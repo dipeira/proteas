@@ -1,0 +1,58 @@
+.drasticcloud {
+	font: 12px arial;
+	color: #9E9E9E;
+}
+.drasticcloud p{
+	margin: 0pt; padding: 0pt; border: 0pt;
+}
+.drasticcloud div{
+	margin: 0pt; padding: 0pt; border: 0pt;
+	display: inline;
+}
+a.drasticcloud-a-true{color: green;}
+a.drasticcloud-a-false{color: red;}
+.drasticcloud a{cursor: pointer;}
+a.drasticcloud-a-mouseover{text-decoration: underline;}
+a.drasticcloud-a-selected{color: black; text-decoration: underline;}
+
+div.drasticcloudmenu {
+	font: 12px arial;
+	margin: 0pt 0pt 3pt 0pt;
+	padding: 3pt;
+	background: #FFF2B2;	
+	border: solid #959595;
+	border-width: 1px 1px 1px 1px;
+}
+div.drasticcloudmenutitle {
+	font: 16px arial;
+	font-weight: bolder;
+	margin: 0pt 0pt 2pt 0pt;
+}
+div.drasticcloudmenutoggle1 {
+	height: 7px;
+	background:  url(../img/back_menutoggle1.gif) no-repeat center center;
+	cursor: pointer;
+	border-width: 0px 0px 0px 0px;
+}
+div.drasticcloudmenutoggle1:hover {
+	height: 7px;
+	background: #EDEDED url(../img/back_menutoggle1mo.gif) no-repeat center center;
+	cursor: pointer;
+	border-width: 0px 0px 0px 0px;
+}
+div.drasticcloudmenutoggle2 {
+	height: 7px;	
+	background:  url(../img/back_menutoggle2.gif) no-repeat center center;
+	cursor: pointer;	
+	border-width: 0px 0px 0px 0px;
+}
+div.drasticcloudmenutoggle2:hover {
+	height: 7px;	
+	background: #EDEDED url(../img/back_menutoggle2mo.gif) no-repeat center center;
+	cursor: pointer;	
+	border-width: 0px 0px 0px 0px;
+}
+
+/* It's probably best to leave these values untouched */
+select {font: 12px arial; margin: 0pt; padding: 0pt;}
+/* end */

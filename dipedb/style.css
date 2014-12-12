@@ -1,0 +1,99 @@
+<!-- CSS goes in the document HEAD or added to your external stylesheet -->
+<style type="text/css">
+table.imagetable {
+	font-size : 70%;
+	font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #999999;
+	border-collapse: collapse;
+}
+table.imagetable th {
+	font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	background:#b5cfd2 url('images/cell-blue.jpg');
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #999999;
+}
+table.imagetable td {
+	font-size : 80%;
+	font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	background:#dcddc0 url('images/cell-grey.jpg');
+	border-width: 1px;
+	padding: 6px;
+	border-style: solid;
+	border-color: #999999;
+}
+
+
+#navigation {
+ margin: 0;
+ padding: 0 1em;
+ background: #000;
+ height: 2em;
+ list-style: none;
+ font-size : 120%;
+ font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+}
+
+#navigation > li {
+ float: left;
+ height: 100%;
+ margin-right: 0.5em;
+ padding: 0 1em;
+ font-size : 70%;
+ font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+}
+
+#navigation > li > a {
+ float: left;
+ height: 100%;
+ color: #c60;
+ text-decoration: none;
+ line-height: 3;
+ font-weight: bold;
+ text-transform: uppercase;
+}
+
+#navigation > li > a:hover {
+ color: orange;
+ text-decoration: underline;
+}
+#navigation > li.sub {
+ position: relative;
+}
+#navigation > li.sub ul {
+ width: 10em;
+ margin: 0;
+ padding: 0.5em 0;
+ list-style: none;
+ background: #a40;
+ position: absolute;
+ top: -1000em;
+}
+
+#navigation > li.sub ul li {
+ width: 90%;
+ margin: 0 auto 0.3em auto;
+}
+
+#navigation > li.sub ul li a {
+ height: 100%;
+ display: block;
+ padding: 0.4em;
+ color: #fff;
+ font-weight: bold;
+ text-decoration: none;
+}
+
+#navigation > li.sub ul li a:hover {
+ background: #c60;
+ text-decoration: underline;
+}
+#navigation > li.sub:hover ul {
+ top: 2.8em;
+}
+
+</style>

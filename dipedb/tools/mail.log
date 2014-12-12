@@ -1,0 +1,63 @@
+++ Starting Swift_SmtpTransport
+<< 220 mail2.sch.gr ESMTP Postfix
+
+>> EHLO [127.0.0.1]
+
+<< 250-mail2.sch.gr
+250-PIPELINING
+250-SIZE 30000000
+250-VRFY
+250-ETRN
+250-STARTTLS
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250 DSN
+
+>> AUTH LOGIN
+
+<< 334 VXNlcm5hbWU6
+
+>> ZGlwZWlyYQ==
+
+<< 334 UGFzc3dvcmQ6
+
+>> cFYhJDc1LTI=
+
+<< 235 2.7.0 Authentication successful
+
+++ Swift_SmtpTransport started
+>> MAIL FROM: <mail@dipe.ira.sch.gr>
+
+<< 250 2.1.0 Ok
+
+>> RCPT TO: <it@dipe.ira.sch.gr>
+
+<< 250 2.1.5 Ok
+
+>> DATA
+
+<< 354 End data with <CR><LF>.<CR><LF>
+
+>> 
+.
+
+<< 250 2.0.0 Ok, id=29282-02, from MTA([127.0.0.1]:10025): 250 2.0.0 Ok: queued as 1CCDF956D9
+
+>> MAIL FROM: <mail@dipe.ira.sch.gr>
+
+<< 250 2.1.0 Ok
+
+>> RCPT TO: <it@dipe.ira.sch.gr>
+
+<< 250 2.1.5 Ok
+
+>> DATA
+
+<< 354 End data with <CR><LF>.<CR><LF>
+
+>> 
+.
+
+<< 250 2.0.0 Ok, id=29477-01, from MTA([127.0.0.1]:10025): 250 2.0.0 Ok: queued as 8F0AE956E9
