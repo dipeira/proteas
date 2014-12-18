@@ -49,17 +49,17 @@
 			}
 		});
 	});
-        
+        var mylink = "<small>Παρακαλώ δώστε έγκυρη πράξη ή δημιουργήστε μία: </small><a target=\"_blank\" href=\"praxi.php\">Πράξεις</a>";
         
                 $(document).ready(function(){
 		$("#updatefrm").validate({
 			debug: false,
                         rules: {
-				name: "required", surname: "required", afm: "required", klados: "required", praxi: "required", type: "required"
+				name: "required", surname: "required", afm: "required", klados: "required", praxi: {"required": true, min:2 }, type: "required"
 			},
 			messages: {
-				name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρη τιμή",
-                                klados: "Παρακαλώ δώστε έγκυρη τιμή", praxi: "Παρακαλώ δώστε έγκυρη τιμή", type: "Παρακαλώ δώστε έγκυρη τιμή"
+				name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρo ΑΦΜ",
+                                klados: "Παρακαλώ δώστε έγκυρη τιμή", praxi: mylink, type: "Παρακαλώ δώστε έγκυρη τιμή"
 			},
 			submitHandler: function(form) {
 				// do other stuff for a valid form

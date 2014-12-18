@@ -28,7 +28,6 @@ p.sample {
 Επίσης χρησιμοποιήθηκε η βιβλιοθήκη javascript <a href="http://jquery.com/">jQuery</a>.
 <br><br>
 
-Σελίδα λογισμικού: <a href="http://code.google.com/p/dipedb/">http://code.google.com/p/dipedb/</a>
 <br><br>
 Επικοινωνία με το δημιουργό: sugarv@sch.gr
 </p>
