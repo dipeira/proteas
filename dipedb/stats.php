@@ -1,39 +1,38 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
-	require_once"config.php";
-	require_once"functions.php";
-	//require('calendar/tc_calendar.php');  
-         
+header('Content-type: text/html; charset=iso8859-7');
+require_once"config.php";
+require_once"functions.php";
+//require('calendar/tc_calendar.php');  
 ?>	
 <html>
-  <head>      
+    <head>      
         <LINK href="style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
         <script type="text/javascript">   
             $(document).ready(function() { 
-			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-		});
+                $("#mytbl").tablesorter({widgets: ['zebra']}); 
+            });
             
             $().ready(function(){
-            $(".slidingDiv").hide();
-            $(".show_hide").show();
+                $(".slidingDiv").hide();
+                $(".show_hide").show();
  
                 $('.show_hide').click(function(){
-                $(".slidingDiv").slideToggle();
+                    $(".slidingDiv").slideToggle();
                 });
             });
         </script>
         <title>Στατιστικά Μονίμων / Αναπληρωτών</title>
-  </head>
+    </head>
 
-<?php
+    <?php
     include("tools/class.login.php");
     $log = new logmein();
-    if($log->logincheck($_SESSION['loggedin']) == false){
-            header("Location: tools/login_check.php");
+    if ($log->logincheck($_SESSION['loggedin']) == false) {
+        header("Location: tools/login_check.php");
     }
     $usrlvl = $_SESSION['userlevel'];
-    
+
     $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
     mysql_select_db($db_name, $mysqlconnection);
     mysql_query("SET NAMES 'greek'", $mysqlconnection);
@@ -72,8 +71,8 @@
     $result = mysql_query($query, $mysqlconnection);
     $mon_alloy = mysql_result($result, 0);
     //$mon_organ = $monimoi_total - $mon_alloy;
-    
-    
+
+
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma FROM employee e 
                 JOIN klados k 
                 ON k.id = e.klados 
@@ -88,6 +87,41 @@
                 GROUP BY klados, e.type";
     $result_anapl = mysql_query($query, $mysqlconnection);
 
+    // sxoleia
+    $sx_arr = array();
+    $query = "SELECT count(*) FROM school WHERE type = 1";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Δημοτικά (Σύνολο)'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 0";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Δημ. Ενεργά'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 1 AND type2 = 0";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Δημ. Ανενεργά'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 2";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Δημ. Ειδικά'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 1";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Δημ. Ιδιωτικά'] = $res;
+
+    $query = "SELECT count(*) FROM school WHERE type = 2";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Νηπιαγωγεία (Σύνολο)'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 0";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Νηπιαγωγεία'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 1 AND type2 = 0";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Νηπ. Ανενεργά'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 2";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Νηπ. Ειδικά'] = $res;
+    $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 1";
+    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $sx_arr['Νηπ. Ιδιωτικά'] = $res;
+
+    //
     echo "<body>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<tr><td colspan=3><strong>Μόνιμοι εκπαιδευτικοί (+ από άλλα ΠΥΣΠΕ/ΠΥΣΔΕ):&nbsp;$monimoi_total</strong></td></tr>";
@@ -96,9 +130,9 @@
     echo "<table class=\"imagetable\" border='1'>";
     echo "<tr><td colspan=3><strong>Μόνιμοι εκπαιδευτικοί (με οργανική στο Ηράκλειο):&nbsp;$monimoi_her_total</strong></td></tr>";
     echo "<tr><td>Κλάδος</td><td colspan=3>Πλήθος</td>";
-        while ($row = mysql_fetch_array($result_mon, MYSQL_NUM)) {
-            echo "<tr><td>$row[1] ($row[2])</td><td colspan=2>$row[0]</td></tr>";  
-        }
+    while ($row = mysql_fetch_array($result_mon, MYSQL_NUM)) {
+        echo "<tr><td>$row[1] ($row[2])</td><td colspan=2>$row[0]</td></tr>";
+    }
     echo "<tr><td><strong>Ιδιωτικοί εκπ/κοί</strong></td><td>$idiwtikoi</td></tr>";
     echo "</table>";
     echo "<br>";
@@ -107,7 +141,7 @@
     echo "<tr><td>Υπηρετούν στο ΠΥΣΠΕ Ηρακλείου και <br>έχουν οργανική σε άλλο ΠΥΣΠΕ/ΠΥΣΔΕ</td><td>$mon_alloy</td></tr>";
     echo "<tr><td>Απόσπασμένοι από άλλο ΠΥΣΠΕ</td><td>$mon_apoallopispe</td></tr>";
     echo "<tr><td>Απόσπασμένοι/με διάθεση από άλλο ΠΥΣΔΕ</td><td>$mon_apoallopisde</td></tr>";
-    echo "<tr><td>Διάθεση ΠΥΣΠΕ</td><td>$mon_diath</td></tr>";    
+    echo "<tr><td>Διάθεση ΠΥΣΠΕ</td><td>$mon_diath</td></tr>";
     echo "<tr><td>Με απόσπαση σε άλλο ΠΥΣΠΕ</td><td>$mon_seallopispe</td></tr>";
     echo "<tr><td>Με απόσπαση σε φορέα</td><td>$mon_seforea</td></tr>";
     echo "<tr><td>Σε άδεια</td><td>$mon_seadeia</td></tr>";
@@ -116,15 +150,23 @@
     echo "<table class=\"imagetable\" border='1'>";
     echo "<tr><td colspan=3><strong>Αναπληρωτές / Ωρομίσθιοι εκπαιδευτικοί:&nbsp;$anapl_total</strong></td>";
     echo "<tr><td>Τύπος</td><td>Κλάδος</td><td>Πλήθος</td>";
-    
-        while ($row = mysql_fetch_array($result_anapl, MYSQL_NUM)) {
-            echo "<tr><td>$row[3]<td>$row[1] ($row[2])</td><td>$row[0]</td></tr>";  
-        }
-        
+    while ($row = mysql_fetch_array($result_anapl, MYSQL_NUM)) {
+        echo "<tr><td>$row[3]<td>$row[1] ($row[2])</td><td>$row[0]</td></tr>";
+    }
     echo "</table>";
+    echo "<br>";
+
+    echo "<table class=\"imagetable\" border='1'>";
+    echo "<tr><td colspan=3><strong>Σχολεία</strong></td>";
+    echo "<tr><td>Τύπος</td><td>Αριθμός</td>";
+    foreach ($sx_arr as $k => $v)
+        echo "<tr><td>$k</td><td>$v</td>";
+
+    echo "</table>";
+
     echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='index.php'\">";
     echo "</body>";
     echo "</html>";
 
     mysql_close();
-?>
+    ?>
