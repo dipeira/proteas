@@ -21,6 +21,8 @@
     }
   $myconn = mysql_connect($db_host, $db_user, $db_password);
   mysql_select_db($db_name, $myconn);
+  mysql_query("SET NAMES 'greek'", $myconn);
+  mysql_query("SET CHARACTER SET 'greek'", $myconn);
   
   $sxol_etos = getParam1('sxol_etos',$myconn);
   
