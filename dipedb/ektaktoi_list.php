@@ -144,6 +144,17 @@
 				$whflag=1;
 			}
 		}
+                if ((strlen($_POST['praxi'])>0) || ($_GET['praxi']>0))
+		{
+			if ($_GET['yphr']>0)
+				$yppost = $_GET['yphr'];
+                        else
+                            $yppost = $_POST['praxi'];
+			if ($whflag)
+				$query .= "AND praxi = $yppost ";
+			else
+				$query .= "WHERE praxi = $yppost ";
+		}
 		$query_all = $query;
 		$query .= " ORDER BY surname ";
                 $query .= $limitQ;
@@ -191,6 +202,9 @@
 	echo "<td>";
         //echo "</td>";
         typeCmb($mysqlconnection);
+        echo "</td>";
+        echo "<td>";
+        tblCmb($mysqlconnection, 'praxi');
         echo "</td>";
 	echo "</form></tr>\n";
 	

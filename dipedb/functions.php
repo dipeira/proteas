@@ -1130,6 +1130,7 @@
 			die('Could not query:' . mysql_error());
 		$num=mysql_numrows($result);
 		echo "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
+                echo "<option value=\"\"> </option>";
 		while ($i < $num) 
 		{
 			$id=mysql_result($result, $i, "id");
@@ -1246,15 +1247,17 @@
           }
           /* display notification
            * JQuery plugin: http://www.9lessons.info/2011/10/jquery-notification-plugin.html
+           * type: 0: success, 1: error
            */        
-          function notify($msg){
+          function notify($msg, $type){
+              $typewrd = $type ? 'error' : 'success';
               echo "<script type=\"text/javascript\">
                   $(document).ready(function(){
                     showNotification({
                     message: '$msg',
-                    type: 'error',
+                    type: '$typewrd',
                     autoClose: true,
-                    duration: 5
+                    duration: 3
                     });
                 });
                 </script>";

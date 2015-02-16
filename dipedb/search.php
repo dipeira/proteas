@@ -125,7 +125,7 @@
 		echo "</select></td></tr>";
 		
 		echo "<tr><td>Α.Μ.</td><td><input type='checkbox' name = 'dspam'></td><td><input type='text' name='am' /></td>";
-		echo "<td>Προύπηρεσία</td><td><input type='checkbox' name = 'dspproyhp'></td><td>";
+		echo "<td>Προϋπηρεσία</td><td><input type='checkbox' name = 'dspproyhp'></td><td>";
 		echo "<select name=\"opp\">";
 		echo "<option value=\"=\" selected>=</option>";
 		echo "<option value=\">\" >></option>";
@@ -133,6 +133,9 @@
 		echo "</select>";
 		echo "Έτη<input type='text' name='pyears' size=1 />Μήνες<input type='text' name='pmonths' size=1 />Ημέρες<input type='text' name='pdays' size=1 /></td></tr>";
 		
+                echo "<tr><td>Α.Φ.Μ.</td><td><input type='checkbox' name = 'dspafm'></td><td><input type='text' name='afm' /></td>";
+                echo "<td></td><td></td><td></tr>";
+                
 		echo "<tr><td>Κλάδος</td><td></td><td>";
 		kladosCmb($mysqlconnection);
 		echo "</td>";

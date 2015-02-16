@@ -250,6 +250,17 @@ $id = $_GET['id'];
                     // idiwtiko ergo se dhmosio forea
                     $idiwtiko = mysql_result($result, 0, "idiwtiko");
                     $idiwtiko_liksi = mysql_result($result, 0, "idiwtiko_liksi");
+                    $idiwtiko_enarxi = mysql_result($result, 0, "idiwtiko_enarxi");
+                    // idiwtiko ergo se idiwtiko forea
+                    $idiwtiko_id = mysql_result($result, 0, "idiwtiko_id");
+                    $idiwtiko_id_enarxi = mysql_result($result, 0, "idiwtiko_id_enarxi");
+                    $idiwtiko_id_liksi = mysql_result($result, 0, "idiwtiko_id_liksi");
+                    // kat'oikon
+                    $katoikon = mysql_result($result, 0, "katoikon");
+                    $katoikon_apo = mysql_result($result, 0, "katoikon_apo");
+                    $katoikon_ews = mysql_result($result, 0, "katoikon_ews");
+                    $katoikon_comm = mysql_result($result, 0, "katoikon_comm");
+                    $katoikon_comm = str_replace(" ", "&nbsp;", $katoikon_comm);
                     
             } // of if not add
 ?>
@@ -416,20 +427,71 @@ if ($_GET['op']=="edit")
                 echo "<input type='text' name='aney_m' size='3' value=$aney_ymd[1]> μήνες&nbsp; <input type='text' name='aney_d' size='3' value=$aney_ymd[2]> ημέρες</td></tr>";
                 
                 // idiwtiko ergo 07-11-2014
-                echo "<tr><td>Ιδ.έργο στ δημ.φορέα</td><td>";
+                echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
                 if ($idiwtiko)
                     echo "<input type='checkbox' name='idiwtiko' checked>";
                 else
                     echo "<input type='checkbox' name='idiwtiko'>";
-                echo "<tr><td>Ημ/νία λήξης Ιδ.Έργου</td><td>";
+                echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
+                $myCalendar = new tc_calendar("idiwtiko_enarxi", true,false);
+                $myCalendar->setIcon("calendar/images/iconCalendar.gif");
+                $myCalendar->setDate(date('d',strtotime($idiwtiko_enarxi)),date('m',strtotime($idiwtiko_enarxi)),date('Y',strtotime($idiwtiko_enarxi)));
+                $myCalendar->setPath("calendar/");
+                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+                $myCalendar->setAlignment("left", "bottom");
+                $myCalendar->writeScript();
                 $myCalendar = new tc_calendar("idiwtiko_liksi", true,false);
                 $myCalendar->setIcon("calendar/images/iconCalendar.gif");
                 $myCalendar->setDate(date('d',strtotime($idiwtiko_liksi)),date('m',strtotime($idiwtiko_liksi)),date('Y',strtotime($idiwtiko_liksi)));
                 $myCalendar->setPath("calendar/");
-                //$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
+                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+                $myCalendar->setAlignment("left", "bottom");
+                $myCalendar->writeScript();
+                // idiwtiko sympl
+                echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
+                if ($idiwtiko_id)
+                    echo "<input type='checkbox' name='idiwtiko_id' checked>";
+                else
+                    echo "<input type='checkbox' name='idiwtiko_id'>";
+                echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
+                $myCalendar = new tc_calendar("idiwtiko_id_enarxi", true,false);
+                $myCalendar->setIcon("calendar/images/iconCalendar.gif");
+                $myCalendar->setDate(date('d',strtotime($idiwtiko_id_enarxi)),date('m',strtotime($idiwtiko_id_enarxi)),date('Y',strtotime($idiwtiko_id_enarxi)));
+                $myCalendar->setPath("calendar/");
+                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+                $myCalendar->setAlignment("left", "bottom");
+                $myCalendar->writeScript();
+                $myCalendar = new tc_calendar("idiwtiko_id_liksi", true,false);
+                $myCalendar->setIcon("calendar/images/iconCalendar.gif");
+                $myCalendar->setDate(date('d',strtotime($idiwtiko_id_liksi)),date('m',strtotime($idiwtiko_id_liksi)),date('Y',strtotime($idiwtiko_id_liksi)));
+                $myCalendar->setPath("calendar/");
+                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
                 $myCalendar->setAlignment("left", "bottom");
                 $myCalendar->writeScript();
                 // idiwtiko end
+                // katoikon
+                echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
+                if ($katoikon)
+                    echo "<input type='checkbox' name='katoikon' checked>";
+                else
+                    echo "<input type='checkbox' name='katoikon'>";
+                echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
+                $myCalendar = new tc_calendar("katoikon_apo", true,false);
+                $myCalendar->setIcon("calendar/images/iconCalendar.gif");
+                $myCalendar->setDate(date('d',strtotime($katoikon_apo)),date('m',strtotime($katoikon_apo)),date('Y',strtotime($katoikon_apo)));
+                $myCalendar->setPath("calendar/");
+                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+                $myCalendar->setAlignment("left", "bottom");
+                $myCalendar->writeScript();
+                $myCalendar = new tc_calendar("katoikon_ews", true,false);
+                $myCalendar->setIcon("calendar/images/iconCalendar.gif");
+                $myCalendar->setDate(date('d',strtotime($katoikon_ews)),date('m',strtotime($katoikon_ews)),date('Y',strtotime($katoikon_ews)));
+                $myCalendar->setPath("calendar/");
+                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+                $myCalendar->setAlignment("left", "bottom");
+                $myCalendar->writeScript();
+                echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
+                // katoikon_end
                 
                 echo "<tr><td>Σχόλια</td><td><input size=50 type='text' name='comments' value=$comments /></td></tr>";
 		
@@ -515,8 +577,25 @@ if ($_GET['op']=="edit")
                             echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' checked disabled>";
                         else
                             echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' disabled>";
-                        $ldate = date ('d-m-Y', strtotime($idiwtiko_liksi));
-                        echo ($idiwtiko > 0 ? "&nbsp;&nbsp;Λήξη:&nbsp;$ldate" : "");
+                        $sdate = strtotime($idiwtiko_enarxi)>0 ? date ('d-m-Y', strtotime($idiwtiko_enarxi)) : '';
+                        $ldate = strtotime($idiwtiko_liksi)>0 ?date ('d-m-Y', strtotime($idiwtiko_liksi)) : '';
+                        echo ($idiwtiko > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
+                        echo "<br>";
+                        if ($idiwtiko_id)
+                            echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' checked disabled>";
+                        else
+                            echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' disabled>";
+                        $sdate = strtotime($idiwtiko_id_enarxi)>0 ? date ('d-m-Y', strtotime($idiwtiko_id_enarxi)): '';
+                        $ldate = strtotime($idiwtiko_id_liksi)>0 ? date ('d-m-Y', strtotime($idiwtiko_id_liksi)): '';
+                        echo ($idiwtiko_id > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
+                        echo "<br>";
+                        if ($katoikon)
+                            echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
+                        else
+                            echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
+                        $sdate = strtotime($katoikon_apo)>0 ? date ('d-m-Y', strtotime($katoikon_apo)) : '';
+                        $ldate = strtotime($katoikon_ews)>0 ? date ('d-m-Y', strtotime($katoikon_ews)) : '';
+                        echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;$katoikon_comm" : "");
                         echo "</div>";
                         echo "</td></tr>";
                     }

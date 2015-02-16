@@ -71,6 +71,13 @@
 		$query .= " am like '".$_POST['am']."'";
 		$flag=1;
 	}
+        if (strlen($_POST['afm'])>0)
+	{
+		if ($flag)
+			$query .= $op;
+		$query .= " afm like '".$_POST['afm']."'";
+		$flag=1;
+	}
         if (strlen($_POST['katast'])>0)
 	{
 		if ($flag)
@@ -78,14 +85,6 @@
 		$query .= " status like '".$_POST['katast']."'";
 		$flag=1;
 	}
-        // if status not set, set it to 1 (ergazetai)...
-//        else
-//        {
-//                $query .= " (status=1 OR status=2) ";
-//		$flag=1;
-//        }
-	
-	//if (strlen($_POST['hm_dior'])>0)
 	if((int)$_POST['hm_dior'])
 	{
 		if ($flag)
@@ -194,7 +193,7 @@
 	{
 		$i=0;
 		$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
-			echo $query; // for debugging...
+			//echo $query; // for debugging...
 		$result = mysql_query($query, $mysqlconnection);
 		$num = mysql_num_rows($result);
 		
@@ -225,6 +224,8 @@
 				echo "<th>Μεταπτ./Διδακτ.</th>\n";
 			if (isset($_POST['dspam']))
 				echo "<th>A.M.</th>\n";
+                        if (isset($_POST['dspafm']))
+				echo "<th>A.Φ.M.</th>\n";
 			if (isset($_POST['dspproyhp']))
 				echo "<th>Προϋπηρεσία</th>\n";
 			if (isset($_POST['dspvathmos']))
@@ -262,6 +263,7 @@
 				
 				$patrwnymo = mysql_result($result, $i, "patrwnymo");
 				$am = mysql_result($result, $i, "am");
+                                $afm = mysql_result($result, $i, "afm");
 				$vathm = mysql_result($result, $i, "vathm");
 				$mk = mysql_result($result, $i, "mk");
 				$hm_dior = mysql_result($result, $i, "hm_dior");
@@ -305,7 +307,7 @@
 				if (isset($_POST['dsppatr']))
 					echo "<td>$patrwnymo</td>\n";
 				if (isset($_POST['dsphm_dior']))
-					echo "<td>$hm_dior</td>\n";
+					echo "<td>".date('d-m-Y',strtotime($hm_dior))."</td>\n";
 				if (isset($_POST['dspmetdid']))
 				{
 					switch ($met_did)
@@ -323,6 +325,8 @@
 				}
 				if (isset($_POST['dspam']))
 					echo "<td>$am</td>\n";
+                                if (isset($_POST['dspafm']))
+					echo "<td>$afm</td>\n";
 				if (isset($_POST['dspproyhp']))
 				{
 					$ymd=days2ymd($proyp);

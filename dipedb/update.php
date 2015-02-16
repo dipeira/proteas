@@ -5,6 +5,8 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <script type="text/javascript" src="js/jquery_notification_v.1.js"></script>
+    <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <title>Update</title>
   </head>
   <body> 
@@ -35,8 +37,6 @@
   // yphr array
   $count = count($_POST['yphr']);
   // if multiple
-  //if ($count > 1)
-  //{ 
         $multi = 1;
         for ($i=0; $i<$count; $i++)
         {
@@ -51,25 +51,6 @@
         $yphret = $_POST['yphr'][0];
         $yphret = mb_convert_encoding($yphret, "iso-8859-7", "utf-8");
         $yphr = getSchoolID($yphret,$mysqlconnection);  
-
-  //}
-  //else
-//  {
-//      if ($_POST['yphr'][0] == "")
-//        $yphr = 387;
-//      else
-//      {
-//        $yphret = $_POST['yphr'][0];
-//        $yphret = mb_convert_encoding($yphret, "iso-8859-7", "utf-8");
-//        $yphr = getSchoolID($yphret,$mysqlconnection);  
-//      }
-//      if (count($_POST['hours'])==1 && $_POST['hours'][0]>0)
-//      {
-//          $single = 1;
-//          $yphr_arr[0] = $yphr;
-//          $hours_arr[0] = $_POST['hours'][0];
-//      }
-//  }
   
   $patrwnymo = $_POST['patrwnymo'];
   $mhtrwnymo = $_POST['mhtrwnymo'];
@@ -103,8 +84,22 @@
   $aney_ews = date('Y-m-d',strtotime($_POST['aney_ews']));
   $aney_xr = $_POST['aney_y']*360 + $_POST['aney_m']*30 + $_POST['aney_d'];
   // idiwtiko 07-11-2014
-  if ($_POST['idiwtiko']) $idiwtiko=1;
-  $idiwtiko_liksi = date('Y-m-d',strtotime($_POST['idiwtiko_liksi']));
+  if ($_POST['idiwtiko']){
+      $idiwtiko=1;
+      $idiwtiko_enarxi = date('Y-m-d',strtotime($_POST['idiwtiko_enarxi']));
+      $idiwtiko_liksi = date('Y-m-d',strtotime($_POST['idiwtiko_liksi']));
+  }
+  if ($_POST['idiwtiko_id']){
+      $idiwtiko_id=1;
+      $idiwtiko_id_enarxi = date('Y-m-d',strtotime($_POST['idiwtiko_id_enarxi']));
+      $idiwtiko_id_liksi = date('Y-m-d',strtotime($_POST['idiwtiko_id_liksi']));
+  }
+  if ($_POST['katoikon']){
+      $katoikon=1;
+      $katoikon_apo = date('Y-m-d',strtotime($_POST['katoikon_apo']));
+      $katoikon_ews = date('Y-m-d',strtotime($_POST['katoikon_ews']));
+      $katoikon_comm = $_POST['katoikon_comm'];
+  }
   
 // $_POST['action']=1 for adding records  
   if (isset($_POST['action']))
@@ -154,7 +149,7 @@
     // if already inserted
     else 
     {
-        echo "<h2 align=\"center\">Η εγγραφή έχει ήδη καταχωρηθεί...</h2>";
+        notify('Η εγγραφή έχει ήδη καταχωρηθεί...',1);
         $dupe = 1;
     }
   } //of if action
@@ -171,7 +166,7 @@
               
           $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
-          $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',";
+          $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
 	  $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', anatr='$anatr', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
 	  $query = $query1.$query2.$query3.$query4;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
@@ -189,6 +184,7 @@
               $idnum = mb_convert_encoding($idnum, "iso-8859-7", "utf-8");
               $vathm = mb_convert_encoding($vathm, "iso-8859-7", "utf-8");
               $comments = mb_convert_encoding($comments, "iso-8859-7", "utf-8");
+              $katoikon_comm = mb_convert_encoding($katoikon_comm, "iso-8859-7", "utf-8");
               $after = array($id,$name,$surname,$patrwnymo,$mhtrwnymo,$klados,$am,$org,$yphr,$thesi,$fek_dior,$hm_dior,$before[12],$vathm,$before[14],$before[15],$mk,$hm_mk,$analipsi,$hm_anal,$met_did,$before[21],$proyp,$before[23],$before[24],$before[25],$comments,$katast,$afm,$before[29],$tel,$address,$idnum,$amka,$aney,$aney_xr,$aney_apo,$aney_ews);
               $ind=0;
               foreach ($after as $aft){
@@ -220,7 +216,7 @@
               
 	  $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr',";
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
-          $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',";
+          $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
 	  $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', anatr='$anatr', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
 	  $query = $query1.$query2.$query3.$query4;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
@@ -265,7 +261,7 @@
 
 echo "<br>";
 if (!$dupe)
-    echo "<h2 align=\"center\">Επιτυχής καταχώρηση!</h2>";
+    notify('Επιτυχής καταχώρηση!',0);
 echo "</body>";
 echo "</html>";
 
