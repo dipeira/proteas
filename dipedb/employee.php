@@ -595,7 +595,7 @@ if ($_GET['op']=="edit")
                             echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
                         $sdate = strtotime($katoikon_apo)>0 ? date ('d-m-Y', strtotime($katoikon_apo)) : '';
                         $ldate = strtotime($katoikon_ews)>0 ? date ('d-m-Y', strtotime($katoikon_ews)) : '';
-                        echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;$katoikon_comm" : "");
+                        echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
                         echo "</div>";
                         echo "</td></tr>";
                     }
@@ -743,7 +743,7 @@ if ($_GET['op']=="edit")
                 echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
                 //
                 echo "</td><td>Ώρες υποχρ. ωραρίου:</td><td colspan=3>$wres</td></tr>";
-		echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>$comments</td></tr>"; 
+		echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".stripslashes($comments)."</td></tr>"; 
 		echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"school_status.php?org=$sx_organ_id\">$sx_organikhs</a></td><td></td><td></td></tr>";
                 
                 // check if multiple schools

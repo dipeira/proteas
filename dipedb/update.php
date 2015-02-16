@@ -74,7 +74,7 @@
   $proyp = $_POST['pyears']*360 + $_POST['pmonths']*30 + $_POST['pdays'];
   //$anatr = $_POST['anatr'];
   //$anatr = $_POST['ayears']*360 + $_POST['amonths']*30 + $_POST['adays'];
-  $comments = $_POST['comments'];
+  $comments = addslashes($_POST['comments']);
   $katast = $_POST['status'];
   $thesi = $_POST['thesi'];
   // aney 27-02-2014
@@ -98,7 +98,7 @@
       $katoikon=1;
       $katoikon_apo = date('Y-m-d',strtotime($_POST['katoikon_apo']));
       $katoikon_ews = date('Y-m-d',strtotime($_POST['katoikon_ews']));
-      $katoikon_comm = $_POST['katoikon_comm'];
+      $katoikon_comm = addslashes($_POST['katoikon_comm']);
   }
   
 // $_POST['action']=1 for adding records  
