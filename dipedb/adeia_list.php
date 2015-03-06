@@ -46,7 +46,7 @@
                 
 
                 // get adeia years
-                $query = "SELECT DISTINCT YEAR(start) FROM adeia where emp_id=".$_GET['id'];
+                $query = "SELECT DISTINCT YEAR(start) FROM adeia where emp_id=".$_GET['id'].' ORDER BY start DESC';
                 $result = mysql_query($query, $mysqlconnection);
                 while ($year = mysql_fetch_array($result, MYSQL_NUM))
                     $year_arr[] = $year[0];
