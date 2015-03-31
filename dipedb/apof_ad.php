@@ -20,7 +20,7 @@
         echo "<table class='imagetable' border='1'>";
         echo "<form action='' method='POST'>";
         echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot'></td></tr>";
-        echo "</td></tr>";
+        echo "<tr><td>Ημερολογιακό Έτος</td><td><input type='text' name='year' value='".date('Y')."'></td></tr>";
         echo "<tr>";
         echo "<td colspan=2><input type='radio' name='type' value='1' checked >Μόνιμοι";
         echo "<input type='radio' name='type' value='2' >Αναπληρωτές<br></td>";
@@ -41,18 +41,25 @@
         }
 
         // if user has submitted data
-        if(isset($_POST['prot']))
+        if(isset($_POST['prot']) && isset($_POST['year']))
         {   
+            if (!$_POST['year'] && !$_POST['prot'])
+                exit('Παρακαλώ δώστε αρ.πρωτοκόλλου & έτος.');
+            if (!$_POST['year'])
+                exit('Παρακαλώ δώστε έτος.');
+            if (!$_POST['prot'])
+                exit('Παρακαλώ δώστε αρ.πρωτοκόλλου.');
+
             $has_errors = 0;
             // if monimoi
             if ($_POST['type'] == 1)
                 $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos FROM adeia a
-                    JOIN employee e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." ORDER BY surname,name ASC";
+                    JOIN employee e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             else
             {
                 $is_anapl = 1;
                 $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos FROM adeia_ekt a
-                    JOIN ektaktoi e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." ORDER BY surname,name ASC";
+                    JOIN ektaktoi e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             }
             
             //echo $query;
@@ -188,11 +195,12 @@
             echo "<input type='hidden' name=arr[] value=$hm_apof>";
             echo "<input type='hidden' name=arr[] value='$emp_ser'>";
             echo "<input type='hidden' name=arr[] value='$is_anapl'>";
+            echo "<input type='hidden' name=arr[] value='".$_POST['year']."'>";
             echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Εκτύπωση απόφασης αδειών'>";
             echo "&nbsp;&nbsp;&nbsp;";
             
             // check if already sent
-            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['prot'];
+            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['prot']." AND YEAR(stamp) = ". $_POST['year'];
             $res = mysql_query($qry, $mysqlconnection);
             if (mysql_num_rows($res) > 0)
                 echo "<br>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
@@ -285,7 +293,7 @@
         if (isset($_POST['btnEmail']))
         {
             // check if already sent
-            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['arr'][1];
+            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['arr'][1]." AND DATE(stamp) = ". $_POST['arr'][5];
             //echo $query;
             $res = mysql_query($qry, $mysqlconnection);
             if (mysql_num_rows($res) > 0)
@@ -295,7 +303,7 @@
                 exit;
             }
             // set max execution time 
-            set_time_limit (360);
+            set_time_limit (1000);
             
             // SMTP password
             $pass = file_get_contents('../conf.txt');
