@@ -457,6 +457,9 @@
                     case 5:
                         $th = "Ιδιωτικός";
                         break;
+                    case 6:
+                        $th = "Δ/ντής-Πρ/νος Ιδιωτικού Σχ.";
+                        break;
                 }
                 return $th;
         }
@@ -488,6 +491,10 @@
                     echo "<option value='5' selected=\"selected\">Ιδιωτικός</option>";	
                 else
                     echo "<option value='5'>Ιδιωτικός</option>";
+                if ($thesi == 6)
+                    echo "<option value='6' selected=\"selected\">Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";	
+                else
+                    echo "<option value='6'>Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";
         }
 	
 	

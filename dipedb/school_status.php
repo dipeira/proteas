@@ -294,7 +294,7 @@
                     echo "<h1>$str1</h1>";
                     disp_school($sch, $mysqlconnection);
                     //Υπηρετούν με θητεία
-                    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND (thesi=1 OR thesi=2)";
+                    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6)";
                     $result = mysql_query($query, $mysqlconnection);
                     $num = mysql_num_rows($result);
                     if ($num)
@@ -332,7 +332,7 @@
                     //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
                     //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
                     //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
-                    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 AND (klados=2 OR klados=1)";
+                    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND (klados=2 OR klados=1)";
                     $result = mysql_query($query, $mysqlconnection);
                     $num = mysql_num_rows($result);
                     if ($num)
@@ -366,7 +366,7 @@
                     //Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)
                     //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
                     //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
-                    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 AND klados!=2 AND klados!=1";
+                    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND klados!=2 AND klados!=1";
                     $result = mysql_query($query, $mysqlconnection);
                     $num = mysql_num_rows($result);
                     if ($num)
@@ -400,7 +400,7 @@
                     
                     
                     // Οργανική αλλού και υπηρετούν
-                    $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi=0 AND status=1 ORDER BY klados";
+                    $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5) AND status=1 ORDER BY klados";
                     $result = mysql_query($query, $mysqlconnection);
                     $num = mysql_num_rows($result);
                     if ($num)
