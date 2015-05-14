@@ -289,7 +289,9 @@
 		echo "<input type=\"submit\" value=\"Ορισμός\">";
 		echo "</FORM>";
 		echo "</td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\"></td></tr>";
+                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
+                echo "&nbsp;&nbsp;&nbsp;";
+                echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
                 echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>
