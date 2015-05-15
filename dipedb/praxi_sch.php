@@ -74,15 +74,13 @@
                 foreach ($praxeis as $pr)
                     $praxinm[] = getNamefromTbl($mysqlconnection, praxi, $pr);
 
-                echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
-            
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
+            	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
 		mysql_select_db($db_name, $mysqlconnection);
 		mysql_query("SET NAMES 'greek'", $mysqlconnection);
 		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 		if ($all)
-                    $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
-                        join school s on s.id = y.yphrethsh where e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
+                    $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch, p.name as praxi from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
+                        join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
                 else
                     $query = "select distinct s.name as sch, s.id as schid from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
                         join school s on s.id = y.yphrethsh where e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY S.NAME ASC";
@@ -90,9 +88,10 @@
 		$result = mysql_query($query, $mysqlconnection);
 		
                 ob_start();
+                echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
                 if ($all)
-                    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Σχολείο</th></tr></thead><tbody>";
+                    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Σχολείο</th><th>Πράξη</th></tr></thead><tbody>";
                 else
                     echo "<thead><tr><th>Σχολείο</th></tr></thead><tbody>";
 
@@ -106,13 +105,13 @@
 		$praxi = $row['praxi'];
 		                
                 if ($all)
-                    echo "<tr><td><a href=\"ektaktoi.php?id=$id&op=view\">$surname $name</a></td><td><a href=\"school_status.php?org=$schid\">$sch</a></td></tr>";
+                    echo "<tr><td><a href=\"ektaktoi.php?id=$id&op=view\">$surname $name</a></td><td><a href=\"school_status.php?org=$schid\">$sch</a></td><td>$praxi</td></tr>";
                 else
                     echo "<tr><td><a href=\"school_status.php?org=$schid\">$sch</a></td></tr>";
                 $i++;
             }
 		echo "</tbody></table>";
-                echo "<small>$i εγγραφές</small>";
+                echo "<small><i>$i εγγραφές</i></small>";
                 echo "<br><br>";
 
 		mysql_close();
@@ -122,7 +121,7 @@
 		ob_end_flush();
 			
 		echo "<form action='2excel.php' method='post'>";
-		echo "<input type='hidden' name = 'data' value='".$page."'>";
+		echo "<input type='hidden' name = 'data' value='".  htmlspecialchars($page, ENT_QUOTES)."'>";
                 echo "<BUTTON TYPE='submit'><IMG SRC='images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
                 echo "&nbsp;&nbsp;&nbsp;";
                 echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
