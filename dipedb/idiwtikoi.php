@@ -161,9 +161,9 @@
 		                
                 // Mono idiwtikoi
                 if ($whflag)
-                    $query .= " AND thesi=5 ";
+                    $query .= " AND thesi in (5,6) ";
                 else
-                    $query .= " WHERE thesi=5 ";
+                    $query .= " WHERE thesi in (5,6) ";
                 
                 $query_all = $query;
                 
