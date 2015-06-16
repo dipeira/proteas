@@ -111,13 +111,14 @@
                 {
                         if ($_POST['type'] == 1)
                             $kratikoy = 1;
+                        $sxol_etos = getParam('sxol_etos', $mysqlconnection);
                         mysql_query("SET NAMES 'greek'", $mysqlconnection);
                         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
                         // kratikoy or ESPA
                         if ($kratikoy)
-                            $query = "SELECT * from ektaktoi WHERE type IN (2,4,5)";
+                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (2,4,5)";
                         else
-                            $query = "SELECT * from ektaktoi WHERE type = 3";
+                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type = 3";
 
                         $result = mysql_query($query, $mysqlconnection);
                         $num=mysql_numrows($result);
@@ -132,49 +133,52 @@
 
                         $i=0;
                         while ($i < $num)
+                        //while ($i < 10) // for testing
                         {
+                            $id = mysql_result($result, $i, "id");
                             $name = mysql_result($result, $i, "name");
                             $surname = mysql_result($result, $i, "surname");
                             $patrwnymo = mysql_result($result, $i, "patrwnymo");
                             $klados = mysql_result($result, $i, "klados");
-                            $sx_yphrethshs = mysql_result($result, $i, "sx_yphrethshs");
                             $ya = mysql_result($result, $i, "ya");
                             $apof = mysql_result($result, $i, "apofasi");
                             $hmpros = mysql_result($result, $i, "hm_anal");
                             $metakinhsh = mysql_result($result, $i, "metakinhsh");
                             $last_afm = substr (mysql_result($result, $i, "afm"), -3);
-							// find espa type & post prefix accordingly - worked only for 2013-14. Proteas now has praxi to distinguish workers.
-							$prefix = '';
-							if (!$kratikoy)
-							{
-								$comments = mysql_result($result, $i, "comments");
-								if (strpos($comments,'ÅÁÅÐ') !== false || strpos($comments,'Å.Á.Å.Ð.') !== false)
-									$prefix = "EAEP_";
-								elseif (strpos($comments,'ÐÁÑÁËËÇËÇ') !== false || strpos($comments,'ÐáñÜëëçëç') !== false)
-									$prefix = "PARAL_";
-								elseif (strpos($comments,'Åîáôïì.') !== false || strpos($comments,'ÅÎÁÔÏÌÉÊÅÕÌÅÍÇ') !== false)
-									$prefix = "EKSATOM_";
-								elseif (strpos($comments,'ÏËÏÇÌÅÑÏ') !== false || strpos($comments,'ÏëïÞìåñï') !== false)
-									$prefix = "OLOHM_";
-								elseif (strpos($comments,'Í¸Ï Ó×ÏËÅÉÏ') !== false)
-									$prefix = "NEO_";
-								else
-									$prefix = '';
-								echo "<input type='hidden' name=arr[$i][prefix] value=$prefix>";
-							}
-                            echo "<input type='hidden' name=arr[$i][name] value=$name>";
-                            echo "<input type='hidden' name=arr[$i][surname] value=$surname>";
-                            echo "<input type='hidden' name=arr[$i][patrwnymo] value=$patrwnymo>";
-                            echo "<input type='hidden' name=arr[$i][klados] value=$klados>";
-                            echo "<input type='hidden' name=arr[$i][sx_yphrethshs] value=$sx_yphrethshs>";
-                            echo "<input type='hidden' name=arr[$i][ya] value=$ya>";
-                            echo "<input type='hidden' name=arr[$i][apof] value=$apof>";
-                            echo "<input type='hidden' name=arr[$i][hmpros] value=$hmpros>";
-                            echo "<input type='hidden' name=arr[$i][metakinhsh] value=\"$metakinhsh\">";
-                            echo "<input type='hidden' name=arr[$i][last_afm] value=\"$last_afm\">";
+                            
+                            // get yphrethseis
+                            unset($sx_yphrethshs);
+                            $sx_yphrethshs[] = array();
+                            $qry = "select yphrethsh, hours from yphrethsh_ekt where emp_id = $id AND sxol_etos = $sxol_etos";
+                            $res1 = mysql_query($qry, $mysqlconnection);
+                            while ($arr = mysql_fetch_array($res1))
+                            {
+                                $sx_yphrethshs[] = array('sch' => $arr[0],'hours' => $arr[1]);
+                            }
+                            // Proteas has now praxi to distinguish workers.
+                            $prefix = '';
+                            if (!$kratikoy)
+                            {
+                                $praksi = mysql_result($result, $i, "praksi");
+                                if (strpos($praksi,'ÅÁÅÐ') !== false || strpos($praksi,'Å.Á.Å.Ð.') !== false)
+                                        $prefix = "EAEP_";
+                                elseif (strpos($praksi,'ÐÁÑÁËËÇËÇ') !== false || strpos($praksi,'ÐáñÜëëçëç') !== false || strpos($praksi,'ðáñÜëëçëç') !== false)
+                                        $prefix = "PARAL_";
+                                elseif (strpos($praksi,'Åîáôïì.') !== false || strpos($praksi,'ÅÎÁÔÏÌÉÊÅÕÌÅÍÇ') !== false || strpos($praksi,'ÅîáôïìéêåõìÝíç') !== false || strpos($praksi,'åîáôïìéêåõìÝíç') !== false)
+                                        $prefix = "EKSATOM_";
+                                elseif (strpos($praksi,'ÏËÏÇÌÅÑÏ') !== false || strpos($praksi,'ÏëïÞìåñï') !== false || strpos($praksi,'ïëïÞìåñï') !== false)
+                                        $prefix = "OLOHM_";
+                                elseif (strpos($praksi,'Í¸Ï Ó×ÏËÅÉÏ') !== false || strpos($praksi,'ÅÊÏ') !== false)
+                                        $prefix = "NEO_";
+                                else
+                                        $prefix = '';
+                            }
+                            $emp_arr = array('name'=>$name,'surname'=>$surname,'patrwnymo'=>$patrwnymo,'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
+                                'ya'=>$ya,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,'last_afm'=>$last_afm,'prefix'=>$prefix);
+                            $submit_array[] = $emp_arr;
                             $i++;
                         }
-
+                        echo "<input type='hidden' name='emp_arr' value=\"". htmlentities(serialize($submit_array)) . "\">";
                         echo "<input type='hidden' name='kratikoy' value=$kratikoy>";
                         echo "<input type='hidden' name='plithos' value=$num>";
                         echo "<input type='submit' VALUE='ÕðïâïëÞ áéôÞìáôïò'>"; 

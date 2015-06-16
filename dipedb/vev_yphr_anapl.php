@@ -14,7 +14,8 @@ mysql_select_db($db_name, $mysqlconnection);
 mysql_query("SET NAMES 'greek'", $mysqlconnection);
 mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 
-$arr = $_POST['arr'];
+$arr = unserialize(html_entity_decode($_POST['emp_arr']));
+
 $i = 1;
 
 foreach( $arr as $myarr)
@@ -62,32 +63,30 @@ foreach( $arr as $myarr)
     $apof = $data;
     
     //sxoleio/-a
-    $data = '';
-    $sx_yphrethshs_id_str = $myarr['sx_yphrethshs'];
-    $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-    if (count($sx_yphrethshs_id_arr) == 2)
-        {
-            $sch = getSchool($sx_yphrethshs_id_arr[0], $mysqlconnection);
-            $data = $sch;
+    $sxoleia = '';
+    foreach ($myarr['sx_yphrethshs'] as $sx_arr){
+        foreach($sx_arr as $k => $v) {
+            if ($k === 'sch' && $v>0)
+            {
+                $sxoleia .= getSchool($v, $mysqlconnection);
+            }
+            else {
+                $sxoleia .= '';
+            }
+            if ($k === 'hours' && $v>0)
+                $sxoleia .= " ($v ώρες), ";
+            else
+                $sxoleia .= '';
         }
-    else
-    {
-        for ($j=0; $j<count($sx_yphrethshs_id_arr)-1; $j++)
-        {
-            $sxol = $sx_yphrethshs_id_arr[$j];
-            $sch = getSchool($sxol, $mysqlconnection);
-            $data .= $sch.", ";
-        }
-        $data = substr($data, 0, -2);
     }
-    $sxoleia = $data;
-    
+    $sxoleia = substr($sxoleia, 0, -2);
+
     // metakinhsh
     $metakinhsh = $myarr['metakinhsh'];
-    if (!strlen($metakinhsh))
-        $top_metak = "και τοποθετήθηκε με την αριθμ. $apof Απόφαση της Δ/ντριας Π.Ε. Ηρακλείου στο (-α) $sxoleia της Δ/νσης Π.Ε. Ηρακλείου.";
+    if (strlen($metakinhsh)<2)
+        $top_metak = "και τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
     else
-        $top_metak = ". ".$metakinhsh;
+        $top_metak = ". Αρχικά τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
     $data = mb_convert_encoding($top_metak, "utf-8", "iso-8859-7");
     $document->setValue('top_metak', $data);
     
@@ -104,7 +103,7 @@ foreach( $arr as $myarr)
     $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('yphr', $data);
-        
+    
     // write to file
     $fname = greek_to_greeklish($myarr['surname']);
 	if (!$_POST['kratikoy'])
