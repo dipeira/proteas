@@ -160,11 +160,13 @@
                             if (!$kratikoy)
                             {
                                 $praksi = mysql_result($result, $i, "praksi");
-                                if (strpos($praksi,'ΕΑΕΠ') !== false || strpos($praksi,'Ε.Α.Ε.Π.') !== false)
+                                if (strpos($praksi,'ΕΑΕΠ') !== false || strpos($praksi,'Ε.Α.Ε.Π.') !== false || strpos($praksi,'ΕΣΠΑ') !== false)
                                         $prefix = "EAEP_";
-                                elseif (strpos($praksi,'ΠΑΡΑΛΛΗΛΗ') !== false || strpos($praksi,'Παράλληλη') !== false || strpos($praksi,'παράλληλη') !== false)
+                                elseif (strpos($praksi,'ΠΑΡΑΛΛΗΛΗ') !== false || strpos($praksi,'Παράλληλη') !== false || strpos($praksi,'παράλληλη') !== false
+                                            || strpos($praksi,'εξειδικευμένη') !== false || strpos($praksi,'Εξειδικευμένη') !== false)
                                         $prefix = "PARAL_";
-                                elseif (strpos($praksi,'Εξατομ.') !== false || strpos($praksi,'ΕΞΑΤΟΜΙΚΕΥΜΕΝΗ') !== false || strpos($praksi,'Εξατομικευμένη') !== false || strpos($praksi,'εξατομικευμένη') !== false)
+                                elseif (strpos($praksi,'Εξατομ.') !== false || strpos($praksi,'ΕΞΑΤΟΜΙΚΕΥΜΕΝΗ') !== false || strpos($praksi,'Εξατομικευμένη') !== false 
+                                            || strpos($praksi,'εξατομικευμένη') !== false || strpos($praksi,'ειδική αγωγή') !== false || strpos($praksi,'Ειδική αγωγή') !== false)
                                         $prefix = "EKSATOM_";
                                 elseif (strpos($praksi,'ΟΛΟΗΜΕΡΟ') !== false || strpos($praksi,'Ολοήμερο') !== false || strpos($praksi,'ολοήμερο') !== false)
                                         $prefix = "OLOHM_";
