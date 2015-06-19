@@ -24,7 +24,12 @@ foreach( $arr as $myarr)
     if ($_POST['kratikoy'])
         $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl.docx');
     else
-        $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_espa.docx');
+    {
+        if ($myarr['ebp'])
+            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_ebp.docx');
+        else
+            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_espa.docx');
+    }
         
     $data = $endofyear;
     $document->setValue('endofyear', $data);
@@ -83,10 +88,20 @@ foreach( $arr as $myarr)
 
     // metakinhsh
     $metakinhsh = $myarr['metakinhsh'];
-    if (strlen($metakinhsh)<2)
-        $top_metak = "και τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
+    if ($myarr['ebp'])
+    {
+        if (strlen($metakinhsh)<2)
+            $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia.";
+        else
+            $top_metak = ". Τοποθετήθηκε με την ταυτάριθμη απόφαση στο ".$metakinhsh . $sxoleia;
+    }
     else
-        $top_metak = ". Αρχικά τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
+    {
+        if (strlen($metakinhsh)<2)
+            $top_metak = "και τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
+        else
+            $top_metak = ". Με την αριθμ. $apof τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
+    }
     $data = mb_convert_encoding($top_metak, "utf-8", "iso-8859-7");
     $document->setValue('top_metak', $data);
     
@@ -106,8 +121,7 @@ foreach( $arr as $myarr)
     
     // write to file
     $fname = greek_to_greeklish($myarr['surname']);
-	if (!$_POST['kratikoy'])
-		$fname = $myarr['prefix'].$fname;
+    $fname = $myarr['prefix'].$fname;
     $last_afm = $myarr['last_afm'];
     $output1 = "word/anapl/".$fname.".docx";
     // if same surname, use last digits of afm

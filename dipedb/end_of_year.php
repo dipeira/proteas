@@ -114,11 +114,11 @@
                         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
                         mysql_query("SET NAMES 'greek'", $mysqlconnection);
                         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
-                        // kratikoy or ESPA
+                        // kratikoy or ESPA 
                         if ($kratikoy)
-                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (2,4,5)";
+                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (2)";
                         else
-                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type = 3";
+                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (3,4,5)";
 
                         $result = mysql_query($query, $mysqlconnection);
                         $num=mysql_numrows($result);
@@ -140,7 +140,7 @@
                             $surname = mysql_result($result, $i, "surname");
                             $patrwnymo = mysql_result($result, $i, "patrwnymo");
                             $klados = mysql_result($result, $i, "klados");
-                            $ya = mysql_result($result, $i, "ya");
+                            $ya = mysql_result($result, $i, "ya") . ' (' . mysql_result($result, $i, "ada") . ')';
                             $apof = mysql_result($result, $i, "apofasi");
                             $hmpros = mysql_result($result, $i, "hm_anal");
                             $metakinhsh = mysql_result($result, $i, "metakinhsh");
@@ -157,26 +157,40 @@
                             }
                             // Proteas has now praxi to distinguish workers.
                             $prefix = '';
+                            $ebp = 0;
+                            $praksi = mysql_result($result, $i, "praksi");
                             if (!$kratikoy)
                             {
                                 $praksi = mysql_result($result, $i, "praksi");
                                 if (strpos($praksi,'ÅÁÅĞ') !== false || strpos($praksi,'Å.Á.Å.Ğ.') !== false || strpos($praksi,'ÅÓĞÁ') !== false)
                                         $prefix = "EAEP_";
                                 elseif (strpos($praksi,'ĞÁÑÁËËÇËÇ') !== false || strpos($praksi,'ĞáñÜëëçëç') !== false || strpos($praksi,'ğáñÜëëçëç') !== false
-                                            || strpos($praksi,'åîåéäéêåõìİíç') !== false || strpos($praksi,'Åîåéäéêåõìİíç') !== false)
+                                            || strpos($praksi,'åîåéäéêåõìİíç') !== false || strpos($praksi,'Åîåéäéêåõìİíç') !== false || strpos($praksi,'ÅÎÅÉÄÉÊÅÕÌÅÍÇ') !== false )
                                         $prefix = "PARAL_";
                                 elseif (strpos($praksi,'Åîáôïì.') !== false || strpos($praksi,'ÅÎÁÔÏÌÉÊÅÕÌÅÍÇ') !== false || strpos($praksi,'Åîáôïìéêåõìİíç') !== false 
                                             || strpos($praksi,'åîáôïìéêåõìİíç') !== false || strpos($praksi,'åéäéêŞ áãùãŞ') !== false || strpos($praksi,'ÅéäéêŞ áãùãŞ') !== false)
                                         $prefix = "EKSATOM_";
                                 elseif (strpos($praksi,'ÏËÏÇÌÅÑÏ') !== false || strpos($praksi,'ÏëïŞìåñï') !== false || strpos($praksi,'ïëïŞìåñï') !== false)
                                         $prefix = "OLOHM_";
-                                elseif (strpos($praksi,'Í¸Ï Ó×ÏËÅÉÏ') !== false || strpos($praksi,'ÅÊÏ') !== false)
+                                elseif (strpos($praksi,'ÍÅÏ Ó×ÏËÅÉÏ') !== false || strpos($praksi,'íİï ó÷ïëåßï') !== false || strpos($praksi,'Íİï ó÷ïëåßï') !== false || strpos($praksi,'ÅÊÏ') !== false)
                                         $prefix = "NEO_";
                                 else
                                         $prefix = '';
+                                // check if ÅÂĞ
+                                if (strpos($praksi,'ÅÂĞ') !== false || strpos($praksi,'ÅÅĞ') !== false)
+                                {
+                                    $ebp = 1;
+                                    $prefix = 'EBP_' . $prefix;
+                                }
+                            }
+                            else {
+                                if (strpos($praksi,'ĞÄÅ') !== false || strpos($praksi,'Ğ.Ä.Å.') !== false)
+                                    $prefix = "PDE_";
+                                else
+                                    $prefix = '';
                             }
                             $emp_arr = array('name'=>$name,'surname'=>$surname,'patrwnymo'=>$patrwnymo,'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
-                                'ya'=>$ya,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,'last_afm'=>$last_afm,'prefix'=>$prefix);
+                                'ya'=>$ya,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,'last_afm'=>$last_afm,'prefix'=>$prefix,'ebp'=>$ebp);
                             $submit_array[] = $emp_arr;
                             $i++;
                         }
