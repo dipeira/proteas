@@ -16,6 +16,23 @@
     }
     else
         $logged = 1;
+    
+    // Get previous sxol_etos or redirect
+    if (((strlen($_REQUEST['sxoletos'])>0) || isset($_SESSION['sxoletos'])) && strcmp($_REQUEST['sxoletos'], $sxol_etos) != 0)
+    {
+        $sxoletos = $_REQUEST['sxoletos'];
+    }
+    else
+    {
+        $sxoletos = find_prev_year($sxol_etos);
+    }
+    if (!isset($_SESSION['sxoletos']))
+        {
+            $_SESSION['sxoletos'] = $sxoletos;
+        }
+        else {
+            $sxoletos = $_SESSION['sxoletos'];
+        }
       
 ?>
 <html>
@@ -35,23 +52,13 @@
 			$("#yphr").autocomplete("get_school.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
 		$().ready(function() {
-			$("#surname").autocomplete("get_name_ekt.php", {
+			$("#surname").autocomplete("get_name_prev.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
@@ -70,8 +77,8 @@
 <div>
       <?php
                 $usrlvl = $_SESSION['userlevel'];
-                //$query = "SELECT * FROM employee";
-		//rpp = results per page
+
+                //rpp = results per page
 		if (isset ($_POST['rpp']))
 			$rpp = $_POST['rpp'];
 		elseif (isset ($_GET['rpp']))
@@ -89,8 +96,13 @@
 		//limit in the query thing
 		$limitQ = ' LIMIT ' .($curpg - 1) * $rpp .',' .$rpp;
 
-                $query = "SELECT * FROM ektaktoi ";
+                
+                $query = "SELECT * FROM ektaktoi_" . $sxoletos.' ';
+                
 	  	
+                if (isset($_SESSION['sxoletos']))
+                        echo "<h3>Έκτακτο προσωπικό σχολικού έτους: " . substr($_SESSION['sxoletos'],0,4) . '-' . substr($_SESSION['sxoletos'],4,2) ."</h3>";
+                
 		$klpost = 0;
 		$yppost = 0;
 		if (($_POST['klados']>0) || (strlen($_POST['yphr'])>0) || (strlen($_POST['surname'])>0) || (strlen($_POST['type'])>0))
@@ -176,17 +188,10 @@
 		if ($result)
 			$num=mysql_num_rows($result);
                 
-                // added 07-02-2013 - when 1 result, redirect to that employee page
-                if ($num_record == 1)
-                {
-                    $id = mysql_result($result, 0, "id");
-                    $url = "ektaktoi.php?id=$id&op=view";
-                    echo "<script>window.location = '$url'</script>";
-                }
 		
         echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-        echo "<thead><tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";
+        echo "<thead><tr><form id='src' name='src' action='ektaktoi_prev.php' method='POST'>\n";
 	if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0) || ($_GET['type']>0))
 		echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
 	else	
@@ -204,7 +209,8 @@
         typeCmb($mysqlconnection);
         echo "</td>";
         echo "<td>";
-        tblCmb($mysqlconnection, 'praxi');
+        $tmp = 'praxi_'.$_SESSION['sxoletos'];
+        tblCmb($mysqlconnection, $tmp, 0, 'praxi');
         echo "</td>";
 	echo "</form></tr>\n";
 	
@@ -231,36 +237,23 @@
                 $sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
                 $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
                 $sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
-                //$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
 		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
                 $sx_yphrethshs_url = "<a href=\"school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-//                if (count($sx_yphrethshs_id_arr)>2)
-//                {
-//                    $sx_yphrethshs_url = "<a href=\"school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a> *";
-//                    $sx_yphrethshs.=" *";
-//                }
+
                 $type = mysql_result($result, $i, "type");
                 $praxi = mysql_result($result, $i, "praxi");
-                $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
+                $praxi = getNamefromTbl($mysqlconnection, "praxi_".$_SESSION['sxoletos'], $praxi);
 								
 		echo "<tr><td>";
-		echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>";
-		if ($usrlvl < 3)
-                    echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>";
-		if ($usrlvl < 2)
-                    echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
 		echo "</td>";
                 $typos = get_type($type, $mysqlconnection);
-		echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+		echo "<td>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
 		echo "</tr>";
 
 		$i++;
     }   
 		echo "</tbody>\n";
-                if ($usrlvl < 2)
-                    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη έκτακτου εκπαιδευτικού</a></span>";		
-                if ($usrlvl == 0)
-                    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"tools/ektaktoi_import.php\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Μαζική εισαγωγή εκτάκτων εκπ/κών από αρχείο excel (.xls)</a></span>";
+                
 		echo "<tr><td colspan=7 align=center>";
 		$prevpg = $curpg-1;
 		if ($lastpg == 0)
@@ -268,20 +261,20 @@
 		echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
 		if ($curpg!=1)
 		{
-				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
+				echo "  <a href=ektaktoi_prev.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
 		}
 		else
 			echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 		if ($curpg != $lastpg)
 		{
 				$nextpg = $curpg+1;
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
 		}
 		else 
 			echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
-		echo "<FORM METHOD=\"POST\" ACTION=\"ektaktoi_list.php\">";
+		echo "<FORM METHOD=\"POST\" ACTION=\"ektaktoi_prev.php\">";
 		echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
 		echo "<input type=\"submit\" value=\"Μετάβαση\">";
                 echo "<br>";
@@ -289,10 +282,7 @@
 		echo "<input type=\"submit\" value=\"Ορισμός\">";
 		echo "</FORM>";
 		echo "</td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
-                echo "&nbsp;&nbsp;&nbsp;";
-                echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Έκτακτο προσωπικό προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
+                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_hire.php'\">";
                 echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>

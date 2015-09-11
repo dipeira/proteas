@@ -1129,14 +1129,15 @@
         }
         
         // generic combo function
-        function tblCmb ($conn,$tbl,$inp = 0)
+        function tblCmb ($conn,$tbl,$inp = 0,$fieldnm)
 	{
 		$query = "SELECT * from $tbl";
 		$result = mysql_query($query, $conn);
 		if (!$result) 
 			die('Could not query:' . mysql_error());
 		$num=mysql_numrows($result);
-		echo "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
+                echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" onchange='replace()' >" : "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
+		//echo "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
                 echo "<option value=\"\"> </option>";
 		while ($i < $num) 
 		{
@@ -1286,6 +1287,15 @@
                     $ret .= "<small><a href=\"employee.php?id=".  $row['id'] ."&op=view\" target=\"_blank\">". $row['surname'] ." ". $row['name'] ."</a></small><br>";
               }
               return $ret;
+          }
+          /*
+           * Return previous school year
+           */
+          function find_prev_year($sxoletos){
+              $tmp = (int)(substr($sxoletos,0,4));
+              $tmp = (string)($tmp - 1);
+              $tmp = $tmp . substr($sxoletos,2,2);
+              return $tmp;
           }
 ?>
 

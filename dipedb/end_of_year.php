@@ -227,7 +227,12 @@
                         $result = mysql_query($query, $mysqlconnection);
                         $query = "TRUNCATE table ektaktoi";
                         $result = mysql_query($query, $mysqlconnection);
-                        //echo $query;
+                        
+                        $tbl_prx = "praxi_$sxol_etos";
+                        $query = "CREATE TABLE $tbl_prx SELECT * FROM praxi";
+                        $result = mysql_query($query, $mysqlconnection);
+                        $query = "TRUNCATE table praxi";
+                        $result = mysql_query($query, $mysqlconnection);
                         if ($result)
                             echo "Επιτυχής Διαγραφή. <br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα $tbl_ekt</small>";
                         else 
