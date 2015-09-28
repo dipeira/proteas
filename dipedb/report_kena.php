@@ -33,7 +33,8 @@
 	if ($_GET['type'] == 1)
         {
             $type = 1;
-            $query = "SELECT * from school WHERE type = $type";
+            // only dhmosia (type2 = 0)
+            $query = "SELECT * from school WHERE type2 = 0 AND type = $type";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
         
@@ -41,10 +42,11 @@
                 echo "<center>";
                 $i=0;
                 ob_start();
-                echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
                     echo "<thead>";
 //                    echo "<tr><td>aaa</td></tr>";
-                    echo "<tr><th rowspan=2>Ονομασία</th>";
+                    echo "<tr><th rowspan=2>Κωδ.</th>";
+                    echo "<th rowspan=2>Ονομασία</th>";
                     echo "<th colspan=4>Οργανικά Κενά</th>";
                     echo "<th colspan=4>Λειτουργικά Κενά</th>";
                     echo "</tr>";
@@ -57,11 +59,13 @@
                 {		
                         $sch = mysql_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
+                        $code = mysql_result($result, $i, "code");
                         $students = mysql_result($result, $i, "students");
                         $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
                         $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
 
                         echo "<tr>";
+                        echo "<td>$code</td>";
                         echo "<td><a href='school_edit.php?org=$sch'>$name</a></td>";
                         echo "<td>$kena_org[0]</td><td>$kena_org[1]</td><td>$kena_org[2]</td><td>$kena_org[3]</td>\n";
                         echo "<td>$kena_leit[0]</td><td>$kena_leit[1]</td><td>$kena_leit[2]</td><td>$kena_leit[3]</td>\n";
@@ -80,7 +84,7 @@
                         $i++;                        
                 }
         //}	
-                echo "<tr><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
+                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
                 echo "<td>$kena_leit_sum[0]</td><td>$kena_leit_sum[1]</td><td>$kena_leit_sum[2]</td><td>$kena_leit_sum[3]</td></tr>";
                 echo "</tbody></table>";
 
@@ -100,7 +104,8 @@
         {
 //            //nipiagogeia
             $type = 2;
-            $query = "SELECT * from school WHERE type = $type";
+            // only dhmosia (type2 = 0)
+            $query = "SELECT * from school WHERE type2 = 0 AND type = $type";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
 
@@ -108,9 +113,10 @@
                 echo "<center>";
                 $i=0;
                 ob_start();
-                echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
                     echo "<thead>";
-                    echo "<tr><th rowspan=2>Ονομασία</th>";
+                    echo "<tr><th rowspan=2>Κωδ.</th>";
+                    echo "<th rowspan=2>Ονομασία</th>";
                     echo "<th>Οργανικά Κενά</th>";
                     echo "<th>Λειτουργικά Κενά</th>";
                     echo "</tr>";
@@ -122,11 +128,13 @@
                 {		
                         $sch = mysql_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
+                        $code = mysql_result($result, $i, "code");
                         $students = mysql_result($result, $i, "students");
                         $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
                         $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
 
                         echo "<tr>";
+                        echo "<td>$code</td>";
                         echo "<td><a href='school_edit.php?org=$sch'>$name</a></td>";
                         echo "<td>$kena_org[0]</td><td>$kena_leit[0]</td>\n";
                         echo "</tr>\n";
@@ -143,7 +151,7 @@
                         
                         $i++;                        
                 }
-                echo "<tr><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
+                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
                 echo "</tbody></table>";            
 
                 $page = ob_get_contents(); 
