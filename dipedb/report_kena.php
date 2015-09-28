@@ -33,8 +33,8 @@
 	if ($_GET['type'] == 1)
         {
             $type = 1;
-            // only dhmosia (type2 = 0)
-            $query = "SELECT * from school WHERE type2 = 0 AND type = $type";
+            // only dhmosia kai eidika (type2 = 0 or 2)
+            $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
         
@@ -104,8 +104,8 @@
         {
 //            //nipiagogeia
             $type = 2;
-            // only dhmosia (type2 = 0)
-            $query = "SELECT * from school WHERE type2 = 0 AND type = $type";
+            // only dhmosia kai eidika (type2 = 0 or 2)
+            $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
 
