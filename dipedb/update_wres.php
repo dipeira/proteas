@@ -136,21 +136,24 @@
 		//$days1 = $cur_day - $dior + $proyp;
                 $days1 = $cur_day - $dior + $proyp - $aney_xr;
 
-                if ($metdid==1)
+		// Metdid not used to compute hours!
+		/*
+        if ($metdid==1)
 			$days = $days1 + 720;
 		else if ($metdid==2)
 			$days = $days1 + 2160;
 		else if ($metdid==3)
 			$days = $days1 + 2520;
 		else
+		*/
 			$days = $days1;
                 
 		$wres = get_wres($days);
                 $ymd = days2ymd($days);
-                echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>$wres</td><td>$days</td><td>$ymd[0] y, $ymd[1] m, $ymd[2] d</tr>";
-                
-                if ($wres <> $old_wres)
+				if ($wres <> $old_wres){
+					echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>$wres</td><td>$days</td><td>$ymd[0] y, $ymd[1] m, $ymd[2] d</tr>";
                     $need_update++;
+				}
                 // allagh wrwn
                 if ($editvmk && $wres <> $old_wres)
                 {

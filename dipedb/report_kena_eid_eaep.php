@@ -158,12 +158,12 @@
                         $has_wres = $has_wres_ekt = $mon_wres = $ekt_wres = 0;
                         if ($yphret > 0){
                             //$pe_ekp = "SELECT e.wres,e.id,e.surname,e.name,e.hm_dior,e.proyp FROM yphrethsh y JOIN employee e ON e.id=y.emp_id WHERE sxol_etos=".$sxol_etos." AND yphrethsh = ".$sch." AND e.klados = ".$klados." AND e.status = 1";
-                            $pe_ekp = "SELECT y.hours,e.id,e.surname,e.name,e.hm_dior,e.proyp FROM yphrethsh y JOIN employee e ON e.id=y.emp_id WHERE sxol_etos=".$sxol_etos." AND yphrethsh = ".$sch." AND e.klados = ".$klados." AND e.status = 1";
+                            $pe_ekp = "SELECT y.hours,e.id,e.surname,e.name,e.hm_dior,e.proyp,e.wres FROM yphrethsh y JOIN employee e ON e.id=y.emp_id WHERE sxol_etos=".$sxol_etos." AND yphrethsh = ".$sch." AND e.klados = ".$klados." AND e.status = 1";
                             $res1 = mysql_query($pe_ekp, $mysqlconnection);
                             
                             while ($row = mysql_fetch_array($res1, MYSQL_BOTH)){
-                                //$has_wres = $row['wres'];
-                                $has_wres = $row['hours'];
+                                $has_wres = $row['wres'];
+                                //$has_wres = $row['hours'];
                                 $ekp_name .= "$has_wres (<small><a href=\"employee.php?id=".  $row['id'] ."&op=view\">". $row['surname'] ." ". $row['name'] .")</a></small><br>";
                                 $mon_wres += $has_wres;
                             }
