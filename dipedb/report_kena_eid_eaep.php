@@ -162,7 +162,12 @@
                             $res1 = mysql_query($pe_ekp, $mysqlconnection);
                             
                             while ($row = mysql_fetch_array($res1, MYSQL_BOTH)){
-                                $has_wres = $row['wres'];
+                                // check if emp is in multiple schools
+                                $q1 = "select count(*) as cnt from yphrethsh where emp_id = '" . $row['id'] ."' and sxol_etos=".$sxol_etos;
+                                $r1 = mysql_query($q1);
+                                $count = mysql_result($r1, 0, 'cnt');
+                                // if more than one schools, get hours from yphrethsh table, else from employee table
+                                $count > 1 ? $has_wres = $row['hours'] : $has_wres = $row['wres'];
                                 //$has_wres = $row['hours'];
                                 $ekp_name .= "$has_wres (<small><a href=\"employee.php?id=".  $row['id'] ."&op=view\">". $row['surname'] ." ". $row['name'] .")</a></small><br>";
                                 $mon_wres += $has_wres;
