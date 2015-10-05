@@ -562,10 +562,7 @@ if ($_GET['op']=="edit")
                 
                 // 11-10-2012 show more personal data from misth database (.mdb) if $mdb in config.php is set
                 // 16-05-2013 tel,address,amka,idnum moved to employee table
-                //if ($mdb)
-                //{
-                    //$res = misth_elements($afm);
-                    if ($amka!=NULL)
+                    if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon)
                     {
                         echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
                         echo "<td colspan=3><div class=\"slidingDiv\">";
@@ -610,22 +607,7 @@ if ($_GET['op']=="edit")
                         echo "</td></tr>";   
                     }
                     // more data ends
-                //}
-                //else
-                //{
-                    /*
-                    // More personal data from mysql table...
-                    $res = misth_elements_mysql($afm) // not implemented - future use maybe?
-                    echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-                    echo "<td colspan=3><div class=\"slidingDiv\">";
-                    echo "Τηλέφωνο: $tel<br>";
-                    echo "Διεύθυνση: $street $numbr, $tk, $city<br>";
-                    echo "ΑΔΤ: $idnum<br>";
-                    echo "AMKA: $amka<br>";
-                    echo "</div>";
-                    echo "</td></tr>";
-                    */
-                //}
+
 		echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
 		echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id,$mysqlconnection)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
                 $hm_mk = date ('d-m-Y', strtotime($hm_mk));

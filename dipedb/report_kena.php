@@ -47,6 +47,7 @@
 //                    echo "<tr><td>aaa</td></tr>";
                     echo "<tr><th rowspan=2>Κωδ.</th>";
                     echo "<th rowspan=2>Ονομασία</th>";
+                    echo "<th rowspan=2>Κατ.</th>";
                     echo "<th colspan=4>Οργανικά Κενά</th>";
                     echo "<th colspan=4>Λειτουργικά Κενά</th>";
                     echo "</tr>";
@@ -60,6 +61,7 @@
                         $sch = mysql_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
                         $code = mysql_result($result, $i, "code");
+                        $cat = getCategory(mysql_result($result, $i, "category"));
                         $students = mysql_result($result, $i, "students");
                         $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
                         $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
@@ -67,6 +69,7 @@
                         echo "<tr>";
                         echo "<td>$code</td>";
                         echo "<td><a href='school_edit.php?org=$sch'>$name</a></td>";
+                        echo "<td>$cat</td>";
                         echo "<td>$kena_org[0]</td><td>$kena_org[1]</td><td>$kena_org[2]</td><td>$kena_org[3]</td>\n";
                         echo "<td>$kena_leit[0]</td><td>$kena_leit[1]</td><td>$kena_leit[2]</td><td>$kena_leit[3]</td>\n";
                         echo "</tr>\n";
@@ -84,7 +87,7 @@
                         $i++;                        
                 }
         //}	
-                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
+                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
                 echo "<td>$kena_leit_sum[0]</td><td>$kena_leit_sum[1]</td><td>$kena_leit_sum[2]</td><td>$kena_leit_sum[3]</td></tr>";
                 echo "</tbody></table>";
 
@@ -117,6 +120,7 @@
                     echo "<thead>";
                     echo "<tr><th rowspan=2>Κωδ.</th>";
                     echo "<th rowspan=2>Ονομασία</th>";
+                    echo "<th rowspan=2>Κατ.</th>";
                     echo "<th>Οργανικά Κενά</th>";
                     echo "<th>Λειτουργικά Κενά</th>";
                     echo "</tr>";
@@ -129,6 +133,7 @@
                         $sch = mysql_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
                         $code = mysql_result($result, $i, "code");
+                        $cat = getCategory(mysql_result($result, $i, "category"));
                         $students = mysql_result($result, $i, "students");
                         $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
                         $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
@@ -136,6 +141,7 @@
                         echo "<tr>";
                         echo "<td>$code</td>";
                         echo "<td><a href='school_edit.php?org=$sch'>$name</a></td>";
+                        echo "<td>$cat</td>";
                         echo "<td>$kena_org[0]</td><td>$kena_leit[0]</td>\n";
                         echo "</tr>\n";
                         
@@ -151,7 +157,7 @@
                         
                         $i++;                        
                 }
-                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
+                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
                 echo "</tbody></table>";            
 
                 $page = ob_get_contents(); 
