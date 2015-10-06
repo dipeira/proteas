@@ -17,7 +17,8 @@ if (isset($_POST['submit'])) {
 
         $objPHPExcel = PHPExcel_IOFactory::load($path);
 
-        foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+            // get only 1st worksheet
+            $worksheet = $objPHPExcel->getSheet(0);
             $worksheetTitle = $worksheet->getTitle();
             $worksheetTitle = mb_convert_encoding($worksheetTitle, "iso-8859-7", "utf-8");
             if (!strcmp($worksheetTitle,'Κλάδοι'))
@@ -69,8 +70,8 @@ if (isset($_POST['submit'])) {
                 }
                 $val[12] = ExcelToPHP($val[12]);
                 $val[12] = date ("Y-m-d", $val[12]);
-                $sql="insert into ektaktoi(name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto)
-                values('".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "')";
+                $sql="insert into ektaktoi(name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto, praxi)
+                values('".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "')";
 
                 //Run your mysql_query
                 $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
@@ -91,7 +92,6 @@ if (isset($_POST['submit'])) {
                     $inserted++;
                 //echo $sql. "<br>";
             }
-        }
         if (!$count)
             echo "<h3>Δεν έγινε εισαγωγή εγγραφών...</h3><i>($inserted εγγραφές έχουν ήδη καταχωρηθεί)</i><br><br>";
         else

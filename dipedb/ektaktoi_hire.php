@@ -129,7 +129,7 @@
         {
             // check if at least one is already inserted
             
-            $query = "SELECT surname, name, patrwnymo FROM ektaktoi WHERE afm IN (select afm from ektaktoi_". $_SESSION['sxoletos'] . " where id in (".$_POST['ektaktoi2']."))";
+            $query = "SELECT surname, name, patrwnymo, afm FROM ektaktoi WHERE afm IN (select afm from ektaktoi_". $_SESSION['sxoletos'] . " where id in (".$_POST['ektaktoi2']."))";
             //"SELECT surname, name, patrwnymo FROM ektaktoi_". $_SESSION['sxoletos'] . " WHERE id IN (".$_POST['ektaktoi2'].")";
             //echo $query;
             $result = mysql_query($query, $mysqlconnection);
@@ -138,7 +138,7 @@
                 echo '<br><strong>Σφάλμα:</strong> Οι παρακάτω εκπ/κοί έχουν ήδη προσληφθεί: <br>';
                 echo "<ul>";
                 while ($row = mysql_fetch_array($result)) {
-                    echo '<li>'.$row['surname'] . ' ' . $row['name'] . ' (πατρ. ' . $row['patrwnymo'] . ')</li>';
+                    echo '<li>'.$row['surname'] . ' ' . $row['name'] . ' (πατρ. ' . $row['patrwnymo'] . '), ΑΦΜ: ' . $row['afm'] .'</li>';
                 }
                 echo "</ul>";
                 echo "<br><strong>Δεν πραγματοποιήθηκε καμία εισαγωγή.</strong>";
