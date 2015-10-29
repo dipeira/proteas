@@ -17,7 +17,7 @@
   if($log->logincheck($_SESSION['loggedin']) == false){
     header("Location: tools/login_check.php");
   }
-  
+  $klados_type = 0;
 	
 ?>
 <html>
@@ -69,20 +69,6 @@
 			}
 		});
 	});
- 
-		$().ready(function() {
-			$("#yphr").autocomplete("get_school.php", {
-				width: 260,
-				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
-				selectFirst: false
-			});
-		});
-                
                 $().ready(function(){
                         $(".slidingDiv").hide();
                         $(".show_hide").show();
@@ -91,23 +77,7 @@
                             $(".slidingDiv").slideToggle();
                         });
                 });
-                
-                $().ready(function() {
-			$(".addRow").btnAddRow(function(row){
-                            row.find(".yphrow").autocomplete("get_school.php", {
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-                            })
-                        });
-                        $(".delRow").btnDelRow();
-                            $(".yphrow").autocomplete("get_school.php", {
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-                            });
-                });
-
+    
 </script>
 
   </head>
@@ -139,28 +109,19 @@
                     $sx_yphrethshs_id = mysql_result($result, 0, "sx_yphrethshs");
                     $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
                 }
-       }
+       //}
                 $id = mysql_result($result, 0, "id");
 		$name = mysql_result($result, 0, "name");
                 $type = mysql_result($result, 0, "type");
 		$surname = mysql_result($result, 0, "surname");
 		$klados_id = mysql_result($result, 0, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
+                // if nip
+                if ($klados_id == 1)
+                    $klados_type = 2;
+                else
+                    $klados_type = 1;
                 $metakinhsh = stripslashes(mysql_result($result, 0, "metakinhsh"));
-      ?>
-        
-   <script type="text/javascript">
-        $().ready(function() {
-                $("#adeia").click(function() {
-                    var MyVar = <?php echo $id; ?>;
-                    $("#adeies").load("ekt_adeia_list.php?id="+ MyVar );
-                    });
-                });
-    </script>
-        
-        
-        
-      <?php
 		$patrwnymo = mysql_result($result, 0, "patrwnymo");
 		$mhtrwnymo = mysql_result($result, 0, "mhtrwnymo");
 		$afm = mysql_result($result, 0, "afm");
@@ -195,9 +156,127 @@
                         $katast = "Διαθεσιμότητα";
                         break;
                 }
+       }
+                ?>
+        	<script type="text/javascript">
+
+        $().ready(function() {
+		$("#yphr").autocomplete("get_school.php", {
+                               extraParams: {type: <?php echo $klados_type; ?>},
+				width: 260,
+				matchContains: true,
+				selectFirst: false
+			});
+	});
+                
+        $().ready(function() {
+		$(".addRow").btnAddRow(function(row){
+                        row.find(".yphrow").autocomplete("get_school.php", {
+                                extraParams: {type: <?php echo $klados_type; ?>},
+				width: 260,
+				matchContains: true,
+				selectFirst: false
+                        })
+                });
+                $(".delRow").btnDelRow();
+                        $(".yphrow").autocomplete("get_school.php", {
+                                extraParams: {type: <?php echo $klados_type; ?>},
+				width: 260,
+				matchContains: true,
+				selectFirst: false
+                        });
+                });
+    </script>
+        <?php
+if ($_GET['op']=="add")
+	{
+		echo "<form id='updatefrm' action='update_ekt.php' method='POST'>";
+		echo "<table class=\"imagetable\" border='1'>";
+		
+		echo "<tr>";
+		//echo "<td>ID</td><td>$id</td>";
+		echo "</tr>";
+		echo "<tr><td>Όνομα</td><td><input type='text' name='name' /></td></tr>";
+		echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' /></td></tr>";
+		echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' /></td></tr>";
+		echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' /></td></tr>";
+		echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' /></td></tr>";
+                echo "<tr><td>Σταθερό</td><td><input type='text' name='stathero' /></td></tr>";
+                echo "<tr><td>Κινητό</td><td><input type='text' name='kinhto' /></td></tr>";
+		echo "<tr><td>Κλάδος</td><td>";
+		kladosCmb($mysqlconnection);
+		echo "</td></tr>";
+		//echo "<tr><td>Βαθμός</td><td><input type='text' name='vathm' /></td></tr>";
+		//echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' /></td></tr>";
+		
+		echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
+                echo "<tr><td>Ημ/νία ανάληψης</td><td>";
+		$myCalendar = new tc_calendar("hm_anal", true);
+		$myCalendar->setIcon("calendar/images/iconCalendar.gif");
+		$myCalendar->setDate(date("d"), date("m"), date("Y"));
+		$myCalendar->setPath("calendar/");
+		$myCalendar->setYearInterval(1970, date("Y"));
+		$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
+		$myCalendar->setAlignment("left", "bottom");
+		$myCalendar->disabledDay("sun,sat");
+		$myCalendar->writeScript();
+	  	echo "</td></tr>";		
+				
+		//echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
+		//metdidCombo(0);		
+                
+                echo "<tr><td>Τύπος Απασχόλησης</td><td>";
+                typeCmb($mysqlconnection);
+                echo "</td></tr>";
+		echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' /></td></tr>";
+                //echo "<tr><td>Υπουργική Απόφαση</td><td><input type='text' name='ya' /></td></tr>";
+                //echo "<tr><td>Απόφαση Δ/ντή</td><td><input type='text' name='apofasi' /></td></tr>";
+		echo "<tr><td>Πράξη:</td><td>";
+                tblCmb($mysqlconnection, "praxi",$praxi);
+                echo "</td></tr>"; 
+		echo "<div id=\"content\">";
+		echo "<form autocomplete=\"off\">";
+		echo "<tr><td>Σχολείο(-α) Υπηρέτησης";
+                echo "<a href=\"\" onclick=\"window.open('help/help.html#school_ekt','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"images/help.gif\"/></a>";
+                //echo "</td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" size=50/>";
+                echo "</td><td><input type=\"text\" name=\"yphr[]\" class=\"yphrow\" id=\"yphrow\" />";
+                echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
+                echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
+                echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+                //echo "</form>";
+                echo "</div>";
+		
+		echo "	</table>";
+		echo "	<input type='hidden' name = 'id' value='$id'>";
+		// action = 1 gia prosthiki
+                echo "  <input type='hidden' name = 'status' value='1'>";
+		echo "  <input type='hidden' name = 'action' value='1'>";
+		echo "	<input type='submit' value='Προσθήκη'>";
+                echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
+		echo "	<br><INPUT TYPE='button' VALUE='Αρχική Σελίδα' onClick=\"parent.location='index.php'\">";
+		echo "	</form>";
+?>
+<div id='results'></div>
+<?php
+		echo "    </center>";
+		echo "</body>";
+		echo "</html>";
+	}
 
 if ($_GET['op']=="edit")
 	{
+            ?>
+   <script type="text/javascript">
+        $().ready(function() {
+                $("#adeia").click(function() {
+                    var MyVar = <?php echo $id; ?>;
+                    $("#adeies").load("ekt_adeia_list.php?id="+ MyVar );
+                    });
+                });
+        
+	
+    </script>
+<?php
 		echo "<form id='updatefrm' name='update' action='update_ekt.php' method='POST'>";
 		echo "<table class=\"imagetable\" border='1'>";
 		
@@ -437,80 +516,7 @@ if ($_GET['op']=="edit")
 			echo "Η διαγραφή απέτυχε...";
 		echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
 	}
-	if ($_GET['op']=="add")
-	{
-		echo "<form id='updatefrm' action='update_ekt.php' method='POST'>";
-		echo "<table class=\"imagetable\" border='1'>";
-		
-		echo "<tr>";
-		//echo "<td>ID</td><td>$id</td>";
-		echo "</tr>";
-		echo "<tr><td>Όνομα</td><td><input type='text' name='name' /></td></tr>";
-		echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' /></td></tr>";
-		echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' /></td></tr>";
-		echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' /></td></tr>";
-		echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' /></td></tr>";
-                echo "<tr><td>Σταθερό</td><td><input type='text' name='stathero' /></td></tr>";
-                echo "<tr><td>Κινητό</td><td><input type='text' name='kinhto' /></td></tr>";
-		echo "<tr><td>Κλάδος</td><td>";
-		kladosCmb($mysqlconnection);
-		echo "</td></tr>";
-		//echo "<tr><td>Βαθμός</td><td><input type='text' name='vathm' /></td></tr>";
-		//echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' /></td></tr>";
-		
-		echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
-                echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-		$myCalendar = new tc_calendar("hm_anal", true);
-		$myCalendar->setIcon("calendar/images/iconCalendar.gif");
-		$myCalendar->setDate(date("d"), date("m"), date("Y"));
-		$myCalendar->setPath("calendar/");
-		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
-	  	echo "</td></tr>";		
-				
-		//echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
-		//metdidCombo(0);		
-                
-                echo "<tr><td>Τύπος Απασχόλησης</td><td>";
-                typeCmb($mysqlconnection);
-                echo "</td></tr>";
-		echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' /></td></tr>";
-                //echo "<tr><td>Υπουργική Απόφαση</td><td><input type='text' name='ya' /></td></tr>";
-                //echo "<tr><td>Απόφαση Δ/ντή</td><td><input type='text' name='apofasi' /></td></tr>";
-		echo "<tr><td>Πράξη:</td><td>";
-                tblCmb($mysqlconnection, "praxi",$praxi);
-                echo "</td></tr>"; 
-		echo "<div id=\"content\">";
-		echo "<form autocomplete=\"off\">";
-		echo "<tr><td>Σχολείο(-α) Υπηρέτησης";
-                echo "<a href=\"\" onclick=\"window.open('help/help.html#school_ekt','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"images/help.gif\"/></a>";
-                //echo "</td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" size=50/>";
-                echo "</td><td><input type=\"text\" name=\"yphr[]\" class=\"yphrow\" id=\"yphrow\" />";
-                echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
-                echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-                echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-                //echo "</form>";
-                echo "</div>";
-		
-		echo "	</table>";
-		echo "	<input type='hidden' name = 'id' value='$id'>";
-		// action = 1 gia prosthiki
-                echo "  <input type='hidden' name = 'status' value='1'>";
-		echo "  <input type='hidden' name = 'action' value='1'>";
-		echo "	<input type='submit' value='Προσθήκη'>";
-                echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
-		echo "	<br><INPUT TYPE='button' VALUE='Αρχική Σελίδα' onClick=\"parent.location='index.php'\">";
-		echo "	</form>";
-?>
-<div id='results'></div>
-<?php
-		echo "    </center>";
-		echo "</body>";
-		echo "</html>";
-	}
+	
 	mysql_close();
 ?> 
 
