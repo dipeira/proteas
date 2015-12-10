@@ -510,36 +510,18 @@
                     }
                     
                     //Έκτακτο Προσωπικό
-                    //$query = "SELECT * from ektaktoi WHERE sx_yphrethshs LIKE '%$sch,%'";
-                    //$query = "SELECT * from ektaktoi WHERE sx_yphrethshs LIKE '$sch,%' OR sx_yphrethshs LIKE '%,$sch,%'";
-                    //$query = "SELECT * from ektaktoi WHERE sx_yphrethshs = $sch";
-                    $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
+                    //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
+                    $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1)";
                     //echo $query;
                     $result = mysql_query($query, $mysqlconnection);
                     $num = mysql_num_rows($result);
                     $sx_yphrethshs = mysql_result($result, 0, "sx_yphrethshs");
-//                    $sx_yphrethshs_id_str = mysql_result($result, 0, "sx_yphrethshs");
-//                    $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-//                    $key = array_search($sch, $sx_yphrethshs_id_arr);
-//                    $num = mysql_num_rows($result);
-                    
-                    //echo "$query<br>$sx_yphrethshs_id_str<br>$key<br>";
-                    
-                    //if ($num) - did not work properly. fixed with if(key)
-                    //if ($key>=0)
-                    //if ($key>=0 && $num>0)
                     if ($num)
                     {
                         echo "<h3>Έκτακτο Προσωπικό</h3><br>";
-                        //$query = "SELECT * from ektaktoi WHERE sx_yphrethshs LIKE '%$sch,%'";
-                        //$result = mysql_query($query, $mysqlconnection);
-                        //$sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
-                        //$sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-                        //$key = array_search($sch, $sx_yphrethshs_id_arr);  
-                        //$num = mysql_num_rows($result);
                         
-                    $i=0;
-                    echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                        $i=0;
+                        echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
 			echo "<thead><tr>";
 			echo "<th>Επώνυμο</th>";
 			echo "<th>Όνομα</th>";
@@ -548,7 +530,7 @@
                         echo "<th>Ώρες</th>";
                         echo "<th>Σχόλια</th>";
                         echo "</tr></thead>\n<tbody>";
-                    while ($i < $num)
+                        while ($i < $num)
 			{
 				$id = mysql_result($result, $i, "id");
 				$name = mysql_result($result, $i, "name");
@@ -559,15 +541,10 @@
                                 $type = get_type($typos,$mysqlconnection);
                                 $comments = mysql_result($result, $i, "comments");
                                 $wres = mysql_result($result, $i, "hours");
-                                //$sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
-                                //$sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-                                //$key = in_array($sch, $sx_yphrethshs_id_arr);
-                                //if (in_array($sch, $sx_yphrethshs_id_arr))
-                                //{
-                                    echo "<tr>";
-                                    echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-                                    echo "</tr>";
-                                //}
+                                
+                                echo "<tr>";
+                                echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                                echo "</tr>";
                                 $i++;
 			}
 			echo "</tbody></table>";
@@ -626,9 +603,9 @@
                     $num = mysql_num_rows($result);
                     if ($num)
                     {
-                    echo "<h3>Σε άδεια</h3><br>";
-                    $i=0;
-                    echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                        echo "<h3>Σε άδεια</h3><br>";
+                        $i=0;
+                        echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
 			echo "<thead><tr>";
 			echo "<th>Επώνυμο</th>";
 			echo "<th>Όνομα</th>";
@@ -637,8 +614,8 @@
                         echo "<th>Ημ/νία Επιστροφής</th>";
                         echo "<th>Σχόλια</th>";
                         echo "</tr></thead>\n<tbody>";
-		    $apontes = array();
-                    while ($i < $num)
+                        $apontes = array();
+                        while ($i < $num)
 			{
                                 $flag = $absent = 0;
 								
@@ -698,7 +675,48 @@
 			}
 			echo "</tbody></table>";
                     }
-                }
+                    //Έκτακτο Προσωπικό σε άδεια
+                    $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
+                    //echo $query;
+                    $result = mysql_query($query, $mysqlconnection);
+                    $num = mysql_num_rows($result);
+                    $sx_yphrethshs = mysql_result($result, 0, "sx_yphrethshs");
+                    if ($num)
+                    {
+                        echo "<h3>Έκτακτο Προσωπικό σε ¶δεια</h3><br>";
+                        
+                        $i=0;
+                        echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+			echo "<thead><tr>";
+			echo "<th>Επώνυμο</th>";
+			echo "<th>Όνομα</th>";
+			echo "<th>Κλάδος</th>";
+                        echo "<th>Τύπος Απασχόλησης</th>";
+                        echo "<th>Ώρες</th>";
+                        echo "<th>Σχόλια</th>";
+                        echo "</tr></thead>\n<tbody>";
+                        while ($i < $num)
+			{
+				$id = mysql_result($result, $i, "id");
+				$name = mysql_result($result, $i, "name");
+				$surname = mysql_result($result, $i, "surname");
+				$klados_id = mysql_result($result, $i, "klados");
+				$klados = getKlados($klados_id,$mysqlconnection);
+                                $typos = mysql_result($result, $i, "type");
+                                $type = get_type($typos,$mysqlconnection);
+                                $comments = mysql_result($result, $i, "comments");
+                                $wres = mysql_result($result, $i, "hours");
+                                
+                                echo "<tr>";
+                                echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                                echo "</tr>";
+                                $i++;
+			}
+			echo "</tbody></table>";
+                        echo "<br>";
+                    }
+
+                } // of school status
 ?>
 		</center>
 		<div id='results'></div>

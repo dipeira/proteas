@@ -116,9 +116,13 @@
 		$surname = mysql_result($result, 0, "surname");
 		$klados_id = mysql_result($result, 0, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
-                // if nip
-                if ($klados_id == 1)
+                // if nip or nip eidikhs
+                if ($klados_id == 1 || $klados_id == 16 || $klados_id == 17)
                     $klados_type = 2;
+                // if ebp or sx.nosileytes
+                elseif ($klados_id == 12 || $klados_id == 25) {
+                    $klados_type = 0;
+                }
                 else
                     $klados_type = 1;
                 $metakinhsh = stripslashes(mysql_result($result, 0, "metakinhsh"));
