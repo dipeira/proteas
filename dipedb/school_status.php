@@ -89,6 +89,7 @@
                     $students = mysql_result($result, 0, "students");
                     $classes = explode(",",$students);
                     $frontistiriako = mysql_result($result, 0, "frontistiriako");
+                    $ted = mysql_result($result, 0, "ted");
                     $oloimero_stud = mysql_result($result, 0, "oloimero_stud");
                     $tmimata = mysql_result($result, 0, "tmimata");
                     $tmimata_exp = explode(",",$tmimata);
@@ -184,7 +185,7 @@
                 }
                 else
                     echo "<td></td>";
-                
+                                
                 if ($oloimero)
                 {
                     if ($type == 1)
@@ -198,7 +199,17 @@
                 }
                 else
                     echo "<td><input type=\"checkbox\" disabled>Όλοήμερο</td></tr>";
-                //echo "</tr>";
+                
+                if ($type == 1)
+                {
+                    echo "<tr>";
+                    if ($ted)
+                        echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td></td>";
+                    else
+                        echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td></td>";
+                    echo "</tr>";
+                }
+                
                 echo "<tr><td>Σχόλια: $comments</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
                 if ($updated>0)
                     echo "<tr><td colspan=2 align=right><small>Τελ.ενημέρωση: ".date("d-m-Y H:i",strtotime($updated))."<small></td></tr>";

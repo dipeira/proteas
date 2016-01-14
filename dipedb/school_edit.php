@@ -109,6 +109,7 @@
                         $students = mysql_result($result, 0, "students");
                         $classes = explode(",",$students);
                         $frontistiriako = mysql_result($result, 0, "frontistiriako");
+                        $ted = mysql_result($result, 0, "ted");
                         $oloimero_stud = mysql_result($result, 0, "oloimero_stud");
                         $tmimata = mysql_result($result, 0, "tmimata");
                         $tmimata_exp = explode(",",$tmimata);
@@ -200,6 +201,15 @@
                         else
                             echo "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td>";
                         echo "</tr>";
+                        
+                        echo "<tr>";
+                        if ($ted)
+                            echo "<td><input type=\"checkbox\" name='ted' checked >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+                        else
+                            echo "<td><input type=\"checkbox\" name='ted' >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+                        echo "<td></td>";
+                        echo "</tr>";
+                        
                         echo "<tr><td colspan=2>Σχόλια: <input type='text' name='comments' value='$comments' size='65' /></td></tr>";
                         echo "</table>";
                         echo "<br>";
