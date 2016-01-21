@@ -80,10 +80,10 @@
 		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 		if ($all)
                     $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch, p.name as praxi from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
-                        join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
+                        join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
                 else
                     $query = "select distinct s.name as sch, s.id as schid from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
-                        join school s on s.id = y.yphrethsh where e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY S.NAME ASC";
+                        join school s on s.id = y.yphrethsh where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY S.NAME ASC";
                 //echo $query;
 		$result = mysql_query($query, $mysqlconnection);
 		
