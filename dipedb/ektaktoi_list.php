@@ -91,8 +91,7 @@
 
                 $query = "SELECT * FROM ektaktoi ";
 	  	
-		$klpost = 0;
-		$yppost = 0;
+		$klpost = $yppost = $praxipost = 0;
 		if (($_POST['klados']>0) || (strlen($_POST['yphr'])>0) || (strlen($_POST['surname'])>0) || (strlen($_POST['type'])>0))
 		{
 			$posted=1;
@@ -147,13 +146,13 @@
                 if ((strlen($_POST['praxi'])>0) || ($_GET['praxi']>0))
 		{
 			if ($_GET['praxi']>0)
-				$yppost = $_GET['praxi'];
+				$praxipost = $_GET['praxi'];
                         else
-                            $yppost = $_POST['praxi'];
+                            $praxipost = $_POST['praxi'];
 			if ($whflag)
-				$query .= "AND praxi = $yppost ";
+				$query .= "AND praxi = $praxipost ";
 			else
-				$query .= "WHERE praxi = $yppost ";
+				$query .= "WHERE praxi = $praxipost ";
 		}
 		$query_all = $query;
 		$query .= " ORDER BY surname ";
@@ -268,16 +267,16 @@
 		echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
 		if ($curpg!=1)
 		{
-				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
+				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Πρώτη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Προηγ/νη</a>";
 		}
 		else
 			echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 		if ($curpg != $lastpg)
 		{
 				$nextpg = $curpg+1;
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Επόμενη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Τελευταία</a>";
 		}
 		else 
 			echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
