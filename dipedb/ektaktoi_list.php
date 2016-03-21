@@ -58,7 +58,7 @@
 		
 		$(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-		}); 
+		});
 	</script>
 	
   </head>
@@ -103,7 +103,10 @@
 				$klpost = $_POST['klados'];
 			else
 				$klpost = $_GET['klados'];
-			$query .= "WHERE klados = $klpost ";
+                        if ($whflag)
+                            $query .= "AND klados = $klpost ";
+			else
+                            $query .= "WHERE klados = $klpost ";
 			$whflag=1;
 		}
                 if (($_POST['type']>0) || ($_GET['type']>0))
@@ -112,7 +115,10 @@
 				$typepost = $_POST['type'];
 			else
 				$typepost = $_GET['type'];
-			$query .= "WHERE type = $typepost ";
+                        if ($whflag)
+                            $query .= "AND type = $typepost ";
+			else
+                            $query .= "WHERE type = $typepost ";
 			$whflag=1;
 		}
 		if ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0))
@@ -186,24 +192,41 @@
         echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";
-	if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0) || ($_GET['type']>0))
-		echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
-	else	
-		echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
-	echo "<input type='text' name='surname' id='surname''/>\n";
+	//if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0) || ($_GET['type']>0))
+	//	echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
+	//else	
+        ?>
+    <script type="text/javascript">
+        $().ready(function(){
+            $('#resetBtn').click(function() {
+                $('#surname').val("");
+                $('#klados').val("");
+                $('#yphr').val("");
+                $('#type').val("");
+                $('#praxi').val("");
+                $('#src').submit();
+            });
+        });
+    </script>
+        <?php
+        echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση' />"
+            . "<br><center><button type='button' id='resetBtn' style='margin: 3px'><small>Επαναφορά</small></button></center>"
+            . "</td><td>\n";
+                
+	echo "<input type='text' name='surname' id='surname' value='$surpost' />\n";
 	echo "<td></td><td>\n";
-	kladosCmb($mysqlconnection);
+        echo $klpost ? kladosCombo($klpost,$mysqlconnection) : kladosCmb($mysqlconnection);
 	echo "</td>\n";
 		echo "<div id=\"content\">";
 		echo "<form autocomplete=\"off\">";
-		echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td>";
+		echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" value='".getSchool($yppost, $mysqlconnection)."'/></td>";
 		echo "</div>";
 	echo "<td>";
         //echo "</td>";
-        typeCmb($mysqlconnection);
+        echo $typepost ? typeCmb1($typepost,$mysqlconnection) : typeCmb($mysqlconnection);
         echo "</td>";
         echo "<td>";
-        tblCmb($mysqlconnection, 'praxi');
+        tblCmb($mysqlconnection, 'praxi', $praxipost,'praxi');
         echo "</td>";
 	echo "</form></tr>\n";
 	
@@ -267,16 +290,16 @@
 		echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
 		if ($curpg!=1)
 		{
-				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Πρώτη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Προηγ/νη</a>";
+				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Πρώτη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Προηγ/νη</a>";
 		}
 		else
 			echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 		if ($curpg != $lastpg)
 		{
 				$nextpg = $curpg+1;
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Επόμενη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost>Τελευταία</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Επόμενη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Τελευταία</a>";
 		}
 		else 
 			echo "  Επόμενη &nbsp;&nbsp; Τελευταία";

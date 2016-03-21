@@ -235,7 +235,8 @@
 		if (!$result) 
 			die('Could not query:' . mysql_error());
 		$num=mysql_numrows($result);
-		echo "<select name=\"klados\">";
+		echo "<select name=\"klados\" id=\"klados\">";
+                echo "<option value='' selected>(Επιλογή:)</option>";
 		while ($i < $num) 
 		{
 			$id=mysql_result($result, $i, "id");
@@ -256,8 +257,8 @@
 		if (!$result) 
 			die('Could not query:' . mysql_error());
 		$num=mysql_numrows($result);
-		echo "<select style='max-width: 97px;' name=\"klados\">";
-		echo "<option value=\"\" selected>(Επιλογή:)</option>";
+		echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
+		echo "<option value='' selected>(Επιλογή:)</option>";
 		while ($i < $num) 
 		{
 			$id=mysql_result($result, $i, "id");
@@ -275,7 +276,7 @@
 		if (!$result) 
 			die('Could not query:' . mysql_error());
 		$num=mysql_numrows($result);
-		echo "<select name=\"type\">";
+		echo "<select name=\"type\" id=\"type\">";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		while ($i < $num) 
 		{
@@ -294,8 +295,8 @@
 			die('Could not query:' . mysql_error());
 		$num=mysql_numrows($result);
                 $type1 = get_type($typeinp, $conn);
-		echo "<select name=\"type\">";
-		//echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
+		echo "<select name=\"type\" id=\"type\">";
+		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		while ($i < $num) 
 		{
 			$id=mysql_result($result, $i, "id");
