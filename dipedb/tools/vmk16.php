@@ -1,0 +1,86 @@
+<?php
+        /* Prepare the DB for the new MKs:
+         * 1. ALTER TABLE `employee` ADD `mk11` TINYINT NOT NULL AFTER `hm_mk`, ADD `hm_mk11` DATE NOT NULL AFTER `mk11`;
+         * 2. UPDATE `employee` SET `mk11` = `mk`
+         * 3. UPDATE `employee` SET `hm_mk11` = `hm_mk`
+         * 4. UPDATE `employee` SET `hm_mk`='2016-01-01' WHERE 1
+         * 5. run this script...
+         */
+	header('Content-type: text/html; charset=iso8859-7'); 
+	Require "../config.php";
+	Require "../functions.php";
+        session_start();
+        ini_set('max_execution_time', 300);  //300 seconds = 5 minutes
+	
+	echo "vmk16: Checks & fixes vathmos & mk of employee records for 01-01-2016 (N.4354/2015)";
+        echo "<br>vmk.php?id=			number: checks specified id";
+	echo "<br>				all: checks all records";
+	echo "<br>date=         		all the above for the given date<br><br>";
+        
+        // if not admin, exit...
+        if ($_SESSION['userlevel'] > 0){
+            die('Not Permitted...');
+        }
+        
+        $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
+        mysql_select_db($db_name, $mysqlconnection);
+        mysql_query("SET NAMES 'greek'", $mysqlconnection);
+        mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+
+        if ((isset($_GET['id'])) && is_numeric($_GET['id']))
+            $query = "SELECT * from employee where id=".$_GET['id'];
+        else
+            $query = "SELECT * from employee";
+
+        echo $query;
+        $result = mysql_query($query, $mysqlconnection);
+        $num=mysql_numrows($result);
+        
+	while ($i<$num)	
+	{
+            $id = mysql_result($result, $i, "id");
+            $hm_dior = mysql_result($result, $i, "hm_dior");
+            $proyp = mysql_result($result, $i, "proyp");
+            $metdid = mysql_result($result, $i, "met_did");
+
+            $hm_dior1 = strtotime($hm_dior);
+            $dior = (date('d',$hm_dior1) + date('m',$hm_dior1)*30 + date('Y',$hm_dior1)*360);
+
+            if (isset($_GET['date']))
+            {
+                $tmp = strtotime($_GET['date']);
+                $day1 = (date('d',$tmp) + date('m',$tmp)*30 + date('Y',$tmp)*360);
+            }
+            else
+                // 01-01-2016 in days...
+                $day1 = 725791;
+
+            // met: 4y, did: 12y, m+d: 12y
+            if ($metdid==1)
+                $days = $day1 - $dior + $proyp + 1440;
+            else if ($metdid==2)
+                $days = $day1 - $dior + $proyp + 4320;
+            else if ($metdid==3)
+                $days = $day1 - $dior + $proyp + 4320;
+            else
+                $days = $day1 - $dior + $proyp;
+
+            // call mk16
+            $mk16 = mk16($days);
+
+            echo "<br>id: $id,&nbsp;&nbsp;hmdior (days): $hm_dior ($dior)";
+            echo "&nbsp;&nbsp;proyp: $proyp";
+            echo "&nbsp;&nbsp;days: $days";
+            echo "&nbsp;&nbsp;MK: $mk16";
+
+            $query = "UPDATE employee SET mk='$mk16' WHERE ID=$id";
+            echo "&nbsp;&nbsp;$query";
+            mysql_query($query, $mysqlconnection);
+            $fix+=1;
+            $i++;
+	}
+		if ($fix)
+                    echo "<br>Updated $fix record(s)";
+                
+		mysql_close();
+?>

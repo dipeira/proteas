@@ -1065,6 +1065,25 @@
 		}
 		return $mk;
 	}
+        // mk16: Function for N.4354/2015
+        // returns new MK
+        function mk16($days) {
+            // @excel: =INT(Q2/2)+1
+            $years = floor ($days/360);
+            $mk = floor($years/2) + 1;
+            return $mk > 19 ? 19 : $mk;
+        }
+        // mk16_plus: Function for N.4354/2015
+        // returns new MK and days since last MK (pleonazwn)
+        function mk16_plus($days) {
+            // @excel: =INT(Q2/2)+1
+            $years = floor ($days/360);
+            $mk = floor($years/2) + 1;
+            $ret[0] = $mk > 19 ? 19 : $mk;
+            $ret[1] = $days - (($mk * 2) - 2);
+            print_r($ret);
+            return ret;
+        }
         
 	function exp2excel ($data)
 	{
