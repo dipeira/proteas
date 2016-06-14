@@ -132,8 +132,10 @@
                         echo "<form name='anaplfrm' action=\"vev_yphr_anapl.php\" method='POST'>";
 
                         $i=0;
+                        // ***********************
                         while ($i < $num)
                         //while ($i < 10) // for testing
+                        // ***********************
                         {
                             $id = mysql_result($result, $i, "id");
                             $name = mysql_result($result, $i, "name");
@@ -162,14 +164,19 @@
                             if (!$kratikoy)
                             {
                                 $praksi = mysql_result($result, $i, "praksi");
-                                if (strpos($praksi,'ÅÁÅÐ') !== false || strpos($praksi,'Å.Á.Å.Ð.') !== false || strpos($praksi,'ÅÓÐÁ') !== false)
+                                if (strpos($praksi,'ÅÁÅÐ') !== false || strpos($praksi,'Å.Á.Å.Ð.') !== false)
                                         $prefix = "EAEP_";
+                                elseif (strpos($praksi,'ÊÑÇÔÇ') !== false)
+                                        $prefix = "PEP_";
                                 elseif (strpos($praksi,'ÐÁÑÁËËÇËÇ') !== false || strpos($praksi,'ÐáñÜëëçëç') !== false || strpos($praksi,'ðáñÜëëçëç') !== false
                                             || strpos($praksi,'åîåéäéêåõìÝíç') !== false || strpos($praksi,'ÅîåéäéêåõìÝíç') !== false || strpos($praksi,'ÅÎÅÉÄÉÊÅÕÌÅÍÇ') !== false )
                                         $prefix = "PARAL_";
                                 elseif (strpos($praksi,'Åîáôïì.') !== false || strpos($praksi,'ÅÎÁÔÏÌÉÊÅÕÌÅÍÇ') !== false || strpos($praksi,'ÅîáôïìéêåõìÝíç') !== false 
                                             || strpos($praksi,'åîáôïìéêåõìÝíç') !== false || strpos($praksi,'åéäéêÞ áãùãÞ') !== false || strpos($praksi,'ÅéäéêÞ áãùãÞ') !== false)
                                         $prefix = "EKSATOM_";
+                                elseif (strpos($praksi,'ÁÍÁÐÔÕÎÇ') !== false || strpos($praksi,'ÁíÜðôõîç') !== false || strpos($praksi,'ÄÏÌÙÍ') !== false 
+                                            || strpos($praksi,'Äïìþí') !== false)
+                                        $prefix = "ANAPT_";
                                 elseif (strpos($praksi,'ÏËÏÇÌÅÑÏ') !== false || strpos($praksi,'ÏëïÞìåñï') !== false || strpos($praksi,'ïëïÞìåñï') !== false)
                                         $prefix = "OLOHM_";
                                 elseif (strpos($praksi,'ÍÅÏ Ó×ÏËÅÉÏ') !== false || strpos($praksi,'íÝï ó÷ïëåßï') !== false || strpos($praksi,'ÍÝï ó÷ïëåßï') !== false || strpos($praksi,'ÅÊÏ') !== false)
@@ -189,12 +196,14 @@
                                 else
                                     $prefix = '';
                             }
+                            $metakinhsh = str_replace("'", "", $metakinhsh);
                             $emp_arr = array('name'=>$name,'surname'=>$surname,'patrwnymo'=>$patrwnymo,'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
                                 'ya'=>$ya,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,'last_afm'=>$last_afm,'prefix'=>$prefix,'ebp'=>$ebp);
+
                             $submit_array[] = $emp_arr;
                             $i++;
                         }
-                        echo "<input type='hidden' name='emp_arr' value=\"". htmlentities(serialize($submit_array)) . "\">";
+                        echo "<input type='hidden' name='emp_arr' value='". serialize($submit_array) ."'>";
                         echo "<input type='hidden' name='kratikoy' value=$kratikoy>";
                         echo "<input type='hidden' name='plithos' value=$num>";
                         echo "<input type='submit' VALUE='ÕðïâïëÞ áéôÞìáôïò'>"; 

@@ -14,6 +14,8 @@ mysql_select_db($db_name, $mysqlconnection);
 mysql_query("SET NAMES 'greek'", $mysqlconnection);
 mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 
+set_time_limit (180);
+
 $arr = unserialize(html_entity_decode($_POST['emp_arr']));
 
 $i = 1;
@@ -21,14 +23,24 @@ $i = 1;
 foreach( $arr as $myarr)
 {
     $PHPWord = new PHPWord();
+    // kratikoy
     if ($_POST['kratikoy'])
         $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl.docx');
+    // espa
     else
     {
+        if (strpos($myarr['prefix'],'PARAL_') !== false || strpos($myarr['prefix'],'EKSATOM_') !== false || strpos($myarr['prefix'],'ANAPT_') !== false || strpos($myarr['prefix'],'NEO_') !== false)
+                $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_eks_ekseid_etc.docx');
+        elseif (strpos($myarr['prefix'],'EAEP_') !== false || strpos($myarr['prefix'],'OLOHM_') !== false )
+                $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_eaep_oloim.docx');
+        elseif (strpos($myarr['prefix'],'PEP_') !== false)
+                $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_pep.docx');
+        /*
         if ($myarr['ebp'])
             $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_ebp.docx');
         else
             $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_espa.docx');
+        */
     }
         
     $data = $endofyear;
