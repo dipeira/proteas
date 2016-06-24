@@ -1206,8 +1206,11 @@
 		die('Could not query:' . mysql_error());
         }
         // creates a new record in yphrethsh table for each employee (if there isn't any) - used when changing sxoliko etos
+        // disp: 0 - none, 1 - basic, 2 - extensive
         function do2yphr($mysqlconnection, $disp = 1)
         {
+              if ($disp)
+                  echo "<h3>Πλήρωση πίνακα υπηρετήσεων</h3>";
               set_time_limit(1200);  
               $sxol_etos = getParam('sxol_etos', $mysqlconnection);
               $i = $ins_count = 0;
@@ -1220,15 +1223,16 @@
                   $id = mysql_result($result0, $i, "id");
                   $sx_yphrethshs = mysql_result($result0, $i, "sx_yphrethshs");
                   $sx_organikhs = mysql_result($result0, $i, "sx_organikhs");
+                  $hours = mysql_result($result0, $i, "wres");
                   //$query1 = "select * from yphrethsh WHERE emp_id=$id AND organikh=$sx_organikhs AND sxol_etos=$sxol_etos";
                   $query1 = "select * from yphrethsh WHERE emp_id=$id AND sxol_etos=$sxol_etos";
                   $result1 = mysql_query($query1, $mysqlconnection);
                   if (!mysql_num_rows($result1))
                   {
-                      $ins_query = "INSERT INTO yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) VALUES ('$id', '$sx_yphrethshs', '24', '$sx_organikhs', '$sxol_etos')";
+                      $ins_query = "INSERT INTO yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) VALUES ('$id', '$sx_yphrethshs', '$hours', '$sx_organikhs', '$sxol_etos')";
                       $ins_result = mysql_query($ins_query, $mysqlconnection);
                       $ins_count++;
-                      if ($disp)
+                      if ($disp > 1)
                           echo "$id, ";
                   }
                   $i++;
@@ -1236,7 +1240,7 @@
 
               mysql_close();
               if ($disp)
-                  echo "<br>$i υπάλληλοι<br>$ins_count αλλαγές...";
+                  echo "<br>$i υπάλληλοι<br>$ins_count αλλαγές...<br>";
           }
           // returns school category
           function getCategory($cat){
@@ -1317,5 +1321,207 @@
               $tmp = $tmp . substr($sxoletos,2,2);
               return $tmp;
           }
+          /*
+           * Wres_tmimata: Compute required hours based on oloimero schedule 2016-17
+           * Returns required hours depending on number of classes
+           * tmimata: 0: A, 1: B, 2: Γ, 3: Δ, 4: E, 5: ΣΤ
+           */
+          function anagkes1617($tm){
+              $artm = array_sum($tm);
+              // 4/thesia
+              if ($artm == 4){
+                $hours = [];
+                $hours['05-07'] = $tm[4]*1;
+                $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3;
+                $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1;
+                $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2;
+                $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+                $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+                $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
+                $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*22;
+                // oloimero
+                $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                return $hours;
+              }
+              // 5/thesia
+              elseif ($artm == 5){
+                $hours = [];
+                $hours['05-07'] = $tm[4]*2 + $tm[5]*2;
+                $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3 + $tm[5]*3;
+                $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2 + $tm[5]*2;
+                $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+                $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*20 + $tm[5]*20;
+                // oloimero
+                $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                return $hours;
+              }
+              // 6/thesia+anw
+              else {
+                $hours = [];
+                $hours['05-07'] = $tm[4]*2 + $tm[5]*2;
+                $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3 + $tm[5]*3;
+                $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2 + $tm[5]*2;
+                $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
+                $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
+                // oloimero
+                $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                return $hours;
+              }
+          }
+          /*
+           * Headmaster's hours depending on number of school classes
+           * 4,5: 20, 6-9: 12, 10,11: 10, 12+: 8
+           */
+          function wres_dnth($tm) {
+              if ($tm == 4 || $tm == 5)
+                  return 20;
+              elseif ($tm > 5 && $tm < 10)
+                  return 12;
+              elseif ($tm == 10 || $tm == 11)
+                  return 10;
+              elseif ($tm >= 12)
+                  return 8;
+          }
+          /*
+           * ektimhseis1617
+           * Function to compute required and available hours for oloimero schedule 2016-17
+           * uses anagkes1617
+           * sch: school code, $print: TRUE to print, false to return 3 arrays(required, available, diff)
+           */
+          function ektimhseis1617($sch, $mysqlconnection, $sxoletos, $print = FALSE)
+            {
+              ?>
+                <script type="text/javascript">
+                $().ready(function(){
+                        $('#toggleBtn').click(function(){
+                            event.preventDefault();
+                            $("#analysis").slideToggle();
+                        });
+                });
+                </script>
+              <?php
+              $avhrs = [];
+              $all = [];
+              // init db
+              mysql_query("SET NAMES 'greek'", $mysqlconnection);
+              mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+              // get tmimata
+              $query = "SELECT tmimata,leitoyrg from school WHERE id='$sch'";
+              $result = mysql_query($query, $mysqlconnection);
+              $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
+              $leit = array_sum($tmimata_exp);
+              //$leit = mysql_result($result, 0, "leitoyrg");
+              // oligothesia
+              if ($leit < 4) 
+              {
+                $reqhrs['70'] = $leit * 25;
+              }
+              else {
+                // Απαιτούμενες ώρες
+                $reqhrs = anagkes1617($tmimata_exp);
+              }
+              // ώρες Δ/ντή
+              $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
+              $result = mysql_query($query, $mysqlconnection);
+              if (mysql_num_rows($result)) {
+                  $dnthrs = wres_dnth($leit);
+                  $klados = mysql_result($result, 0, "klados");
+                  $avhrs[$klados] = $dnthrs;
+                  // ώρες Δ/ντή στην ανάλυση
+                  $ar = Array('surname' =>  mysql_result($result, 0, "e.surname"), 'klados' =>  mysql_result($result, 0, "k.perigrafh"), 'hours' => $dnthrs);
+                  $all[] = $ar;
+              }
+              // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
+              //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
+              $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
+              $result = mysql_query($query, $mysqlconnection);
+              while ($row = mysql_fetch_array($result)){
+                  $kl = strval($row['klados']);
+                  $avhrs[$kl] += $row['wres'];
+              }
+              // αναλυτικά...
+              $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) ORDER BY e.klados";
+              $result = mysql_query($query, $mysqlconnection);
+              while ($row = mysql_fetch_array($result)){
+                  $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                  $all[] = $ar;
+              }
+              // οργ αλλου + υπηρ
+              //$query = "SELECT klados,sum(wres) as wres from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,1) AND status=1 GROUP BY klados";
+              // Οργανική αλλού και δευτερεύουσα υπηρέτηση
+              //$query = "SELECT e.klados,sum(y.hours) FROM employee e join yphrethsh y on e.id = y.emp_id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos GROUP BY e.klados";
+              // αναπληρωτές
+              $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 GROUP BY klados";
+              $result = mysql_query($query, $mysqlconnection);
+              while ($row = mysql_fetch_array($result)){
+                  $kl = strval($row['klados']);
+                  $avhrs[$kl] += $row['wres'];
+              }
+              // αναλυτικά...
+              $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 ORDER BY e.klados";
+              $result = mysql_query($query, $mysqlconnection);
+              while ($row = mysql_fetch_array($result)){
+                  $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                  $all[] = $ar;
+              }
+              
+              // replace kladoi @ array
+              //kladoi: 2/70, 3/06, 4/08, 5/11, 6/16, 15/19-20, 13/05-07, 14/05-07, 20/32
+              $avar = $avhrs;
+              $avar['70'] = $avar['2'];
+              unset($avar['2']);
+              $avar['06'] = $avar['3'];
+              unset($avar['3']);
+              $avar['08'] = $avar['4'];
+              unset($avar['4']);
+              $avar['11'] = $avar['5'];
+              unset($avar['5']);
+              $avar['16'] = $avar['6'];
+              unset($avar['6']);
+              $avar['19-20'] = $avar['15'];
+              unset($avar['15']);
+              $avar['05-07'] = $avar['13'] + $avar['14'];
+              unset($avar['13']);
+              unset($avar['14']);
+              $avar['32'] = $avar['20'];
+              unset($avar['20']);
+
+              // subtract available from required
+              foreach ($avar as $key => $value) {
+                    if(array_key_exists($key, $reqhrs) && array_key_exists($key, $avar))
+                        $ret[$key] = $avar[$key] - $reqhrs[$key];
+              }
+                
+              if ($print){
+                function tdc($val){
+                    return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
+                }  
+                echo "<h3>Λειτουργικά Κενά / Πλεονάσματα</h3>";
+                echo "<table class=\"imagetable\" border='1'>";
+                echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>Ολοημ.</th></thead>";
+                echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['16']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['19-20']."</td><td>".$reqhrs['70']."</td><td>".$reqhrs['O']."</td></tr>";
+                echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['16']."</td><td>".$avar['32']."</td><td>".$avar['19-20']."</td><td>".$avar['70']."</td><td></td></tr>";
+                echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['16']).tdc($ret['32']).tdc($ret['19-20']).tdc($ret['70'])."<td></td></tr>";
+                echo "</table>";
+                echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
+                echo "<div id='analysis' style='display: none;'>";
+                    echo "<table class=\"imagetable\" border='1'>";
+                    foreach ($all as $row) {
+                        echo "<tr><td>".$row['surname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
+                    }
+                    echo "</table>";
+                echo "</div>";
+                echo "<br><br>";
+              }
+              else {
+                  return ['required' => $reqhrs, 'available' => $avar, 'diff' => $ret, 'leit' => $leit];
+              }
+            }
 ?>
 

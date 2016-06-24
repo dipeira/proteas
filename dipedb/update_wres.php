@@ -189,5 +189,5 @@
 	}
 ?>
 <br><br>
-<a href="index.php">Επιστροφή</a>
+<a href="end_of_year.php">Επιστροφή</a>
 </html>

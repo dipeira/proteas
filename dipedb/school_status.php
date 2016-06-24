@@ -1,6 +1,6 @@
 <?php
   header('Content-type: text/html; charset=iso8859-7'); 
-  require_once"config.php";
+  require_once "config.php";
   require_once "functions.php";
   //define("L_LANG", "el_GR"); Needs fixing
   require('calendar/tc_calendar.php');
@@ -58,7 +58,7 @@
         <h2>Καρτέλα σχολείου</h2>
       <?php
       
-        function disp_school ($sch,$conn)
+      function disp_school ($sch,$conn)
 	{
 		$query = "SELECT * from school where id=$sch";
 		$result = mysql_query($query, $conn);
@@ -221,13 +221,12 @@
                 {
                     if ($synolo>0)
                     {
-                    echo "<table class=\"imagetable\" border='1'>";
-                    echo "<tr><td colspan=6>Σύνολο Μαθητών: $synolo</td></tr>";
-                    echo "<tr><td>Α': $classes[0]</td><td>Β': $classes[1]</td><td>Γ': $classes[2]</td><td>Δ': $classes[3]</td><td>Ε': $classes[4]</td><td>ΣΤ': $classes[5]</td></tr>";
-                    echo "<tr><td colspan=6>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο: $synolo_tmim</td></tr>";
-                    echo "<tr><td>Α': $tmimata_exp[0]</td><td>Β': $tmimata_exp[1]</td><td>Γ': $tmimata_exp[2]</td><td>Δ': $tmimata_exp[3]</td><td>Ε': $tmimata_exp[4]</td><td>ΣΤ': $tmimata_exp[5]</td></tr>";
-                    echo "</table>";
-                    echo "<br>";
+                        echo "<table class=\"imagetable\" border='1'>";
+                        echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Ολ</td><td>ΠΖ</td></tr>";
+                        echo "<tr><td>Σύνολο Μαθητών: $synolo</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$classes[6]</td><td>$classes[7]</td></tr>";
+                        echo "<tr><td>Τμήματα/τάξη<br>Σύνολο: $synolo_tmim</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$tmimata_exp[6]</td><td>$tmimata_exp[7]</td></tr>";
+                        echo "</table>";
+                        echo "<br>";
                     }
                     else 
                     {
@@ -275,6 +274,11 @@
                 echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
                 echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
                 echo "<br><br>";
+                $sxol_etos = getParam('sxol_etos', $conn);
+                // if dimotiko & leitoyrg >= 4
+                if ($type == 1 && array_sum($tmimata_exp)>3){
+                        ektimhseis1617($sch, $conn, $sxol_etos, TRUE);
+                }
 	}
       
 		echo "<div id=\"content\">";
@@ -304,6 +308,7 @@
                     
                     echo "<h1>$str1</h1>";
                     disp_school($sch, $mysqlconnection);
+                    
                     //Υπηρετούν με θητεία
                     $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6)";
                     $result = mysql_query($query, $mysqlconnection);

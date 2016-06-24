@@ -62,12 +62,12 @@
       $oloimero = 0;
   
   $comments = $_POST['comments'];
-  $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'];
+  $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'].",".$_POST['g'].",".$_POST['h'];
    
   //29-6-2012
   $oloimero_tea = $_POST['oloimero_tea'];
   $oloimero_stud = $_POST['oloimero_stud'];
-  $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'];
+  $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'].",".$_POST['tg'].",".$_POST['th'];
   $ekp_ee = $_POST['ekp_te'].",".$_POST['ekp_ty'];
   
   $klasiko = $_POST['k1a'].",".$_POST['k1b'].",".$_POST['k2a'].",".$_POST['k2b'].",".$_POST['k3a'].",".$_POST['k3b'].",".$_POST['k4a'].",".$_POST['k4b'];

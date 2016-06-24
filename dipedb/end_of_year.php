@@ -23,15 +23,17 @@
                 $tbl_bkp_mon = "employee_bkp_$sxol_etos";
                 echo "<html><head><h2>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</h2></head><body>";
                 echo "<h3><blink>Προσοχή: Μη αναστρέψιμες ενέργειες</blink></h3>";
-                echo "<tr><td>Προτείνεται η εκτέλεση με τη σειρά του αριθμού που αναγράφεται.<br><br>";
+                echo "<tr><td>Επιβάλλεται η εκτέλεση με τη σειρά του αριθμού που αναγράφεται.<br><br>";
 		echo "<table class=\"imagetable\" border='1'>";
 		echo "<form action='' method='POST' autocomplete='off'>";
                 echo "<tr><td>Ενέργεια</td><td>";
-                echo "<input type='radio' name='type' value='8'>1. Αλλαγή σχολικού έτους (τρέχον σχολικό έτος: $sxol_etos)<br>";
-                echo "<input type='radio' name='type' value='2'>2. Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων<br>";
-                echo "<input type='radio' name='type' value='6' disabled>3. Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους<br>";
-                echo "<input type='radio' name='type' value='3' disabled>4. Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ<br>";
-                echo "<input type='radio' name='type' value='5' disabled>5. Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων<br>";
+                echo "<input type='radio' name='type' value='2'>1. Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων (να γίνει πριν την αλλαγή Σχ.έτους)<br>";
+                echo "<input type='radio' name='type' value='8'>2. Αλλαγή σχολικού έτους (τρέχον σχολικό έτος: $sxol_etos)<br>";
+                echo "<input type='radio' name='type' value='10'>3. Αλλαγή ωραριου εκπ/κων<br>";
+                echo "<input type='radio' name='type' value='11'>4. Πλήρωση πίνακα υπηρετήσεων<br>";
+                //echo "<input type='radio' name='type' value='6' disabled>3. Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους<br>";
+                //echo "<input type='radio' name='type' value='3' disabled>4. Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ<br>";
+                //echo "<input type='radio' name='type' value='5' disabled>5. Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων<br>";
                 echo "<br>";
                 echo "<input type='radio' name='type' value='4'>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31/08)<br>";
                 echo "<br>";
@@ -55,7 +57,12 @@
                 // Allagh sxolikoy etoys
                 if (isset($_POST['sxoletos']))
                 {
-                    do2yphr($mysqlconnection, 0);
+                    //do2yphr($mysqlconnection);
+                    $curSxoletos = getParam('sxol_etos', $mysqlconnection);
+                    if ($curSxoletos == $_POST['sxoletos']){
+                        echo "<br><br>";
+                        die('Σφάλμα: Το έτος έχει ήδη αλλάξει...');
+                    }
                     setParam('sxol_etos', $_POST['sxoletos'], $mysqlconnection);
                     // more...
                     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
@@ -63,13 +70,13 @@
                     $result = mysql_query($query, $mysqlconnection);
                     $query = "DROP TABLE employee_moved";
                     $result = mysql_query($query, $mysqlconnection);
-                    // 389: apospasi se forea, 397: sxol. symvoulos, 399: Apospash ekswteriko
+                    // 388: allo pyspe, 389: apospasi se forea, 397: sxol. symvoulos, 399: Apospash ekswteriko
                     // thesi 2: d/nths, 4: dioikhtikos
-                    $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN (389,397,399) AND thesi NOT IN (2,4)";
+                    $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN (388,389,397,399) AND thesi NOT IN (2,4)";
                     $result = mysql_query($query, $mysqlconnection);
-                    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN (389,397,399) AND thesi NOT IN (2,4)";
+                    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN (388,389,397,399) AND thesi NOT IN (2,4)";
                     $result = mysql_query($query, $mysqlconnection);
-                    $num = mysql_affected_rows();
+                    $num = mysql_affected_rows($mysqlconnection);
                     //echo $query;
                     if ($result)
                         echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -81,7 +88,7 @@
                     $result = mysql_query($query, $mysqlconnection);
                     $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 388";
                     $result = mysql_query($query, $mysqlconnection);
-                    $num = mysql_affected_rows();
+                    $num = mysql_affected_rows($mysqlconnection);
                     //echo $query;
                     if ($result)
                         echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -103,7 +110,7 @@
 //                    else 
 //                        echo "Πρόβλημα στη διαγραφή...";
                     //
-                    do2yphr($mysqlconnection, 0);
+                    //do2yphr($mysqlconnection);
                     echo "<br><br>H διαδικασία ολοκληρώθηκε...";
                 }
                 // vevaiwseis proyphresias anaplhrwtwn
@@ -248,6 +255,7 @@
                             echo "Πρόβλημα στη διαγραφή...";
                 }
                 // epistrofh ekp/kwn Hrakleioy sthn organikh toys
+                /*
                 elseif ($_POST['type'] == 6)
                 {
                         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
@@ -328,6 +336,7 @@
                         else 
                             echo "Πρόβλημα στη διαγραφή...";
                 }
+                */
                 elseif ($_POST['type'] == 4)
                 {
                         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31-08)</h3>";
@@ -352,7 +361,17 @@
                         else 
                             echo "Πρόβλημα στη διαγραφή...";
                 }
-                
+                // Αλλαγή ωραριου εκπ/κων
+                elseif ($_POST['type'] == 10)
+                {
+                    echo "<br><br><a href='update_wres.php'>Αλλαγή ωραριου εκπ/κων</a><br>";
+                    echo "(Παρακαλώ βεβαιωθείτε ότι επιλέγετε 31/12 του τρέχοντος έτους και έχετε επιλέξει Τροποποίηση ωρών στη ΒΔ)";
+                }
+                elseif ($_POST['type'] == 11)
+                {
+                    echo "<br><br><small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
+                    do2yphr($mysqlconnection);
+                }
                 
 		mysql_close();
 
