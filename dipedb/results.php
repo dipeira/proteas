@@ -157,7 +157,7 @@
 		$str1 = mb_convert_encoding($_POST['yphr'], "iso-8859-7", "utf-8");
 		$yphr = getSchoolID($str1,$mysqlconnection);
 		//$query .= " sx_yphrethshs = '$yphr'";
-                $query .= " sx_yphrethshs = '$yphr' OR yphrethsh = '$yphr'";
+                $query .= " (sx_yphrethshs = '$yphr' OR yphrethsh = '$yphr')";
 		$flag=1;
 	}
         
