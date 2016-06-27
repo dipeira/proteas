@@ -87,7 +87,14 @@
                 $usrlvl = $_SESSION['userlevel'];
        if ($_GET['op']!="add")
        {
+           if ($_GET['sxoletos']) {
+               $sx = $_GET['sxoletos'];
+               $query = "SELECT * FROM ektaktoi_$sx e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sx";
+           }
+           else{
                 $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
+           }
+
 		$result = mysql_query($query, $mysqlconnection);
 		$num=mysql_numrows($result);
 		

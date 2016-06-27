@@ -247,7 +247,7 @@
 		echo "<tr><td>";
 		echo "</td>";
                 $typos = get_type($type, $mysqlconnection);
-		echo "<td>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+		echo "<td><a href='ektaktoi.php?op=view&sxoletos=".$_SESSION['sxoletos']."&id=$id' target='_blank'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
 		echo "</tr>";
 
 		$i++;
