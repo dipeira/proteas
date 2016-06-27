@@ -1418,8 +1418,7 @@
               $query = "SELECT tmimata,leitoyrg from school WHERE id='$sch'";
               $result = mysql_query($query, $mysqlconnection);
               $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
-              $leit = array_sum($tmimata_exp);
-              //$leit = mysql_result($result, 0, "leitoyrg");
+              $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
               // oligothesia
               if ($leit < 4) 
               {

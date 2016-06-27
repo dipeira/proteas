@@ -28,12 +28,22 @@
 	mysql_select_db($db_name, $mysqlconnection);
 	mysql_query("SET NAMES 'greek'", $mysqlconnection);
 	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+        
+        echo "<a href='report_kena.php?type=1'>Δ.Σ.</a><br>";
+        echo "<a href='report_kena.php?type=2'>Νηπ.</a><br>";
+        echo "<a href='report_kena.php?type=3'>Ειδικά</a><br>";
+        echo "<a href='index.php'>Επιστροφή</a><br>";
 	
-	if ($_GET['type'] == 1)
+	if ($_GET['type'] == 1 || $_GET['type'] == 3)
         {
             $type = 1;
-            // only dhmosia kai eidika (type2 = 0 or 2)
-            $query = "SELECT * from school WHERE type2 = 0 AND type = $type AND anenergo = 0";
+            if ($_GET['type'] == 1){
+                $query = "SELECT * from school WHERE type2 = 0 AND type = $type AND anenergo = 0";
+            }
+            else {
+                $query = "SELECT * from school WHERE type2 = 2 AND type = $type AND anenergo = 0";
+            }
+                
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
         
