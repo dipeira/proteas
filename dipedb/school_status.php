@@ -222,9 +222,11 @@
                     if ($synolo>0)
                     {
                         echo "<table class=\"imagetable\" border='1'>";
-                        echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Ολ</td><td>ΠΖ</td></tr>";
-                        echo "<tr><td>Σύνολο Μαθητών: $synolo</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$classes[6]</td><td>$classes[7]</td></tr>";
-                        echo "<tr><td>Τμήματα/τάξη<br>Σύνολο: $synolo_tmim</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$tmimata_exp[6]</td><td>$tmimata_exp[7]</td></tr>";
+                        echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
+                        $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
+                        echo "<tr><td>Μαθ.Πρωινού<br>Σύνολο: $synolo_pr</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
+                        $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+                        echo "<tr><td>Τμ./τάξη Πρωινού<br>Σύνολο: $synolo_pr</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]</i></td><td class='tdnone'><i>$tmimata_exp[7]</i></td></tr>";
                         echo "</table>";
                         echo "<br>";
                     }

@@ -13,8 +13,8 @@
         <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
 	<script type="text/javascript">	
 	$(document).ready(function() { 
-			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-		}); 
+            $("#mytbl").tablesorter({widgets: ['zebra']}); 
+	}); 
 	
 	</script>
   </head>
@@ -33,7 +33,7 @@
         {
             $type = 1;
             // only dhmosia kai eidika (type2 = 0 or 2)
-            $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type";
+            $query = "SELECT * from school WHERE type2 = 0 AND type = $type AND anenergo = 0";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
         
@@ -49,11 +49,9 @@
                     echo "<th rowspan=2>Οργ.</th>";
                     echo "<th colspan=4>Οργανικές</th>";
                     echo "<th colspan=4>Οργανικά Κενά</th>";
-                    echo "<th colspan=4>Λειτουργικά Κενά</th>";
                     echo "</tr>";
-                    echo "<tr><th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
-                    echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
-                    echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
+                    echo "<tr><th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
+                    echo "<th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
                     echo "</tr>";
                     echo "</thead>\n<tbody>\n";
 
@@ -66,16 +64,14 @@
                         $organikothta = mysql_result($result, $i, "organikothta");
                         $organikes = unserialize(mysql_result($result, $i, "organikes"));
                         $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
-                        $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
 
                         echo "<tr>";
                         echo "<td>$code</td>";
-                        echo "<td><a href='school_edit.php?org=$sch'>$name</a></td>";
+                        echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td>";
                         echo "<td>$cat</td>";
                         echo "<td>$organikothta</td>";
                         echo "<td>$organikes[0]</td><td>$organikes[1]</td><td>$organikes[2]</td><td>$organikes[3]</td>\n";
                         echo "<td>$kena_org[0]</td><td>$kena_org[1]</td><td>$kena_org[2]</td><td>$kena_org[3]</td>\n";
-                        echo "<td>$kena_leit[0]</td><td>$kena_leit[1]</td><td>$kena_leit[2]</td><td>$kena_leit[3]</td>\n";
                         echo "</tr>\n";
                         
                         $organikes_sum[0] += $organikes[0];
@@ -88,19 +84,17 @@
                         $kena_org_sum[2] += $kena_org[2];
                         $kena_org_sum[3] += $kena_org[3];
                         
-                        $kena_leit_sum[0] += $kena_leit[0];
-                        $kena_leit_sum[1] += $kena_leit[1];
-                        $kena_leit_sum[2] += $kena_leit[2];
-                        $kena_leit_sum[3] += $kena_leit[3];
-                        
                         $i++;                        
                 }
         //}	
                 echo "<tr><td></td><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
                 echo "<td>$organikes_sum[0]</td><td>$organikes_sum[1]</td><td>$organikes_sum[2]</td><td>$organikes_sum[3]</td>";
                 echo "<td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
-                echo "<td>$kena_leit_sum[0]</td><td>$kena_leit_sum[1]</td><td>$kena_leit_sum[2]</td><td>$kena_leit_sum[3]</td></tr>";
+                echo "<tr><td></td><td></td><td></td><td></td><td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
+                echo "<td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
+                echo "</tr>";
                 echo "</tbody></table>";
+                echo "<br>";
 
                 $page = ob_get_contents(); 
                 $_SESSION['page'] = $page;
@@ -203,7 +197,7 @@
 //            //nipiagogeia
             $type = 2;
             // only dhmosia kai eidika (type2 = 0 or 2)
-            $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type";
+            $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type AND anenergo=0";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
 
@@ -218,9 +212,6 @@
                     echo "<th rowspan=2>Κατ.</th>";
                     echo "<th>Οργανικές</th>";
                     echo "<th>Οργανικά Κενά</th>";
-                    echo "<th>Λειτουργικά Κενά</th>";
-                    echo "</tr>";
-                    echo "<tr><th>ΠΕ60</th><th>ΠΕ60</th><th>ΠΕ60</th>";
                     echo "</tr>";
                     echo "</thead>\n<tbody>\n";
 
@@ -233,26 +224,25 @@
                         $students = mysql_result($result, $i, "students");
                         $organikes = unserialize(mysql_result($result, $i, "organikes"));
                         $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
-                        $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
 
                         echo "<tr>";
                         echo "<td>$code</td>";
-                        echo "<td><a href='school_edit.php?org=$sch'>$name</a></td>";
+                        echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td>";
                         echo "<td>$cat</td>";
                         echo "<td>$organikes[0]</td>";
-                        echo "<td>$kena_org[0]</td><td>$kena_leit[0]</td>\n";
+                        echo "<td>$kena_org[0]</td>";
                         echo "</tr>\n";
                         
                         $organikes_sum[0] += $organikes[0];
                         
                         $kena_org_sum[0] += $kena_org[0];
                         
-                        $kena_leit_sum[0] += $kena_leit[0];
                         
                         $i++;                        
                 }
-                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$organikes_sum[0]</td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
-                echo "</tbody></table>";            
+                echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$organikes_sum[0]</td><td>$kena_org_sum[0]</td></tr>";
+                echo "</tbody></table>";
+                echo "<br>";
 
                 $page = ob_get_contents(); 
                 $_SESSION['page'] = $page;

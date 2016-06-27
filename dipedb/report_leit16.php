@@ -47,9 +47,9 @@
             echo "<th rowspan=2>Ονομασία</th>";
             echo "<th rowspan=2>Οργ.</th>";
             echo "<th rowspan=2>Λειτ.</th>";
-            echo "<th colspan=8>Λειτουργικά Κενά</th>";
+            echo "<th colspan=9>Λειτουργικά Κενά</th>";
             echo "</tr>";
-            echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th>";
+            echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>70-(Ολ+ΠΖ)</th>";
             echo "</tr>";
             echo "</thead>\n<tbody>\n";
 
@@ -71,7 +71,7 @@
                 echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td>";
                 echo "<td>$organikothta</td>";
                 echo "<td>".$results['leit']."</td>";
-                echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['16']).tdc($df['32']).tdc($df['19-20']).tdc($df['70']);
+                echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['16']).tdc($df['32']).tdc($df['19-20']).tdc($df['70']).tdc($df['OP']);
                 echo "</tr>\n";
 
                 $df_sum['05-07'] += $df['05-07'];
@@ -82,11 +82,15 @@
                 $df_sum['32'] += $df['32'];
                 $df_sum['19-20'] += $df['19-20'];
                 $df_sum['70'] += $df['70'];
+                $df_sum['OP'] += $df['OP'];
 
                 $i++;                        
         }
         echo "<tr><td></td><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
-        echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['16']."</td><td>".$df_sum['32']."</td><td>".$df_sum['19-20']."</td><td>".$df_sum['70']."</td>\n";
+        echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['16']."</td><td>".$df_sum['32']."</td><td>".$df_sum['19-20']."</td><td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td>\n";
+        echo "<tr><td></td><td></td><td></td><td></td>";
+        echo "<td>05-07</td><td>06</td><td>08</td><td>11</td><td>16</td><td>32</td><td>19-20</td><td>70</td><td>70-(Ολ+ΠΖ)</td>";
+        echo "</tr>";
         echo "</tbody></table>";
         echo "<br>";
 

@@ -1371,6 +1371,8 @@
                 $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
                 // oloimero
                 $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                // PZ
+                $hours['P'] = $tm[7]*5;
                 return $hours;
               }
           }
@@ -1406,6 +1408,7 @@
                 });
                 </script>
               <?php
+              set_time_limit(1200);
               $avhrs = [];
               $all = [];
               // init db
@@ -1497,6 +1500,8 @@
                     if(array_key_exists($key, $reqhrs) && array_key_exists($key, $avar))
                         $ret[$key] = $avar[$key] - $reqhrs[$key];
               }
+              // subtract oloimero & pz from PE70
+              $ret['OP'] = $ret['70'] - $reqhrs['O'] - $reqhrs['P'];
                 
               if ($print){
                 function tdc($val){
@@ -1504,10 +1509,10 @@
                 }  
                 echo "<h3>Λειτουργικά Κενά / Πλεονάσματα</h3>";
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>Ολοημ.</th></thead>";
-                echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['16']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['19-20']."</td><td>".$reqhrs['70']."</td><td>".$reqhrs['O']."</td></tr>";
-                echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['16']."</td><td>".$avar['32']."</td><td>".$avar['19-20']."</td><td>".$avar['70']."</td><td></td></tr>";
-                echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['16']).tdc($ret['32']).tdc($ret['19-20']).tdc($ret['70'])."<td></td></tr>";
+                echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
+                echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['16']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['19-20']."</td><td>".$reqhrs['70']."</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
+                echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['16']."</td><td>".$avar['32']."</td><td>".$avar['19-20']."</td><td>".$avar['70']."</td><td></td><td></td></tr>";
+                echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['16']).tdc($ret['32']).tdc($ret['19-20']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
                 echo "</table>";
                 echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
                 echo "<div id='analysis' style='display: none;'>";
