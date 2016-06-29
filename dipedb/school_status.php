@@ -301,12 +301,14 @@
                     mysql_query("SET NAMES 'greek'", $mysqlconnection);
                     mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
                     
-                    if (isset($_POST['org']))
+                    if (isset($_POST['org'])){
                         $str1 = $_POST['org'];
-                    elseif (isset($_GET['org']))
+                        $sch = $_POST['org'];
+                    }
+                    elseif (isset($_GET['org'])){
                         $str1 = getSchool ($_GET['org'],$mysqlconnection);
-                    //$str1 = mb_convert_encoding($_POST['org'], "iso-8859-7", "utf-8");
-                    $sch = getSchoolID($str1,$mysqlconnection);
+                        $sch = $_GET['org'];
+                    }
                     
                     echo "<h1>$str1</h1>";
                     disp_school($sch, $mysqlconnection);
