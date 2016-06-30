@@ -63,49 +63,48 @@
                 ob_start();
                 echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
                     echo "<thead><tr><th>Ονομασία</th>";
-                    echo "<th>Οργανικ.</th>";
-                    echo "<th>Λειτουργ.</th>";
+                    echo "<th>Οργ.</th>";
+                    echo "<th>Λειτ.</th>";
                     echo "<th>Α'</th>";
                     echo "<th>Β'</th>";
                     echo "<th>Γ'</th>";
                     echo "<th>Δ'</th>";
                     echo "<th>Ε'</th>";
                     echo "<th>ΣΤ'</th>";
-                    echo "<th>Σύνολο</th>";
+                    echo "<th>Σύν.</th>";
                     echo "<th>Τμ. Α'</th>";
                     echo "<th>Τμ. Β'</th>";
                     echo "<th>Τμ. Γ'</th>";
                     echo "<th>Τμ. Δ'</th>";
                     echo "<th>Τμ. Ε'</th>";
                     echo "<th>Τμ. ΣΤ'</th>";
-                    echo "<th>Σύνολο Τμ.</th>";
-                    echo "<th>Εκπ/κοί Ολοημέρου</th>";
-                    echo "<th>Μαθητές Ολοημέρου</th>";
-                    echo "<th>Εκπ/κοί T.E.</th>";
-                    echo "<th>Εκπ/κοί T.Y.</th>";
-                    echo "<th>Παρόντες Εκπ/κοί ΠΕ70</th>";
+                    echo "<th>Σύν. Τμ.</th>";
+                    echo "<th>Παρόντες ΠΕ70</th>";
+                    echo "<th>Τμ. Ολ.</th>";
+                    echo "<th>Μαθ. Ολ.</th>";
+                    echo "<th>Εκπ. T.E.</th>";
+                    echo "<th>Εκπ. T.Y.</th>";
                     echo "</tr></thead>\n<tbody>\n";
 
                 while ($i < $num)
                 {		
                         $organikothta = mysql_result($result, $i, "organikothta");
-                        $leitoyrg = mysql_result($result, $i, "leitoyrg");
                         $sch = mysql_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
                         $students = mysql_result($result, $i, "students");
                         $classes = explode(",",$students);
                         //$frontistiriako = mysql_result($result, $i, "frontistiriako");
-                        $oloimero_stud = mysql_result($result, $i, "oloimero_stud");
                         $tmimata = mysql_result($result, $i, "tmimata");
                         $tmimata_exp = explode(",",$tmimata);
-                        $oloimero_tea = mysql_result($result, $i, "oloimero_tea");
+
+                        $oloimero_stud = $classes[6];
+                        $oloimero_tea = $tmimata_exp[6];
                         $ekp_ee = mysql_result($result, $i, "ekp_ee");
                         $ekp_ee_exp = explode(",",$ekp_ee);
 
-                        $synolo = array_sum($classes);
-                        $synolo_tmim = array_sum($tmimata_exp);
-                        
-                        
+                        $synolo = $classes[0] + $classes[1] + $classes[2] + $classes[3] + $classes[4] + $classes[5];
+                        $leitoyrg = $synolo_tmim = $tmimata_exp[0] + $tmimata_exp[1] + $tmimata_exp[2] + $tmimata_exp[3] + $tmimata_exp[4] + $tmimata_exp[5];
+                                                
                         $ekpqry = "SELECT count(*) as a FROM yphrethsh y JOIN employee e ON e.id=y.emp_id WHERE sxol_etos=".$sxol_etos." AND yphrethsh = ".$sch." AND e.klados = 2 AND e.status = 1";
                         $res2 = mysql_query($ekpqry, $mysqlconnection);
                         $mon_ekpkoi = mysql_result($res2, 0);
@@ -117,9 +116,9 @@
                         
 
                         echo "<tr>";
-                        echo "<td><a href='school_status.php?org=$sch'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
-                        echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
-                        echo "<td>$oloimero_tea</td><td>$oloimero_stud</td><td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td><td>$ekpkoi</td>";
+                        echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
+                        echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td><td>$ekpkoi</td>\n";
+                        echo "<td>$oloimero_tea</td><td>$oloimero_stud</td><td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
                         echo "</tr>\n";
 
                         $sums[0] += $classes[0];
@@ -138,6 +137,7 @@
                         $sumolstud += $oloimero_stud;
                         $sumee[0] += $ekp_ee_exp[0];
                         $sumee[1] += $ekp_ee_exp[1];
+                        $sum70 += $ekpkoi;
                         
                         $i++;                        
                 }
@@ -145,8 +145,11 @@
                 $synolo_stud = array_sum($sums);
                 $synolo_teach =  array_sum($sumt);
                 echo "<tr><td>Σύνολα</td><td></td><td></td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
-                echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td>";
+                echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td>$sum70</td>";
                 echo "<td>$sumol</td><td>$sumolstud</td><td>$sumee[0]</td><td>$sumee[1]</td></tr>";
+                echo "<tr><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
+                echo "<td>Τμ. Α'</td><td>Τμ. Β'</td><td>Τμ. Γ'</td><td>Τμ. Δ'</td><td>Τμ. Ε'</td><td>Τμ. ΣΤ'</td><td>Σύν. Τμ.</td><td>Παρόντες<br>ΠΕ70</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td><td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
+                echo "</tr>";
                 echo "</tbody></table>";
 
                 $page = ob_get_contents(); 
