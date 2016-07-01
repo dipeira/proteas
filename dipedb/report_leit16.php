@@ -58,13 +58,14 @@
         while ($i < $num)
         //while ($i < 2)
         {		
-                $ar = [];
                 $sch = mysql_result($result, $i, "id");
                 $name = getSchool($sch, $mysqlconnection);
                 $code = mysql_result($result, $i, "code");
                 $organikothta = mysql_result($result, $i, "organikothta");
                 $results = ektimhseis1617($sch, $mysqlconnection, $sxol_etos);
-                // count employees per specialty
+                // count monimoi employees per specialty
+                // TODO: count anaplirotes as well...
+                $ar = [];
                 $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) GROUP BY e.klados";
                 $res = mysql_query($qry, $mysqlconnection);
                 while ($row = mysql_fetch_array($res)){

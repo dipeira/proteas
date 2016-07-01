@@ -79,11 +79,14 @@
                     echo "<th>Ôì. Å'</th>";
                     echo "<th>Ôì. ÓÔ'</th>";
                     echo "<th>Óıí. Ôì.</th>";
-                    echo "<th>Ğáñüíôåò ĞÅ70</th>";
+                    echo "<th>ĞÅ70</th>";
+                    echo "<th>ĞÅ06</th>";
+                    echo "<th>ĞÅ11</th>";
+                    echo "<th>ĞÅ16</th>";
                     echo "<th>Ôì. Ïë.</th>";
                     echo "<th>Ìáè. Ïë.</th>";
-                    echo "<th>Åêğ. T.E.</th>";
-                    echo "<th>Åêğ. T.Y.</th>";
+                    //echo "<th>Åêğ. T.E.</th>";
+                    //echo "<th>Åêğ. T.Y.</th>";
                     echo "</tr></thead>\n<tbody>\n";
 
                 while ($i < $num)
@@ -99,26 +102,30 @@
 
                         $oloimero_stud = $classes[6];
                         $oloimero_tea = $tmimata_exp[6];
-                        $ekp_ee = mysql_result($result, $i, "ekp_ee");
-                        $ekp_ee_exp = explode(",",$ekp_ee);
+                        //$ekp_ee = mysql_result($result, $i, "ekp_ee");
+                        //$ekp_ee_exp = explode(",",$ekp_ee);
 
                         $synolo = $classes[0] + $classes[1] + $classes[2] + $classes[3] + $classes[4] + $classes[5];
                         $leitoyrg = $synolo_tmim = $tmimata_exp[0] + $tmimata_exp[1] + $tmimata_exp[2] + $tmimata_exp[3] + $tmimata_exp[4] + $tmimata_exp[5];
-                                                
-                        $ekpqry = "SELECT count(*) as a FROM yphrethsh y JOIN employee e ON e.id=y.emp_id WHERE sxol_etos=".$sxol_etos." AND yphrethsh = ".$sch." AND e.klados = 2 AND e.status = 1";
-                        $res2 = mysql_query($ekpqry, $mysqlconnection);
-                        $mon_ekpkoi = mysql_result($res2, 0);
-                        $ekpqry = "SELECT count(*) FROM ektaktoi e WHERE sx_yphrethshs = ".$sch." AND e.klados = 2";
-                        $res2 = mysql_query($ekpqry, $mysqlconnection);
-                        $ekt_ekpkoi = mysql_result($res2, 0);
-                        $ekpkoi = $mon_ekpkoi + $ekt_ekpkoi;
                         
-                        
+                        // count employees per specialty
+                        $ekp_ar = [];
+                        $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) GROUP BY e.klados";
+                        $res = mysql_query($qry, $mysqlconnection);
+                        while ($row = mysql_fetch_array($res)){
+                            $ekp_ar[$row['klados']] = $row['count'];
+                        }
+                        $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 GROUP BY e.klados";
+                        $res = mysql_query($qry, $mysqlconnection);
+                        while ($row = mysql_fetch_array($res)){
+                            $ekp_ar[$row['klados']] += $row['count'];
+                        }
 
                         echo "<tr>";
                         echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
-                        echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td><td>$ekpkoi</td>\n";
-                        echo "<td>$oloimero_tea</td><td>$oloimero_stud</td><td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
+                        echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
+                        echo "<td>".$ekp_ar['ĞÅ70']."</td><td>".$ekp_ar['ĞÅ06']."</td><td>".$ekp_ar['ĞÅ11']."</td><td>".$ekp_ar['ĞÅ16']."</td>";
+                        echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
                         echo "</tr>\n";
 
                         $sums[0] += $classes[0];
@@ -135,9 +142,12 @@
                         $sumt[5] += $tmimata_exp[5];
                         $sumol += $oloimero_tea;
                         $sumolstud += $oloimero_stud;
-                        $sumee[0] += $ekp_ee_exp[0];
-                        $sumee[1] += $ekp_ee_exp[1];
-                        $sum70 += $ekpkoi;
+                        //$sumee[0] += $ekp_ee_exp[0];
+                        //$sumee[1] += $ekp_ee_exp[1];
+                        $sum70 += $ekp_ar['ĞÅ70'];
+                        $sum06 += $ekp_ar['ĞÅ06'];
+                        $sum11 += $ekp_ar['ĞÅ11'];
+                        $sum16 += $ekp_ar['ĞÅ16'];
                         
                         $i++;                        
                 }
@@ -145,10 +155,10 @@
                 $synolo_stud = array_sum($sums);
                 $synolo_teach =  array_sum($sumt);
                 echo "<tr><td>Óıíïëá</td><td></td><td></td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
-                echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td>$sum70</td>";
-                echo "<td>$sumol</td><td>$sumolstud</td><td>$sumee[0]</td><td>$sumee[1]</td></tr>";
+                echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
+                echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
                 echo "<tr><td></td><td></td><td></td><td>Á'</td><td>Â'</td><td>Ã'</td><td>Ä'</td><td>Å'</td><td>ÓÔ'</td><td>Óıí.</td>";
-                echo "<td>Ôì. Á'</td><td>Ôì. Â'</td><td>Ôì. Ã'</td><td>Ôì. Ä'</td><td>Ôì. Å'</td><td>Ôì. ÓÔ'</td><td>Óıí. Ôì.</td><td>Ğáñüíôåò<br>ĞÅ70</td><td>Ôì. Ïë.</td><td>Ìáè. Ïë.</td><td>Åêğ. T.E.</td><td>Åêğ. T.Y.</td>";
+                echo "<td>Ôì.Á'</td><td>Ôì.Â'</td><td>Ôì.Ã'</td><td>Ôì.Ä'</td><td>Ôì.Å'</td><td>Ôì.ÓÔ'</td><td>Óıí.Ôì.</td><td>ĞÅ70</td><td>ĞÅ06</td><td>ĞÅ11</td><td>ĞÅ16</td><td>Ôì. Ïë.</td><td>Ìáè. Ïë.</td>";//<td>Åêğ. T.E.</td><td>Åêğ. T.Y.</td>";
                 echo "</tr>";
                 echo "</tbody></table>";
 
