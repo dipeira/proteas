@@ -33,7 +33,7 @@
     mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 	
     // only dhmosia (type2 = 0)
-    $query = "SELECT * from school WHERE type2 = 0 AND type = 1";
+    $query = "SELECT * from school WHERE type2 = 0 AND type = 1 AND anenergo=0";
     $result = mysql_query($query, $mysqlconnection);
     $num = mysql_num_rows($result);
 

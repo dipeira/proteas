@@ -54,7 +54,7 @@
             //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
             $type2 = $_POST['type'] - 1;
             
-            $query = "SELECT * from school WHERE type = $type AND type2=$type2";
+            $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
         
@@ -182,7 +182,7 @@
             //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
             $type2 = $_POST['type'] - 4;
             
-            $query = "SELECT * from school WHERE type = $type AND type2=$type2";
+            $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
             
