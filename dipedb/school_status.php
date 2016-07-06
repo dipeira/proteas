@@ -309,7 +309,7 @@
                     
                     if (isset($_POST['org'])){
                         $str1 = $_POST['org'];
-                        $sch = $_POST['org'];
+                        $sch = getSchoolID($_POST['org'],$mysqlconnection);
                     }
                     elseif (isset($_GET['org'])){
                         $str1 = getSchool ($_GET['org'],$mysqlconnection);
