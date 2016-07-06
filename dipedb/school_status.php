@@ -90,15 +90,15 @@
                     $classes = explode(",",$students);
                     $frontistiriako = mysql_result($result, 0, "frontistiriako");
                     $ted = mysql_result($result, 0, "ted");
-                    $oloimero_stud = mysql_result($result, 0, "oloimero_stud");
+                    //$oloimero_stud = mysql_result($result, 0, "oloimero_stud");
                     $tmimata = mysql_result($result, 0, "tmimata");
                     $tmimata_exp = explode(",",$tmimata);
-                    $oloimero_tea = mysql_result($result, 0, "oloimero_tea");
+                    //$oloimero_tea = mysql_result($result, 0, "oloimero_tea");
                     $ekp_ee = mysql_result($result, 0, "ekp_ee");
                     $ekp_ee_exp = explode(",",$ekp_ee);
                     
                     $synolo = array_sum($classes);
-                    $synolo_tmim = array_sum($tmimata_exp);
+                    //$synolo_tmim = array_sum($tmimata_exp);
                     
                 }
                 //if nipiagwgeio
@@ -111,8 +111,8 @@
                     $nip = mysql_result($result, 0, "nip");
                     $nip_exp = explode(",",$nip);
                 }
-                
-                $entaksis = mysql_result($result, 0, "entaksis");
+                // entaksis (varchar): on/off, no. of students
+                $entaksis = explode(",",mysql_result($result, 0, "entaksis"));
                 $ypodoxis = mysql_result($result, 0, "ypodoxis");
                 //$frontistiriako = mysql_result($result, 0, "frontistiriako");
                 $oloimero = mysql_result($result, 0, "oloimero");
@@ -163,8 +163,8 @@
                 //echo "<tr><td colspan=2>Μαθητές: $synolo</td></tr>";
                 //echo "<tr><td colspan=2>Α': $classes[0], Β': $classes[1], Γ': $classes[2], Δ': $classes[3], Ε': $classes[4], ΣΤ': $classes[5]</td></tr>";
                 echo "<tr>";
-                if ($entaksis)
-                    echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης</td>";
+                if ($entaksis[0])
+                    echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</td>";
                 else
                     echo "<td><input type=\"checkbox\" disabled>Τμήμα Ένταξης</td>";
                 if ($ypodoxis)
@@ -172,16 +172,16 @@
                 else
                     echo "<td><input type=\"checkbox\" disabled>Τμήμα Υποδοχής</td>";
                 echo "</tr>";
-                if ($entaksis || $ypodoxis)
+                if ($entaksis[0] || $ypodoxis)
                     echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: $ekp_ee_exp[0]</td><td>Εκπ/κοί Τμ.Υποδοχής: $ekp_ee_exp[1]</td></tr>";
 
                 echo "<tr>";
                 if ($type == 1)
                 {
-                if ($frontistiriako)
-                    echo "<td><input type=\"checkbox\" checked disabled>Φροντιστηριακό Τμήμα</td>";
-                else
-                    echo "<td><input type=\"checkbox\" disabled>Φροντιστηριακό Τμήμα</td>";
+                    if ($frontistiriako)
+                        echo "<td><input type=\"checkbox\" checked disabled>Φροντιστηριακό Τμήμα</td>";
+                    else
+                        echo "<td><input type=\"checkbox\" disabled>Φροντιστηριακό Τμήμα</td>";
                 }
                 else
                     echo "<td></td>";
@@ -191,8 +191,8 @@
                     if ($type == 1)
                     {
                     echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
-                    echo "<tr><td>Μαθητές Ολοημέρου: $oloimero_stud</td>";
-                    echo "<td>Εκπ/κοί Ολοημέρου: $oloimero_tea</td></tr>";
+                    //echo "<tr><td>Μαθητές Ολοημέρου: $oloimero_stud</td>";
+                    //echo "<td>Εκπ/κοί Ολοημέρου: $oloimero_tea</td></tr>";
                     }
                     else
                         echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
@@ -238,40 +238,46 @@
                 }
                 else if ($type == 2)
                 {
+                    // klasiko_nip/pro: klasiko & meikto (@ pos.6,7,8,9) - oloimero_syn_nip/pro: oloimero
                     echo "<table class=\"imagetable\" border='1'>";
-                        $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[6];
-                        $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[7];
-                        $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
-                        $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
-                        echo "<tr><td colspan=16>Μαθητές</td></tr>";
-                        echo "<tr><td colspan=8>Κλασικό (Νήπια: $klasiko_nip / Προνήπια: $klasiko_pro)</td><td colspan=8>Ολοήμερο (Νήπια: $oloimero_syn_nip / Προνήπια: $oloimero_syn_pro)</td></tr>";
-                        echo "<tr><td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td><td colspan=2>Τμήμα 4</td>";
-                        echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td><td colspan=2>Τμήμα 4</td>";
-                        echo "</tr>";
-                        echo "<tr><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td></tr>";
-                        echo "<tr>";
+                    $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];
+                    $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];
+                    $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
+                    $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
+                    $meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
+                    $meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
+                    echo "<tr><td colspan=16>Μαθητές</td></tr>";
+                    echo "<tr><td colspan=6>Κλασικό (Νήπια: $klasiko_nip / Προνήπια: $klasiko_pro)</td><td colspan=6>Ολοήμερο (Νήπια: $oloimero_syn_nip / Προνήπια: $oloimero_syn_pro)</td><td colspan=4>Μεικτό (Νήπια: $meikto_nip / Προνήπια: $meikto_pro)</td></tr>";
+                    echo "<tr><td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td>";//<td colspan=2>Τμήμα 4</td>";
+                    echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td>";//<td colspan=2>Τμήμα 4</td>";
+                    echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td>";
+                    echo "</tr>";
+                    echo "<tr><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td></tr>";
+                    echo "<tr>";
 
-                            echo "<tr>";
-                            echo "<td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td>";
-                            echo "<td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td>";
-                            echo "<td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td>";
-                            echo "<td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td>";
-                            
-                            echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td>";
-                            echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td>";
-                            echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td>";
-                            echo "<td>$oloimero_nip_exp[6]</td><td>$oloimero_nip_exp[7]</td>";
-                            echo "</tr>";
-                        echo "</table>";
-                        echo "<br>";
-                        
-                        $nip_syn = array_sum($nip_exp);
-                        echo "<table class=\"imagetable\" border='1'>";
-                        echo "<tr><td colspan=3>Νηπιαγωγοί (Σύνολο: $nip_syn)</td></tr>";
-                        echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";
-                        echo "<tr><td>$nip_exp[0]</td><td>$nip_exp[1]</td><td>$nip_exp[2]</td></tr>";
-                        echo "</table>";
-                        echo "<br>";
+                        echo "<tr>";
+                        echo "<td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td>";
+                        echo "<td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td>";
+                        echo "<td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td>";
+
+                        echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td>";
+                        echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td>";
+                        echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td>";
+
+                        // μεικτό
+                        echo "<td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td>";
+                        echo "<td>$klasiko_exp[8]</td><td>$klasiko_exp[9]</td>";
+                        echo "</tr>";
+                    echo "</table>";
+                    echo "<br>";
+
+                    $nip_syn = array_sum($nip_exp);
+                    echo "<table class=\"imagetable\" border='1'>";
+                    echo "<tr><td colspan=3>Νηπιαγωγοί (Σύνολο: $nip_syn)</td></tr>";
+                    echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";
+                    echo "<tr><td>$nip_exp[0]</td><td>$nip_exp[1]</td><td>$nip_exp[2]</td></tr>";
+                    echo "</table>";
+                    echo "<br>";
                 }
                 echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
                 echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";

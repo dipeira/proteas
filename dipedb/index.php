@@ -126,9 +126,9 @@
 		   <li><a href="report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
                    <li><a href="report_kena.php?type=1">Οργανικά Κενά</a></li>
                    <li><a href="report_leit16.php">Λειτουργικά Κενά Δημοτικών (2016-17)</a></li>
-                   <li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>
-                   <li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>
-                   <li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>
+                   <!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
+                   <!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
+                   <!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
                    <li><a href="absents.php">Εκπ/κοί σε άδεια</a></li>
 		  </ul>
 		 </li>

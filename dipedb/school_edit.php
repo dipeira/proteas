@@ -117,8 +117,8 @@
                         $ekp_ee = mysql_result($result, 0, "ekp_ee");
                         $ekp_ee_exp = explode(",",$ekp_ee);
                         
-                        $synolo = array_sum($classes);
-                        $synolo_tmim = array_sum($tmimata_exp);
+                        $synolo = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
+                        $synolo_tmim = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
                     }
                     // if nipiagwgeio
                     else if ($type == 2)
@@ -134,7 +134,7 @@
                         $oloimero_synolo = array_sum($oloimero_nip_exp);
                     }
                     $oloimero = mysql_result($result, 0, "oloimero");
-                    $entaksis = mysql_result($result, 0, "entaksis");
+                    $entaksis = explode(",",mysql_result($result, 0, "entaksis"));
                     $ypodoxis = mysql_result($result, 0, "ypodoxis");                    
                     $comments = mysql_result($result, 0, "comments");
                     // organikes - added 05-10-2012
@@ -177,10 +177,10 @@
                     echo "</td></tr>";
                     //
                     echo "<tr>";
-                    if ($entaksis)
-                        echo "<td><input type=\"checkbox\" name='entaksis' checked >Τμήμα Ένταξης</td>";
+                    if ($entaksis[0])
+                        echo "<td><input type=\"checkbox\" name='entaksis' checked >Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
                     else
-                        echo "<td><input type=\"checkbox\" name='entaksis' >Τμήμα Ένταξης</td>";
+                        echo "<td><input type=\"checkbox\" name='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
                     if ($ypodoxis)
                         echo "<td><input type=\"checkbox\" name='ypodoxis' checked >Τμήμα Υποδοχής</td>";
                     else
@@ -210,27 +210,29 @@
                         echo "<td></td>";
                         echo "</tr>";
                         
-                        echo "<tr><td colspan=2>Σχόλια: <input type='text' name='comments' value='$comments' size='65' /></td></tr>";
+                        echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                         echo "</table>";
                         echo "<br>";
                         
                         //if ($oloimero) - Afairethike gia taxythterh kataxwrhsh...
                         //{
+                        /*
                             echo "<table class=\"imagetable\" border='1'>";
                             echo "<tr><td>Μαθητές Ολοημέρου: <input type='text' name='oloimero_stud' value='$oloimero_stud' size='2'/></td>";
                             echo "<td>Εκπ/κοί Ολοημέρου: <input type='text' name='oloimero_tea' value='$oloimero_tea' size='2'/><td></tr>";
                             echo "</table>";
+                        */
                         //}
                         echo "<br>";
 
                         echo "<table class=\"imagetable\" border='1'>";
-                        echo "<tr><td colspan=8>Σύνολο Μαθητών: $synolo</td></tr>";
+                        echo "<tr><td colspan=8>Σύνολο Μαθητών Πρ.: $synolo</td></tr>";
                         echo "<tr><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Ολ.</td><td>ΠΖ</td></tr>";
                         if ($synolo>0)
                             echo "<tr><td><input type='text' name='a' size='1' value=$classes[0] /></td><td><input type='text' name='b' size='1' value=$classes[1] /></td><td><input type='text' name='c' size='1' value=$classes[2] /></td><td><input type='text' name='d' size='1' value=$classes[3] /></td><td><input type='text' name='e' size='1' value=$classes[4] /></td><td><input type='text' name='f' size='1' value=$classes[5] /></td><td><input type='text' name='g' size='1' value=$classes[6] /></td><td><input type='text' name='h' size='1' value=$classes[7] /></td></tr>";
                         else
                             echo "<tr><td><input type='text' name='a' size='1' value='0' /></td><td><input type='text' name='b' size='1' value='0' /></td><td><input type='text' name='c' size='1' value='0' /></td><td><input type='text' name='d' size='1' value='0' /></td><td><input type='text' name='e' size='1' value='0' /></td><td><input type='text' name='f' size='1' value='0' /></td><td><input type='text' name='g' size='1' value='0' /></td><td><input type='text' name='h' size='1' value='0' /></td></tr>";
-                        echo "<tr><td colspan=8>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο: $synolo_tmim</td></tr>";
+                        echo "<tr><td colspan=8>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο Πρ: $synolo_tmim</td></tr>";
                         if ($synolo>0)
                             echo "<tr><td><input type='text' name='ta' size='1' value=$tmimata_exp[0] /></td><td><input type='text' name='tb' size='1' value=$tmimata_exp[1] /></td><td><input type='text' name='tc' size='1' value=$tmimata_exp[2] /></td><td><input type='text' name='td' size='1' value=$tmimata_exp[3] /></td><td><input type='text' name='te' size='1' value=$tmimata_exp[4] /></td><td><input type='text' name='tf' size='1' value=$tmimata_exp[5] /></td><td><input type='text' name='tg' size='1' value=$tmimata_exp[6] /></td><td><input type='text' name='th' size='1' value=$tmimata_exp[7] /></td></tr>";
                         else
@@ -242,15 +244,16 @@
                             echo "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td><td></td></tr>";
                         else
                             echo "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td><td></td></tr>";
-                        echo "<tr><td colspan=2>Σχόλια: <input type='text' name='comments' value='$comments' size='65' /></td></tr>";
+                        echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                         echo "</table>";
                         echo "<br>";
                         
                         echo "<table class=\"imagetable\" border='1'>";
                         echo "<tr><td colspan=16>Μαθητές</td></tr>";
-                        echo "<tr><td colspan=8>Κλασικό</td><td colspan=8>Ολοήμερο</td></tr>";
-                        echo "<tr><td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td><td colspan=2>Τμήμα 4</td>";
-                        echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td><td colspan=2>Τμήμα 4</td>";
+                        echo "<tr><td colspan=6>Κλασικό</td><td colspan=6>Ολοήμερο</td><td colspan=4>Μεικτό</td></tr>";
+                        echo "<tr><td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td>";//<td colspan=2>Τμήμα 4</td>";
+                        echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td>";//<td colspan=2>Τμήμα 4</td>";
+                        echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td>";
                         echo "</tr>";
                         echo "<tr><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td></tr>";
                         echo "<tr>";
@@ -259,12 +262,15 @@
                             echo "<td><input type='text' name='k1a' size='1' value=$klasiko_exp[0]></td><td><input type='text' name='k1b' size='1' value=$klasiko_exp[1]></td>";
                             echo "<td><input type='text' name='k2a' size='1' value=$klasiko_exp[2]></td><td><input type='text' name='k2b' size='1' value=$klasiko_exp[3]></td>";
                             echo "<td><input type='text' name='k3a' size='1' value=$klasiko_exp[4]></td><td><input type='text' name='k3b' size='1' value=$klasiko_exp[5]></td>";
-                            echo "<td><input type='text' name='k4a' size='1' value=$klasiko_exp[6]></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[7]></td>";
                             
                             echo "<td><input type='text' name='o1a' size='1' value=$oloimero_nip_exp[0]></td><td><input type='text' name='o1b' size='1' value=$oloimero_nip_exp[1]></td>";
                             echo "<td><input type='text' name='o2a' size='1' value=$oloimero_nip_exp[2]></td><td><input type='text' name='o2b' size='1' value=$oloimero_nip_exp[3]></td>";
                             echo "<td><input type='text' name='o3a' size='1' value=$oloimero_nip_exp[4]></td><td><input type='text' name='o3b' size='1' value=$oloimero_nip_exp[5]></td>";
-                            echo "<td><input type='text' name='o4a' size='1' value=$oloimero_nip_exp[6]></td><td><input type='text' name='o4b' size='1' value=$oloimero_nip_exp[7]></td>";
+                            //echo "<td><input type='text' name='o4a' size='1' value=$oloimero_nip_exp[6]></td><td><input type='text' name='o4b' size='1' value=$oloimero_nip_exp[7]></td>";
+                            
+                            // meikto (uses klasiko field)
+                            echo "<td><input type='text' name='k4a' size='1' value=$klasiko_exp[6]></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[7]></td>";
+                            echo "<td><input type='text' name='k5a' size='1' value=$klasiko_exp[8]></td><td><input type='text' name='k5b' size='1' value=$klasiko_exp[9]></td>";
                             echo "</tr>";
                         echo "</table>";
                         echo "<br>";
@@ -282,11 +288,10 @@
                     echo "	<input type='hidden' name = 'sch' value='$sch'>";
                     echo "	<input type='hidden' name = 'name' value='$str1'>";
                     
-                    
-                    
-                    echo "<input type='submit' value='Επεξεργασία'>";
+                    echo "<input type='submit' value='Αποθήκευση'>";
                     echo "</form>";
-                    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='index.php'\">";
+                    $schLink = "school_status.php?org=$sch";
+                    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Καρτέλα' onClick=\"parent.location='$schLink'\">";
                 
                 }
 ?>
