@@ -238,38 +238,57 @@
                 }
                 else if ($type == 2)
                 {
-                    // klasiko_nip/pro: klasiko & meikto (@ pos.6,7,8,9) - oloimero_syn_nip/pro: oloimero
-                    echo "<table class=\"imagetable\" border='1'>";
+                    // klasiko_nip/pro: klasiko
+                    // meikto : @ klasiko pos.6,7,8,9,10,11,12,13 - τ1: 6Π,7Ν,8Π,9Ν - τ2: 10Π,11Ν,12Π,13Ν  
+                    //oloimero_syn_nip/pro: oloimero
                     $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];
                     $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];
                     $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
                     $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
                     $meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
                     $meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
-                    echo "<tr><td colspan=16>Μαθητές</td></tr>";
-                    echo "<tr><td colspan=6>Κλασικό (Νήπια: $klasiko_nip / Προνήπια: $klasiko_pro)</td><td colspan=6>Ολοήμερο (Νήπια: $oloimero_syn_nip / Προνήπια: $oloimero_syn_pro)</td><td colspan=4>Μεικτό (Νήπια: $meikto_nip / Προνήπια: $meikto_pro)</td></tr>";
-                    echo "<tr><td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td>";//<td colspan=2>Τμήμα 4</td>";
-                    echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td><td colspan=2>Τμήμα 3</td>";//<td colspan=2>Τμήμα 4</td>";
-                    echo "<td colspan=2>Τμήμα 1</td><td colspan=2>Τμήμα 2</td>";
-                    echo "</tr>";
-                    echo "<tr><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td><td>Νηπ.</td><td>Προνηπ.</td></tr>";
-                    echo "<tr>";
-
-                        echo "<tr>";
-                        echo "<td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td>";
-                        echo "<td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td>";
-                        echo "<td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td>";
-
-                        echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td>";
-                        echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td>";
-                        echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td>";
-
-                        // μεικτό
-                        echo "<td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td>";
-                        echo "<td>$klasiko_exp[8]</td><td>$klasiko_exp[9]</td>";
-                        echo "</tr>";
+                    // Μαθητές
+                    echo "<h3>Μαθητές</h3><br>";
+                    echo "<table class=\"imagetable\" border='1'>";
+                    echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό <small>(Νήπια: $klasiko_nip / Προνήπια: $klasiko_pro)</small></td><td colspan=3>Ολοήμερο <small>(Νήπια: $oloimero_syn_nip / Προνήπια: $oloimero_syn_pro)</small></td></tr>";
+                    echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
+                    // t1
+                    $syn = $klasiko_exp[0]+$klasiko_exp[1];
+                    echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td>$syn</td>";
+                    $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
+                    echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td>$syn_ol</td></tr>";
+                    // t2
+                    $syn = $klasiko_exp[2]+$klasiko_exp[3];
+                    echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$syn</td>";
+                    $syn_ol = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
+                    echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td>$syn_ol</td></tr>";
+                    // t3
+                    $syn = $klasiko_exp[4]+$klasiko_exp[5];
+                    echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$syn</td>";
+                    $syn_ol = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
+                    echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td>$syn_ol</td></tr>";
                     echo "</table>";
                     echo "<br>";
+                    // μεικτό
+                    if ($klasiko_exp[6] || $klasiko_exp[7] || $klasiko_exp[8] || $klasiko_exp[9] || $klasiko_exp[10] || $klasiko_exp[11] || $klasiko_exp[12] || $klasiko_exp[13])
+                    {
+                        echo "<h3>Μεικτό</h3><br>";
+                        echo "<table class=\"imagetable\" border='1'>";
+                        echo "<tr><td rowspan=2>Τμήμα/Ώρα</td><td colspan=3>Ώρα 1 (12.30)</td><td colspan=3>Ώρα 2 (16.00)</small></td></tr>";
+                        echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
+                        // t1
+                        $syn = $klasiko_exp[6]+$klasiko_exp[7];
+                        echo "<tr><td>Τμ.1</td><td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td><td>$syn</td>";
+                        $syn = $klasiko_exp[8]+$klasiko_exp[9];
+                        echo "<td>$klasiko_exp[8]</td><td>$klasiko_exp[9]</td><td>$syn</td></tr>";
+                        // t2
+                        $syn = $klasiko_exp[10]+$klasiko_exp[11];
+                        echo "<tr><td>Τμ.2</td><td>$klasiko_exp[10]</td><td>$klasiko_exp[11]</td><td>$syn</td>";
+                        $syn = $klasiko_exp[12]+$klasiko_exp[13];
+                        echo "<td>$klasiko_exp[12]</td><td>$klasiko_exp[13]</td><td>$syn</td></tr>";
+                        echo "</table>";
+                        echo "<br>";
+                    }
 
                     $nip_syn = array_sum($nip_exp);
                     echo "<table class=\"imagetable\" border='1'>";
@@ -741,7 +760,6 @@
 			echo "</tbody></table>";
                         echo "<br>";
                     }
-
                 } // of school status
 ?>
 		</center>
