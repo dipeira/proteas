@@ -1327,7 +1327,7 @@
            * tmimata: 0: A, 1: B, 2: ц, 3: д, 4: E, 5: ст
            */
           function anagkes1617($tm){
-              $artm = array_sum($tm);
+              $artm = $tm[0]+$tm[1]+$tm[2]+$tm[3]+$tm[4]+$tm[5];
               // 4/thesia
               if ($artm == 4){
                 $hours = [];
