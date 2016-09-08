@@ -104,7 +104,7 @@
                 echo "<td>".($df['05-07']+$df['06']+$df['19-20'])."</td>"; // apait. 05-07,06,19-20
                 echo "<td>".($df['08']+$df['11']+$df['16']+$df['32'])."</td>"; // apait. 08,11,16,32
                 //
-                echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['16']."</td><td>".(int)$av['32']."</td><td>".(int)$av['1920']."</td><td>".(int)$av['70']."</td>";
+                echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['16']."</td><td>".(int)$av['32']."</td><td>".(int)$av['19-20']."</td><td>".(int)$av['70']."</td>";
                 $dnthrs = wres_dnth($results['leit']);
                 echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['16']).tdc($df['32']).tdc($df['19-20']).tdc($df['70']).tdc($df['70']+$dnthrs).tdc($df['OP']);
                 echo "</tr>\n";
