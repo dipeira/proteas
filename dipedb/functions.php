@@ -1505,7 +1505,7 @@
               $avar['05-07'] = $avar['13'] + $avar['14'];
               unset($avar['13']);
               unset($avar['14']);
-              $avar['32'] = $avar['20'];
+              $avar['32'] = $avar['20'] + $avar['28'];
               unset($avar['20']);
 
               // subtract available from required
