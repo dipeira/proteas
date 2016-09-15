@@ -1483,7 +1483,8 @@
               $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 ORDER BY e.klados";
               $result = mysql_query($query, $mysqlconnection);
               while ($row = mysql_fetch_array($result)){
-                  $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                  $srn = $row['surname'] . ' *';
+                  $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                   $all[] = $ar;
               }
               
@@ -1534,6 +1535,7 @@
                         echo "<tr><td>".$row['surname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
                     }
                     echo "</table>";
+                    echo "* Αναπληρωτής";
                 echo "</div>";
                 echo "<br><br>";
               }
