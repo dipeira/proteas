@@ -57,7 +57,7 @@
             echo "<th rowspan=2>+/- 05-07,<br>06,19-20</th>";
             echo "<th rowspan=2>+/- 08,11,<br>16,32</th>";
             //
-            echo "<th colspan=8>Υπάρχουν +/- <small>(εκτός Δ/ντή, σε ώρες)</small></th>";
+            echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
             echo "<th colspan=9>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
             echo "</tr>";
             echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th>";
