@@ -68,7 +68,7 @@
   //29-6-2012
   $oloimero_tea = $_POST['oloimero_tea'];
   $oloimero_stud = $_POST['oloimero_stud'];
-  $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'].",".$_POST['tg'].",".$_POST['th'];
+  $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'].",".$_POST['tg'].",".$_POST['th'].",".$_POST['ti'];
   $ekp_ee = $_POST['ekp_te'].",".$_POST['ekp_ty'];
   
   $klasiko = $_POST['k1a'].",".$_POST['k1b'].",".$_POST['k2a'].",".$_POST['k2b'].",".$_POST['k3a'].",".$_POST['k3b'];  

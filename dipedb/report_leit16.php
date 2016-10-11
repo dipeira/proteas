@@ -58,10 +58,11 @@
             echo "<th rowspan=2>+/- 08,11,<br>16,32</th>";
             //
             echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
-            echo "<th colspan=9>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
+            echo "<th colspan=11>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
             echo "</tr>";
             echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th>";
-            echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>70-(Ολ+ΠΖ)</th>";
+            echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>70-(Ολ+ΠΖ) <strong>(A)</strong></th>";
+            echo "<th>+/- 08,11,<br>16,32 <strong>(B)</strong></th><th>A+B</th>";
             echo "</tr>";
             echo "</thead>\n<tbody>\n";
         while ($i < $num)
@@ -106,8 +107,12 @@
                 echo "<td>".($df['05-07']+$df['06']+$df['19-20'])."</td>"; // apait. 05-07,06,19-20
                 echo "<td>".($df['08']+$df['11']+$df['16']+$df['32'])."</td>"; // apait. 08,11,16,32
                 //
+                $telPE70 = $df['70']-$OP;
                 echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['16']."</td><td>".(int)$av['32']."</td><td>".(int)$av['19-20']."</td><td>".(int)$av['70']."</td>";
-                echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['16']).tdc($df['32']).tdc($df['19-20']).tdc($df['70']).tdc($df['70']-$OP);
+                echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['16']).tdc($df['32']).tdc($df['19-20']).tdc($df['70']).tdc($telPE70);
+                $koines = $df['08']+$df['11']+$df['16']+$df['32'];
+                echo tdc($koines); // apait. 08,11,16,32
+                echo tdc($telPE70+$koines);
                 echo "</tr>\n";
 
                 $par_sum['05-07'] += $av['05-07'];
@@ -133,13 +138,13 @@
         }
         echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=2>ΣΥΝΟΛΑ</td>";
         echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['16']."</td><td>".$par_sum['32']."</td><td>".$par_sum['19-20']."</td><td>".$par_sum['70']."</td>\n";
-        echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['16']."</td><td>".$df_sum['32']."</td><td>".$df_sum['19-20']."</td><td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td>\n";
-        echo "<tr><td></td><td></td><td></td><td></td>";
+        echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['16']."</td><td>".$df_sum['32']."</td><td>".$df_sum['19-20']."</td><td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
+        echo "<tr><td></td><td></td><td></td><td></td><td></td>";
         //
-        echo "<td></td><td></td><td></td><td></td><td></td><td></td>";
+        echo "<td></td><td></td><td></td><td></td><td></td>";
         //
         echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>16</i></td><td><i>32</i></td><td><i>19-20</i></td><td><i>70</i></td>";
-        echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>16</i></td><td><i>32</i></td><td><i>19-20</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td></i>";
+        echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>16</i></td><td><i>32</i></td><td><i>19-20</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
         echo "</tr>";
         echo "</tbody></table>";
         echo "<br>";

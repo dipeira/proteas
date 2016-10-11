@@ -1325,6 +1325,7 @@
            * Wres_tmimata: Compute required hours based on oloimero schedule 2016-17
            * Returns required hours depending on number of classes
            * tmimata: 0: A, 1: B, 2: Ã, 3: Ä, 4: E, 5: ÓÔ
+           * 6: Ïë. 15.00, 7: Ïë. 16:00, 8: ĞÆ
            */
           function anagkes1617($tm){
               $artm = $tm[0]+$tm[1]+$tm[2]+$tm[3]+$tm[4]+$tm[5];
@@ -1340,7 +1341,7 @@
                 $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
                 $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*22;
                 // oloimero
-                $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                $hours['O'] = $tm[6]>0 ? 5 + $tm[6]*5 + $tm[7]*5 : 0;
                 return $hours;
               }
               // 5/thesia
@@ -1368,7 +1369,7 @@
                     $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
                 }
                 // oloimero
-                $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                $hours['O'] = $tm[6]>0 ? 5 + $tm[6]*5 + $tm[7]*5 : 0;
                 
                 return $hours;
               }
@@ -1384,9 +1385,9 @@
                 $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
                 $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
                 // oloimero
-                $hours['O'] = $tm[6]>0 ? 15 + ($tm[6]-1)*10 : 0;
+                $hours['O'] = $tm[6]>0 ? 5 + $tm[6]*5 + $tm[7]*5 : 0;
                 // PZ
-                $hours['P'] = $tm[7]*5;
+                $hours['P'] = $tm[8]*5;
                 return $hours;
               }
           }

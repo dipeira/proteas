@@ -82,6 +82,7 @@
                 $kena_leit = unserialize(mysql_result($result, 0, "kena_leit"));
                 $code = mysql_result($result, 0, "code");
                 $updated = mysql_result($result, 0, "updated");
+                $perif = mysql_result($result, 0, "perif");
                                 
                 // if dimotiko
                 if ($type == 1)
@@ -204,9 +205,9 @@
                 {
                     echo "<tr>";
                     if ($ted)
-                        echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td></td>";
+                        echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td>Περιφ.Σχ.Συμβ.: ".$perif."η</td>";
                     else
-                        echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td></td>";
+                        echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td>Περιφ.Σχ.Συμβ.: ".$perif."η</td>";
                     echo "</tr>";
                 }
                 
@@ -226,7 +227,7 @@
                         $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
                         echo "<tr><td>Μαθ.Πρωινού<br>Σύνολο: $synolo_pr</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
                         $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
-                        echo "<tr><td>Τμ./τάξη Πρωινού<br>Σύνολο: $synolo_pr</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]</i></td><td class='tdnone'><i>$tmimata_exp[7]</i></td></tr>";
+                        echo "<tr><td>Τμ./τάξη Πρωινού<br>Σύνολο: $synolo_pr</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small> (14-15)</small><br>$tmimata_exp[7]<small> (15-16)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
                         echo "</table>";
                         echo "<br>";
                     }
