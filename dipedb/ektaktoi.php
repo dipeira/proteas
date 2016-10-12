@@ -150,6 +150,7 @@
                 $stathero = mysql_result($result, 0, "stathero");
                 $kinhto = mysql_result($result, 0, "kinhto");
                 $praxi = mysql_result($result, 0, "praxi");
+                $updated= mysql_result($result, 0, "updated");
                 
                 $kat = mysql_result($result, 0, "status");
                 switch ($kat)
@@ -497,9 +498,10 @@ if ($_GET['op']=="edit")
                 <?php
 		echo "</td></tr>";
                 */              		
+                echo $updated > 0 ? "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>" : null;
 		echo "	</table>";
 		
-                		
+                echo "<br>";
                 // echo "  <INPUT TYPE='submit' id='adeia' VALUE='¶δειες'>"; future use?
                 if ($usrlvl < 3)
                     echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
