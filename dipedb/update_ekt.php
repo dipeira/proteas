@@ -29,6 +29,8 @@
   $stathero = $_POST['stathero'];
   $kinhto = $_POST['kinhto'];
   
+  $ip = $_SERVER['REMOTE_ADDR'];
+  
   // yphr array
   $count = count($_POST['yphr']);
   // if multiple
@@ -128,6 +130,7 @@
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi',";
 	  $query3 = " hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
 	  $query = $query1.$query2.$query3;
+          $qlog .= $query;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           mysql_query($query,$mysqlconnection);
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos=$sxol_etos";
@@ -136,7 +139,12 @@
           {
                 $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
                 mysql_query($query,$mysqlconnection);
+                $qlog = $qlog . ' \n ' . $query;
           }
+          // insert 2 log
+          $qlog = addslashes($qlog);
+          $query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$qlog')";
+          mysql_query($query1, $mysqlconnection);
       }
       else
       {
@@ -149,6 +157,7 @@
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi',";
 	  $query3 = " hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
 	  $query = $query1.$query2.$query3;
+          $qlog .= $query;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           //echo $query;
           mysql_query($query,$mysqlconnection);
@@ -159,7 +168,12 @@
           {
               $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[0]', '$hours_arr[0]', $sxol_etos)";
               mysql_query($query,$mysqlconnection);
+              $qlog = $qlog . ' \n ' . $query;
           }
+          // insert 2 log
+          $qlog = addslashes($qlog);
+          $query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$qlog')";
+          mysql_query($query1, $mysqlconnection);
       }
   }
 
