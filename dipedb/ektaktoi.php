@@ -220,7 +220,7 @@ if ($_GET['op']=="add")
 		//echo "<tr><td>Βαθμός</td><td><input type='text' name='vathm' /></td></tr>";
 		//echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' /></td></tr>";
 		
-		echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
+		//echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
                 echo "<tr><td>Ημ/νία ανάληψης</td><td>";
 		$myCalendar = new tc_calendar("hm_anal", true);
 		$myCalendar->setIcon("calendar/images/iconCalendar.gif");
@@ -262,8 +262,10 @@ if ($_GET['op']=="add")
 		// action = 1 gia prosthiki
                 echo "  <input type='hidden' name = 'status' value='1'>";
 		echo "  <input type='hidden' name = 'action' value='1'>";
-		echo "	<input type='submit' value='Προσθήκη'>";
+                echo "<br>";
+		echo "	<input type='submit' value='Καταχώρηση'>";
                 echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
+                echo "<br>";
 		echo "	<br><INPUT TYPE='button' VALUE='Αρχική Σελίδα' onClick=\"parent.location='index.php'\">";
 		echo "	</form>";
 ?>
@@ -444,8 +446,12 @@ if ($_GET['op']=="edit")
                     for ($i=0; $i<$count; $i++)
                     {
                         $sxoleia .=  "<a href=\"school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
+                        $counthrs += $hours_arr[$i];
                     }
-                    echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+                    if ($count > 1)
+                        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
+                    else
+                        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
                 }
                 else
                 {

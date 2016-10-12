@@ -735,8 +735,19 @@ if ($_GET['op']=="edit")
                     for ($i=0; $i<$count; $i++)
                     {
                         $sxoleia .=  "<a href=\"school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
+                        $counthrs += $hours_arr[$i];
                     }
-                    echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+                    if ($count>1){
+                        if ($counthrs > $wres){
+                            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
+                        }
+                        else {
+                            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
+                        }
+                    }
+                    else {
+                        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+                    }
                 //}
                 //else
                 //{
