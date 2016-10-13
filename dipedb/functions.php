@@ -1413,16 +1413,6 @@
            */
           function ektimhseis1617($sch, $mysqlconnection, $sxoletos, $print = FALSE)
             {
-              ?>
-                <script type="text/javascript">
-                $().ready(function(){
-                        $('#toggleBtn').click(function(){
-                            event.preventDefault();
-                            $("#analysis").slideToggle();
-                        });
-                });
-                </script>
-              <?php
               set_time_limit(1200);
               $avhrs = [];
               $all = [];
@@ -1462,17 +1452,15 @@
                   $kl = strval($row['klados']);
                   $avhrs[$kl] += $row['wres'];
               }
-              // αναλυτικά...
-              $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) ORDER BY e.klados";
-              $result = mysql_query($query, $mysqlconnection);
-              while ($row = mysql_fetch_array($result)){
-                  $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
-                  $all[] = $ar;
+              if ($print){
+                // αναλυτικά...
+                $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) ORDER BY e.klados";
+                $result = mysql_query($query, $mysqlconnection);
+                while ($row = mysql_fetch_array($result)){
+                    $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                    $all[] = $ar;
+                }
               }
-              // οργ αλλου + υπηρ
-              //$query = "SELECT klados,sum(wres) as wres from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,1) AND status=1 GROUP BY klados";
-              // Οργανική αλλού και δευτερεύουσα υπηρέτηση
-              //$query = "SELECT e.klados,sum(y.hours) FROM employee e join yphrethsh y on e.id = y.emp_id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos GROUP BY e.klados";
               // αναπληρωτές
               $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 GROUP BY klados";
               $result = mysql_query($query, $mysqlconnection);
@@ -1480,13 +1468,15 @@
                   $kl = strval($row['klados']);
                   $avhrs[$kl] += $row['wres'];
               }
-              // αναλυτικά...
-              $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 ORDER BY e.klados";
-              $result = mysql_query($query, $mysqlconnection);
-              while ($row = mysql_fetch_array($result)){
-                  $srn = $row['surname'] . ' *';
-                  $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
-                  $all[] = $ar;
+              if ($print){
+                // αναλυτικά...
+                $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 ORDER BY e.klados";
+                $result = mysql_query($query, $mysqlconnection);
+                while ($row = mysql_fetch_array($result)){
+                    $srn = $row['surname'] . ' *';
+                    $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                    $all[] = $ar;
+                }
               }
               
               // replace kladoi @ array
