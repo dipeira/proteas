@@ -130,8 +130,8 @@
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi',";
 	  $query3 = " hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
 	  $query = $query1.$query2.$query3;
-          $qlog .= $query;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
+          $qlog .= $query;
           mysql_query($query,$mysqlconnection);
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos=$sxol_etos";
           mysql_query($query,$mysqlconnection);
@@ -157,8 +157,8 @@
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi',";
 	  $query3 = " hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
 	  $query = $query1.$query2.$query3;
-          $qlog .= $query;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
+          $qlog .= $query;
           //echo $query;
           mysql_query($query,$mysqlconnection);
           // svhse tyxon >1 yphrethseis 
