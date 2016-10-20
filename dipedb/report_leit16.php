@@ -65,12 +65,23 @@
             echo "</tr>";
             echo "</thead>\n<tbody>\n";
         while ($i < $num)
-        //while ($i < 4)
+        //while ($i < 4) // for testing
         {		
                 $sch = mysql_result($result, $i, "id");
                 $name = getSchool($sch, $mysqlconnection);
                 $code = mysql_result($result, $i, "code");
                 $organikothta = mysql_result($result, $i, "organikothta");
+                
+                // check if leit < 4. If yes, skip
+                $tmimata_exp = explode(",",mysql_result($result, $i, "tmimata"));
+                $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+                // if oligothesio, skip
+                if ($leit < 4) {
+                    $i++;
+                    continue;
+                }
+                
+                // call ektimhseis1617 function
                 $results = ektimhseis1617($sch, $mysqlconnection, $sxol_etos);
                 // required
                 $req = $results['required'];
