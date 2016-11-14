@@ -238,12 +238,14 @@
                         else
                             echo "<tr><td><input type='text' name='ta' size='1' value='0' /></td><td><input type='text' name='tb' size='1' value='0' /></td><td><input type='text' name='tc' size='1' value='0' /></td><td><input type='text' name='td' size='1' value='0' /></td><td><input type='text' name='te' size='1' value='0' /></td><td><input type='text' name='tf' size='1' value='0' /></td><td><input type='text' name='tg' size='1' value='0' /></td><td><input type='text' name='th' size='1' value='0' /></td></tr>";
                     }
+                    // if nip
                     else if ($type == 2)
                     {
                         if ($oloimero)
-                            echo "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td><td></td></tr>";
+                            echo "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>";
                         else
-                            echo "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td><td></td></tr>";
+                            echo "<td><input type=\"checkbox\" name='oloimero'>Όλοήμερο</td>";
+                        echo "<td>Μαθητές Πρωινής Ζώνης&nbsp;&nbsp;<input type='text' name='pz' size='1' value=$klasiko_exp[6]></td></tr>";
                         echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                         echo "</table>";
                         echo "<br>";
@@ -263,20 +265,6 @@
                         echo "<td><input type='text' name='o3a' size='1' value=$oloimero_nip_exp[4]></td><td><input type='text' name='o3b' size='1' value=$oloimero_nip_exp[5]></td></tr>";
                         echo "</table>";
                         echo "<br>";
-                        // μεικτό
-                        echo "<h3>Μεικτό</h3><br>";
-                        echo "<table class=\"imagetable\" border='1'>";
-                        echo "<tr><td rowspan=2>Τμήμα/Ώρα</td><td colspan=2>Ώρα 1 (12.30)</td><td colspan=2>Ώρα 2 (16.00)</small></td></tr>";
-                        echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Νήπια</td><td>Προνήπια</td></tr>";
-                        // t1
-                        echo "<tr><td>Τμ.1</td><td><input type='text' name='k4a' size='1' value=$klasiko_exp[6]></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[7]></td>";
-                        echo "<td><input type='text' name='k4c' size='1' value=$klasiko_exp[8]></td><td><input type='text' name='k4d' size='1' value=$klasiko_exp[9]></td></tr>";
-                        // t2
-                        echo "<tr><td>Τμ.2</td><td><input type='text' name='k5a' size='1' value=$klasiko_exp[10]></td><td><input type='text' name='k5b' size='1' value=$klasiko_exp[11]></td>";
-                        echo "<td><input type='text' name='k5c' size='1' value=$klasiko_exp[12]></td><td><input type='text' name='k5d' size='1' value=$klasiko_exp[13]></td></tr>";
-                        echo "</table>";
-                        echo "<br>";
-                        //////    
                         echo "<table class=\"imagetable\" border='1'>";
                         echo "<tr><td colspan=3>Νηπιαγωγοί</td></tr>";
                         echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";

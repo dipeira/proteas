@@ -187,9 +187,14 @@
                     else
                         echo "<td><input type=\"checkbox\" disabled>Φροντιστηριακό Τμήμα</td>";
                 }
-                else
-                    echo "<td></td>";
-                                
+                // if nip print Proini Zoni (klasiko[6])
+                else {
+                    if ($klasiko_exp[6])
+                        echo "<td><input type=\"checkbox\" checked disabled>Πρωινή Ζώνη / Μαθητές: $klasiko_exp[6]</td>";
+                    else
+                        echo "<td><input type=\"checkbox\" disabled>Πρωινή Ζώνη</td>";
+                }
+                                                    
                 if ($oloimero)
                 {
                     if ($type == 1)
@@ -243,8 +248,9 @@
                 else if ($type == 2)
                 {
                     // klasiko_nip/pro: klasiko
-                    // meikto : @ klasiko pos.6,7,8,9,10,11,12,13 - τ1: 6Π,7Ν,8Π,9Ν - τ2: 10Π,11Ν,12Π,13Ν  
-                    //oloimero_syn_nip/pro: oloimero
+                    // klasiko pos 0-5: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p
+                    // prwinh zvnh @ pos 7 -> klasiko[6]
+                    // oloimero_syn_nip/pro: oloimero
                     $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];
                     $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];
                     $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
@@ -254,46 +260,39 @@
                     // Μαθητές
                     echo "<h3>Μαθητές</h3><br>";
                     echo "<table class=\"imagetable\" border='1'>";
-                    echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό <small>(Νήπια: $klasiko_nip / Προνήπια: $klasiko_pro)</small></td><td colspan=3>Ολοήμερο <small>(Νήπια: $oloimero_syn_nip / Προνήπια: $oloimero_syn_pro)</small></td></tr>";
+                    $ola = $klasiko_nip + $klasiko_pro;
+                    $olola = $oloimero_syn_nip + $oloimero_syn_pro;
+                    echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
                     echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
                     // t1
                     $syn = $klasiko_exp[0]+$klasiko_exp[1];
                     echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td>$syn</td>";
                     $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
                     echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td>$syn_ol</td></tr>";
+                    // print t2 + t3 only if they have students
                     // t2
-                    $syn = $klasiko_exp[2]+$klasiko_exp[3];
-                    echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$syn</td>";
-                    $syn_ol = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
-                    echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td>$syn_ol</td></tr>";
+                    $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
+                    $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
+                    if (($syn2+$syn_ol2) > 0){
+                        echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$syn2</td>";
+                        echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td>$syn_ol2</td></tr>";
+                    }
                     // t3
-                    $syn = $klasiko_exp[4]+$klasiko_exp[5];
-                    echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$syn</td>";
-                    $syn_ol = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
-                    echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td>$syn_ol</td></tr>";
+                    $syn3 = $klasiko_exp[4]+$klasiko_exp[5];
+                    $syn_ol3 = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
+                    if (($syn3+$syn_ol3) > 0){
+                        echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$syn3</td>";
+                        echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td>$syn_ol3</td></tr>";
+                    }
+                    // totals (if more than one tmima)
+                    if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0){
+                        echo "<tr><td><strong>Σύνολα</strong></td><td>$klasiko_nip<td>$klasiko_pro</td><td>$ola</td>";
+                        echo "<td>$oloimero_syn_nip<td>$oloimero_syn_pro</td><td>$olola</td>";
+                        echo "</tr>";
+                    }
                     echo "</table>";
                     echo "<br>";
-                    // μεικτό
-                    if ($klasiko_exp[6] || $klasiko_exp[7] || $klasiko_exp[8] || $klasiko_exp[9] || $klasiko_exp[10] || $klasiko_exp[11] || $klasiko_exp[12] || $klasiko_exp[13])
-                    {
-                        echo "<h3>Μεικτό</h3><br>";
-                        echo "<table class=\"imagetable\" border='1'>";
-                        echo "<tr><td rowspan=2>Τμήμα/Ώρα</td><td colspan=3>Ώρα 1 (12.30)</td><td colspan=3>Ώρα 2 (16.00)</small></td></tr>";
-                        echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
-                        // t1
-                        $syn = $klasiko_exp[6]+$klasiko_exp[7];
-                        echo "<tr><td>Τμ.1</td><td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td><td>$syn</td>";
-                        $syn = $klasiko_exp[8]+$klasiko_exp[9];
-                        echo "<td>$klasiko_exp[8]</td><td>$klasiko_exp[9]</td><td>$syn</td></tr>";
-                        // t2
-                        $syn = $klasiko_exp[10]+$klasiko_exp[11];
-                        echo "<tr><td>Τμ.2</td><td>$klasiko_exp[10]</td><td>$klasiko_exp[11]</td><td>$syn</td>";
-                        $syn = $klasiko_exp[12]+$klasiko_exp[13];
-                        echo "<td>$klasiko_exp[12]</td><td>$klasiko_exp[13]</td><td>$syn</td></tr>";
-                        echo "</table>";
-                        echo "<br>";
-                    }
-
+                    
                     $nip_syn = array_sum($nip_exp);
                     echo "<table class=\"imagetable\" border='1'>";
                     echo "<tr><td colspan=3>Νηπιαγωγοί (Σύνολο: $nip_syn)</td></tr>";
@@ -310,7 +309,7 @@
                 if ($type == 1 && array_sum($tmimata_exp)>3){
                         ektimhseis1617($sch, $conn, $sxol_etos, TRUE);
                 }
-	}
+	} // of disp_school
       
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
