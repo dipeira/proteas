@@ -1461,16 +1461,16 @@
                     $all[] = $ar;
                 }
               }
-              // αναπληρωτές
-              $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 GROUP BY klados";
+              // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6))
+              $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 GROUP BY klados";
               $result = mysql_query($query, $mysqlconnection);
               while ($row = mysql_fetch_array($result)){
                   $kl = strval($row['klados']);
                   $avhrs[$kl] += $row['wres'];
               }
               if ($print){
-                // αναλυτικά...
-                $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 ORDER BY e.klados";
+                // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
+                $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
                 $result = mysql_query($query, $mysqlconnection);
                 while ($row = mysql_fetch_array($result)){
                     $srn = $row['surname'] . ' *';
