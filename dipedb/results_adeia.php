@@ -54,6 +54,7 @@
 			//echo "<p>Πλήθος εγγραφών που βρέθηκαν: $num<p>";
                         $num1=$num;
                         $num2=$num;
+                        $synolo_ola = $synolo_ews = 0;
 			echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=iso8859-7\">";
 			echo "<body>";
 			echo "<center>";
@@ -64,6 +65,7 @@
 			echo "<th>Είδος</th>";
                         echo "<th>Έναρξη</th>";
                         echo "<th>Λήξη</th>";
+                        echo "<th>Ημ.αδ<br><small>Ημ.έως</small></th>";
                         echo "<th>Αρ.Πρωτοκόλλου</th>";
                         echo "<th>Αρ.Απόφασης</th>";
 			echo "</th>\n";
@@ -95,8 +97,21 @@
                                                                 
 				$start = mysql_result($result, $i, "start");
 				$finish = mysql_result($result, $i, "finish");
+                                $days = mysql_result($result, $i, "days");
                                 $start = date ("d-m-Y", strtotime($start));
                                 $finish = date ("d-m-Y", strtotime($finish));
+                                // add days
+                                $synolo_ola += $days;
+                                $days_to_end = 0;
+                                if (strtotime($finish) > strtotime($_POST['hm_to'])) {
+                                    $date1=date_create($start);
+                                    $date2=date_create($_POST['hm_to']);
+                                    $diff=date_diff($date1,$date2);
+                                    $days_to_end = $diff->format("%a");
+                                } else {
+                                    $days_to_end = $days;
+                                }
+                                $synolo_ews += $days_to_end;
                                 
                                 $ar_prot = mysql_result($result, $i, "prot");
                                 $hm_prot = mysql_result($result, $i, "hm_prot");
@@ -124,7 +139,7 @@
                                     $tmpl1 = "ektaktoi";
                                 }
 				echo "<a href=\"".$tmpl1.".php?id=$emp_id&op=view\">$surname, $name</a></td><td><a href=\"".$tmpl.".php?adeia=$id&op=view\">$typewrd</a></td>
-                                <td>$start</td><td>$finish</td><td>$ar_prot/".date("d-m-Y",  strtotime($hm_prot))."</td><td>$apof_all\n";
+                                <td>$start</td><td>$finish</td><td>$days <small><i>($days_to_end)</i></small></td><td>$ar_prot/".date("d-m-Y",  strtotime($hm_prot))."</td><td>$apof_all\n";
 				echo "</tr>";
                                 }
 				
@@ -135,7 +150,9 @@
 			ob_end_flush();
 			
                         $num -= $del;
-                        echo "<p>Πλήθος εγγραφών που βρέθηκαν: $num<p>";
+                        echo "<p>Πλήθος εγγραφών που βρέθηκαν: <strong>$num</strong><p>";
+                        echo "<p>Σύνολο ημερών αδειών: <strong>$synolo_ola</strong><p>";
+                        echo "<p>Σύνολο ημερών απουσίας έως ".date ("d-m-Y", strtotime($_POST['hm_to'])).": <strong>$synolo_ews</strong><p>";
 			echo "<form action='2excel.php' method='post'>";
 			echo "<input type='hidden' name = 'data' value='$page'>";
 			echo "<BUTTON TYPE='submit'><IMG SRC='images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
