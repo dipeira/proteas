@@ -1,5 +1,5 @@
 <?php
-	//header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=iso8859-7'); 
 	//require_once "functions.php";
 ?>
 <html>
@@ -46,17 +46,19 @@
 
         $result = mysql_query($query, $mysqlconnection);
         $num = mysql_num_rows($result);
-
+        
         echo "<body>";
         echo "<center>";
         $i=0;
         ob_start();
+        $synorgtop = $synorgan = 0;
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
         echo "<thead>";
         echo "<tr><th rowspan=2>Κωδ.</th>";
         echo "<th rowspan=2>Ονομασία</th>";
         echo "<th rowspan=2>Κατ.</th>";
         echo "<th rowspan=2>Οργ.</th>";
+        echo "<th rowspan=2>ΠΕ70<br>Οργ.<br>Τοποθ.</th>";
         echo "<th colspan=4>Οργανικές</th>";
         echo "<th colspan=4>Οργανικά Κενά</th>";
         echo "</tr>";
@@ -72,14 +74,21 @@
             $code = mysql_result($result, $i, "code");
             $cat = getCategory(mysql_result($result, $i, "category"));
             $organikothta = mysql_result($result, $i, "organikothta");
+            $synorgan += $organikothta;
             $organikes = unserialize(mysql_result($result, $i, "organikes"));
             $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
+            // οργανικά τοποθετηθέντες
+            $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3)";
+            $rs = mysql_query($qry, $mysqlconnection);
+            $orgtop = mysql_result($rs, 0, "cnt");
+            $synorgtop += $orgtop;
 
             echo "<tr>";
             echo "<td>$code</td>";
             echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td>";
             echo "<td>$cat</td>";
             echo "<td>$organikothta</td>";
+            echo "<td>$orgtop</td>";
             echo "<td>$organikes[0]</td><td>$organikes[1]</td><td>$organikes[2]</td><td>$organikes[3]</td>\n";
             echo "<td>$kena_org[0]</td><td>$kena_org[1]</td><td>$kena_org[2]</td><td>$kena_org[3]</td>\n";
             echo "</tr>\n";
@@ -97,10 +106,10 @@
             $i++;                        
         }
     //}	
-        echo "<tr><td></td><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
-        echo "<td>$organikes_sum[0]</td><td>$organikes_sum[1]</td><td>$organikes_sum[2]</td><td>$organikes_sum[3]</td>";
+        echo "<tr><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
+        echo "<td>$synorgan</td><td>$synorgtop</td><td>$organikes_sum[0]</td><td>$organikes_sum[1]</td><td>$organikes_sum[2]</td><td>$organikes_sum[3]</td>";
         echo "<td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
-        echo "<tr><td></td><td></td><td></td><td></td><td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
+        echo "<tr><td></td><td></td><td></td><td>Οργανι-<br>κότητες</td><td>ΠΕ70<br>Οργ.<br>Τοποθ.</td><td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
         echo "<td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
         echo "</tr>";
         echo "</tbody></table>";
@@ -202,8 +211,9 @@
     }
     else if ($_GET['type'] == 2)
     {
-//            //nipiagogeia
+        //nipiagogeia
         $type = 2;
+        $synorgtop = 0;
         // only dhmosia kai eidika (type2 = 0 or 2)
         $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type";
         $result = mysql_query($query, $mysqlconnection);
@@ -219,6 +229,7 @@
         echo "<th rowspan=2>Ονομασία</th>";
         echo "<th rowspan=2>Κατ.</th>";
         echo "<th>Οργανικές</th>";
+        echo "<th>Οργ.Τοπ.</th>";
         echo "<th>Οργανικά Κενά</th>";
         echo "</tr>";
         echo "</thead>\n<tbody>\n";
@@ -232,12 +243,18 @@
             $students = mysql_result($result, $i, "students");
             $organikes = unserialize(mysql_result($result, $i, "organikes"));
             $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
+            // οργανικά τοποθετηθέντες
+            $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3)";
+            $rs = mysql_query($qry, $mysqlconnection);
+            $orgtop = mysql_result($rs, 0, "cnt");
+            $synorgtop += $orgtop;
 
             echo "<tr>";
             echo "<td>$code</td>";
             echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td>";
             echo "<td>$cat</td>";
             echo "<td>$organikes[0]</td>";
+            echo "<td>$orgtop</td>";
             echo "<td>$kena_org[0]</td>";
             echo "</tr>\n";
 
@@ -248,7 +265,7 @@
 
             $i++;                        
         }
-        echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$organikes_sum[0]</td><td>$kena_org_sum[0]</td></tr>";
+        echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td></tr>";
         echo "</tbody></table>";
         echo "<br>";
 
