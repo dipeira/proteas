@@ -470,7 +470,9 @@ if ($_GET['op']=="edit")
                 $res = mysql_query($qry);
                 $ya = mysql_result($res, 0, 'ya');
                 $apofasi = mysql_result($res, 0, 'apofasi');
+                $ada = mysql_result($res, 0, 'ada');
                 echo "<tr><td>Υπουργική Απόφαση</td><td colspan=3>$ya</td></tr>";
+                echo "<tr><td>Α.Δ.Α.</td><td colspan=3>$ada</td></tr>";
                 echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi</td></tr>";
 				
 		/* Future use?

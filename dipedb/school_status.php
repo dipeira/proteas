@@ -127,7 +127,13 @@
                 echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel</td></tr>";
                 echo "<tr><td>email: <a href=\"mailto:$email\">$email</a></td><td>Fax: $fax</td></tr>";
                 echo "<tr><td>Οργανικότητα: $organikothta</td><td>Λειτουργικότητα: $leitoyrg</td></tr>";
-                echo "<tr><td colspan=3>Κατηγορία: $cat</td></tr>";
+                
+                // οργανικά τοποθετηθέντες
+                $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3) AND thesi IN (0,1,2)";
+                $rs = mysql_query($qry, $conn);
+                $orgtop = mysql_result($rs, 0, "cnt");
+                echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
+                
                 // 05-10-2012 - organikes
                 for ($i=0; $i<count($organikes); $i++)
                     if (!$organikes[$i])

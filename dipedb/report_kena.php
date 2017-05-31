@@ -78,7 +78,7 @@
             $organikes = unserialize(mysql_result($result, $i, "organikes"));
             $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
             // οργανικά τοποθετηθέντες
-            $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3)";
+            $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3) AND thesi IN (0,1,2)";
             $rs = mysql_query($qry, $mysqlconnection);
             $orgtop = mysql_result($rs, 0, "cnt");
             $synorgtop += $orgtop;
