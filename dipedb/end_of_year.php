@@ -125,7 +125,7 @@
                         if ($kratikoy)
                             $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (2)";
                         else
-                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (3,4,5)";
+                            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (3,4,5,6)";
 
                         $result = mysql_query($query, $mysqlconnection);
                         $num=mysql_numrows($result);
@@ -171,8 +171,10 @@
                             if (!$kratikoy)
                             {
                                 $praksi = mysql_result($result, $i, "praksi");
-                                if (strpos($praksi,'ΕΑΕΠ') !== false || strpos($praksi,'Ε.Α.Ε.Π.') !== false)
-                                        $prefix = "EAEP_";
+                                if (strpos($praksi,'Ενιαίου') !== false || strpos($praksi,'ΕΝΙΑΙΟΥ') !== false)
+                                        $prefix = "ENIAIOY_";
+                                elseif (strpos($praksi,'Ενίσχυση') !== false || strpos($praksi,'ΕΝΙΣΧ') !== false)
+                                        $prefix = "ENISX_";
                                 elseif (strpos($praksi,'ΚΡΗΤΗ') !== false)
                                         $prefix = "PEP_";
                                 elseif (strpos($praksi,'ΠΑΡΑΛΛΗΛΗ') !== false || strpos($praksi,'Παράλληλη') !== false || strpos($praksi,'παράλληλη') !== false
@@ -188,6 +190,8 @@
                                         $prefix = "OLOHM_";
                                 elseif (strpos($praksi,'ΝΕΟ ΣΧΟΛΕΙΟ') !== false || strpos($praksi,'νέο σχολείο') !== false || strpos($praksi,'Νέο σχολείο') !== false || strpos($praksi,'ΕΚΟ') !== false)
                                         $prefix = "NEO_";
+                                elseif (strpos($praksi,'EKO') !== false || strpos($praksi,'ΕΚΟ') !== false)
+                                        $prefix = "EKO_";
                                 else
                                         $prefix = '';
                                 // check if ΕΒΠ

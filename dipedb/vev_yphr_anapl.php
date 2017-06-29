@@ -29,12 +29,15 @@ foreach( $arr as $myarr)
     // espa
     else
     {
-        if (strpos($myarr['prefix'],'PARAL_') !== false || strpos($myarr['prefix'],'EKSATOM_') !== false || strpos($myarr['prefix'],'ANAPT_') !== false || strpos($myarr['prefix'],'NEO_') !== false)
+        /*if (strpos($myarr['prefix'],'PARAL_') !== false || strpos($myarr['prefix'],'EKSATOM_') !== false || strpos($myarr['prefix'],'ANAPT_') !== false || strpos($myarr['prefix'],'NEO_') !== false)
                 $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_eks_ekseid_etc.docx');
         elseif (strpos($myarr['prefix'],'EAEP_') !== false || strpos($myarr['prefix'],'OLOHM_') !== false )
                 $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_eaep_oloim.docx');
-        elseif (strpos($myarr['prefix'],'PEP_') !== false)
-                $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_pep.docx');
+        */
+        if (strpos($myarr['prefix'],'PEP_') !== false)
+            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_pep.docx');
+        else
+            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_espa.docx');
         /*
         if ($myarr['ebp'])
             $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_ebp.docx');
@@ -105,14 +108,16 @@ foreach( $arr as $myarr)
         if (strlen($metakinhsh)<2)
             $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia.";
         else
-            $top_metak = ". Τοποθετήθηκε με την ταυτάριθμη απόφαση στο ".$metakinhsh . $sxoleia;
+            //$top_metak = ". Τοποθετήθηκε με την ταυτάριθμη απόφαση στο ".$metakinhsh . $sxoleia;
+            $top_metak = ". ".$metakinhsh . $sxoleia;
     }
     else
     {
         if (strlen($metakinhsh)<2)
             $top_metak = "και τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
         else
-            $top_metak = ". Με την αριθμ. $apof τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
+            //$top_metak = ". Με την αριθμ. $apof τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
+            $top_metak = ". ".$metakinhsh . $sxoleia;
     }
     $data = mb_convert_encoding($top_metak, "utf-8", "iso-8859-7");
     $document->setValue('top_metak', $data);
