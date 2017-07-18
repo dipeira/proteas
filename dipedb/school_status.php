@@ -129,7 +129,8 @@
                 echo "<tr><td>Οργανικότητα: $organikothta</td><td>Λειτουργικότητα: $leitoyrg</td></tr>";
                 
                 // οργανικά τοποθετηθέντες
-                $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3) AND thesi IN (0,1,2)";
+                $klados_qry = ($type == 1) ? 2 : 1;
+                $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3) AND thesi IN (0,1,2)";
                 $rs = mysql_query($qry, $conn);
                 $orgtop = mysql_result($rs, 0, "cnt");
                 echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
