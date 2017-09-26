@@ -48,6 +48,7 @@
             echo "<th rowspan=2>Ονομασία</th>";
             echo "<th rowspan=2>Οργ.</th>";
             echo "<th rowspan=2>Λειτ.</th>";
+            echo "<th rowspan=2>Τοπ.<br>ΠΕ70</th>";
             // new
             echo "<th rowspan=2>Ωρ. Πρ.</th>";
             echo "<th rowspan=2>Ωρ. Ολ.</th>";
@@ -94,18 +95,26 @@
                     continue;
                 }
                 // count pe70
+                /*
                 $count70 = 0;
                 $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) AND e.klados=2";
                 $res = mysql_query($qry, $mysqlconnection);
                 while ($row = mysql_fetch_array($res)){
                     $count70 = $row['count'];
                 }
+                */
+                // τοποθετηθέντες ΠΕ70
+                $qry = "SELECT count(*) as cnt FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 AND thesi IN (0,1,2)";
+                $rs = mysql_query($qry, $mysqlconnection);
+                $top70 = mysql_result($rs, 0, "cnt");
+                $syntop70 += $top70;
                 //
                 echo "<tr>";
                 echo "<td>$code</td>";
                 echo "<td><a href='school_status.php?org=$sch' target='_blank'>$name</a></td>";
                 echo "<td>$organikothta</td>";
                 echo "<td>".$results['leit']."</td>";
+                echo "<td>$top70</td>";
                 // new
                 echo "<td>".($results['leit']*30)."</td>"; //wres pr.
                 $OP = $req['O'] + $req['P'];
@@ -146,10 +155,10 @@
 
                 $i++;                        
         }
-        echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=2>ΣΥΝΟΛΑ</td>";
+        echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=2>ΣΥΝΟΛΑ</td>";
         echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['16']."</td><td>".$par_sum['32']."</td><td>".$par_sum['19-20']."</td><td>".$par_sum['70']."</td>\n";
         echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['16']."</td><td>".$df_sum['32']."</td><td>".$df_sum['19-20']."</td><td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
-        echo "<tr><td></td><td></td><td></td><td></td><td></td>";
+        echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
         //
         echo "<td></td><td></td><td></td><td></td><td></td>";
         //

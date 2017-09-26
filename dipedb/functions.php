@@ -1415,7 +1415,7 @@
             {
               set_time_limit(1200);
               $avhrs = [];
-              $all = [];
+              $all = $allcnt = [];
               // init db
               mysql_query("SET NAMES 'greek'", $mysqlconnection);
               mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
@@ -1439,10 +1439,12 @@
               if (mysql_num_rows($result)) {
                   $dnthrs = wres_dnth($leit);
                   $klados = mysql_result($result, 0, "klados");
+                  $klper = mysql_result($result, 0, "k.perigrafh");
                   $avhrs[$klados] = $dnthrs;
                   // ώρες Δ/ντή στην ανάλυση
                   $ar = Array('surname' =>  mysql_result($result, 0, "e.surname"), 'klados' =>  mysql_result($result, 0, "k.perigrafh"), 'hours' => $dnthrs);
                   $all[] = $ar;
+                  $allcnt[$klper]++;
               }
               // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
               //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
@@ -1459,6 +1461,7 @@
                 while ($row = mysql_fetch_array($result)){
                     $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                     $all[] = $ar;
+                    $allcnt[$row['perigrafh']]++;
                 }
               }
               // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6))
@@ -1476,6 +1479,7 @@
                     $srn = $row['surname'] . ' *';
                     $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                     $all[] = $ar;
+                    $allcnt[$row['perigrafh']]++;
                 }
               }
               
@@ -1512,16 +1516,21 @@
                 function tdc($val){
                     return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
                 }  
-                echo "<h3>Λειτουργικά Κενά / Πλεονάσματα</h3>";
+                echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
                 echo "<table class=\"imagetable\" border='1'>";
                 echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
-                echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['16']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['19-20']."</td><td>".$reqhrs['70']."</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
-                echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['16']."</td><td>".$avar['32']."</td><td>".$avar['19-20']."</td><td>".$avar['70']."</td><td></td><td></td></tr>";
+                echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['16']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['19-20']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
+                echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['16']."</td><td>".$avar['32']."</td><td>".$avar['19-20']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
                 echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['16']).tdc($ret['32']).tdc($ret['19-20']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
                 echo "</table>";
                 echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
                 echo "<div id='analysis' style='display: none;'>";
                     echo "<table class=\"imagetable\" border='1'>";
+                    echo "<tr><td colspan=3><u>ΣΥΝΟΛΑ:</u> ";
+                    foreach ($allcnt as $key=>$value){
+                        echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
+                    }
+                    echo "</td></tr>";
                     foreach ($all as $row) {
                         echo "<tr><td>".$row['surname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
                     }
