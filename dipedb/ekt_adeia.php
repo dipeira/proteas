@@ -118,7 +118,7 @@ if ($_GET['op']=="edit")
                 echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
 
 		echo "<tr><td>type</td><td>";
-                adeiaCmb($type,$mysqlconnection);
+                adeiaCmb($type,$mysqlconnection,1);
                 echo "</td></tr>";
 
                 echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' value=$prot_apof /></td></tr>";
@@ -244,7 +244,7 @@ if ($_GET['op']=="edit")
 		echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
                 echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
 
-		$query1 = "select type from adeia_type where id=$type";
+		$query1 = "select type from adeia_ekt_type where id=$type";
                 $result1 = mysql_query($query1, $mysqlconnection);
 		$typewrd = mysql_result($result1, 0, "type");
                 echo "<tr><td>Τύπος</td><td>$typewrd</td></tr>";
@@ -381,7 +381,7 @@ if ($_GET['op']=="edit")
                 echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
 
 		echo "<tr><td>Τύπος</td><td>";
-                adeiaCmb($type,$mysqlconnection);
+                adeiaCmb($type,$mysqlconnection,1);
                 echo "</td></tr>";
                 
                 echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' /></td></tr>";
@@ -480,6 +480,7 @@ if ($_GET['op']=="edit")
                 echo "	<input type='hidden' name = 'emp_id' value='$emp_id'>";
 		// action = 1 gia prosthiki
 		echo "  <input type='hidden' name = 'action' value='1'>";
+                echo "  <input type='hidden' name = 'sxoletos' value=$sxol_etos>";
 		echo "	<input type='submit' value='Προσθήκη'>";
 		//echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='index.php'\">";
                 echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='ektaktoi.php?id=$emp_id&op=view'\">";

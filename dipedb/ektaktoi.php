@@ -279,18 +279,6 @@ if ($_GET['op']=="add")
 
 if ($_GET['op']=="edit")
 	{
-            ?>
-   <script type="text/javascript">
-        $().ready(function() {
-                $("#adeia").click(function() {
-                    var MyVar = <?php echo $id; ?>;
-                    $("#adeies").load("ekt_adeia_list.php?id="+ MyVar );
-                    });
-                });
-        
-	
-    </script>
-<?php
 		echo "<form id='updatefrm' name='update' action='update_ekt.php' method='POST'>";
 		echo "<table class=\"imagetable\" border='1'>";
 		
@@ -389,7 +377,19 @@ if ($_GET['op']=="edit")
 		echo "</html>";
     }
 	elseif ($_GET['op']=="view")
-	{		
+	{
+            ?>
+   <script type="text/javascript">
+        $().ready(function() {
+                $("#adeia").click(function() {
+                    var MyVar = <?php echo $id; ?>;
+                    $("#adeies").load("ekt_adeia_list.php?id="+ MyVar );
+                    });
+                });
+        
+	
+    </script>
+<?php
 		echo "<table class=\"imagetable\" border='1'>";	
 		echo "<tr>";
 		//echo "<td colspan=2>ID</td><td colspan=2>$id</td>";

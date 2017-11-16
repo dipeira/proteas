@@ -32,6 +32,7 @@
   $finish = date('Y-m-d',strtotime($_POST['finish']));
   $logos =$_POST['logos']; 
   $comments =$_POST['comments']; 
+  $sxoletos = $_POST['sxoletos']; 
   //$logos = mb_convert_encoding($_POST['logos'], "iso-8859-7", "utf-8");
   //$comments = mb_convert_encoding($_POST['comments'], "iso-8859-7", "utf-8");
   
@@ -52,8 +53,8 @@
 // $_POST['action']=1 for adding records  
   if (isset($_POST['action']))
   {
-	$query0 = "INSERT INTO adeia_ekt (emp_id, type, prot, hm_prot, prot_apof, hm_apof, date, vev_dil, days, start, finish, logos, comments) ";
-		 $query1 = "VALUES ('$emp_id','$type','$prot','$hm_prot','$prot_apof','$hm_apof','$date','$vev_dil','$days','$start', '$finish', '$logos','$comments')";
+	$query0 = "INSERT INTO adeia_ekt (emp_id, type, prot, hm_prot, prot_apof, hm_apof, date, vev_dil, days, start, finish, logos, comments, sxoletos) ";
+		 $query1 = "VALUES ('$emp_id','$type','$prot','$hm_prot','$prot_apof','$hm_apof','$date','$vev_dil','$days','$start', '$finish', '$logos','$comments', '$sxoletos')";
 	$query = $query0.$query1;
   }
   else

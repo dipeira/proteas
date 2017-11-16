@@ -582,9 +582,9 @@
 		echo "</select>";
 	}
 	
-        function adeiaCmb ($inp,$conn)
+        function adeiaCmb ($inp,$conn,$ekt = 0)
 	{
-		$query = "SELECT * from adeia_type";
+		$query = $ekt ? "SELECT * from adeia_ekt_type" : "SELECT * from adeia_type";
 		$result = mysql_query($query, $conn);
 		if (!$result) 
 			die('Could not query:' . mysql_error());

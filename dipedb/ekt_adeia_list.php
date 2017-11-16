@@ -32,7 +32,7 @@
     <center>
       <?php
 		$i = 0;
-                $query = "SELECT * from adeia_ekt where emp_id=".$_GET['id'];
+                $query = "SELECT * from adeia_ekt where emp_id=".$_GET['id']." AND sxoletos = $sxol_etos";
 		$result = mysql_query($query, $mysqlconnection);
 		$num=mysql_numrows($result);
 		if (!$num)
@@ -64,7 +64,7 @@
                     $finish = mysql_result($result, $i, "finish");
                     $comments = mysql_result($result, $i, "comments");
                                         
-                    $query1 = "select type from adeia_type where id=$type";
+                    $query1 = "select type from adeia_ekt_type where id=$type";
                     $result1 = mysql_query($query1, $mysqlconnection);
                     $typewrd = mysql_result($result1, 0, "type");
                     if ($usrlvl < 2)
