@@ -1405,6 +1405,9 @@
               elseif ($tm >= 12)
                   return 8;
           }
+          function tdc($val){
+            return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
+          }
           /*
            * ektimhseis1617
            * Function to compute required and available hours for oloimero schedule 2016-17
@@ -1513,9 +1516,6 @@
               $ret['OP'] = $ret['70'] - $reqhrs['O'] - $reqhrs['P'];
                 
               if ($print){
-                function tdc($val){
-                    return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
-                }  
                 echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
                 echo "<table class=\"imagetable\" border='1'>";
                 echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";

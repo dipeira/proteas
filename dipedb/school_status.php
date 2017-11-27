@@ -53,6 +53,10 @@
                             event.preventDefault();
                             $("#analysis").slideToggle();
                         });
+                        $('#toggleSystegBtn').click(function(){
+                            event.preventDefault();
+                            $("#systeg").slideToggle();
+                        });
 		});	
 	</script>
   </head>
@@ -86,6 +90,10 @@
                 $code = mysql_result($result, 0, "code");
                 $updated = mysql_result($result, 0, "updated");
                 $perif = mysql_result($result, 0, "perif");
+                $systeg = mysql_result($result, 0, "systeg");
+                if ($systeg){
+                    $systegName = getSchool($systeg, $conn);
+                }
                                 
                 // if dimotiko
                 if ($type == 1)
@@ -227,6 +235,9 @@
                 }
                 
                 echo "<tr><td>Σχόλια: $comments</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
+                if ($systeg){
+                echo "<tr><td colspan=2>Συστεγαζόμενη σχολική μονάδα: <a href='school_status.php?org=$systeg' target='_blank'>$systegName</td></tr>";    
+                }
                 if ($updated>0)
                     echo "<tr><td colspan=2 align=right><small>Τελ.ενημέρωση: ".date("d-m-Y H:i",strtotime($updated))."<small></td></tr>";
                 echo "</table>";
@@ -314,7 +325,15 @@
                 $sxol_etos = getParam('sxol_etos', $conn);
                 // if dimotiko & leitoyrg >= 4
                 if ($type == 1 && array_sum($tmimata_exp)>3){
-                        ektimhseis1617($sch, $conn, $sxol_etos, TRUE);
+                    ektimhseis1617($sch, $conn, $sxol_etos, TRUE);
+                }
+                // if systegazomeno
+                if ($systeg) {
+                    echo "<a id='toggleSystegBtn' href='#'>Συστεγαζόμενο: $systegName</a>";
+                    echo "<div id='systeg' style='display: none;'>";
+                    ektimhseis1617($systeg, $conn, $sxol_etos, TRUE);
+                    echo "</div>";
+                    echo "<br><br>";
                 }
 	} // of disp_school
       
