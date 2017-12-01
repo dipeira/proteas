@@ -21,7 +21,7 @@
   </head>
 
 <?php
-    function tdc($val){
+    function tdc1($val){
         return $val >= 0 ? "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>$val</td>" : "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$val</td>";
     }
     require_once"config.php";
@@ -128,10 +128,10 @@
                 //
                 $telPE70 = $df['70']-$OP;
                 echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['16']."</td><td>".(int)$av['32']."</td><td>".(int)$av['19-20']."</td><td>".(int)$av['70']."</td>";
-                echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['16']).tdc($df['32']).tdc($df['19-20']).tdc($df['70']).tdc($telPE70);
+                echo tdc1($df['05-07']).tdc1($df['06']).tdc1($df['08']).tdc1($df['11']).tdc1($df['16']).tdc1($df['32']).tdc1($df['19-20']).tdc1($df['70']).tdc1($telPE70);
                 $koines = $df['08']+$df['11']+$df['16']+$df['32'];
-                echo tdc($koines); // apait. 08,11,16,32
-                echo tdc($telPE70+$koines);
+                echo tdc1($koines); // apait. 08,11,16,32
+                echo tdc1($telPE70+$koines);
                 echo "</tr>\n";
 
                 $par_sum['05-07'] += $av['05-07'];
@@ -144,24 +144,43 @@
                 $par_sum['70'] += $av['70'];
                 
                 $df_sum['05-07'] += $df['05-07'];
+                $kena_sum['05-07'] += $df['05-07'] < 0 ? $df['05-07'] : 0;
+                
                 $df_sum['06'] += $df['06'];
+                $kena_sum['06'] += $df['06'] < 0 ? $df['06'] : 0;
+                
                 $df_sum['08'] += $df['08'];
+                $kena_sum['08'] += $df['08'] < 0 ? $df['08'] : 0;
+                
                 $df_sum['11'] += $df['11'];
+                $kena_sum['11'] += $df['11'] < 0 ? $df['11'] : 0;
+                
                 $df_sum['16'] += $df['16'];
+                $kena_sum['16'] += $df['16'] < 0 ? $df['16'] : 0;
+                
                 $df_sum['32'] += $df['32'];
+                $kena_sum['32'] += $df['32'] < 0 ? $df['32'] : 0;
+                
                 $df_sum['19-20'] += $df['19-20'];
+                $kena_sum['19-20'] += $df['19-20'] < 0 ? $df['19-20'] : 0;
+                
                 $df_sum['70'] += $df['70'];
+                $kena_sum['70'] += $df['70'] < 0 ? $df['70'] : 0;
+                
                 $df_sum['OP'] += $df['OP'];
 
                 $i++;                        
         }
-        echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=2>сумока</td>";
+        echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=3>сумока</td>";
         echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['16']."</td><td>".$par_sum['32']."</td><td>".$par_sum['19-20']."</td><td>".$par_sum['70']."</td>\n";
         echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['16']."</td><td>".$df_sum['32']."</td><td>".$df_sum['19-20']."</td><td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
+        
         echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
-        //
+        echo "<td></td><td></td><td colspan=3>MONO KENA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+        echo "<td>".$kena_sum['05-07']."</td><td>".$kena_sum['06']."</td><td>".$kena_sum['08']."</td><td>".$kena_sum['11']."</td><td>".$kena_sum['16']."</td><td>".$kena_sum['32']."</td><td>".$kena_sum['19-20']."</td><td>".$kena_sum['70']."</td><td></td><td></td><td></td>\n";
+        
+        echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
         echo "<td></td><td></td><td></td><td></td><td></td>";
-        //
         echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>16</i></td><td><i>32</i></td><td><i>19-20</i></td><td><i>70</i></td>";
         echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>16</i></td><td><i>32</i></td><td><i>19-20</i></td><td><i>70</i></td><td><i>70-(оК+пф)</i></td><td></td><td></td></i>";
         echo "</tr>";
