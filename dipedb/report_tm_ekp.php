@@ -193,9 +193,9 @@
                     echo "<thead><tr><th>Ονομασία</th>";
                     echo "<th>Οργ.</th>";
                     echo "<th>Λειτ.</th>";
+                    /*
                     echo "<th>1 Νηπ.</th>";
                     echo "<th>1 Προ.</th>";
-                    /*
                     echo "<th>2 Νηπ.</th>";
                     echo "<th>2 Προ.</th>";
                     echo "<th>3 Νηπ.</th>";
@@ -203,12 +203,12 @@
                     echo "<th>4 Νηπ.</th>";
                     echo "<th>4 Προ.</th>";
                      */
-                    echo "<th>Σύν.Νηπ.</th>";
-                    echo "<th>Σύν.Προ.</th>";
-                    
+                    echo "<th>Τμήματα<br>Πρωινού</th>";
+                    echo "<th>Νήπια<br>Πρωινού</th>";
+                    echo "<th>Προνήπια<br>Πρωινού</th>";
+                    /*
                     echo "<th>Ολ.1 Νηπ.</th>";
                     echo "<th>Ολ.1 Προ.</th>";
-                    /*
                     echo "<th>Ολ.2 Νηπ.</th>";
                     echo "<th>Ολ.2 Προ.</th>";
                     echo "<th>Ολ.3 Νηπ.</th>";
@@ -216,13 +216,15 @@
                     echo "<th>Ολ.4 Νηπ.</th>";
                     echo "<th>Ολ.4 Προ.</th>";
                      */
-                    echo "<th>Σύν.Νηπ.</th>";
-                    echo "<th>Σύν.Προ.</th>";
+                    echo "<th>Τμήματα<br>Ολοήμερου</th>";
+                    echo "<th>Νήπια<br>Ολοήμερου</th>";
+                    echo "<th>Προνήπια<br>Ολοήμερου</th>";
                     
                     echo "<th>Εκπ/κοί Κλασικού</th>";
                     echo "<th>Εκπ/κοί Ολοημέρου</th>";
                     echo "<th>Εκπ/κοί T.E.</th>";
                     echo "<th>Σύν.Εκπ/κών</th>";
+                    echo "<th>Τοπ/νοι<br>Εκπ/κοί</th>";
                     echo "</tr></thead>\n<tbody>\n";
 
                 while ($i < $num)
@@ -238,26 +240,44 @@
                     $oloimero_nip_exp = explode(",",$oloimero_nip);
                     $nip = mysql_result($result, $i, "nip");
                     $nip_exp = explode(",",$nip);
-
+                    $klasiko_tm = $oloim_tm = 0;
+                    $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
+                    $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
+                    $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
+                    $oloimero_tm += $oloimero_nip_exp[0]+$oloimero_nip_exp[1]>0 ? 1:0;
+                    $oloimero_tm += $oloimero_nip_exp[2]+$oloimero_nip_exp[3]>0 ? 1:0;
+                    $oloimero_tm += $oloimero_nip_exp[4]+$oloimero_nip_exp[5]>0 ? 1:0;
                     echo "<tr>";
                     echo "<td><a href='school_status.php?org=$sch'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td>";
-                    echo "<td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td>";
+                    //echo "<td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td>";
                     //echo "<td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td>";
-                    $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[6];
-                    $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[7];
+                    $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];// + $klasiko_exp[6];
+                    $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];// + $klasiko_exp[7];
+                    echo "<td>$klasiko_tm</td>";
                     echo "<td>$klasiko_nip</td><td>$klasiko_pro</td>";
                     
-                    echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td>";
+                    //echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td>";
                     //echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td>";
                     //echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td>";
                     //echo "<td>$oloimero_nip_exp[6]</td><td>$oloimero_nip_exp[7]</td>";
                     $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
                     $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
+                    echo "<td>$oloimero_tm</td>";
                     echo "<td>$oloimero_syn_nip</td><td>$oloimero_syn_pro</td>";
                     
                     echo "<td>$nip_exp[0]</td><td>$nip_exp[1]</td><td>$nip_exp[2]</td>";
                     $nip_syn = array_sum($nip_exp);
                     echo "<td>$nip_syn</td>";
+                    // τοποθετημένοι εκπ/κοί
+                    $top60 = $top60m = $top60ana = 0;
+                    $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+                    $res = mysql_query($qry, $mysqlconnection);
+                    $top60m = mysql_result($res, 0, 'pe60');
+                    $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+                    $res = mysql_query($qry, $mysqlconnection);
+                    $top60ana = mysql_result($res, 0, 'pe60');
+                    $top60 = $top60m+$top60ana;
+                    echo "<td>$top60</td>";
                     echo "</tr>\n";
 
                     // sums
