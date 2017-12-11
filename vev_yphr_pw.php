@@ -61,9 +61,9 @@ $document->setValue('yphr', $data);
 
 // head title & name
 $data = $head_title;
-$document->setValue('head_title', $data);
+$document->setValue('headtitle', $data);
 $data = $head_name;
-$document->setValue('head_name', $data);
+$document->setValue('headname', $data);
 
 $output1 = "word/new_vev_".$_SESSION['userid'].".docx";
 $document->save($output1);
