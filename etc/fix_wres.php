@@ -1,7 +1,7 @@
 <?php
 	header('Content-type: text/html; charset=iso8859-7'); 
-	require_once"config.php";
-	require_once"functions.php";
+	require_once "config.php";
+	require_once "functions.php";
 	require('calendar/tc_calendar.php');  
          
 ?>	
@@ -14,6 +14,7 @@
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
 		});
         </script>
+        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
         
 <?php        
 	

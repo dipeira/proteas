@@ -2,12 +2,12 @@
 
 session_start();
 require_once"../config.php";
-require_once 'tools/PHPWord.php';
+require_once '../tools/PHPWord.php';
 
 $PHPWord = new PHPWord();
 
 //$document = $PHPWord->loadTemplate('word/vev_anapl.docx');
-$document = $PHPWord->loadTemplate('word/tmpl_vev.docx');
+$document = $PHPWord->loadTemplate('../word/tmpl_vev.docx');
 
 
 //$current_date = date("d/m/Y");

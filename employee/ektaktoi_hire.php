@@ -15,6 +15,7 @@
         <script type="text/javascript" src="../js/jquery.validate.js"></script>
         <script src="../js/select2.min.js"></script>
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
         <script type="text/javascript">
             $(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 

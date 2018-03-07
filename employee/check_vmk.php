@@ -9,6 +9,7 @@
   <head>      
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
         <script type="text/javascript">   
             $(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 

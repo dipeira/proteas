@@ -27,6 +27,7 @@
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#searchfrm").validate({

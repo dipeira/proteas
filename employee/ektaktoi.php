@@ -29,6 +29,7 @@
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
         <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
+	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
 	<script type="text/javascript">
            

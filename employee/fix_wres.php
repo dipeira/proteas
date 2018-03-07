@@ -14,7 +14,7 @@
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
 		});
         </script>
-        
+        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 <?php        
 	
         include("../tools/class.login.php");

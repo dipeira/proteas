@@ -12,13 +12,13 @@
   // 
   // getParam1: Διαβάζει παραμέτρους από τη βάση
   function getParam1($name,$conn)
-    {
-        $query = "SELECT value from params WHERE name='$name'";
-        $result = mysql_query($query, $conn);
-        if (!$result) 
-            die('Could not query:' . mysql_error());
-        return mysql_result($result, 0, "value");
-    }
+  {
+    $query = "SELECT value from params WHERE name='$name'";
+    $result = mysql_query($query, $conn);
+    if (!$result) 
+        die('Could not query:' . mysql_error());
+    return mysql_result($result, 0, "value");
+  }
   $myconn = mysql_connect($db_host, $db_user, $db_password);
   mysql_select_db($db_name, $myconn);
   mysql_query("SET NAMES 'greek'", $myconn);

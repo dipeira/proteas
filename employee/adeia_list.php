@@ -21,8 +21,9 @@
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Employee</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
-        <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<script type="text/javascript">
         $(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 

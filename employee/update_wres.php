@@ -14,6 +14,7 @@
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
 		});
         </script>
+        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
         
 <?php        
 	// update_wres: Updates wres of all employees

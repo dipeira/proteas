@@ -55,6 +55,7 @@
 <html>
     <head>
         <title>Αιτήματα χρηστών (user requests)</title>
+        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
     </head>
     <body>
         <h3>Πρωτέας: Αιτήματα χρηστών <small>(user requests)</small></h3>

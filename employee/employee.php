@@ -6,7 +6,7 @@
   //Require_once "../tools/access.php";
   error_reporting(E_ALL ^ E_NOTICE);
   //define("L_LANG", "el_GR"); Needs fixing
-  require('../tools/calendar/tc_calendar.php');
+  require_once '../tools/calendar/tc_calendar.php';
   
   $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
   mysql_select_db($db_name, $mysqlconnection);
@@ -29,7 +29,9 @@
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-        <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
+    <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
+    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
 	<script type="text/javascript">
 	$(document).ready(function(){
