@@ -1,7 +1,7 @@
 <?php
   header('Content-type: text/html; charset=iso8859-7'); 
   Require_once "config.php";
-  Require_once "functions.php";
+  Require_once "tools/functions.php";
     
   $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
   mysql_select_db($db_name, $mysqlconnection);
@@ -21,7 +21,7 @@
 <html>
   <head>
 	<center><IMG src="images/header.jpg"></center>
-	<LINK href="style.css" rel="stylesheet" type="text/css">
+	<LINK href="css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Πρωτέας</title>
 	
@@ -35,7 +35,7 @@
         <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
 	<script type="text/javascript">		
 		$().ready(function() {
-			$("#org").autocomplete("get_school.php", {
+			$("#org").autocomplete("employee/get_school.php", {
 				width: 260,
 				matchContains: true,
 				//mustMatch: true,
@@ -47,7 +47,7 @@
 			});
 		});
 		$().ready(function() {
-			$("#yphr").autocomplete("get_school.php", {
+			$("#yphr").autocomplete("employee/get_school.php", {
 				width: 260,
 				matchContains: true,
 				//mustMatch: true,
@@ -59,7 +59,7 @@
 			});
 		});
 		$().ready(function() {
-			$("#surname").autocomplete("get_name.php", {
+			$("#surname").autocomplete("employee/get_name.php", {
 				width: 260,
 				matchContains: true,
 				mustMatch: true,
@@ -102,50 +102,49 @@
 		 <li class="sub">
 		  <a href="#">Πινακας</a>
 		  <ul>
-		   <li><a href="ektaktoi_list.php">Έκτακτο Προσωπικό</a></li>
-                   <li><a href="idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
-		   <li><a href="school_edit.php">Επεξεργασία Σχολείου</a></li>
-		   <li><a href="klados.php">Ειδικότητα</a></li>
+		   <li><a href="employee/ektaktoi_list.php">Έκτακτο Προσωπικό</a></li>
+                   <li><a href="employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
+		   <li><a href="school/school_edit.php">Επεξεργασία Σχολείου</a></li>
+		   <li><a href="employee/klados.php">Ειδικότητα</a></li>
 		  </ul>
 		 </li>
 		 
 		 <li class="sub">
 		  <a href="#">Εργαλεια</a>
 		  <ul>
-                   <li><a href="school_status.php">Καρτέλα Σχολείου</a></li>
-		   <li><a href="apof_ad.php">Αποφάσεις Αδειών</a></li>
-                   <li><a href="check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>
-                   <li><a href="stats.php">Στατιστικά</a></li>
-                   <li><a href="end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
+                   <li><a href="school/school_status.php">Καρτέλα Σχολείου</a></li>
+		   <li><a href="employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
+                   <li><a href="employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>
+                   <li><a href="etc/stats.php">Στατιστικά</a></li>
+                   <li><a href="etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
 		  </ul>
 		 </li>
 		 
 		 <li class="sub">
 		  <a href="#">Αναφορες</a>
                   <ul>
-		   <li><a href="report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
-                   <li><a href="report_kena.php?type=1">Οργανικά Κενά</a></li>
-                   <li><a href="report_leit16.php">Λειτουργικά Κενά Δημοτικών</a></li>
+		   <li><a href="reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
+                   <li><a href="reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
+                   <li><a href="reports/report_leit16.php">Λειτουργικά Κενά Δημοτικών</a></li>
                    <!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
                    <!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
                    <!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
-                   <li><a href="absents.php">Εκπ/κοί σε άδεια</a></li>
+                   <li><a href="employee/absents.php">Εκπ/κοί σε άδεια</a></li>
 		  </ul>
 		 </li>
                  
                  <li class="sub">
 		  <a href="#">Αναζητηση</a>
                   <ul>
-		   <li><a href="search.php">Προσωπικού</a></li>
-		   <li><a href="search_adeia.php">Αδειών</a></li>
+		   <li><a href="employee/search.php">Προσωπικού</a></li>
+		   <li><a href="employee/search_adeia.php">Αδειών</a></li>
 		  </ul>
 		 </li>
 		 <li class="sub">
-		  <a href="about.php">Σχετικα</a>
-                  <ul>
-		   <li><a href="changelog.php">Αλλαγές</a></li>
-                   <li><a href="requests.php">Αιτήματα</a></li>
-		  </ul>
+		  <a href="etc/about.php">Σχετικα</a>
+			<ul>
+				<li><a href="etc/requests.php">Αιτήματα</a></li>
+		  	</ul>
 		 </li>
 
 		</ul>
@@ -274,14 +273,14 @@
                 if ($num_record == 1)
                 {
                     $id = mysql_result($result, 0, "id");
-                    $url = "employee.php?id=$id&op=view";
+                    $url = "employee/employee.php?id=$id&op=view";
                     echo "<script>window.location = '$url'</script>";
                 }
 	
 	if ($logged)
         {
             if ($usrlvl==0)
-                echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='params.php'>Παράμετροι</a>&nbsp;&nbsp;&nbsp;<a href='users.php'>Διαχείριση Χρηστών</a>&nbsp;&nbsp;&nbsp;<a href='log.php'>Log</a>&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
+                echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='params.php'>Παράμετροι</a>&nbsp;&nbsp;&nbsp;<a href='users.php'>Διαχείριση Χρηστών</a>&nbsp;&nbsp;&nbsp;<a href='etc/log.php'>Log</a>&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
             else
                 echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
         }
@@ -329,8 +328,8 @@
 		$sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
 		$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
 		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
-                $sx_organikhs_url = "<a href=\"school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-                $sx_yphrethshs_url = "<a href=\"school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+                $sx_organikhs_url = "<a href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+                $sx_yphrethshs_url = "<a href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
                 // check if multiple schools
                 $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
                 $res = mysql_query($qry,$mysqlconnection);
@@ -338,20 +337,20 @@
                     $sx_yphrethshs .= "*";
 								
 		echo "<tr><td>";
-		echo "<span title=\"Προβολή\"><a href=\"employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>";
+		echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>";
 		if ($usrlvl < 3)
-                    echo "<span title=\"Επεξεργασία\"><a href=\"employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>";
+                    echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>";
 		if ($usrlvl < 2)
-                    echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
+                    echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
 		echo "</td>";
-		echo "<td><a href=\"employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
+		echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
 		echo "</tr>";
 
 		$i++;
     }   
 		echo "</tbody>\n";
                 if ($usrlvl < 2)
-                    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee.php?id=$id&op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";		
+                    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?id=$id&op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";		
 		echo "<tr><td colspan=7 align=center>";
 		$prevpg = $curpg-1;
 		if ($lastpg == 0)
