@@ -15,7 +15,9 @@
         header("Location: tools/login_check.php");
     }
     else
-        $logged = 1;
+		  $logged = 1;
+	
+  $usrlvl = $_SESSION['userlevel'];
       
 ?>
 <html>
@@ -38,11 +40,6 @@
 			$("#org").autocomplete("employee/get_school.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
@@ -50,11 +47,6 @@
 			$("#yphr").autocomplete("employee/get_school.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
@@ -63,26 +55,12 @@
 				width: 260,
 				matchContains: true,
 				mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
-                        $("#surname").result(function(event, data, formatted) {
-                                $("#pinakas").val(data[1]);
-                        });
+			$("#surname").result(function(event, data, formatted) {
+						$("#pinakas").val(data[1]);
+			});
 		});
-
-
-//                $().ready(function() {
-//                    $("#surname").autocomplete({
-//                    source: "get_name.php",
-//                    minLength: 2
-//                    });
-//                });
-
-
 		
 		$(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
@@ -92,8 +70,7 @@
 	
   </head>
   <body> 
-  <!-- <h1> DIPE D.B.</h1> -->
-  
+    
   <div>
 		<ul id="navigation">
 
@@ -114,9 +91,8 @@
 		  <ul>
                    <li><a href="school/school_status.php">Καρτέλα Σχολείου</a></li>
 		   <li><a href="employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
-                   <li><a href="employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>
+                   
                    <li><a href="etc/stats.php">Στατιστικά</a></li>
-                   <li><a href="etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
 		  </ul>
 		 </li>
 		 
@@ -143,19 +119,28 @@
 		 <li class="sub">
 		  <a href="etc/about.php">Σχετικα</a>
 		 </li>
-
+		 <?php
+		 if ($usrlvl == 0):
+		 ?>
+		 <li class="sub">
+		  <a href="#">Διαχειριση</a>
+		  <ul>
+			  <li><a href="etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
+			  <li><a href="employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>
+			  <li><a href='etc/params.php'>Παράμετροι</a></li>
+			  <li><a href='etc/users.php'>Διαχείριση Χρηστών</a></li>
+			  <li><a href='etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
+		  </ul>
+		 </li>
+		 <?php endif; ?>
+		<li class="sub">
+			<a href='tools/login_check.php?logout=1'>Έξοδος</a>
 		</ul>
   
 	</div>
 
 <div>
-      <?php
-      //$idiwtiko = check_idiwtiko($mysqlconnection);
-      //if (strlen($idiwtiko)>0)
-      //    notify($idiwtiko);
-      
-                $usrlvl = $_SESSION['userlevel'];
-                //$query = "SELECT * FROM employee";
+		<?php
 		//rpp = results per page
 		if (isset ($_POST['rpp']))
 			$rpp = $_POST['rpp'];
@@ -276,10 +261,7 @@
 	
 	if ($logged)
         {
-            if ($usrlvl==0)
-                echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='etc/params.php'>Παράμετροι</a>&nbsp;&nbsp;&nbsp;<a href='etc/users.php'>Διαχείριση Χρηστών</a>&nbsp;&nbsp;&nbsp;<a href='etc/log.php'>Log</a>&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
-            else
-                echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
+            echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;".getParam ('sxol_etos', $mysqlconnection)."</p>";
         }
         echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
