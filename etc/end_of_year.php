@@ -128,7 +128,7 @@
                             $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE type IN (3,4,5,6)";
 
                         $result = mysql_query($query, $mysqlconnection);
-                        $num=mysql_numrows($result);
+                        $num=mysql_num_rows($result);
 
                         echo "<h3>Εκτύπωση βεβαιώσεων Αναπληρωτών ";
                         if ($kratikoy)

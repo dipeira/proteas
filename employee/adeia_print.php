@@ -1,6 +1,6 @@
 <?php
 require_once"../config.php";
-require_once 'tools/num2wordgen.php';
+require_once '../tools/num2wordgen.php';
 
 session_start();
 $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);

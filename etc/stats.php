@@ -1,13 +1,12 @@
 <?php
 header('Content-type: text/html; charset=iso8859-7');
-require_once"config.php";
-require_once"functions.php";
-//require('calendar/tc_calendar.php');  
+require_once"../config.php";
+require_once"../tools/functions.php";
 ?>	
 <html>
     <head>      
-        <LINK href="style.css" rel="stylesheet" type="text/css">
-        <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
+        <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
         <script type="text/javascript">   
             $(document).ready(function() { 
                 $("#mytbl").tablesorter({widgets: ['zebra']}); 
@@ -26,10 +25,10 @@ require_once"functions.php";
     </head>
 
     <?php
-    include("tools/class.login.php");
+    include("../tools/class.login.php");
     $log = new logmein();
     if ($log->logincheck($_SESSION['loggedin']) == false) {
-        header("Location: tools/login_check.php");
+        header("Location: ../tools/login_check.php");
     }
     $usrlvl = $_SESSION['userlevel'];
 

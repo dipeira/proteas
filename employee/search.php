@@ -14,7 +14,7 @@
   include("../tools/class.login.php");
   $log = new logmein();
   if($log->logincheck($_SESSION['loggedin']) == false){
-    header("Location: tools/login_check.php");
+    header("Location: ../tools/login_check.php");
   }
 ?>
 <html>
@@ -145,16 +145,8 @@
 		echo "<tr><td>Βαθμός</td><td><input type='checkbox' name = 'dspvathmos'></td><td>";
 		
 		
-		//vathmosCmb($mysqlconnection);
-		echo "<select name=\"vathm\">";
-		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-		echo "<option value=\"ΣΤ\">ΣΤ</option>";
-		echo "<option value=\"Ε\">Ε</option>";
-		echo "<option value=\"Δ\">Δ</option>";
-		echo "<option value=\"Γ\">Γ</option>";
-		echo "<option value=\"Β\">Β</option>";
-		echo "<option value=\"Α\">Α</option>";
-		echo "</select>";
+		vathmosCmb($mysqlconnection);
+		
 		
 		
 		echo "<td>Σχολείο Υπηρέτησης</td><td></td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td></tr>";

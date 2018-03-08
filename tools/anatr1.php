@@ -26,7 +26,7 @@
                 
                 echo $query;
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
                 
                 echo "<table id=\"mytbl\" class=\"imagetable\" border='1'>";
                 echo "<thead><tr><th>id</th><th>surname, name</th><th>hm_dior</th><th>proyp</th><th>anatr_excel</th><th>ALLAGH</th></tr></thead>";

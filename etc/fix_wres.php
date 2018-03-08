@@ -21,7 +21,7 @@
         include("tools/class.login.php");
         $log = new logmein();
         if($log->logincheck($_SESSION['loggedin']) == false){
-            header("Location: tools/login_check.php");
+            header("Location: ../tools/login_check.php");
         }
         $usrlvl = $_SESSION['userlevel'];
         if ($usrlvl)
@@ -38,7 +38,7 @@
 		//$query = "SELECT * from employee";
                 $query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = 201415";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
                 		
                 $synolo = $num;
                 

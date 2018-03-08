@@ -1,16 +1,13 @@
-<!-- CSS goes in the document HEAD or added to your external stylesheet -->
-<style type="text/css">
 table.imagetable {
-	font-size : 70%;
-	font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
-	font-size:11px;
+	font-family : Verdana,Helvetica,Arial,sans-serif;
+	font-size:16px;
 	color:#333333;
 	border-width: 1px;
 	border-color: #999999;
 	border-collapse: collapse;
 }
 table.imagetable th {
-	font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	font-family : Verdana,Helvetica,Arial,sans-serif;
 	background:#b5cfd2 url('../images/cell-blue.jpg');
 	border-width: 1px;
 	padding: 8px;
@@ -19,7 +16,7 @@ table.imagetable th {
 }
 table.imagetable td {
 	font-size : 80%;
-	font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	font-family : Verdana,Helvetica,Arial,sans-serif;
 	background:#dcddc0 url('../images/cell-grey.jpg');
 	border-width: 1px;
 	padding: 6px;
@@ -38,7 +35,7 @@ table.imagetable td {
  height: 2em;
  list-style: none;
  font-size : 120%;
- font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+ font-family : Verdana,Helvetica,Arial,sans-serif;
 }
 
 #navigation > li {
@@ -47,7 +44,7 @@ table.imagetable td {
  margin-right: 0.5em;
  padding: 0 1em;
  font-size : 70%;
- font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+ font-family : Verdana,Helvetica,Arial,sans-serif;
 }
 
 #navigation > li > a {
@@ -98,5 +95,3 @@ table.imagetable td {
 #navigation > li.sub:hover ul {
  top: 2.8em;
 }
-
-</style>

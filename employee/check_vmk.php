@@ -23,7 +23,7 @@
         include("../tools/class.login.php");
         $log = new logmein();
         if($log->logincheck($_SESSION['loggedin']) == false){
-            header("Location: tools/login_check.php");
+            header("Location: ../tools/login_check.php");
         }
         $usrlvl = $_SESSION['userlevel'];
 
@@ -79,7 +79,7 @@
                 else
                     $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi!=5";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 		$dt = $_POST['date'];
                 $type=$_POST['type'];
                 $editvmk = $_POST['editvmk'];
@@ -251,7 +251,7 @@
         // create word document
         if (isset($_POST['btnSubmit']))
         {
-            require_once 'tools/PHPWord.php';
+            require_once '../tools/PHPWord.php';
             $PHPWord = new PHPWord();
             
             // set max execution time 

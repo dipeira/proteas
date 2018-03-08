@@ -1,12 +1,12 @@
 <?php
 	header('Content-type: text/html; charset=iso8859-7'); 
-	require_once"../../config.php";
-	require_once"../../tools/functions.php";
+	require_once"../config.php";
+	require_once"../tools/functions.php";
 ?>	
   <html>
   <head>      
-        <LINK href="../css/../css/style.css" rel="stylesheet" type="text/css">
-        <title>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½</title>
+        <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+        <title>Εκπαιδευτικοί και Σχολεία ανά Πράξη</title>
         <link href="../css/select2.min.css" rel="stylesheet" />
        	<script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
         <script src="../js/select2.min.js"></script>
@@ -34,13 +34,13 @@
 	mysql_query("SET NAMES 'greek'", $mysqlconnection);
 	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         
-        echo "<html><head><h2>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½</h2></head><body>";
+        echo "<html><head><h2>Εκπαιδευτικοί και Σχολεία ανά Πράξη</h2></head><body>";
         echo "<table class=\"imagetable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
         
         $sql = "select * from praxi";
         $result = mysql_query($sql, $mysqlconnection);
-        echo "<tr><td>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½:</td><td>";
+        echo "<tr><td>Επιλογή Πράξεων:</td><td>";
         $cmb = "<select name=\"praxi[]\" class=\"praxi_select\" multiple=\"multiple\">";
         while ($row = mysql_fetch_array($result)){
             if (in_array($row['id'],$_POST['praxi']))
@@ -53,14 +53,14 @@
         
         echo "</td></tr>";
         
-        echo "<tr><td>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½:</td><td>";
-        echo "<input type='radio' name='type' value='0' checked >οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½<br>";
-        echo "<input type='radio' name='type' value='1'>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½/οΏ½οΏ½οΏ½ & οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½<br>";
+        echo "<tr><td>Επιλογή:</td><td>";
+        echo "<input type='radio' name='type' value='0' checked >Εμφάνιση μόνο Σχολείων<br>";
+        echo "<input type='radio' name='type' value='1'>Εμφάνιση Εκπ/κών & Σχολείων<br>";
         echo "</td></tr>";
         
-        echo "<tr><td colspan=2><input type='submit' value='οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½'>";
+        echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
         echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
+        echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
         echo "</table></form>";
 
 	if(isset($_POST['praxi']))
@@ -88,12 +88,12 @@
 		$result = mysql_query($query, $mysqlconnection);
 		
                 ob_start();
-                echo "<h2>οΏ½οΏ½οΏ½οΏ½οΏ½(-οΏ½οΏ½οΏ½): ". implode(', ', $praxinm)."</h2>";
+                echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
                 if ($all)
-                    echo "<thead><tr><th>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½</th><th>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½</th><th>οΏ½οΏ½οΏ½οΏ½οΏ½</th></tr></thead><tbody>";
+                    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Σχολείο</th><th>Πράξη</th></tr></thead><tbody>";
                 else
-                    echo "<thead><tr><th>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½</th></tr></thead><tbody>";
+                    echo "<thead><tr><th>Σχολείο</th></tr></thead><tbody>";
 
             while ($row = mysql_fetch_array($result))	
             {
@@ -111,7 +111,7 @@
                 $i++;
             }
 		echo "</tbody></table>";
-                echo "<small><i>$i οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½</i></small>";
+                echo "<small><i>$i εγγραφές</i></small>";
                 echo "<br><br>";
 
 		mysql_close();
@@ -122,9 +122,9 @@
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
 		echo "<input type='hidden' name = 'data' value='".  htmlspecialchars($page, ENT_QUOTES)."'>";
-                echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ excel</BUTTON>";
+                echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
                 echo "&nbsp;&nbsp;&nbsp;";
-                echo "<INPUT TYPE='button' VALUE='οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½' onClick=\"parent.location='ektaktoi_list.php'\">";
+                echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
                 echo "</form>";
 	}
 ?>

@@ -35,7 +35,7 @@
 		$i = 0;
                 $query = "SELECT * from adeia_ekt where emp_id=".$_GET['id']." AND sxoletos = $sxol_etos";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 		if (!$num)
                 {
                     echo "<br><br><big>Δε βρέθηκαν άδειες</big>";

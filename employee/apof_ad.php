@@ -13,7 +13,7 @@
         include("../tools/class.login.php");
         $log = new logmein();
         if($log->logincheck($_SESSION['loggedin']) == false)
-            header("Location: tools/login_check.php");
+            header("Location: ../tools/login_check.php");
         $usrlvl = $_SESSION['userlevel'];
         
         echo "<html><head><h2>Αποφάσεις αδειών</h2></head><body>";
@@ -64,7 +64,7 @@
             
             //echo $query;
             $result = mysql_query($query, $mysqlconnection);
-            $num=mysql_numrows($result);
+            $num=mysql_num_rows($result);
             if (!$num)
             {
                 echo "Δεν υπάρχουν εγγραφές για τον αρ.πρωτ. ".$_POST['prot'];
@@ -226,33 +226,33 @@
             $emp_num = count($emp);
             $is_anapl = $arr[4];
             
-            require_once 'tools/PHPWord.php';
+            require_once '../tools/PHPWord.php';
             $PHPWord = new PHPWord();
             if ($is_anapl)
             {
                 if ($type == 1)
-                    $document = $PHPWord->loadTemplate('word/apof/an_tmpl_apof_anar.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_anar.docx');
                 elseif ($type == 2)
-                    $document = $PHPWord->loadTemplate('word/apof/an_tmpl_apof_kan.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_kan.docx');
                 elseif ($type == 3)
-                    $document = $PHPWord->loadTemplate('word/apof/an_tmpl_apof_anar_gn.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_anar_gn.docx');
                 elseif ($type == 4)
-                    $document = $PHPWord->loadTemplate('word/apof/an_tmpl_apof_eid.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_eid.docx');
                 elseif ($type == 13)
-                    $document = $PHPWord->loadTemplate('word/apof/an_tmpl_apof_ekl.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_ekl.docx');
             }
             else
             {
                 if ($type == 1)
-                    $document = $PHPWord->loadTemplate('word/apof/tmpl_apof_anar.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_anar.docx');
                 elseif ($type == 2)
-                    $document = $PHPWord->loadTemplate('word/apof/tmpl_apof_kan.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_kan.docx');
                 elseif ($type == 3)
-                    $document = $PHPWord->loadTemplate('word/apof/tmpl_apof_anar_gn.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_anar_gn.docx');
                 elseif ($type == 4)
-                    $document = $PHPWord->loadTemplate('word/apof/tmpl_apof_eid.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_eid.docx');
                 elseif ($type == 13)
-                    $document = $PHPWord->loadTemplate('word/apof/an_tmpl_apof_ekl.docx');
+                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_ekl.docx');
             }
             $document->setValue('prot', $prot_apof);
             $document->setValue('hmprot', $hm_apof);
@@ -281,7 +281,7 @@
                 
                 $i++;
             }
-            $output1 = "word/apof/adeia_apof_".$_SESSION['userid'].".docx";
+            $output1 = "../word/apof/adeia_apof_".$_SESSION['userid'].".docx";
             $document->save($output1);
             echo "<html>";
             echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
@@ -308,7 +308,7 @@
             // SMTP password
             $pass = file_get_contents('../conf.txt');
             
-            require_once 'tools/lib/swift_required.php';
+            require_once '../tools/lib/swift_required.php';
             $transport = Swift_SmtpTransport::newInstance('mail.sch.gr', 25)
             ->setUsername('dipeira')
             ->setPassword($pass)
@@ -326,11 +326,11 @@
             //$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
             
             // Log setup
-            $fname = 'tools/mail.log';
+            $fname = '../tools/mail.log';
             if (file_exists($fname))
             {
                 $temp = file_get_contents($fname);
-                file_put_contents('tools/mail.log.old', $temp, FILE_APPEND);
+                file_put_contents('../tools/mail.log.old', $temp, FILE_APPEND);
             }
             $type1 = $_POST['arr'][0];
             if ($type1 == 1)
@@ -391,7 +391,7 @@
                 // Log email activity
                 $log = $logger->dump();
                 $logger->clear();
-                file_put_contents('tools/mail.log', $log, FILE_APPEND);
+                file_put_contents('../tools/mail.log', $log, FILE_APPEND);
             }                     
             // insert 2 db
             $qry = "INSERT INTO apofaseis (prwt, sent, result) VALUES (".$_POST['arr'][1].",1,'".serialize($summary)."')";

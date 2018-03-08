@@ -6,9 +6,7 @@ require_once '../tools/PHPWord.php';
 
 $PHPWord = new PHPWord();
 
-//$document = $PHPWord->loadTemplate('word/vev_anapl.docx');
 $document = $PHPWord->loadTemplate('../word/tmpl_vev.docx');
-
 
 //$current_date = date("d/m/Y");
 //$document->setValue('date', $current_date);
@@ -65,7 +63,7 @@ $document->setValue('headtitle', $data);
 $data = $head_name;
 $document->setValue('headname', $data);
 
-$output1 = "word/new_vev_".$_SESSION['userid'].".docx";
+$output1 = "../word/new_vev_".$_SESSION['userid'].".docx";
 $document->save($output1);
 //$document->save('tst.docx');
 

@@ -20,7 +20,7 @@
 				var oTable = $('#example').dataTable();
 				
 				/* Apply the jEditable handlers to the table */
-				oTable.$('td').editable( 'tools/editable_ajax.php', {
+				oTable.$('td').editable( '../tools/editable_ajax.php', {
 					"callback": function( sValue, y ) {
 						var aPos = oTable.fnGetPosition( this );
 						oTable.fnUpdate( sValue, aPos[0], aPos[1] );
@@ -50,7 +50,7 @@
 		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 		$query = "SELECT * from school";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 		$i=0;
 ?>
 			<div id="demo">

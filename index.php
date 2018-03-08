@@ -142,9 +142,6 @@
 		 </li>
 		 <li class="sub">
 		  <a href="etc/about.php">Σχετικα</a>
-			<ul>
-				<li><a href="etc/requests.php">Αιτήματα</a></li>
-		  	</ul>
 		 </li>
 
 		</ul>
@@ -280,7 +277,7 @@
 	if ($logged)
         {
             if ($usrlvl==0)
-                echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='params.php'>Παράμετροι</a>&nbsp;&nbsp;&nbsp;<a href='users.php'>Διαχείριση Χρηστών</a>&nbsp;&nbsp;&nbsp;<a href='etc/log.php'>Log</a>&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
+                echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='etc/params.php'>Παράμετροι</a>&nbsp;&nbsp;&nbsp;<a href='etc/users.php'>Διαχείριση Χρηστών</a>&nbsp;&nbsp;&nbsp;<a href='etc/log.php'>Log</a>&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
             else
                 echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;&nbsp;<a href='tools/login_check.php?logout=1'>Έξοδος</a>&nbsp&nbsp&nbsp(Σχολ.Έτος: ".getParam ('sxol_etos', $mysqlconnection).")</p>";
         }

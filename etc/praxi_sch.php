@@ -25,7 +25,7 @@
         include("tools/class.login.php");
         $log = new logmein();
         if($log->logincheck($_SESSION['loggedin']) == false){
-            header("Location: tools/login_check.php");
+            header("Location: ../tools/login_check.php");
         }
         $usrlvl = $_SESSION['userlevel'];
 

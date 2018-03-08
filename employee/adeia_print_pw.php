@@ -2,8 +2,8 @@
 session_start();
 
 require_once"../config.php";
-require_once 'tools/num2wordgen.php';
-require_once 'tools/PHPWord.php';
+require_once '../tools/num2wordgen.php';
+require_once '../tools/PHPWord.php';
 
 $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
 mysql_select_db($db_name, $mysqlconnection);
@@ -35,37 +35,37 @@ $type = $_POST['arr'][1];
         {
             case 1:
                 //$word->Documents->Open(realpath("word/anar.doc"));
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_anar.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_anar.docx');
                 break;
             case 2:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_kan.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_kan.docx');
                 break;
             case 3:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_gnwm.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_gnwm.docx');
                 break;
             case 4:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_eidikh.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_eidikh.docx');
                 break;
             case 5:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_loxeias.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_loxeias.docx');
                 break;
             case 6:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_kyhshs.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_kyhshs.docx');
                 break;
             case 7:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_anatr.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_anatr.docx');
                 break;
             case 8:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_gonikh.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_gonikh.docx');
                 break;
             case 9:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_kan_kyof.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_kan_kyof.docx');
                 break;
             case 10:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_aney_1m.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_aney_1m.docx');
                 break;
             case 12:
-                $document = $PHPWord->loadTemplate('word/docx/tmpl_aney_1y.docx');
+                $document = $PHPWord->loadTemplate('../word/docx/tmpl_aney_1y.docx');
                 break;
             // loipes
         }
@@ -137,7 +137,7 @@ if ($type==1)
 
 }
 
-$output1 = "word/adeia_".$_SESSION['userid'].".docx";
+$output1 = "../word/adeia_".$_SESSION['userid'].".docx";
 $document->save($output1);
 
 header('Content-type: text/html; charset=iso8859-7'); 

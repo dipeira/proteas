@@ -81,7 +81,7 @@
                 $school = getSchool($_GET['sch'], $mysqlconnection);
                 echo "<h2>Λίστα εκδρομών: $school</h2>";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 		if (!$num)
                 {
                     echo "<br><br><big>Δε βρέθηκαν εκδρομές</big>";

@@ -34,7 +34,7 @@
 
         echo $query;
         $result = mysql_query($query, $mysqlconnection);
-        $num=mysql_numrows($result);
+        $num=mysql_num_rows($result);
         
 	while ($i<$num)	
 	{

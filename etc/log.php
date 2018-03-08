@@ -132,32 +132,32 @@
 //                            JOIN logon o ON l.userid = o.userid
 //                            ORDER BY l.timestamp DESC
 //                            LIMIT 100 ";
-                $query = "SELECT l.emp_id, e.am, e.surname, o.username, l.ip, l.timestamp, l.action,l.query
-                            FROM employee_log l
-                            JOIN logon o ON l.userid = o.userid
-                            LEFT JOIN employee e ON e.id = l.emp_id
-                            ORDER BY l.timestamp DESC
-                            LIMIT 300 ";
+        $query = "SELECT l.emp_id, e.am, e.surname, o.username, l.ip, l.timestamp, l.action,l.query
+            FROM employee_log l
+            JOIN logon o ON l.userid = o.userid
+            LEFT JOIN employee e ON e.id = l.emp_id
+            ORDER BY l.timestamp DESC
+            LIMIT 300 ";
 		$result = mysql_query($query, $mysqlconnection);
 		$num=mysql_num_rows($result);
 		$i=0;
                 
-                function action ($action)
-                {
-                    switch ($action){
-                        case 0:
-                            return "add";
-                            break;
-                        case 1:
-                            return "edit";
-                            break;
-                        case 2:
-                            return "delete";
-                            break;
-                    }
-                }
+        function action ($action)
+        {
+            switch ($action){
+                case 0:
+                    return "add";
+                    break;
+                case 1:
+                    return "edit";
+                    break;
+                case 2:
+                    return "delete";
+                    break;
+            }
+        }
 ?>
-			<div id="demo">
+<div id="demo">
 <table cellpadding="0" cellspacing="0" border="1" class="display" id="example">
 	<thead>
 		<tr>
@@ -165,9 +165,9 @@
 			<th>hostname</th>
 			<th>timestamp</th>
 			<th>action</th>
-                        <th>am</th>
-                        <th>surname</th>
-                        <th>change</th>                        
+            <th>am</th>
+            <th>surname</th>
+            <th>change</th>                        
 		</tr>
 	</thead>
 	<tbody>
@@ -181,25 +181,25 @@
                         //    $ip = gethostbyaddr($ip);
 			$timestamp = mysql_result($result, $i, "timestamp");
 			$id = mysql_result($result, $i, "emp_id");
-                        $action = mysql_result($result, $i, "action");
-                        $change = mysql_result($result, $i, "query");
-                        $am = mysql_result($result, $i, "am");
-                        $surname = mysql_result($result, $i, "surname");
-                        if ($action==2)
-                        {
-                            $qry = "SELECT surname,am FROM employee_deleted WHERE id=$id";
-                            $res = mysql_query($qry, $mysqlconnection);
-                            if (mysql_num_rows($res)>0)
-                            {
-                                $surname = mysql_result($res, 0, "surname");
-                                $am = mysql_result($res, 0, "am");
-                            }
-                        }
+                $action = mysql_result($result, $i, "action");
+                $change = mysql_result($result, $i, "query");
+                $am = mysql_result($result, $i, "am");
+                $surname = mysql_result($result, $i, "surname");
+                if ($action==2)
+                {
+                    $qry = "SELECT surname,am FROM employee_deleted WHERE id=$id";
+                    $res = mysql_query($qry, $mysqlconnection);
+                    if (mysql_num_rows($res)>0)
+                    {
+                        $surname = mysql_result($res, 0, "surname");
+                        $am = mysql_result($res, 0, "am");
+                    }
+                }
 //                        else
 //                        {
 //                            $qry1 = "SELECT surname,am FROM employee WHERE id=$id";
 //                            $res1 = mysql_query($qry1, $mysqlconnection);
-//                            if (mysql_numrows($res1)==0)
+//                            if (mysql_num_rows($res1)==0)
 //                            {
 //                                $qry1 = "SELECT surname,am FROM employee_deleted WHERE id=$id";
 //                                $res1 = mysql_query($qry1, $mysqlconnection);
@@ -213,13 +213,12 @@
 			echo "\n<td>$ip</td>";
 			echo "\n<td>$timestamp</td>";
 			echo "\n<td>$act</td>";
-                        echo "\n<td>$am</td>";
-                        echo "\n<td>$surname</td>";
-                        echo "\n<td>$change</td>";
-                        echo "\n</tr>";
+            echo "\n<td>$am</td>";
+            echo "\n<td>$surname</td>";
+            echo "\n<td>$change</td>";
+            echo "\n</tr>";
 			$i++;
 		}
-		//<tr id="3" class="gradeA"> <tr id="2" class="gradeC"><tr id="1" class="gradeX">
 ?>
 		
 	</tbody>
@@ -230,7 +229,7 @@
 			<th></th>
 			<th></th>
 			<th></th>
-                        <th></th>
+            <th></th>
 		</tr>
 	</tfoot>
 	

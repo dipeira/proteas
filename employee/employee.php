@@ -17,7 +17,7 @@
   include("../tools/class.login.php");
   $log = new logmein();
   if($log->logincheck($_SESSION['loggedin']) == false){
-    header("Location: tools/login_check.php");
+    header("Location: ../tools/login_check.php");
   }
   $klados_type = 0;
 ?>
@@ -164,7 +164,7 @@ $id = $_GET['id'];
                 //$query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id'];
                 $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
                 $result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
                 
                 // if multiple schools
                 //if ($num > 0)
@@ -182,7 +182,7 @@ $id = $_GET['id'];
 //                {
 //                    $query = "SELECT * from employee where id=".$_GET['id'];
 //                    $result = mysql_query($query, $mysqlconnection);
-//                    $num=mysql_numrows($result);
+//                    $num=mysql_num_rows($result);
 //                    $sx_yphrethshs_id = mysql_result($result, 0, "sx_yphrethshs");
 //                    $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
 //                }
@@ -841,11 +841,11 @@ if ($_GET['op']=="edit")
 		// Find prev - next row id
 		$qprev = "SELECT id FROM employee WHERE id < $id ORDER BY id DESC LIMIT 1";
 		$res1 = mysql_query($qprev, $mysqlconnection);
-		 if (mysql_numrows($res1))
+		 if (mysql_num_rows($res1))
 			$previd = mysql_result($res1, 0, "id");
 		$qnext = "SELECT id FROM employee WHERE id > $id ORDER BY id ASC LIMIT 1";
 		$res1 = mysql_query($qnext, $mysqlconnection);
-		 if (mysql_numrows($res1))
+		 if (mysql_num_rows($res1))
 			$nextid = mysql_result($res1, 0, "id");
 		
 		

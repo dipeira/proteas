@@ -14,7 +14,7 @@
   include("../tools/class.login.php");
   $log = new logmein();
   if($log->logincheck($_SESSION['loggedin']) == false){
-    header("Location: tools/login_check.php");
+    header("Location: ../tools/login_check.php");
   }
   
 ?>
@@ -47,18 +47,6 @@
 			}
 		});
 	});
-		$().ready(function() {
-			$("#surname").autocomplete("get_name.php", {
-				width: 260,
-				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
-				selectFirst: false
-			});
-		});
 	</script>
   </head>
   <body> 

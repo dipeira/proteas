@@ -15,7 +15,7 @@
   include("../tools/class.login.php");
   $log = new logmein();
   if($log->logincheck($_SESSION['loggedin']) == false){
-    header("Location: tools/login_check.php");
+    header("Location: ../tools/login_check.php");
   }
   $klados_type = 0;
 	
@@ -97,7 +97,7 @@
            }
 
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 		
                 if ($num > 0)
                 {
@@ -113,7 +113,7 @@
                 {
                     $query = "SELECT * from ektaktoi where id=".$_GET['id'];
                     $result = mysql_query($query, $mysqlconnection);
-                    $num=mysql_numrows($result);
+                    $num=mysql_num_rows($result);
                     $sx_yphrethshs_id = mysql_result($result, 0, "sx_yphrethshs");
                     $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
                 }
@@ -250,7 +250,7 @@ if ($_GET['op']=="add")
 		echo "<div id=\"content\">";
 		echo "<form autocomplete=\"off\">";
 		echo "<tr><td>Σχολείο(-α) Υπηρέτησης";
-                echo "<a href=\"\" onclick=\"window.open('help/help.html#../school/school_ekt','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+                echo "<a href=\"\" onclick=\"window.open('../help/help.html#school_ekt','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
                 //echo "</td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" size=50/>";
                 echo "</td><td><input type=\"text\" name=\"yphr[]\" class=\"yphrow\" id=\"yphrow\" />";
                 echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";

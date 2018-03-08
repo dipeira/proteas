@@ -3,7 +3,7 @@
   require_once"../config.php";
   require_once"../tools/functions.php";
   //define("L_LANG", "el_GR"); Needs fixing
-  require('../tools/calendar/tc_calendar.php');
+  //require('../tools/calendar/tc_calendar.php');
   
   $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
   mysql_select_db($db_name, $mysqlconnection);
@@ -23,7 +23,7 @@
 	<script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+    
 	<script type="text/javascript">
         $(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
@@ -56,7 +56,7 @@
                 
                 $query = "SELECT * from adeia where emp_id=".$_GET['id']." ORDER BY start";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 		if (!$num)
                 {
                     echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
@@ -95,7 +95,7 @@
                     
                     $query = "SELECT * from adeia where year(start) = $yr AND emp_id=".$_GET['id']." ORDER BY start";
                     $result = mysql_query($query, $mysqlconnection);
-                    $num=mysql_numrows($result);
+                    $num=mysql_num_rows($result);
                     
                     while ($i<$num)
                     {
