@@ -5,8 +5,11 @@
         $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
         mysql_select_db($db_name, $mysqlconnection);
 ?>	
-  <html>
-      <head><title>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</title></head>
+    <html>
+        <head>
+            <title>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</title>
+            <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+        </head>
   <body>
         
 <?php        
