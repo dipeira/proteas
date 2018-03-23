@@ -2,7 +2,6 @@
   header('Content-type: text/html; charset=iso8859-7'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
-  require_once"../tools/access.php";
   //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
@@ -235,8 +234,8 @@ if ($_GET['op']=="add")
 		$myCalendar->writeScript();
 	  	echo "</td></tr>";		
 				
-		//echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
-		//metdidCombo(0);		
+		echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
+		metdidCombo(0);		
                 
                 echo "<tr><td>Τύπος Απασχόλησης</td><td>";
                 typeCmb($mysqlconnection);
@@ -321,9 +320,8 @@ if ($_GET['op']=="edit")
 		$myCalendar->writeScript();
 	  	echo "</td></tr>";		
 				
-		//echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
-		//<input type='text' name='met_did' value=$met_did /></td></tr>";
-		//metdidCombo($met_did);
+		echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
+		metdidCombo($met_did);
 		//echo "<tr><td>Υπουργική Απόφαση</td><td><input size=50 type='text' name='ya' value=$ya /></td></tr>";
                 //echo "<tr><td>Απόφαση Δ/ντή</td><td><input size=50 type='text' name='apofasi' value=$apofasi /></td></tr>";
 		echo "<tr><td>Πράξη:</td><td>";
@@ -405,20 +403,6 @@ if ($_GET['op']=="edit")
                 echo "<td colspan=3><div class=\"slidingDiv\">";
                 echo "Τηλ.: $stathero - $kinhto<br>";
                 
-           if ($mdb)
-           {
-                $res = misth_elements($afm);
-                if ($res!=NULL)
-                {
-                    echo "Διεύθυνση: ".$res['street']." ".$res['numStr'].", ".$res['city']."<br>";
-                    echo "ΑΔΤ: ".$res['idNum']."<br>";
-                    echo "AMKA: ".$res['AMKA']."<br>";
-                }
-                else
-                {
-                    echo "Περισσότερα στοιχεία δεν είναι διαθέσιμα.";   
-                }
-           }
                echo "</div>";
                echo "</td></tr>";
                 
@@ -438,7 +422,8 @@ if ($_GET['op']=="edit")
 			case 3:
 				$met="Μετ. + Διδ.";
 				break;
-		}
+                }
+                echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
                 		
 		echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>$comments</td></tr>"; 
                 

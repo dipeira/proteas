@@ -134,7 +134,7 @@
 		 </li>
 		 <?php endif; ?>
 		<li class="sub">
-			<a href='tools/login_check.php?logout=1'>Έξοδος</a>
+			<a href='tools/login_check.php?logout=1'>Eξοδος</a>
 		</ul>
   
 	</div>

@@ -1,11 +1,4 @@
 <?php
-        /* Prepare the DB for the new MKs:
-         * 1. ALTER TABLE `employee` ADD `mk11` TINYINT NOT NULL AFTER `hm_mk`, ADD `hm_mk11` DATE NOT NULL AFTER `mk11`;
-         * 2. UPDATE `employee` SET `mk11` = `mk`
-         * 3. UPDATE `employee` SET `hm_mk11` = `hm_mk`
-         * 4. UPDATE `employee` SET `hm_mk`='2016-01-01' WHERE 1
-         * 5. run this script...
-         */
 	header('Content-type: text/html; charset=iso8859-7'); 
 	Require "../config.php";
 	Require "../functions.php";

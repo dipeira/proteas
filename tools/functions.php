@@ -374,7 +374,7 @@
 			echo "<option value=\"6\">ст</option>";
 		echo "</select>";
 	}
-	function metdidCombo ($met_did)
+	function metdidCombo ($met_did = 0)
 	{
 		echo "<select name=\"met_did\">";
 		if ($met_did == 0)
