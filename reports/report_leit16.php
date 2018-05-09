@@ -2,14 +2,14 @@
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    
-        <script type="text/javascript" src="../js/jquery.js"></script>
-        <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="../js/stickytable.js"></script>
 	<script type="text/javascript">	
-	$(document).ready(function() { 
-			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-		}); 
-	
+        $(document).ready(function() { 
+            $("#mytbl").tablesorter({widgets: ['zebra']}); 
+            $("#mytbl").stickyTableHeaders();
+        });
 	</script>
         <style>
             table.imagetable th {
@@ -193,7 +193,8 @@
 
         echo "<form action='../tools/2excel_ses.php' method='post'>";
         echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
         echo "</form>";
         //ob_end_clean();
 ?>

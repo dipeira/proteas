@@ -3,8 +3,6 @@
 	require_once"../config.php";
 	require_once"../tools/functions.php";
 ?>	
-  <html>
-  <head>      
         
 <?php        
 	// apofaseis_adeiwn
@@ -16,8 +14,10 @@
             header("Location: ../tools/login_check.php");
         $usrlvl = $_SESSION['userlevel'];
         
-        echo "<html><head><h2>Αποφάσεις αδειών</h2></head><body>";
-        echo "<table class='imagetable' border='1'>";
+        echo "<html><head><h2>Αποφάσεις αδειών</h2>";
+        echo "<link rel='stylesheet' type='text/css' href='../css/style.css' />";
+        echo "</head><body>";
+        echo "<table class='imagetable stable' border='1'>";
         echo "<form action='' method='POST'>";
         echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot'></td></tr>";
         echo "<tr><td>Ημερολογιακό Έτος</td><td><input type='text' name='year' value='".date('Y')."'></td></tr>";
@@ -25,7 +25,9 @@
         echo "<td colspan=2><input type='radio' name='type' value='1' checked >Μόνιμοι";
         echo "<input type='radio' name='type' value='2' >Αναπληρωτές<br></td>";
         echo "</tr>";
-        echo "<tr><td colspan=2><input type='submit' value='Υποβολή'></td></tr>";
+        echo "<tr><td colspan=2><input type='submit' value='Υποβολή'>";
+        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "</td></tr>";
         echo "</form></table>";
         
         $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
@@ -420,5 +422,5 @@
         mysql_close();
 ?>
 <br><br>
-<a href="../index.php">Επιστροφή</a>
+
 </html>

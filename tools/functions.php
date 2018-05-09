@@ -1116,15 +1116,15 @@
     // source: http://code.loon.gr/snippet/php/%CE%BC%CE%B5%CF%84%CE%B1%CF%84%CF%81%CE%BF%CF%80%CE%AE-greek-%CF%83%CE%B5-greeklish
     function greek_to_greeklish($string)
     {
-                    return strtr($string, array(
-                                    'Α' => 'A', 'Β' => 'V', 'Γ' => 'G', 'Δ' => 'D', 'Ε' => 'E', 'Ζ' => 'Z', 'Η' => 'I', 'Θ' => 'TH', 'Ι' => 'I', 'Κ' => 'K', 'Λ' => 'L',
-                                    'Μ' => 'M', 'Ν' => 'N', 'Ξ' => 'KS', 'Ο' => 'O', 'Π' => 'P', 'Ρ' => 'R', 'Σ' => 'S', 'Τ' => 'T', 'Υ' => 'Y', 'Φ' => 'F','Χ' => 'X', 'Ψ' => 'PS', 'Ω' => 'O',
-                                    'α' => 'a', 'β' => 'v', 'γ' => 'g', 'δ' => 'd', 'ε' => 'e', 'ζ' => 'z', 'η' => 'i',
-                                    'θ' => 'th', 'ι' => 'i', 'κ' => 'k', 'λ' => 'l', 'μ' => 'm', 'ν' => 'n', 'ξ' => 'ks', 'ο' => 'o', 'π' => 'p', 'ρ' => 'r',
-                                    'σ' => 's', 'τ' => 't', 'υ' => 'y', 'φ' => 'f', 'χ' => 'x', 'ψ' => 'ps', 'ω' => 'o', 'ς' => 's',
-                                    'ά' => 'a', 'έ' => 'e', 'ή' => 'i', 'ί' => 'i', 'ό' => 'o', 'ύ' => 'y', 'ώ' => 'o','ϊ' => 'i', 'ϋ' => 'y',
-                                    'ΐ' => 'i', 'ΰ' => 'y'
-                    ));
+        return strtr($string, array(
+            'Α' => 'A', 'Β' => 'V', 'Γ' => 'G', 'Δ' => 'D', 'Ε' => 'E', 'Ζ' => 'Z', 'Η' => 'I', 'Θ' => 'TH', 'Ι' => 'I', 'Κ' => 'K', 'Λ' => 'L',
+            'Μ' => 'M', 'Ν' => 'N', 'Ξ' => 'KS', 'Ο' => 'O', 'Π' => 'P', 'Ρ' => 'R', 'Σ' => 'S', 'Τ' => 'T', 'Υ' => 'Y', 'Φ' => 'F','Χ' => 'X', 'Ψ' => 'PS', 'Ω' => 'O',
+            'α' => 'a', 'β' => 'v', 'γ' => 'g', 'δ' => 'd', 'ε' => 'e', 'ζ' => 'z', 'η' => 'i',
+            'θ' => 'th', 'ι' => 'i', 'κ' => 'k', 'λ' => 'l', 'μ' => 'm', 'ν' => 'n', 'ξ' => 'ks', 'ο' => 'o', 'π' => 'p', 'ρ' => 'r',
+            'σ' => 's', 'τ' => 't', 'υ' => 'y', 'φ' => 'f', 'χ' => 'x', 'ψ' => 'ps', 'ω' => 'o', 'ς' => 's',
+            'ά' => 'a', 'έ' => 'e', 'ή' => 'i', 'ί' => 'i', 'ό' => 'o', 'ύ' => 'y', 'ώ' => 'o',
+            'ϊ' => 'i', 'ϋ' => 'y','Ϊ' => 'I', 'Ϋ' => 'Y','ΐ' => 'i', 'ΰ' => 'y'
+        ));
     }
         
     // generic combo function
@@ -1504,7 +1504,7 @@
         echo "</table>";
         echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";
-            echo "<table class=\"imagetable\" border='1'>";
+            echo "<table class=\"imagetable stable\" border='1'>";
             echo "<tr><td colspan=3><u>ΣΥΝΟΛΑ:</u> ";
             foreach ($allcnt as $key=>$value){
                 echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
@@ -1521,5 +1521,53 @@
         else {
             return ['required' => $reqhrs, 'available' => $avar, 'diff' => $ret, 'leit' => $leit];
         }
+    }
+
+    // Function to check for subtracted days of leave (for anaplirotes)
+    // returns number of subtracted days
+    function subtract_adeies($id, $mysqlconnection) {
+        $has_kyhsh = $has_loxeia = $anar_days = $subtract = 0;
+        $sxol_etos = getParam('sxol_etos', $mysqlconnection);
+        $qry_ad = "SELECT type,days FROM adeia_ekt WHERE emp_id = $id AND sxoletos=$sxol_etos";
+        $res_ad = mysql_query($qry_ad, $mysqlconnection);
+        while ($arr_ad = mysql_fetch_array($res_ad)) {
+            // check adeia type
+            switch ($arr_ad['type']) {
+                case 6:
+                    $has_kyhsh = 1;
+                    break;
+                case 5:
+                    $has_loxeia = 1;
+                    break;
+                case 1:
+                    $anar_days += $arr_ad['days'];
+                    break;
+                case 3:
+                    $anar_days += $arr_ad['days'];
+                    break;
+                // aney
+                case 10:
+                    $subtract += $arr_ad['days'];
+                    break;
+                // apergia
+                case 17:
+                    $subtract += $arr_ad['days'];
+                    break;
+                // stash
+                case 18:
+                    $subtract += ($arr_ad['days']*0.5);
+                    break;
+            }
+        }
+        // if kyhsh or loxeia, subtract every anarrwtikh
+        // if ($has_kyhsh || $has_loxeia) {
+        //     $subtract += $anar_days;
+        // } 
+        // else subtract anarrwtikes > 15
+        //else {
+        if ($anar_days > 15)
+            $subtract += ( $anar_days - 15 );
+        //}
+        return floor($subtract);
     }
 ?>

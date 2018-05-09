@@ -20,7 +20,7 @@
 ?>
 <html>
   <head>
-	<center><IMG src="../images/header.jpg"></center>
+	
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Πρωτέας - Ιδιωτικοί εκπαιδευτικοί</title>
@@ -281,7 +281,7 @@
 		echo "<input type=\"submit\" value=\"Ορισμός\">";
 		echo "</FORM>";
 		echo "</td></tr>";
-                echo "<tr><td colspan=6><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+                echo "<tr><td colspan=6><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>
       

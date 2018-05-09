@@ -22,19 +22,19 @@
 ?>
 <html>
   <head>
-	<center><IMG src="images/header.jpg"></center>
+	<a href="/"><IMG src="images/logo.png" class="applogo"></a>
 	<LINK href="css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Πρωτέας</title>
+	<meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+	<title>Πρωτέας</title>
 	
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery.validate.js"></script>
-         <!--<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>-->
+	<!--<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>-->
 	<script type='text/javascript' src='js/jquery.autocomplete.js'></script>
 	<script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
-        <script type="text/javascript" src="js/jquery_notification_v.1.js"></script>
+  <script type="text/javascript" src="js/jquery_notification_v.1.js"></script>
 	<link rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css" />
-        <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
+  <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
 	<script type="text/javascript">		
 		$().ready(function() {
 			$("#org").autocomplete("employee/get_school.php", {
@@ -42,30 +42,24 @@
 				matchContains: true,
 				selectFirst: false
 			});
-		});
-		$().ready(function() {
 			$("#yphr").autocomplete("employee/get_school.php", {
 				width: 260,
 				matchContains: true,
 				selectFirst: false
 			});
-		});
-		$().ready(function() {
 			$("#surname").autocomplete("employee/get_name.php", {
 				width: 260,
 				matchContains: true,
-				mustMatch: true,
+				//mustMatch: true,
 				selectFirst: false
 			});
 			$("#surname").result(function(event, data, formatted) {
+				if (data){
 						$("#pinakas").val(data[1]);
+				}
 			});
-		});
-		
-		$(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-		});
-                
+		});         
 	</script>
 	
   </head>
@@ -73,52 +67,46 @@
     
   <div>
 		<ul id="navigation">
-
-		 <li><a href="index.php">Αρχικη</a></li>
+			<li><a href="index.php">Αρχικη</a></li>
+			
+			<li class="sub">
+				<a href="#">Πινακας</a>
+				<ul>
+					<li><a href="employee/ektaktoi_list.php">Έκτακτο Προσωπικό</a></li>
+					<li><a href="employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
+					<li><a href="school/school_edit.php">Επεξεργασία Σχολείου</a></li>
+				</ul>
+			</li>
+			
+			<li class="sub">
+				<a href="#">Εργαλεια</a>
+				<ul>
+					<li><a href="school/school_status.php">Καρτέλα Σχολείου</a></li>
+					<li><a href="employee/apof_ad.php">Αποφάσεις Αδειών</a></li>						
+					<li><a href="etc/stats.php">Στατιστικά</a></li>
+				</ul>
+			</li>
 		 
-		 <li class="sub">
-		  <a href="#">Πινακας</a>
-		  <ul>
-		   <li><a href="employee/ektaktoi_list.php">Έκτακτο Προσωπικό</a></li>
-                   <li><a href="employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
-		   <li><a href="school/school_edit.php">Επεξεργασία Σχολείου</a></li>
-		   <li><a href="employee/klados.php">Ειδικότητα</a></li>
-		  </ul>
-		 </li>
-		 
-		 <li class="sub">
-		  <a href="#">Εργαλεια</a>
-		  <ul>
-                   <li><a href="school/school_status.php">Καρτέλα Σχολείου</a></li>
-		   <li><a href="employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
-                   
-                   <li><a href="etc/stats.php">Στατιστικά</a></li>
-		  </ul>
-		 </li>
-		 
-		 <li class="sub">
-		  <a href="#">Αναφορες</a>
-                  <ul>
-		   <li><a href="reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
-                   <li><a href="reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
-                   <li><a href="reports/report_leit16.php">Λειτουργικά Κενά Δημοτικών</a></li>
-                   <!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
-                   <!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
-                   <!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
-                   <li><a href="employee/absents.php">Εκπ/κοί σε άδεια</a></li>
-		  </ul>
-		 </li>
+		 	<li class="sub">
+		  	<a href="#">Αναφορες</a>
+    		<ul>
+		   		<li><a href="reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
+					<li><a href="reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
+					<li><a href="reports/report_leit16.php">Λειτουργικά Κενά Δημοτικών</a></li>
+					<!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
+					<!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
+					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
+					<li><a href="employee/absents.php">Εκπ/κοί σε άδεια</a></li>
+		  	</ul>
+		 	</li>
                  
-                 <li class="sub">
-		  <a href="#">Αναζητηση</a>
-                  <ul>
-		   <li><a href="employee/search.php">Προσωπικού</a></li>
-		   <li><a href="employee/search_adeia.php">Αδειών</a></li>
-		  </ul>
-		 </li>
-		 <li class="sub">
-		  <a href="etc/about.php">Σχετικα</a>
-		 </li>
+      <li class="sub">
+		  	<a href="#">Αναζητηση</a>
+      	<ul>
+					<li><a href="employee/search.php">Προσωπικού</a></li>
+					<li><a href="employee/search_adeia.php">Αδειών</a></li>
+		  	</ul>
+		 	</li>
 		 <?php
 		 if ($usrlvl == 0):
 		 ?>
@@ -128,11 +116,15 @@
 			  <li><a href="etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
 			  <li><a href="employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>
 			  <li><a href='etc/params.php'>Παράμετροι</a></li>
+			  <li><a href="employee/klados.php">Ειδικότητες</a></li>
 			  <li><a href='etc/users.php'>Διαχείριση Χρηστών</a></li>
 			  <li><a href='etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
 		  </ul>
 		 </li>
 		 <?php endif; ?>
+		 <li class="sub">
+		  <a href="etc/about.php">Σχετικα</a>
+		 </li>
 		<li class="sub">
 			<a href='tools/login_check.php?logout=1'>Eξοδος</a>
 		</ul>
@@ -251,19 +243,19 @@
 		if ($result)
 			$num=mysql_num_rows($result);
 		
-                // added 24-01-2013 - when 1 result, redirect to that employee page
-                if ($num_record == 1)
-                {
-                    $id = mysql_result($result, 0, "id");
-                    $url = "employee/employee.php?id=$id&op=view";
-                    echo "<script>window.location = '$url'</script>";
-                }
+		// added 24-01-2013 - when 1 result, redirect to that employee page
+		if ($num_record == 1)
+		{
+				$id = mysql_result($result, 0, "id");
+				$url = "employee/employee.php?id=$id&op=view";
+				echo "<script>window.location = '$url'</script>";
+		}
 	
 	if ($logged)
-        {
-            echo "<p style=\"font-size : 70%; font-family : 'Myriad Web',Verdana,Helvetica,Arial,sans-serif; font-size:11px;\">Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;".getParam ('sxol_etos', $mysqlconnection)."</p>";
-        }
-        echo "<center>";        
+		{
+				echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;".getParam ('sxol_etos', $mysqlconnection)."</p>";
+		}
+  echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><form id='src' name='src' action='index.php' method='POST'>\n";
 	if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0))
@@ -271,7 +263,7 @@
 	else	
 		echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
 	echo "<input type='text' name='surname' id='surname''/>\n";
-        echo "<input type='hidden' name='pinakas' id='pinakas' />";
+  echo "<input type='hidden' name='pinakas' id='pinakas' />";
 	echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές. Αν εμφανίζει επώνυμα 2 φορές, τα 1α είναι μονίμων, τα 2α αναπληρωτών.'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
 	kladosCmb($mysqlconnection);
 	echo "</td>\n";

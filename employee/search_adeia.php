@@ -67,7 +67,7 @@
          {
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
-		echo "<table class=\"imagetable\" border='1'>";
+		echo "<table class=\"imagetable stable\" border='1'>";
 		echo "<tr><td>Ημ/νία από: </td><td>";
 		$myCalendar = new tc_calendar("hm_from", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
@@ -105,8 +105,8 @@
                 		
 		echo "	</table>";
 		echo "	<input type='submit' value='Αναζήτηση'>";
-		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
+		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";
          }	

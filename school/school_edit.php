@@ -29,29 +29,22 @@
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
-	<script type="text/javascript">
-	
-	$().ready(function() {
-			$("#org").autocomplete("../employee/get_school.php", {
-				width: 260,
-				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
-				selectFirst: false
-			});
-		});
-	$(document).ready(function() { 
-			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-                        $("#mytbl2").tablesorter({widgets: ['zebra']});
-                        $("#mytbl3").tablesorter({widgets: ['zebra']});
-                        $("#mytbl4").tablesorter({widgets: ['zebra']});
-                        $("#mytbl5").tablesorter({widgets: ['zebra']});
-                        $("#mytbl6").tablesorter({widgets: ['zebra']});
-		});	
-
+	<script type="text/javascript">	
+        $().ready(function() {
+            $("#org").autocomplete("../employee/get_school.php", {
+                width: 260,
+                matchContains: true,
+                selectFirst: false
+            });
+        });
+        $(document).ready(function() { 
+            $("#mytbl").tablesorter({widgets: ['zebra']}); 
+            $("#mytbl2").tablesorter({widgets: ['zebra']});
+            $("#mytbl3").tablesorter({widgets: ['zebra']});
+            $("#mytbl4").tablesorter({widgets: ['zebra']});
+            $("#mytbl5").tablesorter({widgets: ['zebra']});
+            $("#mytbl6").tablesorter({widgets: ['zebra']});
+        });
 	</script>
   </head>
   <body>
@@ -61,12 +54,12 @@
       
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
-		echo "<table class=\"imagetable\" border='1'>";
+		echo "<table class=\"imagetable stable\" border='1'>";
 		echo "<td>Σχολείο</td><td></td><td><input type=\"text\" name=\"org\" id=\"org\" /></td></tr>";				
 		echo "	</table>";
 		echo "	<input type='submit' value='Αναζήτηση'>";
 		//echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";
 		

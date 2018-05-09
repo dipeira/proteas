@@ -201,16 +201,19 @@ Your new password is: ".$newpassword."
         $this->dbconnect();
         echo'
 <form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-<table>
-<tr><td><div><label for="username">Όνομα Χρήστη</label></td>
-<td><input name="username" id="username" type="text"></div></td></tr>
-<tr><td><div><label for="password">Κωδικός</label></td>
-<td><input name="password" id="password" type="password"></div></td></tr>
-<tr><td colspan=2><input name="action" id="action" value="login" type="hidden">
-<div>
-<input name="submit" id="submit" value="Είσοδος στο σύστημα" type="submit"></div></td></tr></table>
+<div class="imgcontainer">
+    <img src="../images/logo.png" alt="Avatar" class="avatar">
+</div>
+<div class="container">
+    <label for="username"><b>Όνομα Χρήστη</b></label>
+    <input type="text" id="username" placeholder="Εισάγετε όνομα χρήστη" name="username" required>
+
+    <label for="password"><b>Κωδικός</b></label>
+    <input type="password" id="password" placeholder="Εισάγετε κωδικό" name="password" required>
+    <input name="action" id="action" value="login" type="hidden">
+    <button type="submit" id="submit">Είσοδος στο σύστημα</button>
+</div>
 </form>
- 
 ';
     }
     //reset password form

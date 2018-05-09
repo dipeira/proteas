@@ -25,6 +25,7 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_log);
 <title>Διαχείριση Χρηστών</title>
 </head>
 <body>
+    <h2>Διαχείριση Χρηστών</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>

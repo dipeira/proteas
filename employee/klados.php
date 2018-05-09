@@ -12,8 +12,10 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_kl);
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
+<LINK href="../css/style.css" rel="stylesheet" type="text/css">
 <title>Κλάδοι - Ειδικότητες</title>
 </head><body>
+    <h2>Ειδικότητες</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -27,7 +29,7 @@ var thegrid = new drasticGrid('grid1', {
 </script>
 
 <form>
-<INPUT TYPE='button' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

@@ -560,7 +560,6 @@ if ($_GET['op']=="edit")
 		echo "<tr><td>Όνομα</td><td>$name</td><td>Επώνυμο</td><td>$surname</td></tr>";
 		echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
                 
-                // 11-10-2012 show more personal data from misth database (.mdb) if $mdb in ../config.php is set
                 // 16-05-2013 tel,address,amka,idnum moved to employee table
                     if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon)
                     {
@@ -863,7 +862,7 @@ if ($_GET['op']=="edit")
                 // if idiwtikoi
                 if ($thesi == 5)
                     echo "<br><br><INPUT TYPE='button' VALUE='Σελίδα ιδιωτικών' onClick=\"parent.location='idiwtikoi.php'\">";
-                echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
 		?>
                 <div id="adeies"></div>
                 <?php

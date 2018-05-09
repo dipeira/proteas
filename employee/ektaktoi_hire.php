@@ -91,7 +91,7 @@
         
         echo "<tr><td colspan=2><input type='submit' value='Πρόσληψη'>";
         echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=".$_SESSION['sxoletos']."'\"></td></tr>";
+        echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=".$_SESSION['sxoletos']."'\"></td></tr>";
         echo "</table></form>";
 
 	// submitted: now prompt user to confirm

@@ -267,7 +267,7 @@ if ($_GET['op']=="add")
 		echo "	<input type='submit' value='Καταχώρηση'>";
                 echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
                 echo "<br>";
-		echo "	<br><INPUT TYPE='button' VALUE='Αρχική Σελίδα' onClick=\"parent.location='../index.php'\">";
+		echo "	<br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική Σελίδα' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 ?>
 <div id='results'></div>
@@ -366,7 +366,7 @@ if ($_GET['op']=="edit")
                 
 		echo "	<input type='hidden' name = 'id' value='$id'>";
 		echo "	<input type='submit' value='Επεξεργασία'>";
-                echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi.php?id=$id&op=view'\">";
+                echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi.php?id=$id&op=view'\">";
 		echo "	</form>";
 		echo "    </center>";
 		echo "</body>";
@@ -498,7 +498,7 @@ if ($_GET['op']=="edit")
                 echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
                 echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
 
-                echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
 		?>
                 <div id="adeies"></div>
                 <?php
@@ -522,7 +522,7 @@ if ($_GET['op']=="edit")
 			echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
 		else
 			echo "Η διαγραφή απέτυχε...";
-		echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+		echo "	<INPUT TYPE='button' class=btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
 	}
 	
 	mysql_close();

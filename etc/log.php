@@ -107,7 +107,7 @@
                         } );
 		</script>
 	</head>
-        <h1>Employee Log Viewer</h1>
+        <h1>Αρχείο Συμβάντων</h1>
 	<body id="dt_example">
 		<div id="container">
 <?php

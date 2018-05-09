@@ -1,5 +1,8 @@
 <html>
-    <head><title>Βεβαιώσεις υπηρεσίας αναπληρωτών</title></head>
+    <head>
+        <title>Βεβαιώσεις υπηρεσίας αναπληρωτών</title>
+        <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    </head>
     <body>
 <?php
 
@@ -25,24 +28,35 @@ foreach( $arr as $myarr)
     $PHPWord = new PHPWord();
     // kratikoy
     if ($_POST['kratikoy'])
-        $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl.docx');
+        $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl.docx');
     // espa
     else
     {
         /*if (strpos($myarr['prefix'],'PARAL_') !== false || strpos($myarr['prefix'],'EKSATOM_') !== false || strpos($myarr['prefix'],'ANAPT_') !== false || strpos($myarr['prefix'],'NEO_') !== false)
-                $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_eks_ekseid_etc.docx');
+                $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_eks_ekseid_etc.docx');
         elseif (strpos($myarr['prefix'],'EAEP_') !== false || strpos($myarr['prefix'],'OLOHM_') !== false )
-                $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_eaep_oloim.docx');
+                $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_eaep_oloim.docx');
         */
-        if (strpos($myarr['prefix'],'PEP_') !== false)
-            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_pep.docx');
+        if ($myarr['eepebp'] > 0){
+            //if (strpos($myarr['prefix'],'PEP_') !== false)
+            //    $document = $PHPWord->loadTemplate('../word/tmpl_pep.docx');
+            //else
+                $document = $PHPWord->loadTemplate('../word/tmpl_eepebp.docx');
+            $data = $myarr['eepebp'] == 1 ?
+                'Ειδικού Εκπαιδευτικού Προσωπικού ΕΕΠ' :
+                'Ειδικού Βοηθητικού Προσωπικού (ΕΒΠ)';
+            $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+            $document->setValue('eepebp', $data);
+        }
+        //if (strpos($myarr['prefix'],'PEP_') !== false)
+        //    $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_pep.docx');
         else
-            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_espa.docx');
+            $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_espa.docx');
         /*
         if ($myarr['ebp'])
-            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_ebp.docx');
+            $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_ebp.docx');
         else
-            $document = $PHPWord->loadTemplate('word/tmpl_vev_anapl_espa.docx');
+            $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_espa.docx');
         */
     }
         
@@ -76,10 +90,17 @@ foreach( $arr as $myarr)
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('ya', $data);
     
+    $data = $myarr['ada'];
+    $data = str_replace(array( '(', ')' ), "", $data);
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('ada', $data);
+    
     $didetos = substr($sxol_etos,0,4).'-'.substr($sxol_etos,4,2);
     $document->setValue('didetos', $didetos);
     
     $data = $myarr['apof'];
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('apof', $data);
     $apof = $data;
     
     //sxoleio/-a
@@ -100,6 +121,9 @@ foreach( $arr as $myarr)
         }
     }
     $sxoleia = substr($sxoleia, 0, -2);
+
+    $data = mb_convert_encoding($sxoleia, "utf-8", "iso-8859-7");
+    $document->setValue('schools', $data);
 
     // metakinhsh
     $metakinhsh = $myarr['metakinhsh'];
@@ -125,12 +149,17 @@ foreach( $arr as $myarr)
     $data = $hmpros = $myarr['hmpros'];
     $data = date("d-m-Y", strtotime($data));
     $document->setValue('hmpros', $data);
+
+    $data = $myarr['anarrwtikes'];
+    $document->setValue('anar', $data);
     
     // ypologismos yphresias
     $apol = substr($endofyear2,0,2) + substr($endofyear2,3,2)*30 + substr($endofyear2,6,4)*360;
     $pros = substr($hmpros,0,4)*360 + substr($hmpros,5,2)*30 + substr($hmpros,8,2);
     // +1 για να περιληφθεί και η τελευταία μέρα
     $days = $apol - $pros + 1;
+    // subtract subtracted
+    $days -= $myarr['subtracted'];
     $ymd = days2ymd($days);
     $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
@@ -140,10 +169,10 @@ foreach( $arr as $myarr)
     $fname = greek_to_greeklish($myarr['surname']);
     $fname = $myarr['prefix'].$fname;
     $last_afm = $myarr['last_afm'];
-    $output1 = "word/anapl/".$fname.".docx";
+    $output1 = "../word/anapl/".$fname.".docx";
     // if same surname, use last digits of afm
     if (file_exists($output1))
-        $output1 = "word/anapl/".$fname."_".$last_afm.".docx";
+        $output1 = "../word/anapl/".$fname."_".$last_afm.".docx";
     $document->save($output1);
     $filenames[] = $output1;
     $i++;
@@ -151,9 +180,9 @@ foreach( $arr as $myarr)
 
 // create zip file
 if ($_POST['kratikoy'])
-    $zipname = 'word/anapl/file.zip';
+    $zipname = '../word/anapl/file.zip';
 else
-    $zipname = 'word/anapl/file_espa.zip';
+    $zipname = '../word/anapl/file_espa.zip';
 if (file_exists($zipname))
     unlink($zipname);
 $zip = new ZipArchive;
@@ -177,9 +206,9 @@ if ($_POST['kratikoy'])
 else
     echo "ΕΣΠΑ";
 echo "</h3>";
-echo "<br>Εκπ/κοί που βρέθηκαν: ".$_POST['plithos'];
+echo "<br><p>Εκπ/κοί που βρέθηκαν: ".$_POST['plithos'];
 echo "<br>Βεβαιώσεις που εξήχθησαν: ".$vev;
-echo "<br><br><a href=$zipname>Ανοιγμα zip εγγράφου</a>";
+echo "</p><br><br><a href=$zipname>Ανοιγμα zip εγγράφου</a>";
 echo "<br><br><a href=\"../index.php\">Επιστροφή</a>";
 echo "</p>";
 

@@ -21,7 +21,7 @@
 <html>
   <head>
 	
-	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Έκτακτο Προσωπικό</title>
 	
@@ -315,7 +315,7 @@
                 echo "&nbsp;&nbsp;&nbsp;";
                 echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
                 echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Έκτακτο προσωπικό προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+                echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>
       

@@ -8,15 +8,15 @@
     <!--
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     -->
-	
-    <script type="text/javascript" src="../js/jquery-1.2.1.pack.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type="text/javascript">	
-    $(document).ready(function() { 
-        $("#mytbl").tablesorter({widgets: ['zebra']}); 
-    }); 
-
-    </script>
+    <script type="text/javascript" src="../js/stickytable.js"></script>
+	<script type="text/javascript">	
+        $(document).ready(function() { 
+            $("#mytbl").tablesorter({widgets: ['zebra']}); 
+            $("#mytbl").stickyTableHeaders();
+        });  
+	</script>
   </head>
 
 <?php
@@ -32,7 +32,7 @@
     echo "<a href='report_kena.php?type=1'>Δ.Σ.</a><br>";
     echo "<a href='report_kena.php?type=2'>Νηπ.</a><br>";
     echo "<a href='report_kena.php?type=3'>Ειδικά</a><br>";
-    echo "<a href='../index.php'>Επιστροφή</a><br>";
+    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 
     if ($_GET['type'] == 1 || $_GET['type'] == 3)
     {
@@ -122,7 +122,8 @@
         echo "<form action='../tools/2excel_ses.php' method='post'>";
         //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
         echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
         echo "</form>";
         //ob_end_clean();
     }
@@ -205,7 +206,8 @@
         echo "<form action='../tools/2excel_ses.php' method='post'>";
         //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
         echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
         echo "</form>";
         //ob_end_clean();
     }
@@ -276,7 +278,8 @@
         echo "<form action='../tools/2excel_ses.php' method='post'>";
         //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
         echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
         echo "</form>";
     }
 ?>

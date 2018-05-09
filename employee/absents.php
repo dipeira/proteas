@@ -22,34 +22,14 @@
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Εκπ/κοί που βρίσκονται σε άδεια</title>
 	
-	<script type="text/javascript" src="../js/jquery.js"></script>
-	<script type="text/javascript" src="../js/jquery.validate.js"></script>
-        <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
-	<script type="text/javascript">
-	
-	$().ready(function() {
-			$("#org").autocomplete("get_school.php", {
-				width: 260,
-				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
-				selectFirst: false
-			});
-		});
-	$(document).ready(function() { 
-			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-                        $("#mytbl2").tablesorter({widgets: ['zebra']});
-                        $("#mytbl3").tablesorter({widgets: ['zebra']});
-                        $("#mytbl4").tablesorter({widgets: ['zebra']});
-                        $("#mytbl5").tablesorter({widgets: ['zebra']});
-                        $("#mytbl6").tablesorter({widgets: ['zebra']});
-		});	
-
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="../js/stickytable.js"></script>
+	<script type="text/javascript">	
+        $(document).ready(function() { 
+            $("#mytbl").tablesorter({widgets: ['zebra']}); 
+            $("#mytbl").stickyTableHeaders();
+        });
 	</script>
   </head>
   <body> 
@@ -73,7 +53,7 @@
             if ($num)
             {
             $i=0;
-            echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
                 echo "<thead><tr>";
                 echo "<th>Επώνυμο</th>";
                 echo "<th>Όνομα</th>";
@@ -136,7 +116,7 @@
                         $i++;
                 }
                 echo "</tbody></table>";
-                echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+                echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
             }
                     
 

@@ -122,6 +122,7 @@ require_once"../tools/functions.php";
 
     //
     echo "<body>";
+    echo "<h2>Στατιστικά</h2>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<tr><td colspan=3><strong>Μόνιμοι εκπαιδευτικοί (+ από άλλα ΠΥΣΠΕ/ΠΥΣΔΕ):&nbsp;$monimoi_total</strong></td></tr>";
     echo "</table>";
@@ -163,7 +164,7 @@ require_once"../tools/functions.php";
 
     echo "</table>";
 
-    echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='../index.php'\">";
     echo "</body>";
     echo "</html>";
 

@@ -1,5 +1,5 @@
 /* change these styles if you like */
-table.drasticgrid {font: 12px arial; table-layout: fixed; border-spacing: 0px;}
+table.drasticgrid {font: 13px arial; table-layout: fixed; border-spacing: 0px;}
 table.drasticgrid th, td, tr {padding:0; margin:0;}
 th.th			{background-image: url(../img/back_header.jpg); cursor: pointer;} 
 th.thmouseover	{background-image: url(../img/back_header_mo.jpg); color: black;}

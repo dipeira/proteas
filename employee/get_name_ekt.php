@@ -6,8 +6,8 @@ mysql_select_db($db_name);
 mysql_query("SET NAMES 'greek'", $conn);
 mysql_query("SET CHARACTER SET 'greek'", $conn);
 
-$q = strtolower($_GET["q"]);
-//$q = mb_strtolower($_GET["q"],'utf-8');
+//$q = strtolower($_GET["q"]);
+$q = mb_strtolower($_GET["q"],'utf-8');
 if (!$q) return;
 
 $sql = "select DISTINCT surname from ektaktoi where surname LIKE '%$q%'";

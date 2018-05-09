@@ -5,7 +5,20 @@
   $db_password = "d1pe_db";
   $db_name = "dipedb";
   
-  
+  // Πράξεις αναπληρωτών
+  // Κωδικός => Περιγραφή
+  $anapl_praxeis = Array(
+    'ΚΡΑΤ' => 'Κρατικού',
+    'ΕΞΑΤ' => 'Εξατομικευμένη (Τ.Ε.)',
+    'ΕΞΕΙ' => 'Εξειδικευμένη (Παραλ.)',
+    'ΠΡΣΧ' => 'Ενίσχυση Προσχολικής Εκπ.',
+    'ΕΝΙΔ' => 'Εν.Τύπου ΠΕ70',
+    'ΕΝΙΕ' => 'Εν.Τύπου Ειδικότητες',
+    'ΥΠΟΣ' => 'Ανάπτυξη Υποστηρικτικών Δομών',
+    'ΕΚΟ'  => 'ΕΚΟ (ΖΕΠ)',
+    'ΠΕΠ' => 'ΠΕΠ Κρήτης'
+  );
+
   // ******************************************************
   // Από εδώ και πέρα δε χρειάζεται να κάνετε καμία αλλαγή
   // ******************************************************
@@ -34,16 +47,11 @@
   $endofyear = getParam1('endofyear',$myconn);
   $endofyear2 = getParam1('endofyear2',$myconn);
   $protapol = getParam1('protapol',$myconn);
-  
-  // if $mdb=1, Proteas is linked with ms access database
-  $mdb = 0;
-  // $msdatabase: the path of access mdb file - NOT WORKING PLEASE SET IN tools/access.php
-  // $msdatabase = "/access/DTnetNproto.mdb";
-  
+
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini  
 // to avoid notices on some configurations
-  error_reporting(E_ALL ^ E_NOTICE);
+  error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
   
- 
+  
 ?>

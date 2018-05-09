@@ -283,7 +283,7 @@
 		echo "</FORM>";
 		echo "</td></tr>";
                 echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_hire.php'\">";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+                echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>
       

@@ -50,11 +50,6 @@
 			$("#org").autocomplete("get_school.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
@@ -62,11 +57,6 @@
 			$("#yphr").autocomplete("get_school.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
@@ -74,11 +64,6 @@
 			$("#surname").autocomplete("get_name.php", {
 				width: 260,
 				matchContains: true,
-				//mustMatch: true,
-				//minChars: 0,
-				//multiple: true,
-				//highlight: false,
-				//multipleSeparator: ",",
 				selectFirst: false
 			});
 		});
@@ -187,9 +172,9 @@
 		echo "	</table>";
 		echo "	<input type='hidden' name = 'set' value='$set'>";
 		echo "	<input type='submit' value='Αναζήτηση'>";
-		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
+		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
                 echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Βοήθεια\" onclick=\"window.open('help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
-		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";
 		

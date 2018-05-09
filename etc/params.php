@@ -25,6 +25,7 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_opt);
 <title>Διαχείριση Παραμέτρων</title>
 </head>
 <body>
+    <h2>Παράμετροι</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -47,7 +48,7 @@ var thegrid = new drasticGrid('grid1', {
 </table>
 <form>
     <br>
-<INPUT TYPE='button' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

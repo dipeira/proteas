@@ -34,7 +34,7 @@
             echo "<html><head><h2>M.K. Ιδιωτικών Εκπ/κών</h2></head><body>";
         else
             echo "<html><head><h2>M.K. Μονίμων Εκπ/κών</h2></head><body>";
-        echo "<table class=\"imagetable\" border='1'>";
+        echo "<table class=\"imagetable stable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
         echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
         $myCalendar = new tc_calendar("date", true);
@@ -55,7 +55,9 @@
         if ($usrlvl==0)
             echo "<input type='checkbox' name='editvmk' value='1' />Τροποποίηση ΜΚ στη ΒΔ<br />";
         echo "</td></tr>";
-        echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'></td></tr>";
+        echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
+        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "</td></tr>";
         echo "</table></form>";
         if ($idiwtikoi)
             echo "<a href='check_vmk.php'>M.K. Μονίμων Εκπ/κών</a>";
@@ -298,6 +300,4 @@
             echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
         }
 ?>
-<br><br>
-<a href="../index.php">Επιστροφή</a>
 </html>
