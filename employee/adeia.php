@@ -79,7 +79,9 @@
 	</script>
   </head>
   <body>
+  <?php include('../etc/menu.php'); ?>
     <center>
+    	<h3>¶δεια</h3>
       <?php
 		//if (!isset($_GET['emp']) && ($_GET['op']!="delete"))
                 $usrlvl = $_SESSION['userlevel'];

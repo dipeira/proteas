@@ -26,6 +26,7 @@
         session_start();
         
         echo "<body>";
+        include('../etc/menu.php');
         echo "<table class=\"imagetable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
         echo "<tr><td colspan>";

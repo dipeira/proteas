@@ -18,7 +18,9 @@
 		});
             
         </script>
-        
+    </head>
+    <body>
+    <?php include('../etc/menu.php'); ?>
 <?php        
 	// praxi_sch: Displays schools or Schools & ektaktoi for the selected praxi
 
@@ -34,34 +36,34 @@
 	mysql_query("SET NAMES 'greek'", $mysqlconnection);
 	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         
-        echo "<html><head><h2>Εκπαιδευτικοί και Σχολεία ανά Πράξη</h2></head><body>";
-        echo "<table class=\"imagetable\" border='1'>";
-        echo "<form action='' method='POST' autocomplete='off'>";
-        
-        $sql = "select * from praxi";
-        $result = mysql_query($sql, $mysqlconnection);
-        echo "<tr><td>Επιλογή Πράξεων:</td><td>";
-        $cmb = "<select name=\"praxi[]\" class=\"praxi_select\" multiple=\"multiple\">";
-        while ($row = mysql_fetch_array($result)){
-            if (in_array($row['id'],$_POST['praxi']))
-                $cmb .= "<option value=\"".$row['id']."\" selected>".$row['name']."</option>";
-            else
-                $cmb .= "<option value=\"".$row['id']."\">".$row['name']."</option>";
-        }
-        $cmb .= "</select>";
-        echo $cmb;
-        
-        echo "</td></tr>";
-        
-        echo "<tr><td>Επιλογή:</td><td>";
-        echo "<input type='radio' name='type' value='0' checked >Εμφάνιση μόνο Σχολείων<br>";
-        echo "<input type='radio' name='type' value='1'>Εμφάνιση Εκπ/κών & Σχολείων<br>";
-        echo "</td></tr>";
-        
-        echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
-        echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
-        echo "</table></form>";
+    echo "<h2>Εκπαιδευτικοί και Σχολεία ανά Πράξη</h2>";
+    echo "<table class=\"imagetable\" border='1'>";
+    echo "<form action='' method='POST' autocomplete='off'>";
+    
+    $sql = "select * from praxi";
+    $result = mysql_query($sql, $mysqlconnection);
+    echo "<tr><td>Επιλογή Πράξεων:</td><td>";
+    $cmb = "<select name=\"praxi[]\" class=\"praxi_select\" multiple=\"multiple\">";
+    while ($row = mysql_fetch_array($result)){
+        if (in_array($row['id'],$_POST['praxi']))
+            $cmb .= "<option value=\"".$row['id']."\" selected>".$row['name']."</option>";
+        else
+            $cmb .= "<option value=\"".$row['id']."\">".$row['name']."</option>";
+    }
+    $cmb .= "</select>";
+    echo $cmb;
+    
+    echo "</td></tr>";
+    
+    echo "<tr><td>Επιλογή:</td><td>";
+    echo "<input type='radio' name='type' value='0' checked >Εμφάνιση μόνο Σχολείων<br>";
+    echo "<input type='radio' name='type' value='1'>Εμφάνιση Εκπ/κών & Σχολείων<br>";
+    echo "</td></tr>";
+    
+    echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
+    echo "&nbsp;&nbsp;&nbsp;";
+    echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
+    echo "</table></form>";
 
 	if(isset($_POST['praxi']))
 	{
@@ -129,4 +131,5 @@
 	}
 ?>
 <br><br>
+</body>
 </html>

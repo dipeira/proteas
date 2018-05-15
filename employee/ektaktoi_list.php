@@ -62,6 +62,7 @@
 	</script>
 	
   </head>
+  <?php include('../etc/menu.php'); ?>
   <body> 
   <!-- <h1> DIPE D.B.</h1> -->
   

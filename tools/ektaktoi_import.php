@@ -4,7 +4,7 @@ header('Content-type: text/html; charset=iso8859-7');
 require_once 'PHPExcel.php';
 require_once 'PHPExcel/IOFactory.php';
 require_once "../config.php";
-require_once "../functions.php";
+require_once "./functions.php";
 
 $showRows = 10;
 
@@ -111,7 +111,7 @@ else{
     print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
     echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small><br><br>";
 
-    echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../ektaktoi_list.php'\">";
+    echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
     exit;
 }
 ?>

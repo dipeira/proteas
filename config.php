@@ -48,10 +48,10 @@
   $endofyear2 = getParam1('endofyear2',$myconn);
   $protapol = getParam1('protapol',$myconn);
 
-// Report all errors except E_NOTICE
-// This is the default value set in php.ini  
-// to avoid notices on some configurations
+  // Report all errors except E_NOTICE
+  // This is the default value set in php.ini  
+  // to avoid notices on some configurations
   error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
   
-  
+  define('SITE_ROOT', '/'.explode('/',$_SERVER['REQUEST_URI'])[1]); 
 ?>

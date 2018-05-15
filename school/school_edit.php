@@ -48,6 +48,7 @@
 	</script>
   </head>
   <body>
+  <?php include('../etc/menu.php'); ?>
     <center>
         <h2>Επεξεργασία σχολείου</h2>
       <?php     

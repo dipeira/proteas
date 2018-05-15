@@ -154,6 +154,7 @@
 
   </head>
   <body> 
+  <?php include('../etc/menu.php'); ?>
     <center>
       <?php
                 $usrlvl = $_SESSION['userlevel'];

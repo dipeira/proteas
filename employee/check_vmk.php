@@ -15,7 +15,9 @@
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
 		});
         </script>
-        
+   </head>
+   <body>
+   <?php include('../etc/menu.php'); ?>
 <?php        
 	// check_vmk: Checks vathmos & mk of all employee records for the date provided
                 
@@ -31,9 +33,9 @@
         if ($_GET['id']==1)
             $idiwtikoi = 1;
         if ($idiwtikoi)
-            echo "<html><head><h2>M.K. Ιδιωτικών Εκπ/κών</h2></head><body>";
+            echo "<h2>M.K. Ιδιωτικών Εκπ/κών</h2>";
         else
-            echo "<html><head><h2>M.K. Μονίμων Εκπ/κών</h2></head><body>";
+            echo "<h2>M.K. Μονίμων Εκπ/κών</h2>";
         echo "<table class=\"imagetable stable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
         echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";

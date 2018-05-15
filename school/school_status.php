@@ -57,6 +57,7 @@
 	</script>
   </head>
   <body> 
+  <?php include('../etc/menu.php'); ?>
     <center>
         <h2>Καρτέλα σχολείου</h2>
     <?php
@@ -619,7 +620,7 @@
                 $wres = mysql_result($result, $i, "hours");
                 
                 echo "<tr>";
-                echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -679,7 +680,8 @@
         $num = mysql_num_rows($result);
         if ($num)
         {
-            echo "<h3>Σε άδεια</h3>";
+            echo "<h2>Σε ¶δεια</h2>";
+            echo "<h3>Μόνιμοι</h3>";
             $i=0;
             echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
@@ -741,7 +743,7 @@
                         $comments = "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε ¶δεια\"</blink><br>$comm";
 
                     echo "<tr>";
-                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
+                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='../employee/adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
                     echo "</tr>";
                 }
                 $i++;
@@ -756,8 +758,7 @@
         $sx_yphrethshs = mysql_result($result, 0, "sx_yphrethshs");
         if ($num)
         {
-            echo "<h3>Έκτακτο Προσωπικό σε ¶δεια</h3>";
-            
+            echo "<h3>Έκτακτο Προσωπικό</h3>";
             $i=0;
             echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
@@ -781,7 +782,7 @@
                 $wres = mysql_result($result, $i, "hours");
                 
                 echo "<tr>";
-                echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }

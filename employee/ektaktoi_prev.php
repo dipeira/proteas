@@ -70,10 +70,8 @@
 	
   </head>
   <body> 
-  <!-- <h1> DIPE D.B.</h1> -->
-  
-  
-	
+  <?php include('../etc/menu.php'); ?>
+  	
 <div>
       <?php
                 $usrlvl = $_SESSION['userlevel'];

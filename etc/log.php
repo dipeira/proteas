@@ -9,6 +9,8 @@
  // check if super-user
   if ($_SESSION['userlevel']<>0)
      header("Location: ../index.php");
+  
+  include('../config.php');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -20,6 +22,7 @@
 			@import "../css/demo_page.css";
 			@import "../css/demo_table.css";
 		</style>
+        <LINK href="../css/style.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="iso8859-7">
@@ -107,8 +110,9 @@
                         } );
 		</script>
 	</head>
-        <h1>Αρχείο Συμβάντων</h1>
 	<body id="dt_example">
+    <?php include('../etc/menu.php'); ?>
+    <h1>Αρχείο Συμβάντων</h1>
 		<div id="container">
 <?php
 		require_once"../config.php";
@@ -239,6 +243,6 @@
 			
 
 		</div>
-<INPUT TYPE='button' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
 	</body>
 </html>

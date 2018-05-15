@@ -50,7 +50,10 @@
 	</script>
   </head>
   <body> 
+  <?php include('../etc/menu.php'); ?>
     <center>
+	 <h2>Αναζήτηση αδειών</h2>
+	 <br>
       <?php
         //session_start();
         $usrlvl = $_SESSION['userlevel'];

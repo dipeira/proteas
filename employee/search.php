@@ -70,7 +70,9 @@
 	</script>
   </head>
   <body> 
+  <?php include('../etc/menu.php'); ?>
     <center>
+	 <h2>Αναζήτηση προσωπικού</h2>
       <?php
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";

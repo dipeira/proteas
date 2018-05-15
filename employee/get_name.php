@@ -18,7 +18,8 @@ $sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
 
 $rsd = mysql_query($sql,$conn);
 while($rs = mysql_fetch_array($rsd)) {
-	$cname = $rs['surname'];
+        $postfix = $rs['t_nm'] ? ' (Αν)' : ' (Μον)';
+        $cname = $rs['surname'].$postfix;
         $ctbl = $rs['t_nm'];
 	$out =  "$cname|$ctbl\n";
         echo $out;

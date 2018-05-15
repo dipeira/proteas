@@ -29,6 +29,7 @@
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
   </head>
   <body> 
+  <?php include('../etc/menu.php'); ?>
     <center>
       <?php
       

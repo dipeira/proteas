@@ -39,6 +39,7 @@
     $num = mysql_num_rows($result);
 
         echo "<body>";
+        include('../etc/menu.php');
         echo "<center>";
         $i=0;
         ob_start();

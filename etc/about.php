@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="../css/style.css" />
 </head>
 <body>
+	<?php include('../etc/menu.php'); ?>
 	<h2>Σχετικά</h2>
 	<p>
 		Το project <b>Πρωτέας</b> σχεδιάστηκε και αναπτύσσεται από τον εκπαιδευτικό Πληροφορικής Δ.Ε. ΠΕ20 Βαγγέλη Ζαχαριουδάκη <br>

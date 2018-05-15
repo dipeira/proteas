@@ -14,9 +14,11 @@
             header("Location: ../tools/login_check.php");
         $usrlvl = $_SESSION['userlevel'];
         
-        echo "<html><head><h2>Αποφάσεις αδειών</h2>";
+        echo "<html><head>";
         echo "<link rel='stylesheet' type='text/css' href='../css/style.css' />";
         echo "</head><body>";
+        include('../etc/menu.php');
+        echo "<h2>Αποφάσεις αδειών</h2>";
         echo "<table class='imagetable stable' border='1'>";
         echo "<form action='' method='POST'>";
         echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot'></td></tr>";

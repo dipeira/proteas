@@ -122,6 +122,7 @@ require_once"../tools/functions.php";
 
     //
     echo "<body>";
+    include('../etc/menu.php');
     echo "<h2>Στατιστικά</h2>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<tr><td colspan=3><strong>Μόνιμοι εκπαιδευτικοί (+ από άλλα ΠΥΣΠΕ/ΠΥΣΔΕ):&nbsp;$monimoi_total</strong></td></tr>";

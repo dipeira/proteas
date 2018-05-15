@@ -33,6 +33,7 @@
 	</script>
   </head>
   <body> 
+  <?php include('../etc/menu.php'); ?>
     <center>
         <h2>Εκπ/κοί που βρίσκονται σε άδεια</h2>
       <?php

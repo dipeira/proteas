@@ -31,6 +31,8 @@ $pr_labels = implode($pr_labels,',');
 <title>Διαχείριση Πράξεων</title>
 </head>
 <body>
+<?php include('../etc/menu.php'); ?>
+<h2>Διαχείριση Πράξεων</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -77,7 +79,7 @@ var thegrid = new drasticGrid('grid1', {
 </table>
 <p>ΠΡΟΣΟΧΗ: Η πρώτη γραμμή να μη διαγράφεται!</p>
 <form>
-<INPUT TYPE='button' VALUE='Επιστροφή' onClick="parent.location='ektaktoi_list.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='ektaktoi_list.php'">
 </form>
 
 </body></html>

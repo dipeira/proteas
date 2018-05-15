@@ -11,6 +11,7 @@
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
+    <?php include('../etc/menu.php'); ?>
 <?php       
 	// end_of_year: Includes end-of-year actions: Deletes ektakto personnel, returns personnel from other pispe etc...
     include("../tools/class.login.php");

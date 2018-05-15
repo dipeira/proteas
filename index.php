@@ -65,71 +65,7 @@
   </head>
   <body> 
     
-  <div>
-		<ul id="navigation">
-			<li><a href="index.php">Αρχικη</a></li>
-			
-			<li class="sub">
-				<a href="#">Πινακας</a>
-				<ul>
-					<li><a href="employee/ektaktoi_list.php">Έκτακτο Προσωπικό</a></li>
-					<li><a href="employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
-					<li><a href="school/school_edit.php">Επεξεργασία Σχολείου</a></li>
-				</ul>
-			</li>
-			
-			<li class="sub">
-				<a href="#">Εργαλεια</a>
-				<ul>
-					<li><a href="school/school_status.php">Καρτέλα Σχολείου</a></li>
-					<li><a href="employee/apof_ad.php">Αποφάσεις Αδειών</a></li>						
-					<li><a href="etc/stats.php">Στατιστικά</a></li>
-				</ul>
-			</li>
-		 
-		 	<li class="sub">
-		  	<a href="#">Αναφορες</a>
-    		<ul>
-		   		<li><a href="reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
-					<li><a href="reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
-					<li><a href="reports/report_leit16.php">Λειτουργικά Κενά Δημοτικών</a></li>
-					<!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
-					<!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
-					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
-					<li><a href="employee/absents.php">Εκπ/κοί σε άδεια</a></li>
-		  	</ul>
-		 	</li>
-                 
-      <li class="sub">
-		  	<a href="#">Αναζητηση</a>
-      	<ul>
-					<li><a href="employee/search.php">Προσωπικού</a></li>
-					<li><a href="employee/search_adeia.php">Αδειών</a></li>
-		  	</ul>
-		 	</li>
-		 <?php
-		 if ($usrlvl == 0):
-		 ?>
-		 <li class="sub">
-		  <a href="#">Διαχειριση</a>
-		  <ul>
-			  <li><a href="etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
-			  <li><a href="employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>
-			  <li><a href='etc/params.php'>Παράμετροι</a></li>
-			  <li><a href="employee/klados.php">Ειδικότητες</a></li>
-			  <li><a href='etc/users.php'>Διαχείριση Χρηστών</a></li>
-			  <li><a href='etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
-		  </ul>
-		 </li>
-		 <?php endif; ?>
-		 <li class="sub">
-		  <a href="etc/about.php">Σχετικα</a>
-		 </li>
-		<li class="sub">
-			<a href='tools/login_check.php?logout=1'>Eξοδος</a>
-		</ul>
-  
-	</div>
+  <?php include('etc/menu.php'); ?>
 
 <div>
 		<?php
@@ -199,14 +135,14 @@
                 // if ektaktos
                 if (strlen($_POST['surname'])>0 && $_POST['pinakas']==1)
                 {
-                    $surn = $_POST['surname'];
-                    $url = "ektaktoi_list.php?surname=".urlencode($surn);
+                    $surn = explode(' ',$_POST['surname'])[0];
+                    $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
                     echo "<script>window.location = '$url'</script>";
                 }
 		if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)
 		{
 			if (strlen($_POST['surname'])>0)
-                            $surpost = $_POST['surname'];
+                            $surpost = explode(' ',$_POST['surname'])[0];
                         else
                             $surpost = $_GET['surname'];
 			if ($whflag)
@@ -264,7 +200,7 @@
 		echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
 	echo "<input type='text' name='surname' id='surname''/>\n";
   echo "<input type='hidden' name='pinakas' id='pinakas' />";
-	echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές. Αν εμφανίζει επώνυμα 2 φορές, τα 1α είναι μονίμων, τα 2α αναπληρωτών.'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
+	echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές, εμφανίζοντας σε παρένθεση τη σχέση εργασίας'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
 	kladosCmb($mysqlconnection);
 	echo "</td>\n";
 		echo "<div id=\"content\">";
