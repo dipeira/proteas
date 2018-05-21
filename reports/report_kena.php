@@ -64,8 +64,8 @@
         echo "<th colspan=4>Οργανικές</th>";
         echo "<th colspan=4>Οργανικά Κενά</th>";
         echo "</tr>";
-        echo "<tr><th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
-        echo "<th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
+        echo "<tr><th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
+        echo "<th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
         echo "</tr>";
         echo "</thead>\n<tbody>\n";
 
@@ -111,8 +111,8 @@
         echo "<tr><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
         echo "<td>$synorgan</td><td>$synorgtop</td><td>$organikes_sum[0]</td><td>$organikes_sum[1]</td><td>$organikes_sum[2]</td><td>$organikes_sum[3]</td>";
         echo "<td>$kena_org_sum[0]</td><td>$kena_org_sum[1]</td><td>$kena_org_sum[2]</td><td>$kena_org_sum[3]</td>";
-        echo "<tr><td></td><td></td><td></td><td>Οργανι-<br>κότητες</td><td>ΠΕ70<br>Οργ.<br>Τοποθ.</td><td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
-        echo "<td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ16</td>";
+        echo "<tr><td></td><td></td><td></td><td>Οργανι-<br>κότητες</td><td>ΠΕ70<br>Οργ.<br>Τοποθ.</td><td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ79</td>";
+        echo "<td>ΠΕ70</td><td>ΠΕ11</td><td>ΠΕ06</td><td>ΠΕ79</td>";
         echo "</tr>";
         echo "</tbody></table>";
         echo "<br>";
@@ -151,9 +151,9 @@
         echo "<th colspan=4>Οργανικά Κενά</th>";
         echo "<th colspan=4>Λειτουργικά Κενά</th>";
         echo "</tr>";
-        echo "<tr><th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
-        echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
-        echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
+        echo "<tr><th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
+        echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
+        echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
         echo "</tr>";
         echo "</thead>\n<tbody>\n";
 

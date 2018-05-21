@@ -1315,9 +1315,9 @@
         $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3;
         $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1;
         $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2;
-        $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+        $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
         $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
-        $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
+        $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
         $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*22;
         // oloimero
         $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
@@ -1332,9 +1332,9 @@
             $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3 + $tm[5]*3;
             $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
             $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2 + $tm[5]*2;
-            $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+            $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
             $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
-            $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+            $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
             $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*20 + $tm[5]*20;
         // alliws ean synd/lia 5-6
         } else {
@@ -1342,9 +1342,9 @@
             $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3;
             $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
             $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2;
-            $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
+            $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
             $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
-            $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
+            $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
             $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
         }
         // oloimero
@@ -1359,9 +1359,9 @@
         $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3 + $tm[5]*3;
         $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
         $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2 + $tm[5]*2;
-        $hours['16'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+        $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
         $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
-        $hours['19-20'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+        $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
         $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
         // oloimero
         $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
@@ -1466,7 +1466,7 @@
         }
         
         // replace kladoi @ array
-        //kladoi: 2/70, 3/06, 4/08, 5/11, 6/16, 15/19-20, 13/05-07, 14/05-07, 20/32
+        //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/32
         $avar = $avhrs;
         $avar['70'] = $avar['2'];
         unset($avar['2']);
@@ -1476,9 +1476,9 @@
         unset($avar['4']);
         $avar['11'] = $avar['5'];
         unset($avar['5']);
-        $avar['16'] = $avar['6'];
+        $avar['79'] = $avar['6'];
         unset($avar['6']);
-        $avar['19-20'] = $avar['15'];
+        $avar['86'] = $avar['15'];
         unset($avar['15']);
         $avar['05-07'] = $avar['13'] + $avar['14'];
         unset($avar['13']);
@@ -1497,10 +1497,10 @@
         if ($print){
         echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
         echo "<table class=\"imagetable\" border='1'>";
-        echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>16</th><th>32</th><th>19-20</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['16']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['19-20']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
-        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['16']."</td><td>".$avar['32']."</td><td>".$avar['19-20']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
-        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['16']).tdc($ret['32']).tdc($ret['19-20']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
+        echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>32</th><th>86</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
+        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
+        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['32']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
+        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['32']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
         echo "</table>";
         echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";

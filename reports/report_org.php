@@ -48,8 +48,7 @@
                     //echo "<th colspan=4>Οργανικά Κενά</th>";
                     echo "<th colspan=6>Οργανικές - Κενά</th>";
                     echo "</tr>";
-                    //echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
-                    echo "<th colspan=2>ΠΕ11</th><th colspan=2>ΠΕ06</th><th colspan=2>ΠΕ16</th>";
+                    echo "<th colspan=2>ΠΕ11</th><th colspan=2>ΠΕ06</th><th colspan=2>ΠΕ79</th>";
                     //echo "<th>ΠΕ60/70</th>";
                     //echo "<th>KENA</th><th>Διαφορα</th><th>org&anhk&energoi</th><th>tmimata (dntis)</th>";
                     echo "</tr>";

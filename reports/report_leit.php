@@ -68,7 +68,6 @@
                     //echo "<th colspan=4>Οργανικά Κενά</th>";
                     echo "<th colspan=4>Λειτουργικά Κενά</th>";
                     echo "</tr>";
-                    //echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
                     echo "<th>ΠΕ60/70</th>";
                     //echo "<th>KENA</th><th>Διαφορα</th><th>org&anhk&energoi</th><th>tmimata (dntis) - tm.ent</th>";
                     echo "<th>KENA (από υπολογισμό)</th><th>Διαφορα</th>";
@@ -179,7 +178,6 @@
                     echo "<tr><th rowspan=2>Ονομασία</th>";
                     echo "<th colspan=4>Λειτουργικά Κενά</th>";
                     echo "</tr>";
-                    //echo "<th>ΠΕ60/70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ16</th>";
                     echo "<th>ΠΕ60</th>";
                     //echo "<th>KENA</th><th>Διαφορα</th><th>org&anhk&energoi</th><th>tmimata (dntis) - tm.ent</th>";
                     echo "<th>KENA (από υπολογισμό)</th><th>Διαφορά</th>";

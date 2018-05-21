@@ -58,9 +58,6 @@
                         case 5:
                             echo "<tr><th colspan=5>ΠΕ11 - Φυσ. Αγωγής</td></tr>";
                             break;
-//                        case 6:
-//                            echo "ΠΕ16 - Μουσικής";
-//                            break;
                     }
                     echo "<tr><th rowspan=2>Ονομασία</th>";
                     echo "<th colspan=4>Λειτουργικά Κενά</th>";

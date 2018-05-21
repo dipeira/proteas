@@ -44,10 +44,10 @@
                 echo "<a href=\"report_kena_eid_eaep.php?klados=3\">Κενά/Πλεονάσματα ΠΕ06 - Αγγλικών</a><br>";
                 echo "<a href=\"report_kena_eid_eaep.php?klados=4\">Κενά/Πλεονάσματα ΠΕ08 - Καλλιτεχνικών</a><br>";
                 echo "<a href=\"report_kena_eid_eaep.php?klados=5\">Κενά/Πλεονάσματα ΠΕ11 - Φυσικής Αγωγής</a><br>";
-                echo "<a href=\"report_kena_eid_eaep.php?klados=6\">Κενά/Πλεονάσματα ΠΕ16 - Μουσικής</a><br>";
+                echo "<a href=\"report_kena_eid_eaep.php?klados=6\">Κενά/Πλεονάσματα ΠΕ79 - Μουσικής</a><br>";
                 echo "<a href=\"report_kena_eid_eaep.php?klados=13\">Κενά/Πλεονάσματα ΠΕ05 - Γαλλικών</a><br>";
                 echo "<a href=\"report_kena_eid_eaep.php?klados=14\">Κενά/Πλεονάσματα ΠΕ07 - Γερμανικών</a><br>";
-                echo "<a href=\"report_kena_eid_eaep.php?klados=15\">Κενά/Πλεονάσματα ΠΕ19-20 - Πληροφορικής</a><br>";
+                echo "<a href=\"report_kena_eid_eaep.php?klados=15\">Κενά/Πλεονάσματα ΠΕ86 - Πληροφορικής</a><br>";
                 echo "<a href=\"report_kena_eid_eaep.php?klados=20\">Κενά/Πλεονάσματα ΠΕ32 - Θεατρολόγων</a><br>";
                 echo "<center>";
                 $i=0;
@@ -66,7 +66,7 @@
                             echo "<tr><th colspan=4>ΠΕ11 - Φυσ. Αγωγής</td></tr>";
                             break;
                         case 6:
-                            echo "<tr><th colspan=4>ΠΕ16 - Μουσικής</td></tr>";
+                            echo "<tr><th colspan=4>ΠΕ79 - Μουσικής</td></tr>";
                             break;
                         case 13:
                             echo "<tr><th colspan=4>ΠΕ05 - Γαλλικών</td></tr>";
@@ -75,7 +75,7 @@
                             echo "<tr><th colspan=4>ΠΕ07 - Γερμανικών</td></tr>";
                             break;
                         case 15:
-                            echo "<tr><th colspan=4>ΠΕ19-20 - Πληροφορικής</td></tr>";
+                            echo "<tr><th colspan=4>ΠΕ86 - Πληροφορικής</td></tr>";
                             break;
                         case 20:
                             echo "<tr><th colspan=4>ΠΕ32 - Θεατρολόγων</td></tr>";
@@ -125,7 +125,7 @@
                             $pewr = (($tm[4]+$tm[5])*2) + (($tm[0]+$tm[1]+$tm[2]+$tm[3])*4);
                             break;
                         case 6:
-                            // ΠΕ16
+                            // ΠΕ79
                             $pewr = (($tm[0]+$tm[1])*2) + (($tm[2]+$tm[3]+$tm[4]+$tm[5])*1);
                             break;
                         case 13:
@@ -137,7 +137,7 @@
                             $pewr = (($tm[4]+$tm[5])*2);
                             break;
                         case 15:
-                            // ΠΕ19-20
+                            // ΠΕ86
                             $pewr = (($tm[0]+$tm[1])*1) + (($tm[2]+$tm[3]+$tm[4]+$tm[5])*2);
                             break;
                         case 20:

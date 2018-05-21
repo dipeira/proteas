@@ -86,7 +86,7 @@
                     echo "<th>–≈70</th>";
                     echo "<th>–≈06</th>";
                     echo "<th>–≈11</th>";
-                    echo "<th>–≈16</th>";
+                    echo "<th>–≈79</th>";
                     echo "<th>‘Ï. œÎ.</th>";
                     echo "<th>Ã·Ë. œÎ.</th>";
                     //echo "<th>≈Í. T.E.</th>";
@@ -128,7 +128,7 @@
                         echo "<tr>";
                         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
                         echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
-                        echo "<td>".$ekp_ar['–≈70']."</td><td>".$ekp_ar['–≈06']."</td><td>".$ekp_ar['–≈11']."</td><td>".$ekp_ar['–≈16']."</td>";
+                        echo "<td>".$ekp_ar['–≈70']."</td><td>".$ekp_ar['–≈06']."</td><td>".$ekp_ar['–≈11']."</td><td>".$ekp_ar['–≈79']."</td>";
                         echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
                         echo "</tr>\n";
 
@@ -151,7 +151,7 @@
                         $sum70 += $ekp_ar['–≈70'];
                         $sum06 += $ekp_ar['–≈06'];
                         $sum11 += $ekp_ar['–≈11'];
-                        $sum16 += $ekp_ar['–≈16'];
+                        $sum16 += $ekp_ar['–≈79'];
                         
                         $i++;                        
                 }
@@ -162,7 +162,7 @@
                 echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
                 echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
                 echo "<tr><td></td><td></td><td></td><td>¡'</td><td>¬'</td><td>√'</td><td>ƒ'</td><td>≈'</td><td>”‘'</td><td>”˝Ì.</td>";
-                echo "<td>‘Ï.¡'</td><td>‘Ï.¬'</td><td>‘Ï.√'</td><td>‘Ï.ƒ'</td><td>‘Ï.≈'</td><td>‘Ï.”‘'</td><td>”˝Ì.‘Ï.</td><td>–≈70</td><td>–≈06</td><td>–≈11</td><td>–≈16</td><td>‘Ï. œÎ.</td><td>Ã·Ë. œÎ.</td>";//<td>≈Í. T.E.</td><td>≈Í. T.Y.</td>";
+                echo "<td>‘Ï.¡'</td><td>‘Ï.¬'</td><td>‘Ï.√'</td><td>‘Ï.ƒ'</td><td>‘Ï.≈'</td><td>‘Ï.”‘'</td><td>”˝Ì.‘Ï.</td><td>–≈70</td><td>–≈06</td><td>–≈11</td><td>–≈79</td><td>‘Ï. œÎ.</td><td>Ã·Ë. œÎ.</td>";//<td>≈Í. T.E.</td><td>≈Í. T.Y.</td>";
                 echo "</tr>";
                 echo "</tbody></table>";
 
