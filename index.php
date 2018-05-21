@@ -26,7 +26,8 @@
 	<LINK href="css/style.css" rel="stylesheet" type="text/css">
 	<meta http-equiv="content-type" content="text/html; charset=iso8859-7">
 	<title>Πρωτέας</title>
-	
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery.validate.js"></script>
 	<!--<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>-->

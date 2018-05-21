@@ -22,7 +22,7 @@
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Employee</title>
+    <title>Άδεια</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
@@ -81,7 +81,7 @@
   <body>
   <?php include('../etc/menu.php'); ?>
     <center>
-    	<h3>Άδεια</h3>
+    	<h2>Άδεια</h2>
       <?php
 		//if (!isset($_GET['emp']) && ($_GET['op']!="delete"))
                 $usrlvl = $_SESSION['userlevel'];
@@ -113,7 +113,7 @@
 if ($_GET['op']=="edit")
 	{
                 echo "<form id='updatefrm' name='update' action='update_adeia.php' method='POST'>";
-		echo "<table class=\"imagetable\" border='1'>";
+		echo "<table class=\"imagetable stable\" border='1'>";
 
 		echo "<tr>";
 		echo "<td>ID</td><td>$id</td>";
@@ -241,7 +241,7 @@ if ($_GET['op']=="edit")
     }
 	elseif ($_GET['op']=="view")
 	{
-		echo "<table class=\"imagetable\" border='1'>";
+		echo "<table class=\"imagetable stable\" border='1'>";
 		echo "<tr>";
 		echo "<td>ID</td><td>$id</td>";
 		echo "</tr>";

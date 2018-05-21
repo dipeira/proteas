@@ -1,5 +1,6 @@
 <?php
 	header('Content-type: text/html; charset=iso8859-7'); 
+	require_once"../config.php";
 ?>
 <!DOCTYPE html>
 <html>

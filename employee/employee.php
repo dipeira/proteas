@@ -4,7 +4,6 @@
   Require_once "../config.php";
   Require_once "../tools/functions.php";
   //Require_once "../tools/access.php";
-  error_reporting(E_ALL ^ E_NOTICE);
   //define("L_LANG", "el_GR"); Needs fixing
   require_once '../tools/calendar/tc_calendar.php';
   
@@ -34,122 +33,86 @@
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
 	<script type="text/javascript">
-	$(document).ready(function(){
-		$("#yphrfrm").validate({
-			debug: false,
-			rules: {
-			//	name: "required",
-			},
-			messages: {
-			//	name: "Please let us know who you are."
-			},
-			submitHandler: function(form) {
-				// do other stuff for a valid form
-				$.post('yphr.php', $("#yphrfrm").serialize(), function(data) {
-					$('#yphr_res').html(data);
-				});
-			}
-		});
-	});
-           
         $(document).ready(function(){
-		$("#wordfrm").validate({
-			debug: false,
-			rules: {
-			//	name: "required",
-			},
-			messages: {
-			//	name: "Please let us know who you are."
-			},
-			submitHandler: function(form) {
-				// do other stuff for a valid form
-                $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
-				    $('#word').html(data);
-			    });
-			}
-		});
-	});
-        
-        
-                $(document).ready(function(){
-		$("#updatefrm").validate({
-			debug: false,
-			rules: {
-				name: "required", surname: "required", afm: "required", am: "required", klados: "required", vathm: "required", mk: "required", org: "required"
-			},
-			messages: {
-				name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρη τιμή", am: "Παρακαλώ δώστε έγκυρη τιμή", 
-                                klados: "Παρακαλώ δώστε έγκυρη τιμή", vathm: "Παρακαλώ δώστε έγκυρη τιμή", mk: "Παρακαλώ δώστε έγκυρη τιμή", org: "Παρακαλώ δώστε έγκυρη τιμή",
-			},
-			submitHandler: function(form) {
-				// do other stuff for a valid form
-				$.post('update.php', $("#updatefrm").serialize(), function(data) {
-					$('#results').html(data);
-				});
-			}
-		});
-	});
-        
-        
+            $("#yphrfrm").validate({
+                debug: false,
+                rules: {
+                //	name: "required",
+                },
+                messages: {
+                //	name: "Please let us know who you are."
+                },
+                submitHandler: function(form) {
+                    // do other stuff for a valid form
+                    $.post('yphr.php', $("#yphrfrm").serialize(), function(data) {
+                        $('#yphr_res').html(data);
+                    });
+                }
+            });
+        });
+            
+            $(document).ready(function(){
+            $("#wordfrm").validate({
+                debug: false,
+                rules: {
+                //	name: "required",
+                },
+                messages: {
+                //	name: "Please let us know who you are."
+                },
+                submitHandler: function(form) {
+                    // do other stuff for a valid form
+                    $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
+                        $('#word').html(data);
+                    });
+                }
+            });
+        });
+            
+            
+                    $(document).ready(function(){
+            $("#updatefrm").validate({
+                debug: false,
+                rules: {
+                    name: "required", surname: "required", afm: "required", am: "required", klados: "required", vathm: "required", mk: "required", org: "required"
+                },
+                messages: {
+                    name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρη τιμή", am: "Παρακαλώ δώστε έγκυρη τιμή", 
+                                    klados: "Παρακαλώ δώστε έγκυρη τιμή", vathm: "Παρακαλώ δώστε έγκυρη τιμή", mk: "Παρακαλώ δώστε έγκυρη τιμή", org: "Παρακαλώ δώστε έγκυρη τιμή",
+                },
+                submitHandler: function(form) {
+                    // do other stuff for a valid form
+                    $.post('update.php', $("#updatefrm").serialize(), function(data) {
+                        $('#results').html(data);
+                    });
+                }
+            });
+        });
+                    
+        $().ready(function(){
+                $(".slidingDiv").hide();
+                $(".show_hide").show();
 
-//		$().ready(function() {
-//			$("#org").autocomplete("get_school.php", {
-//                                extraParams: {type: <?php echo $klados_type; ?>},
-//				width: 260,
-//				matchContains: true,
-//				selectFirst: false
-//			});
-//		});
-//		$().ready(function() {
-//			$("#yphr").autocomplete("get_school.php", {
-//				width: 260,
-//				matchContains: true,
-//				selectFirst: false
-//			});
-//		});
-                
-                
-//                $().ready(function() {
-//			$(".addRow").btnAddRow(function(row){
-//                            row.find(".yphrow").autocomplete("get_school.php", {
-//				width: 260,
-//				matchContains: true,
-//				selectFirst: false
-//                            })
-//                        });
-//                        $(".delRow").btnDelRow();
-//                            $(".yphrow").autocomplete("get_school.php", {
-//				width: 260,
-//				matchContains: true,
-//				selectFirst: false
-//                            });
-//                });
-                
-                $().ready(function(){
-                        $(".slidingDiv").hide();
-                        $(".show_hide").show();
- 
-                        $('.show_hide').click(function(){
-                            $(".slidingDiv").slideToggle();
-                        });
+                $('.show_hide').click(function(){
+                    $(".slidingDiv").slideToggle();
                 });
-                $().ready(function(){
-                        $(".slidingDiv2").hide();
-                        $(".show_hide2").show();
- 
-                        $('.show_hide2').click(function(){
-                            $(".slidingDiv2").slideToggle();
-                        });
-                });
-                $().ready(function(){
-                        $(".slidingDiv3").hide();
-                        $(".show_hide3").show();
- 
-                        $('.show_hide3').click(function(){
-                            $(".slidingDiv3").slideToggle();
-                        });
-                });
+        });
+        $().ready(function(){
+                $(".slidingDiv2").hide();
+                $(".show_hide2").show();
 
+                $('.show_hide2').click(function(){
+                    $(".slidingDiv2").slideToggle();
+                });
+        });
+        $().ready(function(){
+                $(".slidingDiv3").hide();
+                $(".show_hide3").show();
+
+                $('.show_hide3').click(function(){
+                    $(".slidingDiv3").slideToggle();
+                });
+        });
 </script>
 
   </head>
@@ -318,11 +281,8 @@ if ($_GET['op']=="edit")
 		echo "<form id='updatefrm' name='update' action='update.php' method='POST'>";
 		echo "<table class=\"imagetable\" border='1'>";
 		
-		echo "<tr>";
-		echo "<td>ID</td><td>$id</td>";
-		echo "</tr>";
-		echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
-		echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
+        echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
+        echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
 		echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' value=$patrwnymo /></td></tr>";
 		echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' value=$mhtrwnymo /></td></tr>";
 		echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
@@ -398,146 +358,125 @@ if ($_GET['op']=="edit")
 		//echo "<tr><td>Ανατρέχει</td><td><input type='text' name='anatr' size='3' value=$anatr />&nbsp;Eth<input type='text' name='ayears' size=1 value=$ymd[0] />Mhnes<input type='text' name='amonths' size=1 value=$ymd[1] />Meres<input type='text' name='adays' size=1 value=$ymd[2] /></td></tr>";
                 
 		// aney
-                echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
-                if ($aney)
-                    echo "<input type='checkbox' name='aney' checked>";
-                else
-                    echo "<input type='checkbox' name='aney'>";
-                echo "</tr>";
-                echo "<tr><td>Τρέχουσα άδεια<br>άνευ αποδοχών: (Από / Έως)</td><td>";
-                                        
-                $myCalendar = new tc_calendar("aney_apo", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($aney_apo)),date('m',strtotime($aney_apo)),date('Y',strtotime($aney_apo)));
-                $myCalendar->setPath("../tools/calendar/");
-                //$myCalendar->setYearInterval(1970, date("Y"));
-                $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
+        echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
+        if ($aney)
+            echo "<input type='checkbox' name='aney' checked>";
+        else
+            echo "<input type='checkbox' name='aney'>";
+        echo "</tr>";
+        echo "<tr><td>Τρέχουσα άδεια<br>άνευ αποδοχών: (Από / Έως)</td><td>";
+                                
+        $myCalendar = new tc_calendar("aney_apo", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($aney_apo)),date('m',strtotime($aney_apo)),date('Y',strtotime($aney_apo)));
+        $myCalendar->setPath("../tools/calendar/");
+        //$myCalendar->setYearInterval(1970, date("Y"));
+        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
 
-                $myCalendar = new tc_calendar("aney_ews", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($aney_ews)),date('m',strtotime($aney_ews)),date('Y',strtotime($aney_ews)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                
-                echo "</td></tr>";
-                $aney_ymd = days2ymd($aney_xr);
-                echo "<tr><td>Χρόνος παλαιών αδειών<br>άνευ αποδοχών (<small>χωρίς την παραπάνω</small>):</td><td><input type='text' name='aney_y' size='3' value=$aney_ymd[0]> έτη&nbsp;";
-                echo "<input type='text' name='aney_m' size='3' value=$aney_ymd[1]> μήνες&nbsp; <input type='text' name='aney_d' size='3' value=$aney_ymd[2]> ημέρες</td></tr>";
-                
-                // idiwtiko ergo 07-11-2014
-                echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
-                if ($idiwtiko)
-                    echo "<input type='checkbox' name='idiwtiko' checked>";
-                else
-                    echo "<input type='checkbox' name='idiwtiko'>";
-                echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
-                $myCalendar = new tc_calendar("idiwtiko_enarxi", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($idiwtiko_enarxi)),date('m',strtotime($idiwtiko_enarxi)),date('Y',strtotime($idiwtiko_enarxi)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                $myCalendar = new tc_calendar("idiwtiko_liksi", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($idiwtiko_liksi)),date('m',strtotime($idiwtiko_liksi)),date('Y',strtotime($idiwtiko_liksi)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                // idiwtiko sympl
-                echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
-                if ($idiwtiko_id)
-                    echo "<input type='checkbox' name='idiwtiko_id' checked>";
-                else
-                    echo "<input type='checkbox' name='idiwtiko_id'>";
-                echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
-                $myCalendar = new tc_calendar("idiwtiko_id_enarxi", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($idiwtiko_id_enarxi)),date('m',strtotime($idiwtiko_id_enarxi)),date('Y',strtotime($idiwtiko_id_enarxi)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                $myCalendar = new tc_calendar("idiwtiko_id_liksi", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($idiwtiko_id_liksi)),date('m',strtotime($idiwtiko_id_liksi)),date('Y',strtotime($idiwtiko_id_liksi)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                // idiwtiko end
-                // katoikon
-                echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
-                if ($katoikon)
-                    echo "<input type='checkbox' name='katoikon' checked>";
-                else
-                    echo "<input type='checkbox' name='katoikon'>";
-                echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
-                $myCalendar = new tc_calendar("katoikon_apo", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($katoikon_apo)),date('m',strtotime($katoikon_apo)),date('Y',strtotime($katoikon_apo)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                $myCalendar = new tc_calendar("katoikon_ews", true,false);
-                $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                $myCalendar->setDate(date('d',strtotime($katoikon_ews)),date('m',strtotime($katoikon_ews)),date('Y',strtotime($katoikon_ews)));
-                $myCalendar->setPath("../tools/calendar/");
-                $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-                $myCalendar->setAlignment("left", "bottom");
-                $myCalendar->writeScript();
-                echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
-                // katoikon_end
-                
-                echo "<tr><td>Σχόλια</td><td><input size=50 type='text' name='comments' value=$comments /></td></tr>";
+        $myCalendar = new tc_calendar("aney_ews", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($aney_ews)),date('m',strtotime($aney_ews)),date('Y',strtotime($aney_ews)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        
+        echo "</td></tr>";
+        $aney_ymd = days2ymd($aney_xr);
+        echo "<tr><td>Χρόνος παλαιών αδειών<br>άνευ αποδοχών (<small>χωρίς την παραπάνω</small>):</td><td><input type='text' name='aney_y' size='3' value=$aney_ymd[0]> έτη&nbsp;";
+        echo "<input type='text' name='aney_m' size='3' value=$aney_ymd[1]> μήνες&nbsp; <input type='text' name='aney_d' size='3' value=$aney_ymd[2]> ημέρες</td></tr>";
+        
+        // idiwtiko ergo 07-11-2014
+        echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
+        if ($idiwtiko)
+            echo "<input type='checkbox' name='idiwtiko' checked>";
+        else
+            echo "<input type='checkbox' name='idiwtiko'>";
+        echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
+        $myCalendar = new tc_calendar("idiwtiko_enarxi", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($idiwtiko_enarxi)),date('m',strtotime($idiwtiko_enarxi)),date('Y',strtotime($idiwtiko_enarxi)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        $myCalendar = new tc_calendar("idiwtiko_liksi", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($idiwtiko_liksi)),date('m',strtotime($idiwtiko_liksi)),date('Y',strtotime($idiwtiko_liksi)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        // idiwtiko sympl
+        echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
+        if ($idiwtiko_id)
+            echo "<input type='checkbox' name='idiwtiko_id' checked>";
+        else
+            echo "<input type='checkbox' name='idiwtiko_id'>";
+        echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
+        $myCalendar = new tc_calendar("idiwtiko_id_enarxi", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($idiwtiko_id_enarxi)),date('m',strtotime($idiwtiko_id_enarxi)),date('Y',strtotime($idiwtiko_id_enarxi)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        $myCalendar = new tc_calendar("idiwtiko_id_liksi", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($idiwtiko_id_liksi)),date('m',strtotime($idiwtiko_id_liksi)),date('Y',strtotime($idiwtiko_id_liksi)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        // idiwtiko end
+        // katoikon
+        echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
+        if ($katoikon)
+            echo "<input type='checkbox' name='katoikon' checked>";
+        else
+            echo "<input type='checkbox' name='katoikon'>";
+        echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
+        $myCalendar = new tc_calendar("katoikon_apo", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($katoikon_apo)),date('m',strtotime($katoikon_apo)),date('Y',strtotime($katoikon_apo)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        $myCalendar = new tc_calendar("katoikon_ews", true,false);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($katoikon_ews)),date('m',strtotime($katoikon_ews)),date('Y',strtotime($katoikon_ews)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
+        $myCalendar->setAlignment("left", "bottom");
+        $myCalendar->writeScript();
+        echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
+        // katoikon_end
+        
+        echo "<tr><td>Σχόλια</td><td><input size=50 type='text' name='comments' value=$comments /></td></tr>";
 		
 		//new 15-02-2012: implemented with jquery.autocomplete
 		echo "<div id=\"content\">";
 		echo "<form autocomplete=\"off\">";
 		echo "<tr><td>Σχολείο Οργανικής";
-                echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
-                echo "<td><input type=\"text\" name=\"org\" id=\"org\" value='$sx_organikhs' size='40' />";
-		
+        echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
+        echo "<td><input type=\"text\" name=\"org\" id=\"org\" value='$sx_organikhs' size='40' />";
 
-//                // check if sx_yphrethshs is serialized -> more than one school
-                //if ($multi)
-                //{
-                    $count = count($yphr_arr);
-                        for ($i=0; $i<$count; $i++)
-                        {
-                            echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-                            echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-                            echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
-                            echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
-                            echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-                            echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-                            echo "</tr>";
-                        }
-                //    }
-//                else
-//                {
-//                    echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-//                    //$sx_yphrethshs1 = getSchool ($sx_yphrethshs, $mysqlconnection);
-//                    echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-//                    echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$sx_yphrethshs' class=\"yphrow\" id=\"yphrow\" size=40/>";
-//                    echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
-//                    echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-//                    echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-//                    echo "</tr>";
-//                }
-                //echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-                //echo "</td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" value='$sx_yphrethshs' size='40'/>";
-                
+        $count = count($yphr_arr);
+        for ($i=0; $i<$count; $i++)
+        {
+            echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
+            echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+            echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
+            echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
+            echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
+            echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+            echo "</tr>";
+        }       
 		echo "</div>";
-                
-                thesiselectcmb($thesi);
-                
-                
+        
+        thesiselectcmb($thesi); 
 		
 		echo "	</table>";
 		echo "	<input type='hidden' name = 'id' value='$id'>";
@@ -552,13 +491,14 @@ if ($_GET['op']=="edit")
 		echo "</html>";
     }
 	elseif ($_GET['op']=="view")
-	{		
+	{	
+        echo "<br>";
 		echo "<table class=\"imagetable\" border='1'>";	
 		echo "<tr>";
-		//echo "<td colspan=2>ID</td><td colspan=2>$id</td>";
-                echo "<th colspan=4 align=center>Καρτέλα Υπαλλήλου</th>";
+		
+        echo "<th colspan=4 align=center>Καρτέλα Υπαλλήλου</th>";
 		echo "</tr>";
-		echo "<tr><td>Όνομα</td><td>$name</td><td>Επώνυμο</td><td>$surname</td></tr>";
+		echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
 		echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
                 
                 // 16-05-2013 tel,address,amka,idnum moved to employee table
@@ -874,7 +814,7 @@ if ($_GET['op']=="edit")
 	}
 	if ($_GET['op']=="delete")
 	{
-                $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 		// Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
 		$query1 = "INSERT INTO employee_deleted SELECT e.* FROM employee e WHERE id =".$_GET['id'];
 		$result1 = mysql_query($query1, $mysqlconnection);
@@ -893,16 +833,14 @@ if ($_GET['op']=="edit")
 	}
 	if ($_GET['op']=="add")
 	{
-                echo "<h3>Προσοχή: Παρακαλώ δώστε έγκυρα στοιχεία από τον προσωπικό φάκελο του εργαζομένου</h3><br>";
+        echo "<h3>Προσοχή: Παρακαλώ δώστε έγκυρα στοιχεία από τον προσωπικό φάκελο του εργαζομένου</h3><br>";
 		echo "<form id='updatefrm' action='update.php' method='POST'>";
 		echo "<table class=\"imagetable\" border='1'>";
                 
                 echo "<thead></thead><tbody>";
-		echo "<tr>";
-		//echo "<td>ID</td><td>$id</td>";
-		echo "</tr>";
-		echo "<tr><td>Όνομα</td><td><input type='text' name='name' /></td></tr>";
-		echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' /></td></tr>";
+		
+        echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' /></td></tr>";
+        echo "<tr><td>Όνομα</td><td><input type='text' name='name' /></td></tr>";
 		echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' /></td></tr>";
 		echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' /></td></tr>";
 		echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' /></td></tr>";
@@ -940,7 +878,7 @@ if ($_GET['op']=="edit")
 				
 		echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
 		metdidCombo(0);
-		echo "<tr><td>Προϋπηρεσία</td><td><input type='text' name='proyp' size='3' />&nbsp;Eth<input type='text' name='pyears' size=1 />Mhnes<input type='text' name='pmonths' size=1 />Meres<input type='text' name='pdays' size=1 /></td></tr>";
+		echo "<tr><td>Προϋπηρεσία</td><td><input type='text' name='proyp' size='3' />&nbsp;Έτη:<input type='text' name='pyears' size=1 />&nbsp;Μήνες:<input type='text' name='pmonths' size=1 />&nbsp;Ημέρες:<input type='text' name='pdays' size=1 /></td></tr>";
 		echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' /></td></tr>";
 		 
 		echo "<div id=\"content\">";
@@ -970,7 +908,7 @@ if ($_GET['op']=="edit")
 		echo "  <input type='hidden' name = 'status' value='1'>";
 		echo "	<input type='submit' value='Αποθήκευση'>";
                 echo "&nbsp;&nbsp;&nbsp;&nbsp;	<input type='submit' value='Αποθήκευση & εισαγωγή νέου' onClick=\"parent.location='employee.php?id=100&op=add'\">";
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 ?>
 <div id='results'></div>
