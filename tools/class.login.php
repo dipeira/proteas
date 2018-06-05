@@ -7,11 +7,10 @@ error_reporting(0);
 session_start();
 class logmein {
     //database setup
-       //MAKE SURE TO FILL IN DATABASE INFO
-    var $hostname_logon = 'localhost';      //Database server LOCATION
-    var $database_logon = 'dipedb';       //Database NAME
-    var $username_logon = 'root';       //Database USERNAME
-    var $password_logon = 'd1pe_db';       //Database PASSWORD
+    var $hostname_logon;      //Database server LOCATION
+    var $database_logon;       //Database NAME
+    var $username_logon;       //Database USERNAME
+    var $password_logon;       //Database PASSWORD
  
     //table fields
     var $user_table = 'logon';          //Users table name
@@ -24,6 +23,12 @@ class logmein {
  
     //connect to database
     function dbconnect(){
+        include '../config.php';
+        global $db_host, $db_name, $db_user, $db_password;
+        $this->hostname_logon = $db_host;
+        $this->database_logon = $db_name;
+        $this->username_logon = $db_user;
+        $this->password_logon = $db_password;
         $connections = mysql_connect($this->hostname_logon, $this->username_logon, $this->password_logon) or die ('Unabale to connect to the database');
         mysql_select_db($this->database_logon) or die ('Unable to select database!');
         return;

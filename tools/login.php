@@ -10,6 +10,7 @@
 <body>
 <?php
     header('Content-type: text/html; charset=iso8859-7'); 
+    require_once("../config.php");
     include("class.login.php");
     $log = new logmein();     //Instentiate the class
     $log->dbconnect();        //Connect to the database
@@ -17,7 +18,7 @@
     if ($_GET['logout'])
     {
         $log->logout();
-        header("Location: login_check.php");
+        header("Location: login.php");
     }
 
     if (!isset($_REQUEST['action']))
@@ -27,10 +28,8 @@
 
     if($_REQUEST['action'] == "login"){
         if($log->login("logon", $_REQUEST['username'], $_REQUEST['password']) == true)
-        {
-
-        
-        header("Location: ../index.php");
+        {        
+            header("Location: ../index.php");
         }
     else
         $log->loginform("login", "login-form", "");

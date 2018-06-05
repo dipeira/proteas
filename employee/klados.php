@@ -1,6 +1,14 @@
 <?php
 header('Content-type: text/html; charset=iso8859-7'); 
 include('../config.php');
+
+include("../tools/class.login.php");
+  $log = new logmein();
+  if($log->logincheck($_SESSION['loggedin']) == false){
+    header("Location: ../tools/login.php");
+  }
+
+
 define("PATHDRASTICTOOLS", "../tools/grid/");
 include(PATHDRASTICTOOLS."conf.php");
 include(PATHDRASTICTOOLS."drasticSrcMySQL.class.php");

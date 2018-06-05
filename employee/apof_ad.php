@@ -11,7 +11,7 @@
         include("../tools/class.login.php");
         $log = new logmein();
         if($log->logincheck($_SESSION['loggedin']) == false)
-            header("Location: ../tools/login_check.php");
+            header("Location: ../tools/login.php");
         $usrlvl = $_SESSION['userlevel'];
         
         echo "<html><head>";
@@ -310,7 +310,8 @@
             set_time_limit (1000);
             
             // SMTP password
-            $pass = file_get_contents('../conf.txt');
+            global $smtp_password;
+            $pass = $smtp_password;
             
             require_once '../tools/lib/swift_required.php';
             $transport = Swift_SmtpTransport::newInstance('mail.sch.gr', 25)

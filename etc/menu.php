@@ -59,7 +59,7 @@
 		  <a href="<?=SITE_ROOT?>/etc/about.php">Σχετικα</a>
 		 </li>
 		<li class="sub">
-			<a href='<?=SITE_ROOT?>/tools/login_check.php?logout=1'>Eξοδος</a>
+			<a href='<?=SITE_ROOT?>/tools/login.php?logout=1'>Eξοδος</a>
 		</ul>
   
 	</div>

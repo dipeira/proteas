@@ -3,7 +3,7 @@ header('Content-type: text/html; charset=iso8859-7');
 include("tools/class.login.php");
   $log = new logmein();
   if($log->logincheck($_SESSION['loggedin']) == false){
-    header("Location: ../tools/login_check.php");
+    header("Location: ../tools/login.php");
   }
 
  // check if super-user

@@ -1,16 +1,15 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
-        include("../tools/class.login.php");
-        $log = new logmein();
-        if($log->logincheck($_SESSION['loggedin']) == false){
-            header("Location: ../tools/login_check.php");
-        }
+    header('Content-type: text/html; charset=iso8859-7'); 
+    require_once"../config.php";
+    include("../tools/class.login.php");
+    $log = new logmein();
+    if($log->logincheck($_SESSION['loggedin']) == false){
+        header("Location: ../tools/login.php");
+    }
 
  // check if super-user
   if ($_SESSION['userlevel']<>0)
-     header("Location: ../index.php");
-  
-  include('../config.php');
+    header("Location: ../index.php");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -115,7 +114,7 @@
     <h1>Αρχείο Συμβάντων</h1>
 		<div id="container">
 <?php
-		require_once"../config.php";
+		
 		//require_once"functions.php";
 		
 		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
