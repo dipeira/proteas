@@ -153,7 +153,7 @@
             $surname = mysql_result($result, $i, "surname");
             $patrwnymo = mysql_result($result, $i, "patrwnymo");
             $klados = mysql_result($result, $i, "klados");
-            $ya = mysql_result($result, $i, "ya") . ' ' . mysql_result($result, $i, "ada");
+            $ya = mysql_result($result, $i, "ya");
             $ada = mysql_result($result, $i, "ada");
             $apof = mysql_result($result, $i, "apofasi");
             $hmpros = mysql_result($result, $i, "hm_anal");
@@ -179,36 +179,24 @@
             {
                 if (strlen($ptype) > 0)
                     $prefix = greek_to_greeklish($ptype).'_';
-                else 
-                    $prefix = '';
             }
             if (strlen($prefix) < 1){
                 $i++;
                 continue;
             }
             
-            if (strpos($praksi,'ÅÅÐ') !== false)
-                $eepebp = 1;
-            else if (strpos($praksi,'ÅÂÐ') !== false)
-                $eepebp = 2;
+            // ?????
+            // if (strpos($praksi,'ÅÅÐ') !== false)
+            //     $eepebp = 1;
+            // else if (strpos($praksi,'ÅÂÐ') !== false)
+            //     $eepebp = 2;
             
             if (strpos($prefix,'PEP') !== false)
                 $eepebp = 2;
             elseif (strpos($prefix,'YPOS') !== false) 
                 $eepebp = 1;
             
-            
-            if ($eepebp<1){
-                $i++;
-                continue;
-            }
             $cnt++;
-            // else {
-            //     if (strpos($praksi,'ÐÄÅ') !== false || strpos($praksi,'Ð.Ä.Å.') !== false)
-            //         $prefix = "PDE_";
-            //     else
-            //         $prefix = '';
-            // }
             
             // check (and subtract) Adeies
             $subtracted = subtract_adeies($id, $mysqlconnection);

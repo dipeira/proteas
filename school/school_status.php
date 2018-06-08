@@ -61,7 +61,7 @@
     <center>
         <h2>Καρτέλα σχολείου</h2>
     <?php
-    function disp_school ($sch,$conn)
+    function disp_school ($sch,$sxol_etos,$conn)
 	{
 		$query = "SELECT * from school where id=$sch";
 		$result = mysql_query($query, $conn);
@@ -318,7 +318,6 @@
         echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
         echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
         echo "<br><br>";
-        $sxol_etos = getParam('sxol_etos', $conn);
         // if dimotiko & leitoyrg >= 4
         if ($type == 1 && array_sum($tmimata_exp)>3){
             ektimhseis1617($sch, $conn, $sxol_etos, TRUE);
@@ -370,7 +369,10 @@
         if (!$sch && !$str){
             die('Το σχολείο δε βρέθηκε...');
         }
-        disp_school($sch, $mysqlconnection);
+        if (isset($_GET['sxoletos'])){
+            $sxol_etos = $_GET['sxoletos'];
+        }
+        disp_school($sch, $sxol_etos, $mysqlconnection);
         
         //Υπηρετούν με θητεία
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6)";

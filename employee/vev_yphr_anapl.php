@@ -38,26 +38,15 @@ foreach( $arr as $myarr)
                 $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_eaep_oloim.docx');
         */
         if ($myarr['eepebp'] > 0){
-            //if (strpos($myarr['prefix'],'PEP_') !== false)
-            //    $document = $PHPWord->loadTemplate('../word/tmpl_pep.docx');
-            //else
-                $document = $PHPWord->loadTemplate('../word/tmpl_eepebp.docx');
+            $document = $PHPWord->loadTemplate('../word/tmpl_eepebp.docx');
             $data = $myarr['eepebp'] == 1 ?
                 'Ειδικού Εκπαιδευτικού Προσωπικού ΕΕΠ' :
                 'Ειδικού Βοηθητικού Προσωπικού (ΕΒΠ)';
             $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
             $document->setValue('eepebp', $data);
         }
-        //if (strpos($myarr['prefix'],'PEP_') !== false)
-        //    $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_pep.docx');
         else
             $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_espa.docx');
-        /*
-        if ($myarr['ebp'])
-            $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_ebp.docx');
-        else
-            $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_espa.docx');
-        */
     }
         
     $data = $endofyear;
@@ -138,7 +127,7 @@ foreach( $arr as $myarr)
     else
     {
         if (strlen($metakinhsh)<2)
-            $top_metak = "και τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
+            $top_metak = "Τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
         else
             //$top_metak = ". Με την αριθμ. $apof τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
             $top_metak = ". ".$metakinhsh . $sxoleia;
