@@ -19,13 +19,12 @@
     });  
 	</script>
   </head>
-
+  <body>
 <?php
 	require_once"../config.php";
 	require_once"../tools/functions.php";
         session_start();
         
-        echo "<body>";
         include('../etc/menu.php');
         echo "<table class=\"imagetable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
@@ -198,29 +197,11 @@
                     echo "<thead><tr><th>Ονομασία</th>";
                     echo "<th>Οργ.</th>";
                     echo "<th>Λειτ.</th>";
-                    /*
-                    echo "<th>1 Νηπ.</th>";
-                    echo "<th>1 Προ.</th>";
-                    echo "<th>2 Νηπ.</th>";
-                    echo "<th>2 Προ.</th>";
-                    echo "<th>3 Νηπ.</th>";
-                    echo "<th>3 Προ.</th>";
-                    echo "<th>4 Νηπ.</th>";
-                    echo "<th>4 Προ.</th>";
-                     */
+                    
                     echo "<th>Τμήματα<br>Πρωινού</th>";
                     echo "<th>Νήπια<br>Πρωινού</th>";
                     echo "<th>Προνήπια<br>Πρωινού</th>";
-                    /*
-                    echo "<th>Ολ.1 Νηπ.</th>";
-                    echo "<th>Ολ.1 Προ.</th>";
-                    echo "<th>Ολ.2 Νηπ.</th>";
-                    echo "<th>Ολ.2 Προ.</th>";
-                    echo "<th>Ολ.3 Νηπ.</th>";
-                    echo "<th>Ολ.3 Προ.</th>";
-                    echo "<th>Ολ.4 Νηπ.</th>";
-                    echo "<th>Ολ.4 Προ.</th>";
-                     */
+                    
                     echo "<th>Τμήματα<br>Ολοήμερου</th>";
                     echo "<th>Νήπια<br>Ολοήμερου</th>";
                     echo "<th>Προνήπια<br>Ολοήμερου</th>";
@@ -233,8 +214,7 @@
                     echo "</tr></thead>\n<tbody>\n";
 
                 while ($i < $num)
-                {		
-                        
+                {		 
                     $sch = mysql_result($result, $i, "id");
                     $organikothta = mysql_result($result, $i, "organikothta");
                     $leitoyrg = mysql_result($result, $i, "leitoyrg");
@@ -245,26 +225,23 @@
                     $oloimero_nip_exp = explode(",",$oloimero_nip);
                     $nip = mysql_result($result, $i, "nip");
                     $nip_exp = explode(",",$nip);
-                    $klasiko_tm = $oloim_tm = 0;
+
+                    $klasiko_tm = $oloimero_tm = 0;
                     $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
                     $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
                     $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
                     $oloimero_tm += $oloimero_nip_exp[0]+$oloimero_nip_exp[1]>0 ? 1:0;
                     $oloimero_tm += $oloimero_nip_exp[2]+$oloimero_nip_exp[3]>0 ? 1:0;
                     $oloimero_tm += $oloimero_nip_exp[4]+$oloimero_nip_exp[5]>0 ? 1:0;
+
                     echo "<tr>";
                     echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td>";
-                    //echo "<td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td>";
-                    //echo "<td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$klasiko_exp[6]</td><td>$klasiko_exp[7]</td>";
+                    echo "<td>$klasiko_tm</td>";
+
                     $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];// + $klasiko_exp[6];
                     $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];// + $klasiko_exp[7];
-                    echo "<td>$klasiko_tm</td>";
                     echo "<td>$klasiko_nip</td><td>$klasiko_pro</td>";
                     
-                    //echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td>";
-                    //echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td>";
-                    //echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td>";
-                    //echo "<td>$oloimero_nip_exp[6]</td><td>$oloimero_nip_exp[7]</td>";
                     $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
                     $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
                     echo "<td>$oloimero_tm</td>";
@@ -285,41 +262,36 @@
                     echo "<td>$top60</td>";
                     echo "</tr>\n";
 
-                    // sums
-                    for ($c=0; $c<8; $c++)
-                    {
-                        $sumk[$c] += $klasiko_exp[$c];
-                        $sumol[$c] += $oloimero_nip_exp[$c];
-                    }
-                    for ($c=0; $c<3; $c++)
-                    {
-                        $sumnip[$c] += $nip_exp[$c];
-                    }
+                    $synolo_tm_klas += $klasiko_tm;
+                    $synolo_tm_olo += $oloimero_tm;
+                    $synolo_nip += $klasiko_nip;
+                    $synolo_pro += $klasiko_pro;
+                    $synolo_ol_nip += $oloimero_syn_nip;
+                    $synolo_ol_pro += $oloimero_syn_pro;
+                    $synolo_nipiag_kl += $nip_exp[0];
+                    $synolo_nipiag_olo += $nip_exp[1];
+                    $synolo_nipiag_te += $nip_exp[2];
+                    $synolo_nipiag += $nip_syn;
+                    $synolo_nipiag_top += $top60;
                    
                     $i++;
                 }
                 
-                $synolo_nip = $sumk[0]+$sumk[2]+$sumk[4]+$sumk[6];
-                $synolo_pro = $sumk[1]+$sumk[3]+$sumk[5]+$sumk[7];
-                $synolo_ol_nip = $sumol[0]+$sumol[2]+$sumol[4]+$sumol[6];
-                $synolo_ol_pro = $sumol[1]+$sumol[3]+$sumol[5]+$sumol[7];
-                $synolo_nipiag = array_sum($sumnip);
-                
                 echo "<tr>";
                 echo "<td>Σύνολα</td><td></td><td></td>";
-                //for ($c=0; $c<8; $c++)
-                //      echo "<td>$sumk[$c]</td>";
-                echo "<td>$sumk[0]</td><td>$sumk[1]</td>";
+                echo "<td>$synolo_tm_klas</td>";
                 echo "<td>$synolo_nip</td>";
+                echo "<td>$synolo_tm_olo</td>";
                 echo "<td>$synolo_pro</td>";
-                //for ($c=0; $c<8; $c++)
-                //        echo "<td>$sumol[$c]</td>";
-                echo "<td>$sumol[0]</td><td>$sumol[1]</td>";
+
                 echo "<td>$synolo_ol_nip</td>";
                 echo "<td>$synolo_ol_pro</td>";
-                for ($c=0; $c<3; $c++)
-                        echo "<td>$sumnip[$c]</td>";
+                
+                echo "<td>$synolo_nipiag_kl</td>";
+                echo "<td>$synolo_nipiag_olo</td>";
+                echo "<td>$synolo_nipiag_te</td>";
                 echo "<td>$synolo_nipiag</td>";
+                echo "<td>$synolo_nipiag_top</td>";
                 echo "</tr>";
                 echo "</tbody></table>";
 
@@ -333,12 +305,8 @@
                 echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
                 echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
                 echo "</form>";
-         
         }
    }
-?>
-                       
-  
-		</body>
-		</html>
-                
+?>  
+</body>
+</html>

@@ -1409,7 +1409,7 @@
         // oligothesia
         if ($leit < 4) 
         {
-        $reqhrs['70'] = $leit * 25;
+            $reqhrs['70'] = $leit * 25;
         }
         else {
         // Απαιτούμενες ώρες
@@ -1569,5 +1569,90 @@
             $subtract += ( $anar_days - 15 );
         //}
         return floor($subtract);
+    }
+
+    function organikes_per_klados($mysqlconnection){
+        $query = "SELECT COUNT( * ) as total, k.perigrafh, k.onoma FROM employee e 
+            JOIN klados k 
+            ON k.id = e.klados 
+            WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi NOT IN (4,5)
+            GROUP BY klados";
+        $result_mon = mysql_query($query, $mysqlconnection);
+        $ret = [];
+        while($row = mysql_fetch_array($result_mon, MYSQL_BOTH)){
+            $ret[$row['perigrafh']] = $row['total'];
+        }
+        return $ret;
+    }
+
+    function tmimata_nipiagwgeiwn($mysqlconnection){
+        $query = "SELECT * from school WHERE type = 2 AND type2=0 AND anenergo=0";
+        $result = mysql_query($query, $mysqlconnection);
+        $num = mysql_num_rows($result);
+        $i=0;
+
+        while ($i < $num)
+        {		 
+            $sch = mysql_result($result, $i, "id");
+            //$organikothta = mysql_result($result, $i, "organikothta");
+            //$leitoyrg = mysql_result($result, $i, "leitoyrg");
+            
+            $klasiko = mysql_result($result, $i, "klasiko");
+            $klasiko_exp = explode(",",$klasiko);
+
+            $oloimero_nip = mysql_result($result, $i, "oloimero_nip");
+            $oloimero_nip_exp = explode(",",$oloimero_nip);
+            
+            $klasiko_tm = $oloimero_tm = 0;
+            $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
+            $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
+            $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
+
+            $oloimero_tm += $oloimero_nip_exp[0]+$oloimero_nip_exp[1]>0 ? 1:0;
+            $oloimero_tm += $oloimero_nip_exp[2]+$oloimero_nip_exp[3]>0 ? 1:0;
+            $oloimero_tm += $oloimero_nip_exp[4]+$oloimero_nip_exp[5]>0 ? 1:0;
+
+            $synolo_tm_klas += $klasiko_tm;
+            $synolo_tm_olo += $oloimero_tm;
+            
+            $i++;
+        }
+        return ['klasiko' => $synolo_tm_klas, 'oloimero' => $synolo_tm_olo];
+    }
+
+    function dntes_ana_klado($mysqlconnection, $tetr = false){
+        if ($tetr){
+            $query = "SELECT k.perigrafh as eidikothta, count(*) as total
+            FROM `employee` e 
+            JOIN klados k ON e.klados = k.id 
+            JOIN school s ON e.sx_yphrethshs = s.id 
+            WHERE thesi = 2 AND leitoyrg > 3 AND klados != 1 
+            group by klados";
+        }
+        else {
+            $query = "SELECT k.perigrafh as eidikothta, count(*) as total
+                FROM `employee` e 
+                JOIN klados k ON e.klados = k.id 
+                WHERE thesi = 2 group by klados";
+        }
+        $res = mysql_query($query, $mysqlconnection);
+        $ret = [];
+        while($row = mysql_fetch_array($res, MYSQL_BOTH)){
+            $ret[$row['eidikothta']] = $row['total'];
+        }
+        return $ret;
+    }
+    function apospasmenoi_ekswteriko($mysqlconnection){
+        $query = "SELECT k.perigrafh as eidikothta, count(*) as total
+            FROM `employee` e 
+            JOIN klados k ON e.klados = k.id 
+            WHERE e.sx_yphrethshs=399 group by klados";
+        
+        $res = mysql_query($query, $mysqlconnection);
+        $ret = [];
+        while($row = mysql_fetch_array($res, MYSQL_BOTH)){
+            $ret[$row['eidikothta']] = $row['total'];
+        }
+        return $ret;
     }
 ?>
