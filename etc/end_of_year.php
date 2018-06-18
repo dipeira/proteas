@@ -126,9 +126,9 @@
         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         // kratikoy or ESPA 
         if ($kratikoy)
-            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (2)";
+            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='สัมิ'";
         else
-            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.metakinhsh,e.afm from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (3,4,5,6)";
+            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='สัมิ'";
 
         $result = mysql_query($query, $mysqlconnection);
         $num=mysql_num_rows($result);
@@ -161,6 +161,12 @@
             $last_afm = substr (mysql_result($result, $i, "afm"), -3);
             $ptype = mysql_result($result, $i, "type");
             $praksi = mysql_result($result, $i, "praksi");
+            $typos = mysql_result($result, $i, "typos");
+
+            if ($typos == 1)
+                $meiwmeno = true;
+            else 
+                $meiwmeno = false;
 
             // get yphrethseis
             unset($sx_yphrethshs);
@@ -179,10 +185,6 @@
             {
                 if (strlen($ptype) > 0)
                     $prefix = greek_to_greeklish($ptype).'_';
-            }
-            if (strlen($prefix) < 1){
-                $i++;
-                continue;
             }
             
             // ?????
@@ -214,7 +216,7 @@
                 'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
                 'ya'=>$ya,'ada'=>$ada,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,
                 'last_afm'=>$last_afm,'prefix'=>$prefix,'eepebp'=>$eepebp,
-                'subtracted'=>$subtracted, 'anarrwtikes'=>$anarrwtikes
+                'subtracted'=>$subtracted, 'anarrwtikes'=>$anarrwtikes, 'meiwmeno'=>$meiwmeno
             );
 
             $submit_array[] = $emp_arr;

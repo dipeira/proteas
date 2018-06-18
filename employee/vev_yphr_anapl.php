@@ -23,8 +23,9 @@ $arr = unserialize(html_entity_decode($_POST['emp_arr']));
 
 $i = 1;
 
-foreach( $arr as $myarr)
+foreach($arr as $myarr)
 {
+    $hour_sum = 0;
     $PHPWord = new PHPWord();
     // kratikoy
     if ($_POST['kratikoy'])
@@ -48,7 +49,7 @@ foreach( $arr as $myarr)
         else
             $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_espa.docx');
     }
-        
+
     $data = $endofyear;
     $document->setValue('endofyear', $data);
 	$data = $endofyear2;
@@ -57,6 +58,11 @@ foreach( $arr as $myarr)
     $data = $protapol; 
     $document->setValue('protapol', $data);
     
+    $data = $myarr['meiwmeno'] ? 'μειωμένο' : 'πλήρες';
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('wrario', $data);
+
+
     $data = $myarr['surname']." ".$myarr['name'];
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     //$fullname = $data;
@@ -107,6 +113,10 @@ foreach( $arr as $myarr)
                 $sxoleia .= " ($v ώρες), ";
             else
                 $sxoleia .= '';
+            // if meiwmeno, compute total hours
+            if ($k === 'hours' && $myarr['meiwmeno']){
+                $hour_sum += $v;
+            }
         }
     }
     $sxoleia = substr($sxoleia, 0, -2);
@@ -119,7 +129,7 @@ foreach( $arr as $myarr)
     if ($myarr['ebp'])
     {
         if (strlen($metakinhsh)<2)
-            $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia.";
+            $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia";
         else
             //$top_metak = ". Τοποθετήθηκε με την ταυτάριθμη απόφαση στο ".$metakinhsh . $sxoleia;
             $top_metak = ". ".$metakinhsh . $sxoleia;
@@ -127,7 +137,7 @@ foreach( $arr as $myarr)
     else
     {
         if (strlen($metakinhsh)<2)
-            $top_metak = "Τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia.";
+            $top_metak = "Τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia";
         else
             //$top_metak = ". Με την αριθμ. $apof τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
             $top_metak = ". ".$metakinhsh . $sxoleia;
@@ -149,6 +159,10 @@ foreach( $arr as $myarr)
     $days = $apol - $pros + 1;
     // subtract subtracted
     $days -= $myarr['subtracted'];
+    // if meiwmeno, compute yphresia
+    if ($myarr['meiwmeno']){
+        $days = compute_meiwmeno($days, $hour_sum, $mysqlconnection);
+    }
     $ymd = days2ymd($days);
     $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");

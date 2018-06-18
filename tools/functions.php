@@ -62,7 +62,7 @@
 		//if (!$result) 
 		//	die('Could not query:' . mysql_error());
                 //else
-                    return mysql_result($result, 0);	
+        return mysql_result($result, 0);	
 	}
 	
 	function getSchoolID ($name,$conn)
@@ -198,7 +198,6 @@
             $prev_kan += $pr_after;
             $prev_rem -= $pr_after;
             
-
             //echo "<small>Υπολ.$cur_yr: $rem, Yπολ.$prev_yr: $prev_rem / Κανονικές $cur_yr: $cur_kan, Κανονικές $prev_yr: $prev_kan</small><br>";
             $ret[2] = $prev_yr;
             $ret[3] = $prev_rem - $cur_kan;
@@ -207,7 +206,6 @@
             
             $ret[0] = $cur_yr;
             $ret[1] = $rem + $prev_rem;
-            
         }
         // if ekpaideytikoi
         else
@@ -227,14 +225,13 @@
 	
 	function kladosCombo ($klados,$conn)
 	{
-		//$query = "SELECT * from klados";
-                $query = "SELECT * from klados ORDER BY perigrafh";
+        $query = "SELECT * from klados ORDER BY perigrafh";
 		$result = mysql_query($query, $conn);
 		if (!$result) 
 			die('Could not query:' . mysql_error());
 		$num=mysql_num_rows($result);
 		echo "<select name=\"klados\" id=\"klados\">";
-                echo "<option value='' selected>(Επιλογή:)</option>";
+        echo "<option value='' selected>(Επιλογή:)</option>";
 		while ($i < $num) 
 		{
 			$id=mysql_result($result, $i, "id");
@@ -250,7 +247,6 @@
 	function kladosCmb ($conn)
 	{
 		$query = "SELECT * from klados ORDER BY perigrafh";
-                //$query = "SELECT * from klados";
 		$result = mysql_query($query, $conn);
 		if (!$result) 
 			die('Could not query:' . mysql_error());
@@ -299,11 +295,11 @@
 		{
 			$id=mysql_result($result, $i, "id");
 			$type=mysql_result($result, $i, "type");
-                        if ($type1 == $type)
-                            echo "<option value=\"$id\" selected>".$type."</option>";
-                        else
-                            echo "<option value=\"".$id."\">".$type."</option>";
-		$i++;
+            if ($type1 == $type)
+                echo "<option value=\"$id\" selected>".$type."</option>";
+            else
+                echo "<option value=\"".$id."\">".$type."</option>";
+		    $i++;
 		}
 		echo "</select>";
 	}
@@ -338,11 +334,11 @@
 		echo "<select name=\"taksi\">";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		echo "<option value=\"1\">Α</option>";
-                echo "<option value=\"2\">Β</option>";
-                echo "<option value=\"3\">Γ</option>";
-                echo "<option value=\"4\">Δ</option>";
-                echo "<option value=\"5\">Ε</option>";
-                echo "<option value=\"6\">ΣΤ</option>";
+        echo "<option value=\"2\">Β</option>";
+        echo "<option value=\"3\">Γ</option>";
+        echo "<option value=\"4\">Δ</option>";
+        echo "<option value=\"5\">Ε</option>";
+        echo "<option value=\"6\">ΣΤ</option>";
 		echo "</select>";
 	}
 	function taksiCmb1 ($t)
@@ -418,30 +414,30 @@
     function thesicmb($thesi)
     {
         switch ($thesi)
-            {
-                case 0:
-                    $th = "Εκπαιδευτικός";
-                    break;
-                case 1:
-                    $th = "Υποδιευθυντής";
-                    break;
-                case 2:
-                    $th = "Διευθυντής/Προϊστάμενος";
-                    break;
-                case 3:
-                    $th = "Τμήμα Ένταξης";
-                    break;
-                case 4:
-                    $th = "Διοικητικός";
-                    break;
-                case 5:
-                    $th = "Ιδιωτικός";
-                    break;
-                case 6:
-                    $th = "Δ/ντής-Πρ/νος Ιδιωτικού Σχ.";
-                    break;
-            }
-            return $th;
+        {
+            case 0:
+                $th = "Εκπαιδευτικός";
+                break;
+            case 1:
+                $th = "Υποδιευθυντής";
+                break;
+            case 2:
+                $th = "Διευθυντής/Προϊστάμενος";
+                break;
+            case 3:
+                $th = "Τμήμα Ένταξης";
+                break;
+            case 4:
+                $th = "Διοικητικός";
+                break;
+            case 5:
+                $th = "Ιδιωτικός";
+                break;
+            case 6:
+                $th = "Δ/ντής-Πρ/νος Ιδιωτικού Σχ.";
+                break;
+        }
+        return $th;
     }
     function thesiselectcmb($thesi)
     {
@@ -517,7 +513,7 @@
 		}
 		echo "</select>";
 	}
-        function get_type ($typeid,$conn)
+    function get_type ($typeid,$conn)
 	{
 		$query = "SELECT * from ektaktoi_types WHERE id=$typeid";
 		$result = mysql_query($query, $conn);
@@ -526,20 +522,20 @@
 		$typos=mysql_result($result, $i, "type");
 		return $typos;
 	}
-        function getDimos ($id,$conn)
+    function getDimos ($id,$conn)
 	{
 		$query = "SELECT name from dimos where id=".$id;
 		$result = mysql_query($query, $conn);
 		//if (!$result) 
 		//	die('Could not query:' . mysql_error());
-                //else
-                $dimos = mysql_result($result, 0);
-                if (!$dimos)
-                    return "¶γνωστος";
-                else
-                    return $dimos;
+        //else
+        $dimos = mysql_result($result, 0);
+        if (!$dimos)
+            return "¶γνωστος";
+        else
+            return $dimos;
 	}
-        function katastCmb ($v)
+    function katastCmb ($v)
 	{
 		echo "<select name=\"status\">";
 		if ($v==1)
@@ -587,7 +583,7 @@
 		$ret[0] = floor ($input/360);
 		$ret[1] = floor (($input%360)/30);
 		$ret[2] = floor (($input%360)%30);
-                return $ret;
+        return $ret;
     }
 
 	function days2date ($input)
@@ -595,31 +591,31 @@
 		$ret[0] = floor ($input/360);
 		$ret[1] = floor (($input%360)/30);
 		$ret[2] = floor (($input%360)%30);
-            if ($ret[2]==0 && $ret[1]==0)
+        if ($ret[2]==0 && $ret[1]==0)
+        {
+            $ret[2]=30;
+            $ret[1]=12;
+            $ret[0]-=1;
+        }
+        else
+        {
+            if ($ret[2]==0)
             {
                 $ret[2]=30;
-                $ret[1]=12;
-                $ret[0]-=1;
-            }
-            else
-            {
-                if ($ret[2]==0)
-                {
-                    $ret[2]=30;
-                    if ($ret[1]<=1)
-                    {
-                        $ret[1]=12;
-                        $ret[0]-=1;
-                    }
-                    else
-                        $ret[1]-=1;
-                }
-                if ($ret[1]==0)
+                if ($ret[1]<=1)
                 {
                     $ret[1]=12;
                     $ret[0]-=1;
                 }
+                else
+                    $ret[1]-=1;
             }
+            if ($ret[1]==0)
+            {
+                $ret[1]=12;
+                $ret[0]-=1;
+            }
+        }
 		return $ret;
 	}
 	// vathmos -> ret[0]: vathmos, ret[1]: days (pleonazwn sto vathmo)
@@ -724,7 +720,7 @@
 						$mk = 6;
 						break;
 				}
-                                break;
+                break;
 		}
 		return $mk;
                 
@@ -750,7 +746,7 @@
 						$mk = 2;
 						break;
 				}
-                                break;
+                break;
 			case ("Δ"):  // Δ'
 				switch ($days)
 				{
@@ -767,7 +763,7 @@
 						$mk = 3;
 						break;
 				}
-                                break;
+                break;
 			case ("Γ"):	// Γ'
 				switch ($days)
 				{
@@ -787,7 +783,7 @@
 						$mk = 4;
 						break;
 				}
-                                break;
+                break;
 
                                 
 			case ("Β"):	// Β'
@@ -815,7 +811,7 @@
 						$mk = 6;
 						break;
 				}
-                                break;
+                break;
 		}
 		return $mk;        
 	}
@@ -834,66 +830,66 @@
 				{
 					case ($days>=1080 && $days<1800):
 						$mk[0] = 0;
-                                                $mk[1] = $days - 1080;
+                        $mk[1] = $days - 1080;
 						break;
 					case ($days>=1800 && $days<2520):
 						$mk[0] = 1;
-                                                $mk[1] = $days - 1800;
+                        $mk[1] = $days - 1800;
 						break;
 					case ($days>=2520):
 						$mk[0] = 2;
-                                                $mk[1] = $days - 2520;
+                        $mk[1] = $days - 2520;
 						break;
 				}
-                                break;
+                break;
                         
 			case ("Δ"):  // Δ'
 				switch ($days)
 				{
 					case ($days>=3240 && $days<3960):
 						$mk[0] = 0;
-                                                $mk[1] = $days - 3240;
+                        $mk[1] = $days - 3240;
 						break;
 					case ($days>=3960 && $days<4680):
 						$mk[0] = 1;
-                                                $mk[1] = $days - 3960;
+                        $mk[1] = $days - 3960;
 						break;
 					case ($days>=4680 && $days<5400):
 						$mk[0] = 2;
-                                                $mk[1] = $days - 4680;
+                        $mk[1] = $days - 4680;
 						break;
-                                        case ($days>=5400):
+                    case ($days>=5400):
 						$mk[0] = 3;
-                                                $mk[1] = $days - 5400;
+                        $mk[1] = $days - 5400;
 						break;
 				}
-                                break;
+                break;
                         
 			case ("Γ"):	// Γ'
 				switch ($days)
 				{
 					case ($days>=5400 && $days<6120):
 						$mk[0] = 0;
-                                                $mk[1] = $days - 5400;
+                        $mk[1] = $days - 5400;
 						break;
 					case ($days>=6120 && $days<6840):
 						$mk[0] = 1;
-                                                $mk[1] = $days - 6120;
+                        $mk[1] = $days - 6120;
 						break;
-                                        case ($days>=6840 && $days<7560):
+                    case ($days>=6840 && $days<7560):
 						$mk[0] = 2;
-                                                $mk[1] = $days - 6840;
+                        $mk[1] = $days - 6840;
 						break;
 					case ($days>=7560 && $days<8280):
 						$mk[0] = 3;
-                                                $mk[1] = $days - 7560;
+                        $mk[1] = $days - 7560;
 						break;
-                                        case ($days>=8280):
+                    case ($days>=8280):
 						$mk[0] = 4;
-                                                $mk[1] = $days - 8280;
+                        $mk[1] = $days - 8280;
 						break;
 				}
-                                break;
+                break;
                         
 			case ("Β"):	// Β'
 				switch ($days)
@@ -936,115 +932,6 @@
 		return $mk;
     }
     
-    function mk_plus_new($days,$vathmos)
-	{
-		switch ($vathmos)
-		{
-			case ("ΣΤ"):	// ΣΤ'
-				$mk[0] = 0;
-				break;
-			case ("Ε"):	// Ε'
-				switch ($days)
-				{
-					case ($days>=1080 && $days<=1800):
-						$mk[0] = 0;
-                                                $mk[1] = $days - 1080;
-						break;
-					case ($days>1800 && $days<=2520):
-						$mk[0] = 1;
-                                                $mk[1] = $days - 1800;
-						break;
-					case ($days>2520):
-						$mk[0] = 2;
-                                                $mk[1] = $days - 2520;
-						break;
-				}
-                                break;
-                        
-			case ("Δ"):  // Δ'
-				switch ($days)
-				{
-					case ($days>=3240 && $days<=3960):
-						$mk[0] = 0;
-                                                $mk[1] = $days - 3240;
-						break;
-					case ($days>3960 && $days<=4680):
-						$mk[0] = 1;
-                                                $mk[1] = $days - 3960;
-						break;
-					case ($days>4680 && $days<=5400):
-						$mk[0] = 2;
-                                                $mk[1] = $days - 4680;
-						break;
-                                        case ($days>5400):
-						$mk[0] = 3;
-                                                $mk[1] = $days - 5400;
-						break;
-				}
-                                break;
-                        
-			case ("Γ"):	// Γ'
-				switch ($days)
-				{
-					case ($days>=5400 && $days<=6120):
-						$mk[0] = 0;
-                                                $mk[1] = $days - 5400;
-						break;
-					case ($days>6120 && $days<=6840):
-						$mk[0] = 1;
-                                                $mk[1] = $days - 6120;
-						break;
-                                        case ($days>6840 && $days<=7560):
-						$mk[0] = 2;
-                                                $mk[1] = $days - 6840;
-						break;
-					case ($days>7560):
-						$mk[0] = "3";
-                                                $mk[1] = $days - 7560;
-						break;
-				}
-                                break;
-                        
-			case ("Β"):	// Β'
-				switch ($days)
-				{
-					case ($days>=7560 && $days<=8640):
-						$mk[0] = "0";
-                                                $mk[1] = $days - 7560;
-						break;
-					case ($days>8640 && $days<=9720):
-						$mk[0] = 1;
-                                                $mk[1] = $days - 8640;
-						break;
-					case ($days>9720 && $days<=10800):
-						$mk[0] = 2;
-                                                $mk[1] = $days - 9720;
-						break;
-					case ($days>10800 && $days<=11880):
-						$mk[0] = 3;
-                                                $mk[1] = $days - 10800;
-						break;
-					case ($days>11880 && $days<=12960):
-						$mk[0] = 4;
-                                                $mk[1] = $days - 11880;
-						break;
-					case ($days>12960 && $days<=14040):
-						$mk[0] = 5;
-                                                $mk[1] = $days - 12960;
-						break;
-					case ($days>14040):
-						$mk[0] = 6;
-                                                $mk[1] = $days - 14040;
-						break;
-				}
-                                break;
-                         case ("Α"):
-                             $mk[0]=0;
-                             $mk[1]=0;
-                             break;
-		}
-		return $mk;
-	}
     // mk16: Function for N.4354/2015
     // returns new MK
     function mk16($days) {
@@ -1135,9 +1022,9 @@
 		if (!$result) 
 			die('Could not query:' . mysql_error());
 		$num=mysql_num_rows($result);
-                echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" >" : "<select id=\"$tbl\" name=\"$tbl\" >";
+        echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" >" : "<select id=\"$tbl\" name=\"$tbl\" >";
 		//echo "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
-                echo "<option value=\"\"> </option>";
+        echo "<option value=\"\"> </option>";
 		while ($i < $num) 
 		{
 			$id=mysql_result($result, $i, "id");
@@ -1146,7 +1033,7 @@
 				echo "<option value=\"".$id."\" selected=\"selected\">".$name."</option>";
 			else
 				echo "<option value=\"".$id."\">".$name."</option>";
-		$i++;
+		    $i++;
 		}
 		echo "</select>";
 	}
@@ -1155,7 +1042,7 @@
         $query = "SELECT * from $tbl WHERE id=$id";
         $result = mysql_query($query, $conn);
         if (!$result) 
-    die('Could not query:' . mysql_error());
+            die('Could not query:' . mysql_error());
         $name=mysql_result($result, 0, "name");
         return $name;
     }
@@ -1164,7 +1051,7 @@
         $query = "SELECT * from $tbl WHERE name=$name";
         $result = mysql_query($query, $conn);
         if (!$result) 
-    die('Could not query:' . mysql_error());
+            die('Could not query:' . mysql_error());
         $id=mysql_result($result, 0, "id");
         return $id;
     }
@@ -1174,7 +1061,7 @@
         $query = "SELECT value from params WHERE name='$name'";
         $result = mysql_query($query, $conn);
         if (!$result) 
-    die('Could not query:' . mysql_error());
+            die('Could not query:' . mysql_error());
         return mysql_result($result, 0, "value");
     }
     function setParam($name,$value,$conn)
@@ -1182,7 +1069,7 @@
         $query = "UPDATE params SET value='$value' WHERE name='$name'";
         $result = mysql_query($query, $conn);
         if (!$result) 
-    die('Could not query:' . mysql_error());
+            die('Could not query:' . mysql_error());
     }
     // creates a new record in yphrethsh table for each employee (if there isn't any) - used when changing sxoliko etos
     // disp: 0 - none, 1 - basic, 2 - extensive
@@ -1533,15 +1420,21 @@
         while ($arr_ad = mysql_fetch_array($res_ad)) {
             // check adeia type
             switch ($arr_ad['type']) {
+                /*
+                // kyhshs
                 case 6:
                     $has_kyhsh = 1;
                     break;
+                // loxeias
                 case 5:
                     $has_loxeia = 1;
                     break;
+                */
+                // anarrwtikh
                 case 1:
                     $anar_days += $arr_ad['days'];
                     break;
+                // anarrwtikh (ygeionomiko)
                 case 3:
                     $anar_days += $arr_ad['days'];
                     break;
@@ -1654,5 +1547,12 @@
             $ret[$row['eidikothta']] = $row['total'];
         }
         return $ret;
+    }
+    function compute_meiwmeno($days, $days_per_week = 14, $mysqlconnection){
+        $ypoxr = getParam('yp_wr', $mysqlconnection);
+        if (!isset($ypoxr))
+            $ypoxr = 24;
+        return ($days * ($days_per_week/$ypoxr));
+        
     }
 ?>

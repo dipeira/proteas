@@ -152,7 +152,6 @@
                 else
                     $vath[0] = $vathm;
 		$mk1 = mk_plus($days,$vath[0]);
-                //$mk1 = mk_plus_new($days,$vath[0]);
 				
 		if (($type==1 || $type==2) && (strcmp($vathm,$vath[0])!=0))
 		{
