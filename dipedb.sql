@@ -162,19 +162,6 @@ CREATE TABLE IF NOT EXISTS `apofaseis` (
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `changelog`
---
-
-CREATE TABLE IF NOT EXISTS `changelog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ch_date` date NOT NULL,
-  `change_txt` varchar(400) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=13 ;
-
--- --------------------------------------------------------
-
---
 -- Δομή πίνακα για τον πίνακα `dimos`
 --
 
@@ -241,101 +228,6 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `ektaktoi_201314`
---
-
-CREATE TABLE IF NOT EXISTS `ektaktoi_201314` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(20) CHARACTER SET greek NOT NULL,
-  `surname` varchar(30) CHARACTER SET greek NOT NULL,
-  `patrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
-  `mhtrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
-  `klados` int(11) NOT NULL,
-  `sx_yphrethshs` varchar(30) CHARACTER SET greek NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
-  `vathm` varchar(4) CHARACTER SET greek NOT NULL,
-  `hm_vathm` date NOT NULL,
-  `mk` tinyint(2) NOT NULL,
-  `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) CHARACTER SET greek NOT NULL,
-  `hm_anal` date NOT NULL,
-  `ya` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Υπουργική Απόφαση',
-  `apofasi` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Απόφαση Δ/ντή',
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `comments` longtext CHARACTER SET greek NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) CHARACTER SET greek NOT NULL,
-  `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης (1 ωρομ, 2 αναπλ, 3 αναπλ ΕΣΠΑ, 4 ΕΕΠ, 5 ΕΒΠ)',
-  `stathero` varchar(30) CHARACTER SET greek NOT NULL,
-  `kinhto` varchar(30) CHARACTER SET greek NOT NULL,
-  `metakinhsh` text CHARACTER SET greek NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
-  `praxi` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `ektaktoi_bkp`
---
-
-CREATE TABLE IF NOT EXISTS `ektaktoi_bkp` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(20) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `patrwnymo` varchar(30) NOT NULL,
-  `mhtrwnymo` varchar(30) NOT NULL,
-  `klados` int(11) NOT NULL,
-  `sx_yphrethshs` varchar(30) NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
-  `vathm` varchar(4) NOT NULL,
-  `hm_vathm` date NOT NULL,
-  `mk` tinyint(2) NOT NULL,
-  `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) NOT NULL,
-  `hm_anal` date NOT NULL,
-  `ya` varchar(50) NOT NULL COMMENT 'Υπουργική Απόφαση',
-  `apofasi` varchar(50) NOT NULL COMMENT 'Απόφαση Δ/ντή',
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) NOT NULL,
-  `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης'
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `ektaktoi_not`
---
-
-CREATE TABLE IF NOT EXISTS `ektaktoi_not` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `patrwnymo` varchar(30) NOT NULL,
-  `mhtrwnymo` varchar(30) NOT NULL,
-  `klados` int(11) NOT NULL,
-  `sx_yphrethshs` varchar(30) NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
-  `vathm` varchar(4) NOT NULL,
-  `hm_vathm` date NOT NULL,
-  `mk` tinyint(2) NOT NULL,
-  `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) NOT NULL,
-  `hm_anal` date NOT NULL,
-  `ya` varchar(50) NOT NULL COMMENT 'Υπουργική Απόφαση',
-  `apofasi` varchar(50) NOT NULL COMMENT 'Απόφαση Δ/ντή',
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) NOT NULL,
-  `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης (1 ωρομ, 2 αναπλ, 3 αναπλ ΕΣΠΑ, 4 ΕΕΠ, 5 ΕΒΠ)',
-  `stathero` varchar(30) NOT NULL,
-  `kinhto` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `klados` (`klados`)
-) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=323 ;
-
--- --------------------------------------------------------
-
---
 -- Δομή πίνακα για τον πίνακα `ektaktoi_types`
 --
 
@@ -364,18 +256,14 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
-  `vathm_old` varchar(4) NOT NULL,
   `vathm` varchar(4) NOT NULL,
   `hm_vathm` date NOT NULL,
-  `mk_old` tinyint(2) NOT NULL,
   `mk` tinyint(2) NOT NULL,
   `hm_mk` date NOT NULL,
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
   `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
   `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
-  `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
@@ -426,18 +314,14 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Διοικητικός, 4 Ιδιωτικός',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
-  `vathm_old` varchar(4) NOT NULL,
   `vathm` varchar(4) NOT NULL,
   `hm_vathm` date NOT NULL,
-  `mk_old` tinyint(2) NOT NULL,
   `mk` tinyint(2) NOT NULL,
   `hm_mk` date NOT NULL,
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
   `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
   `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
-  `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
@@ -454,48 +338,6 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   KEY `klados` (`klados`),
   KEY `sx_organikhs` (`sx_organikhs`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=2663 ;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `employee_deleted_140109`
---
-
-CREATE TABLE IF NOT EXISTS `employee_deleted_140109` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `patrwnymo` varchar(30) NOT NULL,
-  `mhtrwnymo` varchar(30) NOT NULL,
-  `klados` int(11) NOT NULL,
-  `am` int(10) NOT NULL,
-  `sx_organikhs` int(11) NOT NULL,
-  `sx_yphrethshs` int(11) NOT NULL,
-  `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος',
-  `fek_dior` varchar(10) NOT NULL,
-  `hm_dior` date NOT NULL,
-  `vathm_old` varchar(4) NOT NULL,
-  `vathm` varchar(4) NOT NULL,
-  `hm_vathm` date NOT NULL,
-  `mk_old` tinyint(2) NOT NULL,
-  `mk` tinyint(2) NOT NULL,
-  `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) NOT NULL,
-  `hm_anal` date NOT NULL,
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
-  `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
-  `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
-  `anatr` int(11) NOT NULL COMMENT 'se hmeres',
-  `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
-  `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) NOT NULL,
-  `eidikh` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `klados` (`klados`),
-  KEY `sx_organikhs` (`sx_organikhs`)
-) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=2469 ;
 
 -- --------------------------------------------------------
 
@@ -533,18 +375,14 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
   `fek_dior` varchar(10) CHARACTER SET greek NOT NULL,
   `hm_dior` date NOT NULL,
-  `vathm_old` varchar(4) CHARACTER SET greek NOT NULL,
   `vathm` varchar(4) CHARACTER SET greek NOT NULL,
   `hm_vathm` date NOT NULL,
-  `mk_old` tinyint(2) NOT NULL,
   `mk` tinyint(2) NOT NULL,
   `hm_mk` date NOT NULL,
   `analipsi` varchar(5) CHARACTER SET greek NOT NULL,
   `hm_anal` date NOT NULL,
   `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
   `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
-  `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext CHARACTER SET greek NOT NULL,
@@ -561,63 +399,6 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `aney_ews` date NOT NULL COMMENT 'Αδ. άνευ έως',
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `employee_unused`
---
-
-CREATE TABLE IF NOT EXISTS `employee_unused` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `patrwnymo` varchar(30) NOT NULL,
-  `mhtrwnymo` varchar(30) NOT NULL,
-  `klados` int(11) NOT NULL,
-  `am` int(10) NOT NULL,
-  `sx_organikhs` int(11) NOT NULL,
-  `sx_yphrethshs` int(11) NOT NULL,
-  `fek_dior` varchar(10) NOT NULL,
-  `hm_dior` date NOT NULL,
-  `vathm_old` varchar(4) NOT NULL,
-  `vathm` varchar(4) NOT NULL,
-  `hm_vathm` date NOT NULL,
-  `mk_old` tinyint(2) NOT NULL,
-  `mk` tinyint(2) NOT NULL,
-  `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) NOT NULL,
-  `hm_anal` date NOT NULL,
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
-  `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
-  `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
-  `anatr` int(11) NOT NULL COMMENT 'se hmeres',
-  `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
-  `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `klados` (`klados`),
-  KEY `sx_organikhs` (`sx_organikhs`)
-) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=1840 ;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `excel`
---
-
-CREATE TABLE IF NOT EXISTS `excel` (
-  `surname` varchar(30) NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `patr` varchar(30) NOT NULL,
-  `am` int(11) NOT NULL,
-  `anatr` int(11) NOT NULL,
-  `vathmos` varchar(5) NOT NULL,
-  `mk` int(11) NOT NULL,
-  PRIMARY KEY (`am`)
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
 
 -- --------------------------------------------------------
 
@@ -652,88 +433,6 @@ CREATE TABLE IF NOT EXISTS `logon` (
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `metdid`
---
-
-CREATE TABLE IF NOT EXISTS `metdid` (
-  `afm` int(11) NOT NULL,
-  `metdid` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `misth`
---
-
-CREATE TABLE IF NOT EXISTS `misth` (
-  `city` varchar(20) NOT NULL,
-  `street` varchar(20) NOT NULL,
-  `num` varchar(20) NOT NULL,
-  `tk` varchar(20) NOT NULL,
-  `born` date NOT NULL,
-  `start_date` date NOT NULL,
-  `anal_date` date NOT NULL,
-  `proyp_misth` int(11) NOT NULL,
-  `afm1` int(11) NOT NULL,
-  PRIMARY KEY (`afm1`)
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `misth2`
---
-
-CREATE TABLE IF NOT EXISTS `misth2` (
-  `idnum` varchar(20) NOT NULL,
-  `tel` varchar(40) NOT NULL,
-  `afm` int(11) NOT NULL,
-  `amka` bigint(20) NOT NULL,
-  KEY `afm` (`afm`)
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `my_test`
---
-
-CREATE TABLE IF NOT EXISTS `my_test` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(20) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `patrwnymo` varchar(30) NOT NULL,
-  `mhtrwnymo` varchar(30) NOT NULL,
-  `klados` int(11) NOT NULL,
-  `am` int(10) NOT NULL,
-  `sx_organikhs` int(11) NOT NULL,
-  `sx_yphrethshs` int(11) NOT NULL,
-  `fek_dior` varchar(10) NOT NULL,
-  `hm_dior` date NOT NULL,
-  `vathm` varchar(4) NOT NULL,
-  `hm_vathm` date NOT NULL,
-  `mk` tinyint(2) NOT NULL,
-  `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) NOT NULL,
-  `hm_anal` date NOT NULL,
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `proyp` int(11) NOT NULL COMMENT 'se hmeres',
-  `proyp_excel` int(11) NOT NULL,
-  `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
-  `anatr` int(11) NOT NULL COMMENT 'se hmeres',
-  `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) NOT NULL,
-  `excel_anatr` int(11) NOT NULL,
-  `exc_v` varchar(5) NOT NULL,
-  `ex_mk` int(11) NOT NULL,
-  `proyp_misth` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
-
--- --------------------------------------------------------
-
---
 -- Δομή πίνακα για τον πίνακα `params`
 --
 
@@ -760,23 +459,6 @@ CREATE TABLE IF NOT EXISTS `praxi` (
   `sxolio` varchar(300) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=38 ;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `requests`
---
-
-CREATE TABLE IF NOT EXISTS `requests` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(20) NOT NULL,
-  `req_name` varchar(50) NOT NULL,
-  `req_date` date NOT NULL,
-  `req_txt` text NOT NULL,
-  `req_done` date NOT NULL,
-  `req_comment` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -821,30 +503,6 @@ CREATE TABLE IF NOT EXISTS `school` (
   `anenergo` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=402 ;
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `school_bkp`
---
-
-CREATE TABLE IF NOT EXISTS `school_bkp` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) NOT NULL,
-  `address` varchar(40) NOT NULL,
-  `tel` varchar(18) NOT NULL,
-  `fax` varchar(18) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `organikothta` int(11) NOT NULL,
-  `leitoyrg` int(11) NOT NULL COMMENT 'Λειτουργικότητα',
-  `students` text NOT NULL COMMENT 'Οι τάξεις να χωρίζονται με κόμμα',
-  `entaksis` int(11) NOT NULL,
-  `ypodoxis` int(11) NOT NULL,
-  `frontistiriako` int(11) NOT NULL,
-  `oloimero` int(11) NOT NULL,
-  `comments` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=greek AUTO_INCREMENT=390 ;
 
 -- --------------------------------------------------------
 

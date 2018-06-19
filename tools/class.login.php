@@ -7,11 +7,10 @@ error_reporting(0);
 session_start();
 class logmein {
     //database setup
-       //MAKE SURE TO FILL IN DATABASE INFO
-    var $hostname_logon = 'localhost';      //Database server LOCATION
-    var $database_logon = 'dipedb';       //Database NAME
-    var $username_logon = 'root';       //Database USERNAME
-    var $password_logon = 'd1pe_db';       //Database PASSWORD
+    var $hostname_logon;      //Database server LOCATION
+    var $database_logon;       //Database NAME
+    var $username_logon;       //Database USERNAME
+    var $password_logon;       //Database PASSWORD
  
     //table fields
     var $user_table = 'logon';          //Users table name
@@ -24,6 +23,12 @@ class logmein {
  
     //connect to database
     function dbconnect(){
+        include '../config.php';
+        global $db_host, $db_name, $db_user, $db_password;
+        $this->hostname_logon = $db_host;
+        $this->database_logon = $db_name;
+        $this->username_logon = $db_user;
+        $this->password_logon = $db_password;
         $connections = mysql_connect($this->hostname_logon, $this->username_logon, $this->password_logon) or die ('Unabale to connect to the database');
         mysql_select_db($this->database_logon) or die ('Unable to select database!');
         return;
@@ -201,16 +206,19 @@ Your new password is: ".$newpassword."
         $this->dbconnect();
         echo'
 <form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-<table>
-<tr><td><div><label for="username">Όνομα Χρήστη</label></td>
-<td><input name="username" id="username" type="text"></div></td></tr>
-<tr><td><div><label for="password">Κωδικός</label></td>
-<td><input name="password" id="password" type="password"></div></td></tr>
-<tr><td colspan=2><input name="action" id="action" value="login" type="hidden">
-<div>
-<input name="submit" id="submit" value="Είσοδος στο σύστημα" type="submit"></div></td></tr></table>
+<div class="imgcontainer">
+    <img src="../images/logo.png" alt="Avatar" class="avatar">
+</div>
+<div class="container">
+    <label for="username"><b>Όνομα Χρήστη</b></label>
+    <input type="text" id="username" placeholder="Εισάγετε όνομα χρήστη" name="username" required>
+
+    <label for="password"><b>Κωδικός</b></label>
+    <input type="password" id="password" placeholder="Εισάγετε κωδικό" name="password" required>
+    <input name="action" id="action" value="login" type="hidden">
+    <button type="submit" id="submit">Είσοδος στο σύστημα</button>
+</div>
 </form>
- 
 ';
     }
     //reset password form

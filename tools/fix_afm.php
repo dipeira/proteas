@@ -13,7 +13,7 @@
 		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 			$query = "SELECT id,afm from employee";
 		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_numrows($result);
+		$num=mysql_num_rows($result);
 	while ($i<$num)	
 	{
 		$id = mysql_result($result, $i, "id");

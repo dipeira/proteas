@@ -1,0 +1,42 @@
+/* change these styles if you like */
+table.drasticgrid {font: 13px arial; table-layout: fixed; border-spacing: 0px;}
+table.drasticgrid th, td, tr {padding:0; margin:0;}
+th.th			{background-image: url(../img/back_header.jpg); cursor: pointer;} 
+th.thmouseover	{background-image: url(../img/back_header_mo.jpg); color: black;}
+/* If you want to use different backgrounds for readonly / editable use this:
+th.thmouseover.readonly	{background-image: url(../img/back_header_mo.jpg);}
+th.thmouseover.editable	{background-image: url(../img/back_header_mo_editable.jpg);}
+*/
+tr				{color: #505050; cursor: default;}
+tr.rowmouseover	td.tdeven, tr.rowmouseover td.tdodd  {background: #E5EAFF; color: black;}
+tr.rowselected	td.tdeven, tr.rowselected td.tdodd {background: #CCD5FF; color: black; font-weight: bolder;}
+td.tdeven		{background: #ffffff;}
+td.tdodd		{background: #F9F9F9;}
+td.divdel		{background: none;}
+
+img.imgdel		{background: none;}
+img.imgadd		{cursor: pointer;}
+textarea.ddtypetext {background: transparent; color: #505050; font: 12px arial; border-style: none;}
+textarea.ddtypetextedit {background: white; color: #505050; font: 12px arial; border-style: solid; border-width: 1px; border-color: #D3D3D3;}
+input {margin: 0; padding: 0; background: white; color: #505050; font: 12px arial;}
+input.inset {margin: 0; padding: 0;border-style: solid; border-width: 1px; border-color: #D3D3D3;}
+select {background: white; color: #505050; font: 12px arial; border-style: solid; border-width: 1px; border-color: #D3D3D3;}
+
+div.tddiv {position: relative;}
+div.divth {position: relative;}
+img.imgedit {position: absolute; right:0px; top:0px; z-index:1; cursor: pointer;}
+
+.divth {overflow: hidden; white-space: nowrap; text-align: left;}
+.divtd {overflow: hidden; white-space: nowrap; margin: 0pt; padding: 0pt;}
+
+/* For slider */
+td#colslider.visible {padding:0; margin:0; border: #A8C1DA solid 1px;}
+div.slider  {width: 16px; background: #eee;}
+div.knob, div.up, div.down {width: 12px; background-image: url(../img/back_stub.jpg); border: #A8C1DA solid 1px;}
+div.knobmouseover, div.upmouseover, div.downmouseover {background-image: url(../img/back_stub_mo.jpg); border: #8598AA solid 1px;}
+div.up {margin: 0 0 1px 0}
+div.down {margin: 1px 0 0 0}
+div.tick {font-weight:bold; position: absolute; cursor: default;}
+
+/* For sums */
+div.divtdsum {padding-top 2px; color: #828282; border: #A8C1DA solid; border-width: 1px 0 0 0;}
