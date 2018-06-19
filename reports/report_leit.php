@@ -2,6 +2,7 @@
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <title>Πίνακας λειτουργικών κενών</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -40,6 +41,7 @@
 
         echo "<body>";
         include('../etc/menu.php');
+        echo "<h3>Πίνακας λειτουργικών κενών</h3>";
         echo "<center>";
         $i=0;
         ob_start();

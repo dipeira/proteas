@@ -8,6 +8,7 @@
     <!--
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     -->
+    <title>Πίνακας οργανικών κενών</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -29,7 +30,14 @@
     mysql_query("SET NAMES 'greek'", $mysqlconnection);
     mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 
-    
+    echo "<body>";
+    include('../etc/menu.php');
+    echo "<h3>Οργανικά κενά</h3>";
+    echo "<p>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
+    echo "<a href='report_kena.php?type=1'>Δημοτικά Σχολεία</a><br>";
+    echo "<a href='report_kena.php?type=2'>Νηπιαγωγεία</a><br>";
+    echo "<a href='report_kena.php?type=3'>Ειδικά Σχολεία</a><br>";
+    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 
     if ($_GET['type'] == 1 || $_GET['type'] == 3)
     {
@@ -44,12 +52,7 @@
         $result = mysql_query($query, $mysqlconnection);
         $num = mysql_num_rows($result);
         
-        echo "<body>";
-        include('../etc/menu.php');
-        echo "<a href='report_kena.php?type=1'>Δημοτικά Σχολεία</a><br>";
-        echo "<a href='report_kena.php?type=2'>Νηπιαγωγεία</a><br>";
-        echo "<a href='report_kena.php?type=3'>Ειδικά Σχολεία</a><br>";
-        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        
         echo "<center>";
         $i=0;
         ob_start();

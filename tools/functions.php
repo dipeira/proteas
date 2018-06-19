@@ -896,38 +896,38 @@
 				{
 					case ($days>=7560 && $days<8640):
 						$mk[0] = "0";
-                                                $mk[1] = $days - 7560;
+                        $mk[1] = $days - 7560;
 						break;
 					case ($days>=8640 && $days<9720):
 						$mk[0] = 1;
-                                                $mk[1] = $days - 8640;
+                        $mk[1] = $days - 8640;
 						break;
 					case ($days>=9720 && $days<10800):
 						$mk[0] = 2;
-                                                $mk[1] = $days - 9720;
+                        $mk[1] = $days - 9720;
 						break;
 					case ($days>=10800 && $days<11880):
 						$mk[0] = 3;
-                                                $mk[1] = $days - 10800;
+                        $mk[1] = $days - 10800;
 						break;
 					case ($days>=11880 && $days<12960):
 						$mk[0] = 4;
-                                                $mk[1] = $days - 11880;
+                        $mk[1] = $days - 11880;
 						break;
 					case ($days>=12960 && $days<14040):
 						$mk[0] = 5;
-                                                $mk[1] = $days - 12960;
+                        $mk[1] = $days - 12960;
 						break;
 					case ($days>=14040):
 						$mk[0] = 6;
-                                                $mk[1] = $days - 14040;
+                        $mk[1] = $days - 14040;
 						break;
 				}
-                                break;
-                         case ("Α"):
-                             $mk[0]=0;
-                             $mk[1]=0;
-                             break;
+                break;
+            case ("Α"):
+                $mk[0]=0;
+                $mk[1]=0;
+                break;
 		}
 		return $mk;
     }
@@ -1159,7 +1159,7 @@
             });
         });
         </script>";
-        }
+    }
     /*
     * check for expired adeies idiwtikoy ergoy
     */
@@ -1203,7 +1203,7 @@
         $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1;
         $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2;
         $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
-        $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+        $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
         $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
         $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*22;
         // oloimero
@@ -1220,7 +1220,7 @@
             $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
             $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2 + $tm[5]*2;
             $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
-            $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+            $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
             $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
             $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*20 + $tm[5]*20;
         // alliws ean synd/lia 5-6
@@ -1230,7 +1230,7 @@
             $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
             $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2;
             $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
-            $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
+            $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
             $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
             $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
         }
@@ -1241,20 +1241,20 @@
         }
         // 6/thesia+anw
         else {
-        $hours = [];
-        $hours['05-07'] = $tm[4]*2 + $tm[5]*2;
-        $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3 + $tm[5]*3;
-        $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
-        $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2 + $tm[5]*2;
-        $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
-        $hours['32'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
-        $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
-        $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
-        // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
-        // PZ
-        $hours['P'] = $tm[8]*5;
-        return $hours;
+            $hours = [];
+            $hours['05-07'] = $tm[4]*2 + $tm[5]*2;
+            $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3 + $tm[5]*3;
+            $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+            $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2 + $tm[5]*2;
+            $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+            $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
+            $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
+            $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
+            // oloimero
+            $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+            // PZ
+            $hours['P'] = $tm[8]*5;
+            return $hours;
         }
     }
     /*
@@ -1299,8 +1299,8 @@
             $reqhrs['70'] = $leit * 25;
         }
         else {
-        // Απαιτούμενες ώρες
-        $reqhrs = anagkes1617($tmimata_exp);
+            // Απαιτούμενες ώρες
+            $reqhrs = anagkes1617($tmimata_exp);
         }
         // ώρες Δ/ντή
         $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
@@ -1324,14 +1324,14 @@
             $avhrs[$kl] += $row['wres'];
         }
         if ($print){
-        // αναλυτικά...
-        $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) ORDER BY e.klados";
-        $result = mysql_query($query, $mysqlconnection);
-        while ($row = mysql_fetch_array($result)){
-            $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
-            $all[] = $ar;
-            $allcnt[$row['perigrafh']]++;
-        }
+            // αναλυτικά...
+            $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) ORDER BY e.klados";
+            $result = mysql_query($query, $mysqlconnection);
+            while ($row = mysql_fetch_array($result)){
+                $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                $all[] = $ar;
+                $allcnt[$row['perigrafh']]++;
+            }
         }
         // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6))
         $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 GROUP BY klados";
@@ -1341,19 +1341,19 @@
             $avhrs[$kl] += $row['wres'];
         }
         if ($print){
-        // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
-        $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
-        $result = mysql_query($query, $mysqlconnection);
-        while ($row = mysql_fetch_array($result)){
-            $srn = $row['surname'] . ' *';
-            $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
-            $all[] = $ar;
-            $allcnt[$row['perigrafh']]++;
-        }
+            // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
+            $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
+            $result = mysql_query($query, $mysqlconnection);
+            while ($row = mysql_fetch_array($result)){
+                $srn = $row['surname'] . ' *';
+                $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                $all[] = $ar;
+                $allcnt[$row['perigrafh']]++;
+            }
         }
         
         // replace kladoi @ array
-        //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/32
+        //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/91
         $avar = $avhrs;
         $avar['70'] = $avar['2'];
         unset($avar['2']);
@@ -1370,7 +1370,7 @@
         $avar['05-07'] = $avar['13'] + $avar['14'];
         unset($avar['13']);
         unset($avar['14']);
-        $avar['32'] = $avar['20'] + $avar['28'];
+        $avar['91'] = $avar['20'] + $avar['28'];
         unset($avar['20']);
 
         // subtract available from required
@@ -1384,10 +1384,10 @@
         if ($print){
         echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
         echo "<table class=\"imagetable\" border='1'>";
-        echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>32</th><th>86</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['32']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
-        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['32']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
-        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['32']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
+        echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
+        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
+        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
+        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
         echo "</table>";
         echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";
@@ -1412,24 +1412,20 @@
 
     // Function to check for subtracted days of leave (for anaplirotes)
     // returns number of subtracted days
-    function subtract_adeies($id, $mysqlconnection) {
-        $has_kyhsh = $has_loxeia = $anar_days = $subtract = 0;
+    function get_adeies($id, $mysqlconnection) {
+        $has_kyhsh = $has_loxeia = $anar_days = $anar_days_subtr = $apergies = $aney = $subtract = 0;
         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
         $qry_ad = "SELECT type,days FROM adeia_ekt WHERE emp_id = $id AND sxoletos=$sxol_etos";
         $res_ad = mysql_query($qry_ad, $mysqlconnection);
         while ($arr_ad = mysql_fetch_array($res_ad)) {
             // check adeia type
             switch ($arr_ad['type']) {
-                /*
-                // kyhshs
-                case 6:
-                    $has_kyhsh = 1;
-                    break;
-                // loxeias
-                case 5:
-                    $has_loxeia = 1;
-                    break;
-                */
+                // // kyhshs
+                // case 6:
+                //     $has_kyhsh = 1; break;
+                // // loxeias
+                // case 5:
+                //     $has_loxeia = 1; break;
                 // anarrwtikh
                 case 1:
                     $anar_days += $arr_ad['days'];
@@ -1440,15 +1436,15 @@
                     break;
                 // aney
                 case 10:
-                    $subtract += $arr_ad['days'];
+                    $aney += $arr_ad['days'];
                     break;
                 // apergia
                 case 17:
-                    $subtract += $arr_ad['days'];
+                    $apergies += $arr_ad['days'];
                     break;
                 // stash
                 case 18:
-                    $subtract += ($arr_ad['days']*0.5);
+                    $apergies += ($arr_ad['days']*0.5);
                     break;
             }
         }
@@ -1456,12 +1452,24 @@
         // if ($has_kyhsh || $has_loxeia) {
         //     $subtract += $anar_days;
         // } 
-        // else subtract anarrwtikes > 15
-        //else {
-        if ($anar_days > 15)
-            $subtract += ( $anar_days - 15 );
-        //}
-        return floor($subtract);
+        // subtract anarrwtikes > 15
+        if ($anar_days > 15){
+            $anar_days_subtr = $anar_days - 15;
+            $subtract += $anar_days_subtr;
+        }
+        // subtract aney
+        $subtract += $aney;
+        // subtract (rounded down) apergies 
+        $subtract += floor($apergies);
+
+        $ret = Array(
+            'subtracted'=>$subtract, 
+            'anar_sub'=>$anar_days_subtr,
+            'anar'=>$anar_days,
+            'aney'=>$aney,
+            'apergies'=>floor($apergies)
+        );
+        return $ret;
     }
 
     function organikes_per_klados($mysqlconnection){
@@ -1513,8 +1521,8 @@
         return ['klasiko' => $synolo_tm_klas, 'oloimero' => $synolo_tm_olo];
     }
 
-    function dntes_ana_klado($mysqlconnection, $tetr = false){
-        if ($tetr){
+    function dntes_ana_klado($mysqlconnection, $tetrathesia_k_anw = false){
+        if ($tetrathesia_k_anw){
             $query = "SELECT k.perigrafh as eidikothta, count(*) as total
             FROM `employee` e 
             JOIN klados k ON e.klados = k.id 
@@ -1552,7 +1560,6 @@
         $ypoxr = getParam('yp_wr', $mysqlconnection);
         if (!isset($ypoxr))
             $ypoxr = 24;
-        return ($days * ($days_per_week/$ypoxr));
-        
+        return round($days * ($days_per_week/$ypoxr));
     }
 ?>

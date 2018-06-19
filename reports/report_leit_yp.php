@@ -2,6 +2,7 @@
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <title>Πίνακας λειτουργικών κενών (για Υπουργείο)</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -47,7 +48,7 @@
         $req_sum['ΠΕ08'] += $req['08'];
         $req_sum['ΠΕ11'] += $req['11'];
         $req_sum['ΠΕ79'] += $req['79'];
-        $req_sum['ΠΕ32'] += $req['32'];
+        $req_sum['ΠΕ91'] += $req['91'];
         $req_sum['ΠΕ86'] += $req['86'];
         $req_sum['ΠΕ70'] += $req['70'];
         // add oloimero teacher if leitoyrg < 4

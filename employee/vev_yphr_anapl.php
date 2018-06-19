@@ -7,7 +7,7 @@
 <?php
 
 session_start();
-
+header('Content-type: text/html; charset=iso8859-7'); 
 require_once '../tools/PHPWord.php';
 require_once '../config.php';
 require_once '../tools/functions.php';
@@ -27,19 +27,20 @@ foreach($arr as $myarr)
 {
     $hour_sum = 0;
     $PHPWord = new PHPWord();
+
+    // choose word template depending on employee type etc.
     // kratikoy
     if ($_POST['kratikoy'])
         $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl.docx');
     // espa
-    else
-    {
-        /*if (strpos($myarr['prefix'],'PARAL_') !== false || strpos($myarr['prefix'],'EKSATOM_') !== false || strpos($myarr['prefix'],'ANAPT_') !== false || strpos($myarr['prefix'],'NEO_') !== false)
-                $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_eks_ekseid_etc.docx');
-        elseif (strpos($myarr['prefix'],'EAEP_') !== false || strpos($myarr['prefix'],'OLOHM_') !== false )
-                $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_eaep_oloim.docx');
-        */
+    else {
         if ($myarr['eepebp'] > 0){
-            $document = $PHPWord->loadTemplate('../word/tmpl_eepebp.docx');
+            // if PEP
+            if ($myarr['eepebp'] == 2){
+                $document = $PHPWord->loadTemplate('../word/tmpl_pep.docx');
+            } else {
+                $document = $PHPWord->loadTemplate('../word/tmpl_eepebp.docx');
+            }
             $data = $myarr['eepebp'] == 1 ?
                 'Ειδικού Εκπαιδευτικού Προσωπικού ΕΕΠ' :
                 'Ειδικού Βοηθητικού Προσωπικού (ΕΒΠ)';
@@ -58,6 +59,7 @@ foreach($arr as $myarr)
     $data = $protapol; 
     $document->setValue('protapol', $data);
     
+    // meiwmeno
     $data = $myarr['meiwmeno'] ? 'μειωμένο' : 'πλήρες';
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('wrario', $data);
@@ -149,16 +151,40 @@ foreach($arr as $myarr)
     $data = date("d-m-Y", strtotime($data));
     $document->setValue('hmpros', $data);
 
-    $data = $myarr['anarrwtikes'];
-    $document->setValue('anar', $data);
+    //////////////////////////////
+    // Adeies, aney, apergies poy afairoyntai
+    //////////////////////////////
+    $adeies = $myarr['adeies'];
     
+    // debug
+    // if ($adeies['anar_sub'] >0){
+    //     echo $myarr['surname']." ".$myarr['prefix']." ";
+    //     print_r($adeies);
+    //     echo "<br>";
+    // }
+    $adeies_txt = '';
+    if ($adeies['anar_sub'] > 0) {
+        $adeies_txt .= "Έλαβε αναρρωτικές άδειες σύνολο: ".$adeies['anar']." ημέρες, από τις οποίες μόνο 15 ημέρες υπολογίζονται για προϋπηρεσία σύμφωνα με το άρθρο 657 και 658 του αστικού κώδικα, το άρθρο 11 του Ν. 2874/2000, την εγκύκλιο αριθμ. 79/14-07-1999 ΙΚΑ, έγγραφο αρ. πρωτ. Π06/40/29-04-2013 ΙΚΑ. ";
+    }
+    if ($adeies['aney'] > 0){
+        $adeies_txt .= "Έλαβε ".$adeies['aney']." ημέρα/-ες άδειας άνευ αποδοχών. ";
+    }
+    if ($adeies['apergies'] > 0){
+        $adeies_txt .= "Απέργησε ".$adeies['apergies']." ημέρα/-ες.";
+    }
+
+    $data = mb_convert_encoding($adeies_txt, "utf-8", "iso-8859-7");
+    $document->setValue('adeies', $data);
+    //////////////////
+
+
     // ypologismos yphresias
     $apol = substr($endofyear2,0,2) + substr($endofyear2,3,2)*30 + substr($endofyear2,6,4)*360;
     $pros = substr($hmpros,0,4)*360 + substr($hmpros,5,2)*30 + substr($hmpros,8,2);
     // +1 για να περιληφθεί και η τελευταία μέρα
     $days = $apol - $pros + 1;
     // subtract subtracted
-    $days -= $myarr['subtracted'];
+    $days -= $adeies['subtracted'];
     // if meiwmeno, compute yphresia
     if ($myarr['meiwmeno']){
         $days = compute_meiwmeno($days, $hour_sum, $mysqlconnection);
@@ -196,7 +222,7 @@ foreach ($filenames as $file) {
 $zip->close();
 // end of zip
 
-header('Content-type: text/html; charset=iso8859-7'); 
+
 echo "<html>";
 echo "<p>";
 // Delete docx files after creating zip file
@@ -211,10 +237,10 @@ else
 echo "</h3>";
 echo "<br><p>Εκπ/κοί που βρέθηκαν: ".$_POST['plithos'];
 echo "<br>Βεβαιώσεις που εξήχθησαν: ".$vev;
-echo "</p><br><br><a href=$zipname>Ανοιγμα zip εγγράφου</a>";
-echo "<br><br><a href=\"../index.php\">Επιστροφή</a>";
+echo "</p><br><br><a href=$zipname>Ανοιγμα zip εγγράφου</a><br>";
+echo "<input type='button' class='btn-red' value='Επιστροφή' onclick=\"parent.location='../etc/end_of_year.php'\">";
 echo "</p>";
 
 ?>
-    </body>
+</body>
 </html>

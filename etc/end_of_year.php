@@ -177,7 +177,7 @@
             {
                 $sx_yphrethshs[] = array('sch' => $arr[0],'hours' => $arr[1]);
             }
-            // Proteas has now praxi to distinguish workers.
+            // Proteas has now prefix to distinguish workers.
             $prefix = '';
             $eepebp = 0;
 
@@ -186,13 +186,7 @@
                 if (strlen($ptype) > 0)
                     $prefix = greek_to_greeklish($ptype).'_';
             }
-            
-            // ?????
-            // if (strpos($praksi,'ееп') !== false)
-            //     $eepebp = 1;
-            // else if (strpos($praksi,'ебп') !== false)
-            //     $eepebp = 2;
-            
+                        
             if (strpos($prefix,'PEP') !== false)
                 $eepebp = 2;
             elseif (strpos($prefix,'YPOS') !== false) 
@@ -200,15 +194,8 @@
             
             $cnt++;
             
-            // check (and subtract) Adeies
-            $subtracted = subtract_adeies($id, $mysqlconnection);
-            // find sum of anarrwtikes
-            $qry_an = "SELECT sum(days) as anar FROM adeia_ekt WHERE emp_id = $id AND sxoletos=$sxol_etos AND type IN (1,3)";
-            $res_an = mysql_query($qry_an, $mysqlconnection);
-            $anarrwtikes = mysql_result($res_an, 0, "anar");
-            if (!$anarrwtikes)
-                $anarrwtikes = 0;
-            //
+            // get (and subtract) Adeies
+            $adeies = get_adeies($id, $mysqlconnection);
 
             $metakinhsh = str_replace("'", "", $metakinhsh);
             $emp_arr = array(
@@ -216,7 +203,7 @@
                 'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
                 'ya'=>$ya,'ada'=>$ada,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,
                 'last_afm'=>$last_afm,'prefix'=>$prefix,'eepebp'=>$eepebp,
-                'subtracted'=>$subtracted, 'anarrwtikes'=>$anarrwtikes, 'meiwmeno'=>$meiwmeno
+                'adeies'=>$adeies, 'meiwmeno'=>$meiwmeno
             );
 
             $submit_array[] = $emp_arr;
