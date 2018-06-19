@@ -1,14 +1,37 @@
 # Πρωτέας
 Βαγγέλης Ζαχαριουδάκης, ΠΕ20
 
-Πληροφορίες: sugarv@sch.gr
+Πληροφορίες: it@dipe.ira.sch.gr
 
-(c) 2013-15
+(c) 2013-18
 
-Το project Πρωτέας σχεδιάστηκε και αναπτύχθηκε από τον εκπαιδευτικό Πληροφορικής Δ.Ε. ΠΕ20 Βαγγέλη Ζαχαριουδάκη
-κατά το σχολικό έτος 2011-2012, για λογαριασμό της Δ/νσης Πρωτοβάθμιας Εκπαίδευσης Ν.Ηρακλείου.
+Το project Πρωτέας σχεδιάστηκε και αναπτύσσεται από τον εκπαιδευτικό Πληροφορικής Δ.Ε. ΠΕ20 Βαγγέλη Ζαχαριουδάκη από το σχολικό έτος 2011-2012 έως σήμερα, για λογαριασμό της Δ/νσης Πρωτοβάθμιας Εκπαίδευσης Ν.Ηρακλείου.
 
-Η ανάπτυξη έγινε εξ'ολοκλήρου με λογισμικό ανοιχτού κώδικα (open-source).
-Τα εργαλεία που χρησιμοποιήθηκαν είναι η γλώσσα PHP, η βάση δεδομένων MySQL και ο web server Apache.Επίσης χρησιμοποιήθηκε η βιβλιοθήκη javascript jQuery.
+Αποτελεί μία ολοκληρωμένη βάση δεδομένων υπαλλήλων Πρωτοβάθμιας εκπαίδευσης.
+
+#### Χαρακτηριστικά:
+
+- Καρτέλα μόνιμου/αναπληρωτή εκπ/κού (στοιχεία, υπηρετήσεις, άδειες κλπ.)
+- Υπολογισμός λειτουργικών κενών/πλεονασμάτων
+- Δημιουργία αναφορών σχολικών μονάδων
+- Δημιουργία βεβαιώσεων υπηρεσίας αναπληρωτών εκπ/κών
+- Μισθολογική ωρίμανση εκπ/κών
+
+#### Εργαλεία:
+Η ανάπτυξη γίνεται εξ'ολοκλήρου με λογισμικό ανοιχτού κώδικα (open-source).
+Τα εργαλεία που χρησιμοποιούνται είναι η γλώσσα PHP, η βάση δεδομένων MySQL και ο web server Apache.
+
+Επίσης χρησιμοποιούνται:
+
+- [jQuery](https://jquery.com/)
+- [DataTables](https://datatables.net/)
+- [PHP Calandar Date Picker](http://www.triconsole.com/php/calendar_datepicker.php)
+- [Select2](https://select2.org/)
+- [StickyTableHeaders](https://github.com/jmosbech/StickyTableHeaders)
+- [DrasticGrid](https://www.linux.com/news/quickly-put-data-mysql-web-drasticgrid)
+- [PHPExcel](https://github.com/PHPOffice/PHPExcel)
+- [PHPWord](https://github.com/PHPOffice/PHPWord)
+- [SwiftMailer](https://swiftmailer.symfony.com/)
+- [Simple PHP/MySQL authentication/login class](http://www.emirplicanic.com/php/simple-phpmysql-authentication-class)
 
 Το σύστημα βρίσκεται υπό συνεχή ανάπτυξη, ανάλογα με τις ανάγκες της Δ/νσης Π.Ε. Ηρακλείου.
