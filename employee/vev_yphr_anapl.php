@@ -23,6 +23,11 @@ $arr = unserialize(html_entity_decode($_POST['emp_arr']));
 
 $i = 1;
 
+// crete directory if not present
+if (!file_exists('../word/anapl')) {
+    mkdir('../word/anapl', 0777, true);
+}
+
 foreach($arr as $myarr)
 {
     $hour_sum = 0;
