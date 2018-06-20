@@ -58,12 +58,6 @@ foreach($arr as $myarr)
     
     $data = $protapol; 
     $document->setValue('protapol', $data);
-    
-    // meiwmeno
-    $data = $myarr['meiwmeno'] ? 'μειωμένο' : 'πλήρες';
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-    $document->setValue('wrario', $data);
-
 
     $data = $myarr['surname']." ".$myarr['name'];
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
@@ -133,16 +127,15 @@ foreach($arr as $myarr)
         if (strlen($metakinhsh)<2)
             $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia";
         else
-            //$top_metak = ". Τοποθετήθηκε με την ταυτάριθμη απόφαση στο ".$metakinhsh . $sxoleia;
-            $top_metak = ". ".$metakinhsh . $sxoleia;
+            $top_metak = $metakinhsh . " " . $sxoleia;
     }
     else
     {
         if (strlen($metakinhsh)<2)
             $top_metak = "Τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia";
         else
-            //$top_metak = ". Με την αριθμ. $apof τοποθετήθηκε στο ".$metakinhsh . $sxoleia;
-            $top_metak = ". ".$metakinhsh . $sxoleia;
+            
+            $top_metak = $metakinhsh . " " . $sxoleia;
     }
     $data = mb_convert_encoding($top_metak, "utf-8", "iso-8859-7");
     $document->setValue('top_metak', $data);
@@ -151,13 +144,21 @@ foreach($arr as $myarr)
     $data = date("d-m-Y", strtotime($data));
     $document->setValue('hmpros', $data);
 
+    // meiwmeno
+    $ypoxr = getParam('yp_wr', $mysqlconnection);
+    $data = $myarr['meiwmeno'] ? 
+        "μειωμένο ωράριο $hour_sum ώρες/εβδομάδα (πλήρες υποχρ.ωράριο $ypoxr ώρες/εβδ.)" :
+        "πλήρες ωράριο ($ypoxr ώρες/εβδομάδα)";
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('wrario', $data);
+
     //////////////////////////////
     // Adeies, aney, apergies poy afairoyntai
     //////////////////////////////
     $adeies = $myarr['adeies'];
     
     // debug
-    // if ($adeies['anar_sub'] >0){
+    // if ($adeies['subtracted'] >0){
     //     echo $myarr['surname']." ".$myarr['prefix']." ";
     //     print_r($adeies);
     //     echo "<br>";
@@ -167,32 +168,52 @@ foreach($arr as $myarr)
         $adeies_txt .= "Έλαβε αναρρωτικές άδειες σύνολο: ".$adeies['anar']." ημέρες, από τις οποίες μόνο 15 ημέρες υπολογίζονται για προϋπηρεσία σύμφωνα με το άρθρο 657 και 658 του αστικού κώδικα, το άρθρο 11 του Ν. 2874/2000, την εγκύκλιο αριθμ. 79/14-07-1999 ΙΚΑ, έγγραφο αρ. πρωτ. Π06/40/29-04-2013 ΙΚΑ. ";
     }
     if ($adeies['aney'] > 0){
-        $adeies_txt .= "Έλαβε ".$adeies['aney']." ημέρα/-ες άδειας άνευ αποδοχών. ";
+        $adeies_aney = $adeies['aney'] > 1 ?
+            $adeies['aney'] . " ημέρες, που αφαιρούνται από τη συνολική του/-ης προϋπηρεσία." :
+            $adeies['aney'] . " ημέρα, που αφαιρείται από τη συνολική του/-ης προϋπηρεσία.";
+
+        $adeies_txt .= "Έλαβε άδεια άνευ αποδοχών σε εφαρμογή του Ν.2075/2012 άρθρο 50 για ".$adeies_aney;
     }
-    if ($adeies['apergies'] > 0){
-        $adeies_txt .= "Απέργησε ".$adeies['apergies']." ημέρα/-ες.";
-    }
+    // if ($adeies['apergies'] > 0){
+    //     $adeies_txt .= "Απέργησε ".$adeies['apergies']." ημέρα/-ες.";
+    // }
 
     $data = mb_convert_encoding($adeies_txt, "utf-8", "iso-8859-7");
     $document->setValue('adeies', $data);
     //////////////////
-
+    
 
     // ypologismos yphresias
     $apol = substr($endofyear2,0,2) + substr($endofyear2,3,2)*30 + substr($endofyear2,6,4)*360;
+    // hm/nia ya or apofasi perif/khs
+    $tempya = strlen($myarr['ya']) > 0 ? $myarr['ya'] : $myarr['apof'];
+    $temp = explode('/',$tempya);
+    $temp = explode('-', $temp[2]);
+    $hm_ya = $temp[0] + $temp[1]*30 + $temp[2]*360;
+    // hm proslhpshs
     $pros = substr($hmpros,0,4)*360 + substr($hmpros,5,2)*30 + substr($hmpros,8,2);
     // +1 για να περιληφθεί και η τελευταία μέρα
     $days = $apol - $pros + 1;
+    $days_ya = $apol - $hm_ya + 1;
     // subtract subtracted
     $days -= $adeies['subtracted'];
+    $days_ya -= $adeies['subtracted'];
     // if meiwmeno, compute yphresia
     if ($myarr['meiwmeno']){
         $days = compute_meiwmeno($days, $hour_sum, $mysqlconnection);
+        $days_ya = compute_meiwmeno($days_ya, $hour_sum, $mysqlconnection);
     }
     $ymd = days2ymd($days);
+    $ymd_ya = days2ymd($days_ya);
     $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
+    $data_ya = $ymd_ya[1]." μήνες, ".$ymd_ya[2]." ημέρες";
+    // debug
+    // echo "hm_ya: $tempya -> p: $data /// p_ya: $data_ya<br>";
+    //
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('yphr', $data);
+    $data = mb_convert_encoding($data_ya, "utf-8", "iso-8859-7");
+    $document->setValue('yphr_ya', $data);
     
     // write to file
     $fname = greek_to_greeklish($myarr['surname']);

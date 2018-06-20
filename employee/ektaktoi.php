@@ -353,7 +353,7 @@ if ($_GET['op']=="edit")
                 echo "</tr>";
         }
         
-        echo "<tr><td>Μετακινήσεις<span title='Συμπληρώστε ως εξής: \"Αρχικά τοποθετήθηκε στο ΧΧΧΧΧΧ και έπειτα με την ΧΧΧ απόφαση τοποθετήθηκε στο\"'>&nbsp;<img src=\"../images/help.gif\"/></span></td>";
+        echo "<tr><td>Μετακινήσεις<br><br><small><strong>ΠΡΟΣΟΧΗ:</strong> Συμπληρώστε ως εξής: \"Αρχικά τοποθετήθηκε στο ΧΧΧΧΧΧ<br> και έπειτα με την ΧΧΧ απόφαση τοποθετήθηκε στο\"</small></td>";
         echo "<td><textarea rows=4 cols=50 name='metakinhsh'>$metakinhsh</textarea></td></tr>";
         echo "</form>";
         echo "</div>";

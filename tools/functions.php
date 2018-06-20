@@ -582,7 +582,9 @@
 	{
 		$ret[0] = floor ($input/360);
 		$ret[1] = floor (($input%360)/30);
-		$ret[2] = floor (($input%360)%30);
+        $ret[2] = floor (($input%360)%30);
+        if ($ret[0] < 0 || $ret[1] < 0 || $ret[2] < 0)
+            return Array(0,0,0);
         return $ret;
     }
 
@@ -1459,8 +1461,8 @@
         }
         // subtract aney
         $subtract += $aney;
-        // subtract (rounded down) apergies 
-        $subtract += floor($apergies);
+        // subtract (rounded down) apergies
+        //$subtract += floor($apergies);
 
         $ret = Array(
             'subtracted'=>$subtract, 
