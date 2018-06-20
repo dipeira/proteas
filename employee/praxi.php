@@ -52,8 +52,8 @@ var thegrid = new drasticGrid('grid1', {
         {name: 'sxolio', displayname:'Σχόλια', width: 150},
 		{name: 'type', displayname:'Τύπος',
 			type: DDTYPEKEY, 
-            values: [<? echo $pr_values; ?>],
-            labels:  [<? echo $pr_labels; ?>],
+            values: [<?= $pr_values; ?>],
+            labels:  [<?= $pr_labels; ?>],
             width: 150
         }
     ]//,
