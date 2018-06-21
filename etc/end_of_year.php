@@ -199,7 +199,7 @@
 
             $metakinhsh = str_replace("'", "", $metakinhsh);
             $emp_arr = array(
-                'name'=>$name,'surname'=>$surname,'patrwnymo'=>$patrwnymo,
+                'id'=>$id,'name'=>$name,'surname'=>$surname,'patrwnymo'=>$patrwnymo,
                 'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
                 'ya'=>$ya,'ada'=>$ada,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,
                 'last_afm'=>$last_afm,'prefix'=>$prefix,'eepebp'=>$eepebp,

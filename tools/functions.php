@@ -1017,9 +1017,10 @@
     }
         
     // generic combo function
-    function tblCmb ($conn,$tbl,$inp = 0,$fieldnm)
+    function tblCmb ($conn, $tbl, $inp = 0, $fieldnm = NULL, $sortby = NULL)
 	{
-		$query = "SELECT * from $tbl";
+        $query = "SELECT * from $tbl";
+        $query .= $sortby ? " ORDER BY $sortby ASC" : '';
 		$result = mysql_query($query, $conn);
 		if (!$result) 
 			die('Could not query:' . mysql_error());
@@ -1412,68 +1413,6 @@
         }
     }
 
-    // Function to check for subtracted days of leave (for anaplirotes)
-    // returns number of subtracted days
-    function get_adeies($id, $mysqlconnection) {
-        $has_kyhsh = $has_loxeia = $anar_days = $anar_days_subtr = $apergies = $aney = $subtract = 0;
-        $sxol_etos = getParam('sxol_etos', $mysqlconnection);
-        $qry_ad = "SELECT type,days FROM adeia_ekt WHERE emp_id = $id AND sxoletos=$sxol_etos";
-        $res_ad = mysql_query($qry_ad, $mysqlconnection);
-        while ($arr_ad = mysql_fetch_array($res_ad)) {
-            // check adeia type
-            switch ($arr_ad['type']) {
-                // // kyhshs
-                // case 6:
-                //     $has_kyhsh = 1; break;
-                // // loxeias
-                // case 5:
-                //     $has_loxeia = 1; break;
-                // anarrwtikh
-                case 1:
-                    $anar_days += $arr_ad['days'];
-                    break;
-                // anarrwtikh (ygeionomiko)
-                case 3:
-                    $anar_days += $arr_ad['days'];
-                    break;
-                // aney
-                case 10:
-                    $aney += $arr_ad['days'];
-                    break;
-                // apergia
-                case 17:
-                    $apergies += $arr_ad['days'];
-                    break;
-                // stash
-                case 18:
-                    $apergies += ($arr_ad['days']*0.5);
-                    break;
-            }
-        }
-        // if kyhsh or loxeia, subtract every anarrwtikh
-        // if ($has_kyhsh || $has_loxeia) {
-        //     $subtract += $anar_days;
-        // } 
-        // subtract anarrwtikes > 15
-        if ($anar_days > 15){
-            $anar_days_subtr = $anar_days - 15;
-            $subtract += $anar_days_subtr;
-        }
-        // subtract aney
-        $subtract += $aney;
-        // subtract (rounded down) apergies
-        //$subtract += floor($apergies);
-
-        $ret = Array(
-            'subtracted'=>$subtract, 
-            'anar_sub'=>$anar_days_subtr,
-            'anar'=>$anar_days,
-            'aney'=>$aney,
-            'apergies'=>floor($apergies)
-        );
-        return $ret;
-    }
-
     function organikes_per_klados($mysqlconnection){
         $query = "SELECT COUNT( * ) as total, k.perigrafh, k.onoma FROM employee e 
             JOIN klados k 
@@ -1558,6 +1497,87 @@
         }
         return $ret;
     }
+
+    // Function to check for subtracted days of leave (for anaplirotes)
+    // returns number of subtracted days
+    function get_adeies($id, $mysqlconnection) {
+        $has_kyhsh = $has_loxeia = $anar_days = $anar_days_subtr = $apergies = $aney = $subtract = 0;
+        $sxol_etos = getParam('sxol_etos', $mysqlconnection);
+        $qry_ad = "SELECT type,days FROM adeia_ekt WHERE emp_id = $id AND sxoletos=$sxol_etos";
+        $res_ad = mysql_query($qry_ad, $mysqlconnection);
+        while ($arr_ad = mysql_fetch_array($res_ad)) {
+            // check adeia type
+            switch ($arr_ad['type']) {
+                // // kyhshs
+                // case 6:
+                //     $has_kyhsh = 1; break;
+                // // loxeias
+                // case 5:
+                //     $has_loxeia = 1; break;
+                // anarrwtikh or anarrwtikh (ygeionomiko)
+                case 1:
+                case 3:
+                    $anar_days += $arr_ad['days'];
+                    break;
+                // aney or aney anatrofhs
+                case 10:
+                case 12:
+                    $aney += $arr_ad['days'];
+                    break;
+                // apergia
+                case 17:
+                    $apergies += $arr_ad['days'];
+                    break;
+                // stash
+                case 18:
+                    $apergies += ($arr_ad['days']*0.5);
+                    break;
+            }
+        }
+        // if kyhsh or loxeia, subtract every anarrwtikh
+        // if ($has_kyhsh || $has_loxeia) {
+        //     $subtract += $anar_days;
+        // } 
+        // subtract anarrwtikes > 15
+        if ($anar_days > 15){
+            $anar_days_subtr = $anar_days - 15;
+            $subtract += $anar_days_subtr;
+        }
+        // subtract aney
+        $subtract += $aney;
+        // subtract (rounded down) apergies
+        //$subtract += floor($apergies);
+
+        $ret = Array(
+            'subtracted'=>$subtract, 
+            'anar_sub'=>$anar_days_subtr,
+            'anar'=>$anar_days,
+            'aney'=>$aney,
+            'apergies'=>floor($apergies)
+        );
+        return $ret;
+    }
+
+    // get ypoxrewtiko wrario
+    // depending on klados, praxi etc.
+    function get_ypoxrewtiko_wrario($emp_id, $conn) {
+        $query = "SELECT e.id, e.klados, p.type, p.name as praxi FROM ektaktoi e
+            JOIN praxi p ON e.praxi = p.id
+            WHERE e.id = $emp_id";
+        $res = mysql_query($query, $conn);
+        $row = mysql_fetch_array($res, MYSQL_BOTH);
+        // PE60 or EEP or Anaptixi Yp.Dom.
+        if ($row['klados'] == 1 || strpos($row['praxi'],'ееп') !== false || $row['type'] == 'упос'){
+            return 25;
+        // EBP or PEP
+        } elseif (strpos($row['praxi'],'ебп') !== false || $row['type'] == 'пеп') {
+            return 30;
+        }
+        return 24;
+    }
+
+    // compute_meiwmeno
+    // for teachers with reduced teaching hours
     function compute_meiwmeno($days, $days_per_week = 14, $mysqlconnection){
         $ypoxr = getParam('yp_wr', $mysqlconnection);
         if (!isset($ypoxr))

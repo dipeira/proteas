@@ -6,6 +6,7 @@
 				<a href="#">Πινακας</a>
 				<ul>
 					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Έκτακτο Προσωπικό</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/praxi.php">Διαχείριση πράξεων</a></li>
 					<li><a href="<?=SITE_ROOT?>/employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
 					<li><a href="<?=SITE_ROOT?>/school/school_edit.php">Επεξεργασία Σχολείου</a></li>
 				</ul>

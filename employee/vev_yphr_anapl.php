@@ -97,7 +97,6 @@ foreach($arr as $myarr)
     $data = $myarr['apof'];
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('apof', $data);
-    $apof = $data;
     
     //sxoleio/-a
     $sxoleia = '';
@@ -137,7 +136,7 @@ foreach($arr as $myarr)
     else
     {
         if (strlen($metakinhsh)<2)
-            $top_metak = "Τοποθετήθηκε με την αριθμ. $apof Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia";
+            $top_metak = "Τοποθετήθηκε με την αριθμ. ".$myarr['apof']." Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia";
         else
             
             $top_metak = $metakinhsh . " " . $sxoleia;
@@ -150,7 +149,12 @@ foreach($arr as $myarr)
     $document->setValue('hmpros', $data);
 
     // meiwmeno
-    $ypoxr = getParam('yp_wr', $mysqlconnection);
+    $ypoxr = get_ypoxrewtiko_wrario($myarr['id'], $mysqlconnection);
+    // debug
+    // if ($ypoxr>24){
+    //     echo "<br>".$myarr['surname']." ".$myarr['prefix']." $ypoxr";
+    // }
+    //
     $data = $myarr['meiwmeno'] ? 
         "μειωμένο ωράριο $hour_sum ώρες/εβδομάδα (πλήρες υποχρ.ωράριο $ypoxr ώρες/εβδ.)" :
         "πλήρες ωράριο ($ypoxr ώρες/εβδομάδα)";
@@ -177,7 +181,7 @@ foreach($arr as $myarr)
             $adeies['aney'] . " ημέρες, που αφαιρούνται από τη συνολική του/-ης προϋπηρεσία." :
             $adeies['aney'] . " ημέρα, που αφαιρείται από τη συνολική του/-ης προϋπηρεσία.";
 
-        $adeies_txt .= "Έλαβε άδεια άνευ αποδοχών σε εφαρμογή του Ν.2075/2012 άρθρο 50 για ".$adeies_aney;
+        $adeies_txt .= "Έλαβε άδεια άνευ αποδοχών σε εφαρμογή του Ν.4075/2012 άρθρο 50 για ".$adeies_aney;
     }
     // if ($adeies['apergies'] > 0){
     //     $adeies_txt .= "Απέργησε ".$adeies['apergies']." ημέρα/-ες.";

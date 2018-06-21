@@ -227,7 +227,7 @@
         echo $typepost ? typeCmb1($typepost,$mysqlconnection) : typeCmb($mysqlconnection);
         echo "</td>";
         echo "<td>";
-        tblCmb($mysqlconnection, 'praxi', $praxipost,'praxi');
+        tblCmb($mysqlconnection, 'praxi', $praxipost,'praxi','name');
         echo "</td>";
 	echo "</form></tr>\n";
 	
