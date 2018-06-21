@@ -189,9 +189,9 @@
                         
             if (strpos($prefix,'PEP') !== false)
                 $eepebp = 2;
-            elseif (strpos($prefix,'YPOS') !== false) 
+            elseif (strpos($prefix,'YPOS') !== false || strpos($praksi,'ееп') !== false || strpos($praksi,'ебп') !== false) 
                 $eepebp = 1;
-            
+
             $cnt++;
             
             // get (and subtract) Adeies
