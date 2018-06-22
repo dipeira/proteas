@@ -70,14 +70,18 @@ if (isset($_POST['submit'])) {
                 }
                 $val[12] = ExcelToPHP($val[12]);
                 $val[12] = date ("Y-m-d", $val[12]);
-                $sql="insert into ektaktoi(name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto, praxi)
-                values('".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "')";
-
-                //Run your mysql_query
+                // prepare connection
                 $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
                 mysql_select_db($db_name, $mysqlconnection);
                 mysql_query("SET NAMES 'greek'", $mysqlconnection);
                 mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+                // prepare hm/nia apoxwrhshs (endofyear)
+                $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
+                // prepare query
+                $sql="insert into ektaktoi(hm_apox, name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto, praxi)
+                values('$hm_apox','".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "')";
+
+                //Run your mysql_query
                 $sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
                 // check if already inserted...
                 $sql1 = "select afm from ektaktoi where afm=$val[18]";

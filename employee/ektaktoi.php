@@ -141,7 +141,8 @@
 		$mk = mysql_result($result, 0, "mk");
                 $hm_mk = mysql_result($result, 0, "hm_mk");
 		$analipsi = mysql_result($result, 0, "analipsi");
-		$hm_anal = mysql_result($result, 0, "hm_anal");
+                $hm_anal = mysql_result($result, 0, "hm_anal");
+                $hm_apox = mysql_result($result, 0, "hm_apox");
 		$met_did = mysql_result($result, 0, "met_did");
 		//$ya = mysql_result($result, 0, "ya");
 		//$apofasi = mysql_result($result, 0, "apofasi");
@@ -313,6 +314,17 @@ if ($_GET['op']=="edit")
         $myCalendar->setAlignment("left", "bottom");
         $myCalendar->disabledDay("sun,sat");
         $myCalendar->writeScript();
+        echo "</td></tr>";
+        echo "<tr><td>Ημ/νία αποχώρησης</td><td>";
+        $myCalendar = new tc_calendar("hm_apox", true);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setDate(date('d',strtotime($hm_apox)),date('m',strtotime($hm_apox)),date('Y',strtotime($hm_apox)));
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->setYearInterval(1970, date("Y"));
+        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
+        $myCalendar->setAlignment("left", "bottom");
+        //$myCalendar->disabledDay("sun,sat");
+        $myCalendar->writeScript();
         echo "</td></tr>";		
                         
         echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
@@ -443,6 +455,10 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Ανάληψη υπηρεσίας</td><td colspan=3>$analipsi</td>";
         $date_anal = date ("d-m-Y",  strtotime($hm_anal));
         echo "<tr><td>Ημ/νία Ανάληψης</td><td colspan=3>$date_anal</td>";
+        if ($kat == 2){
+                $date_apox = date ("d-m-Y",  strtotime($hm_apox));
+                echo "<tr><td>Ημ/νία Αποχώρησης</td><td colspan=3>$date_apox</td>";
+        }
         echo "<tr><td>Μετακινήσεις</td><td colspan=3>$metakinhsh</td></tr>";
         echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
         echo "<tr><td>Πραξη</td><td colspan=3>".getNamefromTbl($mysqlconnection, "praxi", $praxi)."</td></tr>";

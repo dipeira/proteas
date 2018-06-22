@@ -58,7 +58,8 @@ foreach($arr as $myarr)
 
     $data = $endofyear;
     $document->setValue('endofyear', $data);
-	$data = $endofyear2;
+    $data = $hmapox = $myarr['hmapox'];
+    $data = date("d-m-Y", strtotime($data));
     $document->setValue('endofyear2', $data);
     
     $data = $protapol; 
@@ -193,7 +194,7 @@ foreach($arr as $myarr)
     
 
     // ypologismos yphresias
-    $apol = substr($endofyear2,0,2) + substr($endofyear2,3,2)*30 + substr($endofyear2,6,4)*360;
+    $apol = substr($hmapox,8,2) + substr($hmapox,5,2)*30 + substr($hmapox,0,4)*360;
     // hm/nia ya or apofasi perif/khs
     $tempya = strlen($myarr['ya']) > 0 ? $myarr['ya'] : $myarr['apof'];
     $temp = explode('/',$tempya);
@@ -239,9 +240,9 @@ foreach($arr as $myarr)
 
 // create zip file
 if ($_POST['kratikoy'])
-    $zipname = '../word/anapl/file.zip';
+    $zipname = '../word/anapl/vev.zip';
 else
-    $zipname = '../word/anapl/file_espa.zip';
+    $zipname = '../word/anapl/vev_espa.zip';
 if (file_exists($zipname))
     unlink($zipname);
 $zip = new ZipArchive;

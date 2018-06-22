@@ -76,6 +76,7 @@
 
   $analipsi = $_POST['analipsi'];
   $hm_anal = date('Y-m-d',strtotime($_POST['hm_anal']));
+  $hm_apox = date('Y-m-d',strtotime($_POST['hm_apox']));
   $met_did = $_POST['met_did'];
 
   //$ya = $_POST['ya'];
@@ -93,10 +94,13 @@
       $surn = mb_convert_encoding($surname, "iso-8859-7", "utf-8");
       $query = "select afm,surname from ektaktoi WHERE afm='$afm' AND surname = '$surn'";
       $result = mysql_query($query,$mysqlconnection);
+      // hm/nia apoxwrhshs (from endofyear param)
+      $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
+
       if (!mysql_num_rows($result))
       {
-            $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did) ";
-            $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did')";
+            $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did, hm_apox) ";
+            $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox')";
 
             $query = $query0.$query1;
             $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
@@ -127,8 +131,8 @@
           $before = mysql_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
-	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',";
-	  $query3 = " hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
+	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',";
+	  $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
       $query = $query1.$query2.$query3;
 
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
@@ -156,7 +160,7 @@
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',";
-	  $query3 = " hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
+	  $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
 	  $query = $query1.$query2.$query3;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;

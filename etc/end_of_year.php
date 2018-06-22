@@ -126,9 +126,9 @@
         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         // kratikoy or ESPA 
         if ($kratikoy)
-            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='สัมิ'";
+            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='สัมิ'";
         else
-            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='สัมิ'";
+            $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='สัมิ'";
 
         $result = mysql_query($query, $mysqlconnection);
         $num=mysql_num_rows($result);
@@ -157,6 +157,7 @@
             $ada = mysql_result($result, $i, "ada");
             $apof = mysql_result($result, $i, "apofasi");
             $hmpros = mysql_result($result, $i, "hm_anal");
+            $hmapox = mysql_result($result, $i, "hm_apox");
             $metakinhsh = mysql_result($result, $i, "metakinhsh");
             $last_afm = substr (mysql_result($result, $i, "afm"), -3);
             $ptype = mysql_result($result, $i, "type");
@@ -201,7 +202,7 @@
             $emp_arr = array(
                 'id'=>$id,'name'=>$name,'surname'=>$surname,'patrwnymo'=>$patrwnymo,
                 'klados'=>$klados,'sx_yphrethshs'=>$sx_yphrethshs,
-                'ya'=>$ya,'ada'=>$ada,'apof'=>$apof,'hmpros'=>$hmpros,'metakinhsh'=>$metakinhsh,
+                'ya'=>$ya,'ada'=>$ada,'apof'=>$apof,'hmpros'=>$hmpros,'hmapox'=>$hmapox,'metakinhsh'=>$metakinhsh,
                 'last_afm'=>$last_afm,'prefix'=>$prefix,'eepebp'=>$eepebp,
                 'adeies'=>$adeies, 'meiwmeno'=>$meiwmeno
             );
