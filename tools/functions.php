@@ -1262,17 +1262,17 @@
     }
     /*
     * Headmaster's hours depending on number of school classes
-    * 4,5: 20, 6-9: 12, 10,11: 10, 12+: 8
+    * 4,5: 18, 6-9: 10, 10,11: 8, 12+: 6
     */
     function wres_dnth($tm) {
         if ($tm == 4 || $tm == 5)
-            return 20;
+            return 18;
         elseif ($tm > 5 && $tm < 10)
-            return 12;
-        elseif ($tm == 10 || $tm == 11)
             return 10;
-        elseif ($tm >= 12)
+        elseif ($tm == 10 || $tm == 11)
             return 8;
+        elseif ($tm >= 12)
+            return 6;
     }
     function tdc($val){
     return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
@@ -1292,10 +1292,13 @@
         mysql_query("SET NAMES 'greek'", $mysqlconnection);
         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         // get tmimata
-        $query = "SELECT tmimata,leitoyrg from school WHERE id='$sch'";
+        $query = "SELECT students,tmimata,leitoyrg from school WHERE id='$sch'";
         $result = mysql_query($query, $mysqlconnection);
         $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+        // synolo mathitwn (gia yp/ntes)
+        $classes = explode(",",mysql_result($result, 0, "students"));
+        $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
         // oligothesia
         if ($leit < 4) 
         {
@@ -1317,6 +1320,17 @@
             $ar = Array('surname' =>  mysql_result($result, 0, "e.surname"), 'klados' =>  mysql_result($result, 0, "k.perigrafh"), 'hours' => $dnthrs);
             $all[] = $ar;
             $allcnt[$klper]++;
+        }
+        // ώρες Υπ/ντή
+        $meiwsh_ypnth = 0;
+        if ($synolo_pr > 120){
+            if ($synolo_pr > 270) {
+                $meiwsh_ypnth = 4;
+            } else {
+                $meiwsh_ypnth = 2;
+            }
+            // add meiwsh_ypnth to 70's required hours
+            $reqhrs['70'] += $meiwsh_ypnth;
         }
         // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
         //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
