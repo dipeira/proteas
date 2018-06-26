@@ -2,11 +2,11 @@
 	header('Content-type: text/html; charset=iso8859-7'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
-	require('../tools/calendar/tc_calendar.php');  
-         
+	require('../tools/calendar/tc_calendar.php');
 ?>	
   <html>
-  <head>      
+  <head>    
+        <title>Αλλαγή ωραριου εκπ/κων</title>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
         <script type="text/javascript">   
@@ -15,7 +15,10 @@
 		});
         </script>
         <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
-        
+        </head>
+        <body>
+        <?php include('../etc/menu.php'); ?>
+        <h2>Αλλαγή ωραριου εκπ/κων</h2>
 <?php        
 	// update_wres: Updates wres of all employees
         function get_wres($days)
@@ -39,8 +42,7 @@
         }
         $usrlvl = $_SESSION['userlevel'];
 
-        
-        echo "<table class=\"imagetable\" border='1'>";
+        echo "<table class=\"imagetable stable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
         echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
         $myCalendar = new tc_calendar("date", true);
@@ -189,6 +191,7 @@
                 file_put_contents($fname, $emp_ser);
 	}
 ?>
-<br><br>
-<a href="end_of_year.php">Επιστροφή</a>
+<br>
+<input type='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+</body>
 </html>
