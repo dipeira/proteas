@@ -239,7 +239,7 @@ if ($_GET['op']=="add")
         echo "<tr><td>Τύπος Απασχόλησης</td><td>";
         typeCmb($mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' /></td></tr>";
+        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' ></textarea></td></tr>";
         //echo "<tr><td>Υπουργική Απόφαση</td><td><input type='text' name='ya' /></td></tr>";
         //echo "<tr><td>Απόφαση Δ/ντή</td><td><input type='text' name='apofasi' /></td></tr>";
         echo "<tr><td>Πράξη:</td><td>";
@@ -334,7 +334,7 @@ if ($_GET['op']=="edit")
         echo "<tr><td>Πράξη:</td><td>";
         tblCmb($mysqlconnection, "praxi",$praxi);
         echo "</td></tr>";
-        echo "<tr><td>Σχόλια</td><td><input size=50 type='text' name='comments' value=$comments /></td></tr>";
+        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
         
         //new 15-02-2012: implemented with jquery.autocomplete
         echo "<div id=\"content\">";

@@ -70,7 +70,7 @@
         });
             
             
-                    $(document).ready(function(){
+        $(document).ready(function(){
             $("#updatefrm").validate({
                 debug: false,
                 rules: {
@@ -90,28 +90,28 @@
         });
                     
         $().ready(function(){
-                $(".slidingDiv").hide();
-                $(".show_hide").show();
+            $(".slidingDiv").hide();
+            $(".show_hide").show();
 
-                $('.show_hide').click(function(){
-                    $(".slidingDiv").slideToggle();
-                });
+            $('.show_hide').click(function(){
+                $(".slidingDiv").slideToggle();
+            });
         });
         $().ready(function(){
-                $(".slidingDiv2").hide();
-                $(".show_hide2").show();
+            $(".slidingDiv2").hide();
+            $(".show_hide2").show();
 
-                $('.show_hide2').click(function(){
-                    $(".slidingDiv2").slideToggle();
-                });
+            $('.show_hide2').click(function(){
+                $(".slidingDiv2").slideToggle();
+            });
         });
         $().ready(function(){
-                $(".slidingDiv3").hide();
-                $(".show_hide3").show();
+            $(".slidingDiv3").hide();
+            $(".show_hide3").show();
 
-                $('.show_hide3').click(function(){
-                    $(".slidingDiv3").slideToggle();
-                });
+            $('.show_hide3').click(function(){
+                $(".slidingDiv3").slideToggle();
+            });
         });
 </script>
 
@@ -120,14 +120,14 @@
   <?php include('../etc/menu.php'); ?>
     <center>
       <?php
-                $usrlvl = $_SESSION['userlevel'];
-$id = $_GET['id'];
+            $usrlvl = $_SESSION['userlevel'];
+            $id = $_GET['id'];
             if ($_GET['op']!="add")
             {
                 //$query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id'];
                 $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
                 $result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		        $num=mysql_num_rows($result);
                 
                 // if multiple schools
                 //if ($num > 0)
@@ -231,46 +231,46 @@ $id = $_GET['id'];
         
 <script type="text/javascript">
     $().ready(function() {
-			$("#org").autocomplete("get_school.php", {
-                                extraParams: {type: <?php echo $klados_type; ?>},
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-			});
-		});
-		$().ready(function() {
-			$("#yphr").autocomplete("get_school.php", {
-                                extraParams: {type: <?php echo $klados_type; ?>},
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-			});
-		});
-                
-                                $().ready(function() {
-			$(".addRow").btnAddRow(function(row){
-                            row.find(".yphrow").autocomplete("get_school.php", {
-                                extraParams: {type: <?php echo $klados_type; ?>},
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-                            })
-                        });
-                        $(".delRow").btnDelRow();
-                            $(".yphrow").autocomplete("get_school.php", {
-                                extraParams: {type: <?php echo $klados_type; ?>},
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-                            });
-                });
-                
-        $().ready(function() {
-                $("#adeia").click(function() {
-                    var MyVar = <?php echo $id; ?>;
-                    $("#adeies").load("adeia_list.php?id="+ MyVar );
-                    });
-                });
+        $("#org").autocomplete("get_school.php", {
+                            extraParams: {type: <?php echo $klados_type; ?>},
+            width: 260,
+            matchContains: true,
+            selectFirst: false
+        });
+    });
+    $().ready(function() {
+        $("#yphr").autocomplete("get_school.php", {
+                            extraParams: {type: <?php echo $klados_type; ?>},
+            width: 260,
+            matchContains: true,
+            selectFirst: false
+        });
+    });
+            
+    $().ready(function() {
+        $(".addRow").btnAddRow(function(row){
+            row.find(".yphrow").autocomplete("get_school.php", {
+                extraParams: {type: <?php echo $klados_type; ?>},
+                width: 260,
+                matchContains: true,
+                selectFirst: false
+            })
+        });
+        $(".delRow").btnDelRow();
+        $(".yphrow").autocomplete("get_school.php", {
+            extraParams: {type: <?php echo $klados_type; ?>},
+            width: 260,
+            matchContains: true,
+            selectFirst: false
+        });
+    });
+            
+    $().ready(function() {
+        $("#adeia").click(function() {
+            var MyVar = <?php echo $id; ?>;
+            $("#adeies").load("adeia_list.php?id="+ MyVar );
+        });
+    });
 </script>
      
         
@@ -286,24 +286,24 @@ if ($_GET['op']=="edit")
 		echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' value=$patrwnymo /></td></tr>";
 		echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' value=$mhtrwnymo /></td></tr>";
 		echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
-                echo "<tr><td>Τηλέφωνο</td><td><input size='30' type='text' name='tel' value='$tel' /></td></tr>";
-                echo "<tr><td>Διεύθυνση</td><td><input size='50' type='text' name='address' value='$address' /></td></tr>";
-                echo "<tr><td>Α.Δ.Τ.</td><td><input type='text' name='idnum' value='$idnum' /></td></tr>";
-                echo "<tr><td>Α.Μ.K.A.</td><td><input type='text' name='amka' value='$amka' /></td></tr>";
+        echo "<tr><td>Τηλέφωνο</td><td><input size='30' type='text' name='tel' value='$tel' /></td></tr>";
+        echo "<tr><td>Διεύθυνση</td><td><input size='50' type='text' name='address' value='$address' /></td></tr>";
+        echo "<tr><td>Α.Δ.Τ.</td><td><input type='text' name='idnum' value='$idnum' /></td></tr>";
+        echo "<tr><td>Α.Μ.K.A.</td><td><input type='text' name='amka' value='$amka' /></td></tr>";
 		echo "<tr><td>Α.Μ.</td><td><input type='text' name='am' value=$am /></td></tr>";
 		echo "<tr><td>Κλάδος</td><td>";
 		kladosCombo($klados_id,$mysqlconnection);
-                echo "</td></tr>";
-                echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
-                echo "<tr><td>Κατάσταση</td><td>";
-                katastCmb($kat);
+        echo "</td></tr>";
+        echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
+        echo "<tr><td>Κατάσταση</td><td>";
+        katastCmb($kat);
 		echo "</td></tr>";
 		echo "<tr><td>Βαθμός</td><td>";
 		vathmosCmb1($vathm, $mysqlconnection);
 		echo "</td><tr>";
 		//<input type='text' name='vathm' value=$vathm /></td></tr>";
 		echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
-                echo "<tr><td>Ημ/νία M.K.</td><td>";
+        echo "<tr><td>Ημ/νία M.K.</td><td>";
 		$myCalendar = new tc_calendar("hm_mk", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		//$myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -454,7 +454,7 @@ if ($_GET['op']=="edit")
         echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
         // katoikon_end
         
-        echo "<tr><td>Σχόλια</td><td><input size=50 type='text' name='comments' value=$comments /></td></tr>";
+        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
 		
 		//new 15-02-2012: implemented with jquery.autocomplete
 		echo "<div id=\"content\">";
@@ -879,7 +879,7 @@ if ($_GET['op']=="edit")
 		echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
 		metdidCombo(0);
 		echo "<tr><td>Προϋπηρεσία</td><td><input type='text' name='proyp' size='3' />&nbsp;Έτη:<input type='text' name='pyears' size=1 />&nbsp;Μήνες:<input type='text' name='pmonths' size=1 />&nbsp;Ημέρες:<input type='text' name='pdays' size=1 /></td></tr>";
-		echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' /></td></tr>";
+        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' ></textarea></td></tr>";
 		 
 		echo "<div id=\"content\">";
 		echo "<form autocomplete=\"off\">";
