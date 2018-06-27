@@ -91,8 +91,8 @@
             continue;
         }
         
-        // call ektimhseis1617 function
-        $results = ektimhseis1617($sch, $mysqlconnection, $sxol_etos);
+        // call ektimhseis_wrwn function
+        $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
         // required
         $req = $results['required'];
         // available hours

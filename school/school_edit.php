@@ -111,6 +111,7 @@
                         $oloimero_tea = mysql_result($result, 0, "oloimero_tea");
                         $ekp_ee = mysql_result($result, 0, "ekp_ee");
                         $ekp_ee_exp = explode(",",$ekp_ee);
+                        $vivliothiki = mysql_result($result, 0, "vivliothiki");
                         
                         $synolo = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
                         $synolo_tmim = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
@@ -204,6 +205,10 @@
                             echo "<td><input type=\"checkbox\" name='ted' >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
                         echo "<td></td>";
                         echo "</tr>";
+                        if ($vivliothiki)
+                            echo "<td><input type=\"checkbox\" name='vivliothiki' checked >Σχολική βιβλιοθήκη</td><td></td>";
+                        else
+                            echo "<td><input type=\"checkbox\" name='vivliothiki' >Σχολική βιβλιοθήκη</td><td></td>";
                         
                         echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                         echo "</table>";

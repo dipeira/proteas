@@ -38,8 +38,8 @@
     {		
         $sch = mysql_result($result, $i, "id");
         $leit = mysql_result($result, $i, "leitoyrg");
-        // call ektimhseis1617 function
-        $results = ektimhseis1617($sch, $mysqlconnection, $sxol_etos);
+        // call ektimhseis_wrwn function
+        $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
         // required hours
         $req = $results['required'];
         $req_sum['пе05'] += floor($req['05-07']/2);

@@ -1191,12 +1191,12 @@
         return $tmp;
     }
     /*
-    * Wres_tmimata: Compute required hours based on oloimero schedule 2016-17
+    * anagkes_wrwn: Compute required hours based on oloimero schedule 2016-17
     * Returns required hours depending on number of classes
     * tmimata: 0: A, 1: B, 2: Γ, 3: Δ, 4: E, 5: ΣΤ
     * 6: Ολ. 15.00, 7: Ολ. 16:00, 8: ΠΖ
     */
-    function anagkes1617($tm){
+    function anagkes_wrwn($tm){
         $artm = $tm[0]+$tm[1]+$tm[2]+$tm[3]+$tm[4]+$tm[5];
         // 4/thesia
         if ($artm == 4){
@@ -1278,12 +1278,12 @@
     return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
     }
     /*
-    * ektimhseis1617
-    * Function to compute required and available hours for oloimero schedule 2016-17
-    * uses anagkes1617
+    * ektimhseis_wrwn
+    * Function to compute required and available hours for oloimero schedule (since 2016-17)
+    * uses anagkes_wrwn
     * sch: school code, $print: TRUE to print, false to return 3 arrays(required, available, diff)
     */
-    function ektimhseis1617($sch, $mysqlconnection, $sxoletos, $print = FALSE)
+    function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = FALSE)
     {
         set_time_limit(1200);
         $avhrs = [];
@@ -1292,9 +1292,10 @@
         mysql_query("SET NAMES 'greek'", $mysqlconnection);
         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         // get tmimata
-        $query = "SELECT students,tmimata,leitoyrg from school WHERE id='$sch'";
+        $query = "SELECT students,tmimata,leitoyrg,vivliothiki from school WHERE id='$sch'";
         $result = mysql_query($query, $mysqlconnection);
         $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
+        $vivliothiki = mysql_result($result, 0, "vivliothiki");
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
         // synolo mathitwn (gia yp/ntes)
         $classes = explode(",",mysql_result($result, 0, "students"));
@@ -1306,7 +1307,7 @@
         }
         else {
             // Απαιτούμενες ώρες
-            $reqhrs = anagkes1617($tmimata_exp);
+            $reqhrs = anagkes_wrwn($tmimata_exp);
         }
         // ώρες Δ/ντή
         $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
@@ -1331,6 +1332,10 @@
             }
             // add meiwsh_ypnth to 70's required hours
             $reqhrs['70'] += $meiwsh_ypnth;
+        }
+        // μείωση ωραρίου υπευθύνου βιβλιοθήκης (3 ώρες)
+        if ($vivliothiki > 0){
+            $reqhrs['70'] += 3;
         }
         // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
         //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";

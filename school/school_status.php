@@ -107,7 +107,7 @@
             
             $synolo = array_sum($classes);
             //$synolo_tmim = array_sum($tmimata_exp);
-            
+            $vivliothiki = mysql_result($result, 0, "vivliothiki");
         }
         //if nipiagwgeio
         if ($type == 2)
@@ -224,10 +224,15 @@
         {
             echo "<tr>";
             if ($ted)
-                echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td>Περιφ.Σχ.Συμβ.: ".$perif."η</td>";
+                echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
             else
-                echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td><td>Περιφ.Σχ.Συμβ.: ".$perif."η</td>";
+                echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+            if ($vivliothiki)
+                echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη</td>";
+            else
+                echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
             echo "</tr>";
+            echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td><td></td></tr>";
         }
         
         echo "<tr><td>Σχόλια: $comments</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
@@ -320,13 +325,13 @@
         echo "<br><br>";
         // if dimotiko & leitoyrg >= 4
         if ($type == 1 && array_sum($tmimata_exp)>3){
-            ektimhseis1617($sch, $conn, $sxol_etos, TRUE);
+            ektimhseis_wrwn($sch, $conn, $sxol_etos, TRUE);
         }
         // if systegazomeno
         if ($systeg) {
             echo "<a id='toggleSystegBtn' href='#'>Συστεγαζόμενο: $systegName</a>";
             echo "<div id='systeg' style='display: none;'>";
-            ektimhseis1617($systeg, $conn, $sxol_etos, TRUE);
+            ektimhseis_wrwn($systeg, $conn, $sxol_etos, TRUE);
             echo "</div>";
             echo "<br><br>";
         }
