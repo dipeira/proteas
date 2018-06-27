@@ -89,10 +89,10 @@
        if ($_GET['op']!="add")
        {
            if ($_GET['sxoletos']) {
-               $sx = $_GET['sxoletos'];
-               $query = "SELECT * FROM ektaktoi_$sx e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sx";
+               $sxol_etos = $_GET['sxoletos'];
+               $query = "SELECT * FROM ektaktoi_$sxol_etos e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
            }
-           else{
+           else {
                 $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
            }
 
@@ -365,7 +365,7 @@ if ($_GET['op']=="edit")
                 echo "</tr>";
         }
         
-        echo "<tr><td>Μετακινήσεις<br><br><small><strong>ΠΡΟΣΟΧΗ:</strong> Συμπληρώστε ως εξής: \"Αρχικά τοποθετήθηκε στο ΧΧΧΧΧΧ<br> και έπειτα με την ΧΧΧ απόφαση τοποθετήθηκε στο\"</small></td>";
+        echo "<tr><td>Μετακινήσεις<br><br><small><strong>ΠΡΟΣΟΧΗ:</strong> Συμπληρώστε ως εξής: \"Αρχικά τοποθετήθηκε στο ΧΧΧΧΧΧ και έπειτα με την ΧΧΧ απόφαση τοποθετήθηκε στο\"</small></td>";
         echo "<td><textarea rows=4 cols=50 name='metakinhsh'>$metakinhsh</textarea></td></tr>";
         echo "</form>";
         echo "</div>";
@@ -389,8 +389,9 @@ elseif ($_GET['op']=="view")
         $().ready(function() {
                 $("#adeia").click(function() {
                         var MyVar = <?php echo $id; ?>;
-                        $("#adeies").load("ekt_adeia_list.php?id="+ MyVar );
-                        });
+                        var sxEtos = <?php echo $sxol_etos; ?>;
+                        $("#adeies").load("ekt_adeia_list.php?id="+ MyVar+"&sxol_etos="+sxEtos);
+                });
         });
         </script>
 <?php

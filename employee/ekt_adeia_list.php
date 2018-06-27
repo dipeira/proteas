@@ -32,18 +32,21 @@
   <body> 
     <center>
       <?php
-		$i = 0;
-                $query = "SELECT * from adeia_ekt where emp_id=".$_GET['id']." AND sxoletos = $sxol_etos";
+        $i = 0;
+        if (isset($_GET['sxol_etos'])){
+            $sxol_etos = $_GET['sxol_etos'];
+        }
+        $query = "SELECT * from adeia_ekt where emp_id=".$_GET['id']." AND sxoletos = $sxol_etos";
 		$result = mysql_query($query, $mysqlconnection);
 		$num=mysql_num_rows($result);
 		if (!$num)
-                {
-                    echo "<br><br><big>Äå âñÝèçêáí Üäåéåò</big>";
-                    $emp_id = $_GET['id'];
-                    if ($usrlvl < 2)
-                        echo "<br><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add\"><big>ÐñïóèÞêç ¶äåéáò</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
-                    exit;
-                }
+        {
+            echo "<br><br><big>Äå âñÝèçêáí Üäåéåò</big>";
+            $emp_id = $_GET['id'];
+            if ($usrlvl < 2)
+                echo "<br><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add\"><big>ÐñïóèÞêç ¶äåéáò</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
+            exit;
+        }
                 
 		
                 echo "<br>";

@@ -267,9 +267,9 @@
                 $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
 								
 		echo "<tr><td>";
-		echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>";
+		echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
 		if ($usrlvl < 3)
-                    echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
+                    echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
 		if ($usrlvl < 2)
                     echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
 		echo "</td>";

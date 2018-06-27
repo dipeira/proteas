@@ -73,7 +73,7 @@
 		$rpp = $_GET['rpp'];
 	else
 		$rpp= 20;
-		
+
 	if ($_POST['page']!=0)
 		$curpg = $_POST['page'];
 					elseif (isset($_GET['page'])) 
@@ -235,9 +235,9 @@
 			$sx_yphrethshs .= "*";
 								
 		echo "<tr><td>";
-		echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>";
+		echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>&nbsp;&nbsp;";
 		if ($usrlvl < 3)
-         echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>";
+         echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
 		if ($usrlvl < 2)
          echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
 		echo "</td>";
