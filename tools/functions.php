@@ -1334,7 +1334,9 @@
             $reqhrs['70'] += $meiwsh_ypnth;
         }
         // μείωση ωραρίου υπευθύνου βιβλιοθήκης (3 ώρες)
+        $meiwsh_vivliothikis = 0;
         if ($vivliothiki > 0){
+            $meiwsh_vivliothikis = 3;
             $reqhrs['70'] += 3;
         }
         // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
@@ -1411,6 +1413,13 @@
         echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
         echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
         echo "</table>";
+        // if meiwseis, print below table
+        if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0){
+            echo "<p>Μειώσεις υπ.ωραρίου: ";
+            echo $meiwsh_ypnth > 0 ? 'Υποδιευθυντών (ΠΕ70): '.$meiwsh_ypnth.' ώρες<br>' : '';
+            echo $meiwsh_vivliothikis > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.$meiwsh_vivliothikis.' ώρες<br>' : '';
+            echo "</p>";
+        }
         echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";
             echo "<table class=\"imagetable stable\" border='1'>";

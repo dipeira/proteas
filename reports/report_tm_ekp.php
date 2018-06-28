@@ -26,6 +26,7 @@
         session_start();
         
         include('../etc/menu.php');
+        echo "<h3>Μαθητές & Εκπαιδευτικοί</h3>";
         echo "<table class=\"imagetable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
         echo "<tr><td colspan>";
@@ -39,7 +40,7 @@
         echo "<tr><td colspan><input type='submit' value='Προβολή'>";
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
         echo "</td></tr>";
-        echo "</table></form></head>";
+        echo "</table></form>";
         echo "<br>";
                 
 	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
