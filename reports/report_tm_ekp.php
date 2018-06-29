@@ -258,7 +258,8 @@
 
                     // τοποθετημένοι εκπ/κοί
                     $top60 = $top60m = $top60ana = 0;
-                    $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+                    // exclude ekp/koys@tmima entaksis
+                    $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi != 3";
                     $res = mysql_query($qry, $mysqlconnection);
                     $top60m = mysql_result($res, 0, 'pe60');
                     $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
