@@ -58,7 +58,7 @@
             $type = 1;
             //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
             if ($_POST['type'] == 7){
-                $query = "SELECT * from school WHERE type = $type AND type2=0 AND anenergo=0 AND organikothta <4";
+                $query = "SELECT * from school WHERE type = $type AND type2=0 AND anenergo=0 AND leitoyrg <4";
             } else {
                 $type2 = $_POST['type'] - 1;
                 $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
@@ -269,9 +269,15 @@
                     echo "<td>$top60</td>";
 
                     $k_pl = $top60-$apait;
-                    $k_pl_class = $k_pl >= 0 ? 
-                        "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
-                        "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+                    // >0: yellow, 0: green, <0: red
+                    if ($k_pl == 0) {
+                        $k_pl_class = "'background:none;background-color:rgba(0, 255, 0, 0.37)'";
+                    } elseif ($k_pl < 0 ){
+                        $k_pl_class = "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+                    } else {
+                        $k_pl_class = "'background:none;background-color:rgba(255,255,0,0.3)'";
+                    }
+
                     echo "<td style=$k_pl_class>$k_pl</td>";
                     echo "</tr>\n";
 
