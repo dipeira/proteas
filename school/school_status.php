@@ -87,6 +87,7 @@
         $updated = mysql_result($result, 0, "updated");
         $perif = mysql_result($result, 0, "perif");
         $systeg = mysql_result($result, 0, "systeg");
+        $anenergo = mysql_result($result, 0, "anenergo");
         if ($systeg){
             $systegName = getSchool($systeg, $conn);
         }
@@ -232,7 +233,9 @@
             else
                 echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
             echo "</tr>";
-            echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td><td></td></tr>";
+            echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td>";
+            echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
+            echo "</tr>";
         }
         
         echo "<tr><td>Σχόλια: $comments</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
@@ -277,7 +280,7 @@
             $meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
             $meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
             // Μαθητές
-            echo "<h3>Μαθητές</h3><br>";
+            echo "<h3>Μαθητές</h3>";
             echo "<table class=\"imagetable\" border='1'>";
             $ola = $klasiko_nip + $klasiko_pro;
             $olola = $oloimero_syn_nip + $oloimero_syn_pro;
@@ -285,14 +288,23 @@
             echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
             // t1
             $syn = $klasiko_exp[0]+$klasiko_exp[1];
+            $tmimata_nip = 1;
+            $tmimata_nip_ol = 0;
             echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td>$syn</td>";
             $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
+            if ($syn_ol > 0){
+                $tmimata_nip_ol += 1;
+            }
             echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td>$syn_ol</td></tr>";
             // print t2 + t3 only if they have students
             // t2
             $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
             $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
             if (($syn2+$syn_ol2) > 0){
+                $tmimata_nip += 1;
+                if ($syn_ol2 > 0){
+                    $tmimata_nip_ol += 1;
+                }
                 echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$syn2</td>";
                 echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td>$syn_ol2</td></tr>";
             }
@@ -300,6 +312,10 @@
             $syn3 = $klasiko_exp[4]+$klasiko_exp[5];
             $syn_ol3 = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
             if (($syn3+$syn_ol3) > 0){
+                $tmimata_nip += 1;
+                if ($syn_ol3 > 0){
+                    $tmimata_nip_ol += 1;
+                }
                 echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$syn3</td>";
                 echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td>$syn_ol3</td></tr>";
             }
@@ -312,12 +328,35 @@
             echo "</table>";
             echo "<br>";
             
-            $nip_syn = array_sum($nip_exp);
-            echo "<table class=\"imagetable\" border='1'>";
-            echo "<tr><td colspan=3>Νηπιαγωγοί (Σύνολο: $nip_syn)</td></tr>";
-            echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";
-            echo "<tr><td>$nip_exp[0]</td><td>$nip_exp[1]</td><td>$nip_exp[2]</td></tr>";
-            echo "</table>";
+            $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
+            // τοποθετημένοι εκπ/κοί
+            $top60 = $top60m = $top60ana = 0;
+            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            $res = mysql_query($qry, $conn);
+            $top60m = mysql_result($res, 0, 'pe60');
+            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            $res = mysql_query($qry, $conn);
+            $top60ana = mysql_result($res, 0, 'pe60');
+            $top60 = $top60m+$top60ana;
+            
+            $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
+
+            echo "<h3>Λειτουργικά κενά</h3>";
+            echo "<table class=\"imagetable stable\" border='1'>";
+            echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
+
+            echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
+            echo "<td>$syn_apait</td>";
+            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
+
+            echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
+            $k_pl = $top60-$syn_apait;
+            $k_pl_class = $k_pl >= 0 ? 
+                "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
+                "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
+
+            echo "</tbody></table>";
             echo "<br>";
         }
         echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";

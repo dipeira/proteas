@@ -29,6 +29,7 @@
   $fax = $_POST['fax'];
   $organ = $_POST['organ'];
   $leitoyrg = $_POST['leitoyrg'];
+  $anenergo = $_POST['anenergo'] == 'on' ? 1 : 0;
   // 05-10-2012
   $organikes = serialize($_POST['organikes']);
   // 19-06-2013
@@ -68,7 +69,7 @@
   $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', fax='$fax', email='$email', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";
   $query1 = ", oloimero_tea = '$oloimero_tea', oloimero_stud = '$oloimero_stud', tmimata = '$tmimata', ekp_ee='$ekp_ee'";
   $query2 = ", klasiko = '$klasiko', oloimero_nip = '$oloimero_nip', nip = '$nip', kena_org = '$kena_org', kena_leit = '$kena_leit', titlos = '$titlos', tk = '$tk'";
-  $query3 = ", vivliothiki = '$vivliothiki' WHERE id=$sch";
+  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki' WHERE id=$sch";
   $query = $query0.$query1.$query2.$query3;
   //$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
   //echo $query;

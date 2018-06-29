@@ -33,7 +33,8 @@
         echo "<input type='radio' name='type' value='1' checked >Δημόσια Δημοτικά (όχι ειδικά)<br>";
         echo "<input type='radio' name='type' value='2' >Ιδιωτικά Δημοτικά<br>";
         echo "<input type='radio' name='type' value='3' >Ειδικά Δημοτικά<br>";
-        echo "<input type='radio' name='type' value='4' >Δημόσια Νηπιαγωγεία (όχι ειδικά)<br>";
+        echo "<input type='radio' name='type' value='7' >Ολιγοθέσια Δημοτικά<br>";
+        echo "<input type='radio' name='type' value='4' >Δημόσια Νηπιαγωγεία (όχι ειδικά) (και λειτουργικά κενά)<br>";
         echo "<input type='radio' name='type' value='5' >Ιδιωτικά Νηπιαγωγεία<br>";
         echo "<input type='radio' name='type' value='6' >Ειδικά Νηπιαγωγεία<br>";
         echo "</td></tr>";
@@ -49,16 +50,19 @@
 	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
 	
     if ($_POST['type']){
-        $dim_ar = array('1', '2', '3');
+        $dim_ar = array('1', '2', '3', '7');
         $nip_ar = array('4', '5', '6');       
         //if ($_GET['type'] == 1)
         if (in_array($_POST['type'],$dim_ar))
         {
             $type = 1;
             //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
-            $type2 = $_POST['type'] - 1;
-            
-            $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
+            if ($_POST['type'] == 7){
+                $query = "SELECT * from school WHERE type = $type AND type2=0 AND anenergo=0 AND organikothta <4";
+            } else {
+                $type2 = $_POST['type'] - 1;
+                $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
+            }
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
         
@@ -207,11 +211,12 @@
                     echo "<th>Νήπια<br>Ολοήμερου</th>";
                     echo "<th>Προνήπια<br>Ολοήμερου</th>";
                     
-                    echo "<th>Εκπ/κοί Κλασικού</th>";
-                    echo "<th>Εκπ/κοί Ολοημέρου</th>";
-                    echo "<th>Εκπ/κοί T.E.</th>";
-                    echo "<th>Σύν.Εκπ/κών</th>";
+                    echo "<th>Απαιτούμενοι Εκπ/κοί</th>";
+                    //echo "<th>Εκπ/κοί Ολοημέρου</th>";
+                    //echo "<th>Εκπ/κοί T.E.</th>";
+                    //echo "<th>Σύν.Εκπ/κών</th>";
                     echo "<th>Τοπ/νοι<br>Εκπ/κοί</th>";
+                    echo "<th>+ / -</th>";
                     echo "</tr></thead>\n<tbody>\n";
 
                 while ($i < $num)
@@ -224,8 +229,6 @@
                     $klasiko_exp = explode(",",$klasiko);
                     $oloimero_nip = mysql_result($result, $i, "oloimero_nip");
                     $oloimero_nip_exp = explode(",",$oloimero_nip);
-                    $nip = mysql_result($result, $i, "nip");
-                    $nip_exp = explode(",",$nip);
 
                     $klasiko_tm = $oloimero_tm = 0;
                     $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
@@ -237,7 +240,7 @@
 
                     echo "<tr>";
                     echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td>";
-                    echo "<td>$klasiko_tm</td>";
+                    echo "<td><strong>$klasiko_tm</strong></td>";
 
                     $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];// + $klasiko_exp[6];
                     $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];// + $klasiko_exp[7];
@@ -245,12 +248,14 @@
                     
                     $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
                     $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
-                    echo "<td>$oloimero_tm</td>";
+                    echo "<td><strong>$oloimero_tm</strong></td>";
                     echo "<td>$oloimero_syn_nip</td><td>$oloimero_syn_pro</td>";
                     
-                    echo "<td>$nip_exp[0]</td><td>$nip_exp[1]</td><td>$nip_exp[2]</td>";
-                    $nip_syn = array_sum($nip_exp);
-                    echo "<td>$nip_syn</td>";
+                    // apaitoymenoi
+                    $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
+                    $apait = $klasiko_tm + $oloimero_tm + $has_entaxi;
+                    echo "<td>$apait</td>";
+
                     // τοποθετημένοι εκπ/κοί
                     $top60 = $top60m = $top60ana = 0;
                     $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
@@ -261,6 +266,12 @@
                     $top60ana = mysql_result($res, 0, 'pe60');
                     $top60 = $top60m+$top60ana;
                     echo "<td>$top60</td>";
+
+                    $k_pl = $top60-$apait;
+                    $k_pl_class = $k_pl >= 0 ? 
+                        "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
+                        "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+                    echo "<td style=$k_pl_class>$k_pl</td>";
                     echo "</tr>\n";
 
                     $synolo_tm_klas += $klasiko_tm;
@@ -269,10 +280,8 @@
                     $synolo_pro += $klasiko_pro;
                     $synolo_ol_nip += $oloimero_syn_nip;
                     $synolo_ol_pro += $oloimero_syn_pro;
-                    $synolo_nipiag_kl += $nip_exp[0];
-                    $synolo_nipiag_olo += $nip_exp[1];
-                    $synolo_nipiag_te += $nip_exp[2];
-                    $synolo_nipiag += $nip_syn;
+                    $synolo_apait += $apait;
+                    $synolo_k_pl += $k_pl;
                     $synolo_nipiag_top += $top60;
                    
                     $i++;
@@ -284,15 +293,11 @@
                 echo "<td>$synolo_nip</td>";
                 echo "<td>$synolo_tm_olo</td>";
                 echo "<td>$synolo_pro</td>";
-
                 echo "<td>$synolo_ol_nip</td>";
                 echo "<td>$synolo_ol_pro</td>";
-                
-                echo "<td>$synolo_nipiag_kl</td>";
-                echo "<td>$synolo_nipiag_olo</td>";
-                echo "<td>$synolo_nipiag_te</td>";
-                echo "<td>$synolo_nipiag</td>";
+                echo "<td>$synolo_apait</td>";
                 echo "<td>$synolo_nipiag_top</td>";
+                echo "<td>$synolo_k_pl</td>";
                 echo "</tr>";
                 echo "</tbody></table>";
 

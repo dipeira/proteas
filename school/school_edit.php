@@ -97,6 +97,7 @@
                     $type = mysql_result($result, 0, "type");
                     $organikothta = mysql_result($result, 0, "organikothta");
                     $leitoyrg = mysql_result($result, 0, "leitoyrg");
+                    $anenergo = mysql_result($result, 0, "anenergo");
                     
                     // if dimotiko
                     if ($type == 1)
@@ -188,27 +189,26 @@
                     
                     if ($type == 1)
                     {
-                        if ($frontistiriako)
-                            echo "<td><input type=\"checkbox\" name='frontistiriako' checked >Φροντιστηριακό Τμήμα</td>";
-                        else
-                            echo "<td><input type=\"checkbox\" name='frontistiriako' >Φροντιστηριακό Τμήμα</td>";
-                        if ($oloimero)
-                            echo "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>";
-                        else
-                            echo "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td>";
+                        echo $frontistiriako ? 
+                            "<td><input type=\"checkbox\" name='frontistiriako' checked >Φροντιστηριακό Τμήμα</td>" :
+                            "<td><input type=\"checkbox\" name='frontistiriako' >Φροντιστηριακό Τμήμα</td>";
+                        echo $oloimero ? 
+                            "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>" : 
+                            "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td>";
                         echo "</tr>";
                         
                         echo "<tr>";
-                        if ($ted)
-                            echo "<td><input type=\"checkbox\" name='ted' checked >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
-                        else
-                            echo "<td><input type=\"checkbox\" name='ted' >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
-                        echo "<td></td>";
+                        echo $ted ? 
+                            "<td><input type=\"checkbox\" name='ted' checked >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>" :
+                            "<td><input type=\"checkbox\" name='ted' >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+                        //echo "<td></td>";
+                        echo $anenergo ? 
+                            "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
+                            "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
                         echo "</tr>";
-                        if ($vivliothiki)
-                            echo "<td><input type=\"checkbox\" name='vivliothiki' checked >Σχολική βιβλιοθήκη</td><td></td>";
-                        else
-                            echo "<td><input type=\"checkbox\" name='vivliothiki' >Σχολική βιβλιοθήκη</td><td></td>";
+                        echo $vivliothiki ? 
+                            "<td><input type=\"checkbox\" name='vivliothiki' checked >Σχολική βιβλιοθήκη</td><td></td>" :
+                            "<td><input type=\"checkbox\" name='vivliothiki' >Σχολική βιβλιοθήκη</td><td></td>";
                         
                         echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                         echo "</table>";
@@ -281,7 +281,7 @@
                     echo "<input type='submit' value='Αποθήκευση'>";
                     echo "</form>";
                     $schLink = "school_status.php?org=$sch";
-                    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Καρτέλα' onClick=\"parent.location='$schLink'\">";
+                    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='$schLink'\">";
                 
                 }
 ?>

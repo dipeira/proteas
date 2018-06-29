@@ -18,7 +18,7 @@
         $logged = 1;
     
     // Get previous sxol_etos or redirect
-    if (((strlen($_REQUEST['sxoletos'])>0) || isset($_SESSION['sxoletos'])) && strcmp($_REQUEST['sxoletos'], $sxol_etos) != 0)
+    if (strlen($_REQUEST['sxoletos'])>0)
     {
         $sxoletos = $_REQUEST['sxoletos'];
     }
@@ -26,14 +26,7 @@
     {
         $sxoletos = find_prev_year($sxol_etos);
     }
-    if (!isset($_SESSION['sxoletos']))
-        {
-            $_SESSION['sxoletos'] = $sxoletos;
-        }
-        else {
-            $sxoletos = $_SESSION['sxoletos'];
-        }
-      
+          
 ?>
 <html>
   <head>
@@ -74,9 +67,9 @@
   	
 <div>
       <?php
-                $usrlvl = $_SESSION['userlevel'];
+		$usrlvl = $_SESSION['userlevel'];
 
-                //rpp = results per page
+		//rpp = results per page
 		if (isset ($_POST['rpp']))
 			$rpp = $_POST['rpp'];
 		elseif (isset ($_GET['rpp']))
@@ -95,11 +88,11 @@
 		$limitQ = ' LIMIT ' .($curpg - 1) * $rpp .',' .$rpp;
 
                 
-                $query = "SELECT * FROM ektaktoi_" . $sxoletos.' ';
-                
-	  	
-                if (isset($_SESSION['sxoletos']))
-                        echo "<h3>Έκτακτο προσωπικό σχολικού έτους: " . substr($_SESSION['sxoletos'],0,4) . '-' . substr($_SESSION['sxoletos'],4,2) ."</h3>";
+		$query = "SELECT * FROM ektaktoi_" . $sxoletos.' ';
+		
+
+		if (isset($sxoletos))
+				echo "<h3>Έκτακτο προσωπικό σχολικού έτους: " . substr($sxoletos,0,4) . '-' . substr($sxoletos,4,2) ."</h3>";
                 
 		$klpost = 0;
 		$yppost = 0;
@@ -139,12 +132,12 @@
 		}
 		if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)
 		{
-                        if (strlen($_POST['surname'])>0)
-                            $surpost = $_POST['surname'];
-                        else{
-                            $surpost = urldecode($_GET['surname']);
-                            //$surpost = mb_convert_encoding($surpost, "iso-8859-7", "utf-8");
-                        }
+			if (strlen($_POST['surname'])>0)
+					$surpost = $_POST['surname'];
+			else{
+					$surpost = urldecode($_GET['surname']);
+					//$surpost = mb_convert_encoding($surpost, "iso-8859-7", "utf-8");
+			}
                             
 			if ($whflag)
 				$query .= "AND surname LIKE '$surpost' ";
@@ -154,7 +147,7 @@
 				$whflag=1;
 			}
 		}
-                if ((strlen($_POST['praxi'])>0) || ($_GET['praxi']>0))
+      if ((strlen($_POST['praxi'])>0) || ($_GET['praxi']>0))
 		{
 			if ($_GET['praxi']>0)
 				$yppost = $_GET['praxi'];
@@ -207,7 +200,7 @@
         typeCmb($mysqlconnection);
         echo "</td>";
         echo "<td>";
-        $tmp = 'praxi_'.$_SESSION['sxoletos'];
+        $tmp = 'praxi_'.$sxoletos;
         tblCmb($mysqlconnection, $tmp, 0, 'praxi');
         echo "</td>";
 	echo "</form></tr>\n";
@@ -240,12 +233,12 @@
 
                 $type = mysql_result($result, $i, "type");
                 $praxi = mysql_result($result, $i, "praxi");
-                $praxi = getNamefromTbl($mysqlconnection, "praxi_".$_SESSION['sxoletos'], $praxi);
+                $praxi = getNamefromTbl($mysqlconnection, "praxi_".$sxoletos, $praxi);
 								
 		echo "<tr><td>";
 		echo "</td>";
                 $typos = get_type($type, $mysqlconnection);
-		echo "<td><a href='ektaktoi.php?op=view&sxoletos=".$_SESSION['sxoletos']."&id=$id' target='_blank'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+		echo "<td><a href='ektaktoi.php?op=view&sxoletos=".$sxoletos."&id=$id' target='_blank'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
 		echo "</tr>";
 
 		$i++;
@@ -280,7 +273,8 @@
 		echo "<input type=\"submit\" value=\"Ορισμός\">";
 		echo "</FORM>";
 		echo "</td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_hire.php'\">";
+		echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_hire.php'\">";
+		echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πράξεις έτους $sxoletos' onClick=\"parent.location='praxi_prev.php?sxoletos=$sxoletos'\">";
                 echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>
