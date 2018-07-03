@@ -1,12 +1,13 @@
 <?php
 
 session_start();
-require_once"../config.php";
+require_once "../config.php";
 require_once '../tools/PHPWord.php';
+require_once '../tools/functions.php';
 
 $PHPWord = new PHPWord();
 
-$document = $PHPWord->loadTemplate('../word/tmpl_vev.docx');
+$document = $PHPWord->loadTemplate('../word/tmpl/tmpl_vev.docx');
 
 //$current_date = date("d/m/Y");
 //$document->setValue('date', $current_date);
@@ -58,20 +59,17 @@ $data = $_POST['arr']['11'];
 $document->setValue('yphr', $data);
 
 // head title & name
-$data = $head_title;
+$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
+$data = mb_convert_encoding(getParam('head_title', $mysqlconnection), "utf-8", "iso-8859-7");
 $document->setValue('headtitle', $data);
-$data = $head_name;
+$data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");
 $document->setValue('headname', $data);
 
 $output1 = "../word/new_vev_".$_SESSION['userid'].".docx";
 $document->save($output1);
-//$document->save('tst.docx');
 
 header('Content-type: text/html; charset=iso8859-7'); 
 echo "<html>";
 echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
 echo "</html>";
 ?>
-
-
-

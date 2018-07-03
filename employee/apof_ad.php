@@ -235,28 +235,28 @@
             if ($is_anapl)
             {
                 if ($type == 1)
-                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_anar.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_anar.docx');
                 elseif ($type == 2)
-                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_kan.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_kan.docx');
                 elseif ($type == 3)
-                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_anar_gn.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_anar_gn.docx');
                 elseif ($type == 4)
-                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_eid.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_eid.docx');
                 elseif ($type == 13)
-                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_ekl.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_ekl.docx');
             }
             else
             {
                 if ($type == 1)
-                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_anar.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/tmpl_apof_anar.docx');
                 elseif ($type == 2)
-                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_kan.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/tmpl_apof_kan.docx');
                 elseif ($type == 3)
-                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_anar_gn.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/tmpl_apof_anar_gn.docx');
                 elseif ($type == 4)
-                    $document = $PHPWord->loadTemplate('../word/apof/tmpl_apof_eid.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/tmpl_apof_eid.docx');
                 elseif ($type == 13)
-                    $document = $PHPWord->loadTemplate('../word/apof/an_tmpl_apof_ekl.docx');
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_ekl.docx');
             }
             $document->setValue('prot', $prot_apof);
             $document->setValue('hmprot', $hm_apof);
@@ -285,7 +285,15 @@
                 
                 $i++;
             }
-            $output1 = "../word/apof/adeia_apof_".$_SESSION['userid'].".docx";
+            // head_title & head_name
+            $data = getParam('head_title', $mysqlconnection);
+            $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+            $document->setValue('head_title', $data);
+            $data = getParam('head_name', $mysqlconnection);
+            $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+            $document->setValue('head_name', $data);
+            
+            $output1 = "../word/adeia_apof_".$_SESSION['userid'].".docx";
             $document->save($output1);
             echo "<html>";
             echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";

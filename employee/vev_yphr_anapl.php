@@ -23,7 +23,7 @@ $arr = unserialize(html_entity_decode($_POST['emp_arr']));
 
 $i = 1;
 
-// crete directory if not present
+// create directory if not present
 if (!file_exists('../word/anapl')) {
     mkdir('../word/anapl', 0777, true);
 }
@@ -36,15 +36,15 @@ foreach($arr as $myarr)
     // choose word template depending on employee type etc.
     // kratikoy
     if ($_POST['kratikoy'])
-        $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl.docx');
+        $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_vev_anapl.docx');
     // espa
     else {
         if ($myarr['eepebp'] > 0){
             // if PEP
             if ($myarr['eepebp'] == 2){
-                $document = $PHPWord->loadTemplate('../word/tmpl_pep.docx');
+                $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_pep.docx');
             } else {
-                $document = $PHPWord->loadTemplate('../word/tmpl_eepebp.docx');
+                $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_eepebp.docx');
             }
             $data = $myarr['eepebp'] == 1 ?
                 'Ειδικού Εκπαιδευτικού Προσωπικού ΕΕΠ' :
@@ -53,7 +53,7 @@ foreach($arr as $myarr)
             $document->setValue('eepebp', $data);
         }
         else
-            $document = $PHPWord->loadTemplate('../word/tmpl_vev_anapl_espa.docx');
+            $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_vev_anapl_espa.docx');
     }
 
     $data = $endofyear;
@@ -224,6 +224,13 @@ foreach($arr as $myarr)
     $document->setValue('yphr', $data);
     $data = mb_convert_encoding($data_ya, "utf-8", "iso-8859-7");
     $document->setValue('yphr_ya', $data);
+
+    $data = getParam('head_title', $mysqlconnection);
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('head_title', $data);
+    $data = getParam('head_name', $mysqlconnection);
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('head_name', $data);
     
     // write to file
     $fname = greek_to_greeklish($myarr['surname']);

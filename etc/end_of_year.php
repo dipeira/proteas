@@ -139,8 +139,12 @@
         else
             echo "ΕΣΠΑ";
         echo "</h3>";
+        if ($num == 0){
+            echo "<p>Δε βρέθηκαν εγγραφές!</p>";
+            die();
+        }
         echo "<form name='anaplfrm' action=\"../employee/vev_yphr_anapl.php\" method='POST'>";
-        //echo "<form name='anaplfrm' action='' method='POST'>"; // for testing
+        
 
         $i=$cnt=0;
         // ***********************

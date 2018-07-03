@@ -264,7 +264,7 @@
             $fname = "word/tmp.txt";
             $data = unserialize(file_get_contents($fname));
             
-            $document = $PHPWord->loadTemplate('word/apof/tmpl_apof_mk.docx');
+            $document = $PHPWord->loadTemplate('word/tmpl_apof/tmpl_apof_mk.docx');
                                    
             foreach ($data as $ar)
             {
@@ -290,12 +290,12 @@
             $mydata = array('onmo' => $onmo,'patr' => $patr,'klados' => $klados,'vathm' => $vathm,'mk'=> $mk,'hmnia' => $hmnia, 'eth' => $eth);
             $document->cloneRow2('TBL1', $mydata);
                         
-            $data = mb_convert_encoding($head_title, "utf-8", "iso-8859-7");
+            $data = mb_convert_encoding(getParam('head_title', $mysqlconnection), "utf-8", "iso-8859-7");
             $document->setValue("headtitle", $data);
-            $data = mb_convert_encoding($head_name, "utf-8", "iso-8859-7");
+            $data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");
             $document->setValue("headname", $data);
 
-            $output1 = "word/apof/apof_mk_".$_SESSION['userid'].".docx";
+            $output1 = "word/apof_mk_".$_SESSION['userid'].".docx";
             $document->save($output1);
             echo "<html>";
             echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
