@@ -1306,6 +1306,10 @@
             $reqhrs['70'] = $leit * 25;
         }
         else {
+            // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
+            if ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10){
+                $tmimata_exp[8] = 0;
+            }
             // Απαιτούμενες ώρες
             $reqhrs = anagkes_wrwn($tmimata_exp);
         }
