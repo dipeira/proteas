@@ -1200,47 +1200,50 @@
         $artm = $tm[0]+$tm[1]+$tm[2]+$tm[3]+$tm[4]+$tm[5];
         // 4/thesia
         if ($artm == 4){
-        $hours = [];
-        $hours['05-07'] = $tm[4]*1;
-        $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3;
-        $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1;
-        $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2;
-        $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
-        $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
-        $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
-        $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*22;
-        // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
-        return $hours;
+            $hours = [];
+            $hours['05-07'] = $tm[4]*1;
+            $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3;
+            $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1;
+            $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2;
+            $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+            $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+            $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
+            $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*22;
+            // oloimero
+            $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+            // PZ
+            $hours['P'] = $tm[8]*5;
+            return $hours;
         }
         // 5/thesia
         elseif ($artm == 5){
-        // ean opws fek dld synd/lia 3-4
-        $hours = [];
-        if ($tm[2] + $tm[3] == 1){
-            $hours['05-07'] = $tm[4]*2 + $tm[5]*2;
-            $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3 + $tm[5]*3;
-            $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
-            $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2 + $tm[5]*2;
-            $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
-            $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
-            $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
-            $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*20 + $tm[5]*20;
-        // alliws ean synd/lia 5-6
-        } else {
-            $hours['05-07'] = $tm[4]*1;
-            $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3;
-            $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
-            $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2;
-            $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
-            $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
-            $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
-            $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
-        }
-        // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
-        
-        return $hours;
+            // ean opws fek dld synd/lia 3-4
+            $hours = [];
+            if ($tm[2] + $tm[3] == 1){
+                $hours['05-07'] = $tm[4]*2 + $tm[5]*2;
+                $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3 + $tm[5]*3;
+                $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[4]*2 + $tm[5]*2;
+                $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1;
+                $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1 + $tm[5]*1;
+                $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[4]*20 + $tm[5]*20;
+            // alliws ean synd/lia 5-6
+            } else {
+                $hours['05-07'] = $tm[4]*1;
+                $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[3]*3 + $tm[4]*3;
+                $hours['08'] = $tm[0]*2 + $tm[1]*2 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
+                $hours['11'] = $tm[0]*3 + $tm[1]*3 + $tm[2]*3 + $tm[3]*3 + $tm[4]*2;
+                $hours['79'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
+                $hours['91'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1;
+                $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1;
+                $hours['70'] = $tm[0]*21 + $tm[1]*21 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
+            }
+            // oloimero
+            $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+            // PZ
+            $hours['P'] = $tm[8]*5;
+            return $hours;
         }
         // 6/thesia+anw
         else {
@@ -1304,6 +1307,10 @@
         if ($leit < 4) 
         {
             $reqhrs['70'] = $leit * 25;
+            // for PZ: at least 7 stud for leit < 9
+            if ($classes[7] >= 7){
+                $reqhrs['70'] += 5;
+            }
         }
         else {
             // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
