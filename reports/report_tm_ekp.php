@@ -210,6 +210,9 @@
                     echo "<th>Τμήματα<br>Ολοήμερου</th>";
                     echo "<th>Νήπια<br>Ολοήμερου</th>";
                     echo "<th>Προνήπια<br>Ολοήμερου</th>";
+
+                    echo "<th>Τ.Ε.</th>";
+                    echo "<th>Μαθ Τ.Ε.</th>";
                     
                     echo "<th>Απαιτούμενοι Εκπ/κοί</th>";
                     echo "<th>Τοπ/νοι<br>Εκπ/κοί</th>";
@@ -222,6 +225,7 @@
                     $organikothta = mysql_result($result, $i, "organikothta");
                     $leitoyrg = mysql_result($result, $i, "leitoyrg");
                     $name = getSchool($sch, $mysqlconnection);
+                    $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
                     $klasiko = mysql_result($result, $i, "klasiko");
                     $klasiko_exp = explode(",",$klasiko);
                     $oloimero_nip = mysql_result($result, $i, "oloimero_nip");
@@ -251,6 +255,9 @@
                     // apaitoymenoi
                     $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
                     $apait = $klasiko_tm + $oloimero_tm + $has_entaxi;
+                    
+                    echo $has_entaxi ? "<td>Ναι</td>" : "<td>Όχι</td>";
+                    echo $has_entaxi ? "<td>$entaksis[1]</td>" : "<td>0</td>";
                     echo "<td>$apait</td>";
 
                     // τοποθετημένοι εκπ/κοί
@@ -298,7 +305,7 @@
                 echo "<td>$synolo_tm_olo</td>";
                 echo "<td>$synolo_pro</td>";
                 echo "<td>$synolo_ol_nip</td>";
-                echo "<td>$synolo_ol_pro</td>";
+                echo "<td>$synolo_ol_pro</td><td></td><td></td>";
                 echo "<td>$synolo_apait</td>";
                 echo "<td>$synolo_nipiag_top</td>";
                 echo "<td>$synolo_k_pl</td>";
