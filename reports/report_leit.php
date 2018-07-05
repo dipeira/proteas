@@ -22,13 +22,14 @@
   </head>
 
 <?php
-    function hours_to_teachers($hours) {
-        return round($hours/23,0);
-    }
     function tdc1($val){
-        return $val >= 0 ? 
-            "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'><span title='".hours_to_teachers($val)."'>$val</span></td>" : 
-            "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        if ($val == 0) {
+            return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        } elseif ($val < 0 ){
+            return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        } else {
+            return "<td style='background:none;background-color:rgba(255,255,0,0.3)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        }
     }
     
     require_once"../config.php";
@@ -45,32 +46,59 @@
     $result = mysql_query($query, $mysqlconnection);
     $num = mysql_num_rows($result);
 
+    $oligothesia = isset($_GET['oligothesia']) ? true : false;
+
     echo "<body>";
     include('../etc/menu.php');
     echo "<h3>Πίνακας λειτουργικών κενών</h3>";
+    echo $oligothesia ? 
+        "<p><a href='report_leit.php'>4/θέσια & άνω</a>&nbsp;&nbsp;Ολιγοθέσια</p>" :
+        "<p>4/θέσια & άνω&nbsp;&nbsp;<a href='report_leit.php?oligothesia=1'>Ολιγοθέσια</a></p>";
     echo "<center>";
     $i=0;
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
     echo "<thead>";
-    echo "<tr><th rowspan=2>Κωδ.</th>";
-    echo "<th rowspan=2>Ονομασία</th>";
-    echo "<th rowspan=2>Οργ.</th>";
-    echo "<th rowspan=2>Λειτ.</th>";
-    echo "<th rowspan=2>Τοπ.<br>ΠΕ70</th>";
-    // new
-    echo "<th rowspan=2>Ωρ. Πρ.</th>";
-    echo "<th rowspan=2>Ωρ. Ολ.</th>";
-    echo "<th rowspan=2>Συν. Ωρ.</th>";
-    echo "<th rowspan=2>Yπαρ. Ωρ.06,<br>11,79</th>";
-    echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
-    echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
-    //
-    echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
-    echo "<th colspan=11>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
-    echo "</tr>";
-    echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th><th>70</th>";
-    echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th><th>70</th><th>70-(Ολ+ΠΖ) <strong>(A)</strong></th>";
+    
+    if ($oligothesia){
+        echo "<tr><th>Κωδ.</th>";
+        echo "<th>Ονομασία</th>";
+        echo "<th>Οργ.</th>";
+        echo "<th>Λειτ.</th>";
+        echo "<th>Τοπ.<br>ΠΕ70</th>";
+        echo "<th>Ωρ. Πρ.</th>";
+        echo "<th>Ωρ. Ολ.</th>";
+        echo "<th>Συν. Ωρ.</th>";
+    }
+    if (!$oligothesia){
+        echo "<tr><th rowspan=2>Κωδ.</th>";
+        echo "<th rowspan=2>Ονομασία</th>";
+        echo "<th rowspan=2>Οργ.</th>";
+        echo "<th rowspan=2>Λειτ.</th>";
+        echo "<th rowspan=2>Τοπ.<br>ΠΕ70</th>";
+        // new
+        echo "<th rowspan=2>Ωρ. Πρ.</th>";
+        echo "<th rowspan=2>Ωρ. Ολ.</th>";
+        echo "<th rowspan=2>Συν. Ωρ.</th>";
+        echo "<th rowspan=2>Yπαρ. Ωρ.06,<br>11,79</th>";
+        echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
+        echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
+        echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
+        echo "<th colspan=11>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
+        echo "</tr>";
+        echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
+        echo "<th>70</th>";
+    } else {
+        echo "<th>Υπ.70</th>";
+    }
+    
+    if (!$oligothesia){
+        echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
+        echo "<th>70</th><th>70+Ολ+ΠΖ <strong>(A)</strong></th>";
+    } else {
+        echo "<th>Απαιτ.70</th><th>Απαιτ.70<br>+(Ολ+ΠΖ) <strong>(A)</strong></th>";
+    }
+    
     echo "<th>+/- 08,11,<br>79,91 <strong>(B)</strong></th><th>A+B</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
@@ -82,15 +110,15 @@
         $code = mysql_result($result, $i, "code");
         $organikothta = mysql_result($result, $i, "organikothta");
         
-        // check if leit < 4. If yes, skip
+        // compute leitoyrgikothta
         $tmimata_exp = explode(",",mysql_result($result, $i, "tmimata"));
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
-        // if oligothesio, skip
-        if ($leit < 4) {
+        // skip depending on requested schools
+        if (($oligothesia & $leit >=4) || (!$oligothesia && $leit < 4)){
             $i++;
             continue;
         }
-        
+                
         // call ektimhseis_wrwn function
         $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
         // required
@@ -125,24 +153,32 @@
         echo "<td>".$results['leit']."</td>";
         echo "<td>$top70</td>";
         // new
-        echo "<td>".($results['leit']*30)."</td>"; //wres pr.
+        echo $oligothesia ? 
+            "<td>".($results['leit']*25)."</td>" :
+            "<td>".($results['leit']*30)."</td>";
         $OP = $req['O'] + $req['P'];
         echo "<td>".$OP."</td>"; // olohm + PZ
         //$diffOP = $df['70']-$df['OP'];
         //echo "<td>".$diffOP."</td>"; // olohm
-        echo "<td>".($results['leit']*30+$OP)."</td>"; //synolo wrwn
-        echo "<td>".($av['06']+$av['11']+$av['79'])."</td>"; // yparx. 08,11,79
-        echo "<td>".($df['05-07']+$df['06']+$df['86'])."</td>"; // apait. 05-07,06,86
-        echo "<td>".($df['08']+$df['11']+$df['79']+$df['91'])."</td>"; // apait. 08,11,79,91
-        //
+        echo $oligothesia ?
+            "<td>".($results['leit']*25+$OP)."</td>" : 
+            "<td>".($results['leit']*30+$OP)."</td>" ;
+        if (!$oligothesia){
+            echo "<td>".($av['06']+$av['11']+$av['79'])."</td>"; // yparx. 08,11,79
+            echo "<td>".($df['05-07']+$df['06']+$df['86'])."</td>"; // apait. 05-07,06,86
+            echo "<td>".($df['08']+$df['11']+$df['79']+$df['91'])."</td>"; // apait. 08,11,79,91
+            echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['79']."</td><td>".(int)$av['91']."</td><td>".(int)$av['86']."</td>";
+        }
         $telPE70 = $df['70']-$OP;
-        echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['79']."</td><td>".(int)$av['91']."</td><td>".(int)$av['86']."</td><td>".(int)$av['70']."</td>";
-        echo tdc1($df['05-07']).tdc1($df['06']).tdc1($df['08']).tdc1($df['11']).tdc1($df['79']).tdc1($df['91']).tdc1($df['86']).tdc1($df['70']).tdc1($telPE70);
+        echo "<td>".(int)$av['70']."</td>";
+        if (!$oligothesia){
+            echo tdc1($df['05-07']).tdc1($df['06']).tdc1($df['08']).tdc1($df['11']).tdc1($df['79']).tdc1($df['91']).tdc1($df['86']);
+        }
+        echo tdc1($df['70']).tdc1($telPE70);
         $koines = $df['08']+$df['11']+$df['79']+$df['91'];
-        echo tdc1($koines); // apait. 08,11,79,91
+        echo tdc1((int)$koines); // apait. 08,11,79,91
         echo tdc1($telPE70+$koines);
         echo "</tr>\n";
-
 
         $par_sum['05-07'] += $av['05-07'];
         $par_sum['06'] += $av['06'];
@@ -187,27 +223,43 @@
     $df_sum_t = array_map(hours_to_teachers, $df_sum);
     $kena_sum_t = array_map(hours_to_teachers, $kena_sum);
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=3>ΣΥΝΟΛΑ</td>";
-    echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['79']."</td><td>".$par_sum['91']."</td><td>".$par_sum['86']."</td><td>".$par_sum['70']."</td>\n";
-    echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td><td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
+    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>";
+    if (!$oligothesia){
+        echo "</td><td colspan=3>ΣΥΝΟΛΑ</td>";
+        echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['79']."</td><td>".$par_sum['91']."</td><td>".$par_sum['86']."</td>";
+    }
+    echo "<td>".$par_sum['70']."</td>\n";
+    if (!$oligothesia){
+        echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td>";
+    }
+    echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=3>ΣΥΝΟΛΑ (εκπ)</td>";
-    echo "<td>".$par_sum_t['05-07']."</td><td>".$par_sum_t['06']."</td><td>".$par_sum_t['08']."</td><td>".$par_sum_t['11']."</td><td>".$par_sum_t['79']."</td><td>".$par_sum_t['91']."</td><td>".$par_sum_t['86']."</td><td>".$par_sum_t['70']."</td>\n";
-    echo "<td>".$df_sum_t['05-07']."</td><td>".$df_sum_t['06']."</td><td>".$df_sum_t['08']."</td><td>".$df_sum_t['11']."</td><td>".$df_sum_t['79']."</td><td>".$df_sum_t['91']."</td><td>".$df_sum_t['86']."</td><td>".$df_sum_t['70']."</td><td>".$df_sum_t['OP']."</td><td></td><td></td>\n";
+    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>";
+    if (!$oligothesia){
+        echo "</td><td colspan=3>ΣΥΝΟΛΑ (εκπ)</td>";
+        echo "<td>".$par_sum_t['05-07']."</td><td>".$par_sum_t['06']."</td><td>".$par_sum_t['08']."</td><td>".$par_sum_t['11']."</td><td>".$par_sum_t['79']."</td><td>".$par_sum_t['91']."</td><td>".$par_sum_t['86']."</td>";
+    }
+    echo "<td>".$par_sum_t['70']."</td>\n";
+    if (!$oligothesia){
+        echo "<td>".$df_sum_t['05-07']."</td><td>".$df_sum_t['06']."</td><td>".$df_sum_t['08']."</td><td>".$df_sum_t['11']."</td><td>".$df_sum_t['79']."</td><td>".$df_sum_t['91']."</td><td>".$df_sum_t['86']."</td>";
+    }
+    echo "<td>".$df_sum_t['70']."</td><td>".$df_sum_t['OP']."</td><td></td><td></td>\n";
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
-    echo "<td></td><td></td><td colspan=3>MONO KENA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
-    echo "<td>".$kena_sum['05-07']."</td><td>".$kena_sum['06']."</td><td>".$kena_sum['08']."</td><td>".$kena_sum['11']."</td><td>".$kena_sum['79']."</td><td>".$kena_sum['91']."</td><td>".$kena_sum['86']."</td><td>".$kena_sum['70']."</td><td></td><td></td><td></td>\n";
+    //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+    //echo "<td></td><td colspan=3>MONO KENA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+    //echo "<td>".$kena_sum['05-07']."</td><td>".$kena_sum['06']."</td><td>".$kena_sum['08']."</td><td>".$kena_sum['11']."</td><td>".$kena_sum['79']."</td><td>".$kena_sum['91']."</td><td>".$kena_sum['86']."</td><td>".$kena_sum['70']."</td><td></td><td></td><td></td>\n";
 
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
-    echo "<td></td><td></td><td colspan=3>MONO KENA (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
-    echo "<td>".$kena_sum_t['05-07']."</td><td>".$kena_sum_t['06']."</td><td>".$kena_sum_t['08']."</td><td>".$kena_sum_t['11']."</td><td>".$kena_sum_t['79']."</td><td>".$kena_sum_t['91']."</td><td>".$kena_sum_t['86']."</td><td>".$kena_sum_t['70']."</td><td></td><td></td><td></td>\n";
+    //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
+    //echo "<td></td><td></td><td colspan=3>MONO KENA (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+    //echo "<td>".$kena_sum_t['05-07']."</td><td>".$kena_sum_t['06']."</td><td>".$kena_sum_t['08']."</td><td>".$kena_sum_t['11']."</td><td>".$kena_sum_t['79']."</td><td>".$kena_sum_t['91']."</td><td>".$kena_sum_t['86']."</td><td>".$kena_sum_t['70']."</td><td></td><td></td><td></td>\n";
     
+    if (!$oligothesia){
     echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
     echo "<td></td><td></td><td></td><td></td><td></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
     echo "</tr>";
+    }
     echo "</tbody></table>";
     echo "<br>";
 

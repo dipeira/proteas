@@ -363,7 +363,7 @@
         echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
         echo "<br><br>";
         // if dimotiko & leitoyrg >= 4
-        if ($type == 1 && array_sum($tmimata_exp)>3){
+        if ($type == 1 ){//&& array_sum($tmimata_exp)>3){
             ektimhseis_wrwn($sch, $conn, $sxol_etos, TRUE);
         }
         // if systegazomeno
@@ -419,7 +419,7 @@
         disp_school($sch, $sxol_etos, $mysqlconnection);
         
         //Υπηρετούν με θητεία
-        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6)";
+        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
         $result = mysql_query($query, $mysqlconnection);
         $num = mysql_num_rows($result);
         if ($num)

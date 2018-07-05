@@ -1017,9 +1017,9 @@
     }
         
     // generic combo function
-    function tblCmb ($conn, $tbl, $inp = 0, $fieldnm = NULL, $sortby = NULL)
+    function tblCmb ($conn, $tbl, $inp = 0, $fieldnm = NULL, $sortby = NULL, $query = NULL)
 	{
-        $query = "SELECT * from $tbl";
+        $query = $query ? $query : "SELECT * from $tbl";
         $query .= $sortby ? " ORDER BY $sortby ASC" : '';
 		$result = mysql_query($query, $conn);
 		if (!$result) 
@@ -1198,8 +1198,18 @@
     */
     function anagkes_wrwn($tm){
         $artm = $tm[0]+$tm[1]+$tm[2]+$tm[3]+$tm[4]+$tm[5];
+        // oligothesia (<4/thesia)
+        if ($artm < 4){
+            $hours = [];
+            $hours['70'] = $artm * 25;
+            // oloimero
+            $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+            // PZ
+            $hours['P'] = $tm[8]*5;
+            return $hours;
+        }
         // 4/thesia
-        if ($artm == 4){
+        elseif ($artm == 4){
             $hours = [];
             $hours['05-07'] = $tm[4]*1;
             $hours['06'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*3 + $tm[4]*3;
@@ -1277,8 +1287,20 @@
         elseif ($tm >= 12)
             return 6;
     }
+    function hours_to_teachers($hours) {
+        return round($hours/23,0);
+    }
     function tdc($val){
-    return $val >= 0 ? "<td style='background:none;background-color:#00FF00'>$val</td>" : "<td style='background:none;background-color:#FF0000'>$val</td>";
+        // return $val >= 0 ? 
+        //     "<td style='background:none;background-color:#00FF00'>$val</td>" : 
+        //     "<td style='background:none;background-color:#FF0000'>$val</td>";
+        if ($val == 0) {
+            return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        } elseif ($val < 0 ){
+            return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        } else {
+            return "<td style='background:none;background-color:rgba(255,255,0,0.3)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+        }
     }
     /*
     * ektimhseis_wrwn
@@ -1303,47 +1325,59 @@
         // synolo mathitwn (gia yp/ntes)
         $classes = explode(",",mysql_result($result, 0, "students"));
         $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
-        // oligothesia
-        if ($leit < 4) 
-        {
-            $reqhrs['70'] = $leit * 25;
-            // for PZ: at least 7 stud for leit < 9
-            if ($classes[7] >= 7){
-                $reqhrs['70'] += 5;
-            }
+        
+        // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
+        if ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10){
+            $tmimata_exp[8] = 0;
         }
-        else {
-            // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
-            if ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10){
-                $tmimata_exp[8] = 0;
-            }
-            // Απαιτούμενες ώρες
-            $reqhrs = anagkes_wrwn($tmimata_exp);
-        }
+        // Απαιτούμενες ώρες
+        $reqhrs = anagkes_wrwn($tmimata_exp);
+        
         // ώρες Δ/ντή
         $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
         $result = mysql_query($query, $mysqlconnection);
         if (mysql_num_rows($result)) {
-            $dnthrs = wres_dnth($leit);
+            $dnthrs = $leit < 4 ?
+                mysql_result($result, 0, "wres") :
+                wres_dnth($leit);
             $klados = mysql_result($result, 0, "klados");
             $klper = mysql_result($result, 0, "k.perigrafh");
             $avhrs[$klados] = $dnthrs;
             // ώρες Δ/ντή στην ανάλυση
-            $ar = Array('surname' =>  mysql_result($result, 0, "e.surname"), 'klados' =>  mysql_result($result, 0, "k.perigrafh"), 'hours' => $dnthrs);
+            $ar = Array(
+                'surname' =>  mysql_result($result, 0, "e.surname")." <small>(Δ/ντής/-ντρια)</small>",
+                'klados' =>  mysql_result($result, 0, "k.perigrafh"), 
+                'hours' => $dnthrs
+            );
             $all[] = $ar;
             $allcnt[$klper]++;
         }
         // ώρες Υπ/ντή
         $meiwsh_ypnth = 0;
-        if ($synolo_pr > 120){
-            if ($synolo_pr > 270) {
-                $meiwsh_ypnth = 4;
-            } else {
-                $meiwsh_ypnth = 2;
+        $query_yp = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
+        $result_yp = mysql_query($query_yp, $mysqlconnection);
+        if (mysql_num_rows($result_yp)) {
+            // reduce if students > 120
+            if ($synolo_pr > 120){
+                if ($synolo_pr > 270) {
+                    $meiwsh_ypnth = 4;
+                } else {
+                    $meiwsh_ypnth = 2;
+                }
             }
-            // add meiwsh_ypnth to 70's required hours
-            $reqhrs['70'] += $meiwsh_ypnth;
+            $klados = mysql_result($result_yp, 0, "klados");
+            $meiwsh_ypnth_klados = mysql_result($result_yp, 0, "k.perigrafh");
+            $avhrs[$klados] -= $meiwsh_ypnth;
+            // ώρες Υπ/ντή στην ανάλυση
+            $ar = Array(
+                'surname' =>  mysql_result($result_yp, 0, "e.surname").' <small>(Υπ/ντής)</small>', 
+                'klados' =>  $meiwsh_ypnth_klados, 
+                'hours' => mysql_result($result_yp, 0, "e.wres") - $meiwsh_ypnth
+            );
+            $all[] = $ar;
+            $allcnt[$klper]++;
         }
+        
         // μείωση ωραρίου υπευθύνου βιβλιοθήκης (3 ώρες)
         $meiwsh_vivliothikis = 0;
         if ($vivliothiki > 0){
@@ -1360,7 +1394,7 @@
         }
         if ($print){
             // αναλυτικά...
-            $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) ORDER BY e.klados";
+            $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
             $result = mysql_query($query, $mysqlconnection);
             while ($row = mysql_fetch_array($result)){
                 $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
@@ -1427,7 +1461,7 @@
         // if meiwseis, print below table
         if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0){
             echo "<p>Μειώσεις υπ.ωραρίου: ";
-            echo $meiwsh_ypnth > 0 ? 'Υποδιευθυντών (ΠΕ70): '.$meiwsh_ypnth.' ώρες<br>' : '';
+            echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
             echo $meiwsh_vivliothikis > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.$meiwsh_vivliothikis.' ώρες<br>' : '';
             echo "</p>";
         }

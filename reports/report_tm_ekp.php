@@ -191,7 +191,7 @@
             //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
             $type2 = $_POST['type'] - 4;
             
-            $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
+            $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0 ORDER BY name";
             $result = mysql_query($query, $mysqlconnection);
             $num = mysql_num_rows($result);
             
@@ -212,9 +212,6 @@
                     echo "<th>Προνήπια<br>Ολοήμερου</th>";
                     
                     echo "<th>Απαιτούμενοι Εκπ/κοί</th>";
-                    //echo "<th>Εκπ/κοί Ολοημέρου</th>";
-                    //echo "<th>Εκπ/κοί T.E.</th>";
-                    //echo "<th>Σύν.Εκπ/κών</th>";
                     echo "<th>Τοπ/νοι<br>Εκπ/κοί</th>";
                     echo "<th>+ / -</th>";
                     echo "</tr></thead>\n<tbody>\n";
