@@ -85,12 +85,13 @@
   <?php include('../etc/menu.php'); ?>
     <center>
       <?php
-                $usrlvl = $_SESSION['userlevel'];
+        $usrlvl = $_SESSION['userlevel'];
        if ($_GET['op']!="add")
        {
            if ($_GET['sxoletos']) {
                $sxol_etos = $_GET['sxoletos'];
-               $query = "SELECT * FROM ektaktoi_$sxol_etos e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
+               $sxoletos = $_GET['sxoletos'];
+               $query = "SELECT * FROM ektaktoi_old e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos AND e.sxoletos=$sxoletos";
            }
            else {
                 $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
@@ -464,7 +465,10 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
         echo "<tr><td>Πραξη</td><td colspan=3>".getNamefromTbl($mysqlconnection, "praxi", $praxi)."</td></tr>";
         
-        $qry = "SELECT * FROM praxi WHERE id=$praxi";
+        $qry = $sxoletos ? 
+                "SELECT * FROM praxi_old WHERE id=$praxi AND sxoletos = $sxoletos" :
+                "SELECT * FROM praxi WHERE id=$praxi";
+        
         $res = mysql_query($qry);
         $ya = mysql_result($res, 0, 'ya');
         $apofasi = mysql_result($res, 0, 'apofasi');
@@ -509,7 +513,9 @@ elseif ($_GET['op']=="view")
         }
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
         echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
-        echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
+        echo $sxoletos ?
+                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
+                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
 
         echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
         ?>

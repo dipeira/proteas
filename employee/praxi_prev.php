@@ -48,7 +48,7 @@
 <?php
 	echo "<h3>Πράξεις σχολικού έτους: " . substr($sxoletos,0,4) . '-' . substr($sxoletos,4,2) ."</h3>";
 	
-	$query = "SELECT * from praxi_".$sxoletos;
+	$query = "SELECT * from praxi_old where sxoletos=".$sxoletos;
 	//echo $query;
 	
 	$result = mysql_query($query, $mysqlconnection);
@@ -83,7 +83,7 @@
       ?>
       
       <br>
-      <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick='parent.location="ektaktoi_prev.php"'>
+      <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick='parent.location="ektaktoi_prev.php?sxoletos=<?=$sxoletos?>"'>
     </center>
 </div>
   </body>

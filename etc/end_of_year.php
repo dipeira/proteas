@@ -238,23 +238,26 @@
         $query = "select id from ektaktoi";
         $result = mysql_query($query, $mysqlconnection);
         if (!mysql_num_rows($result))
-            exit('O πίνακας έκτακτου προσωπικού είναι κενός...');
-        //
-        //$query = "DROP TABLE ektaktoi_bkp";
-        //$result = mysql_query($query, $mysqlconnection);
-        $tbl_ekt = "ektaktoi_$sxol_etos";
-        $query = "CREATE TABLE $tbl_ekt SELECT * FROM ektaktoi";
+            exit('Σφάλμα: O πίνακας έκτακτου προσωπικού είναι κενός...');
+        // check if already inserted        
+        $query = "select id from ektaktoi_old where sxoletos = $sxol_etos";
         $result = mysql_query($query, $mysqlconnection);
+        if (!mysql_num_rows($result))
+            exit('Σφάλμα: H διαγραφή έχει ήδη γίνει...');
+        // archive into ektaktoi_old
+        $query = "insert into ektaktoi_old select *, '$sxol_etos' as sxoletos from ektaktoi where 1";
+        $result = mysql_query($query, $mysqlconnection);
+        // empty table
         $query = "TRUNCATE table ektaktoi";
         $result = mysql_query($query, $mysqlconnection);
         
-        $tbl_prx = "praxi_$sxol_etos";
-        $query = "CREATE TABLE $tbl_prx SELECT * FROM praxi";
+        // archive praxi
+        $query = "insert into praxi_old select *, '$sxol_etos' as sxoletos from praxi where 1";
         $result = mysql_query($query, $mysqlconnection);
         $query = "TRUNCATE table praxi";
         $result = mysql_query($query, $mysqlconnection);
         if ($result)
-            echo "Επιτυχής Διαγραφή. <br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα $tbl_ekt</small>";
+            echo "Επιτυχής Διαγραφή. <br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα 'ektaktoi_old'</small>";
         else 
             echo "Πρόβλημα στη διαγραφή...";
     }

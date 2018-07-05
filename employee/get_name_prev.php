@@ -9,11 +9,12 @@ mysql_select_db($db_name);
 mysql_query("SET NAMES 'greek'", $conn);
 mysql_query("SET CHARACTER SET 'greek'", $conn);
 
-$q = strtolower($_GET["q"]);
-//$q = mb_strtolower($_GET["q"],'utf-8');
+//$q = strtolower($_GET["q"]);
+$q = mb_strtolower($_GET["q"],'utf-8');
 if (!$q) return;
 
-$sql = "select DISTINCT surname from ektaktoi_".$_SESSION['sxoletos']. " where surname LIKE '%$q%'";
+$sql = "select DISTINCT surname from ektaktoi_old where surname LIKE '%$q%' AND sxoletos=".$_SESSION['sxoletos'];
+
 //workaround for greek chars
 $sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
 

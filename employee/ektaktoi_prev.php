@@ -17,7 +17,7 @@
     else
         $logged = 1;
     
-    // Get previous sxol_etos or redirect
+    // Get previous sxol_etos or find
     if (strlen($_REQUEST['sxoletos'])>0)
     {
         $sxoletos = $_REQUEST['sxoletos'];
@@ -25,7 +25,8 @@
     else
     {
         $sxoletos = find_prev_year($sxol_etos);
-    }
+	 }
+	 $_SESSION['sxoletos'] = $sxoletos;
           
 ?>
 <html>
@@ -58,7 +59,12 @@
 		
 		$(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
-		}); 
+		});
+
+		function changeYear(){
+			var selYr = $('#year-change').find(":selected").val();
+			parent.location='ektaktoi_prev.php?sxoletos='+selYr;
+		} 
 	</script>
 	
   </head>
@@ -88,7 +94,7 @@
 		$limitQ = ' LIMIT ' .($curpg - 1) * $rpp .',' .$rpp;
 
                 
-		$query = "SELECT * FROM ektaktoi_" . $sxoletos.' ';
+		$query = "SELECT * FROM ektaktoi_old where sxoletos=" . $sxoletos.' ';
 		
 
 		if (isset($sxoletos))
@@ -107,8 +113,7 @@
 				$klpost = $_POST['klados'];
 			else
 				$klpost = $_GET['klados'];
-			$query .= "WHERE klados = $klpost ";
-			$whflag=1;
+			$query .= "AND klados = $klpost ";
 		}
                 if (($_POST['type']>0) || ($_GET['type']>0))
 		{
@@ -116,8 +121,7 @@
 				$typepost = $_POST['type'];
 			else
 				$typepost = $_GET['type'];
-			$query .= "WHERE type = $typepost ";
-			$whflag=1;
+			$query .= "AND type = $typepost ";
 		}
 		if ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0))
 		{
@@ -125,10 +129,7 @@
 				$yppost = getSchoolID ($_POST['yphr'], $mysqlconnection);
 			if ($_GET['yphr']>0)
 				$yppost = $_GET['yphr'];
-			if ($whflag)
 				$query .= "AND sx_yphrethshs = $yppost ";
-			else
-				$query .= "WHERE sx_yphrethshs = $yppost ";
 		}
 		if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)
 		{
@@ -139,13 +140,7 @@
 					//$surpost = mb_convert_encoding($surpost, "iso-8859-7", "utf-8");
 			}
                             
-			if ($whflag)
-				$query .= "AND surname LIKE '$surpost' ";
-			else
-			{
-				$query .= "WHERE surname LIKE '$surpost' ";
-				$whflag=1;
-			}
+			$query .= "AND surname LIKE '$surpost' ";
 		}
       if ((strlen($_POST['praxi'])>0) || ($_GET['praxi']>0))
 		{
@@ -153,10 +148,8 @@
 				$yppost = $_GET['praxi'];
                         else
                             $yppost = $_POST['praxi'];
-			if ($whflag)
-				$query .= "AND praxi = $yppost ";
-			else
-				$query .= "WHERE praxi = $yppost ";
+			
+			$query .= "AND praxi = $yppost ";
 		}
 		$query_all = $query;
 		$query .= " ORDER BY surname ";
@@ -179,39 +172,51 @@
 		if ($result)
 			$num=mysql_num_rows($result);
                 
-		
-        echo "<center>";        
+	// display prev year select
+	$query_pr = "SELECT distinct sxoletos from praxi_old ORDER BY sxoletos DESC";
+	$result_pr = mysql_query($query_pr, $mysqlconnection);
+	if (mysql_num_rows($result_pr)){
+		echo "Επιλέξτε έτος: ";
+		echo "<select id='year-change' onchange='changeYear()'>";
+		while ($row = mysql_fetch_array($result_pr)){
+			$setos = substr($row['sxoletos'],0,4).'-'.substr($row['sxoletos'],4,2);
+			$selected = $sxoletos == $row['sxoletos'] ? 'selected' : '';
+			echo "<option value='".$row['sxoletos']."' $selected>".$setos."</option>";
+		}
+		echo "</select><br><br>";
+	}
+	echo "<center>";
+	
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-        echo "<thead><tr><form id='src' name='src' action='ektaktoi_prev.php' method='POST'>\n";
+	echo "<thead><tr><form id='src' name='src' action='ektaktoi_prev.php?sxoletos=$sxoletos' method='POST'>\n";
+	echo "<td colspan=2><input type='text' name='surname' id='surname''/>";
 	if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0) || ($_GET['type']>0))
-		echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
+		echo "<INPUT TYPE='submit' VALUE='Επαναφορά'>";
 	else	
-		echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
-	echo "<input type='text' name='surname' id='surname''/>\n";
-	echo "<td></td><td>\n";
+		echo "<INPUT TYPE='submit' VALUE='Αναζήτηση'>";
+	
+	echo "<td>\n";
 	kladosCmb($mysqlconnection);
 	echo "</td>\n";
-		echo "<div id=\"content\">";
-		echo "<form autocomplete=\"off\">";
-		echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td>";
-		echo "</div>";
+	echo "<div id=\"content\">";
+	echo "<form autocomplete=\"off\">";
+	echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td>";
+	echo "</div>";
 	echo "<td>";
-        //echo "</td>";
-        typeCmb($mysqlconnection);
-        echo "</td>";
-        echo "<td>";
-        $tmp = 'praxi_'.$sxoletos;
-        tblCmb($mysqlconnection, $tmp, 0, 'praxi');
-        echo "</td>";
+	//echo "</td>";
+	typeCmb($mysqlconnection);
+	echo "</td>";
+	echo "<td>";
+	tblCmb($mysqlconnection, 'praxi_old', 0, 'praxi_old',NULL, "SELECT * from praxi_old where sxoletos = $sxoletos");
+	echo "</td>";
 	echo "</form></tr>\n";
 	
-        echo "<tr><th>Ενέργεια</th>\n";
 	echo "<th>Επώνυμο</th>\n";
 	echo "<th>Όνομα</th>\n";
 	echo "<th>Ειδικότητα</th>\n";
 	echo "<th>Σχ.Υπηρέτησης<br><small>(* περισσότερα από 1 σχολ.)</small></th>\n";
-        echo "<th>Τύπος Απασχόλησης</th>\n";
-        echo "<th>Πράξη</th>\n";
+	echo "<th>Τύπος Απασχόλησης</th>\n";
+	echo "<th>Πράξη</th>\n";
 	echo "</tr>\n</thead>\n";
 	
 	echo "<tbody>\n";
@@ -225,20 +230,21 @@
 		$klados_id = mysql_result($result, $i, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
 		// an parapanw apo 1 sxoleia, deixnei mono to 1o (kyriws) kai vazei * dipla toy.
-                $sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
-                $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-                $sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
+		$sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
+		$sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
+		$sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
 		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
-                $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+		$sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
 
-                $type = mysql_result($result, $i, "type");
-                $praxi = mysql_result($result, $i, "praxi");
-                $praxi = getNamefromTbl($mysqlconnection, "praxi_".$sxoletos, $praxi);
+		$type = mysql_result($result, $i, "type");
+		$praxi = mysql_result($result, $i, "praxi");
+		$query_p = "SELECT name from praxi_old WHERE id=$praxi AND sxoletos=$sxoletos";
+		$result_p = mysql_query($query_p, $mysqlconnection);
+		$praxi = mysql_result($result_p, 0, "name");
 								
-		echo "<tr><td>";
-		echo "</td>";
-                $typos = get_type($type, $mysqlconnection);
-		echo "<td><a href='ektaktoi.php?op=view&sxoletos=".$sxoletos."&id=$id' target='_blank'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+		echo "<tr>";
+      $typos = get_type($type, $mysqlconnection);
+		echo "<td><a href='ektaktoi.php?op=view&sxoletos=".$sxoletos."&id=$id'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
 		echo "</tr>";
 
 		$i++;
@@ -252,16 +258,16 @@
 		echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
 		if ($curpg!=1)
 		{
-				echo "  <a href=ektaktoi_prev.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
+				echo "  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
 		}
 		else
 			echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 		if ($curpg != $lastpg)
 		{
 				$nextpg = $curpg+1;
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
 		}
 		else 
 			echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
@@ -275,7 +281,7 @@
 		echo "</td></tr>";
 		echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_hire.php'\">";
 		echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πράξεις έτους $sxoletos' onClick=\"parent.location='praxi_prev.php?sxoletos=$sxoletos'\">";
-                echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+      echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
 		echo "</table>\n";
       ?>
       
