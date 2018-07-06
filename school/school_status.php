@@ -379,7 +379,8 @@
     echo "<div id=\"content\">";
     echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
     echo "<table class=\"imagetable stable\" border='1'>";
-    echo "<td>Σχολείο</td><td></td><td><input type=\"text\" name=\"org\" id=\"org\" /></td></tr>";				
+    echo "<td>Σχολείο</td><td></td>";
+    echo "<td><input type=\"text\" name=\"org\" id=\"org\" style='width:250px;'/></td></tr>";				
     echo "	</table>";
     echo "	<input type='submit' value='Αναζήτηση'>";
     //echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";

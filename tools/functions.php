@@ -1278,7 +1278,9 @@
     * 4,5: 18, 6-9: 10, 10,11: 8, 12+: 6
     */
     function wres_dnth($tm) {
-        if ($tm == 4 || $tm == 5)
+        if ($tm < 4)
+            return 25;
+        elseif ($tm == 4 || $tm == 5)
             return 18;
         elseif ($tm > 5 && $tm < 10)
             return 10;
@@ -1317,11 +1319,13 @@
         mysql_query("SET NAMES 'greek'", $mysqlconnection);
         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         // get tmimata
-        $query = "SELECT students,tmimata,leitoyrg,vivliothiki from school WHERE id='$sch'";
+        $query = "SELECT students,tmimata,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
         $result = mysql_query($query, $mysqlconnection);
         $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
         $vivliothiki = mysql_result($result, 0, "vivliothiki");
+        $eidiko = mysql_result($result, 0, "type2") == 2 ? true : false;
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+        $oligothesio = $leit < 4 ? true : false;
         // synolo mathitwn (gia yp/ntes)
         $classes = explode(",",mysql_result($result, 0, "students"));
         $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
@@ -1332,14 +1336,11 @@
         }
         // Απαιτούμενες ώρες
         $reqhrs = anagkes_wrwn($tmimata_exp);
-        
         // ώρες Δ/ντή
         $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
         $result = mysql_query($query, $mysqlconnection);
         if (mysql_num_rows($result)) {
-            $dnthrs = $leit < 4 ?
-                mysql_result($result, 0, "wres") :
-                wres_dnth($leit);
+            $dnthrs = wres_dnth($leit);
             $klados = mysql_result($result, 0, "klados");
             $klper = mysql_result($result, 0, "k.perigrafh");
             $avhrs[$klados] = $dnthrs;
@@ -1357,13 +1358,9 @@
         $query_yp = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
         $result_yp = mysql_query($query_yp, $mysqlconnection);
         if (mysql_num_rows($result_yp)) {
-            // reduce if students > 120
-            if ($synolo_pr > 120){
-                if ($synolo_pr > 270) {
-                    $meiwsh_ypnth = 4;
-                } else {
-                    $meiwsh_ypnth = 2;
-                }
+            // reduce if students > 120 or eidiko with >30 students
+            if ($synolo_pr > 120 || ($eidiko && $synolo_pr > 30)){
+                $meiwsh_ypnth = 2;
             }
             $klados = mysql_result($result_yp, 0, "klados");
             $meiwsh_ypnth_klados = mysql_result($result_yp, 0, "k.perigrafh");
@@ -1390,7 +1387,10 @@
         $result = mysql_query($query, $mysqlconnection);
         while ($row = mysql_fetch_array($result)){
             $kl = strval($row['klados']);
-            $avhrs[$kl] += $row['wres'];
+            if ($oligothesio){
+                $avhrs[$kl] += 25;
+            } else 
+                $avhrs[$kl] += $row['wres'];
         }
         if ($print){
             // αναλυτικά...

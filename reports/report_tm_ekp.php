@@ -87,6 +87,8 @@
                     echo "<th>‘Ï. ≈'</th>";
                     echo "<th>‘Ï. ”‘'</th>";
                     echo "<th>”˝Ì. ‘Ï.</th>";
+                    echo "<th>‘.≈.</th>";
+                    echo "<th>Ã·Ë ‘.≈.</th>";
                     echo "<th>–≈70</th>";
                     echo "<th>–≈06</th>";
                     echo "<th>–≈11</th>";
@@ -107,6 +109,8 @@
                         //$frontistiriako = mysql_result($result, $i, "frontistiriako");
                         $tmimata = mysql_result($result, $i, "tmimata");
                         $tmimata_exp = explode(",",$tmimata);
+                        $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
+                        $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
 
                         $oloimero_stud = $classes[6];
                         $oloimero_tea = $tmimata_exp[6];
@@ -132,6 +136,9 @@
                         echo "<tr>";
                         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
                         echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
+                        echo $has_entaxi ? "<td>Õ·È</td>" : "<td>º˜È</td>";
+                        echo $has_entaxi ? "<td>$entaksis[1]</td>" : "<td>0</td>";
+                        
                         echo "<td>".$ekp_ar['–≈70']."</td><td>".$ekp_ar['–≈06']."</td><td>".$ekp_ar['–≈11']."</td><td>".$ekp_ar['–≈79']."</td>";
                         echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
                         echo "</tr>\n";

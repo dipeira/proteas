@@ -8,7 +8,7 @@
 */
     session_start();
     $contents = $_SESSION['page'];
-    $contents = mb_convert_encoding($contents,"utf-8","iso-8859-7");
+    //$contents = mb_convert_encoding($contents,"utf-8","iso-8859-7");
     $result = preg_replace("/<a\s(.+?)>(.+?)<\/a>/is", "<b>$2</b>", $contents);
 
     $filename ="export.xls";
