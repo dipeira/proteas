@@ -1383,14 +1383,21 @@
         }
         // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
         //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
-        $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
-        $result = mysql_query($query, $mysqlconnection);
-        while ($row = mysql_fetch_array($result)){
-            $kl = strval($row['klados']);
-            if ($oligothesio){
-                $avhrs[$kl] += 25;
-            } else 
+        if ($oligothesio){
+            $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
+            $result = mysql_query($query, $mysqlconnection);
+            while ($row = mysql_fetch_array($result)){
+                $plithos = strval($row['plithos']);
+                $kl = strval($row['klados']);
+                $avhrs[$kl] += $plithos * 25;
+            }
+        } else {
+            $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
+            $result = mysql_query($query, $mysqlconnection);
+            while ($row = mysql_fetch_array($result)){
+                $kl = strval($row['klados']);
                 $avhrs[$kl] += $row['wres'];
+            }
         }
         if ($print){
             // αναλυτικά...
@@ -1420,7 +1427,6 @@
                 $allcnt[$row['perigrafh']]++;
             }
         }
-        
         // replace kladoi @ array
         //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/91
         $avar = $avhrs;
