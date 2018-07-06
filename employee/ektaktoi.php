@@ -463,7 +463,11 @@ elseif ($_GET['op']=="view")
         }
         echo "<tr><td>Μετακινήσεις</td><td colspan=3>$metakinhsh</td></tr>";
         echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
-        echo "<tr><td>Πραξη</td><td colspan=3>".getNamefromTbl($mysqlconnection, "praxi", $praxi)."</td></tr>";
+        echo "<tr><td>Πραξη</td><td colspan=3>";
+        echo $sxoletos ? 
+                getNamefromTbl($mysqlconnection, "praxi_old", $praxi) :
+                getNamefromTbl($mysqlconnection, "praxi", $praxi);
+        echo "</td></tr>";
         
         $qry = $sxoletos ? 
                 "SELECT * FROM praxi_old WHERE id=$praxi AND sxoletos = $sxoletos" :
