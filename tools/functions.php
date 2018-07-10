@@ -1372,7 +1372,7 @@
                 'hours' => mysql_result($result_yp, 0, "e.wres") - $meiwsh_ypnth
             );
             $all[] = $ar;
-            $allcnt[$klper]++;
+            $allcnt[$meiwsh_ypnth_klados]++;
         }
         
         // μείωση ωραρίου υπευθύνου βιβλιοθήκης (3 ώρες)
@@ -1457,35 +1457,46 @@
         $ret['OP'] = $ret['70'] - $reqhrs['O'] - $reqhrs['P'];
         
         if ($print){
-        echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
-        echo "<table class=\"imagetable\" border='1'>";
-        echo "<thead><th>Κλάδος</th><th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th><th>70</th><th>Ολοημ.</th><th>Π.Ζ.</th></thead>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
-        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
-        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
-        echo "</table>";
-        // if meiwseis, print below table
-        if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0){
-            echo "<p>Μειώσεις υπ.ωραρίου: ";
-            echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
-            echo $meiwsh_vivliothikis > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.$meiwsh_vivliothikis.' ώρες<br>' : '';
-            echo "</p>";
-        }
-        echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
-        echo "<div id='analysis' style='display: none;'>";
-            echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<tr><td colspan=3><u>ΣΥΝΟΛΑ:</u> ";
-            foreach ($allcnt as $key=>$value){
-                echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
-            }
-            echo "</td></tr>";
-            foreach ($all as $row) {
-                echo "<tr><td>".$row['surname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
-            }
+            echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
+            echo "<table class=\"imagetable\" border='1'>";
+            echo "<thead>";
+            echo "<th>Κλάδος</th>";
+            echo "<th><span title='Γαλλικών-Γερμανικών'>05-07</span></th>";
+            echo "<th><span title='Αγγλικών'>06</span></th>";
+            echo "<th><span title='Καλλιτεχνικών'>08</span></th>";
+            echo "<th><span title='Φυσικής αγωγής'>11</span></th>";
+            echo "<th><span title='Μουσικής'>79</span></th>";
+            echo "<th><span title='Θεατρικής Αγωγής'>91</span></th>";
+            echo "<th><span title='Πληροφορικής'>86</span></th>";
+            echo "<th><span title='Δασκάλων'>70</span></th>";
+            echo "<th>Ολοήμερο</th><th>Πρωινή Ζώνη</th>";
+            echo "</thead>";
+            echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
+            echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
+            echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
             echo "</table>";
-            echo "* Αναπληρωτής";
-        echo "</div>";
-        echo "<br><br>";
+            // if meiwseis, print below table
+            if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0){
+                echo "<p>Μειώσεις υπ.ωραρίου: ";
+                echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
+                echo $meiwsh_vivliothikis > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.$meiwsh_vivliothikis.' ώρες<br>' : '';
+                echo "</p>";
+            }
+            echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
+            echo "<div id='analysis' style='display: none;'>";
+                echo "<table class=\"imagetable stable\" border='1'>";
+                echo "<tr><td colspan=3><u>ΣΥΝΟΛΑ:</u> ";
+                foreach ($allcnt as $key=>$value){
+                    echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
+                }
+                echo "</td></tr>";
+                foreach ($all as $row) {
+                    echo "<tr><td>".$row['surname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
+                }
+                echo "</table>";
+                echo "* Αναπληρωτής";
+            echo "</div>";
+            echo "<br><br>";
         }
         else {
             return ['required' => $reqhrs, 'available' => $avar, 'diff' => $ret, 'leit' => $leit];

@@ -430,6 +430,7 @@
             $i=0;
             echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -448,6 +449,7 @@
                 $comments = mysql_result($result, $i, "comments");
 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -467,6 +469,7 @@
             $i=0;
             echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -481,6 +484,7 @@
                 $klados = getKlados($klados_id,$mysqlconnection);
                 $comments = mysql_result($result, $i, "comments");
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -500,6 +504,7 @@
             $i=0;
             echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -515,6 +520,7 @@
                 $comments = mysql_result($result, $i, "comments");
 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -534,6 +540,7 @@
             $i=0;
             echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -552,6 +559,7 @@
                 $comments = mysql_result($result, $i, "comments");
                 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -571,6 +579,7 @@
             $i=0;
             echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -591,6 +600,7 @@
                 $hours = mysql_result($result, $i, "hours");
                 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -608,6 +618,7 @@
             $i=0;
             echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -626,6 +637,7 @@
                 $comments = mysql_result($result, $i, "comments");
 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -647,6 +659,7 @@
             $i=0;
             echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -667,6 +680,7 @@
                 $wres = mysql_result($result, $i, "hours");
                 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -686,6 +700,7 @@
             $i=0;
             echo "<table id=\"mytbl5\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -704,6 +719,7 @@
                 $comments = mysql_result($result, $i, "comments");
                 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
@@ -732,6 +748,7 @@
             $i=0;
             echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -790,6 +807,7 @@
                         $comments = "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε ¶δεια\"</blink><br>$comm";
 
                     echo "<tr>";
+                    echo "<td>".($i+1)."</td>";
                     echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='../employee/adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
                     echo "</tr>";
                 }
@@ -809,6 +827,7 @@
             $i=0;
             echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
+            echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
@@ -829,6 +848,7 @@
                 $wres = mysql_result($result, $i, "hours");
                 
                 echo "<tr>";
+                echo "<td>".($i+1)."</td>";
                 echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
