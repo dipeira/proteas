@@ -1304,6 +1304,15 @@
             return "<td style='background:none;background-color:rgba(255,255,0,0.3)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
         }
     }
+    function tdc_without($val){
+        if ($val == 0) {
+            return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>$val</td>";
+        } elseif ($val < 0 ){
+            return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$val</td>";
+        } else {
+            return "<td style='background:none;background-color:rgba(255,255,0,0.3)'>$val</td>";
+        }
+    }
     /*
     * ektimhseis_wrwn
     * Function to compute required and available hours for oloimero schedule (since 2016-17)
