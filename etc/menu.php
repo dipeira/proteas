@@ -27,6 +27,7 @@
 		   		<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
 					<li><a href="<?=SITE_ROOT?>/reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
 					<li><a href="<?=SITE_ROOT?>/reports/report_leit.php">Λειτουργικά Κενά Δημοτικών</a></li>
+					<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php?type=4">Λειτουργικά Κενά Νηπιαγωγείων</a></li>
 					<li><a href="<?=SITE_ROOT?>/reports/report_leit_yp.php">Λειτουργικά Κενά (για Υπουργείο)</a></li>
 					<!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
 					<!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->

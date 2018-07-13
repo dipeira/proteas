@@ -21,17 +21,7 @@
         </style>
   </head>
 
-<?php
-    function tdc1($val){
-        if ($val == 0) {
-            return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
-        } elseif ($val < 0 ){
-            return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
-        } else {
-            return "<td style='background:none;background-color:rgba(255,255,0,0.3)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
-        }
-    }
-    
+<?php    
     require_once"../config.php";
     require_once"../tools/functions.php";
     session_start();
@@ -99,7 +89,7 @@
         echo "<th>Απαιτ.70</th><th>Απαιτ.70<br>+(Ολ+ΠΖ) <strong>(A)</strong></th>";
     }
     
-    echo "<th>+/- 08,11,<br>79,91 <strong>(B)</strong></th><th>A+B</th>";
+    echo "<th>+/- 08,11,<br>79,91 <strong>(B)</strong></th><th>A+B</th><th>+/- T.E.</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
     while ($i < $num)
@@ -131,15 +121,7 @@
             $i++;
             continue;
         }
-        // count pe70
-        /*
-        $count70 = 0;
-        $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) AND e.klados=2";
-        $res = mysql_query($qry, $mysqlconnection);
-        while ($row = mysql_fetch_array($res)){
-            $count70 = $row['count'];
-        }
-        */
+        
         // τοποθετηθέντες ΠΕ70
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 AND thesi IN (0,1,2)";
         $rs = mysql_query($qry, $mysqlconnection);
@@ -172,12 +154,13 @@
         $telPE70 = $df['70']-$OP;
         echo "<td>".(int)$av['70']."</td>";
         if (!$oligothesia){
-            echo tdc1($df['05-07']).tdc1($df['06']).tdc1($df['08']).tdc1($df['11']).tdc1($df['79']).tdc1($df['91']).tdc1($df['86']);
+            echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['79']).tdc($df['91']).tdc($df['86']);
         }
-        echo tdc1($df['70']).tdc1($telPE70);
+        echo tdc($df['70']).tdc($telPE70);
         $koines = $df['08']+$df['11']+$df['79']+$df['91'];
-        echo tdc1((int)$koines); // apait. 08,11,79,91
-        echo tdc1($telPE70+$koines);
+        echo tdc((int)$koines); // apait. 08,11,79,91
+        echo tdc($telPE70+$koines);
+        echo isset($df['TE']) ? tdc($df['TE'],NULL,false) : "<td></td>";
         echo "</tr>\n";
 
         $par_sum['05-07'] += $av['05-07'];
@@ -215,6 +198,8 @@
         
         $df_sum['OP'] += $df['OP'];
 
+        $df_sum['TE'] += $df['TE'];
+
         $i++;                        
     } // of while
 
@@ -233,6 +218,7 @@
         echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td>";
     }
     echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
+    echo "<td>".$df_sum['TE']."</td>";
     
     echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>";
     if (!$oligothesia){
@@ -244,6 +230,7 @@
         echo "<td>".$df_sum_t['05-07']."</td><td>".$df_sum_t['06']."</td><td>".$df_sum_t['08']."</td><td>".$df_sum_t['11']."</td><td>".$df_sum_t['79']."</td><td>".$df_sum_t['91']."</td><td>".$df_sum_t['86']."</td>";
     }
     echo "<td>".$df_sum_t['70']."</td><td>".$df_sum_t['OP']."</td><td></td><td></td>\n";
+    
     
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
     //echo "<td></td><td colspan=3>MONO KENA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";

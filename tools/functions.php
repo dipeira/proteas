@@ -1292,25 +1292,17 @@
     function hours_to_teachers($hours) {
         return round($hours/23,0);
     }
-    function tdc($val){
-        // return $val >= 0 ? 
-        //     "<td style='background:none;background-color:#00FF00'>$val</td>" : 
-        //     "<td style='background:none;background-color:#FF0000'>$val</td>";
+    function tdc($val,$colspan = NULL,$withspan = true){
+        $cols = $colspan ? "colspan=$colspan" : '';
+        $colval = $withspan ? 
+            "<span title='".hours_to_teachers($val)."'>$val</span>" :
+            $val;
         if ($val == 0) {
-            return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+            return "<td $cols style='background:none;background-color:rgba(0, 255, 0, 0.37)'>$colval</td>";
         } elseif ($val < 0 ){
-            return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
+            return "<td $cols style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$colval</td>";
         } else {
-            return "<td style='background:none;background-color:rgba(255,255,0,0.3)'><span title='".hours_to_teachers($val)."'>$val</span></td>";
-        }
-    }
-    function tdc_without($val){
-        if ($val == 0) {
-            return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>$val</td>";
-        } elseif ($val < 0 ){
-            return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$val</td>";
-        } else {
-            return "<td style='background:none;background-color:rgba(255,255,0,0.3)'>$val</td>";
+            return "<td $cols style='background:none;background-color:rgba(255,255,0,0.3)'>$colval</td>";
         }
     }
     /*
@@ -1328,13 +1320,16 @@
         mysql_query("SET NAMES 'greek'", $mysqlconnection);
         mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
         // get tmimata
-        $query = "SELECT students,tmimata,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
+        $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
         $result = mysql_query($query, $mysqlconnection);
         $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
         $vivliothiki = mysql_result($result, 0, "vivliothiki");
         $eidiko = mysql_result($result, 0, "type2") == 2 ? true : false;
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
         $oligothesio = $leit < 4 ? true : false;
+        // entaksis
+        $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
+        $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
         // synolo mathitwn (gia yp/ntes)
         $classes = explode(",",mysql_result($result, 0, "students"));
         $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
@@ -1390,7 +1385,7 @@
             $meiwsh_vivliothikis = 3;
             $reqhrs['70'] += 3;
         }
-        // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές)
+        // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές, εκτός Τ.Ε.)
         //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
         if ($oligothesio){
             $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
@@ -1436,6 +1431,24 @@
                 $allcnt[$row['perigrafh']]++;
             }
         }
+        // PE70 entaksis
+        if ($has_entaxi > 0){
+            $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 and thesi = 3";
+            $res = mysql_query($qry, $mysqlconnection);
+            $top_ent = mysql_result($res, 0, 'pe70');
+            $avhrs['TE'] = $top_ent;
+            $ret['TE'] = $top_ent - $has_entaxi;
+            if ($print){
+                // αναλυτικά...
+                $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
+                $result = mysql_query($query, $mysqlconnection);
+                while ($row = mysql_fetch_array($result)){
+                    $ar = Array('surname' => $row['surname'] . ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                    $all[] = $ar;
+                    //$allcnt[$row['perigrafh']]++;
+                }
+            }
+        }
         // replace kladoi @ array
         //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/91
         $avar = $avhrs;
@@ -1479,10 +1492,17 @@
             echo "<th><span title='Πληροφορικής'>86</span></th>";
             echo "<th><span title='Δασκάλων'>70</span></th>";
             echo "<th>Ολοήμερο</th><th>Πρωινή Ζώνη</th>";
+            echo $has_entaxi ? '<th>T.E.<small> (αρ.εκπ)</small></th>' : '';
             echo "</thead>";
-            echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td></tr>";
-            echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td></td><td></td></tr>";
-            echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'])."<td></td></tr>";
+            echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
+            echo $has_entaxi ? '<td>1</td>' : '';
+            echo "</tr>";
+            echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td colspan=2></td>";
+            echo $has_entaxi ? '<td>'.$avhrs['TE'].'</td>' : '';
+            echo "</tr>";
+            echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'],2);
+            echo $has_entaxi ? tdc($ret['TE']) : '';
+            echo "</tr>";
             echo "</table>";
             // if meiwseis, print below table
             if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0){

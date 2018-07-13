@@ -302,18 +302,18 @@ if ($_REQUEST['type']){
             
             if ($kenapl){
                if ($k_pl > 0) {
-                    echo "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>0</td>".tdc_without($k_pl);
+                    echo "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>0</td>".tdc($k_pl,NULL,false);
                     $synolo_pleon += $k_pl;
                } else {
-                    echo tdc_without($k_pl)."<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>0</td>";
+                    echo tdc($k_pl,NULL,false)."<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>0</td>";
                     $synolo_kena += $k_pl;
                }
                    
                    
             } else {
-                echo tdc_without($k_pl);
+                echo tdc($k_pl,NULL,false);
             }
-            echo tdc_without($k_pl_ent);
+            echo tdc($k_pl_ent,NULL,false);
             echo "</tr>\n";
 
             $synolo_tm_klas += $klasiko_tm;
