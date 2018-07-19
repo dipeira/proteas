@@ -237,7 +237,7 @@
             echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
             echo "</tr>";
         }
-        
+        echo $anenergo && $type == 2 ? "<tr><td>Κατάσταση: Σε αναστολή</td><td></td>" : "<td>Κατάσταση: Ενεργό</td><td></td></tr>";
         echo "<tr><td>Σχόλια: $comments</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
         if ($systeg){
             echo "<tr><td colspan=2>Συστεγαζόμενη σχολική μονάδα: <a href='school_status.php?org=$systeg' target='_blank'>$systegName</td></tr>";    

@@ -246,7 +246,11 @@
                         else
                             echo "<td><input type=\"checkbox\" name='oloimero'>Όλοήμερο</td>";
                         echo "<td>Μαθητές Πρωινής Ζώνης&nbsp;&nbsp;<input type='text' name='pz' size='1' value=$klasiko_exp[6]></td></tr>";
-                        echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
+                        echo "<tr><td>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td>";
+                        echo $anenergo ? 
+                            "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
+                            "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
+                        echo "</tr>";
                         echo "</table>";
                         echo "<br>";
                         /////////    
