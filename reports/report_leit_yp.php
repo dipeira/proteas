@@ -37,7 +37,7 @@
     while ($i < $num)
     {		
         $sch = mysql_result($result, $i, "id");
-        $leit = mysql_result($result, $i, "leitoyrg");
+        $leit = get_leitoyrgikothta($sch, $mysqlconnection);
         // call ektimhseis_wrwn function
         $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
         // required hours
@@ -68,10 +68,6 @@
     // get apospasmenoi @ ekswteriko
     $ekswteriko = apospasmenoi_ekswteriko($mysqlconnection);
 
-    // convert requirement hours to teachers (23 hours each)
-    function hours_to_teachers($n){
-        return floor($n/23);
-    }
     $req_sum_teachers = array_map('hours_to_teachers', $req_sum);
 
     // prepare array for table
@@ -90,6 +86,7 @@
     
     // print table
     echo "<h2>Πίνακας λειτουργικών κενών</h2>";
+    echo "<h4>(Η αναφορά είναι υπό κατασκευή)</h4>";
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
     echo "<thead>";

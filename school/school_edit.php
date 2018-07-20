@@ -96,7 +96,7 @@
                     $email = mysql_result($result, 0, "email");
                     $type = mysql_result($result, 0, "type");
                     $organikothta = mysql_result($result, 0, "organikothta");
-                    $leitoyrg = mysql_result($result, 0, "leitoyrg");
+                    $leitoyrg = get_leitoyrgikothta($sch, $mysqlconnection);
                     $anenergo = mysql_result($result, 0, "anenergo");
                     
                     // if dimotiko
@@ -145,7 +145,7 @@
                     echo "<tr><td colspan=3>Τίτλος (αναλυτικά): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
                     echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td><td>Τηλ.: <input type='text' name='tel' value='$tel' /></td></tr>";
                     echo "<tr><td>email: <input type='text' name='email' value='$email' size='30'/></a></td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
-                    echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td>Λειτουργικότητα: <input type='text' name='leitoyrg' value='$leitoyrg' size='2'/></td></td></tr>";
+                    echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
                     // 05-10-2012 - organikes
                     if ($type == 1)
                         echo "<tr><td colspan=2>Οργανικές: ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";

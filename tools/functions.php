@@ -1555,8 +1555,6 @@
         while ($i < $num)
         {		 
             $sch = mysql_result($result, $i, "id");
-            //$organikothta = mysql_result($result, $i, "organikothta");
-            //$leitoyrg = mysql_result($result, $i, "leitoyrg");
             
             $klasiko = mysql_result($result, $i, "klasiko");
             $klasiko_exp = explode(",",$klasiko);
@@ -1702,5 +1700,24 @@
         if (!isset($ypoxr))
             $ypoxr = 24;
         return round($days * ($days_per_week/$ypoxr));
+    }
+    function get_leitoyrgikothta($id, $mysqlconnection){
+        $query = "SELECT tmimata,type,klasiko from school WHERE id='$id'";
+        $result = mysql_query($query, $mysqlconnection);
+        $type = mysql_result($result, 0, 'type');
+        // if nip
+        if ($type == 2){
+            $klasiko_exp = explode(",",mysql_result($result, 0, "klasiko"));
+            $klasiko_tm = 0;
+            $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
+            $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
+            $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
+            return $klasiko_tm;
+        } else {
+            $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
+            $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+            return $leit;
+        }
+        
     }
 ?>

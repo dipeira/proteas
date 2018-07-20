@@ -77,7 +77,7 @@
         $email = mysql_result($result, 0, "email");
         $type = mysql_result($result, 0, "type");
         $organikothta = mysql_result($result, 0, "organikothta");
-        $leitoyrg = mysql_result($result, 0, "leitoyrg");
+        $leitoyrg = get_leitoyrgikothta($sch, $conn);
         // organikes - added 05-10-2012
         $organikes = unserialize(mysql_result($result, 0, "organikes"));
         // kena_org, kena_leit - added 19-06-2013

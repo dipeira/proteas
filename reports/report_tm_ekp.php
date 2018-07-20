@@ -214,7 +214,7 @@ if ($_REQUEST['type']){
             echo "<th>Οργ.</th>";
             echo "<th>Λειτ.</th>";
             
-            echo "<th>Τμήματα<br>Πρωινού</th>";
+            //echo "<th>Τμήματα<br>Πρωινού</th>";
             echo "<th>Νήπια<br>Πρωινού</th>";
             echo "<th>Προνήπια<br>Πρωινού</th>";
             
@@ -237,7 +237,6 @@ if ($_REQUEST['type']){
         {		 
             $sch = mysql_result($result, $i, "id");
             $organikothta = mysql_result($result, $i, "organikothta");
-            $leitoyrg = mysql_result($result, $i, "leitoyrg");
             $name = getSchool($sch, $mysqlconnection);
             $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
             $klasiko = mysql_result($result, $i, "klasiko");
@@ -283,7 +282,7 @@ if ($_REQUEST['type']){
                 continue;
             }
             echo "<tr>";
-            echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td>";
+            echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td><td>$organikothta</td>";
             echo "<td><strong>$klasiko_tm</strong></td>";
 
             $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];// + $klasiko_exp[6];
@@ -331,7 +330,7 @@ if ($_REQUEST['type']){
         }
         
         echo "<tr>";
-        echo "<td>Σύνολα</td><td></td><td></td>";
+        echo "<td>Σύνολα</td><td></td>";
         echo "<td>$synolo_tm_klas</td>";
         echo "<td>$synolo_nip</td>";
         echo "<td>$synolo_tm_olo</td>";
