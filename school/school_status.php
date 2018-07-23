@@ -39,12 +39,7 @@
         });
     });
 	$(document).ready(function() { 
-        $("#mytbl").tablesorter({widgets: ['zebra']}); 
-        $("#mytbl2").tablesorter({widgets: ['zebra']});
-        $("#mytbl3").tablesorter({widgets: ['zebra']});
-        $("#mytbl4").tablesorter({widgets: ['zebra']});
-        $("#mytbl5").tablesorter({widgets: ['zebra']});
-        $("#mytbl6").tablesorter({widgets: ['zebra']});
+        $(".tablesorter").tablesorter({widgets: ['zebra']}); 
         $('#toggleBtn').click(function(){
             event.preventDefault();
             $("#analysis").slideToggle();
