@@ -1201,7 +1201,7 @@
         // oligothesia (<4/thesia)
         if ($artm < 4){
             $hours = [];
-            $hours['70'] = $artm * 25;
+            $hours['70'] = $artm * 30;
             // oloimero
             $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
             // PZ
@@ -1393,7 +1393,7 @@
             while ($row = mysql_fetch_array($result)){
                 $plithos = strval($row['plithos']);
                 $kl = strval($row['klados']);
-                $avhrs[$kl] += $plithos * 25;
+                $avhrs[$kl] += $plithos * 30;
             }
         } else {
             $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";

@@ -136,14 +136,14 @@
         echo "<td>$top70</td>";
         // new
         echo $oligothesia ? 
-            "<td>".($results['leit']*25)."</td>" :
+            "<td>".($results['leit']*30)."</td>" :
             "<td>".($results['leit']*30)."</td>";
         $OP = $req['O'] + $req['P'];
         echo "<td>".$OP."</td>"; // olohm + PZ
         //$diffOP = $df['70']-$df['OP'];
         //echo "<td>".$diffOP."</td>"; // olohm
         echo $oligothesia ?
-            "<td>".($results['leit']*25+$OP)."</td>" : 
+            "<td>".($results['leit']*30+$OP)."</td>" : 
             "<td>".($results['leit']*30+$OP)."</td>" ;
         if (!$oligothesia){
             echo "<td>".($av['06']+$av['11']+$av['79'])."</td>"; // yparx. 08,11,79
