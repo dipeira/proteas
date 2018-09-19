@@ -472,6 +472,46 @@
         else
             echo "<option value='6'>Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";
     }
+    function thesianaplcmb($thesi)
+    {
+        switch ($thesi)
+        {
+            case 0:
+                $th = "Εκπαιδευτικός";
+                break;
+            case 1:
+                $th = "Διευθυντής/Προϊστάμενος";
+                break;
+            case 2:
+                $th = "Τμήμα Ένταξης";
+                break;
+            case 3:
+                $th = "Παράλληλη στήριξη";
+                break;
+        }
+        return $th;
+    }
+    function thesianaplselectcmb($thesi)
+    {
+        echo "<tr><td>Θέση</td><td>";
+        echo "<select name=\"thesi\">";
+        if ($thesi == 0)
+            echo "<option value='0' selected=\"selected\">Εκπαιδευτικός</option>";
+        else
+            echo "<option value='0'>Εκπαιδευτικός</option>";
+        if ($thesi == 1)
+            echo "<option value='1' selected=\"selected\">Διευθυντής/Προϊστάμενος</option>";	
+        else
+            echo "<option value='1'>Διευθυντής/Προϊστάμενος</option>";
+        if ($thesi == 2)
+            echo "<option value='2' selected=\"selected\">Τμήμα Ένταξης</option>";	
+        else
+            echo "<option value='2'>Τμήμα Ένταξης</option>";
+        if ($thesi == 3)
+            echo "<option value='3' selected=\"selected\">Παράλληλη στήριξη</option>";	
+        else
+            echo "<option value='3'>Παράλληλη στήριξη</option>";
+    }
 	
 	
 	function schoolCombo ($schid,$conn)
@@ -1350,7 +1390,8 @@
             $avhrs[$klados] = $dnthrs;
             // ώρες Δ/ντή στην ανάλυση
             $ar = Array(
-                'surname' =>  mysql_result($result, 0, "e.surname")." <small>(Δ/ντής/-ντρια)</small>",
+                'name' => mysql_result($result, 0, "e.name"),
+                'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysql_result($result, 0, "e.surname"),
                 'klados' =>  mysql_result($result, 0, "k.perigrafh"), 
                 'hours' => $dnthrs
             );
@@ -1371,7 +1412,8 @@
             $avhrs[$klados] -= $meiwsh_ypnth;
             // ώρες Υπ/ντή στην ανάλυση
             $ar = Array(
-                'surname' =>  mysql_result($result_yp, 0, "e.surname").' <small>(Υπ/ντής)</small>', 
+                'name' => mysql_result($result, 0, "e.name"),
+                'surname' =>  '<small>(Υπ/ντής)</small> ' . mysql_result($result_yp, 0, "e.surname"), 
                 'klados' =>  $meiwsh_ypnth_klados, 
                 'hours' => mysql_result($result_yp, 0, "e.wres") - $meiwsh_ypnth
             );
@@ -1405,16 +1447,16 @@
         }
         if ($print){
             // αναλυτικά...
-            $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
+            $query = "SELECT e.name, e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
             $result = mysql_query($query, $mysqlconnection);
             while ($row = mysql_fetch_array($result)){
-                $ar = Array('surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                $ar = Array('name' => $row['name'], 'surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                 $all[] = $ar;
                 $allcnt[$row['perigrafh']]++;
             }
         }
-        // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6))
-        $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 GROUP BY klados";
+        // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη))
+        $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 AND e.thesi NOT IN (2,3) GROUP BY klados";
         $result = mysql_query($query, $mysqlconnection);
         while ($row = mysql_fetch_array($result)){
             $kl = strval($row['klados']);
@@ -1422,11 +1464,13 @@
         }
         if ($print){
             // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
-            $query = "SELECT e.surname, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
+            $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
             $result = mysql_query($query, $mysqlconnection);
             while ($row = mysql_fetch_array($result)){
                 $srn = $row['surname'] . ' *';
-                $ar = Array('surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                $srn .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
+                $srn .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
+                $ar = Array('name' => $row['name'], 'surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                 $all[] = $ar;
                 $allcnt[$row['perigrafh']]++;
             }
@@ -1440,10 +1484,10 @@
             $ret['TE'] = $top_ent - $has_entaxi;
             if ($print){
                 // αναλυτικά...
-                $query = "SELECT e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
+                $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
                 $result = mysql_query($query, $mysqlconnection);
                 while ($row = mysql_fetch_array($result)){
-                    $ar = Array('surname' => $row['surname'] . ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                    $ar = Array('name' => $row['name'],'surname' => $row['surname'] . ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                     $all[] = $ar;
                     //$allcnt[$row['perigrafh']]++;
                 }
@@ -1514,13 +1558,14 @@
             echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
             echo "<div id='analysis' style='display: none;'>";
                 echo "<table class=\"imagetable stable\" border='1'>";
-                echo "<tr><td colspan=3><u>ΣΥΝΟΛΑ:</u> ";
+                echo "<tr><td colspan=3><u>Σύνολα εκπ/κών:</u> ";
                 foreach ($allcnt as $key=>$value){
                     echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
                 }
                 echo "</td></tr>";
+                echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
                 foreach ($all as $row) {
-                    echo "<tr><td>".$row['surname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
+                    echo "<tr><td>".$row['surname']." ".substr($row['name'],0,3).".</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
                 }
                 echo "</table>";
                 echo "* Αναπληρωτής";

@@ -156,6 +156,7 @@
                 $kinhto = mysql_result($result, 0, "kinhto");
                 $praxi = mysql_result($result, 0, "praxi");
                 $updated= mysql_result($result, 0, "updated");
+                $thesi = mysql_result($result, 0, "thesi");
                 
                 $kat = mysql_result($result, 0, "status");
                 switch ($kat)
@@ -259,7 +260,7 @@ if ($_GET['op']=="add")
         echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
         //echo "</form>";
         echo "</div>";
-        
+        thesianaplselectcmb(0);
         echo "	</table>";
         echo "	<input type='hidden' name = 'id' value='$id'>";
         // action = 1 gia prosthiki
@@ -372,6 +373,7 @@ if ($_GET['op']=="edit")
         echo "<td><textarea rows=4 cols=50 name='metakinhsh'>$metakinhsh</textarea></td></tr>";
         echo "</form>";
         echo "</div>";
+        thesianaplselectcmb($thesi);
         echo "	</table>";
         
         echo "	<input type='hidden' name = 'id' value='$id'>";
@@ -482,7 +484,7 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Υπουργική Απόφαση</td><td colspan=3>$ya</td></tr>";
         echo "<tr><td>Α.Δ.Α.</td><td colspan=3>$ada</td></tr>";
         echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi</td></tr>";
-                        
+        echo "<tr><td>Θέση</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
         /* Future use?
         echo "<td colspan=2 align='center'>";
         //Form gia Bebaiwsh

@@ -671,6 +671,10 @@
                 $klados = getKlados($klados_id,$mysqlconnection);
                 $typos = mysql_result($result, $i, "type");
                 $type = get_type($typos,$mysqlconnection);
+                $thesi = mysql_result($result, $i, "thesi");
+                $type .= $thesi == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
+                $type .= $thesi == 3 ? '<small> (Παράλληλη στήριξη)</small>' : '';
+
                 $comments = mysql_result($result, $i, "comments");
                 $wres = mysql_result($result, $i, "hours");
                 
