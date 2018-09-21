@@ -55,6 +55,7 @@
         echo "<th>Ονομασία</th>";
         echo "<th>Οργ.</th>";
         echo "<th>Λειτ.</th>";
+        echo "<th>Ολ.</th>";
         echo "<th>Τοπ.<br>ΠΕ70</th>";
         echo "<th>Ωρ. Πρ.</th>";
         echo "<th>Ωρ. Ολ.</th>";
@@ -65,14 +66,16 @@
         echo "<th rowspan=2>Ονομασία</th>";
         echo "<th rowspan=2>Οργ.</th>";
         echo "<th rowspan=2>Λειτ.</th>";
+        echo "<th rowspan=2>Ολ.</th>";
         echo "<th rowspan=2>Τοπ.<br>ΠΕ70</th>";
         // new
         echo "<th rowspan=2>Ωρ. Πρ.</th>";
         echo "<th rowspan=2>Ωρ. Ολ.</th>";
         echo "<th rowspan=2>Συν. Ωρ.</th>";
-        echo "<th rowspan=2>Yπαρ. Ωρ.06,<br>11,79</th>";
-        echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
-        echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
+        echo "<th rowspan=2>Συν. Παρ.</th>";
+        //echo "<th rowspan=2>Yπαρ. Ωρ.06,<br>11,79</th>";
+        //echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
+        //echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
         echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
         echo "<th colspan=11>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
         echo "</tr>";
@@ -100,6 +103,15 @@
         $code = mysql_result($result, $i, "code");
         $organikothta = mysql_result($result, $i, "organikothta");
         
+        //// Oloimera
+        $classes = explode(",",mysql_result($result, $i, "students"));
+        $tmimata_exp = explode(",",mysql_result($result, $i, "tmimata"));
+
+        $oloimero_stud = $classes[6];
+        $oloimero_tea = $tmimata_exp[6];
+        $oloimero = "$oloimero_stud ($oloimero_tea)";
+        ////
+
         // compute leitoyrgikothta
         $tmimata_exp = explode(",",mysql_result($result, $i, "tmimata"));
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
@@ -133,6 +145,7 @@
         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$organikothta</td>";
         echo "<td>".$results['leit']."</td>";
+        echo "<td>$oloimero</td>";
         echo "<td>$top70</td>";
         // new
         echo $oligothesia ? 
@@ -142,13 +155,17 @@
         echo "<td>".$OP."</td>"; // olohm + PZ
         //$diffOP = $df['70']-$df['OP'];
         //echo "<td>".$diffOP."</td>"; // olohm
-        echo $oligothesia ?
-            "<td>".($results['leit']*30+$OP)."</td>" : 
-            "<td>".($results['leit']*30+$OP)."</td>" ;
+        // echo $oligothesia ?
+        //     "<td>".($results['leit']*30+$OP)."</td>" : 
+        //     "<td>".($results['leit']*30+$OP)."</td>" ;
+        echo "<td>".($results['leit']*30+$OP)."</td>";
+
         if (!$oligothesia){
-            echo "<td>".($av['06']+$av['11']+$av['79'])."</td>"; // yparx. 08,11,79
-            echo "<td>".($df['05-07']+$df['06']+$df['86'])."</td>"; // apait. 05-07,06,86
-            echo "<td>".($df['08']+$df['11']+$df['79']+$df['91'])."</td>"; // apait. 08,11,79,91
+            //echo "<td>".($av['06']+$av['11']+$av['79'])."</td>"; // yparx. 08,11,79
+            //echo "<td>".($df['05-07']+$df['06']+$df['86'])."</td>"; // apait. 05-07,06,86
+            //echo "<td>".($df['08']+$df['11']+$df['79']+$df['91'])."</td>"; // apait. 08,11,79,91
+            $all_av = array_sum($av);
+            echo "<td>$all_av</td>";
             echo "<td>".(int)$av['05-07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['79']."</td><td>".(int)$av['91']."</td><td>".(int)$av['86']."</td>";
         }
         $telPE70 = $df['70']-$OP;
@@ -241,7 +258,7 @@
     //echo "<td>".$kena_sum_t['05-07']."</td><td>".$kena_sum_t['06']."</td><td>".$kena_sum_t['08']."</td><td>".$kena_sum_t['11']."</td><td>".$kena_sum_t['79']."</td><td>".$kena_sum_t['91']."</td><td>".$kena_sum_t['86']."</td><td>".$kena_sum_t['70']."</td><td></td><td></td><td></td>\n";
     
     if (!$oligothesia){
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
+    echo "<tr><td></td><td></td><td></td><td></td><td></td>";//<td></td>";
     echo "<td></td><td></td><td></td><td></td><td></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
