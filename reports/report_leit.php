@@ -234,8 +234,8 @@
     if (!$oligothesia){
         echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td>";
     }
-    echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
-    echo "<td>".$df_sum['TE']."</td>";
+    echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td><td></td>\n";
+    
     
     echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
     if (!$oligothesia){
@@ -247,7 +247,7 @@
         echo "<td>".$df_sum_t['05-07']."</td><td>".$df_sum_t['06']."</td><td>".$df_sum_t['08']."</td><td>".$df_sum_t['11']."</td><td>".$df_sum_t['79']."</td><td>".$df_sum_t['91']."</td><td>".$df_sum_t['86']."</td>";
     }
     echo "<td>".$df_sum_t['70']."</td><td>".$df_sum_t['OP']."</td><td></td><td></td>\n";
-    
+    echo "<td>".$df_sum['TE']."</td>";
     
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
     //echo "<td></td><td colspan=3>MONO KENA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
@@ -262,7 +262,7 @@
     echo "<td></td><td></td><td></td><td></td><td></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ïë+ÐÆ)</i></td><td></td><td></td></i>";
-    echo "</tr>";
+    echo "<td></td></tr>";
     }
     echo "</tbody></table>";
     echo "<br>";
