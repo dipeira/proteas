@@ -1455,8 +1455,8 @@
                 $allcnt[$row['perigrafh']]++;
             }
         }
-        // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη))
-        $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 AND e.thesi NOT IN (2,3) GROUP BY klados";
+        // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
+        $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.thesi NOT IN (2,3) GROUP BY klados";
         $result = mysql_query($query, $mysqlconnection);
         while ($row = mysql_fetch_array($result)){
             $kl = strval($row['klados']);
