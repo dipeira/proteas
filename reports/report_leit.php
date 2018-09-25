@@ -225,7 +225,7 @@
     $df_sum_t = array_map(hours_to_teachers, $df_sum);
     $kena_sum_t = array_map(hours_to_teachers, $kena_sum);
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>";
+    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
     if (!$oligothesia){
         echo "</td><td colspan=3>сумока</td>";
         echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['79']."</td><td>".$par_sum['91']."</td><td>".$par_sum['86']."</td>";
@@ -237,7 +237,7 @@
     echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td>\n";
     echo "<td>".$df_sum['TE']."</td>";
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>";
+    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
     if (!$oligothesia){
         echo "</td><td colspan=3>сумока (ЕЙП)</td>";
         echo "<td>".$par_sum_t['05-07']."</td><td>".$par_sum_t['06']."</td><td>".$par_sum_t['08']."</td><td>".$par_sum_t['11']."</td><td>".$par_sum_t['79']."</td><td>".$par_sum_t['91']."</td><td>".$par_sum_t['86']."</td>";
