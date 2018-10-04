@@ -33,6 +33,7 @@
 					<!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
 					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
 					<li><a href="<?=SITE_ROOT?>/employee/absents.php">Εκπ/κοί σε άδεια</a></li>
+					<li><a href="<?=SITE_ROOT?>/etc/check_wres.php">Συμπλήρωση υποχρ.ωραρίου</a></li>
 		  	</ul>
 		 	</li>
                  

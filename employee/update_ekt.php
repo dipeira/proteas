@@ -87,6 +87,7 @@
   $katast = $_POST['status'];
   $metakinhsh = addslashes($_POST['metakinhsh']);
   $praxi = $_POST['praxi'];
+  $wres = $_POST['wres'];
     
 // $_POST['action']=1 for adding records  
   if (isset($_POST['action']))
@@ -100,8 +101,8 @@
 
       if (!mysql_num_rows($result))
       {
-            $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did, hm_apox, thesi) ";
-            $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox',$thesi)";
+            $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did, hm_apox, thesi,wres) ";
+            $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox',$thesi,24)";
 
             $query = $query0.$query1;
             $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
@@ -132,7 +133,7 @@
           $before = mysql_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
-	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,";
+	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres,";
 	  $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
       $query = $query1.$query2.$query3;
 
@@ -160,7 +161,7 @@
           $before = mysql_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
-	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,";
+	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,wres=$wres,";
 	  $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
 	  $query = $query1.$query2.$query3;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");

@@ -157,6 +157,7 @@
                 $praxi = mysql_result($result, 0, "praxi");
                 $updated= mysql_result($result, 0, "updated");
                 $thesi = mysql_result($result, 0, "thesi");
+                $wres = mysql_result($result, 0, "wres");
                 
                 $kat = mysql_result($result, 0, "status");
                 switch ($kat)
@@ -338,6 +339,7 @@ if ($_GET['op']=="edit")
         echo "<tr><td>Πράξη:</td><td>";
         tblCmb($mysqlconnection, "praxi",$praxi);
         echo "</td></tr>";
+        echo "<tr><td>Υποχρεωτικό ωράριο</td><td><input type='text' name='wres' value=$wres /></td></tr>";
         echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
         
         //new 15-02-2012: implemented with jquery.autocomplete
@@ -438,6 +440,7 @@ elseif ($_GET['op']=="view")
         echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
                         
         echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>$comments</td></tr>"; 
+        echo "<tr><td>Υποχρεωτικό ωράριο</td><td colspan='3'>$wres</td></tr>";
         
         // check if multiple schools
         if ($multi)
