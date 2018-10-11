@@ -131,7 +131,7 @@
                 if ($klados_id == 1 || $klados_id == 16 || $klados_id == 17)
                     $klados_type = 2;
                 // if ebp or sx.nosileytes
-                elseif ($klados_id == 12 || $klados_id == 25) {
+                elseif (in_array($klados_id, [12, 25, 26, 8, 21, 9, 10, 27, 11])) {
                     $klados_type = 0;
                 }
                 else
