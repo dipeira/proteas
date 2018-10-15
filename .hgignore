@@ -1,7 +1,0 @@
-syntax: glob
-dipedb/word/anapl/
-word\new_vev_2.docx
-.vscode/
-tools\mail.log
-config.php
-word/anapl/

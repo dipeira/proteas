@@ -1,0 +1,5 @@
+word/anapl/
+word/*.docx
+.vscode/
+tools/mail.log
+config.php
