@@ -67,19 +67,21 @@
                     $start = mysql_result($result, $i, "start");
                     $finish = mysql_result($result, $i, "finish");
                     $comments = mysql_result($result, $i, "comments");
+                    $sxol_etos = mysql_result($result, $i, "sxoletos");
                                         
                     $query1 = "select type from adeia_ekt_type where id=$type";
                     $result1 = mysql_query($query1, $mysqlconnection);
                     $typewrd = mysql_result($result1, 0, "type");
                     if ($usrlvl < 2)
-                        echo "<tr><td>$id<span title=\"ÄéáãñáöÞ\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td><td><a href='ekt_adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
+                        echo "<tr><td>$id<span title=\"ÄéáãñáöÞ\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
                     else
-                        echo "<tr><td>$id</td><td><a href='ekt_adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
+                        echo "<tr><td>$id</td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
                     $i++;
                 }
 
-		echo "</tbody>";
-                if ($usrlvl < 2)
+        echo "</tbody>";
+                // add absense only on current year
+                if ($usrlvl < 2 && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
                     echo "<tr><td colspan=8><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add\">ÐñïóèÞêç ¶äåéáò<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
                 echo "</table>";
 		

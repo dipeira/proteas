@@ -71,12 +71,21 @@
   <body>
     <center>
       <?php
-		//if (!isset($_GET['emp']) && ($_GET['op']!="delete"))
-                $usrlvl = $_SESSION['userlevel'];
+		if (!isset($_GET['sxol_etos'])){
+			echo "<h2>Σφάλμα: Παρακαλώ δώστε σχολικό έτος.</h2>";
+			echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+			die();
+		}
+		$usrlvl = $_SESSION['userlevel'];
+		$prev_year = false;
+		if (isset($_GET['sxol_etos']) && $_GET['sxol_etos'] != $sxol_etos) {
+			$sxol_etos = $_GET['sxol_etos'];
+			$prev_year = true;
+		}
                 
                 if (!isset($_GET['emp']))
                 {
-                    $query = "SELECT * from adeia_ekt where id=".$_GET['adeia'];
+                    $query = "SELECT * from adeia_ekt where id=".$_GET['adeia']." AND sxoletos=$sxol_etos";
                     $result = mysql_query($query, $mysqlconnection);
 
                     $id = mysql_result($result, 0, "id");
@@ -100,6 +109,11 @@
 
 if ($_GET['op']=="edit")
 	{
+		if ($prev_year){
+			echo "<h2>Σφάλμα: Δεν μπορείτε να επεξεργαστείτε άδειες προηγούμενου έτους</h2>";
+			echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+			die();
+		}
                 echo "<form id='updatefrm' name='update' action='ekt_update_adeia.php' method='POST'>";
 		echo "<table class=\"imagetable\" border='1'>";
 
@@ -233,7 +247,11 @@ if ($_GET['op']=="edit")
 		echo "<tr>";
 		echo "<td>ID</td><td>$id</td>";
 		echo "</tr>";
-                $query1 = "select * from ektaktoi where id=$emp_id";
+		// check if current sxoliko etos
+		$query1 = $sxol_etos != getParam('sxol_etos',$mysqlconnection) ? 
+			"select * from ektaktoi_old where sxoletos=$sxol_etos AND id=$emp_id" :
+			"select * from ektaktoi where id=$emp_id";
+			
                 $result1 = mysql_query($query1, $mysqlconnection);
 		$name = mysql_result($result1, 0, "name");
                 $surname = mysql_result($result1, 0, "surname");
@@ -332,9 +350,9 @@ if ($_GET['op']=="edit")
 
 		if ($previd)
 			echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$previd&op=view'\">";
-                if ($usrlvl < 3)
-                    echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$id&op=edit'\">";
-                echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='ektaktoi.php?id=$emp_id&op=view'\">";
+                if ($usrlvl < 3 && $sxol_etos != $sxoletos)
+                    echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$id&op=edit&sxol_etos=$sxol_etos'\">";
+                echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"history.back()\">";
 		if ($nextid)
 			echo "	<INPUT TYPE='button' VALUE='>>' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$nextid&op=view'\">";
                 echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
@@ -345,6 +363,11 @@ if ($_GET['op']=="edit")
 	}
 	if ($_GET['op']=="delete")
 	{
+		if ($prev_year){
+			echo "<h2>Σφάλμα: Δεν μπορείτε να διαγράψετε άδειες προηγούμενου έτους</h2>";
+			echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+			die();
+		}
 		// Copies the to-be-deleted row to adeia_deleted table for backup purposes.Also adds a row to adeia_del_log for logging purposes...
 		$query1 = "INSERT INTO adeia_ekt_deleted SELECT e.* FROM adeia_ekt e WHERE id =".$_GET['adeia'];
 		$result1 = mysql_query($query1, $mysqlconnection);
@@ -363,6 +386,11 @@ if ($_GET['op']=="edit")
 	}
 	if ($_GET['op']=="add")
 	{
+		if ($prev_year){
+			echo "<h2>Σφάλμα: Δεν μπορείτε να προσθέσετε άδειες σε προηγούμενο έτος</h2>";
+			echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+			die();
+		}
 		echo "<form id='updatefrm' name='updatefrm' action='ekt_update_adeia.php' method='POST'>";
 		echo "<table class=\"imagetable\" border='1'>";
 		$emp_id = $_GET['emp'];
