@@ -44,7 +44,7 @@
             echo "<br><br><big>Äå âñÝèçêáí Üäåéåò</big>";
             $emp_id = $_GET['id'];
             if ($usrlvl < 2)
-                echo "<br><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add\"><big>ÐñïóèÞêç ¶äåéáò</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
+                echo "<br><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\"><big>ÐñïóèÞêç ¶äåéáò</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
             exit;
         }
                 
@@ -82,7 +82,7 @@
         echo "</tbody>";
                 // add absense only on current year
                 if ($usrlvl < 2 && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
-                    echo "<tr><td colspan=8><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add\">ÐñïóèÞêç ¶äåéáò<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
+                    echo "<tr><td colspan=8><span title=\"ÐñïóèÞêç ¶äåéáò\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">ÐñïóèÞêç ¶äåéáò<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
                 echo "</table>";
 		
 		echo "</body>";
