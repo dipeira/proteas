@@ -977,6 +977,9 @@
     // mk16: Function for N.4354/2015
     // returns new MK
     function mk16($days) {
+        if ($days <= 0){
+          return 1;
+        }
         // @excel: =INT(Q2/2)+1
         $years = floor ($days/360);
         $mk = floor($years/2) + 1;

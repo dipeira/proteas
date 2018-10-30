@@ -143,10 +143,10 @@
                         }
                             
 			if ($whflag)
-				$query .= "AND surname LIKE '$surpost' ";
+				$query .= "AND surname LIKE '%$surpost%' ";
 			else
 			{
-				$query .= "WHERE surname LIKE '$surpost' ";
+				$query .= "WHERE surname LIKE '%$surpost%' ";
 				$whflag=1;
 			}
 		}
@@ -189,7 +189,6 @@
                     $url = "ektaktoi.php?id=$id&op=view";
                     echo "<script>window.location = '$url'</script>";
                 }
-		
         echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";
@@ -231,54 +230,57 @@
         echo "</td>";
 	echo "</form></tr>\n";
 	
-        echo "<tr><th>Ενέργεια</th>\n";
-	echo "<th>Επώνυμο</th>\n";
-	echo "<th>Όνομα</th>\n";
-	echo "<th>Ειδικότητα</th>\n";
-	echo "<th>Σχ.Υπηρέτησης<br><small>(* περισσότερα από 1 σχολ.)</small></th>\n";
-        echo "<th>Τύπος Απασχόλησης</th>\n";
-        echo "<th>Πράξη</th>\n";
-	echo "</tr>\n</thead>\n";
+    echo "<tr><th>Ενέργεια</th>\n";
+    echo "<th>Επώνυμο</th>\n";
+    echo "<th>Όνομα</th>\n";
+    echo "<th>Ειδικότητα</th>\n";
+    echo "<th>Σχ.Υπηρέτησης<br><small>(* περισσότερα από 1 σχολ.)</small></th>\n";
+    echo "<th>Τύπος Απασχόλησης</th>\n";
+    echo "<th>Πράξη</th>\n";
+  	echo "</tr>\n</thead>\n";
 	
-	echo "<tbody>\n";
-	
-	while ($i < $num)
-	{
-	
-		$id = mysql_result($result, $i, "id");
-		$name = mysql_result($result, $i, "name");
-		$surname = mysql_result($result, $i, "surname");
-		$klados_id = mysql_result($result, $i, "klados");
-		$klados = getKlados($klados_id,$mysqlconnection);
-		// an parapanw apo 1 sxoleia, deixnei mono to 1o (kyriws) kai vazei * dipla toy.
-                $sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
-                $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-                $sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
-                //$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
-		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
-                $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-//                if (count($sx_yphrethshs_id_arr)>2)
-//                {
-//                    $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a> *";
-//                    $sx_yphrethshs.=" *";
-//                }
-                $type = mysql_result($result, $i, "type");
-                $praxi = mysql_result($result, $i, "praxi");
-                $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
-								
-		echo "<tr><td>";
-		echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
-		if ($usrlvl < 3)
-                    echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
-		if ($usrlvl < 2)
-                    echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
-		echo "</td>";
-                $typos = get_type($type, $mysqlconnection);
-		echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
-		echo "</tr>";
+	  echo "<tbody>\n";
+    if ($num == 0){
+      echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
+    } else {
+	  while ($i < $num)
+    {
+    
+      $id = mysql_result($result, $i, "id");
+      $name = mysql_result($result, $i, "name");
+      $surname = mysql_result($result, $i, "surname");
+      $klados_id = mysql_result($result, $i, "klados");
+      $klados = getKlados($klados_id,$mysqlconnection);
+      // an parapanw apo 1 sxoleia, deixnei mono to 1o (kyriws) kai vazei * dipla toy.
+                  $sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
+                  $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
+                  $sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
+                  //$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
+      $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
+                  $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+  //                if (count($sx_yphrethshs_id_arr)>2)
+  //                {
+  //                    $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a> *";
+  //                    $sx_yphrethshs.=" *";
+  //                }
+                  $type = mysql_result($result, $i, "type");
+                  $praxi = mysql_result($result, $i, "praxi");
+                  $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
+                  
+      echo "<tr><td>";
+      echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
+      if ($usrlvl < 3)
+                      echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
+      if ($usrlvl < 2)
+                      echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+      echo "</td>";
+                  $typos = get_type($type, $mysqlconnection);
+      echo "<td><a href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+      echo "</tr>";
 
-		$i++;
-    }   
+      $i++;
+      }   
+    }
 		echo "</tbody>\n";
                 if ($usrlvl < 2)
                     echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη έκτακτου εκπαιδευτικού</a></span>";		
@@ -291,16 +293,16 @@
 		echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
 		if ($curpg!=1)
 		{
-				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Πρώτη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Προηγ/νη</a>";
+				echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Πρώτη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Προηγ/νη</a>";
 		}
 		else
 			echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 		if ($curpg != $lastpg)
 		{
 				$nextpg = $curpg+1;
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Επόμενη</a>";
-				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost>Τελευταία</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Επόμενη</a>";
+				echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Τελευταία</a>";
 		}
 		else 
 			echo "  Επόμενη &nbsp;&nbsp; Τελευταία";

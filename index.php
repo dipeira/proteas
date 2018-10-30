@@ -142,10 +142,10 @@
 		else
 			$surpost = $_GET['surname'];
 		if ($whflag)
-			$query .= "AND surname LIKE '$surpost' ";
+			$query .= "AND surname LIKE '%$surpost%' ";
 		else
 		{
-			$query .= "WHERE surname LIKE '$surpost' ";
+			$query .= "WHERE surname LIKE '%$surpost%' ";
 			$whflag=1;
 		}
 	}
@@ -214,38 +214,41 @@
 	echo "</tr>\n</thead>\n";
 	
 	echo "<tbody>\n";
-	
-	while ($i < $num)
-	{
-		$id = mysql_result($result, $i, "id");
-		$name = mysql_result($result, $i, "name");
-		$surname = mysql_result($result, $i, "surname");
-		$klados_id = mysql_result($result, $i, "klados");
-		$klados = getKlados($klados_id,$mysqlconnection);
-		$sx_organ_id = mysql_result($result, $i, "sx_organikhs");
-		$sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
-		$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
-		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
-		$sx_organikhs_url = "<a href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-		$sx_yphrethshs_url = "<a href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-		// check if multiple schools
-		$qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
-		$res = mysql_query($qry,$mysqlconnection);
-		if (mysql_num_rows($res) > 0)
-			$sx_yphrethshs .= "*";
-								
-		echo "<tr><td>";
-		echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>&nbsp;&nbsp;";
-		if ($usrlvl < 3)
-         echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
-		if ($usrlvl < 2)
-         echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
-		echo "</td>";
-		echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
-		echo "</tr>";
+	if ($num == 0){
+    echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
+  } else {
+    while ($i < $num)
+    {
+      $id = mysql_result($result, $i, "id");
+      $name = mysql_result($result, $i, "name");
+      $surname = mysql_result($result, $i, "surname");
+      $klados_id = mysql_result($result, $i, "klados");
+      $klados = getKlados($klados_id,$mysqlconnection);
+      $sx_organ_id = mysql_result($result, $i, "sx_organikhs");
+      $sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
+      $sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
+      $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
+      $sx_organikhs_url = "<a href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+      $sx_yphrethshs_url = "<a href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+      // check if multiple schools
+      $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
+      $res = mysql_query($qry,$mysqlconnection);
+      if (mysql_num_rows($res) > 0)
+        $sx_yphrethshs .= "*";
+                  
+      echo "<tr><td>";
+      echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>&nbsp;&nbsp;";
+      if ($usrlvl < 3)
+          echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
+      if ($usrlvl < 2)
+          echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
+      echo "</td>";
+      echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
+      echo "</tr>";
 
-		$i++;
-   }   
+      $i++;
+    }  
+  } 
 	echo "</tbody>\n";
 	if ($usrlvl < 2)
 		echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?id=$id&op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";		
