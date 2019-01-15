@@ -6,19 +6,11 @@ require_once"../tools/functions.php";
 <html>
     <head>      
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="../js/jquery.js"></script>
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
         <script type="text/javascript">   
-            $(document).ready(function() { 
-                $("#mytbl").tablesorter({widgets: ['zebra']}); 
-            });
-            
-            $().ready(function(){
-                $(".slidingDiv").hide();
-                $(".show_hide").show();
- 
-                $('.show_hide').click(function(){
-                    $(".slidingDiv").slideToggle();
-                });
+            $().ready(function() { 
+                $(".tablesorter").tablesorter({widgets: ['zebra']}); 
             });
         </script>
         <title>Στατιστικά Μονίμων / Αναπληρωτών</title>
@@ -31,46 +23,51 @@ require_once"../tools/functions.php";
         header("Location: ../tools/login.php");
     }
     $usrlvl = $_SESSION['userlevel'];
-
+    // status: 1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ¶δεια, 4 Διαθεσιμότητα
     $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
     mysql_select_db($db_name, $mysqlconnection);
     mysql_query("SET NAMES 'greek'", $mysqlconnection);
     mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
-    $query = "SELECT count( * ) FROM employee WHERE status!=2 AND thesi!=5";
-    $result = mysql_query($query, $mysqlconnection);
-    $monimoi_total = mysql_result($result, 0);
+    
     $query = "SELECT count( * ) FROM employee WHERE status!=2 AND thesi=5";
     $result = mysql_query($query, $mysqlconnection);
     $idiwtikoi = mysql_result($result, 0);
+    
     $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi!=5";
     $result = mysql_query($query, $mysqlconnection);
     $monimoi_her_total = mysql_result($result, 0);
+    
     $query = "SELECT count( * ) FROM ektaktoi";
     $result = mysql_query($query, $mysqlconnection);
     $anapl_total = mysql_result($result, 0);
+    
     $query = "SELECT count(*) FROM employee WHERE sx_organikhs=1 AND status!=2";
     $result = mysql_query($query, $mysqlconnection);
     $mon_diath = mysql_result($result, 0);
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=388 AND status!=2";
+    
+    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=388 AND status!=2 AND sx_yphrethshs NOT IN (388,394)";
     $result = mysql_query($query, $mysqlconnection);
     $mon_apoallopispe = mysql_result($result, 0);
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=394 AND status!=2";
+    
+    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=394 AND status!=2 AND sx_yphrethshs NOT IN (388,394)";
     $result = mysql_query($query, $mysqlconnection);
     $mon_apoallopisde = mysql_result($result, 0);
-    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=388 AND status!=2";
+    
+    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=388 AND status!=2 AND sx_organikhs NOT IN (388,394)";
     $result = mysql_query($query, $mysqlconnection);
     $mon_seallopispe = mysql_result($result, 0);
-    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=389 AND status!=2";
+    
+    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=389 AND status!=2 AND sx_organikhs NOT IN (388,394)";
     $result = mysql_query($query, $mysqlconnection);
     $mon_seforea = mysql_result($result, 0);
+    
     $query = "SELECT count(*) FROM employee WHERE STATUS=3";
     $result = mysql_query($query, $mysqlconnection);
     $mon_seadeia = mysql_result($result, 0);
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=388 OR sx_organikhs=394";
+    
+    $query = "SELECT count(*) FROM employee WHERE status!=2 AND (sx_organikhs=388 OR sx_organikhs=394) AND sx_yphrethshs NOT IN (388,394)";
     $result = mysql_query($query, $mysqlconnection);
     $mon_alloy = mysql_result($result, 0);
-    //$mon_organ = $monimoi_total - $mon_alloy;
-
 
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma FROM employee e 
                 JOIN klados k 
@@ -78,7 +75,7 @@ require_once"../tools/functions.php";
                 WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi!=5
                 GROUP BY klados";
     $result_mon = mysql_query($query, $mysqlconnection);
-    //$num = mysql_fetch_array($result);
+
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma, ek.type
                 FROM ektaktoi e
                 JOIN klados k ON k.id = e.klados
@@ -124,21 +121,16 @@ require_once"../tools/functions.php";
     echo "<body>";
     include('../etc/menu.php');
     echo "<h2>Στατιστικά</h2>";
-    echo "<table class=\"imagetable\" border='1'>";
-    echo "<tr><td colspan=3><strong>Μόνιμοι εκπαιδευτικοί (+ από άλλα ΠΥΣΠΕ/ΠΥΣΔΕ):&nbsp;$monimoi_total</strong></td></tr>";
-    echo "</table>";
-    echo "<br>";
-    echo "<table class=\"imagetable\" border='1'>";
-    echo "<tr><td colspan=3><strong>Μόνιμοι εκπαιδευτικοί (με οργανική στο Ηράκλειο):&nbsp;$monimoi_her_total</strong></td></tr>";
-    echo "<tr><td>Κλάδος</td><td colspan=3>Πλήθος</td>";
+    echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
+    echo "<h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση ".getParam('dnsh',$mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
+    echo "<thead><th><b>Κλάδος</b></th><th colspan=3><b>Αριθμός</b></th></thead><tbody>";
     while ($row = mysql_fetch_array($result_mon, MYSQL_NUM)) {
         echo "<tr><td>$row[1] ($row[2])</td><td colspan=2>$row[0]</td></tr>";
     }
     echo "<tr><td><strong>Ιδιωτικοί εκπ/κοί</strong></td><td>$idiwtikoi</td></tr>";
-    echo "</table>";
+    echo "</tbody></table>";
     echo "<br>";
     echo "<table class=\"imagetable\" border='1'>";
-    //echo "<tr><td>Με οργανική στο ΠΥΣΠΕ</td><td>$mon_organ</td></tr>";
     echo "<tr><td>Υπηρετούν στο ΠΥΣΠΕ Ηρακλείου και <br>έχουν οργανική σε άλλο ΠΥΣΠΕ/ΠΥΣΔΕ</td><td>$mon_alloy</td></tr>";
     echo "<tr><td>Απόσπασμένοι από άλλο ΠΥΣΠΕ</td><td>$mon_apoallopispe</td></tr>";
     echo "<tr><td>Απόσπασμένοι/με διάθεση από άλλο ΠΥΣΔΕ</td><td>$mon_apoallopisde</td></tr>";
@@ -148,22 +140,22 @@ require_once"../tools/functions.php";
     echo "<tr><td>Σε άδεια</td><td>$mon_seadeia</td></tr>";
     echo "</table>";
     echo "<br>";
-    echo "<table class=\"imagetable\" border='1'>";
-    echo "<tr><td colspan=3><strong>Αναπληρωτές / Ωρομίσθιοι εκπαιδευτικοί:&nbsp;$anapl_total</strong></td>";
-    echo "<tr><td>Τύπος</td><td>Κλάδος</td><td>Πλήθος</td>";
+    echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
+    echo "<h3>Αναπληρωτές / Ωρομίσθιοι εκπαιδευτικοί:&nbsp;$anapl_total</h3>";
+    echo "<thead><th>Τύπος</th><th>Κλάδος</th><th>Πλήθος</th></thead><tbody>";
     while ($row = mysql_fetch_array($result_anapl, MYSQL_NUM)) {
         echo "<tr><td>$row[3]<td>$row[1] ($row[2])</td><td>$row[0]</td></tr>";
     }
-    echo "</table>";
+    echo "</tbody></table>";
     echo "<br>";
 
-    echo "<table class=\"imagetable\" border='1'>";
-    echo "<tr><td colspan=3><strong>Σχολεία</strong></td>";
-    echo "<tr><td>Τύπος</td><td>Αριθμός</td>";
+    echo "<table class=\"imagetable tablesorter\" border='1'>";
+    echo "<h3>Σχολικές Μονάδες</h3>";
+    echo "<thead><th>Τύπος</th><th>Αριθμός</th></thead><tbody>";
     foreach ($sx_arr as $k => $v)
         echo "<tr><td>$k</td><td>$v</td>";
 
-    echo "</table>";
+    echo "</tbody></table>";
 
     echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='../index.php'\">";
     echo "</body>";
