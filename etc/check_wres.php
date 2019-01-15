@@ -7,10 +7,11 @@
   <head>      
       <LINK href="../css/style.css" rel="stylesheet" type="text/css">
       <title>Συμπλήρωση υποχρεωτικού ωραρίου</title>
-      <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
+      <script type="text/javascript" src="../js/jquery.js"></script>
+      <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
       <script type="text/javascript">   
          $(document).ready(function() { 
-            $("#mytbl").tablesorter({widgets: ['zebra']}); 
+            $(".tablesorter").tablesorter({widgets: ['zebra']}); 
          });
       </script>
    </head>
@@ -69,7 +70,7 @@
       if ($has_mon_diffs || $has_ekt_diffs){
          if ($has_mon_diffs){
             echo "<h3>Μόνιμοι</h3>";
-            echo "<table class=\"imagetable\" border='1'>";
+            echo "<table class=\"imagetable tablesorter\" border='1'>";
             echo "<thead><th>Επώνυμο</th><th>Όνομα</th><th>Ώρες Υπ.Ωραρίου</th><th>Ώρες Τοποθέτησης σε Σχ.Μονάδες</th><th>Διαφορά <small>(Υποχρ. - Τοποθ.)</small></th></thead>";
             echo "<tbody>";
             foreach ($mon_diffs as $row) {
@@ -84,7 +85,7 @@
          }
          if ($has_ekt_diffs){
             echo "<h3>Αναπληρωτές</h3>";
-            echo "<table class=\"imagetable\" border='1'>";
+            echo "<table class=\"imagetable tablesorter\" border='1'>";
             echo "<thead><th>Επώνυμο</th><th>Όνομα</th><th>Ώρες Υπ.Ωραρίου</th><th>Ώρες Τοποθέτησης σε Σχ.Μονάδες</th><th>Διαφορά <small>(Υποχρ. - Τοποθ.)</small></th></thead>";
             echo "<tbody>";
             foreach ($ekt_diffs as $row) {

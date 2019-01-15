@@ -37,8 +37,14 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_opt);
 <script type="text/javascript">
 var thegrid = new drasticGrid('grid1', {
     pathimg: "../tools/grid/img/",
-	colwidth: "300"
-    });
+	  colwidth: "300",
+    columns: [
+      {name: 'id', displayname:'Α/Α', width:25},
+      {name: 'name', displayname:'Όνομα', width: 150},
+      {name: 'value', displayname:'Τιμή', width: 250},
+      {name: 'descr', displayname:'Περιγραφή', width: 400}
+    ]
+});
 </script>
 
 <table class="imagetable" border="1">
