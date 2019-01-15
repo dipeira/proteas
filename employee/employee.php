@@ -178,6 +178,7 @@
                     $hm_anal = mysql_result($result, 0, "hm_anal");
                     $met_did = mysql_result($result, 0, "met_did");
                     $proyp = mysql_result($result, 0, "proyp");
+                    $proyp_not = mysql_result($result, 0, "proyp_not");
                     $anatr = mysql_result($result, 0, "anatr");
                     $comments = mysql_result($result, 0, "comments");
                     $comments = str_replace(" ", "&nbsp;", $comments);
@@ -354,7 +355,9 @@ if ($_GET['op']=="edit")
 		//<input type='text' name='met_did' value=$met_did /></td></tr>";
 		metdidCombo($met_did);
 		$ymd=days2ymd($proyp);
-		echo "<tr><td>Προϋπηρεσία</td><td>($proyp Ημέρες)&nbsp;Έτη<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες<input type='text' name='pdays' size=1 value=$ymd[2] /></td></tr>";
+		echo "<tr><td>Μισθολογική Προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες&nbsp;<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες&nbsp;<input type='text' name='pdays' size=1 value=$ymd[2] />&nbsp;($proyp Ημέρες)</td></tr>";
+    $ymdnot=days2ymd($proyp_not);
+		echo "<tr><td>Προϋπηρεσία που δε λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου</td><td>Έτη&nbsp;<input type='text' name='peyears' size=1 value=$ymdnot[0] />Μήνες&nbsp;<input type='text' name='pemonths' size=1 value=$ymdnot[1] />Ημέρες&nbsp;<input type='text' name='pedays' size=1 value=$ymdnot[2] /></td></tr>";
                 
 		// aney
         echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
@@ -574,7 +577,7 @@ if ($_GET['op']=="edit")
     echo "<tr><td>Ημ/νία Ανάληψης</td><td>".date('d-m-Y',strtotime($hm_anal))."</td><td>Μεταπτυχιακό/Διδακτορικό</td><td>$met</td></tr>";
 
     $ymd=days2ymd($proyp);
-    $temp = "<tr><td>Προϋπηρεσία</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td>";
+    $temp = "<tr><td>Μισθολογική Προϋπηρεσία</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td>";
     //}
     $hm_dior_org = $hm_dior;
     // if hm_anal-hm_dior > 30
@@ -622,10 +625,13 @@ if ($_GET['op']=="edit")
     }
     $aney = $aney_xr + $days_aney;
     $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp + $aney;
+    //$anatr_not = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp_not + $aney;
 		$ymd = days2date($anatr);
 		
 		echo "$temp<td>Ανατρέχει</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td></tr>";
-                
+    
+    $ymdnot=days2ymd($proyp_not);
+    echo "<tr><td colspan=2>Προϋπηρεσία που δε λαμβάνεται υπ'όψιν για μείωση ωραρίου</td><td colspan=2>Έτη: $ymdnot[0] &nbsp; Μήνες: $ymdnot[1] &nbsp; Ημέρες: $ymdnot[2] </td></tr>";                
     // aney
     echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
     if ($aney)
@@ -686,10 +692,11 @@ if ($_GET['op']=="edit")
                       
       echo "<tr><td><a href=\"#\" class=\"show_hide3\"><small>Εμφάνιση/Απόκρυψη<br>μεταβολών</small></a></td>";
       echo "<td colspan=3><div class=\"slidingDiv3\">";
-
-      while ($row = mysql_fetch_array($result_upd, MYSQL_ASSOC)) 
-              echo date("d-m-Y H:i", strtotime($row['timestamp']))." usr: ".$row['username']." - IP: ".$row['ip']." ".$row['query']."<br>";
-      
+      echo "<ul>";
+      while ($row = mysql_fetch_array($result_upd, MYSQL_ASSOC)) {
+              echo "<li><b>".date("d-m-Y H:i", strtotime($row['timestamp']))."</b>&nbsp; usr: ".$row['username']." - IP: ".$row['ip']." ".$row['query']."</li>";
+      }
+      echo "</ul>";
       echo "</div>";
       echo "</td></tr>";
     }
@@ -707,6 +714,7 @@ if ($_GET['op']=="edit")
 		$myCalendar->writeScript();
 		echo "<br>";
 		echo "<input type='hidden' name = 'anatr' value='$anatr'>";
+    echo "<input type='hidden' name = 'proyp_not' value='$proyp_not'>";
     echo "<input type='hidden' name = 'met_did' value='$met_did'>";
 		echo "<INPUT TYPE='submit' VALUE='Υπολογισμός'>";
 		echo "<br>";
@@ -842,7 +850,8 @@ if ($_GET['op']=="edit")
 				
 		echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
 		metdidCombo(0);
-		echo "<tr><td>Προϋπηρεσία</td><td><input type='text' name='proyp' size='3' />&nbsp;Έτη:<input type='text' name='pyears' size=1 />&nbsp;Μήνες:<input type='text' name='pmonths' size=1 />&nbsp;Ημέρες:<input type='text' name='pdays' size=1 /></td></tr>";
+		echo "<tr><td>Μισθολογική Προϋπηρεσία</td><td>Έτη:&nbsp;<input type='text' name='pyears' size=1 />&nbsp;Μήνες:&nbsp;<input type='text' name='pmonths' size=1 />&nbsp;Ημέρες:&nbsp;<input type='text' name='pdays' size=1 /></td></tr>";
+    echo "<tr><td>Προϋπηρεσία που δε λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου</td><td>Έτη:&nbsp;<input type='text' name='peyears' size=1 />&nbsp;Μήνες:&nbsp;<input type='text' name='pemonths' size=1 />&nbsp;Ημέρες:&nbsp;<input type='text' name='pedays' size=1 /></td></tr>";
         echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' ></textarea></td></tr>";
 		 
 		echo "<div id=\"content\">";

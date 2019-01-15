@@ -37,7 +37,7 @@
 
 	//old: $query = "SELECT * from employee WHERE";
         // changed to include employee teaching to multiple schools (table yphrethsh)
-        $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
+  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
 	if (strlen($_POST['name'])>0)
 	{
 		$query .= " name like '".$_POST['name']."'";
@@ -71,14 +71,21 @@
 		$query .= " am like '".$_POST['am']."'";
 		$flag=1;
 	}
-        if (strlen($_POST['afm'])>0)
+  if (strlen($_POST['afm'])>0)
 	{
 		if ($flag)
 			$query .= $op;
 		$query .= " afm like '".$_POST['afm']."'";
 		$flag=1;
+  }
+  if (strlen($_POST['tel'])>0)
+	{
+		if ($flag)
+			$query .= $op;
+		$query .= " tel like '%".$_POST['tel']."%'";
+		$flag=1;
 	}
-        if (strlen($_POST['katast'])>0)
+  if (strlen($_POST['katast'])>0)
 	{
 		if ($flag)
 			$query .= $op;

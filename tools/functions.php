@@ -1768,4 +1768,17 @@
         }
         
     }
+    function get_wres($days)
+    {
+      // 0-10: 24 wres, 11-15: 23 wres, 15-20: 22 wres, >20: 21 wres
+      // 10y = 3600 days, 15y = 5400 days, 20y = 7200 days
+      if ($days <= 3600)
+          return 24;
+      elseif ($days > 3600 && $days <= 5400)
+          return 23;
+      elseif ($days > 5400 && $days <= 7200)
+          return 22;
+      elseif ($days >7200)
+          return 21;
+    }        
 ?>

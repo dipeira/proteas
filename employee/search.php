@@ -121,8 +121,9 @@
 		echo "</select>";
 		echo "Έτη<input type='text' name='pyears' size=1 />Μήνες<input type='text' name='pmonths' size=1 />Ημέρες<input type='text' name='pdays' size=1 /></td></tr>";
 		
-                echo "<tr><td>Α.Φ.Μ.</td><td><input type='checkbox' name = 'dspafm'></td><td><input type='text' name='afm' /></td>";
-                echo "<td></td><td></td><td></tr>";
+    echo "<tr><td>Α.Φ.Μ.</td><td><input type='checkbox' name = 'dspafm'></td><td><input type='text' name='afm' /></td>";
+    echo "<td>Τηλέφωνο</td><td></td><td><input type='text' name='tel' /></td>";
+    echo "</tr>";
                 
 		echo "<tr><td>Κλάδος</td><td></td><td>";
 		kladosCmb($mysqlconnection);
@@ -141,24 +142,24 @@
 		echo "<tr><td>Μ.Κ.</td><td><input type='checkbox' name = 'dspmk'></td><td><input type='text' name='mk' /></td>";
 		echo "<td>Σχόλια</td><td></td><td><input type='text' name='comments' /></td></tr>";
                 
-                echo "<tr><td>Κατάσταση</td><td><input type='checkbox' name = 'dspkatast'></td><td>";
-                echo "<select name=\"katast\">";
+    echo "<tr><td>Κατάσταση</td><td><input type='checkbox' name = 'dspkatast'></td><td>";
+    echo "<select name=\"katast\">";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		echo "<option value=\"1\">Εργάζεται</option>";
 		echo "<option value=\"2\">Λύση Σχέσης-Παραίτηση</option>";
 		echo "<option value=\"3\">¶δεια</option>";
 		echo "<option value=\"4\">Διαθεσιμότητα</option>";
 		echo "</select>";
-                //echo "</td><td></td><td></td><td></td>";
-                echo "</td><td>Συνολική Υπηρεσία <br><small>(από διορισμό + προϋπηρεσία)</small></td><td><input type='checkbox' name = 'dspsynol'></td><td>";
-                echo "<select name=\"ops\">";
+    //echo "</td><td></td><td></td><td></td>";
+    echo "</td><td>Συνολική Υπηρεσία <br><small>(από διορισμό + προϋπηρεσία)</small></td><td><input type='checkbox' name = 'dspsynol'></td><td>";
+    echo "<select name=\"ops\">";
 		echo "<option value=\"=\" selected>=</option>";
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
 		echo "</select>";
 		echo "Έτη<input type='text' name='syears' size=1 />Μήνες<input type='text' name='smonths' size=1 />Ημέρες<input type='text' name='sdays' size=1 /><br>";
-                echo "<small>Συνολική Υπηρεσία έως:</small><br>";
-                $myCalendar = new tc_calendar("hm_synol", true);
+    echo "<small>Συνολική Υπηρεσία έως:</small><br>";
+    $myCalendar = new tc_calendar("hm_synol", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		//$myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
 		$myCalendar->setPath("../tools/calendar/");
@@ -167,7 +168,7 @@
 		$myCalendar->setAlignment("left", "bottom");
 		$myCalendar->disabledDay("sun,sat");
 		$myCalendar->writeScript();
-                echo "</td></tr>";
+    echo "</td></tr>";
 
 		echo "<tr><td colspan=6><input type='checkbox' name = 'and'>Να ισχύουν ΟΛΑ τα παραπάνω κριτήρια ΤΑΥΤΟΧΡΟΝΑ;</td></tr>";	
 		
@@ -175,7 +176,7 @@
 		echo "	<input type='hidden' name = 'set' value='$set'>";
 		echo "	<input type='submit' value='Αναζήτηση'>";
 		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-                echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Βοήθεια\" onclick=\"window.open('help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
+    echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Βοήθεια\" onclick=\"window.open('help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
 		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";

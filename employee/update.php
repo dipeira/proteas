@@ -67,8 +67,8 @@ $analipsi = $_POST['analipsi'];
 //date('d-m-Y',strtotime($hm_dior))
 $hm_anal = date('Y-m-d',strtotime($_POST['hm_anal']));
 $met_did = $_POST['met_did'];
-//$proyp = $_POST['proyp'];
 $proyp = $_POST['pyears']*360 + $_POST['pmonths']*30 + $_POST['pdays'];
+$proyp_not = $_POST['peyears']*360 + $_POST['pemonths']*30 + $_POST['pedays'];
 //$anatr = $_POST['anatr'];
 //$anatr = $_POST['ayears']*360 + $_POST['amonths']*30 + $_POST['adays'];
 $comments = addslashes($_POST['comments']);
@@ -107,8 +107,8 @@ if (isset($_POST['action']))
     $result = mysql_query($query,$mysqlconnection);
     if (!mysql_num_rows($result))
     {
-        $query0 = "INSERT INTO employee (name, surname, patrwnymo, mhtrwnymo, klados, am, sx_organikhs, sx_yphrethshs, fek_dior, hm_dior, vathm, mk, hm_anal, met_did, proyp, comments, afm, thesi, status, wres) ";
-        $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$am','$org','$yphr_arr[0]','$fek_dior','$hm_dior','$vathm','$mk','$hm_anal','$met_did','$proyp','$comments', '$afm', '$thesi', '$katast', '$wres')";
+        $query0 = "INSERT INTO employee (name, surname, patrwnymo, mhtrwnymo, klados, am, sx_organikhs, sx_yphrethshs, fek_dior, hm_dior, vathm, mk, hm_anal, met_did, proyp, comments, afm, thesi, status, wres, proyp_not) ";
+        $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$am','$org','$yphr_arr[0]','$fek_dior','$hm_dior','$vathm','$mk','$hm_anal','$met_did','$proyp','$comments', '$afm', '$thesi', '$katast', '$wres', '$proyp_not')";
         $query = $query0.$query1;
         $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
         mysql_query($query,$mysqlconnection);
@@ -141,7 +141,7 @@ else {
     $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
     $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
     $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
-    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', anatr='$anatr', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
+    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not',anatr='$anatr', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
     $query = $query1.$query2.$query3.$query4;
     $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     //echo $query;
