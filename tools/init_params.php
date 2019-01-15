@@ -10,7 +10,11 @@
     return mysql_result($result, 0, "value");
   }
   $myconn = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $myconn);
+  $db_selected = mysql_select_db($db_name, $myconn);
+  // workaround for init.php
+  if (!$db_selected){
+    return;
+  }
   mysql_query("SET NAMES 'greek'", $myconn);
   mysql_query("SET CHARACTER SET 'greek'", $myconn);
   

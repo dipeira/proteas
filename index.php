@@ -17,7 +17,7 @@
 		else
 			$logged = 1;
 		
-	$usrlvl = $_SESSION['userlevel'];   
+  $usrlvl = $_SESSION['userlevel'];
 ?>
 <html>
   <head>
@@ -66,6 +66,12 @@
   	<?php include('etc/menu.php'); ?>
 	<div>
 <?php
+  // notify admin to delete init.php if it exists
+  if ($usrlvl == 0){
+    if (file_exists('init.php')){
+      notify("ΠΡΟΣΟΧΗ: Παρακαλώ διαγράψτε το αρχείο <b>init.php</b> για λόγους ασφαλείας!</p>",'error');
+    }
+  }
 	//rpp = results per page
 	if (isset ($_POST['rpp']))
 		$rpp = $_POST['rpp'];

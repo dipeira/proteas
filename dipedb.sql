@@ -16,9 +16,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES greek */;
 
---
--- Database: `dipedb`
---
 
 -- --------------------------------------------------------
 
@@ -438,7 +435,7 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `am` int(10) NOT NULL,
   `sx_organikhs` int(11) NOT NULL,
   `sx_yphrethshs` int(11) NOT NULL,
-  `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Διοικητικός, 4 Ιδιωτικός',
+  `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
   `vathm_old` varchar(4) NOT NULL,
@@ -447,6 +444,8 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `mk_old` tinyint(2) NOT NULL,
   `mk` tinyint(2) NOT NULL,
   `hm_mk` date NOT NULL,
+  `mk11` tinyint(4) NOT NULL,
+  `hm_mk11` date NOT NULL,
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
   `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
@@ -464,7 +463,21 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `idnum` varchar(40) NOT NULL,
   `amka` varchar(40) NOT NULL,
   `aney` int(11) NOT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `aney_xr` int(11) NOT NULL COMMENT 'Συνολ. χρόνος αδ. άνευ αποδοχών',
+  `aney_apo` date NOT NULL COMMENT 'Αδ. ανευ από',
+  `aney_ews` date NOT NULL COMMENT 'Αδ. άνευ έως',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `wres` int(11) NOT NULL COMMENT 'Διδακτικές ώρες (βάσει ετών υπηρεσίας)',
+  `idiwtiko` tinyint(4) NOT NULL,
+  `idiwtiko_id` tinyint(4) NOT NULL,
+  `idiwtiko_liksi` date NOT NULL,
+  `idiwtiko_enarxi` date NOT NULL,
+  `idiwtiko_id_enarxi` date NOT NULL,
+  `idiwtiko_id_liksi` date NOT NULL,
+  `katoikon` tinyint(4) NOT NULL,
+  `katoikon_apo` date NOT NULL,
+  `katoikon_ews` date NOT NULL,
+  `katoikon_comm` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=greek;
 
 -- --------------------------------------------------------
@@ -489,27 +502,27 @@ CREATE TABLE IF NOT EXISTS `employee_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `employee_moved` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(20) CHARACTER SET greek NOT NULL,
-  `surname` varchar(30) CHARACTER SET greek NOT NULL,
-  `patrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
-  `mhtrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `surname` varchar(30) NOT NULL,
+  `patrwnymo` varchar(30) NOT NULL,
+  `mhtrwnymo` varchar(30) NOT NULL,
   `klados` int(11) NOT NULL,
   `am` int(10) NOT NULL,
   `sx_organikhs` int(11) NOT NULL,
   `sx_yphrethshs` int(11) NOT NULL,
   `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
-  `fek_dior` varchar(10) CHARACTER SET greek NOT NULL,
+  `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
-  `vathm_old` varchar(4) CHARACTER SET greek NOT NULL,
-  `vathm` varchar(4) CHARACTER SET greek NOT NULL,
+  `vathm_old` varchar(4) NOT NULL,
+  `vathm` varchar(4) NOT NULL,
   `hm_vathm` date NOT NULL,
   `mk_old` tinyint(2) NOT NULL,
   `mk` tinyint(2) NOT NULL,
   `hm_mk` date NOT NULL,
   `mk11` tinyint(4) NOT NULL,
   `hm_mk11` date NOT NULL,
-  `analipsi` varchar(5) CHARACTER SET greek NOT NULL,
+  `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
   `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
   `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
@@ -517,14 +530,14 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `anatr_katataksi` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
-  `comments` longtext CHARACTER SET greek NOT NULL,
+  `comments` longtext NOT NULL,
   `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) CHARACTER SET greek NOT NULL,
+  `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
-  `tel` varchar(40) CHARACTER SET greek NOT NULL,
-  `address` varchar(80) CHARACTER SET greek NOT NULL,
-  `idnum` varchar(40) CHARACTER SET greek NOT NULL,
-  `amka` varchar(40) CHARACTER SET greek NOT NULL,
+  `tel` varchar(40) NOT NULL,
+  `address` varchar(80) NOT NULL,
+  `idnum` varchar(40) NOT NULL,
+  `amka` varchar(40) NOT NULL,
   `aney` int(11) NOT NULL,
   `aney_xr` int(11) NOT NULL COMMENT 'Συνολ. χρόνος αδ. άνευ αποδοχών',
   `aney_apo` date NOT NULL COMMENT 'Αδ. ανευ από',
@@ -540,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `katoikon` tinyint(4) NOT NULL,
   `katoikon_apo` date NOT NULL,
   `katoikon_ews` date NOT NULL,
-  `katoikon_comm` text CHARACTER SET greek NOT NULL
+  `katoikon_comm` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -635,7 +648,8 @@ INSERT INTO `params` (`id`, `name`, `value`, `descr`) VALUES
 (8, 'endofyear', '21-06-2019', 'Ημέρα έκδοσης βεβαιώσεων αναπληρωτών'),
 (9, 'endofyear2', '21-06-2019', 'Τελευταία ημέρα εργασίας αναπληρωτών (για βεβαιώσεις)'),
 (10, 'protapol', '99999', 'Πρωτόκολλο απόλυσης'),
-(11, 'yp_wr', '24', 'Υποχρεωτικό ωράριο βαθμίδας');
+(11, 'yp_wr', '24', 'Υποχρεωτικό ωράριο βαθμίδας'),
+(12, 'dnsh', 'Π.Ε. XXXXXXX', 'Διεύθυνση εκπαίδευσης');
 
 -- --------------------------------------------------------
 
