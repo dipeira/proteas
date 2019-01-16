@@ -114,6 +114,7 @@ if (isset($_POST['submit'])) {
   }
 }
 else {
+  echo "<IMG src='../images/logo.png' class='applogo'></a>";
   echo "<h2>Εισαγωγή έκτακτων εκπαιδευτικών από αρχείο excel</h2>";
   print "<p>Πραγματοποιήστε μαζική εισαγωγή έκτακτων εκπ/κών (αναπληρωτών) στο σύστημα.</p>\n";
   print '<p>Χρησιμοποιήστε το <a href="import_sample.xls">πρότυπο βιβλίο excel</a>, ακολουθώντας τις οδηγίες που βρίσκονται σε αυτό <small>(ως σχόλια στα κελιά των κεφαλίδων)</small>.</p>';
@@ -122,6 +123,7 @@ else {
   print "<input size='50' type='file' name='filename'><br />\n";
   print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
   echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small><br><br>";
+  echo "<a href='import.php'>Εισαγωγή μονίμων και σχολείων</a><br>";
 
   echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
   exit;

@@ -52,6 +52,7 @@
 		  <ul>
 			  <li><a href="<?=SITE_ROOT?>/etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
 			  <!--<li><a href="<?=SITE_ROOT?>/employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>-->
+        <li><a href='<?=SITE_ROOT?>/tools/import.php'>Εισαγωγή δεδομένων</a></li>
 			  <li><a href='<?=SITE_ROOT?>/etc/params.php'>Παράμετροι</a></li>
 			  <li><a href="<?=SITE_ROOT?>/employee/klados.php">Ειδικότητες</a></li>
 			  <li><a href='<?=SITE_ROOT?>/etc/users.php'>Διαχείριση Χρηστών</a></li>

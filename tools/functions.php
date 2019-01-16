@@ -73,7 +73,19 @@
 			die('Could not query:' . mysql_error());
 		else
 			return mysql_result($result, 0);	
-	}
+  }
+  function getSchoolFromCode($code, $conn)
+  {
+    $query = "SELECT id from school where code = '$code'";
+		$result = mysql_query($query, $conn);
+		if (!$result) {
+      return false;
+    }
+      //die('Could not query:' . mysql_error());
+      
+		else
+			return mysql_result($result, 0);	
+  }
         
     //The function returns the no. of business days between two dates and it skips the holidays
     function getWorkingDays($startDate,$endDate,$holidays){
