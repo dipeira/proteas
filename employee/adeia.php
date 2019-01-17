@@ -114,10 +114,6 @@ if ($_GET['op']=="edit")
 	{
                 echo "<form id='updatefrm' name='update' action='update_adeia.php' method='POST'>";
 		echo "<table class=\"imagetable stable\" border='1'>";
-
-		echo "<tr>";
-		echo "<td>ID</td><td>$id</td>";
-		echo "</tr>";
                 $query1 = "select * from employee where id=$emp_id";
                 $result1 = mysql_query($query1, $mysqlconnection);
 		$name = mysql_result($result1, 0, "name");
@@ -242,9 +238,6 @@ if ($_GET['op']=="edit")
 	elseif ($_GET['op']=="view")
 	{
 		echo "<table class=\"imagetable stable\" border='1'>";
-		echo "<tr>";
-		echo "<td>ID</td><td>$id</td>";
-		echo "</tr>";
                 $query1 = "select * from employee where id=$emp_id";
                 $result1 = mysql_query($query1, $mysqlconnection);
 		$name = mysql_result($result1, 0, "name");

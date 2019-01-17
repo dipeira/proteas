@@ -4,7 +4,8 @@ session_start();
 require_once "../config.php";
 require_once "../tools/functions.php";
 require_once '../tools/num2wordgen.php';
-require_once '../tools/PHPWord.php';
+
+require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
 
 $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
 mysql_select_db($db_name, $mysqlconnection);

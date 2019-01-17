@@ -1,0 +1,6 @@
+{
+  "require": {
+    "phpoffice/phpexcel": "1.7.9",
+    "phpoffice/phpword": "0.7.0"
+  }
+}

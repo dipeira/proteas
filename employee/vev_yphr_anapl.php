@@ -8,7 +8,7 @@
 
 session_start();
 header('Content-type: text/html; charset=iso8859-7'); 
-require_once '../tools/PHPWord.php';
+require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
 require_once '../config.php';
 require_once '../tools/functions.php';
 

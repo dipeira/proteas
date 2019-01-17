@@ -3,3 +3,4 @@ word/*.docx
 .vscode/
 tools/mail.log
 config.php
+vendor/

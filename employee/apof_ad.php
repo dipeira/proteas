@@ -230,7 +230,7 @@
             $emp_num = count($emp);
             $is_anapl = $arr[4];
             
-            require_once '../tools/PHPWord.php';
+            require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
             $PHPWord = new PHPWord();
             if ($is_anapl)
             {

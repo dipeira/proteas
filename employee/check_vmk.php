@@ -254,7 +254,7 @@
         // create word document
         if (isset($_POST['btnSubmit']))
         {
-            require_once '../tools/PHPWord.php';
+            require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
             $PHPWord = new PHPWord();
             
             // set max execution time 
