@@ -147,31 +147,43 @@
                     echo "<tr><td>email: <input type='text' name='email' value='$email' size='30'/></a></td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
                     echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
                     // 05-10-2012 - organikes
-                    if ($type == 1)
-                        echo "<tr><td colspan=2>Οργανικές: ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                    if ($type == 1){
+                      echo "<tr><td colspan=2>Οργανικές: ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/>";
+                    }  
                     else
                         echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
-                    echo "&nbsp;&nbsp;Φυσ. Αγωγής: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/>";
-                    echo "&nbsp;&nbsp;Αγγλικών: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/>";
-                    echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/>";
                     echo "</td></tr>";
                     // 19-06-2013 - kena_org, kena_leit
-                    if ($type == 1)
-                        echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ70: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
+                    if ($type == 1){
+                      echo "<tr><td colspan=2>Οργ. Κενά: &nbsp;ΠΕ70: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ11: <input type='text' name='kena_org[]' value='$kena_org[1]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ06: <input type='text' name='kena_org[]' value='$kena_org[2]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ79: <input type='text' name='kena_org[]' value='$kena_org[3]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ05: <input type='text' name='kena_org[]' value='$kena_org[4]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ07: <input type='text' name='kena_org[]' value='$kena_org[5]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ08: <input type='text' name='kena_org[]' value='$kena_org[6]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ86: <input type='text' name='kena_org[]' value='$kena_org[7]' size='2'/>";
+                      echo "&nbsp;&nbsp;ΠΕ91: <input type='text' name='kena_org[]' value='$kena_org[8]' size='2'/>";
+                    }
                     else
                         echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
-                    echo "&nbsp;&nbsp;Φυσ. Αγωγής: <input type='text' name='kena_org[]' value='$kena_org[1]' size='2'/>";
-                    echo "&nbsp;&nbsp;Αγγλικών: <input type='text' name='kena_org[]' value='$kena_org[2]' size='2'/>";
-                    echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='kena_org[]' value='$kena_org[3]' size='2'/>";
                     echo "</td></tr>";
-                    if ($type == 1)
-                        echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ70: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
-                    else
-                        echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ60: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
-                    echo "&nbsp;&nbsp;Φυσ. Αγωγής: <input type='text' name='kena_leit[]' value='$kena_leit[1]' size='2'/>";
-                    echo "&nbsp;&nbsp;Αγγλικών: <input type='text' name='kena_leit[]' value='$kena_leit[2]' size='2'/>";
-                    echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='kena_leit[]' value='$kena_leit[3]' size='2'/>";
-                    echo "</td></tr>";
+                    // if ($type == 1)
+                    //     echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ70: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
+                    // else
+                    //     echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ60: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
+                    // echo "&nbsp;&nbsp;Φυσ. Αγωγής: <input type='text' name='kena_leit[]' value='$kena_leit[1]' size='2'/>";
+                    // echo "&nbsp;&nbsp;Αγγλικών: <input type='text' name='kena_leit[]' value='$kena_leit[2]' size='2'/>";
+                    // echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='kena_leit[]' value='$kena_leit[3]' size='2'/>";
+                    // echo "</td></tr>";
                     //
                     echo "<tr>";
                     if ($entaksis[0])

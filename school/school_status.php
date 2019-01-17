@@ -77,7 +77,6 @@
         $organikes = unserialize(mysql_result($result, 0, "organikes"));
         // kena_org, kena_leit - added 19-06-2013
         $kena_org = unserialize(mysql_result($result, 0, "kena_org"));
-        $kena_leit = unserialize(mysql_result($result, 0, "kena_leit"));
         $code = mysql_result($result, 0, "code");
         $updated = mysql_result($result, 0, "updated");
         $perif = mysql_result($result, 0, "perif");
@@ -139,41 +138,40 @@
         for ($i=0; $i<count($organikes); $i++)
             if (!$organikes[$i])
                 $organikes[$i]=0;
-        if ($type == 1)
-            echo "<tr><td colspan=2>Οργανικές: ΠΕ70: $organikes[0] /";
+        if ($type == 1){
+          echo "<tr><td colspan=2>Οργανικές: ΠΕ70: $organikes[0]";
+          echo "&nbsp;&nbsp;ΠΕ11: $organikes[1]";
+          echo "&nbsp;&nbsp;ΠΕ06: $organikes[2]";
+          echo "&nbsp;&nbsp;ΠΕ79: $organikes[3]";
+          echo "&nbsp;&nbsp;ΠΕ05: $organikes[4]";
+          echo "&nbsp;&nbsp;ΠΕ07: $organikes[5]";
+          echo "&nbsp;&nbsp;ΠΕ08: $organikes[6]";
+          echo "&nbsp;&nbsp;ΠΕ86: $organikes[7]";
+          echo "&nbsp;&nbsp;ΠΕ91: $organikes[8]";
+        }
         else
-            echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0] /";
-        echo "&nbsp;&nbsp;Φυσ. Αγωγής: $organikes[1] /";
-        echo "&nbsp;&nbsp;Αγγλικών: $organikes[2] /";
-        echo "&nbsp;&nbsp;Μουσικής: $organikes[3]";
+          echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0] /";
+        
         echo "</td></tr>";
         // 05-10-2012 - kena_leit, kena_org
         for ($i=0; $i<count($kena_org); $i++)
             if (!$kena_org[$i])
                 $kena_org[$i]=0;
-        if ($type == 1)
-            echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ70: $kena_org[0] /";
+        if ($type == 1){
+          echo "<tr><td colspan=2>Οργ. Κενά: &nbsp;ΠΕ70: $kena_org[0]";
+          echo "&nbsp;&nbsp;&nbsp;ΠΕ11: $kena_org[1]";
+          echo "&nbsp;&nbsp;ΠΕ06: $kena_org[2]";
+          echo "&nbsp;&nbsp;ΠΕ79: $kena_org[3]";
+          echo "&nbsp;&nbsp;ΠΕ05: $kena_org[4]";
+          echo "&nbsp;&nbsp;ΠΕ07: $kena_org[5]";
+          echo "&nbsp;&nbsp;ΠΕ08: $kena_org[6]";
+          echo "&nbsp;&nbsp;ΠΕ86: $kena_org[7]";
+          echo "&nbsp;&nbsp;ΠΕ91: $kena_org[8]";
+        }
         else
             echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0] /";
-        echo "&nbsp;&nbsp;Φυσ. Αγωγής: $kena_org[1] /";
-        echo "&nbsp;&nbsp;Αγγλικών: $kena_org[2] /";
-        echo "&nbsp;&nbsp;Μουσικής: $kena_org[3]";
         echo "</td></tr>";
-        for ($i=0; $i<count($kena_leit); $i++)
-            if (!$kena_leit[$i])
-                $kena_leit[$i]=0;
-        if ($type == 1)
-            echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ70: $kena_leit[0] /";
-        else
-            echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ60: $kena_leit[0] /";
-        echo "&nbsp;&nbsp;Φυσ. Αγωγής: $kena_leit[1] /";
-        echo "&nbsp;&nbsp;Αγγλικών: $kena_leit[2] /";
-        echo "&nbsp;&nbsp;Μουσικής: $kena_leit[3]";
-        echo "</td></tr>";
-        // end of leit,org
-        //echo "<tr><td colspan=2>Μαθητές: $synolo</td></tr>";
-        //echo "<tr><td colspan=2>Α': $classes[0], Β': $classes[1], Γ': $classes[2], Δ': $classes[3], Ε': $classes[4], ΣΤ': $classes[5]</td></tr>";
-        echo "<tr>";
+
         if ($entaksis[0])
             echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</td>";
         else
