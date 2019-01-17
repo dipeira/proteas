@@ -150,7 +150,7 @@
           echo "&nbsp;&nbsp;ΠΕ91: $organikes[8]";
         }
         else
-          echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0] /";
+          echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
         
         echo "</td></tr>";
         // 05-10-2012 - kena_leit, kena_org
@@ -169,7 +169,7 @@
           echo "&nbsp;&nbsp;ΠΕ91: $kena_org[8]";
         }
         else
-            echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0] /";
+            echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0]";
         echo "</td></tr>";
 
         if ($entaksis[0])
