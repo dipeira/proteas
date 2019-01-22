@@ -21,10 +21,9 @@
 	require_once"../tools/functions.php";
     session_start();
 	
-	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+	$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
 	$op = " AND";
         if (!$_POST['mon_anapl'])
@@ -44,8 +43,8 @@
 		$i=0;
 		$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
 		//	echo $query; // for debugging...
-		$result = mysql_query($query, $mysqlconnection);
-		$num = mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num = mysqli_num_rows($result);
 		
 		if ($num==0)
 			echo "<BR><p>Κανένα αποτέλεσμα...</p>";
@@ -74,15 +73,15 @@
 			while ($i < $num)
 			{
                                 
-				$id = mysql_result($result, $i, "id");
-                $emp_id = mysql_result($result, $i, "emp_id");
+				$id = mysqli_result($result, $i, "id");
+                $emp_id = mysqli_result($result, $i, "emp_id");
                 
                 if (!$_POST['mon_anapl'])
                     $query0 = "select name,surname from employee where id=$emp_id";
                 else
                     $query0 = "select name,surname from ektaktoi where id=$emp_id";
-                $result0 = mysql_query($query0, $mysqlconnection);
-                $test = mysql_num_rows($result0);
+                $result0 = mysqli_query($mysqlconnection, $query0);
+                $test = mysqli_num_rows($result0);
                 //Skip deleted employees
                 if ($test == 0)
                 {
@@ -92,12 +91,12 @@
                 }
                 else
                 {
-                    $name = mysql_result($result0, 0, "name");
-                    $surname = mysql_result($result0, 0, "surname");
+                    $name = mysqli_result($result0, 0, "name");
+                    $surname = mysqli_result($result0, 0, "surname");
                                                                     
-                    $start = mysql_result($result, $i, "start");
-                    $finish = mysql_result($result, $i, "finish");
-                    $days = mysql_result($result, $i, "days");
+                    $start = mysqli_result($result, $i, "start");
+                    $finish = mysqli_result($result, $i, "finish");
+                    $days = mysqli_result($result, $i, "days");
                     $start = date ("d-m-Y", strtotime($start));
                     $finish = date ("d-m-Y", strtotime($finish));
                     // add days
@@ -113,19 +112,19 @@
                     }
                     $synolo_ews += $days_to_end;
                     
-                    $ar_prot = mysql_result($result, $i, "prot");
-                    $hm_prot = mysql_result($result, $i, "hm_prot");
-                    $apof = mysql_result($result, $i, "prot_apof");
-                    $hm_apof = mysql_result($result, $i, "hm_apof");
+                    $ar_prot = mysqli_result($result, $i, "prot");
+                    $hm_prot = mysqli_result($result, $i, "hm_prot");
+                    $apof = mysqli_result($result, $i, "prot_apof");
+                    $hm_apof = mysqli_result($result, $i, "hm_apof");
                     if ($apof>0)
                         $apof_all = $apof."/".date("d-m-Y", strtotime($hm_apof));
                     else
                         $apof_all = "";
 
-                    $type = mysql_result($result, $i, "type");
+                    $type = mysqli_result($result, $i, "type");
                     $query1 = "select type from adeia_type where id=$type";
-                    $result1 = mysql_query($query1, $mysqlconnection);
-                    $typewrd = mysql_result($result1, 0, "type");
+                    $result1 = mysqli_query($mysqlconnection, $query1);
+                    $typewrd = mysqli_result($result1, 0, "type");
                     
                     $i++;
                                                                             

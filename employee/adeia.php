@@ -6,10 +6,9 @@
   //define("L_LANG", "el_GR"); //Needs fixing
   require('../tools/calendar/tc_calendar.php');
 
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
   // Demand authorization                
   include("../tools/class.login.php");
@@ -89,25 +88,25 @@
                 if (!isset($_GET['emp']))
                 {
                     $query = "SELECT * from adeia where id=".$_GET['adeia'];
-                    $result = mysql_query($query, $mysqlconnection);
+                    $result = mysqli_query($mysqlconnection, $query);
 
-                    $id = mysql_result($result, 0, "id");
-                    $emp_id = mysql_result($result, 0, "emp_id");
-                    $type = mysql_result($result, 0, "type");
-                    $prot = mysql_result($result, 0, "prot");
-                    $prot_apof = mysql_result($result, 0, "prot_apof");
-                    $hm_apof = mysql_result($result, 0, "hm_apof");
-                    $hm_prot = mysql_result($result, 0, "hm_prot");
-                    $date = mysql_result($result, 0, "date");
-                    $vev_dil = mysql_result($result, 0, "vev_dil");
-                    $days = mysql_result($result, 0, "days");
-                    $start = mysql_result($result, 0, "start");
-                    $finish = mysql_result($result, 0, "finish");
-                    $logos = mysql_result($result, 0, "logos");
+                    $id = mysqli_result($result, 0, "id");
+                    $emp_id = mysqli_result($result, 0, "emp_id");
+                    $type = mysqli_result($result, 0, "type");
+                    $prot = mysqli_result($result, 0, "prot");
+                    $prot_apof = mysqli_result($result, 0, "prot_apof");
+                    $hm_apof = mysqli_result($result, 0, "hm_apof");
+                    $hm_prot = mysqli_result($result, 0, "hm_prot");
+                    $date = mysqli_result($result, 0, "date");
+                    $vev_dil = mysqli_result($result, 0, "vev_dil");
+                    $days = mysqli_result($result, 0, "days");
+                    $start = mysqli_result($result, 0, "start");
+                    $finish = mysqli_result($result, 0, "finish");
+                    $logos = mysqli_result($result, 0, "logos");
                     $logos = str_replace(" ", "&nbsp;", $logos);
-                    $comments = mysql_result($result, 0, "comments");
+                    $comments = mysqli_result($result, 0, "comments");
                     $comments = str_replace(" ", "&nbsp;", $comments);
-                    $created = mysql_result($result, 0, "created");
+                    $created = mysqli_result($result, 0, "created");
                 }
 
 if ($_GET['op']=="edit")
@@ -115,13 +114,13 @@ if ($_GET['op']=="edit")
                 echo "<form id='updatefrm' name='update' action='update_adeia.php' method='POST'>";
 		echo "<table class=\"imagetable stable\" border='1'>";
                 $query1 = "select * from employee where id=$emp_id";
-                $result1 = mysql_query($query1, $mysqlconnection);
-		$name = mysql_result($result1, 0, "name");
-                $surname = mysql_result($result1, 0, "surname");
-                $kl1 = mysql_result($result1, 0, "klados");
+                $result1 = mysqli_query($query1, $mysqlconnection);
+		$name = mysqli_result($result1, 0, "name");
+                $surname = mysqli_result($result1, 0, "surname");
+                $kl1 = mysqli_result($result1, 0, "klados");
                 $q2 = "select * from klados where id=$kl1";
-                $res2 = mysql_query($q2, $mysqlconnection);
-                $klados = mysql_result($res2, 0, "perigrafh");
+                $res2 = mysqli_query($mysqlconnection, $q2);
+                $klados = mysqli_result($res2, 0, "perigrafh");
 		echo "<tr><td>Όνομα</td><td>$name</td></tr>";
 		echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
                 echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
@@ -239,20 +238,20 @@ if ($_GET['op']=="edit")
 	{
 		echo "<table class=\"imagetable stable\" border='1'>";
                 $query1 = "select * from employee where id=$emp_id";
-                $result1 = mysql_query($query1, $mysqlconnection);
-		$name = mysql_result($result1, 0, "name");
-                $surname = mysql_result($result1, 0, "surname");
-                $kl1 = mysql_result($result1, 0, "klados");
+                $result1 = mysqli_query($mysqlconnection, $query1);
+		$name = mysqli_result($result1, 0, "name");
+                $surname = mysqli_result($result1, 0, "surname");
+                $kl1 = mysqli_result($result1, 0, "klados");
                 $q2 = "select * from klados where id=$kl1";
-                $res2 = mysql_query($q2, $mysqlconnection);
-                $klados = mysql_result($res2, 0, "perigrafh");
+                $res2 = mysqli_query($mysqlconnection, $q2);
+                $klados = mysqli_result($res2, 0, "perigrafh");
 		echo "<tr><td>Όνομα</td><td>$name</td></tr>";
 		echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
                 echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
 
 		$query1 = "select type from adeia_type where id=$type";
-                $result1 = mysql_query($query1, $mysqlconnection);
-		$typewrd = mysql_result($result1, 0, "type");
+                $result1 = mysqli_query($mysqlconnection, $query1);
+		$typewrd = mysqli_result($result1, 0, "type");
                 echo "<tr><td>Τύπος</td><td>$typewrd</td></tr>";
                 if (!$prot_apof)
                     $prot_apof = '';
@@ -327,13 +326,13 @@ if ($_GET['op']=="edit")
 
 		// Find prev - next row id
 		$qprev = "SELECT id FROM adeia WHERE id < $id AND emp_id = $emp_id ORDER BY id DESC LIMIT 1";
-		$res1 = mysql_query($qprev, $mysqlconnection);
-		 if (mysql_num_rows($res1))
-			$previd = mysql_result($res1, 0, "id");
+		$res1 = mysqli_query($mysqlconnection, $qprev);
+		 if (mysqli_num_rows($res1))
+			$previd = mysqli_result($res1, 0, "id");
 		$qnext = "SELECT id FROM adeia WHERE id > $id AND emp_id = $emp_id ORDER BY id ASC LIMIT 1";
-		$res1 = mysql_query($qnext, $mysqlconnection);
-		 if (mysql_num_rows($res1))
-			$nextid = mysql_result($res1, 0, "id");
+		$res1 = mysqli_query($mysqlconnection, $qnext);
+		 if (mysqli_num_rows($res1))
+			$nextid = mysqli_result($res1, 0, "id");
 
 		if ($previd)
 			echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$previd&op=view'\">";
@@ -352,11 +351,11 @@ if ($_GET['op']=="edit")
 	{
 		// Copies the to-be-deleted row to adeia_deleted table for backup purposes.Also adds a row to adeia_del_log for logging purposes...
 		$query1 = "INSERT INTO adeia_deleted SELECT e.* FROM adeia e WHERE id =".$_GET['adeia'];
-		$result1 = mysql_query($query1, $mysqlconnection);
+		$result1 = mysqli_query($mysqlconnection, $query1);
                 $query1 = "INSERT INTO adeia_del_log (adeia_id, userid) VALUES (".$_GET['adeia'].",".$_SESSION['userid'].")";
-		$result1 = mysql_query($query1, $mysqlconnection);
+		$result1 = mysqli_query($mysqlconnection, $query1);
                 $query = "DELETE from adeia where id=".$_GET['adeia'];
-		$result = mysql_query($query, $mysqlconnection);
+		$result = mysqli_query($mysqlconnection, $query);
 		// Copies the deleted row to employee)deleted
 
 		if ($result)
@@ -374,13 +373,13 @@ if ($_GET['op']=="edit")
 		//echo "<td>ID</td><td>$id</td>";
 		//echo "</tr>";
                 $query1 = "select * from employee where id=$emp_id";
-                $result1 = mysql_query($query1, $mysqlconnection);
-		$name = mysql_result($result1, 0, "name");
-                $surname = mysql_result($result1, 0, "surname");
-                $kl1 = mysql_result($result1, 0, "klados");
+                $result1 = mysqli_query($mysqlconnection, $query1);
+		$name = mysqli_result($result1, 0, "name");
+                $surname = mysqli_result($result1, 0, "surname");
+                $kl1 = mysqli_result($result1, 0, "klados");
                 $q2 = "select * from klados where id=$kl1";
-                $res2 = mysql_query($q2, $mysqlconnection);
-                $klados = mysql_result($res2, 0, "perigrafh");
+                $res2 = mysqli_query($mysqlconnection, $q2);
+                $klados = mysqli_result($res2, 0, "perigrafh");
 		echo "<tr><td>Όνομα</td><td>$name</td></tr>";
 		echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
                 echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
@@ -495,6 +494,6 @@ if ($_GET['op']=="edit")
                         echo "</body>";
                         echo "</html>";
                 }
-                mysql_close();
+                mysqli_close();
         ?>
     </html>

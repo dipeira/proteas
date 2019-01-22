@@ -44,13 +44,13 @@
 		require_once"../config.php";
 		//require_once"../tools/functions.php";
 		
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    
 		$query = "SELECT * from school";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 		$i=0;
 ?>
 			<div id="demo">
@@ -80,22 +80,22 @@
 <?php
 		while ($i<$num)
 		{
-			$id = mysql_result($result, $i, "id");
-			$name = mysql_result($result, $i, "name");
-                        $titlos = mysql_result($result, $i, "titlos");
-			$address = mysql_result($result, $i, "address");
-                        $tk = mysql_result($result, $i, "tk");
-			$tel = mysql_result($result, $i, "tel");
-			$fax = mysql_result($result, $i, "fax");
-			$email = mysql_result($result, $i, "email");
-                        $organ = mysql_result($result, $i, "organikothta");
-                        $leitoyrg = mysql_result($result, $i, "leitoyrg");
-                        //$students = mysql_result($result, $i, "students");
-                        //$entaksis = mysql_result($result, $i, "entaksis");
-                        //$ypodoxis = mysql_result($result, $i, "ypodoxis");
-                        //$front = mysql_result($result, $i, "frontistiriako");
-                        //$olo = mysql_result($result, $i, "oloimero");
-                        $comm = mysql_result($result, $i, "comments");
+			$id = mysqli_result($result, $i, "id");
+			$name = mysqli_result($result, $i, "name");
+                        $titlos = mysqli_result($result, $i, "titlos");
+			$address = mysqli_result($result, $i, "address");
+                        $tk = mysqli_result($result, $i, "tk");
+			$tel = mysqli_result($result, $i, "tel");
+			$fax = mysqli_result($result, $i, "fax");
+			$email = mysqli_result($result, $i, "email");
+                        $organ = mysqli_result($result, $i, "organikothta");
+                        $leitoyrg = mysqli_result($result, $i, "leitoyrg");
+                        //$students = mysqli_result($result, $i, "students");
+                        //$entaksis = mysqli_result($result, $i, "entaksis");
+                        //$ypodoxis = mysqli_result($result, $i, "ypodoxis");
+                        //$front = mysqli_result($result, $i, "frontistiriako");
+                        //$olo = mysqli_result($result, $i, "oloimero");
+                        $comm = mysqli_result($result, $i, "comments");
 			echo "<tr id='$id' class='gradeA'>\n<td>$id</td>";
 			echo "\n<td>$name</td>";
                         echo "\n<td>$titlos</td>";

@@ -5,10 +5,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -51,9 +50,9 @@
 			}
 		});
 	});
-        var mylink = "<small>Παρακαλώ δώστε έγκυρη πράξη ή δημιουργήστε μία: </small><a target=\"_blank\" href=\"praxi.php\">Πράξεις</a>";
+    var mylink = "<small>Παρακαλώ δώστε έγκυρη πράξη ή δημιουργήστε μία: </small><a target=\"_blank\" href=\"praxi.php\">Πράξεις</a>";
         
-                $(document).ready(function(){
+  $(document).ready(function(){
 		$("#updatefrm").validate({
 			debug: false,
                         rules: {
@@ -99,33 +98,33 @@
                 $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
            }
 
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 		
                 if ($num > 0)
                 {
                     $multi = 1;
                     for ($i=0; $i<$num; $i++)
                     {
-                        $yphr_id_arr[$i] = mysql_result($result, $i, "yphrethsh");
-                        $yphr_arr[$i] = getSchool (mysql_result($result, $i, "yphrethsh"), $mysqlconnection);
-                        $hours_arr[$i] = mysql_result($result, $i, "hours");
+                        $yphr_id_arr[$i] = mysqli_result($result, $i, "yphrethsh");
+                        $yphr_arr[$i] = getSchool (mysqli_result($result, $i, "yphrethsh"), $mysqlconnection);
+                        $hours_arr[$i] = mysqli_result($result, $i, "hours");
                     }            
                 }
                 else
                 {
                     $query = "SELECT * from ektaktoi where id=".$_GET['id'];
-                    $result = mysql_query($query, $mysqlconnection);
-                    $num=mysql_num_rows($result);
-                    $sx_yphrethshs_id = mysql_result($result, 0, "sx_yphrethshs");
+                    $result = mysqli_query($mysqlconnection, $query);
+                    $num=mysqli_num_rows($result);
+                    $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
                     $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
                 }
        //}
-                $id = mysql_result($result, 0, "id");
-		$name = mysql_result($result, 0, "name");
-                $type = mysql_result($result, 0, "type");
-		$surname = mysql_result($result, 0, "surname");
-		$klados_id = mysql_result($result, 0, "klados");
+                $id = mysqli_result($result, 0, "id");
+		$name = mysqli_result($result, 0, "name");
+                $type = mysqli_result($result, 0, "type");
+		$surname = mysqli_result($result, 0, "surname");
+		$klados_id = mysqli_result($result, 0, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
                 // if nip or nip eidikhs
                 if ($klados_id == 1 || $klados_id == 16 || $klados_id == 17)
@@ -136,30 +135,30 @@
                 }
                 else
                     $klados_type = 1;
-                $metakinhsh = stripslashes(mysql_result($result, 0, "metakinhsh"));
-		$patrwnymo = mysql_result($result, 0, "patrwnymo");
-		$mhtrwnymo = mysql_result($result, 0, "mhtrwnymo");
-		$afm = mysql_result($result, 0, "afm");
-		$vathm = mysql_result($result, 0, "vathm");
-		$mk = mysql_result($result, 0, "mk");
-                $hm_mk = mysql_result($result, 0, "hm_mk");
-		$analipsi = mysql_result($result, 0, "analipsi");
-                $hm_anal = mysql_result($result, 0, "hm_anal");
-                $hm_apox = mysql_result($result, 0, "hm_apox");
-		$met_did = mysql_result($result, 0, "met_did");
-		//$ya = mysql_result($result, 0, "ya");
-		//$apofasi = mysql_result($result, 0, "apofasi");
-		$comments = mysql_result($result, 0, "comments");
+                $metakinhsh = stripslashes(mysqli_result($result, 0, "metakinhsh"));
+		$patrwnymo = mysqli_result($result, 0, "patrwnymo");
+		$mhtrwnymo = mysqli_result($result, 0, "mhtrwnymo");
+		$afm = mysqli_result($result, 0, "afm");
+		$vathm = mysqli_result($result, 0, "vathm");
+		$mk = mysqli_result($result, 0, "mk");
+                $hm_mk = mysqli_result($result, 0, "hm_mk");
+		$analipsi = mysqli_result($result, 0, "analipsi");
+                $hm_anal = mysqli_result($result, 0, "hm_anal");
+                $hm_apox = mysqli_result($result, 0, "hm_apox");
+		$met_did = mysqli_result($result, 0, "met_did");
+		//$ya = mysqli_result($result, 0, "ya");
+		//$apofasi = mysqli_result($result, 0, "apofasi");
+		$comments = mysqli_result($result, 0, "comments");
                 $comments = str_replace(" ", "&nbsp;", $comments);
-                $type = mysql_result($result, 0, "type");
-                $stathero = mysql_result($result, 0, "stathero");
-                $kinhto = mysql_result($result, 0, "kinhto");
-                $praxi = mysql_result($result, 0, "praxi");
-                $updated= mysql_result($result, 0, "updated");
-                $thesi = mysql_result($result, 0, "thesi");
-                $wres = mysql_result($result, 0, "wres");
+                $type = mysqli_result($result, 0, "type");
+                $stathero = mysqli_result($result, 0, "stathero");
+                $kinhto = mysqli_result($result, 0, "kinhto");
+                $praxi = mysqli_result($result, 0, "praxi");
+                $updated= mysqli_result($result, 0, "updated");
+                $thesi = mysqli_result($result, 0, "thesi");
+                $wres = mysqli_result($result, 0, "wres");
                 
-                $kat = mysql_result($result, 0, "status");
+                $kat = mysqli_result($result, 0, "status");
                 switch ($kat)
                 {   
                     case 1:
@@ -480,10 +479,10 @@ elseif ($_GET['op']=="view")
                 "SELECT * FROM praxi_old WHERE id=$praxi AND sxoletos = $sxoletos" :
                 "SELECT * FROM praxi WHERE id=$praxi";
         
-        $res = mysql_query($qry);
-        $ya = mysql_result($res, 0, 'ya');
-        $apofasi = mysql_result($res, 0, 'apofasi');
-        $ada = mysql_result($res, 0, 'ada');
+        $res = mysqli_query($mysqlconnection, $qry);
+        $ya = mysqli_result($res, 0, 'ya');
+        $apofasi = mysqli_result($res, 0, 'apofasi');
+        $ada = mysqli_result($res, 0, 'ada');
         echo "<tr><td>Υπουργική Απόφαση</td><td colspan=3>$ya</td></tr>";
         echo "<tr><td>Α.Δ.Α.</td><td colspan=3>$ada</td></tr>";
         echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi</td></tr>";
@@ -541,11 +540,11 @@ if ($_GET['op']=="delete")
 {
         // Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
         //$query1 = "INSERT INTO ektaktoi_deleted SELECT e.* FROM ektaktoi e WHERE id =".$_GET['id'];
-        //$result1 = mysql_query($query1, $mysqlconnection);
+        //$result1 = mysqli_query($mysqlconnection, $query1)
         //$query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action) VALUES (".$_GET['id'].",".$_SESSION['userid'].", 2)";
-        //$result1 = mysql_query($query1, $mysqlconnection);
+        //$result1 = mysqli_query($mysqlconnection, $query1)
         $query = "DELETE from ektaktoi where id=".$_GET['id'];
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         // Copies the deleted row to employee)deleted
         
         if ($result)
@@ -555,5 +554,5 @@ if ($_GET['op']=="delete")
         echo "	<INPUT TYPE='button' class=btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
 }
 
-mysql_close();
+mysqli_close();
 ?> 

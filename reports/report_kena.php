@@ -25,10 +25,9 @@
     require_once"../tools/functions.php";
     session_start();
 
-    $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-    mysql_select_db($db_name, $mysqlconnection);
-    mysql_query("SET NAMES 'greek'", $mysqlconnection);
-    mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
     echo "<body>";
     include('../etc/menu.php');
@@ -49,8 +48,8 @@
             $query = "SELECT * from school WHERE type2 = 2 AND type = $type";
         }
 
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_num_rows($result);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_num_rows($result);
         
         
         echo "<center>";
@@ -76,18 +75,18 @@
 
         while ($i < $num)
         {		
-            $sch = mysql_result($result, $i, "id");
+            $sch = mysqli_result($result, $i, "id");
             $name = getSchool($sch, $mysqlconnection);
-            $code = mysql_result($result, $i, "code");
-            $cat = getCategory(mysql_result($result, $i, "category"));
-            $organikothta = mysql_result($result, $i, "organikothta");
+            $code = mysqli_result($result, $i, "code");
+            $cat = getCategory(mysqli_result($result, $i, "category"));
+            $organikothta = mysqli_result($result, $i, "organikothta");
             $synorgan += $organikothta;
-            $organikes = unserialize(mysql_result($result, $i, "organikes"));
-            $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
+            $organikes = unserialize(mysqli_result($result, $i, "organikes"));
+            $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
             // οργανικά τοποθετηθέντες
             $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3) AND thesi IN (0,1,2)";
-            $rs = mysql_query($qry, $mysqlconnection);
-            $orgtop = mysql_result($rs, 0, "cnt");
+            $rs = mysqli_query($mysqlconnection, $qry);
+            $orgtop = mysqli_result($rs, 0, "cnt");
             $synorgtop += $orgtop;
 
             echo "<tr>";
@@ -144,8 +143,8 @@
         $synorgtop = 0;
         // only dhmosia kai eidika (type2 = 0 or 2)
         $query = "SELECT * from school WHERE type2 in (0,2) AND type = $type";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_num_rows($result);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_num_rows($result);
 
         echo "<body>";
         echo "<center>";
@@ -164,17 +163,17 @@
 
         while ($i < $num)
         {		
-            $sch = mysql_result($result, $i, "id");
+            $sch = mysqli_result($result, $i, "id");
             $name = getSchool($sch, $mysqlconnection);
-            $code = mysql_result($result, $i, "code");
-            $cat = getCategory(mysql_result($result, $i, "category"));
-            $students = mysql_result($result, $i, "students");
-            $organikes = unserialize(mysql_result($result, $i, "organikes"));
-            $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
+            $code = mysqli_result($result, $i, "code");
+            $cat = getCategory(mysqli_result($result, $i, "category"));
+            $students = mysqli_result($result, $i, "students");
+            $organikes = unserialize(mysqli_result($result, $i, "organikes"));
+            $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
             // οργανικά τοποθετηθέντες
             $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3)";
-            $rs = mysql_query($qry, $mysqlconnection);
-            $orgtop = mysql_result($rs, 0, "cnt");
+            $rs = mysqli_query($mysqlconnection, $qry);
+            $orgtop = mysqli_result($rs, 0, "cnt");
             $synorgtop += $orgtop;
 
             echo "<tr>";

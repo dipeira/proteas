@@ -3,10 +3,9 @@
   require_once"../config.php";
   require_once"../tools/functions.php";
     
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
     include("../tools/class.login.php");
     $log = new logmein();
@@ -158,27 +157,27 @@
 		// Debugging...
 		//echo $query;
 		
-		$result = mysql_query($query, $mysqlconnection);
-		$result1 = mysql_query($query_all, $mysqlconnection);
+		$result = mysqli_query($mysqlconnection, $query);
+		$result1 = mysqli_query($mysqlconnection, $query_all);
 		// Number of records found
 		
 		if ($result)
-			$num_record = mysql_num_rows($result);
+			$num_record = mysqli_num_rows($result);
 		if ($result1)
-			$num_record1 = mysql_num_rows($result1);
+			$num_record1 = mysqli_num_rows($result1);
 		$lastpg = ceil($num_record1 / $rpp);
 		
 				
 		if ($result)
-			$num=mysql_num_rows($result);
+			$num=mysqli_num_rows($result);
                 
 	// display prev year select
 	$query_pr = "SELECT distinct sxoletos from praxi_old ORDER BY sxoletos DESC";
-	$result_pr = mysql_query($query_pr, $mysqlconnection);
-	if (mysql_num_rows($result_pr)){
+	$result_pr = mysqli_query($mysqlconnection, $query_pr);
+	if (mysqli_num_rows($result_pr)){
 		echo "Επιλέξτε έτος: ";
 		echo "<select id='year-change' onchange='changeYear()'>";
-		while ($row = mysql_fetch_array($result_pr)){
+		while ($row = mysqli_fetch_array($result_pr)){
 			$setos = substr($row['sxoletos'],0,4).'-'.substr($row['sxoletos'],4,2);
 			$selected = $sxoletos == $row['sxoletos'] ? 'selected' : '';
 			echo "<option value='".$row['sxoletos']."' $selected>".$setos."</option>";
@@ -224,23 +223,23 @@
 	while ($i < $num)
 	{
 	
-		$id = mysql_result($result, $i, "id");
-		$name = mysql_result($result, $i, "name");
-		$surname = mysql_result($result, $i, "surname");
-		$klados_id = mysql_result($result, $i, "klados");
+		$id = mysqli_result($result, $i, "id");
+		$name = mysqli_result($result, $i, "name");
+		$surname = mysqli_result($result, $i, "surname");
+		$klados_id = mysqli_result($result, $i, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
 		// an parapanw apo 1 sxoleia, deixnei mono to 1o (kyriws) kai vazei * dipla toy.
-		$sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
+		$sx_yphrethshs_id_str = mysqli_result($result, $i, "sx_yphrethshs");
 		$sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
 		$sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
 		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
 		$sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
 
-		$type = mysql_result($result, $i, "type");
-		$praxi = mysql_result($result, $i, "praxi");
+		$type = mysqli_result($result, $i, "type");
+		$praxi = mysqli_result($result, $i, "praxi");
 		$query_p = "SELECT name from praxi_old WHERE id=$praxi AND sxoletos=$sxoletos";
-		$result_p = mysql_query($query_p, $mysqlconnection);
-		$praxi = mysql_result($result_p, 0, "name");
+		$result_p = mysqli_query($mysqlconnection, $query_p);
+		$praxi = mysqli_result($result_p, 0, "name");
 								
 		echo "<tr>";
       $typos = get_type($type, $mysqlconnection);
@@ -292,5 +291,5 @@
   </body>
 </html>
 <?php
-	mysql_close();
+	mysqli_close();
 ?>

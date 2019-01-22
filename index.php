@@ -3,20 +3,18 @@
 	Require_once "config.php";
 	Require_once "tools/functions.php";
 		
-	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
-	
-		include("tools/class.login.php");
-		$log = new logmein();
-		if($log->logincheck($_SESSION['loggedin']) == false)
-		{   
-			header("Location: tools/login.php");
-		}
-		else
-			$logged = 1;
-		
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+
+  include("tools/class.login.php");
+  $log = new logmein();
+  if($log->logincheck($_SESSION['loggedin']) == false)
+  {   
+    header("Location: tools/login.php");
+  }
+  else
+    $logged = 1;		
   $usrlvl = $_SESSION['userlevel'];
 ?>
 <html>
@@ -167,31 +165,32 @@
 	$q_main = "SELECT * FROM employee ". $query . $limitQ;
 	$q_count = "SELECT count(*) as cnt FROM employee " . $query;
 
-	$result = mysql_query($q_main, $mysqlconnection);
-	$result1 = mysql_query($q_count, $mysqlconnection);
+	$result = mysqli_query($mysqlconnection, $q_main);
+	$result1 = mysqli_query($mysqlconnection, $q_count);
 	// Number of records found
 	if ($result)
-		$num_record = mysql_num_rows($result);
+		$num_record = mysqli_num_rows($result);
 	if ($result1)
-		$num_record1 = mysql_result($result1, 0, "cnt");;
+    $num_record1 = mysqli_result($result1, 0, "cnt");
+
 	$lastpg = ceil($num_record1 / $rpp);
 			
 	if ($result)
-		$num=mysql_num_rows($result);
-	
+		$num=mysqli_num_rows($result);
+
 	// added 24-01-2013 - when 1 result, redirect to that employee page
 	if ($num_record == 1)
 	{
-		$id = mysql_result($result, 0, "id");
+		$id = mysqli_result($result, 0, "id");
 		$url = "employee/employee.php?id=$id&op=view";
 		echo "<script>window.location = '$url'</script>";
 	}
-	
+
 	if ($logged)
 	{
 		echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;".getParam ('sxol_etos', $mysqlconnection)."</p>";
 	}
-  	echo "<center>";        
+    echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
    echo "<thead><tr><form id='src' name='src' action='index.php' method='POST'>\n";
 	if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0))
@@ -201,7 +200,7 @@
 	echo "<input type='text' name='surname' id='surname''/>\n";
   	echo "<input type='hidden' name='pinakas' id='pinakas' />";
 	echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές, εμφανίζοντας σε παρένθεση τη σχέση εργασίας'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
-	kladosCmb($mysqlconnection);
+  kladosCmb($mysqlconnection);
 	echo "</td>\n";
 	echo "<div id=\"content\">";
 	echo "<form autocomplete=\"off\">";
@@ -225,21 +224,21 @@
   } else {
     while ($i < $num)
     {
-      $id = mysql_result($result, $i, "id");
-      $name = mysql_result($result, $i, "name");
-      $surname = mysql_result($result, $i, "surname");
-      $klados_id = mysql_result($result, $i, "klados");
+      $id = mysqli_result($result, $i, "id");
+      $name = mysqli_result($result, $i, "name");
+      $surname = mysqli_result($result, $i, "surname");
+      $klados_id = mysqli_result($result, $i, "klados");
       $klados = getKlados($klados_id,$mysqlconnection);
-      $sx_organ_id = mysql_result($result, $i, "sx_organikhs");
+      $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
       $sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
-      $sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
+      $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
       $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
       $sx_organikhs_url = "<a href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
       $sx_yphrethshs_url = "<a href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
       // check if multiple schools
       $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
-      $res = mysql_query($qry,$mysqlconnection);
-      if (mysql_num_rows($res) > 0)
+      $res = mysqli_query($mysqlconnection,$qry);
+      if (mysqli_num_rows($res) > 0)
         $sx_yphrethshs .= "*";
                   
       echo "<tr><td>";
@@ -296,5 +295,5 @@
 </body>
 </html>
 <?php
-	mysql_close();
+	mysqli_close();
 ?>

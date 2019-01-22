@@ -19,10 +19,9 @@
     require_once"../tools/functions.php";
     session_start();
 
-    $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-    mysql_select_db($db_name, $mysqlconnection);
-    mysql_query("SET NAMES 'greek'", $mysqlconnection);
-    mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 	
     echo "<body>";
     include('../etc/menu.php');
@@ -31,12 +30,12 @@
     // get required hours
     // only dhmosia (type2 = 0) dhmotika (type = 1)
     $query = "SELECT * from school WHERE type2 = 0 AND type = 1 AND anenergo=0";
-    $result = mysql_query($query, $mysqlconnection);
-    $num = mysql_num_rows($result);
-    $i=0;
-    while ($i < $num)
+    
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    while ($row = mysqli_fetch_array($result))
     {		
-        $sch = mysql_result($result, $i, "id");
+        $sch = $row['id'];
         $leit = get_leitoyrgikothta($sch, $mysqlconnection);
         // call ektimhseis_wrwn function
         $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
@@ -54,8 +53,7 @@
         // add oloimero teacher if leitoyrg < 4
         if ($leit < 4){
             $req_sum['пе70'] += 24;
-        }
-        $i++;                        
+        }                       
     }
     
     // get organikes per klados

@@ -12,10 +12,9 @@
   require_once"../config.php";
   require_once"../tools/functions.php";
     
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
 
   $id = $_POST['id'];
@@ -46,8 +45,8 @@
   if (isset($_POST['action']))
   {
 //        $qry = "SELECT prot FROM adeia WHERE prot = $prot";
-//        $res = mysql_query($qry,$mysqlconnection);
-//        if (mysql_num_rows($res)>0)
+//        $res = mysqli_query($mysqlconnection, $qry);
+//        if (mysqli_num_rows($res)>0)
 //            die('Η άδεια με αυτόν τον αρ.πρωτ. έχει ήδη καταχωρηθεί...');
         
 	$query0 = "INSERT INTO adeia (emp_id, type, prot_apof, hm_apof, prot, hm_prot, date, vev_dil, days, start, finish, logos, comments) ";
@@ -65,10 +64,10 @@
   // for debugging...
   // echo "<br>".$query;
   
-  mysql_query($query,$mysqlconnection);
+  mysqli_query($mysqlconnection, $query);
   
   //echo "Επιτυχής καταχώρηση!";
-  mysql_close();
+  mysqli_close();
 ?>
 <br>
 <h2 align="center">Επιτυχής καταχώρηση!</h2>

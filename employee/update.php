@@ -14,10 +14,9 @@
 require_once "../config.php";
 require_once "../tools/functions.php";
 
-$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-mysql_select_db($db_name, $mysqlconnection);
-mysql_query("SET NAMES 'greek'", $mysqlconnection);
-mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
 $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -104,24 +103,24 @@ if (isset($_POST['action']))
     // check if record exists by checking am AND surname
     $surn = mb_convert_encoding($surname, "iso-8859-7", "utf-8");
     $query = "select am,surname from employee WHERE am='$am' AND surname = '$surn'";
-    $result = mysql_query($query,$mysqlconnection);
-    if (!mysql_num_rows($result))
+    $result = mysqli_query($mysqlconnection, $query);
+    if (!mysqli_num_rows($result))
     {
         $query0 = "INSERT INTO employee (name, surname, patrwnymo, mhtrwnymo, klados, am, sx_organikhs, sx_yphrethshs, fek_dior, hm_dior, vathm, mk, hm_anal, met_did, proyp, comments, afm, thesi, status, wres, proyp_not) ";
         $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$am','$org','$yphr_arr[0]','$fek_dior','$hm_dior','$vathm','$mk','$hm_anal','$met_did','$proyp','$comments', '$afm', '$thesi', '$katast', '$wres', '$proyp_not')";
         $query = $query0.$query1;
         $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
-        mysql_query($query,$mysqlconnection);
+        mysqli_query($mysqlconnection, $query);
         // insert into yphrethsh
-        $id = mysql_insert_id();
+        $id = mysqli_insert_id();
         for ($i=0; $i<count($yphr_arr); $i++) 
         {
             $query = "insert into yphrethsh (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
-            mysql_query($query,$mysqlconnection);
+            mysqli_query($mysqlconnection, $query);
         } 
         // insert 2 log
         $query1 = "INSERT INTO employee_log (emp_id, userid, action, ip) VALUES ('$id',".$_SESSION['userid'].", 0,'$ip')";
-        mysql_query($query1, $mysqlconnection);
+        mysqli_query($mysqlconnection, $query1);
     }
     // if already inserted
     else 
@@ -135,8 +134,8 @@ if (isset($_POST['action']))
 else {
     // get current row from db
     $qry = "SELECT * from employee WHERE id=$id";
-    $res = mysql_query($qry,$mysqlconnection);
-    $before = mysql_fetch_row($res);
+    $res = mysqli_query($mysqlconnection, $qry);
+    $before = mysqli_fetch_row($res);
         
     $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
     $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
@@ -145,19 +144,19 @@ else {
     $query = $query1.$query2.$query3.$query4;
     $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     //echo $query;
-    mysql_query($query,$mysqlconnection);
+    mysqli_query($mysqlconnection, $query);
     // insert 2 log
-    if (mysql_affected_rows()>0)
+    if (mysqli_affected_rows()>0)
     {
         // find changes and write them to query field
         $qry = "SELECT * from employee WHERE id=$id";
-        $res = mysql_query($qry,$mysqlconnection);
-        $after = mysql_fetch_row($res);
+        $res = mysqli_query($mysqlconnection, $qry);
+        $after = mysqli_fetch_row($res);
 
         $diff = array_diff($after, $before);
         $temp = Array();
         foreach ($diff as $key => $value) {
-            $field = mysql_field_name($res, $key);
+            $field = mysqli_field_name($res, $key);
             if ($field === 'updated'){
                 continue;
             }
@@ -166,18 +165,18 @@ else {
         $change = implode(", ", $temp);
         //
         $query1 = "INSERT INTO employee_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$change')";
-        mysql_query($query1, $mysqlconnection);
+        mysqli_query($mysqlconnection, $query1);
     }
     // AND sxol_etos -> future use...
     $query = "DELETE FROM yphrethsh WHERE emp_id = $id AND sxol_etos=$sxol_etos";
-    mysql_query($query,$mysqlconnection);
+    mysqli_query($mysqlconnection, $query);
     for ($i=0; $i<count($yphr_arr); $i++) 
     {
         $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', '$org',$sxol_etos)";
-        mysql_query($query,$mysqlconnection);
+        mysqli_query($mysqlconnection, $query);
     }
 }
-mysql_close();
+mysqli_close();
 
 echo "<br>";
 if (!$dupe)

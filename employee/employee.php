@@ -7,10 +7,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   require_once '../tools/calendar/tc_calendar.php';
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -128,8 +127,8 @@
             {
                 //$query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id'];
                 $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
-                $result = mysql_query($query, $mysqlconnection);
-		        $num=mysql_num_rows($result);
+                $result = mysqli_query($mysqlconnection, $query);
+		        $num=mysqli_num_rows($result);
                 
                 // if multiple schools
                 //if ($num > 0)
@@ -137,60 +136,60 @@
                 //    $multi = 1;
                     for ($i=0; $i<$num; $i++)
                     {
-                        $yphr_id_arr[$i] = mysql_result($result, $i, "yphrethsh");
-                        $yphr_arr[$i] = getSchool (mysql_result($result, $i, "yphrethsh"), $mysqlconnection);
-                        $hours_arr[$i] = mysql_result($result, $i, "hours");
+                        $yphr_id_arr[$i] = mysqli_result($result, $i, "yphrethsh");
+                        $yphr_arr[$i] = getSchool (mysqli_result($result, $i, "yphrethsh"), $mysqlconnection);
+                        $hours_arr[$i] = mysqli_result($result, $i, "hours");
                     }
                 //}
                 // else one school
 //                else
 //                {
 //                    $query = "SELECT * from employee where id=".$_GET['id'];
-//                    $result = mysql_query($query, $mysqlconnection);
-//                    $num=mysql_num_rows($result);
-//                    $sx_yphrethshs_id = mysql_result($result, 0, "sx_yphrethshs");
+//                    $result = mysqli_query($mysqlconnection, $query);
+//                    $num=mysqli_num_rows($result);
+//                    $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
 //                    $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
 //                }
-                    $id = mysql_result($result, 0, "id");
-                    $name = mysql_result($result, 0, "name");
-                    $surname = mysql_result($result, 0, "surname");
-                    $klados_id = mysql_result($result, 0, "klados");
+                    $id = mysqli_result($result, 0, "id");
+                    $name = mysqli_result($result, 0, "name");
+                    $surname = mysqli_result($result, 0, "surname");
+                    $klados_id = mysqli_result($result, 0, "klados");
                     // if nip
                     if ($klados_id == 1)
                         $klados_type = 2;
                     else
                         $klados_type = 1;
                     $klados = getKlados($klados_id,$mysqlconnection);
-                    $sx_organ_id = mysql_result($result, 0, "sx_organikhs");
+                    $sx_organ_id = mysqli_result($result, 0, "sx_organikhs");
                     $sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
-                    $thesi = mysql_result($result, 0, "thesi");
-                    $patrwnymo = mysql_result($result, 0, "patrwnymo");
-                    $mhtrwnymo = mysql_result($result, 0, "mhtrwnymo");
-                    $afm = mysql_result($result, 0, "afm");
-                    $am = mysql_result($result, 0, "am");
-                    //$etos_gen = mysql_result($result, 0, "etos_gen");
-                    $vathm = mysql_result($result, 0, "vathm");
-                    $mk = mysql_result($result, 0, "mk");
-                    $hm_mk = mysql_result($result, 0, "hm_mk");
-                    $fek_dior = mysql_result($result, 0, "fek_dior");
-                    $hm_dior = mysql_result($result, 0, "hm_dior");
-                    $analipsi = mysql_result($result, 0, "analipsi");
-                    $hm_anal = mysql_result($result, 0, "hm_anal");
-                    $met_did = mysql_result($result, 0, "met_did");
-                    $proyp = mysql_result($result, 0, "proyp");
-                    $proyp_not = mysql_result($result, 0, "proyp_not");
-                    $anatr = mysql_result($result, 0, "anatr");
-                    $comments = mysql_result($result, 0, "comments");
+                    $thesi = mysqli_result($result, 0, "thesi");
+                    $patrwnymo = mysqli_result($result, 0, "patrwnymo");
+                    $mhtrwnymo = mysqli_result($result, 0, "mhtrwnymo");
+                    $afm = mysqli_result($result, 0, "afm");
+                    $am = mysqli_result($result, 0, "am");
+                    //$etos_gen = mysqli_result($result, 0, "etos_gen");
+                    $vathm = mysqli_result($result, 0, "vathm");
+                    $mk = mysqli_result($result, 0, "mk");
+                    $hm_mk = mysqli_result($result, 0, "hm_mk");
+                    $fek_dior = mysqli_result($result, 0, "fek_dior");
+                    $hm_dior = mysqli_result($result, 0, "hm_dior");
+                    $analipsi = mysqli_result($result, 0, "analipsi");
+                    $hm_anal = mysqli_result($result, 0, "hm_anal");
+                    $met_did = mysqli_result($result, 0, "met_did");
+                    $proyp = mysqli_result($result, 0, "proyp");
+                    $proyp_not = mysqli_result($result, 0, "proyp_not");
+                    $anatr = mysqli_result($result, 0, "anatr");
+                    $comments = mysqli_result($result, 0, "comments");
                     $comments = str_replace(" ", "&nbsp;", $comments);
-                    $wres = mysql_result($result, 0, "wres");
+                    $wres = mysqli_result($result, 0, "wres");
                     
                     //new 16-05-2013
-                    $tel = mysql_result($result, 0, "tel");
-                    $address = mysql_result($result, 0, "address");
-                    $idnum = mysql_result($result, 0, "idnum");
-                    $amka = mysql_result($result, 0, "amka");
+                    $tel = mysqli_result($result, 0, "tel");
+                    $address = mysqli_result($result, 0, "address");
+                    $idnum = mysqli_result($result, 0, "idnum");
+                    $amka = mysqli_result($result, 0, "amka");
 				
-                    $kat = mysql_result($result, 0, "status");
+                    $kat = mysqli_result($result, 0, "status");
                     switch ($kat)
                     {   
                         case 1:
@@ -207,25 +206,25 @@
                             break;
                     }
                     // updated: 05-09-2013
-                    $updated = mysql_result($result, 0, "updated");
+                    $updated = mysqli_result($result, 0, "updated");
                     // aney apodoxwn: 27-02-2014
-                    $aney = mysql_result($result, 0, "aney");
-                    $aney_xr = mysql_result($result, 0, "aney_xr");
-                    $aney_apo = mysql_result($result, 0, "aney_apo");
-                    $aney_ews = mysql_result($result, 0, "aney_ews");
+                    $aney = mysqli_result($result, 0, "aney");
+                    $aney_xr = mysqli_result($result, 0, "aney_xr");
+                    $aney_apo = mysqli_result($result, 0, "aney_apo");
+                    $aney_ews = mysqli_result($result, 0, "aney_ews");
                     // idiwtiko ergo se dhmosio forea
-                    $idiwtiko = mysql_result($result, 0, "idiwtiko");
-                    $idiwtiko_liksi = mysql_result($result, 0, "idiwtiko_liksi");
-                    $idiwtiko_enarxi = mysql_result($result, 0, "idiwtiko_enarxi");
+                    $idiwtiko = mysqli_result($result, 0, "idiwtiko");
+                    $idiwtiko_liksi = mysqli_result($result, 0, "idiwtiko_liksi");
+                    $idiwtiko_enarxi = mysqli_result($result, 0, "idiwtiko_enarxi");
                     // idiwtiko ergo se idiwtiko forea
-                    $idiwtiko_id = mysql_result($result, 0, "idiwtiko_id");
-                    $idiwtiko_id_enarxi = mysql_result($result, 0, "idiwtiko_id_enarxi");
-                    $idiwtiko_id_liksi = mysql_result($result, 0, "idiwtiko_id_liksi");
+                    $idiwtiko_id = mysqli_result($result, 0, "idiwtiko_id");
+                    $idiwtiko_id_enarxi = mysqli_result($result, 0, "idiwtiko_id_enarxi");
+                    $idiwtiko_id_liksi = mysqli_result($result, 0, "idiwtiko_id_liksi");
                     // kat'oikon
-                    $katoikon = mysql_result($result, 0, "katoikon");
-                    $katoikon_apo = mysql_result($result, 0, "katoikon_apo");
-                    $katoikon_ews = mysql_result($result, 0, "katoikon_ews");
-                    $katoikon_comm = mysql_result($result, 0, "katoikon_comm");
+                    $katoikon = mysqli_result($result, 0, "katoikon");
+                    $katoikon_apo = mysqli_result($result, 0, "katoikon_apo");
+                    $katoikon_ews = mysqli_result($result, 0, "katoikon_ews");
+                    $katoikon_comm = mysqli_result($result, 0, "katoikon_comm");
                     $katoikon_comm = str_replace(" ", "&nbsp;", $katoikon_comm);
                     
             } // of if not add
@@ -672,12 +671,12 @@ if ($_GET['op']=="edit")
     echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
     // history
     $hist_qry = "SELECT * FROM yphrethsh WHERE emp_id=$id AND sxol_etos<$sxol_etos";
-    $hist_res = mysql_query($hist_qry, $mysqlconnection);
-    if (mysql_num_rows($hist_res))
+    $hist_res = mysqli_query($mysqlconnection, $hist_qry);
+    if (mysqli_num_rows($hist_res))
     {
       echo "<tr><td><a href=\"#\" class=\"show_hide2\"><small>Εμφάνιση/Απόκρυψη<br>ιστορικού</small></a></td>";
       echo "<td colspan=3><div class=\"slidingDiv2\">";
-      while ($row = mysql_fetch_array($hist_res, MYSQLI_ASSOC))
+      while ($row = mysqli_fetch_array($hist_res, MYSQLI_ASSOC))
           echo "Σχολ.έτος: ".$row['sxol_etos']." - Σχ.Υπηρέτησης : ".getSchool($row['yphrethsh'], $mysqlconnection)." (".$row['hours']." ώρες) - <small>Οργανική: ".getSchool($row['organikh'], $mysqlconnection)."</small><br>";
               
       echo "</div>";
@@ -688,12 +687,12 @@ if ($_GET['op']=="edit")
     if ($updated > 0 && $usrlvl==0)
     {
       $update_qry = "SELECT l.*, u.username from employee_log l JOIN logon u ON u.userid = l.userid WHERE emp_id=$id ORDER BY timestamp DESC";
-      $result_upd = mysql_query($update_qry, $mysqlconnection);
+      $result_upd = mysqli_query($mysqlconnection, $update_qry);
                       
       echo "<tr><td><a href=\"#\" class=\"show_hide3\"><small>Εμφάνιση/Απόκρυψη<br>μεταβολών</small></a></td>";
       echo "<td colspan=3><div class=\"slidingDiv3\">";
       echo "<ul>";
-      while ($row = mysql_fetch_array($result_upd, MYSQL_ASSOC)) {
+      while ($row = mysqli_fetch_array($result_upd, MYSQLI_ASSOC)) {
               echo "<li><b>".date("d-m-Y H:i", strtotime($row['timestamp']))."</b>&nbsp; usr: ".$row['username']." - IP: ".$row['ip']." ".$row['query']."</li>";
       }
       echo "</ul>";
@@ -752,13 +751,13 @@ if ($_GET['op']=="edit")
 		
 		// Find prev - next row id
 		$qprev = "SELECT id FROM employee WHERE id < $id ORDER BY id DESC LIMIT 1";
-		$res1 = mysql_query($qprev, $mysqlconnection);
-		 if (mysql_num_rows($res1))
-			$previd = mysql_result($res1, 0, "id");
+		$res1 = mysqli_query($mysqlconnection, $qprev);
+		 if (mysqli_num_rows($res1))
+			$previd = mysqli_result($res1, 0, "id");
 		$qnext = "SELECT id FROM employee WHERE id > $id ORDER BY id ASC LIMIT 1";
-		$res1 = mysql_query($qnext, $mysqlconnection);
-		 if (mysql_num_rows($res1))
-			$nextid = mysql_result($res1, 0, "id");
+		$res1 = mysqli_query($mysqlconnection, $qnext);
+		 if (mysqli_num_rows($res1))
+			$nextid = mysqli_result($res1, 0, "id");
 		
 		//echo (existID($previd,$mysqlconnection));
 		if ($previd)
@@ -789,11 +788,11 @@ if ($_GET['op']=="edit")
         $ip = $_SERVER['REMOTE_ADDR'];
 		// Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
 		$query1 = "INSERT INTO employee_deleted SELECT e.* FROM employee e WHERE id =".$_GET['id'];
-		$result1 = mysql_query($query1, $mysqlconnection);
+		$result1 = mysqli_query($mysqlconnection, $query1);
                 $query1 = "INSERT INTO employee_log (emp_id, ip, userid, action) VALUES (".$_GET['id'].",$ip,".$_SESSION['userid'].", 2)";
-		$result1 = mysql_query($query1, $mysqlconnection);
+		$result1 = mysqli_query($mysqlconnection, $query1);
                 $query = "DELETE from employee where id=".$_GET['id'];
-		$result = mysql_query($query, $mysqlconnection);
+		$result = mysqli_query($mysqlconnection, $query);
 		// Copies the deleted row to employee)deleted
 		
 		if ($result)
@@ -890,5 +889,5 @@ if ($_GET['op']=="edit")
 		echo "</body>";
 		echo "</html>";
 	}
-	mysql_close();
+	mysqli_close();
 ?> 

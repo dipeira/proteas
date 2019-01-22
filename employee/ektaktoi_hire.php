@@ -46,10 +46,9 @@
         }
         $usrlvl = $_SESSION['userlevel'];
 
-        $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+        $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         
         echo "<html><head><h2>Πρόσληψη έκτακτων εκπαιδευτικών προηγούμενου έτους</h2></head><body>";
         
@@ -57,10 +56,10 @@
         echo "<table class=\"imagetable\" border='1'>";
         
         $sql = "select * from ektaktoi_".$_SESSION['sxoletos'];
-        $result = mysql_query($sql, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $sql);
         echo "<tr><td>Επιλογή εκπ/κών:</td><td>";
         $cmb = "<select name=\"ektaktoi[]\" class=\"ektaktoi_select\" multiple=\"multiple\">";
-        while ($row = mysql_fetch_array($result)){
+        while ($row = mysqli_fetch_array($result)){
             if (in_array($row['id'],$_POST['ektaktoi']))
                 $cmb .= "<option value=\"".$row['id']."\" selected>".$row['surname'].' '.$row['name']."</option>";
             else
@@ -100,7 +99,7 @@
                 $ektaktoi_csv = implode(', ', $_POST['ektaktoi']);
                 
                 $query = "SELECT surname,name,patrwnymo FROM ektaktoi_".$_SESSION['sxoletos']." WHERE id IN (".$ektaktoi_csv.")";
-                $result = mysql_query($query, $mysqlconnection);
+                $result = mysqli_query($mysqlconnection, $query);
 
                 echo "<br><br><h2>Επιβεβαίωση προσλήψεων</h2>";
                 echo "<h5>Ημερομηνία:".date('d-m-Y',strtotime($_POST['date']))."</h5>";
@@ -108,11 +107,11 @@
                 echo "<h5>Τύπος απασχόλησης:". get_type($_POST['type'],$mysqlconnection). "</h5>";
                 echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
                 echo "<thead><tr><th>Επώνυμο</th><th>Όνομα</th><th>Πατρώνυμο</th></tr></thead>";
-        	while ($row = mysql_fetch_array($result))
+        	while ($row = mysqli_fetch_array($result))
                 {
                     echo "<tr><td>".$row['surname']."</td><td>".$row['name']."</td><td>".$row['patrwnymo']."</td></tr>";
                 }
-                echo "<tr><td colspan=3><small>Αριθμός εγγραφών: ".mysql_num_rows($result)."</small></td></tr>";
+                echo "<tr><td colspan=3><small>Αριθμός εγγραφών: ".mysqli_num_rows($result)."</small></td></tr>";
                 
                 
                 echo "<form action='' method='POST' autocomplete='off'>";
@@ -133,12 +132,12 @@
             $query = "SELECT surname, name, patrwnymo, afm FROM ektaktoi WHERE afm IN (select afm from ektaktoi_". $_SESSION['sxoletos'] . " where id in (".$_POST['ektaktoi2']."))";
             //"SELECT surname, name, patrwnymo FROM ektaktoi_". $_SESSION['sxoletos'] . " WHERE id IN (".$_POST['ektaktoi2'].")";
             //echo $query;
-            $result = mysql_query($query, $mysqlconnection);
-            if (mysql_num_rows($result) > 0)
+            $result = mysqli_query($mysqlconnection, $query);
+            if (mysqli_num_rows($result) > 0)
             {
                 echo '<br><strong>Σφάλμα:</strong> Οι παρακάτω εκπ/κοί έχουν ήδη προσληφθεί: <br>';
                 echo "<ul>";
-                while ($row = mysql_fetch_array($result)) {
+                while ($row = mysqli_fetch_array($result)) {
                     echo '<li>'.$row['surname'] . ' ' . $row['name'] . ' (πατρ. ' . $row['patrwnymo'] . '), ΑΦΜ: ' . $row['afm'] .'</li>';
                 }
                 echo "</ul>";
@@ -150,13 +149,13 @@
                     . " SELECT name,surname,patrwnymo,mhtrwnymo,klados,met_did,status,afm,stathero,kinhto,". $_POST['type2'].",". $_POST['praxi2'].",'". date('Y-m-d',strtotime($_POST['date2']))."' "
                     . "FROM ektaktoi_".$_SESSION['sxoletos']." WHERE id in (".$_POST['ektaktoi2'].")";
             //echo $query;
-            $result = mysql_query($query, $mysqlconnection);
+            $result = mysqli_query($mysqlconnection, $query);
             if ($result)
-                echo "Έγινε επιτυχής εισαγωγή " . mysql_affected_rows () . " εκπαιδευτικών.";
+                echo "Έγινε επιτυχής εισαγωγή " . mysqli_affected_rows () . " εκπαιδευτικών.";
 
         }
 
-        mysql_close();
+        mysqli_close();
 ?>
 <br><br>
 </html>

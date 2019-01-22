@@ -13,10 +13,9 @@
   Require_once "../config.php";
   //Require_once "../functions.php";
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
     
   set_time_limit(1200);  
   
@@ -27,7 +26,7 @@
     {
         echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
         echo "<br><a href=\"index.php\">Επιστροφή</a>";
-        mysql_close();
+        mysqli_close();
         exit;
     }
     echo "<form action='' method='POST' autocomplete='off'>";

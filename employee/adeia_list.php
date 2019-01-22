@@ -5,10 +5,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   //require('../tools/calendar/tc_calendar.php');
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   session_start();
   $usrlvl = $_SESSION['userlevel'];
@@ -48,15 +47,15 @@
 
                 // get adeia years
                 $query = "SELECT DISTINCT YEAR(start) FROM adeia where emp_id=".$_GET['id'].' ORDER BY start DESC';
-                $result = mysql_query($query, $mysqlconnection);
-                while ($year = mysql_fetch_array($result, MYSQL_NUM))
+                $result = mysqli_query($mysqlconnection, $query);
+                while ($year = mysqli_fetch_array($result, MYSQLI_NUM))
                     $year_arr[] = $year[0];
                 
                 
                 
                 $query = "SELECT * from adeia where emp_id=".$_GET['id']." ORDER BY start";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 		if (!$num)
                 {
                     echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
@@ -94,24 +93,24 @@
                     echo "<tbody>";
                     
                     $query = "SELECT * from adeia where year(start) = $yr AND emp_id=".$_GET['id']." ORDER BY start";
-                    $result = mysql_query($query, $mysqlconnection);
-                    $num=mysql_num_rows($result);
+                    $result = mysqli_query($mysqlconnection, $query);
+                    $num=mysqli_num_rows($result);
                     
                     while ($i<$num)
                     {
-                        $id = mysql_result($result, $i, "id");
-                        $emp_id = mysql_result($result, $i, "emp_id");
-                        $type = mysql_result($result, $i, "type");
-                        $prot = mysql_result($result, $i, "prot");
-                        $date = mysql_result($result, $i, "date");
-                        $days = mysql_result($result, $i, "days");
-                        $start = mysql_result($result, $i, "start");
-                        $finish = mysql_result($result, $i, "finish");
-                        $comments = mysql_result($result, $i, "comments");
+                        $id = mysqli_result($result, $i, "id");
+                        $emp_id = mysqli_result($result, $i, "emp_id");
+                        $type = mysqli_result($result, $i, "type");
+                        $prot = mysqli_result($result, $i, "prot");
+                        $date = mysqli_result($result, $i, "date");
+                        $days = mysqli_result($result, $i, "days");
+                        $start = mysqli_result($result, $i, "start");
+                        $finish = mysqli_result($result, $i, "finish");
+                        $comments = mysqli_result($result, $i, "comments");
 
                         $query1 = "select type from adeia_type where id=$type";
-                        $result1 = mysql_query($query1, $mysqlconnection);
-                        $typewrd = mysql_result($result1, 0, "type");
+                        $result1 = mysqli_query($mysqlconnection, $query1);
+                        $typewrd = mysqli_result($result1, 0, "type");
                         if ($usrlvl < 2)
                             echo "<tr><td>$id<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('adeia.php?adeia=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td><td><a href='adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
                         else
@@ -139,5 +138,5 @@
 		echo "</html>";	
 
 
-	mysql_close();
+	mysqli_close();
 ?>

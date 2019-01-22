@@ -5,25 +5,24 @@
 	
 	
 		
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		
                 $query = "SELECT * from employee";
                 
                 echo $query;
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 	while ($i<$num)	
 	{
-		$id = mysql_result($result, $i, "id");
-                $name = mysql_result($result, $i, "name");
-                $surname = mysql_result($result, $i, "surname");
-		$hm_dior = mysql_result($result, $i, "hm_dior");
-		$proyp = mysql_result($result, $i, "proyp");
-		$met_did = mysql_result($result, $i, "met_did");
-                $anatr_db = mysql_result($result, $i, "anatr");
+		$id = mysqli_result($result, $i, "id");
+                $name = mysqli_result($result, $i, "name");
+                $surname = mysqli_result($result, $i, "surname");
+		$hm_dior = mysqli_result($result, $i, "hm_dior");
+		$proyp = mysqli_result($result, $i, "proyp");
+		$met_did = mysqli_result($result, $i, "met_did");
+                $anatr_db = mysqli_result($result, $i, "anatr");
 		
 		
                 $d1 = strtotime($hm_dior);
@@ -51,7 +50,7 @@
 		{
 			$query = "UPDATE employee SET anatr='$anatr' WHERE ID=$id";
 			echo "&nbsp;&nbsp;$query";
-			mysql_query($query, $mysqlconnection);
+			mysqli_query($mysqlconnection, $query);
 			$fix+=1;
 		}
 		//echo "<br>";
@@ -62,5 +61,5 @@
 		if ($fix)
 			echo "<br>Fixed $fix record(s)";
                 
-		mysql_close();
+		mysqli_close();
 ?>

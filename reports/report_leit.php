@@ -26,15 +26,14 @@
     require_once"../tools/functions.php";
     session_start();
 
-    $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-    mysql_select_db($db_name, $mysqlconnection);
-    mysql_query("SET NAMES 'greek'", $mysqlconnection);
-    mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 	
     // only dhmosia (type2 = 0)
     $query = "SELECT * from school WHERE type2 = 0 AND type = 1 AND anenergo=0";
-    $result = mysql_query($query, $mysqlconnection);
-    $num = mysql_num_rows($result);
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
 
     $oligothesia = isset($_GET['oligothesia']) ? true : false;
 
@@ -98,14 +97,14 @@
     while ($i < $num)
     //while ($i < 4) // for testing
     {		
-        $sch = mysql_result($result, $i, "id");
+        $sch = mysqli_result($result, $i, "id");
         $name = getSchool($sch, $mysqlconnection);
-        $code = mysql_result($result, $i, "code");
-        $organikothta = mysql_result($result, $i, "organikothta");
+        $code = mysqli_result($result, $i, "code");
+        $organikothta = mysqli_result($result, $i, "organikothta");
         
         //// Oloimera
-        $classes = explode(",",mysql_result($result, $i, "students"));
-        $tmimata_exp = explode(",",mysql_result($result, $i, "tmimata"));
+        $classes = explode(",",mysqli_result($result, $i, "students"));
+        $tmimata_exp = explode(",",mysqli_result($result, $i, "tmimata"));
 
         $oloimero_stud = $classes[6];
         $oloimero_tea = $tmimata_exp[6];
@@ -113,7 +112,7 @@
         ////
 
         // compute leitoyrgikothta
-        $tmimata_exp = explode(",",mysql_result($result, $i, "tmimata"));
+        $tmimata_exp = explode(",",mysqli_result($result, $i, "tmimata"));
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
         // skip depending on requested schools
         if (($oligothesia & $leit >=4) || (!$oligothesia && $leit < 4)){
@@ -136,8 +135,8 @@
         
         // τοποθετηθέντες ΠΕ70
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 AND thesi IN (0,1,2)";
-        $rs = mysql_query($qry, $mysqlconnection);
-        $top70 = mysql_result($rs, 0, "cnt");
+        $rs = mysqli_query($mysqlconnection, $qry);
+        $top70 = mysqli_result($rs, 0, "cnt");
         $syntop70 += $top70;
         //
         echo "<tr>";

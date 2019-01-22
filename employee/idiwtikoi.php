@@ -3,10 +3,9 @@
   require_once"../config.php";
   require_once"../tools/functions.php";
     
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
     include("../tools/class.login.php");
     $log = new logmein();
@@ -173,19 +172,19 @@
 		// Debugging...
 		//echo $query;
 		
-		$result = mysql_query($query, $mysqlconnection);
-		$result1 = mysql_query($query_all, $mysqlconnection);
+		$result = mysqli_query($mysqlconnection, $query);
+		$result1 = mysqli_query($mysqlconnection, $query_all);
 		// Number of records found
 		
 		if ($result)
-			$num_record = mysql_num_rows($result);
+			$num_record = mysqli_num_rows($result);
 		if ($result1)
-			$num_record1 = mysql_num_rows($result1);
+			$num_record1 = mysqli_num_rows($result1);
 		$lastpg = ceil($num_record1 / $rpp);
 		
 				
 		if ($result)
-			$num=mysql_num_rows($result);
+			$num=mysqli_num_rows($result);
 	
         echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
@@ -221,21 +220,21 @@
 	while ($i < $num)
 	{
 	
-		$id = mysql_result($result, $i, "id");
-		$name = mysql_result($result, $i, "name");
-		$surname = mysql_result($result, $i, "surname");
-		$klados_id = mysql_result($result, $i, "klados");
+		$id = mysqli_result($result, $i, "id");
+		$name = mysqli_result($result, $i, "name");
+		$surname = mysqli_result($result, $i, "surname");
+		$klados_id = mysqli_result($result, $i, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
-		$sx_organ_id = mysql_result($result, $i, "sx_organikhs");
+		$sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
 		$sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
-		$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
+		$sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
 		$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
                 $sx_organikhs_url = "<a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
                 $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
                 // check if multiple schools
                 $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
-                $res = mysql_query($qry,$mysqlconnection);
-                if (mysql_num_rows($res) > 0)
+                $res = mysqli_query($mysqlconnection, $qry);
+                if (mysqli_num_rows($res) > 0)
                     $sx_yphrethshs .= "*";
 								
 		echo "<tr><td>";
@@ -292,5 +291,5 @@
   </body>
 </html>
 <?php
-	mysql_close();
+	mysqli_close();
 ?>

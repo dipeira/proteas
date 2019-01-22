@@ -2,8 +2,9 @@
 	header('Content-type: text/html; charset=iso8859-7'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
-    $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-    mysql_select_db($db_name, $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 ?>	
 <html>
     <head>
@@ -52,7 +53,7 @@
     if ($usrlvl > 0)
     {
         echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
-        mysql_close();
+        mysqli_close();
         exit;
     }
     // Allagh sxolikoy etoys
@@ -68,16 +69,16 @@
         // more...
         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
         $query = "CREATE TABLE $tbl_bkp_mon SELECT * FROM employee";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "DROP TABLE employee_moved";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         // 388: allo pyspe, 389: apospasi se forea, 397: sxol. symvoulos, 399: Apospash ekswteriko
         // thesi 2: d/nths, 4: dioikhtikos
         $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN (388,389,397,399) AND thesi NOT IN (2,4)";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN (388,389,397,399) AND thesi NOT IN (2,4)";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_affected_rows($mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_affected_rows($mysqlconnection);
         //echo $query;
         if ($result)
             echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -86,10 +87,10 @@
         
         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
         $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 388";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 388";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_affected_rows($mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_affected_rows($mysqlconnection);
         //echo $query;
         if ($result)
             echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -98,13 +99,13 @@
         
         // echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
         // $query = "DROP TABLE employee_deleted";
-        // $result = mysql_query($query, $mysqlconnection);
+        // $result = mysqli_query($mysqlconnection, $query);
         // // 388: ¶λλο ΠΥΣΠΕ, 394: ¶λλο ΠΥΣΔΕ
         // $query = "CREATE TABLE employee_deleted SELECT * FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397,389)";
-        // $result = mysql_query($query, $mysqlconnection);
+        // $result = mysqli_query($mysqlconnection, $query);
         // $query = "DELETE FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397,389)";
-        // $result = mysql_query($query, $mysqlconnection);
-        // $num = mysql_affected_rows();
+        // $result = mysqli_query($mysqlconnection, $query);
+        // $num = mysqli_affected_rows();
         // //echo $query;
         // if ($result)
         //     echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -122,16 +123,16 @@
         if ($_POST['type'] == 1)
             $kratikoy = 1;
         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
-        mysql_query("SET NAMES 'greek'", $mysqlconnection);
-        mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         // kratikoy or ESPA 
         if ($kratikoy)
             $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='ΚΡΑΤ'";
         else
             $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='ΚΡΑΤ'";
 
-        $result = mysql_query($query, $mysqlconnection);
-        $num=mysql_num_rows($result);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num=mysqli_num_rows($result);
 
         echo "<h3>Εκτύπωση βεβαιώσεων Αναπληρωτών ";
         if ($kratikoy)
@@ -152,21 +153,21 @@
         //while ($i < 20) // for testing
         // ***********************
         {
-            $id = mysql_result($result, $i, "id");
-            $name = mysql_result($result, $i, "name");
-            $surname = mysql_result($result, $i, "surname");
-            $patrwnymo = mysql_result($result, $i, "patrwnymo");
-            $klados = mysql_result($result, $i, "klados");
-            $ya = mysql_result($result, $i, "ya");
-            $ada = mysql_result($result, $i, "ada");
-            $apof = mysql_result($result, $i, "apofasi");
-            $hmpros = mysql_result($result, $i, "hm_anal");
-            $hmapox = mysql_result($result, $i, "hm_apox");
-            $metakinhsh = mysql_result($result, $i, "metakinhsh");
-            $last_afm = substr (mysql_result($result, $i, "afm"), -3);
-            $ptype = mysql_result($result, $i, "type");
-            $praksi = mysql_result($result, $i, "praksi");
-            $typos = mysql_result($result, $i, "typos");
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $patrwnymo = mysqli_result($result, $i, "patrwnymo");
+            $klados = mysqli_result($result, $i, "klados");
+            $ya = mysqli_result($result, $i, "ya");
+            $ada = mysqli_result($result, $i, "ada");
+            $apof = mysqli_result($result, $i, "apofasi");
+            $hmpros = mysqli_result($result, $i, "hm_anal");
+            $hmapox = mysqli_result($result, $i, "hm_apox");
+            $metakinhsh = mysqli_result($result, $i, "metakinhsh");
+            $last_afm = substr (mysqli_result($result, $i, "afm"), -3);
+            $ptype = mysqli_result($result, $i, "type");
+            $praksi = mysqli_result($result, $i, "praksi");
+            $typos = mysqli_result($result, $i, "typos");
 
             if ($typos == 1)
                 $meiwmeno = true;
@@ -177,8 +178,8 @@
             unset($sx_yphrethshs);
             $sx_yphrethshs[] = array();
             $qry = "select yphrethsh, hours from yphrethsh_ekt where emp_id = $id AND sxol_etos = $sxol_etos";
-            $res1 = mysql_query($qry, $mysqlconnection);
-            while ($arr = mysql_fetch_array($res1))
+            $res1 = mysqli_query($mysqlconnection, $qry);
+            while ($arr = mysqli_fetch_array($res1))
             {
                 $sx_yphrethshs[] = array('sch' => $arr[0],'hours' => $arr[1]);
             }
@@ -236,26 +237,26 @@
         echo "<h3>Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων</h3>";
         // check if not empty
         $query = "select id from ektaktoi";
-        $result = mysql_query($query, $mysqlconnection);
-        if (!mysql_num_rows($result))
+        $result = mysqli_query($mysqlconnection, $query);
+        if (!mysqli_num_rows($result))
             exit('Σφάλμα: O πίνακας έκτακτου προσωπικού είναι κενός...');
         // check if already inserted        
         $query = "select id from ektaktoi_old where sxoletos = $sxol_etos";
-        $result = mysql_query($query, $mysqlconnection);
-        if (!mysql_num_rows($result))
+        $result = mysqli_query($mysqlconnection, $query);
+        if (!mysqli_num_rows($result))
             exit('Σφάλμα: H διαγραφή έχει ήδη γίνει...');
         // archive into ektaktoi_old
         $query = "insert into ektaktoi_old select *, '$sxol_etos' as sxoletos from ektaktoi where 1";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         // empty table
         $query = "TRUNCATE table ektaktoi";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         
         // archive praxi
         $query = "insert into praxi_old select *, '$sxol_etos' as sxoletos from praxi where 1";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "TRUNCATE table praxi";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         if ($result)
             echo "Επιτυχής Διαγραφή. <br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα 'ektaktoi_old'</small>";
         else 
@@ -266,19 +267,19 @@
         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31-08)</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_yphrethshs = 389";
-        $result = mysql_query($query, $mysqlconnection);
-        if (!mysql_num_rows($result))
+        $result = mysqli_query($mysqlconnection, $query);
+        if (!mysqli_num_rows($result))
             exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
         //
         //$query = "DROP TABLE employee_bkp";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 389";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 389";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_affected_rows();
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
             echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -296,7 +297,7 @@
         echo "<br><br><small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
         do2yphr($mysqlconnection);
     }
-    mysql_close();
+    mysqli_close();
 
     // epistrofh ekp/kwn Hrakleioy sthn organikh toys
     /*
@@ -305,23 +306,23 @@
         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_yphrethshs NOT IN (389,397,399) AND sx_yphrethshs != sx_organikhs AND thesi NOT IN (2,4)";
-        $result = mysql_query($query, $mysqlconnection);
-        if (!mysql_num_rows($result))
+        $result = mysqli_query($mysqlconnection, $query);
+        if (!mysqli_num_rows($result))
             exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
         //
         //$query = "DROP TABLE employee_bkp";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         $query = "CREATE TABLE $tbl_bkp_mon SELECT * FROM employee";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "DROP TABLE employee_moved";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         // 389: apospasi se forea, 397: sxol. symvoulos, 399: Apospash ekswteriko
         // thesi 2: d/nths, 4: dioikhtikos
         $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN (389,397,399) AND thesi NOT IN (2,4)";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN (389,397,399) AND thesi NOT IN (2,4)";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_affected_rows();
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
             echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -333,19 +334,19 @@
         echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_yphrethshs = 388 AND sx_organikhs != 388";
-        $result = mysql_query($query, $mysqlconnection);
-        if (!mysql_num_rows($result))
+        $result = mysqli_query($mysqlconnection, $query);
+        if (!mysqli_num_rows($result))
             exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
         //
         //$query = "DROP TABLE employee_bkp";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 388";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 388";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_affected_rows();
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
             echo "Επιτυχής μεταβολή $num εγγραφών.";
@@ -358,22 +359,22 @@
         echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397)";
-        $result = mysql_query($query, $mysqlconnection);
-        if (!mysql_num_rows($result))
+        $result = mysqli_query($mysqlconnection, $query);
+        if (!mysqli_num_rows($result))
             exit('Δεν υπάρχουν εκπαιδευτικοί γι\' αυτή την ενέργεια...');
         //
         //$query = "DROP TABLE employee_bkp";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
-        //$result = mysql_query($query, $mysqlconnection);
+        //$result = mysqli_query($mysqlconnection, $query);
         $query = "DROP TABLE employee_deleted";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         // 388: ¶λλο ΠΥΣΠΕ, 394: ¶λλο ΠΥΣΔΕ
         $query = "CREATE TABLE employee_deleted SELECT * FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397)";
-        $result = mysql_query($query, $mysqlconnection);
+        $result = mysqli_query($mysqlconnection, $query);
         $query = "DELETE FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397)";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_affected_rows();
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
             echo "Επιτυχής μεταβολή $num εγγραφών.";

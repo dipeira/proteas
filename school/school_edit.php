@@ -5,10 +5,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -66,10 +65,9 @@
 		
                 if (isset($_POST['org']) || isset($_GET['org']))
                 {
-                    $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-                    mysql_select_db($db_name, $mysqlconnection);
-                    mysql_query("SET NAMES 'greek'", $mysqlconnection);
-                    mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+                    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+                    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+                    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
                     
                     if (isset($_POST['org']))
                     {
@@ -86,33 +84,33 @@
                     echo "<h1>$str1</h1>";
                     //disp_school($sch, $mysqlconnection);
                     $query = "SELECT * from school where id=$sch";
-                    $result = mysql_query($query, $mysqlconnection);
+                    $result = mysqli_query($mysqlconnection, $query);
 
-                    $titlos = mysql_result($result, 0, "titlos");
-                    $address = mysql_result($result, 0, "address");
-                    $tk = mysql_result($result, 0, "tk");
-                    $tel = mysql_result($result, 0, "tel");
-                    $fax = mysql_result($result, 0, "fax");
-                    $email = mysql_result($result, 0, "email");
-                    $type = mysql_result($result, 0, "type");
-                    $organikothta = mysql_result($result, 0, "organikothta");
+                    $titlos = mysqli_result($result, 0, "titlos");
+                    $address = mysqli_result($result, 0, "address");
+                    $tk = mysqli_result($result, 0, "tk");
+                    $tel = mysqli_result($result, 0, "tel");
+                    $fax = mysqli_result($result, 0, "fax");
+                    $email = mysqli_result($result, 0, "email");
+                    $type = mysqli_result($result, 0, "type");
+                    $organikothta = mysqli_result($result, 0, "organikothta");
                     $leitoyrg = get_leitoyrgikothta($sch, $mysqlconnection);
-                    $anenergo = mysql_result($result, 0, "anenergo");
+                    $anenergo = mysqli_result($result, 0, "anenergo");
                     
                     // if dimotiko
                     if ($type == 1)
                     {
-                        $students = mysql_result($result, 0, "students");
+                        $students = mysqli_result($result, 0, "students");
                         $classes = explode(",",$students);
-                        $frontistiriako = mysql_result($result, 0, "frontistiriako");
-                        $ted = mysql_result($result, 0, "ted");
-                        $oloimero_stud = mysql_result($result, 0, "oloimero_stud");
-                        $tmimata = mysql_result($result, 0, "tmimata");
+                        $frontistiriako = mysqli_result($result, 0, "frontistiriako");
+                        $ted = mysqli_result($result, 0, "ted");
+                        $oloimero_stud = mysqli_result($result, 0, "oloimero_stud");
+                        $tmimata = mysqli_result($result, 0, "tmimata");
                         $tmimata_exp = explode(",",$tmimata);
-                        $oloimero_tea = mysql_result($result, 0, "oloimero_tea");
-                        $ekp_ee = mysql_result($result, 0, "ekp_ee");
+                        $oloimero_tea = mysqli_result($result, 0, "oloimero_tea");
+                        $ekp_ee = mysqli_result($result, 0, "ekp_ee");
                         $ekp_ee_exp = explode(",",$ekp_ee);
-                        $vivliothiki = mysql_result($result, 0, "vivliothiki");
+                        $vivliothiki = mysqli_result($result, 0, "vivliothiki");
                         
                         $synolo = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
                         $synolo_tmim = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
@@ -120,25 +118,25 @@
                     // if nipiagwgeio
                     else if ($type == 2)
                     {
-                        $klasiko = mysql_result($result, 0, "klasiko");
+                        $klasiko = mysqli_result($result, 0, "klasiko");
                         $klasiko_exp = explode(",",$klasiko);
-                        $oloimero_nip = mysql_result($result, 0, "oloimero_nip");
+                        $oloimero_nip = mysqli_result($result, 0, "oloimero_nip");
                         $oloimero_nip_exp = explode(",",$oloimero_nip);
-                        $nip = mysql_result($result, 0, "nip");
+                        $nip = mysqli_result($result, 0, "nip");
                         $nip_exp = explode(",",$nip);
                         
                         $klasiko_synolo = array_sum($klasiko_exp);
                         $oloimero_synolo = array_sum($oloimero_nip_exp);
                     }
-                    $oloimero = mysql_result($result, 0, "oloimero");
-                    $entaksis = explode(",",mysql_result($result, 0, "entaksis"));
-                    $ypodoxis = mysql_result($result, 0, "ypodoxis");                    
-                    $comments = mysql_result($result, 0, "comments");
+                    $oloimero = mysqli_result($result, 0, "oloimero");
+                    $entaksis = explode(",",mysqli_result($result, 0, "entaksis"));
+                    $ypodoxis = mysqli_result($result, 0, "ypodoxis");                    
+                    $comments = mysqli_result($result, 0, "comments");
                     // organikes - added 05-10-2012
-                    $organikes = unserialize(mysql_result($result, 0, "organikes"));
+                    $organikes = unserialize(mysqli_result($result, 0, "organikes"));
                     // kena_leit, kena_org - added 19-06-2013
-                    $kena_org = unserialize(mysql_result($result, 0, "kena_org"));
-                    $kena_leit = unserialize(mysql_result($result, 0, "kena_leit"));
+                    $kena_org = unserialize(mysqli_result($result, 0, "kena_org"));
+                    $kena_leit = unserialize(mysqli_result($result, 0, "kena_leit"));
 
                     echo "<table class=\"imagetable\" border='1'>";
                     echo "<form id='updatefrm' name='update' action='school_update.php' method='POST'>";

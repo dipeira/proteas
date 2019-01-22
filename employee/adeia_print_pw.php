@@ -7,27 +7,26 @@ require_once '../tools/num2wordgen.php';
 
 require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
 
-$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-mysql_select_db($db_name, $mysqlconnection);
-mysql_query("SET NAMES 'greek'", $mysqlconnection);
-mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
 // Get employee data
 $emp_id = $_POST['arr'][0];
 $query1 = "select * from employee where id=$emp_id";
-$result1 = mysql_query($query1, $mysqlconnection);
-$name = mysql_result($result1, 0, "name");
-$surname = mysql_result($result1, 0, "surname");
+$result1 = mysqli_query($mysqlconnection, $query1);
+$name = mysqli_result($result1, 0, "name");
+$surname = mysqli_result($result1, 0, "surname");
 
-$kl1 = mysql_result($result1, 0, "klados");
+$kl1 = mysqli_result($result1, 0, "klados");
 $q2 = "select * from klados where id=$kl1";
-$res2 = mysql_query($q2, $mysqlconnection);
-$klados = mysql_result($res2, 0, "perigrafh");
+$res2 = mysqli_query($mysqlconnection, $q2);
+$klados = mysqli_result($res2, 0, "perigrafh");
 
-$yphr = mysql_result($result1, 0, "sx_yphrethshs");
+$yphr = mysqli_result($result1, 0, "sx_yphrethshs");
 $q3 = "select * from school where id=$yphr";
-$res3 = mysql_query($q3, $mysqlconnection);
-$school = mysql_result($res3, 0, "name");
+$res3 = mysqli_query($mysqlconnection, $q3);
+$school = mysqli_result($res3, 0, "name");
 
 //$word = new COM("word.application") or die("Unable to instantiate Word");
 $PHPWord = new PHPWord();

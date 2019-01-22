@@ -5,10 +5,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   session_start();
   $usrlvl = $_SESSION['userlevel'];
@@ -37,15 +36,15 @@
       {
         $query = "SELECT * from ekdromi where id=".$id;
         //echo $query;
-	$result = mysql_query($query, $mysqlconnection);
-	$rec['sch'] = mysql_result($result, 0, "sch");
-        $rec['taksi'] = mysql_result($result, 0, "taksi");
-        $rec['tmima'] = mysql_result($result, 0, "tmima");
-        $rec['prot'] = mysql_result($result, 0, "prot");
-        $rec['date'] = mysql_result($result, 0, "date");
-        $proo = mysql_result($result, 0, "proorismos");
+	$result = mysqli_query($mysqlconnection, $query);
+	$rec['sch'] = mysqli_result($result, 0, "sch");
+        $rec['taksi'] = mysqli_result($result, 0, "taksi");
+        $rec['tmima'] = mysqli_result($result, 0, "tmima");
+        $rec['prot'] = mysqli_result($result, 0, "prot");
+        $rec['date'] = mysqli_result($result, 0, "date");
+        $proo = mysqli_result($result, 0, "proorismos");
         $rec['proorismos'] = str_replace(" ", "&nbsp;", $proo);
-        $comm = mysql_result($result, 0, "comments");
+        $comm = mysqli_result($result, 0, "comments");
         $rec['comments'] = str_replace(" ", "&nbsp;", $comm);
         return $rec;
       }
@@ -81,8 +80,8 @@
                 //echo $query;
                 $school = getSchool($_GET['sch'], $mysqlconnection);
                 echo "<h2>Λίστα εκδρομών: $school</h2>";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 		if (!$num)
                 {
                     echo "<br><br><big>Δε βρέθηκαν εκδρομές</big>";
@@ -99,14 +98,14 @@
                     echo "<tbody>";
                     while ($i<$num)
                     {
-                        $id = mysql_result($result, $i, "id");
-                        $sch = mysql_result($result, $i, "sch");
-                        $taksi = mysql_result($result, $i, "taksi");
-                        $tmima = mysql_result($result, $i, "tmima");
-                        $prot = mysql_result($result, $i, "prot");
-                        $date = mysql_result($result, $i, "date");
-                        $proorismos = mysql_result($result, $i, "proorismos");
-                        $comm = mysql_result($result, $i, "comments");
+                        $id = mysqli_result($result, $i, "id");
+                        $sch = mysqli_result($result, $i, "sch");
+                        $taksi = mysqli_result($result, $i, "taksi");
+                        $tmima = mysqli_result($result, $i, "tmima");
+                        $prot = mysqli_result($result, $i, "prot");
+                        $date = mysqli_result($result, $i, "date");
+                        $proorismos = mysqli_result($result, $i, "proorismos");
+                        $comm = mysqli_result($result, $i, "comments");
                         $comments = substr($comm,0, 30);
                         echo "<tr><td><a href='ekdromi.php?id=$id&op=view'>$prot</a><span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ekdromi.php?id=$id&sch=$sch&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span><span title=\"Επεξεργασία\"><a href=\"ekdromi.php?id=$id&sch=$sch&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span></td><td>".taksi_switch($taksi)."</td><td>$tmima</td><td>$proorismos</td><td>".date('d-m-Y',strtotime($date))."</td><td>$comments</td></tr>";
                         $i++;
@@ -211,7 +210,7 @@
         {
                 $query = "DELETE from ekdromi where id=".$_GET['id'];
                 //echo $query;
-		$result = mysql_query($query, $mysqlconnection);
+		$result = mysqli_query($mysqlconnection, $query);
                 if ($result)
 			echo "Η εγγραφή με κωδικό ".$_GET['id']." διαγράφηκε με επιτυχία.";
 		else
@@ -248,7 +247,7 @@
             //$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
             // for debugging...
             //echo "<br>".$query;
-            mysql_query($query,$mysqlconnection);
+            mysqli_query($mysqlconnection, $query);
             echo "<INPUT TYPE='button' VALUE='Επιστροφή στις εκδρομές' onClick=\"parent.location='ekdromi.php?sch=".$sch."&op=list'\">";
             echo "<meta http-equiv=\"refresh\" content=\"2; URL=ekdromi.php?sch=".$sch."&op=list\">";
         }
@@ -257,5 +256,5 @@
 		echo "</html>";	
 
 
-	mysql_close();
+	mysqli_close();
 ?>

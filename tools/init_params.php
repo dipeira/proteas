@@ -1,22 +1,22 @@
 <?php
   //require_once('../config.php');
+  require_once('functions.php');
   // getParam1: Διαβάζει παραμέτρους από τη βάση
   function getParam1($name,$conn)
   {
     $query = "SELECT value from params WHERE name='$name'";
-    $result = mysql_query($query, $conn);
+    $result = mysqli_query($conn, $query);
     if (!$result) 
-        die('Could not query:' . mysql_error());
-    return mysql_result($result, 0, "value");
+        die('Could not query:' . mysqli_error());
+    return mysqli_result($result, 0, "value");
   }
-  $myconn = mysql_connect($db_host, $db_user, $db_password);
-  $db_selected = mysql_select_db($db_name, $myconn);
+  $myconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
   // workaround for init.php
-  if (!$db_selected){
-    return;
-  }
-  mysql_query("SET NAMES 'greek'", $myconn);
-  mysql_query("SET CHARACTER SET 'greek'", $myconn);
+  // if (!$db_selected){
+  //   return;
+  // }
+  mysqli_query($myconn, "SET NAMES 'greek'");
+  mysqli_query($myconn, "SET CHARACTER SET 'greek'");
   
   $sxol_etos = getParam1('sxol_etos',$myconn);
   

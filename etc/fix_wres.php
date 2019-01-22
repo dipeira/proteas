@@ -31,34 +31,33 @@
         set_time_limit (180);
             
 		$updates = $fails = 0;
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		//$query = "SELECT * from employee";
                 $query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = 201415";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
                 		
                 $synolo = $num;
                 
             while ($i<$num)	
             {
-		$name = mysql_result($result, $i, "name");
-		$surname = mysql_result($result, $i, "surname");
-                $ypoxr_wres = mysql_result($result, $i, "wres");
+		$name = mysqli_result($result, $i, "name");
+		$surname = mysqli_result($result, $i, "surname");
+                $ypoxr_wres = mysqli_result($result, $i, "wres");
                 
-                $yphr_hours = mysql_result($result, $i, "hours");
-                $yphr_id = mysql_result($result, $i, "id");
+                $yphr_hours = mysqli_result($result, $i, "hours");
+                $yphr_id = mysqli_result($result, $i, "id");
                 
                 if ($ypoxr_wres && ($yphr_hours > $ypoxr_wres))
                 {
                     $updates++;
                     $qry = "update yphrethsh set hours=$ypoxr_wres where id=$yphr_id";
-                    $res = mysql_query($qry, $mysqlconnection);
+                    $res = mysqli_query($mysqlconnection, $qry);
                     if (!res)
                     {
-                        die ('Error: '.mysql_error ());
+                        die ('Error: '.mysqli_error ());
                         $fails++;
                     }
                     echo "$surname\tYpoxr:$ypoxr_wres,Yphr:$yphr_hours ".$qry."<br>";
@@ -69,7 +68,7 @@
 		
                 echo "<br>";
                 
-		mysql_close();
+		mysqli_close();
                 
                 echo "ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ $updates ÿÿÿÿÿÿÿÿÿÿÿ ÿÿÿ ÿ.ÿ. (ÿÿ ÿÿÿÿÿÿ $synolo ÿÿÿÿÿÿÿÿÿ)";
                 if ($fails)

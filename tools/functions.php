@@ -45,46 +45,59 @@
 </script>
 
 <?php
- 
+  // Workaround for the missing mysqli_result function
+  // Ideal for the transition to mysqli
+  // taken from https://mariolurig.com/coding/mysqli_result-function-to-match-mysqli_result/
+  function mysqli_result($res,$row=0,$col=0){ 
+    $numrows = mysqli_num_rows($res); 
+    if ($numrows && $row <= ($numrows-1) && $row >=0){
+        mysqli_data_seek($res,$row);
+        $resrow = (is_numeric($col)) ? mysqli_fetch_row($res) : mysqli_fetch_assoc($res);
+        if (isset($resrow[$col])){
+            return $resrow[$col];
+        }
+    }
+    return false;
+  }
 	function getKlados ($id,$conn)
 	{
 		$query = "SELECT perigrafh from klados where id=".$id;
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		//if (!$result) 
-		//	die('Could not query:' . mysql_error());
-		return mysql_result($result, 0);
+		//	die('Could not query:' . mysqli_error());
+		return mysqli_result($result, 0);
 	}
 	
 	function getSchool ($id,$conn)
 	{
 		$query = "SELECT name from school where id=".$id;
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		//if (!$result) 
-		//	die('Could not query:' . mysql_error());
+		//	die('Could not query:' . mysqli_error());
                 //else
-        return mysql_result($result, 0);	
+        return mysqli_result($result, 0);	
 	}
 	
 	function getSchoolID ($name,$conn)
 	{
 		$query = "SELECT id from school where name='".$name."'";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
+			die('Could not query:' . mysqli_error());
 		else
-			return mysql_result($result, 0);	
+			return mysqli_result($result, 0);	
   }
   function getSchoolFromCode($code, $conn)
   {
     $query = "SELECT id from school where code = '$code'";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) {
       return false;
     }
-      //die('Could not query:' . mysql_error());
+      //die('Could not query:' . mysqli_error());
       
 		else
-			return mysql_result($result, 0);	
+			return mysqli_result($result, 0);	
   }
         
     //The function returns the no. of business days between two dates and it skips the holidays
@@ -154,32 +167,32 @@
     function ypoloipo_adeiwn ($id, $sql)
     {
         $qry2 = "SELECT sx_yphrethshs,thesi FROM employee WHERE id= $id";
-        $res2 = mysql_query($qry2, $sql);
-        $sx_yphr = mysql_result($res2, 0, "sx_yphrethshs");
-        $thesi = mysql_result($res2, 0, "thesi");
+        $res2 = mysqli_query($qry2, $sql);
+        $sx_yphr = mysqli_result($res2, 0, "sx_yphrethshs");
+        $thesi = mysqli_result($res2, 0, "thesi");
         // if apospasmenoi / dioikhtikoi
         if ($sx_yphr == 389 || $sx_yphr == 398 || $thesi == 4)
         {
             $cur_yr = date("Y");
             $prev_yr = $cur_yr - 1;
             $qry = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $cur_yr AND year(FINISH) = $cur_yr AND emp_id = $id";
-            $res = mysql_query($qry, $sql);
-            $cur_kan = mysql_result($res, 0, "rem");
+            $res = mysqli_query($qry, $sql);
+            $cur_kan = mysqli_result($res, 0, "rem");
             $rem = 25 - $cur_kan;
         
             $qry1 = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $prev_yr AND year(FINISH) = $prev_yr AND emp_id = $id";
-            $res1 = mysql_query($qry1, $sql);
-            $prev_kan = mysql_result($res1, 0, "rem");
+            $res1 = mysqli_query($qry1, $sql);
+            $prev_kan = mysqli_result($res1, 0, "rem");
             $prev_rem = 25 - $prev_kan;
             
             // xmas adeies
             $pre = $after = 0;
             $qry0 = "SELECT start, finish FROM adeia WHERE type=2 AND YEAR(start) = $prev_yr AND YEAR(finish) = $cur_yr AND emp_id = $id";
-            $res0 = mysql_query($qry0, $sql);
-            if (mysql_num_rows($res0)>0)
+            $res0 = mysqli_query($qry0, $sql);
+            if (mysqli_num_rows($res0)>0)
             {
-                $start = mysql_result($res0, 0, "start");
-                $finish = mysql_result($res0, 0, "finish");
+                $start = mysqli_result($res0, 0, "start");
+                $finish = mysqli_result($res0, 0, "finish");
                 $holidays=array("$prev_yr-12-25","$prev_yr-12-26","$cur_yr-01-01","$cur_yr-01-06");
                 $pre = getWorkingDays($start,"$prev_yr-12-31",$holidays);
                 $after = getWorkingDays("$cur_yr-01-01",$finish,$holidays);
@@ -194,11 +207,11 @@
             $pre = $after = 0;
             $preprev = $prev_yr-1;
             $qry0 = "SELECT start, finish FROM adeia WHERE type=2 AND YEAR(start) = $preprev AND YEAR(finish) = $prev_yr AND emp_id = $id";
-            $res0 = mysql_query($qry0, $sql);
-            if (mysql_num_rows($res0)>0)
+            $res0 = mysqli_query($qry0, $sql);
+            if (mysqli_num_rows($res0)>0)
             {
-                $start = mysql_result($res0, 0, "start");
-                $finish = mysql_result($res0, 0, "finish");
+                $start = mysqli_result($res0, 0, "start");
+                $finish = mysqli_result($res0, 0, "finish");
                 $holidays=array("$preprev-12-25","$preprev-12-26","$prev_yr-01-01","$prev_yr-01-06");
                 $pr_pre = getWorkingDays($start,"$preprev-12-31",$holidays);
                 $pr_after = getWorkingDays("$prev_yr-01-01",$finish,$holidays);
@@ -225,8 +238,8 @@
             $cur_yr = date("Y");
             $prev_yr = $cur_yr - 1;
             $qry = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $cur_yr AND emp_id = $id";
-            $res = mysql_query($qry, $sql);
-            $rem = mysql_result($res, 0, "rem");
+            $res = mysqli_query($qry, $sql);
+            $rem = mysqli_result($res, 0, "rem");
         
             $ret[0] = $cur_yr;
             $ret[1] = 10 - $rem;
@@ -238,16 +251,16 @@
 	function kladosCombo ($klados,$conn)
 	{
         $query = "SELECT * from klados ORDER BY perigrafh";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
 		echo "<select name=\"klados\" id=\"klados\">";
         echo "<option value='' selected>(Επιλογή:)</option>";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$per=mysql_result($result, $i, "perigrafh");
+			$id=mysqli_result($result, $i, "id");
+			$per=mysqli_result($result, $i, "perigrafh");
 			if (strcmp($klados,$id)==0)
 				echo "<option value=\"".$id."\" selected=\"selected\">".$per."</option>";
 			else
@@ -259,17 +272,17 @@
 	function kladosCmb ($conn)
 	{
 		$query = "SELECT * from klados ORDER BY perigrafh";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
 		echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
 		echo "<option value='' selected>(Επιλογή:)</option>";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$per=mysql_result($result, $i, "perigrafh");
-			$onoma=mysql_result($result, $i, "onoma");
+			$id=mysqli_result($result, $i, "id");
+			$per=mysqli_result($result, $i, "perigrafh");
+			$onoma=mysqli_result($result, $i, "onoma");
 			echo "<option value=\"".$id."\">".$per.", ".$onoma."</option>";
 		$i++;
 		}
@@ -278,16 +291,16 @@
     function typeCmb ($conn)
 	{
 		$query = "SELECT * from ektaktoi_types";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
 		echo "<select name=\"type\" id=\"type\">";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$type=mysql_result($result, $i, "type");
+			$id=mysqli_result($result, $i, "id");
+			$type=mysqli_result($result, $i, "type");
 			echo "<option value=\"".$id."\">".$type."</option>";
 		$i++;
 		}
@@ -296,17 +309,17 @@
     function typeCmb1 ($typeinp,$conn)
 	{
 		$query = "SELECT * from ektaktoi_types";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
                 $type1 = get_type($typeinp, $conn);
 		echo "<select name=\"type\" id=\"type\">";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$type=mysql_result($result, $i, "type");
+			$id=mysqli_result($result, $i, "id");
+			$type=mysqli_result($result, $i, "type");
             if ($type1 == $type)
                 echo "<option value=\"$id\" selected>".$type."</option>";
             else
@@ -529,15 +542,15 @@
 	function schoolCombo ($schid,$conn)
 	{
 		$query = "SELECT * from school";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
 		echo "<select name=\"school\">";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$name=mysql_result($result, $i, "name");
+			$id=mysqli_result($result, $i, "id");
+			$name=mysqli_result($result, $i, "name");
 			if (strcmp($schid,$id)==0)
 				echo "<option value=\"".$id."\" selected=\"selected\">".$name."</option>";
 			else
@@ -550,16 +563,16 @@
 	function schCombo ($name1,$conn)
 	{
 		$query = "SELECT * from school";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
 		echo "<select name='$name1'>";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$name=mysql_result($result, $i, "name");
+			$id=mysqli_result($result, $i, "id");
+			$name=mysqli_result($result, $i, "name");
 			echo "<option value=\"".$id."\">".$name."</option>";
 		$i++;
 		}
@@ -568,20 +581,20 @@
     function get_type ($typeid,$conn)
 	{
 		$query = "SELECT * from ektaktoi_types WHERE id=$typeid";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$typos=mysql_result($result, $i, "type");
+			die('Could not query:' . mysqli_error());
+		$typos=mysqli_result($result, $i, "type");
 		return $typos;
 	}
     function getDimos ($id,$conn)
 	{
 		$query = "SELECT name from dimos where id=".$id;
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		//if (!$result) 
-		//	die('Could not query:' . mysql_error());
+		//	die('Could not query:' . mysqli_error());
         //else
-        $dimos = mysql_result($result, 0);
+        $dimos = mysqli_result($result, 0);
         if (!$dimos)
             return "¶γνωστος";
         else
@@ -612,15 +625,15 @@
     function adeiaCmb ($inp,$conn,$ekt = 0)
 	{
 		$query = $ekt ? "SELECT * from adeia_ekt_type" : "SELECT * from adeia_type";
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
 		echo "<select id='type' name=\"type\" >";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$type=mysql_result($result, $i, "type");
+			$id=mysqli_result($result, $i, "id");
+			$type=mysqli_result($result, $i, "type");
 			if (strcmp($id,$inp)==0)
 				echo "<option value=\"".$id."\" selected=\"selected\">".$type."</option>";
 			else
@@ -1076,17 +1089,17 @@
 	{
         $query = $query ? $query : "SELECT * from $tbl";
         $query .= $sortby ? " ORDER BY $sortby ASC" : '';
-		$result = mysql_query($query, $conn);
+		$result = mysqli_query($conn, $query);
 		if (!$result) 
-			die('Could not query:' . mysql_error());
-		$num=mysql_num_rows($result);
+			die('Could not query:' . mysqli_error());
+		$num=mysqli_num_rows($result);
         echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" >" : "<select id=\"$tbl\" name=\"$tbl\" >";
 		//echo "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
         echo "<option value=\"\"> </option>";
 		while ($i < $num) 
 		{
-			$id=mysql_result($result, $i, "id");
-			$name=mysql_result($result, $i, "name");
+			$id=mysqli_result($result, $i, "id");
+			$name=mysqli_result($result, $i, "name");
 			if ($id==$inp)
 				echo "<option value=\"".$id."\" selected=\"selected\">".$name."</option>";
 			else
@@ -1098,36 +1111,36 @@
     function getNamefromTbl ($conn, $tbl, $id)
     {
         $query = "SELECT * from $tbl WHERE id=$id";
-        $result = mysql_query($query, $conn);
+        $result = mysqli_query($conn, $query);
         if (!$result) 
-            die('Could not query:' . mysql_error());
-        $name=mysql_result($result, 0, "name");
+            die('Could not query:' . mysqli_error());
+        $name=mysqli_result($result, 0, "name");
         return $name;
     }
     function getIDfromTbl ($conn, $tbl, $name)
     {
         $query = "SELECT * from $tbl WHERE name=$name";
-        $result = mysql_query($query, $conn);
+        $result = mysqli_query($conn, $query);
         if (!$result) 
-            die('Could not query:' . mysql_error());
-        $id=mysql_result($result, 0, "id");
+            die('Could not query:' . mysqli_error());
+        $id=mysqli_result($result, 0, "id");
         return $id;
     }
     //get parameter from param table
     function getParam($name,$conn)
     {
         $query = "SELECT value from params WHERE name='$name'";
-        $result = mysql_query($query, $conn);
+        $result = mysqli_query($conn, $query);
         if (!$result) 
-            die('Could not query:' . mysql_error());
-        return mysql_result($result, 0, "value");
+            die('Could not query:' . mysqli_error());
+        return mysqli_result($result, 0, "value");
     }
     function setParam($name,$value,$conn)
     {
         $query = "UPDATE params SET value='$value' WHERE name='$name'";
-        $result = mysql_query($query, $conn);
+        $result = mysqli_query($conn,$query);
         if (!$result) 
-            die('Could not query:' . mysql_error());
+            die('Could not query:' . mysqli_error());
     }
     // creates a new record in yphrethsh table for each employee (if there isn't any) - used when changing sxoliko etos
     // disp: 0 - none, 1 - basic, 2 - extensive
@@ -1139,22 +1152,21 @@
         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
         $i = $ins_count = 0;
         $query0 = "SELECT * from employee";
-        $result0 = mysql_query($query0, $mysqlconnection);
-        $num = mysql_num_rows($result0);
+        $result0 = mysqli_query($mysqlconnection, $query0);
+        $num = mysqli_num_rows($result0);
 
         while ($i < $num)
         {
-            $id = mysql_result($result0, $i, "id");
-            $sx_yphrethshs = mysql_result($result0, $i, "sx_yphrethshs");
-            $sx_organikhs = mysql_result($result0, $i, "sx_organikhs");
-            $hours = mysql_result($result0, $i, "wres");
+            $id = mysqli_result($result0, $i, "id");
+            $sx_yphrethshs = mysqli_result($result0, $i, "sx_yphrethshs");
+            $sx_organikhs = mysqli_result($result0, $i, "sx_organikhs");
+            $hours = mysqli_result($result0, $i, "wres");
             //$query1 = "select * from yphrethsh WHERE emp_id=$id AND organikh=$sx_organikhs AND sxol_etos=$sxol_etos";
             $query1 = "select * from yphrethsh WHERE emp_id=$id AND sxol_etos=$sxol_etos";
-            $result1 = mysql_query($query1, $mysqlconnection);
-            if (!mysql_num_rows($result1))
+            $result1 = mysqli_query($mysqlconnection, $query1);
+            if (!mysqli_num_rows($result1))
             {
                 $ins_query = "INSERT INTO yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) VALUES ('$id', '$sx_yphrethshs', '$hours', '$sx_organikhs', '$sxol_etos')";
-                $ins_result = mysql_query($ins_query, $mysqlconnection);
                 $ins_count++;
                 if ($disp > 1)
                     echo "$id, ";
@@ -1162,7 +1174,7 @@
             $i++;
         }
 
-        mysql_close();
+        mysqli_close();
         if ($disp)
             echo "<br>$i υπάλληλοι<br>$ins_count αλλαγές...<br>";
     }
@@ -1224,14 +1236,14 @@
     function check_idiwtiko($conn){
         $ret = "";
         $query = "SELECT id,surname,name,idiwtiko_liksi from employee WHERE idiwtiko=1 AND idiwtiko_liksi <= curdate()";
-        $result = mysql_query($query, $conn);
+        $result = mysqli_query($conn, $query);
         if (!$result) 
-        die('Could not query:' . mysql_error());
-        if (!mysql_num_rows($result))
+        die('Could not query:' . mysqli_error());
+        if (!mysqli_num_rows($result))
             return "";
         else
             $ret = "Οι παρακάτω εκπ/κοί έχουν άδεια ιδιωτικού έργου σε δημόσιο φορέα που έχει λήξει:<br>";
-        while ($row = mysql_fetch_array($result, MYSQL_BOTH)){
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)){
             $ret .= "<small><a href=\"employee.php?id=".  $row['id'] ."&op=view\" target=\"_blank\">". $row['surname'] ." ". $row['name'] ."</a></small><br>";
         }
         return $ret;
@@ -1372,21 +1384,21 @@
         $avhrs = [];
         $all = $allcnt = [];
         // init db
-        mysql_query("SET NAMES 'greek'", $mysqlconnection);
-        mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         // get tmimata
         $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
-        $result = mysql_query($query, $mysqlconnection);
-        $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
-        $vivliothiki = mysql_result($result, 0, "vivliothiki");
-        $eidiko = mysql_result($result, 0, "type2") == 2 ? true : false;
+        $result = mysqli_query($mysqlconnection, $query);
+        $tmimata_exp = explode(",",mysqli_result($result, 0, "tmimata"));
+        $vivliothiki = mysqli_result($result, 0, "vivliothiki");
+        $eidiko = mysqli_result($result, 0, "type2") == 2 ? true : false;
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
         $oligothesio = $leit < 4 ? true : false;
         // entaksis
-        $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
+        $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
         $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
         // synolo mathitwn (gia yp/ntes)
-        $classes = explode(",",mysql_result($result, 0, "students"));
+        $classes = explode(",",mysqli_result($result, 0, "students"));
         $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
         
         // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
@@ -1397,17 +1409,17 @@
         $reqhrs = anagkes_wrwn($tmimata_exp);
         // ώρες Δ/ντή
         $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
-        $result = mysql_query($query, $mysqlconnection);
-        if (mysql_num_rows($result)) {
+        $result = mysqli_query($mysqlconnection, $query);
+        if (mysqli_num_rows($result)) {
             $dnthrs = wres_dnth($leit);
-            $klados = mysql_result($result, 0, "klados");
-            $klper = mysql_result($result, 0, "k.perigrafh");
+            $klados = mysqli_result($result, 0, "klados");
+            $klper = mysqli_result($result, 0, "k.perigrafh");
             $avhrs[$klados] = $dnthrs;
             // ώρες Δ/ντή στην ανάλυση
             $ar = Array(
-                'name' => mysql_result($result, 0, "e.name"),
-                'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysql_result($result, 0, "e.surname"),
-                'klados' =>  mysql_result($result, 0, "k.perigrafh"), 
+                'name' => mysqli_result($result, 0, "e.name"),
+                'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysqli_result($result, 0, "e.surname"),
+                'klados' =>  mysqli_result($result, 0, "k.perigrafh"), 
                 'hours' => $dnthrs
             );
             $all[] = $ar;
@@ -1416,21 +1428,21 @@
         // ώρες Υπ/ντή
         $meiwsh_ypnth = 0;
         $query_yp = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
-        $result_yp = mysql_query($query_yp, $mysqlconnection);
-        if (mysql_num_rows($result_yp)) {
+        $result_yp = mysqli_query($mysqlconnection, $query_yp);
+        if (mysqli_num_rows($result_yp)) {
             // reduce if students > 120 or eidiko with >30 students
             if ($synolo_pr > 120 || ($eidiko && $synolo_pr > 30)){
                 $meiwsh_ypnth = 2;
             }
-            $klados = mysql_result($result_yp, 0, "klados");
-            $meiwsh_ypnth_klados = mysql_result($result_yp, 0, "k.perigrafh");
+            $klados = mysqli_result($result_yp, 0, "klados");
+            $meiwsh_ypnth_klados = mysqli_result($result_yp, 0, "k.perigrafh");
             $avhrs[$klados] -= $meiwsh_ypnth;
             // ώρες Υπ/ντή στην ανάλυση
             $ar = Array(
-                'name' => mysql_result($result, 0, "e.name"),
-                'surname' =>  '<small>(Υπ/ντής)</small> ' . mysql_result($result_yp, 0, "e.surname"), 
+                'name' => mysqli_result($result, 0, "e.name"),
+                'surname' =>  '<small>(Υπ/ντής)</small> ' . mysqli_result($result_yp, 0, "e.surname"), 
                 'klados' =>  $meiwsh_ypnth_klados, 
-                'hours' => mysql_result($result_yp, 0, "e.wres") - $meiwsh_ypnth
+                'hours' => mysqli_result($result_yp, 0, "e.wres") - $meiwsh_ypnth
             );
             $all[] = $ar;
             $allcnt[$meiwsh_ypnth_klados]++;
@@ -1446,16 +1458,16 @@
         //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
         if ($oligothesio){
             $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
-            $result = mysql_query($query, $mysqlconnection);
-            while ($row = mysql_fetch_array($result)){
+            $result = mysqli_query($mysqlconnection, $query);
+            while ($row = mysqli_fetch_array($result)){
                 $plithos = strval($row['plithos']);
                 $kl = strval($row['klados']);
                 $avhrs[$kl] += $plithos * 30;
             }
         } else {
             $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
-            $result = mysql_query($query, $mysqlconnection);
-            while ($row = mysql_fetch_array($result)){
+            $result = mysqli_query($mysqlconnection, $query);
+            while ($row = mysqli_fetch_array($result)){
                 $kl = strval($row['klados']);
                 $avhrs[$kl] += $row['wres'];
             }
@@ -1463,8 +1475,8 @@
         if ($print){
             // αναλυτικά...
             $query = "SELECT e.name, e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
-            $result = mysql_query($query, $mysqlconnection);
-            while ($row = mysql_fetch_array($result)){
+            $result = mysqli_query($mysqlconnection, $query);
+            while ($row = mysqli_fetch_array($result)){
                 $ar = Array('name' => $row['name'], 'surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                 $all[] = $ar;
                 $allcnt[$row['perigrafh']]++;
@@ -1472,16 +1484,16 @@
         }
         // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
         $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.thesi NOT IN (2,3) GROUP BY klados";
-        $result = mysql_query($query, $mysqlconnection);
-        while ($row = mysql_fetch_array($result)){
+        $result = mysqli_query($mysqlconnection, $query);
+        while ($row = mysqli_fetch_array($result)){
             $kl = strval($row['klados']);
             $avhrs[$kl] += $row['wres'];
         }
         if ($print){
             // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
             $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
-            $result = mysql_query($query, $mysqlconnection);
-            while ($row = mysql_fetch_array($result)){
+            $result = mysqli_query($mysqlconnection, $query);
+            while ($row = mysqli_fetch_array($result)){
                 $srn = $row['surname'] . ' *';
                 $srn .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
                 $srn .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
@@ -1493,15 +1505,15 @@
         // PE70 entaksis
         if ($has_entaxi > 0){
             $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 and thesi = 3";
-            $res = mysql_query($qry, $mysqlconnection);
-            $top_ent = mysql_result($res, 0, 'pe70');
+            $res = mysqli_query($mysqlconnection, $qry);
+            $top_ent = mysqli_result($res, 0, 'pe70');
             $avhrs['TE'] = $top_ent;
             $ret['TE'] = $top_ent - $has_entaxi;
             if ($print){
                 // αναλυτικά...
                 $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
-                $result = mysql_query($query, $mysqlconnection);
-                while ($row = mysql_fetch_array($result)){
+                $result = mysqli_query($mysqlconnection, $query);
+                while ($row = mysqli_fetch_array($result)){
                     $ar = Array('name' => $row['name'],'surname' => $row['surname'] . ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                     $all[] = $ar;
                     //$allcnt[$row['perigrafh']]++;
@@ -1598,9 +1610,9 @@
             ON k.id = e.klados 
             WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi NOT IN (4,5)
             GROUP BY klados";
-        $result_mon = mysql_query($query, $mysqlconnection);
+        $result_mon = mysqli_query($mysqlconnection, $query);
         $ret = [];
-        while($row = mysql_fetch_array($result_mon, MYSQL_BOTH)){
+        while($row = mysqli_fetch_array($result_mon, MYSQLI_BOTH)){
             $ret[$row['perigrafh']] = $row['total'];
         }
         return $ret;
@@ -1608,18 +1620,18 @@
 
     function tmimata_nipiagwgeiwn($mysqlconnection){
         $query = "SELECT * from school WHERE type = 2 AND type2=0 AND anenergo=0";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_num_rows($result);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_num_rows($result);
         $i=0;
 
         while ($i < $num)
         {		 
-            $sch = mysql_result($result, $i, "id");
+            $sch = mysqli_result($result, $i, "id");
             
-            $klasiko = mysql_result($result, $i, "klasiko");
+            $klasiko = mysqli_result($result, $i, "klasiko");
             $klasiko_exp = explode(",",$klasiko);
 
-            $oloimero_nip = mysql_result($result, $i, "oloimero_nip");
+            $oloimero_nip = mysqli_result($result, $i, "oloimero_nip");
             $oloimero_nip_exp = explode(",",$oloimero_nip);
             
             $klasiko_tm = $oloimero_tm = 0;
@@ -1654,9 +1666,9 @@
                 JOIN klados k ON e.klados = k.id 
                 WHERE thesi = 2 group by klados";
         }
-        $res = mysql_query($query, $mysqlconnection);
+        $res = mysqli_query($mysqlconnection, $query);
         $ret = [];
-        while($row = mysql_fetch_array($res, MYSQL_BOTH)){
+        while($row = mysqli_fetch_array($res, MYSQLI_BOTH)){
             $ret[$row['eidikothta']] = $row['total'];
         }
         return $ret;
@@ -1667,9 +1679,9 @@
             JOIN klados k ON e.klados = k.id 
             WHERE e.sx_yphrethshs=399 group by klados";
         
-        $res = mysql_query($query, $mysqlconnection);
+        $res = mysqli_query($mysqlconnection, $query);
         $ret = [];
-        while($row = mysql_fetch_array($res, MYSQL_BOTH)){
+        while($row = mysqli_fetch_array($res, MYSQLI_BOTH)){
             $ret[$row['eidikothta']] = $row['total'];
         }
         return $ret;
@@ -1681,8 +1693,8 @@
         $has_kyhsh = $has_loxeia = $anar_days = $anar_days_subtr = $apergies = $aney = $subtract = 0;
         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
         $qry_ad = "SELECT type,days FROM adeia_ekt WHERE emp_id = $id AND sxoletos=$sxol_etos";
-        $res_ad = mysql_query($qry_ad, $mysqlconnection);
-        while ($arr_ad = mysql_fetch_array($res_ad)) {
+        $res_ad = mysqli_query($mysqlconnection, $qry_ad);
+        while ($arr_ad = mysqli_fetch_array($res_ad)) {
             // check adeia type
             switch ($arr_ad['type']) {
                 // // kyhshs
@@ -1741,8 +1753,8 @@
         $query = "SELECT e.id, e.klados, p.type, p.name as praxi FROM ektaktoi e
             JOIN praxi p ON e.praxi = p.id
             WHERE e.id = $emp_id";
-        $res = mysql_query($query, $conn);
-        $row = mysql_fetch_array($res, MYSQL_BOTH);
+        $res = mysqli_query($conn, $query);
+        $row = mysqli_fetch_array($res, MYSQLI_BOTH);
         // PE60 or EEP or Anaptixi Yp.Dom.
         if ($row['klados'] == 1 || strpos($row['praxi'],'ΕΕΠ') !== false || $row['type'] == 'ΥΠΟΣ'){
             return 25;
@@ -1763,18 +1775,18 @@
     }
     function get_leitoyrgikothta($id, $mysqlconnection){
         $query = "SELECT tmimata,type,klasiko from school WHERE id='$id'";
-        $result = mysql_query($query, $mysqlconnection);
-        $type = mysql_result($result, 0, 'type');
+        $result = mysqli_query($mysqlconnection, $query);
+        $type = mysqli_result($result, 0, 'type');
         // if nip
         if ($type == 2){
-            $klasiko_exp = explode(",",mysql_result($result, 0, "klasiko"));
+            $klasiko_exp = explode(",",mysqli_result($result, 0, "klasiko"));
             $klasiko_tm = 0;
             $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
             $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
             $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
             return $klasiko_tm;
         } else {
-            $tmimata_exp = explode(",",mysql_result($result, 0, "tmimata"));
+            $tmimata_exp = explode(",",mysqli_result($result, 0, "tmimata"));
             $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
             return $leit;
         }
@@ -1792,5 +1804,5 @@
           return 22;
       elseif ($days >7200)
           return 21;
-    }        
+    }     
 ?>

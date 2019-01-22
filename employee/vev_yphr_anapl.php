@@ -12,10 +12,9 @@ require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
 require_once '../config.php';
 require_once '../tools/functions.php';
 
-$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-mysql_select_db($db_name, $mysqlconnection);
-mysql_query("SET NAMES 'greek'", $mysqlconnection);
-mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
 set_time_limit (180);
 
@@ -76,9 +75,9 @@ foreach($arr as $myarr)
     
     $klados = $myarr['klados'];
     $qry1 = "select perigrafh,onoma from klados where id=$klados";
-    $res1 = mysql_query($qry1, $mysqlconnection);
-    $kl1 = mysql_result($res1, 0, "perigrafh");
-    $kl2 = mysql_result($res1, 0, "onoma");
+    $res1 = mysqli_query($mysqlconnection, $qry1);
+    $kl1 = mysqli_result($res1, 0, "perigrafh");
+    $kl2 = mysqli_result($res1, 0, "onoma");
     $data = $kl2." (".$kl1.")";
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('kladosfull', $data);

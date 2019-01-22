@@ -38,10 +38,9 @@
   echo "</table></form>";
   echo "<br>";
                 
-	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 	
 if ($_REQUEST['type']){
     $dim_ar = array('1', '2', '3', '7');
@@ -57,8 +56,8 @@ if ($_REQUEST['type']){
           $type2 = $_REQUEST['type'] - 1;
           $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
       }
-      $result = mysql_query($query, $mysqlconnection);
-      $num = mysql_num_rows($result);
+      $result = mysqli_query($mysqlconnection, $query);
+      $num = mysqli_num_rows($result);
 
       echo "<center>";
       $i=0;
@@ -95,20 +94,20 @@ if ($_REQUEST['type']){
 
       while ($i < $num)
       {		
-        $organikothta = mysql_result($result, $i, "organikothta");
-        $sch = mysql_result($result, $i, "id");
+        $organikothta = mysqli_result($result, $i, "organikothta");
+        $sch = mysqli_result($result, $i, "id");
         $name = getSchool($sch, $mysqlconnection);
-        $students = mysql_result($result, $i, "students");
+        $students = mysqli_result($result, $i, "students");
         $classes = explode(",",$students);
-        //$frontistiriako = mysql_result($result, $i, "frontistiriako");
-        $tmimata = mysql_result($result, $i, "tmimata");
+        //$frontistiriako = mysqli_result($result, $i, "frontistiriako");
+        $tmimata = mysqli_result($result, $i, "tmimata");
         $tmimata_exp = explode(",",$tmimata);
-        $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
+        $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
         $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
 
         $oloimero_stud = $classes[6];
         $oloimero_tea = $tmimata_exp[6];
-        //$ekp_ee = mysql_result($result, $i, "ekp_ee");
+        //$ekp_ee = mysqli_result($result, $i, "ekp_ee");
         //$ekp_ee_exp = explode(",",$ekp_ee);
 
         $synolo = $classes[0] + $classes[1] + $classes[2] + $classes[3] + $classes[4] + $classes[5];
@@ -117,13 +116,13 @@ if ($_REQUEST['type']){
         // count employees per specialty
         $ekp_ar = [];
         $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) GROUP BY e.klados";
-        $res = mysql_query($qry, $mysqlconnection);
-        while ($row = mysql_fetch_array($res)){
+        $res = mysqli_query($mysqlconnection, $qry);
+        while ($row = mysqli_fetch_array($res)){
             $ekp_ar[$row['klados']] = $row['count'];
         }
         $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 GROUP BY e.klados";
-        $res = mysql_query($qry, $mysqlconnection);
-        while ($row = mysql_fetch_array($res)){
+        $res = mysqli_query($mysqlconnection, $qry);
+        while ($row = mysqli_fetch_array($res)){
             $ekp_ar[$row['klados']] += $row['count'];
         }
 
@@ -196,8 +195,8 @@ if ($_REQUEST['type']){
         "<p>Όλα&nbsp;&nbsp;<a href='report_tm_ekp.php?type=4&kenapl=1'>Μόνο Κενά/Πλεονάσματα</a></p>";
         
         $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0 ORDER BY name";
-        $result = mysql_query($query, $mysqlconnection);
-        $num = mysql_num_rows($result);
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_num_rows($result);
     
         echo "<center>";
         $i=0;
@@ -228,13 +227,13 @@ if ($_REQUEST['type']){
 
         while ($i < $num)
         {		 
-            $sch = mysql_result($result, $i, "id");
-            $organikothta = mysql_result($result, $i, "organikothta");
+            $sch = mysqli_result($result, $i, "id");
+            $organikothta = mysqli_result($result, $i, "organikothta");
             $name = getSchool($sch, $mysqlconnection);
-            $entaksis = explode(',', mysql_result($result, $i, "entaksis"));
-            $klasiko = mysql_result($result, $i, "klasiko");
+            $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
+            $klasiko = mysqli_result($result, $i, "klasiko");
             $klasiko_exp = explode(",",$klasiko);
-            $oloimero_nip = mysql_result($result, $i, "oloimero_nip");
+            $oloimero_nip = mysqli_result($result, $i, "oloimero_nip");
             $oloimero_nip_exp = explode(",",$oloimero_nip);
 
             $klasiko_tm = $oloimero_tm = 0;
@@ -249,15 +248,15 @@ if ($_REQUEST['type']){
             $top60 = $top60m = $top60ana = $top60ent = 0;
             // exclude ekp/koys@tmima entaksis
             $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi != 3";
-            $res = mysql_query($qry, $mysqlconnection);
-            $top60m = mysql_result($res, 0, 'pe60');
+            $res = mysqli_query($mysqlconnection, $qry);
+            $top60m = mysqli_result($res, 0, 'pe60');
             $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
-            $res = mysql_query($qry, $mysqlconnection);
-            $top60ana = mysql_result($res, 0, 'pe60');
+            $res = mysqli_query($mysqlconnection, $qry);
+            $top60ana = mysqli_result($res, 0, 'pe60');
             // only T.E.
             $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi = 3";
-            $res = mysql_query($qry, $mysqlconnection);
-            $top60ent = mysql_result($res, 0, 'pe60');
+            $res = mysqli_query($mysqlconnection, $qry);
+            $top60ent = mysqli_result($res, 0, 'pe60');
             
             $top60 = $top60m+$top60ana;
             // apaitoymenoi

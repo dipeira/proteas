@@ -25,10 +25,9 @@
         $onlysynol=0;
         $synol_find=0;
 	
-	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 	$flag=0;
 	if (isset($_POST['and']))
 		$op = " AND";
@@ -201,8 +200,8 @@
 		$i=0;
 		$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
 			//echo $query; // for debugging...
-		$result = mysql_query($query, $mysqlconnection);
-		$num = mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num = mysqli_num_rows($result);
 		
 		if ($num==0)
 			echo "<BR><p>Κανένα αποτέλεσμα...</p>";
@@ -248,35 +247,35 @@
 			{
                                 // fix to avoid double records display
                                 $oldid = $id;
-				$id = mysql_result($result, $i, "id");
+				$id = mysqli_result($result, $i, "id");
                                 if ($oldid == $id)
                                 {
                                     $i++;
                                     continue;
                                 }
-				$name = mysql_result($result, $i, "name");
-				$surname = mysql_result($result, $i, "surname");
-				$klados_id = mysql_result($result, $i, "klados");
+				$name = mysqli_result($result, $i, "name");
+				$surname = mysqli_result($result, $i, "surname");
+				$klados_id = mysqli_result($result, $i, "klados");
 				$klados = getKlados($klados_id,$mysqlconnection);
-				$sx_organ_id = mysql_result($result, $i, "sx_organikhs");
+				$sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
 				$sx_organikhs = getSchool ($sx_organ_id, $mysqlconnection);
-				$sx_yphrethshs_id = mysql_result($result, $i, "sx_yphrethshs");
+				$sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
 				$sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
                                 // check if multiple schools
                                 $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
-                                $res = mysql_query($qry,$mysqlconnection);
-                                if (mysql_num_rows($res) > 0)
+                                $res = mysqli_query($mysqlconnection, $qry);
+                                if (mysqli_num_rows($res) > 0)
                                 $sx_yphrethshs .= "*";
 				
-				$patrwnymo = mysql_result($result, $i, "patrwnymo");
-				$am = mysql_result($result, $i, "am");
-                                $afm = mysql_result($result, $i, "afm");
-				$vathm = mysql_result($result, $i, "vathm");
-				$mk = mysql_result($result, $i, "mk");
-				$hm_dior = mysql_result($result, $i, "hm_dior");
-				$met_did = mysql_result($result, $i, "met_did");
-				$proyp = mysql_result($result, $i, "proyp");
-                                $katast = mysql_result($result, $i, "status");
+				$patrwnymo = mysqli_result($result, $i, "patrwnymo");
+				$am = mysqli_result($result, $i, "am");
+                                $afm = mysqli_result($result, $i, "afm");
+				$vathm = mysqli_result($result, $i, "vathm");
+				$mk = mysqli_result($result, $i, "mk");
+				$hm_dior = mysqli_result($result, $i, "hm_dior");
+				$met_did = mysqli_result($result, $i, "met_did");
+				$proyp = mysqli_result($result, $i, "proyp");
+                                $katast = mysqli_result($result, $i, "status");
                                 $i++;
                                 if (isset($_POST['dspsynol']))
                                 {

@@ -59,7 +59,7 @@ $data = $_POST['arr']['11'];
 $document->setValue('yphr', $data);
 
 // head title & name
-$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
+$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
 $data = mb_convert_encoding(getParam('head_title', $mysqlconnection), "utf-8", "iso-8859-7");
 $document->setValue('headtitle', $data);
 $data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");

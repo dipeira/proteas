@@ -117,10 +117,9 @@
 		
 		//require_once"functions.php";
 		
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		//$query = "SELECT * from employee_log";
 //                $query = "SELECT o.username,l.ip,l.timestamp,l.action,e.surname,e.am
 //                            FROM employee_log l
@@ -141,8 +140,8 @@
             LEFT JOIN employee e ON e.id = l.emp_id
             ORDER BY l.timestamp DESC
             LIMIT 300 ";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 		$i=0;
                 
         function action ($action)
@@ -177,38 +176,38 @@
 <?php
 		while ($i<$num)
 		{
-			$username = mysql_result($result, $i, "username");
-			$ip = mysql_result($result, $i, "ip");
+			$username = mysqli_result($result, $i, "username");
+			$ip = mysqli_result($result, $i, "ip");
                         // gethostbyaddr was slooow and was removed
                         //if (strlen($ip)>0)
                         //    $ip = gethostbyaddr($ip);
-			$timestamp = mysql_result($result, $i, "timestamp");
-			$id = mysql_result($result, $i, "emp_id");
-                $action = mysql_result($result, $i, "action");
-                $change = mysql_result($result, $i, "query");
-                $am = mysql_result($result, $i, "am");
-                $surname = mysql_result($result, $i, "surname");
+			$timestamp = mysqli_result($result, $i, "timestamp");
+			$id = mysqli_result($result, $i, "emp_id");
+                $action = mysqli_result($result, $i, "action");
+                $change = mysqli_result($result, $i, "query");
+                $am = mysqli_result($result, $i, "am");
+                $surname = mysqli_result($result, $i, "surname");
                 if ($action==2)
                 {
                     $qry = "SELECT surname,am FROM employee_deleted WHERE id=$id";
-                    $res = mysql_query($qry, $mysqlconnection);
-                    if (mysql_num_rows($res)>0)
+                    $res = mysqli_query($mysqlconnection, $qry);
+                    if (mysqli_num_rows($res)>0)
                     {
-                        $surname = mysql_result($res, 0, "surname");
-                        $am = mysql_result($res, 0, "am");
+                        $surname = mysqli_result($res, 0, "surname");
+                        $am = mysqli_result($res, 0, "am");
                     }
                 }
 //                        else
 //                        {
 //                            $qry1 = "SELECT surname,am FROM employee WHERE id=$id";
-//                            $res1 = mysql_query($qry1, $mysqlconnection);
-//                            if (mysql_num_rows($res1)==0)
+//                            $res1 = mysqli_query($mysqlconnection, $qry1)
+//                            if (mysqli_num_rows($res1)==0)
 //                            {
 //                                $qry1 = "SELECT surname,am FROM employee_deleted WHERE id=$id";
-//                                $res1 = mysql_query($qry1, $mysqlconnection);
+//                                $res1 = mysqli_query($mysqlconnection, $qry1)
 //                            }
-//                            $surname = mysql_result($res1, 0, "surname");
-//                            $am = mysql_result($res1, 0, "am");
+//                            $surname = mysqli_result($res1, 0, "surname");
+//                            $am = mysqli_result($res1, 0, "am");
 //                        }
 			$act = action($action);
                         

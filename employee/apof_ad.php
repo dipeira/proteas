@@ -32,16 +32,15 @@
         echo "</td></tr>";
         echo "</form></table>";
         
-        $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-        mysql_select_db($db_name, $mysqlconnection);
-        mysql_query("SET NAMES 'greek'", $mysqlconnection);
-        mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+        $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         
         function getEmail($id,$conn)
         {
             $query = "SELECT email FROM school WHERE id=$id";
-            $result = mysql_query($query, $conn);
-            return mysql_result($result, 0);
+            $result = mysqli_query($conn, $query);
+            return mysqli_result($result, 0);
         }
 
         // if user has submitted data
@@ -67,8 +66,8 @@
             }
             
             //echo $query;
-            $result = mysql_query($query, $mysqlconnection);
-            $num=mysql_num_rows($result);
+            $result = mysqli_query($mysqlconnection, $query);
+            $num=mysqli_num_rows($result);
             if (!$num)
             {
                 echo "Δεν υπάρχουν εγγραφές για τον αρ.πρωτ. ".$_POST['prot'];
@@ -76,7 +75,7 @@
                 exit;
             }
 
-            $type = mysql_result($result, 0, "type");
+            $type = mysqli_result($result, 0, "type");
             if ($type == 1)
                 $typewrd = "αναρρωτικών";
             elseif ($type == 2)
@@ -85,7 +84,7 @@
                 $typewrd = "αναρρωτικών με γνωμάτευση Α/θμιας Υγ/κής Επιτροπής";
             elseif ($type == 4)
                 $typewrd = "ειδικών";
-            $hm_apof_org = $hm_apof = mysql_result($result, 0, "hm_apof");
+            $hm_apof_org = $hm_apof = mysqli_result($result, 0, "hm_apof");
             $hm_apof = date('d-m-Y',strtotime($hm_apof));
             $prot_apof = $_POST['prot'];
             echo "<h3>Απόφαση $typewrd αδειών με αρ.πρωτ. $prot_apof/$hm_apof</h3>";
@@ -99,26 +98,26 @@
             $i=0;
             while ($i < $num)
             {
-                $name = mysql_result($result, $i, "name");
-                $surname = mysql_result($result, $i, "surname");
-                $days = mysql_result($result, $i, "days");
-                $start = mysql_result($result, $i, "start");
+                $name = mysqli_result($result, $i, "name");
+                $surname = mysqli_result($result, $i, "surname");
+                $days = mysqli_result($result, $i, "days");
+                $start = mysqli_result($result, $i, "start");
                 $start = date("d-m-Y", strtotime($start));
-                $prot = mysql_result($result, $i, "prot");
-                $vev_dil = mysql_result($result, $i, "vev_dil");
+                $prot = mysqli_result($result, $i, "prot");
+                $vev_dil = mysqli_result($result, $i, "vev_dil");
                 if ($is_anapl)
                 {
-                    $sx_yphrethshs_id_str = mysql_result($result, $i, "sx_yphrethshs");
+                    $sx_yphrethshs_id_str = mysqli_result($result, $i, "sx_yphrethshs");
                     $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
                     $sch_code = $sx_yphrethshs_id_arr[0];
                 }
                 else
-                    $sch_code = mysql_result($result, $i, "sx_yphrethshs");
-                $emp_id = mysql_result($result, $i, "emp_id");
-                $ad_id = mysql_result($result, $i, "id");
-                $typei = mysql_result($result, $i, "type");
-                $hm_apof_1 = mysql_result($result, $i, "hm_apof");
-                $logos = mysql_result($result, $i, "logos");
+                    $sch_code = mysqli_result($result, $i, "sx_yphrethshs");
+                $emp_id = mysqli_result($result, $i, "emp_id");
+                $ad_id = mysqli_result($result, $i, "id");
+                $typei = mysqli_result($result, $i, "type");
+                $hm_apof_1 = mysqli_result($result, $i, "hm_apof");
+                $logos = mysqli_result($result, $i, "logos");
                 // if different date of apofasi
                 if ($hm_apof_org <> $hm_apof_1)
                 {
@@ -205,8 +204,8 @@
             
             // check if already sent
             $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['prot']." AND YEAR(stamp) = ". $_POST['year'];
-            $res = mysql_query($qry, $mysqlconnection);
-            if (mysql_num_rows($res) > 0)
+            $res = mysqli_query($mysqlconnection, $qry);
+            if (mysqli_num_rows($res) > 0)
                 echo "<br>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
             else
             {
@@ -307,8 +306,8 @@
             // check if already sent
             $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['arr'][1]." AND DATE(stamp) = ". $_POST['arr'][5];
             //echo $query;
-            $res = mysql_query($qry, $mysqlconnection);
-            if (mysql_num_rows($res) > 0)
+            $res = mysqli_query($mysqlconnection, $qry);
+            if (mysqli_num_rows($res) > 0)
             {
                 echo "<h3>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
                 echo "<br><a href=\"../index.php\">Επιστροφή</a>";
@@ -408,7 +407,7 @@
             }                     
             // insert 2 db
             $qry = "INSERT INTO apofaseis (prwt, sent, result) VALUES (".$_POST['arr'][1].",1,'".serialize($summary)."')";
-            $res = mysql_query($qry, $mysqlconnection);
+            $res = mysqli_query($mysqlconnection, $qry);
             
             // print results
             $oks = $errs = 0;
@@ -430,7 +429,7 @@
             echo "</table>";
             echo "$oks επιτυχημένες αποστολές.<br>$errs λάθη.";
         }
-        mysql_close();
+        mysqli_close();
 ?>
 <br><br>
 

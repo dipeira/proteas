@@ -22,20 +22,18 @@
 <?php
 	require_once"../config.php";
 	require_once"../tools/functions.php";
-        session_start();
-        
+  session_start();      
  
-	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 	
 	if ($_GET['type'] == 1)
         {
             $type = 1;
             $query = "SELECT * from school WHERE type = $type AND type2=0";
-            $result = mysql_query($query, $mysqlconnection);
-            $num = mysql_num_rows($result);
+            $result = mysqli_query($mysqlconnection, $query);
+            $num = mysqli_num_rows($result);
         
                 echo "<body>";
                 echo "<center>";
@@ -56,15 +54,15 @@
 
                 while ($i < $num)
                 {		
-                        $sch = mysql_result($result, $i, "id");
+                        $sch = mysqli_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
-                        //$students = mysql_result($result, $i, "students");
-                        //$oloimero = mysql_result($result, $i, "oloimero");
-                        //$oloimero_tea = mysql_result($result, $i, "oloimero_tea");
-                        $organikes = unserialize(mysql_result($result, $i, "organikes"));
-                        $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
-                        $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
-                        $tmim = mysql_result($result, $i, "tmimata");
+                        //$students = mysqli_result($result, $i, "students");
+                        //$oloimero = mysqli_result($result, $i, "oloimero");
+                        //$oloimero_tea = mysqli_result($result, $i, "oloimero_tea");
+                        $organikes = unserialize(mysqli_result($result, $i, "organikes"));
+                        $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
+                        $kena_leit = unserialize(mysqli_result($result, $i, "kena_leit"));
+                        $tmim = mysqli_result($result, $i, "tmimata");
                         $tmimata_exp = explode(",",$tmim);
                         $tmimata = array_sum($tmimata_exp);                         
                         
@@ -102,8 +100,8 @@
 //            //nipiagogeia
             $type = 2;
             $query = "SELECT * from school WHERE type = $type";
-            $result = mysql_query($query, $mysqlconnection);
-            $num = mysql_num_rows($result);
+            $result = mysqli_query($mysqlconnection, $query);
+            $num = mysqli_num_rows($result);
 
                 echo "<body>";
                 echo "<center>";
@@ -121,11 +119,11 @@
 
                 while ($i < $num)
                 {		
-                        $sch = mysql_result($result, $i, "id");
+                        $sch = mysqli_result($result, $i, "id");
                         $name = getSchool($sch, $mysqlconnection);
-                        $students = mysql_result($result, $i, "students");
-                        $kena_org = unserialize(mysql_result($result, $i, "kena_org"));
-                        $kena_leit = unserialize(mysql_result($result, $i, "kena_leit"));
+                        $students = mysqli_result($result, $i, "students");
+                        $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
+                        $kena_leit = unserialize(mysqli_result($result, $i, "kena_leit"));
 
                         echo "<tr>";
                         echo "<td><a href='../school/school_edit.php?org=$sch'>$name</a></td>";

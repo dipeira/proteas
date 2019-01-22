@@ -5,10 +5,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -113,7 +112,7 @@
 		echo "	</form>";
 		echo "</div>";
          }	
-		//mysql_close();
+		//mysqli_close();
 ?>
 		</center>
 		<div id='results'></div>

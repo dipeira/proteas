@@ -4,10 +4,9 @@
   require_once "../tools/functions.php";
   //define("L_LANG", "el_GR"); Needs fixing
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -49,11 +48,10 @@
             //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today' AND status=3";
             $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
             //echo $query;
-            $result = mysql_query($query, $mysqlconnection);
-            $num = mysql_num_rows($result);
+            $result = mysqli_query($mysqlconnection, $query);
+            $num = mysqli_num_rows($result);
             if ($num)
             {
-            $i=0;
             echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
                 echo "<thead><tr>";
                 echo "<th>Επώνυμο</th>";
@@ -64,23 +62,23 @@
                 echo "<th>Σχόλια</th>";
                 echo "</tr></thead>\n<tbody>";
                 $apontes = array();
-            while ($i < $num)
+            while ($row = mysqli_fetch_array($result))
                 {
                         $flag = $absent = 0;
 
-                        $id = mysql_result($result, $i, "emp_id");
-                        $adeia_id = mysql_result($result, $i, "id");
-                        $type = mysql_result($result, $i, "type");
-                        $name = mysql_result($result, $i, "name");
-                        $surname = mysql_result($result, $i, "surname");
-                        $klados_id = mysql_result($result, $i, "klados");
+                        $id = $row['emap_id'];
+                        $adeia_id = $row['id'];
+                        $type = $row['type'];
+                        $name = $row['name'];
+                        $surname = $row['surname'];
+                        $klados_id = $row['klados'];
                         $klados = getKlados($klados_id,$mysqlconnection);
-                        $comments = mysql_result($result, $i, "comments");
+                        $comments = $row['comments'];
                         $comm = $comments;
                         $today = date("Y-m-d");
-                        $return = mysql_result($result, $i, "finish");
-                        $start = mysql_result($result, $i, "start");
-                        $status = mysql_result($result, $i, "status");
+                        $return = $row['fininsh'];
+                        $start = $row['start'];
+                        $status = $row['status'];
                         // if return date exists, check if absent and print - else continue.
 
                         if ($start<$today && $return>$today)
@@ -104,8 +102,9 @@
                         if ($flag)
                         {
                             $query1 = "select type from adeia_type where id=$type";
-                            $result1 = mysql_query($query1, $mysqlconnection);
-                            $typewrd = mysql_result($result1, 0, "type");
+                            $result1 = mysqli_query($mysqlconnection, $query1);
+                            $rs = mysqli_fetch_array($result1);
+                            $typewrd = $rs['type'];
                             if ($absent && $status<>3)
                                 $comments = "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε ¶δεια\"</blink><br>$comm";
                             //if ($absent)
@@ -114,7 +113,7 @@
                             echo "<td><a href=\"employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
                             echo "</tr>";
                         }
-                        $i++;
+
                 }
                 echo "</tbody></table>";
                 echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";

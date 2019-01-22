@@ -11,6 +11,7 @@ class logmein {
     var $database_logon;       //Database NAME
     var $username_logon;       //Database USERNAME
     var $password_logon;       //Database PASSWORD
+    var $db_conn;
  
     //table fields
     var $user_table = 'logon';          //Users table name
@@ -29,8 +30,7 @@ class logmein {
         $this->database_logon = $db_name;
         $this->username_logon = $db_user;
         $this->password_logon = $db_password;
-        $connections = mysql_connect($this->hostname_logon, $this->username_logon, $this->password_logon) or die ('Unabale to connect to the database');
-        mysql_select_db($this->database_logon) or die ('Unable to select database!');
+        $this->db_conn = mysqli_connect($this->hostname_logon, $this->username_logon, $this->password_logon, $this->database_logon) or die ('Unabale to connect to the database');
         return;
     }
  
@@ -48,7 +48,7 @@ class logmein {
         }
         //execute login via qry function that prevents MySQL injections
         $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->user_column."='?' AND ".$this->pass_column." = '?';" , $username, $password);
-        $row=mysql_fetch_assoc($result);
+        $row=mysqli_fetch_assoc($result);
         if($row != "Error"){
             if($row[$this->user_column] !="" && $row[$this->pass_column] !=""){
                 //register sessions
@@ -60,7 +60,7 @@ class logmein {
                 //userlevel session is optional. Use it if you have different user levels
                 $_SESSION['userlevel'] = $row[$this->user_level];
                 $result = $this->qry("UPDATE ".$this->user_table." SET lastlogin=now()WHERE ".$this->user_column."='?';" , $username);
-                $row=mysql_fetch_assoc($result);
+                $row=mysqli_fetch_assoc($result);
                 return true;
             }else{
                 session_destroy();
@@ -81,7 +81,7 @@ class logmein {
       $args  = array_map('mysql_real_escape_string', $args);
       array_unshift($args,$query);
       $query = call_user_func_array('sprintf',$args);
-      $result = mysql_query($query) or die(mysql_error());
+      $result = mysqli_query($this->db_conn,$query) or die(mysqli_error());
           if($result){
             return $result;
           }else{
@@ -112,7 +112,7 @@ class logmein {
         }
         //exectue query
         $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->pass_column." = '?';" , $logincode);
-        $rownum = mysql_num_rows($result);
+        $rownum = mysqli_num_rows($result);
         //return true if logged in and false if not
         if($row != "Error"){
             if($rownum > 0){
@@ -122,7 +122,7 @@ class logmein {
             }
         }
     }
- 
+ /*
     //reset password
     function passwordreset($username, $user_table, $pass_column, $user_column){
         //connect to DB
@@ -149,7 +149,7 @@ class logmein {
  
         //update database with new password
         $qry = "UPDATE ".$this->user_table." SET ".$this->pass_column."='".$newpassword_db."' WHERE ".$this->user_column."='".stripslashes($username)."'";
-        $result = mysql_query($qry) or die(mysql_error());
+        $result = mysqli_query($qry) or die(mysqli_error());
  
         $to = stripslashes($username);
         //some injection protection
@@ -199,7 +199,7 @@ Your new password is: ".$newpassword."
         }
         return $pass;
     }
- 
+ */
     //login form
     function loginform($formname, $formclass, $formaction){
         //conect to DB

@@ -1,9 +1,8 @@
 <?php
         Require "../config.php";
-        $conn = mysql_connect($db_host, $db_user, $db_password);
-        mysql_select_db($db_name, $conn);
-        mysql_query("SET NAMES 'greek'", $conn);
-        mysql_query("SET CHARACTER SET 'greek'", $conn);
+        $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
                 
 	switch ($_POST['column'])
 	{
@@ -55,8 +54,8 @@
 	}
         $query = "UPDATE school SET $row='".$_POST['value']."' WHERE id='".$_POST['row_id']."'";
         $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
-        $res = mysql_query($query,$conn);
+        $res = mysqli_query($conn, $query);
         echo $_POST['value'];
         
-        mysql_close();
+        mysqli_close();
 ?>

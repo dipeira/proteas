@@ -31,10 +31,9 @@
       // set max execution time 
       set_time_limit (180);
             
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+		  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+      mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+      mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
       //$query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = $sxol_etos";
       echo "<h2>Μη συμπλήρωση υποχρεωτικού ωραρίου</h2>";
@@ -46,9 +45,9 @@
 
       // monimoi
       $query = "select e.id as empid,e.surname,e.name,e.wres, sum(y.hours) as hours from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = $sxol_etos GROUP BY y.emp_id ORDER BY e.surname ASC";
-      $result = mysql_query($query, $mysqlconnection);
+      $result = mysqli_query($mysqlconnection, $query);
 
-      while ($row = mysql_fetch_assoc($result)) {
+      while ($row = mysqli_fetch_assoc($result)) {
          if ($row['hours'] == $row['wres']){
             continue;
          }
@@ -57,9 +56,9 @@
       }
       // ektaktoi
       $query = "select e.id as empid,e.surname,e.name,e.wres, sum(y.hours) as hours from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where sxol_etos = $sxol_etos GROUP BY y.emp_id ORDER BY e.surname ASC";
-      $result = mysql_query($query, $mysqlconnection);
+      $result = mysqli_query($mysqlconnection, $query);
                 		
-      while ($row = mysql_fetch_assoc($result)) {
+      while ($row = mysqli_fetch_assoc($result)) {
          if ($row['hours'] == $row['wres']){
             continue;
          }
@@ -103,7 +102,7 @@
       }
 
          
-		mysql_close();
+		mysqli_close();
                 
 
 	//}
