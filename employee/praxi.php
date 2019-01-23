@@ -44,18 +44,17 @@ var thegrid = new drasticGrid('grid1', {
 	//colwidth: "300",
     pagelength:25,
     columns: [
-		{name: 'id', displayname:'Α/Α', width:25},
-		{name: 'name', displayname:'Όνομα', width: 300},
-		{name: 'ya', displayname:'Υπουργική Απόφαση', width: 150},
-        {name: 'ada', displayname:'Α.Δ.Α.', width: 150},
-        {name: 'apofasi', displayname:'Απόφαση Δ/ντή', width: 150},
-        {name: 'sxolio', displayname:'Σχόλια', width: 150},
-		{name: 'type', displayname:'Τύπος',
-			type: DDTYPEKEY, 
-            values: [<?= $pr_values; ?>],
-            labels:  [<?= $pr_labels; ?>],
-            width: 150
-        }
+      {name: 'name', displayname:'Όνομα', width: 300},
+      {name: 'ya', displayname:'Υπουργική Απόφαση', width: 150},
+          {name: 'ada', displayname:'Α.Δ.Α.', width: 150},
+          {name: 'apofasi', displayname:'Απόφαση Δ/ντή', width: 150},
+          {name: 'sxolio', displayname:'Σχόλια', width: 150},
+      {name: 'type', displayname:'Τύπος',
+        type: DDTYPEKEY, 
+        values: [<?= $pr_values; ?>],
+        labels:  [<?= $pr_labels; ?>],
+        width: 150
+      }
     ]//,
     // onUpdateStart: function(id, colname, value) {
 	// 	if (id == 0 ) {
@@ -67,7 +66,7 @@ var thegrid = new drasticGrid('grid1', {
 });
 </script>
 
-<table class="imagetable" border="1">
+<table class="imagetable stable" border="1">
     <tr><th colspan="2">Επεξήγηση</th></tr>
     <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>
     <tr><td>A/A</td><td>Δε μεταβάλλεται</td></tr>

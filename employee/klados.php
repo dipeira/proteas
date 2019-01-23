@@ -8,6 +8,9 @@ include("../tools/class.login.php");
     header("Location: ../tools/login.php");
   }
 
+  // check if super-user
+if ($_SESSION['userlevel']<>0)
+  header("Location: ../index.php");
 
 define("PATHDRASTICTOOLS", "../tools/grid/");
 include(PATHDRASTICTOOLS."conf.php");
@@ -32,9 +35,12 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_kl);
 <div id="grid1"></div>
 <script type="text/javascript">
 var thegrid = new drasticGrid('grid1', {
-    pathimg: "../tools/grid/img/",
-	colwidth: "300"
-    });
+  pathimg: "../tools/grid/img/",
+  columns: [
+      {name: 'perigrafh', displayname:'Κλάδος', width: 100},
+      {name: 'onoma', displayname:'Λεκτικό', width: 200},
+  ]
+});
 </script>
 
 <form>

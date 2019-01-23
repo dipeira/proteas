@@ -8,14 +8,18 @@ include("../tools/class.login.php");
     header("Location: ../tools/login.php");
   }
 
- // check if super-user
-// if ($_SESSION['userlevel']<>0)
-//     header("Location: index.php");
+// check if super-user
+if ($_SESSION['userlevel']<>0)
+  header("Location: ../index.php");
 
 define("PATHDRASTICTOOLS", "../tools/grid/");
 include(PATHDRASTICTOOLS."conf.php");
 include(PATHDRASTICTOOLS."drasticSrcMySQL.class.php");
-$src = new drasticSrcMySQL($server, $user, $pw, $db, $table_opt);
+$options = array(
+  "add_allowed" => false,       
+  "delete_allowed" => false
+);
+$src = new drasticSrcMySQL($server, $user, $pw, $db, $table_opt, $options);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -38,16 +42,17 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_opt);
 var thegrid = new drasticGrid('grid1', {
     pathimg: "../tools/grid/img/",
 	  colwidth: "300",
+    pagelength: 10,
     columns: [
-      {name: 'id', displayname:'Α/Α', width:25},
-      {name: 'name', displayname:'Όνομα', width: 150},
+      //{name: 'id', displayname:'Α/Α', width:25},
+      {name: 'name', displayname:'Όνομα', width: 150, editable: false},
       {name: 'value', displayname:'Τιμή', width: 250},
-      {name: 'descr', displayname:'Περιγραφή', width: 400}
+      {name: 'descr', displayname:'Περιγραφή', width: 400, editable: false}
     ]
 });
 </script>
 
-<table class="imagetable" border="1">
+<table class="imagetable stable" border="1">
     <tr><th colspan="2">Επεξήγηση</th></tr>
     <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>
     <tr><td>id</td><td>A/A <small>(δε μεταβάλλεται)</small></td></tr>

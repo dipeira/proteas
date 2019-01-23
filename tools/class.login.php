@@ -78,9 +78,12 @@ class logmein {
       $args  = func_get_args();
       $query = array_shift($args);
       $query = str_replace("?", "%s", $query);
-      $args  = array_map('mysql_real_escape_string', $args);
-      array_unshift($args,$query);
-      $query = call_user_func_array('sprintf',$args);
+      // workaround to replace mysql_real_escape_string
+      foreach ($args as $arg) {
+        $escaped[] = mysqli_real_escape_string($this->db_conn, $arg);
+      }
+      array_unshift($escaped,$query);
+      $query = call_user_func_array('sprintf',$escaped);
       $result = mysqli_query($this->db_conn,$query) or die(mysqli_error());
           if($result){
             return $result;

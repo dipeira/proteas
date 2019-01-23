@@ -1,5 +1,6 @@
 <?php
 /* DrasticTools version 0.6.23
+   (patched by Sugarvag on 23/01/2019 to comply with mysqli)
  * DrasticTools is released under the GPL license: 
  * Copyright (C) 2007 email: info@drasticdata.nl
  *
@@ -33,7 +34,7 @@ class drasticSrcMySQL {
 	public $sortcol;					// name of column to sort on initially. Defaults to the id column.
 	public $sort;						// sort ascending (a) or descending (d)? Default is a.
 	public $SQLCharset		= "utf8";	// character set of the strings in the table		
-	public $HTMLCharset		= "UTF-8";	// character set for xhttprequest
+	public $HTMLCharset		= "iso8859-7";	// character set for xhttprequest
 	
 	// General variables
 	public $orderbystr, $wherestr, $addstr;
@@ -58,57 +59,58 @@ class drasticSrcMySQL {
 			if (isset($options["sort"])) $this->sort= $options["sort"];
 			if (isset($options["SQLCharset"])) $this->SQLCharset= $options["SQLCharset"];
 			if (isset($options["HTMLCharset"])) $this->HTMLCharset= $options["HTMLCharset"];						
-		}
+    }
 		/* Optionally retrieve parameters from the addparams parameter.
 		 * Uncomment the line below and change "myparameter" to the name of your parameter
 		 * If you pass multiple parameters copy the line multiple times
 		 * 
-		 * $myparameter = mysql_real_escape_string($_REQUEST["myparameter"]);
+		 * $myparameter = mysqli_real_escape_string($_REQUEST["myparameter"]);
 		 */		
-		
-		$this->conn = mysql_connect($server, $user, $pw) or die(mysql_error());
-		mysql_select_db($db) or die (mysql_error());
+		$this->conn = mysqli_connect($server, $user, $pw, $db) or die(mysqli_error());
 		$this->table = $table;
-		$res = mysql_query("SET NAMES '" . $this->SQLCharset . "'", $this->conn);
-		
+		$res = mysqli_query($this->conn, "SET NAMES '" . $this->SQLCharset . "'");
 		// Initialize the name of the id field, column names and numeric columns:
-		$idresult = $this->metadata();
-		$primary_found = false;
-		for($i=0; $i < mysql_num_fields($idresult); $i++)  {
-			$fld = mysql_fetch_field($idresult, $i);
-			if ($primary_found == false) {
-				if ($fld->primary_key == 1) { 
-					$this->idname = $fld->name;
-					$this->idcolnr = $i;
-					$primary_found = true;
-				}
-				elseif ($fld->unique_key == 1) {
-					$this->idname = $fld->name;
-					$this->idcolnr = $i;
-				}
-			}
+    $idresult = $this->metadata();
+    //$primary_found = false;
+    // find primary key
+    $r = mysqli_fetch_assoc(mysqli_query($this->conn, "SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'")); 
+    $this->idname = $r['Column_name']; 
+    while ($fld = mysqli_fetch_field($idresult)){
+		//for($i=0; $i < mysqli_num_fields($idresult); $i++)  {
+      //$fld = mysqli_fetch_field($idresult, $i);
+			// if ($primary_found == false) {
+			// 	if ($fld->primary_key == 1) { 
+			// 		$this->idname = $fld->name;
+			// 		$this->idcolnr = $i;
+			// 		$primary_found = true;
+			// 	}
+			// 	elseif ($fld->unique_key == 1) {
+			// 		$this->idname = $fld->name;
+			// 		$this->idcolnr = $i;
+			// 	}
+			// }
 			$this->cols[] = $fld->name;
 			if ($fld->numeric == 1) $this->cols_numeric[] = $fld->name;
-		}
+    }
 		if (!isset($this->idname)) die("Could not find primary or unique key");
 		// Initialize editablecols if not done yet:
 		if (!isset($this->editablecols)) {
-			mysql_field_seek($idresult, 0);
-			for($i=0; $i < mysql_num_fields($idresult); $i++)  {
-				$fldname = mysql_fetch_field($idresult)->name;
+			mysqli_field_seek($idresult, 0);
+			for($i=0; $i < mysqli_num_fields($idresult); $i++)  {
+				$fldname = mysqli_fetch_field($idresult)->name;
 				if ($fldname != $this->idname) $this->editablecols[] = $fldname;
 			}
 		}
-		mysql_free_result($idresult);
+		mysqli_free_result($idresult);
 		
 		// Initialize Field types:
 		$this->fldtypes = array();
-		$colresult = mysql_query("SHOW COLUMNS FROM " . $this->table, $this->conn) or die(mysql_error());
-		for($i=0; $i < mysql_num_rows($colresult); $i++)  {
-			list($fldname, $fldtype, $fldnull, $fldkey, $flddefault, $fldextra) = mysql_fetch_row($colresult);	
+		$colresult = mysqli_query($this->conn, "SHOW COLUMNS FROM " . $this->table) or die(mysqli_error());
+		for($i=0; $i < mysqli_num_rows($colresult); $i++)  {
+			list($fldname, $fldtype, $fldnull, $fldkey, $flddefault, $fldextra) = mysqli_fetch_row($colresult);	
 			$this->fldtypes[$fldname] = $fldtype;
 		}
-		mysql_free_result($colresult);
+		mysqli_free_result($colresult);
 		
 		// Calculate the WHERE string and the string for the ADD operation, if the defaultcols option is set.
 		$this->wherestr = "";
@@ -128,8 +130,8 @@ class drasticSrcMySQL {
 		}
 		
 		// Do the sorting:
-		if (isset($_REQUEST["sortcol"])) $this->sortcol = mysql_real_escape_string($_REQUEST["sortcol"]);
-		if (isset($_REQUEST["sort"])) $this->sort = mysql_real_escape_string($_REQUEST["sort"]);
+		if (isset($_REQUEST["sortcol"])) $this->sortcol = mysqli_real_escape_string($this->conn, $_REQUEST["sortcol"]);
+		if (isset($_REQUEST["sort"])) $this->sort = mysqli_real_escape_string($this->conn, $_REQUEST["sort"]);
 		if (!$this->sortcol) $this->sortcol = $this->idname;
 		if (!$this->sort) $this->sort = "a";
 		$this->orderbystr = " ORDER BY " . $this->sortcol . ($this->sort == "d"?" DESC":"");		  
@@ -138,10 +140,10 @@ class drasticSrcMySQL {
 		header( "Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . " GMT" ); 
 		header( "Cache-Control: no-cache, must-revalidate" ); 
 		header( "Pragma: no-cache" );
-		if (isset($_REQUEST["op"])) 	$op		= mysql_real_escape_string($_REQUEST["op"]); else $op = "";		
-		if (isset($_REQUEST["id"])) 	$id		= mysql_real_escape_string($_REQUEST["id"]);
-		if (isset($_REQUEST["col"])) 	$col	= mysql_real_escape_string($_REQUEST["col"]);
-		if (isset($_REQUEST["value"])) 	$value	= mysql_real_escape_string($_REQUEST["value"]);
+		if (isset($_REQUEST["op"])) 	$op		= mysqli_real_escape_string($this->conn, $_REQUEST["op"]); else $op = "";		
+		if (isset($_REQUEST["id"])) 	$id		= mysqli_real_escape_string($this->conn, $_REQUEST["id"]);
+		if (isset($_REQUEST["col"])) 	$col	= mysqli_real_escape_string($this->conn, $_REQUEST["col"]);
+		if (isset($_REQUEST["value"])) 	$value	= mysqli_real_escape_string($this->conn, $_REQUEST["value"]);
 		if ($op != "vb" && $op != "vc") header("Content-Type: text/html; charset=".$this->HTMLCharset);
 		
 		switch ($op) {
@@ -152,8 +154,8 @@ class drasticSrcMySQL {
 		
 		// Get the table in memory
 		$this->result = $this->select();
-		$this->num_rows = mysql_num_rows($this->result);
-		$this->num_fields = mysql_num_fields($this->result);
+		$this->num_rows = mysqli_num_rows($this->result);
+		$this->num_fields = mysqli_num_fields($this->result);
 
 		if ($op == "v") exit($this->view());
 		if ($op == "vm") exit($this->view_meta());
@@ -163,8 +165,8 @@ class drasticSrcMySQL {
 		if ($op == "vrn") exit($this->view_rownr());
 	}
 	function __destruct() {
-		if ($this->result) mysql_free_result($this->result);
-		if ($this->conn) mysql_close($this->conn);
+		if ($this->result) mysqli_free_result($this->result);
+		if ($this->conn) mysqli_close($this->conn);
 	}
 	
 	private function view_meta(){
@@ -188,22 +190,22 @@ class drasticSrcMySQL {
 	// These protected functions can be overruled if you want to redefine your datasource
 	//
 	protected function select(){
-		$res = mysql_query("SELECT * FROM $this->table" . $this->wherestr . $this->orderbystr, $this->conn) or die(mysql_error());
+		$res = mysqli_query($this->conn,  "SELECT * FROM $this->table" . $this->wherestr . $this->orderbystr) or die(mysqli_error());
 		return ($res);
 	}	
 	protected function add(){
-		mysql_query("INSERT INTO $this->table" . $this->addstr, $this->conn) or die(mysql_error());
-		if (mysql_affected_rows($this->conn) == 1) return(true); else return(false);
+		mysqli_query($this->conn, "INSERT INTO $this->table" . $this->addstr) or die(mysqli_error());
+		if (mysqli_affected_rows($this->conn) == 1) return(true); else return(false);
 	}
 	protected function sums($sumString){
 		// SumString contains something like "SUM(var1), SUM(var2), SUM(var3)" and is derived from the sum settings in the grid.
 		// We advise to use the sumString, but the rest of the query can be changed, same as for select.
-		$res = mysql_query("SELECT ". $sumString . " FROM $this->table" . $this->wherestr, $this->conn) or die(mysql_error());
+		$res = mysqli_query($this->conn, "SELECT ". $sumString . " FROM $this->table" . $this->wherestr) or die(mysqli_error());
 		return ($res);
 	}
 	// Override this function if you want to use (join) query on multiple tables:
 	protected function metadata(){
-		$res = mysql_query("SELECT * FROM $this->table LIMIT 1", $this->conn);
+		$res = mysqli_query($this->conn, "SELECT * FROM $this->table LIMIT 1");
 		return ($res);
 	}
 	
@@ -215,7 +217,7 @@ class drasticSrcMySQL {
 		// check field
 		if ($fld != "") {
 			$found = false;
-			while (($field = mysql_fetch_field($res)) != null) {
+			while (($field = mysqli_fetch_field($res)) != null) {
 				if ($field->name == $fld) {
 					$found = true;
 					break;
@@ -224,25 +226,25 @@ class drasticSrcMySQL {
 			if (!$found) return(false);
 		} 
 		// check id
-		for ($i=0; $i < mysql_num_rows($res); $i++)  {
-			$row = mysql_fetch_array($res);
+		for ($i=0; $i < mysqli_num_rows($res); $i++)  {
+			$row = mysqli_fetch_array($res);
 			if ($row[$this->idcolnr] == $id) return(true);
 		}
 		return(false);
 	}	
 	private function delete($id){
 		if (!$this->exists($id)) return(false);
-		mysql_query("DELETE FROM $this->table WHERE $this->idname='$id'", $this->conn) or die(mysql_error());
-		if (mysql_affected_rows($this->conn) == 1) return(json_encode(true)); else return(json_encode(false));
+		mysqli_query($this->conn, "DELETE FROM $this->table WHERE $this->idname='$id'") or die(mysqli_error());
+		if (mysqli_affected_rows($this->conn) == 1) return(json_encode(true)); else return(json_encode(false));
 	}
 	private function update($id, $fld, $value){
 		if ((in_array($fld, $this->editablecols)) && $this->exists($id, $fld)) {
-			mysql_query("UPDATE $this->table SET $fld='$value' WHERE $this->idname='$id'", $this->conn) or die(mysql_error());
-			if (mysql_affected_rows($this->conn) == 1) { 
+			mysqli_query($this->conn, "UPDATE $this->table SET $fld='$value' WHERE $this->idname='$id'") or die(mysqli_error());
+			if (mysqli_affected_rows($this->conn) == 1) { 
 				return("1");
 			} else {
-				$res = mysql_query("SELECT $fld FROM $this->table WHERE $this->idname='$id'", $this->conn) or die(mysql_error());
-				$row = mysql_fetch_array($res);
+				$res = mysqli_query($this->conn, "SELECT $fld FROM $this->table WHERE $this->idname='$id'") or die(mysqli_error());
+				$row = mysqli_fetch_array($res);
 				if ($row[0] == $value) 
 					return("1");
 				else
@@ -253,9 +255,9 @@ class drasticSrcMySQL {
 	}
 	private function view_rownr(){
 		if (isset($_REQUEST["id"])){
-			mysql_data_seek($this->result, 0);
+			mysqli_data_seek($this->result, 0);
 			for ($i = 0; $i < $this->num_rows; $i++) {
-				$value = mysql_fetch_array($this->result);
+				$value = mysqli_fetch_array($this->result);
 				if ($value[$this->idcolnr] == $_REQUEST["id"]) {
 					return(json_encode($i));
 				}
@@ -265,26 +267,26 @@ class drasticSrcMySQL {
 	}	
 	private function view(){
 		if ($this->num_rows == 0) return(json_encode(array(null, null)));
-		if (isset($_REQUEST["cols"])) $cols = explode(",", mysql_real_escape_string($_REQUEST["cols"]), $this->num_fields);
+		if (isset($_REQUEST["cols"])) $cols = explode(",", mysqli_real_escape_string($this->conn, $_REQUEST["cols"]), $this->num_fields);
 		if (isset($_REQUEST["id"])){
-			$res = mysql_query("SELECT * FROM $this->table WHERE ".$this->idname." = '".mysql_real_escape_string($_REQUEST["id"])."'", $this->conn);
-			$value = mysql_fetch_array($res);
+			$res = mysqli_query($this->conn, "SELECT * FROM $this->table WHERE ".$this->idname." = '".mysqli_real_escape_string($_REQUEST["id"])."'");
+			$value = mysqli_fetch_array($res);
 			for ($j = 0; $j < ((isset($cols))?(count($cols)):($this->num_fields)); $j++) {
 				$row[$j] = $value[((isset($cols))?($cols[$j]):($j))];
 			}
 			$arr[0] = $row;
 			$sqlidarr[0] = $value[$this->idname];
-			mysql_free_result($res);
+			mysqli_free_result($res);
 		}
 		else {
-			if (isset($_REQUEST["start"])) $start = mysql_real_escape_string($_REQUEST["start"]); else $start = 0;
-			if (isset($_REQUEST["end"])) $end = mysql_real_escape_string($_REQUEST["end"]); else $end= $this->num_rows;
+			if (isset($_REQUEST["start"])) $start = mysqli_real_escape_string($this->conn, $_REQUEST["start"]); else $start = 0;
+			if (isset($_REQUEST["end"])) $end = mysqli_real_escape_string($this->conn, $_REQUEST["end"]); else $end= $this->num_rows;
 			if ($start < 0) $start=0;
 			if ($end > $this->num_rows) $end = $this->num_rows;
 			if ($start < $this->num_rows) {		
-				mysql_data_seek($this->result, $start);
+				mysqli_data_seek($this->result, $start);
 				for ($i = 0; $i < ($end-$start); $i++) {
-					$value = mysql_fetch_array($this->result);
+					$value = mysqli_fetch_array($this->result);
 					for ($j = 0; $j < ((isset($cols))?(count($cols)):($this->num_fields)); $j++) {
 						$row[$j] = $value[((isset($cols))?($cols[$j]):($j))];
 						//echo $row[$j];
@@ -298,25 +300,25 @@ class drasticSrcMySQL {
 		$result[1] = $arr;
 		// optionally add sums
 		if (isset($_REQUEST["sns"]) && strlen($_REQUEST["sns"]) > 0) {
-			$sumnames = explode(",", mysql_real_escape_string($_REQUEST["sns"]));
+			$sumnames = explode(",", mysqli_real_escape_string($this->conn, $_REQUEST["sns"]));
 			$sumString = ''; foreach ($sumnames as $sumname) $sumString .= ($sumString==''?'':', ') . "SUM(" . $sumname . ")";
 			$res = $this -> sums($sumString);
-			$value = mysql_fetch_array($res, MYSQL_NUM);
+			$value = mysqli_fetch_array($res, MYSQLI_NUM);
 			$result[2] = $value;
-			mysql_free_result($res);
+			mysqli_free_result($res);
 		}
 		return(json_encode($result));
 	}
 	private function view_bar(){
-		$id = mysql_real_escape_string($_REQUEST["id"]);
-		$colname = mysql_real_escape_string($_REQUEST["colname"]);
-		$w = mysql_real_escape_string($_REQUEST["w"]);
-		$h = mysql_real_escape_string($_REQUEST["h"]);
+		$id = mysqli_real_escape_string($this->conn, $_REQUEST["id"]);
+		$colname = mysqli_real_escape_string($this->conn, $_REQUEST["colname"]);
+		$w = mysqli_real_escape_string($this->conn, $_REQUEST["w"]);
+		$h = mysqli_real_escape_string($this->conn, $_REQUEST["h"]);
 		if (!isset($this->max)) $this->max = $this->MaxNumber($colname);	
-		$res = mysql_query("SELECT $colname FROM $this->table WHERE $this->idname='$id'", $this->conn) or die(mysql_error());
-		$data = mysql_fetch_array($res);
+		$res = mysqli_query($this->conn, "SELECT $colname FROM $this->table WHERE $this->idname='$id'") or die(mysqli_error());
+		$data = mysqli_fetch_array($res);
 		$value = $data[0];
-		mysql_free_result($res);
+		mysqli_free_result($res);
 		
 		$im = imagecreatetruecolor ($w, $h) or die("Cannot Initialize new GD image stream");
 		imagealphablending($im, FALSE);
@@ -334,14 +336,14 @@ class drasticSrcMySQL {
 		ImageDestroy($im);
 	}
 	private function view_circle(){
-		$id = mysql_real_escape_string($_REQUEST["id"]);
-		$colname = mysql_real_escape_string($_REQUEST["colname"]);
-		$w = mysql_real_escape_string($_REQUEST["w"]);
+		$id = mysqli_real_escape_string($this->conn, $_REQUEST["id"]);
+		$colname = mysqli_real_escape_string($this->conn, $_REQUEST["colname"]);
+		$w = mysqli_real_escape_string($this->conn, $_REQUEST["w"]);
 		if (!isset($this->max)) $this->max = $this->MaxNumber($colname);	
-		$res = mysql_query("SELECT $colname FROM $this->table WHERE $this->idname='$id'", $this->conn) or die(mysql_error());
-		$data = mysql_fetch_array($res);
+		$res = mysqli_query($this->conn, "SELECT $colname FROM $this->table WHERE $this->idname='$id'") or die(mysqli_error());
+		$data = mysqli_fetch_array($res);
 		$value = $data[0];
-		mysql_free_result($res);
+		mysqli_free_result($res);
 		
 		$maxr = $w / 2;
 		$maxopp = pi() * pow($maxr, 2);
@@ -365,9 +367,9 @@ class drasticSrcMySQL {
 	}	
 	private function MaxNumber($colname) {
 		$max = 0;
-		mysql_data_seek($this->result, 0);
+		mysqli_data_seek($this->result, 0);
 		for ($i=0; $i < $this->num_rows; $i++) {
-			$row = mysql_fetch_array($this->result);
+			$row = mysqli_fetch_array($this->result);
 			$max = max($max, $row[$colname]);
 		}
 		return($max);

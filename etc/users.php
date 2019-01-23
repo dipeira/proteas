@@ -35,14 +35,13 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_log);
 <div id="grid1"></div>
 <script type="text/javascript">
 var thegrid = new drasticGrid('grid1', {
-    pathimg: "../tools/grid/img/",
-	colwidth: "300"
-    });
+  pathimg: "../tools/grid/img/",
+});
 </script>
 
-<table class="imagetable" border="1">
-    <tr><th colspan="2">Userlevels</th></tr>
-    <tr><td>Userlevel</td><td>Δικαιώματα</td></tr>
+<h3>Επίπεδα ασφαλείας</h3>
+<table class="imagetable stable" border="1">
+    <tr><th>Επίπεδο</th><th>Δικαιώματα</th></tr>
     <tr><td>0</td><td>Διαχειριστής</td></tr>
     <tr><td>1</td><td>Προσθήκη / Διαγραφή / Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
     <tr><td>2</td><td>Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
