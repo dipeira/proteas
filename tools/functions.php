@@ -1804,5 +1804,14 @@
           return 22;
       elseif ($days >7200)
           return 21;
-    }     
+    }   
+    function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }  
 ?>

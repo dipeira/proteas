@@ -471,8 +471,8 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
         echo "<tr><td>Πραξη</td><td colspan=3>";
         echo $sxoletos ? 
-                getNamefromTbl($mysqlconnection, "praxi_old", $praxi) :
-                getNamefromTbl($mysqlconnection, "praxi", $praxi);
+                "<a href='ektaktoi_prev.php?praxi=$praxi'>".getNamefromTbl($mysqlconnection, "praxi_old", $praxi)."</a>" :
+                "<a href='ektaktoi_list.php?praxi=$praxi'>".getNamefromTbl($mysqlconnection, "praxi", $praxi)."</a>";
         echo "</td></tr>";
         
         $qry = $sxoletos ? 
