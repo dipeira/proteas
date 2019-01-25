@@ -2,7 +2,7 @@
 // url: http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 
 //For security reasons, don't display any errors or warnings. Comment out in DEV.
-error_reporting(0);
+//error_reporting(0);
 //start session
 session_start();
 class logmein {
@@ -24,7 +24,7 @@ class logmein {
  
     //connect to database
     function dbconnect(){
-        include '../config.php';
+        require_once 'config.php';
         global $db_host, $db_name, $db_user, $db_password;
         $this->hostname_logon = $db_host;
         $this->database_logon = $db_name;
@@ -100,7 +100,7 @@ class logmein {
     }
  
     //check if loggedin
-    function logincheck($logincode, $user_table, $pass_column, $user_column){
+    function logincheck($logincode, $user_table = null, $pass_column = null, $user_column = null){
         //conect to DB
         $this->dbconnect();
         //make sure password column and table are set

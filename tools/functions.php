@@ -72,7 +72,8 @@
 	{
 		$query = "SELECT name from school where id=".$id;
 		$result = mysqli_query($conn, $query);
-		//if (!$result) 
+    if (!$result) 
+    return;
 		//	die('Could not query:' . mysqli_error());
                 //else
         return mysqli_result($result, 0);	
@@ -166,8 +167,8 @@
     // 23-12-2013: compute ypoloipo adeiwn - if yphrethsh = foreas adeies = 25 days
     function ypoloipo_adeiwn ($id, $sql)
     {
-        $qry2 = "SELECT sx_yphrethshs,thesi FROM employee WHERE id= $id";
-        $res2 = mysqli_query($qry2, $sql);
+        $qry2 = "SELECT sx_yphrethshs,thesi FROM employee WHERE id=$id";
+        $res2 = mysqli_query($sql, $qry2);
         $sx_yphr = mysqli_result($res2, 0, "sx_yphrethshs");
         $thesi = mysqli_result($res2, 0, "thesi");
         // if apospasmenoi / dioikhtikoi
@@ -181,14 +182,14 @@
             $rem = 25 - $cur_kan;
         
             $qry1 = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $prev_yr AND year(FINISH) = $prev_yr AND emp_id = $id";
-            $res1 = mysqli_query($qry1, $sql);
+            $res1 = mysqli_query($sql, $qry1);
             $prev_kan = mysqli_result($res1, 0, "rem");
             $prev_rem = 25 - $prev_kan;
             
             // xmas adeies
             $pre = $after = 0;
             $qry0 = "SELECT start, finish FROM adeia WHERE type=2 AND YEAR(start) = $prev_yr AND YEAR(finish) = $cur_yr AND emp_id = $id";
-            $res0 = mysqli_query($qry0, $sql);
+            $res0 = mysqli_query($sql, $qry0);
             if (mysqli_num_rows($res0)>0)
             {
                 $start = mysqli_result($res0, 0, "start");
@@ -207,7 +208,7 @@
             $pre = $after = 0;
             $preprev = $prev_yr-1;
             $qry0 = "SELECT start, finish FROM adeia WHERE type=2 AND YEAR(start) = $preprev AND YEAR(finish) = $prev_yr AND emp_id = $id";
-            $res0 = mysqli_query($qry0, $sql);
+            $res0 = mysqli_query($sql, $qry0);
             if (mysqli_num_rows($res0)>0)
             {
                 $start = mysqli_result($res0, 0, "start");
@@ -238,7 +239,7 @@
             $cur_yr = date("Y");
             $prev_yr = $cur_yr - 1;
             $qry = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $cur_yr AND emp_id = $id";
-            $res = mysqli_query($qry, $sql);
+            $res = mysqli_query($sql, $qry);
             $rem = mysqli_result($res, 0, "rem");
         
             $ret[0] = $cur_yr;

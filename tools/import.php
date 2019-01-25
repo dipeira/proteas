@@ -1,3 +1,6 @@
+<?php
+  header('Content-type: text/html; charset=iso8859-7'); 
+?>
 <html>
   <head>
 	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">

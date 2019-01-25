@@ -150,7 +150,7 @@
 //                    $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
 //                    $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
 //                }
-                    $id = mysqli_result($result, 0, "id");
+                    //$id = mysqli_result($result, 0, "id");
                     $name = mysqli_result($result, 0, "name");
                     $surname = mysqli_result($result, 0, "surname");
                     $klados_id = mysqli_result($result, 0, "klados");
@@ -889,5 +889,5 @@ if ($_GET['op']=="edit")
 		echo "</body>";
 		echo "</html>";
 	}
-	mysqli_close();
+	mysqli_close($mysqlconnection);
 ?> 
