@@ -16,13 +16,13 @@
 <html>
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-        <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Employee</title>
+  <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+  <title>Employee</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    
+  <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+  <script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript">
         $(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
@@ -138,5 +138,5 @@
 		echo "</html>";	
 
 
-	mysqli_close();
+	mysqli_close($mysqlconnection);
 ?>

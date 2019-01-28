@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=iso8859-7'); 
         session_start();
 ?>
 <html>
@@ -22,19 +22,19 @@
   echo "<h2>Βοηθητικό Εργαλείο για γέμισμα πίνακα υπηρετήσεων με τρέχουσες υπηρετήσεις</h2>";
   echo "<br>ΣΗΜ. Πρέπει να εκτελείται με κάθε αλλαγή σχολικού έτους. Αν εκτελεστεί παραπάνω από μία φορές δεν καταστρέφει τα δεδομένα.";
   echo "<br><strong>ΠΡΟΣΟΧΗ:</strong>Η διαδικασία διαρκεί αρκετά λεπτά.";
-  if ($usrlvl > 0)
-    {
-        echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
-        echo "<br><a href=\"index.php\">Επιστροφή</a>";
-        mysqli_close();
-        exit;
-    }
+if ($usrlvl > 0) {
+      echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
+      echo "<br><a href=\"index.php\">Επιστροφή</a>";
+      mysqli_close($mysqlconnection);
+      exit;
+}
     echo "<form action='' method='POST' autocomplete='off'>";
     echo "<input type='submit' name='submit' value='Πραγματοποίηση'>";
     echo "<br><br><input type='button' onclick=\"parent.location='../index.php'\" value=\"Αρχική σελίδα\">";
     echo "</form>";
-  if (isset($_POST['submit']))
-    do2yphr($mysqlconnection,1);
+if (isset($_POST['submit'])) {
+    do2yphr($mysqlconnection, 1);
+}
 
 echo "</body>";
 echo "</html>";

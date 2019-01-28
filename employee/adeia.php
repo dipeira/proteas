@@ -494,6 +494,6 @@ if ($_GET['op']=="edit")
                         echo "</body>";
                         echo "</html>";
                 }
-                mysqli_close();
+                mysqli_close($mysqlconnection);
         ?>
     </html>

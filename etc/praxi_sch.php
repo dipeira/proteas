@@ -112,7 +112,7 @@
                 echo "<small><i>$i εγγραφές</i></small>";
                 echo "<br><br>";
 
-		mysqli_close();
+		mysqli_close($mysqlconnection);
                 
                 $page = ob_get_contents(); 
                 $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);

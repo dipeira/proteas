@@ -176,7 +176,7 @@ else {
         mysqli_query($mysqlconnection, $query);
     }
 }
-mysqli_close();
+mysqli_close($mysqlconnection);
 
 echo "<br>";
 if (!$dupe)

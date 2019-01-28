@@ -228,7 +228,7 @@
                     echo "<br>$problems προβλήματα";
                 if ($updates)
                     echo "<br>$updates τροποποιήσεις ΜΚ στη ΒΔ";
-		mysqli_close();
+    mysqli_close($mysqlconnection);
                 
                 $page = ob_get_contents(); 
 		ob_end_flush();

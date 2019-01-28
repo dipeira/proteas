@@ -45,30 +45,30 @@
             {
 		$name = mysqli_result($result, $i, "name");
 		$surname = mysqli_result($result, $i, "surname");
-                $ypoxr_wres = mysqli_result($result, $i, "wres");
-                
-                $yphr_hours = mysqli_result($result, $i, "hours");
-                $yphr_id = mysqli_result($result, $i, "id");
-                
-                if ($ypoxr_wres && ($yphr_hours > $ypoxr_wres))
-                {
-                    $updates++;
-                    $qry = "update yphrethsh set hours=$ypoxr_wres where id=$yphr_id";
-                    $res = mysqli_query($mysqlconnection, $qry);
-                    if (!res)
-                    {
-                        die ('Error: '.mysqli_error ());
-                        $fails++;
-                    }
-                    echo "$surname\tYpoxr:$ypoxr_wres,Yphr:$yphr_hours ".$qry."<br>";
-                }
+    $ypoxr_wres = mysqli_result($result, $i, "wres");
+    
+    $yphr_hours = mysqli_result($result, $i, "hours");
+    $yphr_id = mysqli_result($result, $i, "id");
+    
+    if ($ypoxr_wres && ($yphr_hours > $ypoxr_wres))
+    {
+        $updates++;
+        $qry = "update yphrethsh set hours=$ypoxr_wres where id=$yphr_id";
+        $res = mysqli_query($mysqlconnection, $qry);
+        if (!res)
+        {
+            die ('Error: '.mysqli_error ());
+            $fails++;
+        }
+        echo "$surname\tYpoxr:$ypoxr_wres,Yphr:$yphr_hours ".$qry."<br>";
+    }
                 
 		$i++;
             }
 		
                 echo "<br>";
                 
-		mysqli_close();
+    mysqli_close($mysqlconnection);
                 
                 echo "ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ $updates ÿÿÿÿÿÿÿÿÿÿÿ ÿÿÿ ÿ.ÿ. (ÿÿ ÿÿÿÿÿÿ $synolo ÿÿÿÿÿÿÿÿÿ)";
                 if ($fails)

@@ -88,5 +88,5 @@
   </body>
 </html>
 <?php
-	mysqli_close();
+	mysqli_close($mysqlconnection);
 ?>

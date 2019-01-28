@@ -29,12 +29,13 @@
     if($_REQUEST['action'] == "login"){
         if($log->login("logon", $_REQUEST['username'], $_REQUEST['password']) == true)
         {        
-            header("Location: ../index.php");
+          header("Location: ../index.php");
         }
-    else
-        $log->loginform("login", "login-form", "");
-        echo "<center><h2>H είσοδος απέτυχε...</h2>";
-        echo "<p>Παρακαλώ δοκιμάστε με έναν έγκυρο συνδυασμό ονόματος χρήστη - κωδικού...</p></center>";
+        else {
+          $log->loginform("login", "login-form", "");
+          echo "<center><h2>H είσοδος απέτυχε...</h2>";
+          echo "<p>Παρακαλώ δοκιμάστε με έναν έγκυρο συνδυασμό ονόματος χρήστη - κωδικού...</p></center>";
+        }
     }
 ?>    
 </body>

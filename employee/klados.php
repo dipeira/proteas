@@ -1,20 +1,21 @@
 <?php
 header('Content-type: text/html; charset=iso8859-7'); 
-include('../config.php');
+require '../config.php';
 
-include("../tools/class.login.php");
+require "../tools/class.login.php";
   $log = new logmein();
-  if($log->logincheck($_SESSION['loggedin']) == false){
+if($log->logincheck($_SESSION['loggedin']) == false) {
     header("Location: ../tools/login.php");
-  }
+}
 
   // check if super-user
-if ($_SESSION['userlevel']<>0)
-  header("Location: ../index.php");
+if ($_SESSION['userlevel']<>0) {
+    header("Location: ../index.php");
+}
 
 define("PATHDRASTICTOOLS", "../tools/grid/");
-include(PATHDRASTICTOOLS."conf.php");
-include(PATHDRASTICTOOLS."drasticSrcMySQL.class.php");
+require PATHDRASTICTOOLS."conf.php";
+require PATHDRASTICTOOLS."drasticSrcMySQL.class.php";
 $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_kl);
 ?>
 
@@ -26,7 +27,7 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_kl);
 <LINK href="../css/style.css" rel="stylesheet" type="text/css">
 <title>Κλάδοι - Ειδικότητες</title>
 </head><body>
-<?php include('../etc/menu.php'); ?>
+<?php require '../etc/menu.php'; ?>
     <h2>Ειδικότητες</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>

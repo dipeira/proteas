@@ -1,18 +1,18 @@
 <?php
 header('Content-type: text/html; charset=iso8859-7'); 
-include("tools/class.login.php");
+require "tools/class.login.php";
   $log = new logmein();
-  if($log->logincheck($_SESSION['loggedin']) == false){
+if($log->logincheck($_SESSION['loggedin']) == false) {
     header("Location: ../tools/login.php");
-  }
+}
 
  // check if super-user
 // if ($_SESSION['userlevel']<>0)
 //     header("Location: index.php");
  
 define("PATHDRASTICTOOLS", "grid/");
-include(PATHDRASTICTOOLS."conf.php");
-include(PATHDRASTICTOOLS."drasticSrcMySQL.class.php");
+require PATHDRASTICTOOLS."conf.php";
+require PATHDRASTICTOOLS."drasticSrcMySQL.class.php";
 $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_pr);
 ?>
 
@@ -33,7 +33,7 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_pr);
 <script type="text/javascript">
 var thegrid = new drasticGrid('grid1', {
     pathimg: "grid/img/",
-	colwidth: "300"
+    colwidth: "300"
     });
 </script>
 

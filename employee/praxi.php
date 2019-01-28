@@ -1,25 +1,27 @@
 <?php
 header('Content-type: text/html; charset=iso8859-7'); 
 require_once"../config.php";
-include("../tools/class.login.php");
+require "../tools/class.login.php";
   $log = new logmein();
-  if($log->logincheck($_SESSION['loggedin']) == false){
+if($log->logincheck($_SESSION['loggedin']) == false) {
     header("Location: ../tools/login.php");
-  }
+}
  
 define("PATHDRASTICTOOLS", "../tools/grid/");
-include(PATHDRASTICTOOLS."conf.php");
-include(PATHDRASTICTOOLS."drasticSrcMySQL.class.php");
+require PATHDRASTICTOOLS."conf.php";
+require PATHDRASTICTOOLS."drasticSrcMySQL.class.php";
 $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_pr);
 
 // Prepare $anapl_praxeis keys/values for DrasticGrid
 $pr_values = $pr_labels = Array();
-array_walk_recursive($anapl_praxeis, function($item, $key) use (&$pr_values, &$pr_labels){
-    $pr_values[] = '"'.$key.'"';
-    $pr_labels[] = '"'.$item.'"';
-});
-$pr_values = implode($pr_values,',');
-$pr_labels = implode($pr_labels,',');
+array_walk_recursive(
+    $anapl_praxeis, function ($item, $key) use (&$pr_values, &$pr_labels) {
+        $pr_values[] = '"'.$key.'"';
+        $pr_labels[] = '"'.$item.'"';
+    }
+);
+$pr_values = implode($pr_values, ',');
+$pr_labels = implode($pr_labels, ',');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -31,7 +33,7 @@ $pr_labels = implode($pr_labels,',');
 <title>Διαχείριση Πράξεων</title>
 </head>
 <body>
-<?php include('../etc/menu.php'); ?>
+<?php require '../etc/menu.php'; ?>
 <h2>Διαχείριση Πράξεων</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
@@ -41,7 +43,7 @@ $pr_labels = implode($pr_labels,',');
 <script type="text/javascript">
 var thegrid = new drasticGrid('grid1', {
     pathimg: "../tools/grid/img/",
-	//colwidth: "300",
+    //colwidth: "300",
     pagelength:25,
     columns: [
       {name: 'name', displayname:'Όνομα', width: 300},
@@ -51,18 +53,18 @@ var thegrid = new drasticGrid('grid1', {
           {name: 'sxolio', displayname:'Σχόλια', width: 150},
       {name: 'type', displayname:'Τύπος',
         type: DDTYPEKEY, 
-        values: [<?= $pr_values; ?>],
-        labels:  [<?= $pr_labels; ?>],
+        values: [<?php echo $pr_values; ?>],
+        labels:  [<?php echo $pr_labels; ?>],
         width: 150
       }
     ]//,
     // onUpdateStart: function(id, colname, value) {
-	// 	if (id == 0 ) {
-	// 		alert('Σφάλμα: Η πρώτη γραμμή δεν μπορεί να μεταβληθεί...');
-	// 		this.do_update = false;
-	// 	}
-	// 	else this.do_update = true;
-	// }
+    //     if (id == 0 ) {
+    //         alert('Σφάλμα: Η πρώτη γραμμή δεν μπορεί να μεταβληθεί...');
+    //         this.do_update = false;
+    //     }
+    //     else this.do_update = true;
+    // }
 });
 </script>
 

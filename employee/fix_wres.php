@@ -64,7 +64,7 @@
 		    $i++;
         }
         echo "<br>";       
-		mysqli_close();
+        mysqli_close($mysqlconnection);
 
         echo "Πραγματοποιήθηκαν $updates ενημερώσεις στη Β.Δ. (σε πλήθος $synolo υπαλλήλων)";
         if ($fails)

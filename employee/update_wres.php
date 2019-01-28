@@ -156,7 +156,7 @@
 		echo "</tbody></table>";
     echo "<br>";
                 
-		mysqli_close();
+		mysqli_close($mysqlconnection);
                 
     if ($editvmk)
         echo "Πραγματοποιήθηκαν $updates ενημερώσεις στη Β.Δ.";

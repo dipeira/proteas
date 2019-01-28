@@ -185,7 +185,7 @@
 
   if (!$dupe)
     notify('Επιτυχής καταχώρηση!',0);
-  mysqli_close();
+  mysqli_close($mysqlconnection);
 ?>
 <br>
 </body>

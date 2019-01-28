@@ -429,7 +429,7 @@
             echo "</table>";
             echo "$oks επιτυχημένες αποστολές.<br>$errs λάθη.";
         }
-        mysqli_close();
+        mysqli_close($mysqlconnection);
 ?>
 <br><br>
 

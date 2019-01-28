@@ -7,7 +7,9 @@ mysqli_query($conn, "SET CHARACTER SET 'greek'");
 
 //$q = strtolower($_GET["q"]);
 $q = mb_strtolower($_GET["q"],'utf-8');
-if (!$q) return;
+if (strlen($q) < 2) {
+  return;
+} 
 
 //$sql = "select DISTINCT surname from employee where surname LIKE '%$q%' LIMIT 0, 10";
 // changed 13-11-2014: it now searches monimoi & ektaktoi and returns surname & 0 for mon, 1 for ekt
@@ -17,11 +19,11 @@ $sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
 
 $rsd = mysqli_query($conn,$sql);
 while($rs = mysqli_fetch_array($rsd)) {
-        $postfix = $rs['t_nm'] ? ' (Αν)' : ' (Μον)';
-        $cname = $rs['surname'].$postfix;
-        $ctbl = $rs['t_nm'];
+  $postfix = $rs['t_nm'] ? ' (Αν)' : ' (Μον)';
+  $cname = $rs['surname'].$postfix;
+  $ctbl = $rs['t_nm'];
 	$out =  "$cname|$ctbl\n";
-        echo $out;
-        //echo json_encode($out);
+  echo $out;
+  //echo json_encode($out);
 }
 ?>

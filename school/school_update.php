@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=iso8859-7'); 
         session_start();
 ?>
 <html>
@@ -74,7 +74,7 @@
   mysqli_query($mysqlconnection, $query);
 
   //echo "Επιτυχής καταχώρηση!";
-  mysqli_close();
+  mysqli_close($mysqlconnection);
 ?>
 <br>
   <center>

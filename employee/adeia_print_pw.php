@@ -32,123 +32,124 @@ $school = mysqli_result($res3, 0, "name");
 $PHPWord = new PHPWord();
 
 $type = $_POST['arr'][1];
-    switch ($type)
-        {
-            case 1:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_anar.docx');
-                break;
-            case 2:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_kan.docx');
-                break;
-            case 3:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_gnwm.docx');
-                break;
-            case 4:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_eidikh.docx');
-                break;
-            case 5:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_loxeias.docx');
-                break;
-            case 6:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_kyhshs.docx');
-                break;
-            case 7:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_anatr.docx');
-                break;
-            case 8:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_gonikh.docx');
-                break;
-            case 9:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_kan_kyof.docx');
-                break;
-            case 10:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_aney_1m.docx');
-                break;
-            case 12:
-                $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_aney_1y.docx');
-                break;
-            // loipes
-        }
+switch ($type)
+{
+  case 1:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_anar.docx');
+      break;
+  case 2:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_kan.docx');
+      break;
+  case 3:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_gnwm.docx');
+      break;
+  case 4:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_eidikh.docx');
+      break;
+  case 5:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_loxeias.docx');
+      break;
+  case 6:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_kyhshs.docx');
+      break;
+  case 7:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_anatr.docx');
+      break;
+  case 8:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_gonikh.docx');
+      break;
+  case 9:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_kan_kyof.docx');
+      break;
+  case 10:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_aney_1m.docx');
+      break;
+  case 12:
+      $document = $PHPWord->loadTemplate('../word/tmpl_adeia/tmpl_aney_1y.docx');
+      break;
+              // loipes
+}
 
-$data = $klados;
-$data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-$document->setValue('klados', $data);
+    $data = $klados;
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('klados', $data);
         
-$data = $surname." ".$name;
-$data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-$document->setValue('fullname', $data);
-
-//if ($type!=3)
-//{
-//      $document->setValue('fullname1', $data);
-//}
-
-$data = $school;
-$data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-$document->setValue('school', $data);
-
-$data = $_POST['arr']['2'];
-$document->setValue('prot', $data);
-
-$data = $_POST['arr']['3'];
-$document->setValue('hmprot', $data);
-
-if ($type!=3)
-{
-    $data = $_POST['arr']['4'];
-    $document->setValue('date', $data);
-}
-
-// if aney apodoxwn skip days & daysfull
-if (($type != 10) && ($type != 12))
-{
-    $data = $days = $_POST['arr']['6'];
-    //$document->setValue('days', $data);
-
-    if ($days==1)
-          $data = "μίας (1) ημέρας";
-//        $data = "(μίας) ημέρας";
-    else
-        $data = convertNumber($data)." (".$days.") ημερών";
+    $data = $surname." ".$name;
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-    $document->setValue('daysfull', $data);
-}
+    $document->setValue('fullname', $data);
 
-$start = $_POST['arr']['7'];
-$finish = $_POST['arr']['8'];
-if ($days==1)
-    $duration = "στις $start";
-else
-    $duration = "από $start έως $finish";
-$data = $duration;
-$data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-$document->setValue('duration', $data);
+    //if ($type!=3)
+    //{
+    //      $document->setValue('fullname1', $data);
+    //}
 
-if ($type==1)
-{
-    $vevdil = $_POST['arr']['5'];
-    if ($vevdil==1)
-        $data = "Ιατρική Βεβαίωση";
-    else
-        $data = "Υπεύθυνη Δήλωση";
+    $data = $school;
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-    $document->setValue('vevdil', $data);
+    $document->setValue('school', $data);
 
-}
+    $data = $_POST['arr']['2'];
+    $document->setValue('prot', $data);
 
-$data = getParam('head_title', $mysqlconnection);
-$data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-$document->setValue('head_title', $data);
-$data = getParam('head_name', $mysqlconnection);
-$data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
-$document->setValue('head_name', $data);
+    $data = $_POST['arr']['3'];
+    $document->setValue('hmprot', $data);
 
-$output1 = "../word/adeia_".$_SESSION['userid'].".docx";
-$document->save($output1);
+    if ($type!=3) {
+        $data = $_POST['arr']['4'];
+        $document->setValue('date', $data);
+    }
 
-header('Content-type: text/html; charset=iso8859-7'); 
+    // if aney apodoxwn skip days & daysfull
+    if (($type != 10) && ($type != 12)) {
+        $data = $days = $_POST['arr']['6'];
+        //$document->setValue('days', $data);
 
-echo "<html>";
-echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
-?>
+        if ($days==1) {
+            $data = "μίας (1) ημέρας";
+        }
+        //        $data = "(μίας) ημέρας";
+        else {
+            $data = convertNumber($data)." (".$days.") ημερών";
+        }
+        $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+        $document->setValue('daysfull', $data);
+    }
+
+    $start = $_POST['arr']['7'];
+    $finish = $_POST['arr']['8'];
+    if ($days==1) {
+        $duration = "στις $start";
+    } else {
+        $duration = "από $start έως $finish";
+    }
+    $data = $duration;
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('duration', $data);
+
+    if ($type==1) {
+        $vevdil = $_POST['arr']['5'];
+        if ($vevdil==1) {
+            $data = "Ιατρική Βεβαίωση";
+        } else {
+            $data = "Υπεύθυνη Δήλωση";
+        }
+        $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+        $document->setValue('vevdil', $data);
+
+    }
+
+    $data = getParam('head_title', $mysqlconnection);
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('head_title', $data);
+    $data = getParam('head_name', $mysqlconnection);
+    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+    $document->setValue('head_name', $data);
+
+    $output1 = "../word/adeia_".$_SESSION['userid'].".docx";
+    $document->save($output1);
+
+    header('Content-type: text/html; charset=iso8859-7'); 
+
+    echo "<html>";
+    echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
+    ?>
 </html>

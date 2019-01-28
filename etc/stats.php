@@ -2,7 +2,7 @@
 header('Content-type: text/html; charset=iso8859-7');
 require_once"../config.php";
 require_once"../tools/functions.php";
-?>	
+?>    
 <html>
     <head>      
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
@@ -17,7 +17,7 @@ require_once"../tools/functions.php";
     </head>
 
     <?php
-    include("../tools/class.login.php");
+    require "../tools/class.login.php";
     $log = new logmein();
     if ($log->logincheck($_SESSION['loggedin']) == false) {
         header("Location: ../tools/login.php");
@@ -128,10 +128,10 @@ require_once"../tools/functions.php";
 
     //
     echo "<body>";
-    include('../etc/menu.php');
+    require '../etc/menu.php';
     echo "<h2>Στατιστικά</h2>";
     echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
-    echo "<h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση ".getParam('dnsh',$mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
+    echo "<h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση ".getParam('dnsh', $mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
     echo "<thead><th><b>Κλάδος</b></th><th colspan=3><b>Αριθμός</b></th></thead><tbody>";
     while ($row = mysqli_fetch_array($result_mon, MYSQLI_NUM)) {
         echo "<tr><td>$row[1] ($row[2])</td><td colspan=2>$row[0]</td></tr>";
@@ -161,8 +161,9 @@ require_once"../tools/functions.php";
     echo "<table class=\"imagetable tablesorter\" border='1'>";
     echo "<h3>Σχολικές Μονάδες</h3>";
     echo "<thead><th>Τύπος</th><th>Αριθμός</th></thead><tbody>";
-    foreach ($sx_arr as $k => $v)
+    foreach ($sx_arr as $k => $v) {
         echo "<tr><td>$k</td><td>$v</td>";
+    }
 
     echo "</tbody></table>";
 
@@ -170,5 +171,5 @@ require_once"../tools/functions.php";
     echo "</body>";
     echo "</html>";
 
-    mysqli_close();
+    mysqli_close($mysqlconnection);
     ?>

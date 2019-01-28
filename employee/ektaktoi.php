@@ -554,5 +554,5 @@ if ($_GET['op']=="delete")
         echo "	<INPUT TYPE='button' class=btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
 }
 
-mysqli_close();
+mysqli_close($mysqlconnection);
 ?> 

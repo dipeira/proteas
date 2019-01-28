@@ -70,7 +70,7 @@
   mysqli_query($mysqlconnection, $query);
   
   //echo "Επιτυχής καταχώρηση!";
-  mysqli_close();
+  mysqli_close($mysqlconnection);
 ?>
 <br>
 <h2 align="center">Επιτυχής καταχώρηση!</h2>

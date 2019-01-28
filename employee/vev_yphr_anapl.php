@@ -16,7 +16,7 @@ $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
 mysqli_query($mysqlconnection, "SET NAMES 'greek'");
 mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 
-set_time_limit (180);
+set_time_limit(180);
 
 $arr = unserialize(html_entity_decode($_POST['emp_arr']));
 
@@ -34,13 +34,14 @@ foreach($arr as $myarr)
 
     // choose word template depending on employee type etc.
     // kratikoy
-    if ($_POST['kratikoy'])
+    if ($_POST['kratikoy']) {
         $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_vev_anapl.docx');
+    }
     // espa
     else {
-        if ($myarr['eepebp'] > 0){
+        if ($myarr['eepebp'] > 0) {
             // if PEP
-            if ($myarr['eepebp'] == 2){
+            if ($myarr['eepebp'] == 2) {
                 $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_pep.docx');
             } else {
                 $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_eepebp.docx');
@@ -51,8 +52,9 @@ foreach($arr as $myarr)
             $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
             $document->setValue('eepebp', $data);
         }
-        else
+        else {
             $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_vev_anapl_espa.docx');
+        }
     }
 
     $data = $endofyear;
@@ -91,7 +93,7 @@ foreach($arr as $myarr)
     $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('ada', $data);
     
-    $didetos = substr($sxol_etos,0,4).'-'.substr($sxol_etos,4,2);
+    $didetos = substr($sxol_etos, 0, 4).'-'.substr($sxol_etos, 4, 2);
     $document->setValue('didetos', $didetos);
     
     $data = $myarr['apof'];
@@ -102,19 +104,19 @@ foreach($arr as $myarr)
     $sxoleia = '';
     foreach ($myarr['sx_yphrethshs'] as $sx_arr){
         foreach($sx_arr as $k => $v) {
-            if ($k === 'sch' && $v>0)
-            {
+            if ($k === 'sch' && $v>0) {
                 $sxoleia .= getSchool($v, $mysqlconnection);
             }
             else {
                 $sxoleia .= '';
             }
-            if ($k === 'hours' && $v>0)
+            if ($k === 'hours' && $v>0) {
                 $sxoleia .= " ($v ώρες), ";
-            else
+            } else {
                 $sxoleia .= '';
+            }
             // if meiwmeno, compute total hours
-            if ($k === 'hours' && $myarr['meiwmeno']){
+            if ($k === 'hours' && $myarr['meiwmeno']) {
                 $hour_sum += $v;
             }
         }
@@ -126,20 +128,21 @@ foreach($arr as $myarr)
 
     // metakinhsh
     $metakinhsh = $myarr['metakinhsh'];
-    if ($myarr['ebp'])
-    {
-        if (strlen($metakinhsh)<2)
+    if ($myarr['ebp']) {
+        if (strlen($metakinhsh)<2) {
             $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia";
-        else
+        } else {
             $top_metak = $metakinhsh . " " . $sxoleia;
+        }
     }
     else
     {
-        if (strlen($metakinhsh)<2)
+        if (strlen($metakinhsh)<2) {
             $top_metak = "Τοποθετήθηκε με την αριθμ. ".$myarr['apof']." Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia";
-        else
+        } else {
             
             $top_metak = $metakinhsh . " " . $sxoleia;
+        }
     }
     $data = mb_convert_encoding($top_metak, "utf-8", "iso-8859-7");
     $document->setValue('top_metak', $data);
@@ -176,7 +179,7 @@ foreach($arr as $myarr)
     if ($adeies['anar_sub'] > 0) {
         $adeies_txt .= "Έλαβε αναρρωτικές άδειες σύνολο: ".$adeies['anar']." ημέρες, από τις οποίες μόνο 15 ημέρες υπολογίζονται για προϋπηρεσία σύμφωνα με το άρθρο 657 και 658 του αστικού κώδικα, το άρθρο 11 του Ν. 2874/2000, την εγκύκλιο αριθμ. 79/14-07-1999 ΙΚΑ, έγγραφο αρ. πρωτ. Π06/40/29-04-2013 ΙΚΑ. ";
     }
-    if ($adeies['aney'] > 0){
+    if ($adeies['aney'] > 0) {
         $adeies_aney = $adeies['aney'] > 1 ?
             $adeies['aney'] . " ημέρες, που αφαιρούνται από τη συνολική του/-ης προϋπηρεσία." :
             $adeies['aney'] . " ημέρα, που αφαιρείται από τη συνολική του/-ης προϋπηρεσία.";
@@ -193,14 +196,14 @@ foreach($arr as $myarr)
     
 
     // ypologismos yphresias
-    $apol = substr($hmapox,8,2) + substr($hmapox,5,2)*30 + substr($hmapox,0,4)*360;
+    $apol = substr($hmapox, 8, 2) + substr($hmapox, 5, 2)*30 + substr($hmapox, 0, 4)*360;
     // hm/nia ya or apofasi perif/khs
     $tempya = strlen($myarr['ya']) > 0 ? $myarr['ya'] : $myarr['apof'];
-    $temp = explode('/',$tempya);
+    $temp = explode('/', $tempya);
     $temp = explode('-', $temp[2]);
     $hm_ya = $temp[0] + $temp[1]*30 + $temp[2]*360;
     // hm proslhpshs
-    $pros = substr($hmpros,0,4)*360 + substr($hmpros,5,2)*30 + substr($hmpros,8,2);
+    $pros = substr($hmpros, 0, 4)*360 + substr($hmpros, 5, 2)*30 + substr($hmpros, 8, 2);
     // +1 για να περιληφθεί και η τελευταία μέρα
     $days = $apol - $pros + 1;
     $days_ya = $apol - $hm_ya + 1;
@@ -208,7 +211,7 @@ foreach($arr as $myarr)
     $days -= $adeies['subtracted'];
     $days_ya -= $adeies['subtracted'];
     // if meiwmeno, compute yphresia
-    if ($myarr['meiwmeno']){
+    if ($myarr['meiwmeno']) {
         $days = compute_meiwmeno($days, $hour_sum, $mysqlconnection);
         $days_ya = compute_meiwmeno($days_ya, $hour_sum, $mysqlconnection);
     }
@@ -237,20 +240,23 @@ foreach($arr as $myarr)
     $last_afm = $myarr['last_afm'];
     $output1 = "../word/anapl/".$fname.".docx";
     // if same surname, use last digits of afm
-    if (file_exists($output1))
+    if (file_exists($output1)) {
         $output1 = "../word/anapl/".$fname."_".$last_afm.".docx";
+    }
     $document->save($output1);
     $filenames[] = $output1;
     $i++;
 } 
 
 // create zip file
-if ($_POST['kratikoy'])
+if ($_POST['kratikoy']) {
     $zipname = '../word/anapl/vev.zip';
-else
+} else {
     $zipname = '../word/anapl/vev_espa.zip';
-if (file_exists($zipname))
+}
+if (file_exists($zipname)) {
     unlink($zipname);
+}
 $zip = new ZipArchive;
 $zip->open($zipname, ZipArchive::CREATE);
 foreach ($filenames as $file) {
@@ -263,14 +269,16 @@ $zip->close();
 echo "<html>";
 echo "<p>";
 // Delete docx files after creating zip file
-foreach ($filenames as $file)
+foreach ($filenames as $file) {
     unlink($file);
+}
 $vev = $i-1;
 echo "<h3>Επιτυχής εξαγωγή βεβαιώσεων αναπληρωτών ";
-if ($_POST['kratikoy'])
+if ($_POST['kratikoy']) {
     echo "κρατικού προϋπολογισμού";
-else
+} else {
     echo "ΕΣΠΑ";
+}
 echo "</h3>";
 echo "<br><p>Εκπ/κοί που βρέθηκαν: ".$_POST['plithos'];
 echo "<br>Βεβαιώσεις που εξήχθησαν: ".$vev;

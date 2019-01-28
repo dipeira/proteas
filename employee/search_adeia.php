@@ -112,7 +112,7 @@
 		echo "	</form>";
 		echo "</div>";
          }	
-		//mysqli_close();
+    mysqli_close($mysqlconnection);
 ?>
 		</center>
 		<div id='results'></div>

@@ -111,13 +111,13 @@
                 $i++;
             }
 		echo "</tbody></table>";
-                echo "<small><i>$i εγγραφές</i></small>";
-                echo "<br><br>";
+    echo "<small><i>$i εγγραφές</i></small>";
+    echo "<br><br>";
 
-		mysqli_close();
+    mysqli_close($mysqlconnection);
                 
-                $page = ob_get_contents(); 
-                $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);
+    $page = ob_get_contents(); 
+    $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);
 		ob_end_flush();
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
