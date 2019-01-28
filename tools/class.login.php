@@ -5,6 +5,8 @@
 //error_reporting(0);
 //start session
 session_start();
+require_once dirname(__DIR__).'/config.php';
+
 class logmein {
     //database setup
     var $hostname_logon;      //Database server LOCATION
@@ -24,7 +26,6 @@ class logmein {
  
     //connect to database
     function dbconnect(){
-        require_once 'config.php';
         global $db_host, $db_name, $db_user, $db_password;
         $this->hostname_logon = $db_host;
         $this->database_logon = $db_name;
