@@ -71,6 +71,10 @@ if ($usrlvl == 0) {
         notify("ΠΡΟΣΟΧΗ: Παρακαλώ διαγράψτε το αρχείο <b>init.php</b> για λόγους ασφαλείας!</p>", 'error');
     }
 }
+if (isset($_POST['clearall'])) {
+  $_POST = array();
+  echo "<script>window.location = 'index.php'</script>";
+}
     //rpp = results per page
 if (isset($_POST['rpp'])) {
     $rpp = $_POST['rpp'];
@@ -87,7 +91,6 @@ if ($_POST['page']!=0) {
 } else {
     $curpg = 1;
 }
-                            
     //limit in the query thing
     $limitQ = ' LIMIT ' .($curpg - 1) * $rpp .',' .$rpp;
 
@@ -135,6 +138,7 @@ if ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0)) {
         $query .= "AND sx_yphrethshs = $yppost ";
     } else {
         $query .= "WHERE sx_yphrethshs = $yppost ";
+        $whflag = 1;
     }
 }
     // if ektaktos
@@ -166,11 +170,24 @@ if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
   }
 
   // exclude employees that don't belong in d/nsh
-  $text = " (sx_yphrethshs NOT IN (388, 394) AND sx_organikhs NOT IN (388,394))";
-  if ($whflag) {
-    $query .= " AND $text";
-  } else {
-    $query .= " WHERE $text";
+  if (!isset($_REQUEST['outsiders']) || !isset($_REQUEST['outsiders'])==0) {
+    $text = " (sx_yphrethshs NOT IN (388, 394) AND sx_organikhs NOT IN (388,394))";
+    if ($whflag) {
+      $query .= " AND $text";
+    } else {
+      $query .= " WHERE $text";
+      $whflag = 1;
+    }
+  }
+  // include inactive employees
+  if (!isset($_REQUEST['inactive']) || !isset($_REQUEST['inactive'])) {
+    $text = " status IN (1,3)";
+    if ($whflag) {
+      $query .= " AND $text";
+    } else {
+      $query .= " WHERE $text";
+      $whflag = 1;
+    }
   }
     
     $query .= " ORDER BY surname ";
@@ -210,16 +227,26 @@ if ($logged) {
 }
     echo "<center>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-   echo "<thead><tr><form id='src' name='src' action='index.php' method='POST'>\n";
-if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0)) {
-    echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
+   echo "<thead>";
+   echo "<tr><form id='src' name='src' action='index.php' method='POST'>\n";
+if ($posted || 
+      ($_REQUEST['klados']>0) || 
+      ($_REQUEST['org']>0) || 
+      ($_REQUEST['yphr']>0) || 
+      (strlen($_REQUEST['surname'])>0) || 
+      (isset($_REQUEST['outsiders'])) ||
+      (isset($_REQUEST['inactive']))
+    ) {
+    echo "<input type='hidden' name='clearall' id='clearall' />";
+    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
 } else {    
-    echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
+    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
 }
-    echo "<input type='text' name='surname' id='surname''/>\n";
-      echo "<input type='hidden' name='pinakas' id='pinakas' />";
+    echo strlen($_REQUEST['surname'])>0 ? "<input type='text' value='".$_REQUEST['surname']."' name='surname' id='surname''/>\n" : "<input type='text' name='surname' id='surname''/>\n";
+    echo "<input type='hidden' name='pinakas' id='pinakas' />";
     echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές, εμφανίζοντας σε παρένθεση τη σχέση εργασίας'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
-  kladosCmb($mysqlconnection);
+    echo $klpost > 0 ? kladosCombo($klpost, $mysqlconnection) : kladosCmb($mysqlconnection);
+  //  kladosCmb($mysqlconnection);
     echo "</td>\n";
     echo "<div id=\"content\">";
     echo "<form autocomplete=\"off\">";
@@ -227,6 +254,11 @@ if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0)) {
     echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td>";
     echo "</div>";
     echo "</td>";
+    echo "<tr>";
+    $has_outsiders = isset($_REQUEST['outsiders']) ? 'checked' : '';
+    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση</td>";	
+    $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
+    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive>Εμφάνιση και όσων δεν εργάζονται <small>(λύση σχέσης, διαθεσιμότητα)</small></td>";
     echo "</form></tr>\n";
 
    echo "<tr><th>Ενέργεια</th>\n";
@@ -287,22 +319,24 @@ if ($lastpg == 0) {
     $curpg = 0;
 }
     echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+$outsiders = isset($_REQUEST['outsiders']) ? '&outsiders=1' : '';
+$inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
 if ($curpg!=1) {
-    echo "  <a href=index.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Πρώτη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Προηγ/νη</a>";
+    echo "  <a href=index.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Πρώτη</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Προηγ/νη</a>";
 }
 else {
         echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 }
 if ($curpg != $lastpg) {
     $nextpg = $curpg+1;
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Επόμενη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Τελευταία</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Επόμενη</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Τελευταία</a>";
 }
 else { 
         echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
 }
-    echo "<FORM METHOD=\"POST\" ACTION=\"index.php\">";
+    echo "<FORM METHOD='POST' ACTION='index.php?".$_SERVER['QUERY_STRING']."'>";
     echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
     echo "<input type=\"submit\" value=\"Μετάβαση\">";
     echo "<br>";
