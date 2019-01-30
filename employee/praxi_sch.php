@@ -44,7 +44,7 @@
     echo "<tr><td>Επιλογή Πράξεων:</td><td>";
     $cmb = "<select name=\"praxi[]\" class=\"praxi_select\" multiple=\"multiple\">";
     while ($row = mysqli_fetch_array($result)){
-        if (in_array($row['id'],$_POST['praxi']))
+        if (isset($_POST['praxi']) && in_array($row['id'],$_POST['praxi']))
             $cmb .= "<option value=\"".$row['id']."\" selected>".$row['name']."</option>";
         else
             $cmb .= "<option value=\"".$row['id']."\">".$row['name']."</option>";
@@ -124,7 +124,7 @@
 		echo "<input type='hidden' name = 'data' value='".  htmlspecialchars($page, ENT_QUOTES)."'>";
                 echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
                 echo "&nbsp;&nbsp;&nbsp;";
-                echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+                echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
                 echo "</form>";
 	}
 ?>

@@ -242,7 +242,7 @@ elseif ($_POST['type'] == 2) {
     $query = "select id from ektaktoi";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result)) {
-        exit('Σφάλμα: O πίνακας έκτακτου προσωπικού είναι κενός...');
+        exit('Σφάλμα: O πίνακας αναπληρωτών είναι κενός...');
     }
     // check if already inserted        
     $query = "select id from ektaktoi_old where sxoletos = $sxol_etos";

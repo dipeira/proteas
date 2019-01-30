@@ -50,7 +50,7 @@
     print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
     echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small>";
     echo "</form>";
-    echo "<br><a href='ektaktoi_import.php'>Εισαγωγή έκτακτου προσωπικού</a>";
+    echo "<br><a href='ektaktoi_import.php'>Εισαγωγή αναπληρωτών</a>";
     echo "<br><br>";
     echo "<a href='../index.php'>Επιστροφή</a>";
     exit;

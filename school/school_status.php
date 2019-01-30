@@ -637,7 +637,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<br>";
         }
         
-        //Έκτακτο Προσωπικό
+        //Αναπληρωτές
         //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
         $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1)";
         //echo $query;
@@ -645,7 +645,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $num = mysqli_num_rows($result);
         $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
         if ($num) {
-            echo "<h3>Έκτακτο Προσωπικό</h3>";
+            echo "<h3>Αναπληρωτές</h3>";
             $i=0;
             echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
@@ -806,14 +806,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             echo "</tbody></table>";
         }
-        //Έκτακτο Προσωπικό σε άδεια
+        //Αναπληρωτές σε άδεια
         $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
         //echo $query;
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
         if ($num) {
-            echo "<h3>Έκτακτο Προσωπικό</h3>";
+            echo "<h3>Αναπληρωτές</h3>";
             $i=0;
             echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";

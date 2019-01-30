@@ -477,7 +477,7 @@ elseif ($_GET['op']=="view") {
     echo "<table class=\"imagetable\" border='1'>";    
     echo "<tr>";
         
-       echo "<th colspan=4 align=center>Καρτέλα Υπαλλήλου</th>";
+       echo "<th colspan=4 align=center>Καρτέλα μόνιμου εκπαιδευτικού</th>";
     echo "</tr>";
     echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
     echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";

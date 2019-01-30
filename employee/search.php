@@ -72,7 +72,7 @@
   <?php include('../etc/menu.php'); ?>
     <center>
 	 <h2>Αναζήτηση προσωπικού</h2>
-   <h3>(μόνιμου & έκτακτου)</h3>
+   <h3>(μονίμων & αναπληρωτών)</h3>
       <?php
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";

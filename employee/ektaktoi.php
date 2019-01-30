@@ -22,7 +22,7 @@
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Έκτακτο Προσωπικό</title>
+    <title>Αναπληρωτές</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
@@ -200,7 +200,7 @@
         <?php
 if ($_GET['op']=="add")
 {
-        echo "<h3>Προσθήκη έκτακτου εκπαιδευτικού</h3>";
+        echo "<h3>Προσθήκη αναπληρωτή εκπαιδευτικού</h3>";
         echo "<form id='updatefrm' action='update_ekt.php' method='POST'>";
         echo "<table class=\"imagetable\" border='1'>";
         
@@ -261,7 +261,7 @@ if ($_GET['op']=="add")
         echo "  <input type='hidden' name = 'action' value='1'>";
         echo "<br>";
         echo "	<input type='submit' value='Καταχώρηση'>";
-        echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
+        echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
         echo "<br>";
         echo "	<br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική Σελίδα' onClick=\"parent.location='../index.php'\">";
         echo "	</form>";
@@ -275,7 +275,7 @@ if ($_GET['op']=="add")
 
 if ($_GET['op']=="edit")
 {
-        echo "<h3>Επεξεργασία έκτακτου εκπαιδευτικού</h3>";
+        echo "<h3>Επεξεργασία αναπληρωτή εκπαιδευτικού</h3>";
         echo "<form id='updatefrm' name='update' action='update_ekt.php' method='POST'>";
         echo "<table class=\"imagetable\" border='1'>";
         echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
@@ -398,7 +398,7 @@ elseif ($_GET['op']=="view")
         echo "<table class=\"imagetable\" border='1'>";	
         echo "<tr>";
         //echo "<td colspan=2>ID</td><td colspan=2>$id</td>";
-        echo "<th colspan=4 align=center>Καρτέλα Υπαλλήλου</th>";
+        echo "<th colspan=4 align=center>Καρτέλα αναπληρωτή εκπαιδευτικού</th>";
         echo "</tr>";
         echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
         echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
@@ -509,8 +509,8 @@ elseif ($_GET['op']=="view")
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
         echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
         echo $sxoletos ?
-                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
-                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_list.php'\">";
+                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
+                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
 
         echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
         ?>

@@ -22,7 +22,7 @@ else {
     
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Έκτακτο Προσωπικό</title>
+    <title>Αναπληρωτές</title>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -182,7 +182,8 @@ else {
         $url = "ektaktoi.php?id=$id&op=view";
         echo "<script>window.location = '$url'</script>";
     }
-    echo "<center>";        
+    echo "<center>";
+    echo "<h2>Αναπληρωτές</h2>";
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
     echo "<tr><th>Ενέργεια</th>\n";
@@ -268,10 +269,10 @@ else {
         }
         echo "</tbody>\n";
         if ($usrlvl < 2) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη έκτακτου εκπαιδευτικού</a></span>";
+            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</a></span>";
         }        
         if ($usrlvl == 0) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"../tools/ektaktoi_import.php\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Μαζική εισαγωγή εκτάκτων εκπ/κών από αρχείο excel (.xls)</a></span>";
+            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"../tools/ektaktoi_import.php\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Μαζική εισαγωγή αναπληρωτών εκπ/κών από αρχείο excel (.xls)</a></span>";
         }
         echo "<tr><td colspan=7 align=center>";
         $prevpg = $curpg-1;
@@ -305,7 +306,7 @@ else {
         echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
         echo "&nbsp;&nbsp;&nbsp;";
         echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Έκτακτο προσωπικό προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αναπληρωτές προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
         echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
         echo "</table>\n";
         ?>

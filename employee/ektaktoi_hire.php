@@ -9,7 +9,7 @@
   <html>
   <head>      
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-        <title>Πρόσληψη έκτακτων εκπαιδευτικών προηγούμενου έτους</title>
+        <title>Πρόσληψη αναπληρωτών εκπαιδευτικών προηγούμενου έτους</title>
         <link href="../css/select2.min.css" rel="stylesheet" />
            <script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
         <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -50,7 +50,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         mysqli_query($mysqlconnection, "SET NAMES 'greek'");
         mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         
-        echo "<html><head><h2>Πρόσληψη έκτακτων εκπαιδευτικών προηγούμενου έτους</h2></head><body>";
+        echo "<html><head><h2>Πρόσληψη αναπληρωτών εκπαιδευτικών προηγούμενου έτους</h2></head><body>";
         
         echo "<form action='' id='hirefrm' method='POST' autocomplete='off'>";
         echo "<table class=\"imagetable\" border='1'>";

@@ -32,7 +32,7 @@ else
     
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Έκτακτο Προσωπικό</title>
+    <title>Αναπληρωτές</title>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -98,7 +98,7 @@ else
         
 
         if (isset($sxoletos)) {
-            echo "<h3>Έκτακτο προσωπικό σχολικού έτους: " . substr($sxoletos, 0, 4) . '-' . substr($sxoletos, 4, 2) ."</h3>";
+            echo "<h3>Αναπληρωτές σχολικού έτους: " . substr($sxoletos, 0, 4) . '-' . substr($sxoletos, 4, 2) ."</h3>";
         }
                 
         $klpost = 0;
@@ -284,7 +284,7 @@ else
         echo "<input type=\"submit\" value=\"Ορισμός\">";
         echo "</FORM>";
         echo "</td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη έκτακτου προσωπικού' onClick=\"parent.location='ektaktoi_hire.php'\">";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη αναπληρωτών' onClick=\"parent.location='ektaktoi_hire.php'\">";
         echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πράξεις έτους $sxoletos' onClick=\"parent.location='praxi_prev.php?sxoletos=$sxoletos'\">";
         echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
         echo "</table>\n";
