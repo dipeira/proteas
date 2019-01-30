@@ -1,3 +1,6 @@
+<?php
+  header('Content-type: text/html; charset=iso8859-7'); 
+?>
 <html>
   <head>
 	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">
@@ -116,7 +119,7 @@
           // employees
           case 1:
             // check school codes
-            $mysqlconn = mysql_connect($db_host, $db_user, $db_password);
+            $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
             $sx_organ = getSchoolFromCode($data[23],$mysqlconn);
             $sx_yphr = getSchoolFromCode($data[24],$mysqlconn);
             if (!$sx_organ || !$sx_yphr){

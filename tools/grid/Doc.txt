@@ -39,12 +39,12 @@ define("PATHDRASTICTOOLS", "<PATHTODRASTICTOOLS");
 include(PATHDRASTICTOOLS."drasticSrcMySQL.class.php");
 class mysrc extends drasticsrcmysql {
     protected function select(){
-        $res = mysql_query("SELECT * FROM $this->table WHERE <PUTYOURWHERECLAUSEHERE>" . $this->orderbystr, $this->conn) or die(mysql_error());
+        $res = mysqli_query($this->conn) or die(mysqli_error(), "SELECT * FROM $this->table WHERE <PUTYOURWHERECLAUSEHERE>" . $this->orderbystr)
         return ($res);
     }
     protected function add(){
-        mysql_query("INSERT INTO $this->table (Continent) VALUES('Europe')", $this->conn) or die(mysql_error());
-        if (mysql_affected_rows($this->conn) == 1) return(true); else return(false);
+        mysqli_query($this->conn) or die(mysqli_error(), "INSERT INTO $this->table (Continent) VALUES('Europe')")
+        if (mysqli_affected_rows($this->conn) == 1) return(true); else return(false);
     }
 }
 For grids which use the 'sum' function to show column totals you can override the summation function (sums), see examplegrid13.

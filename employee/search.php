@@ -5,10 +5,9 @@
   //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -60,19 +59,20 @@
 				selectFirst: false
 			});
 		});
-		$().ready(function() {
-			$("#surname").autocomplete("get_name.php", {
-				width: 260,
-				matchContains: true,
-				selectFirst: false
-			});
-		});
+		// $().ready(function() {
+		// 	$("#surname").autocomplete("get_name.php", {
+		// 		width: 260,
+		// 		matchContains: true,
+		// 		selectFirst: false
+		// 	});
+		// });
 	</script>
   </head>
   <body> 
   <?php include('../etc/menu.php'); ?>
     <center>
 	 <h2>Αναζήτηση προσωπικού</h2>
+   <h3>(μόνιμου & έκτακτου)</h3>
       <?php
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
@@ -169,19 +169,29 @@
 		$myCalendar->disabledDay("sun,sat");
 		$myCalendar->writeScript();
     echo "</td></tr>";
-
-		echo "<tr><td colspan=6><input type='checkbox' name = 'and'>Να ισχύουν ΟΛΑ τα παραπάνω κριτήρια ΤΑΥΤΟΧΡΟΝΑ;</td></tr>";	
+    echo "<tr><td>Τύπος</td><td></td><td>";
+    echo "<select name=\"emptype\">";
+		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
+		echo "<option value=\"1\">Μόνιμος</option>";
+		echo "<option value=\"2\">Αναπληρωτής</option>";
+		echo "<option value=\"3\">Διοικητικός</option>";
+		echo "<option value=\"4\">Ιδιωτικός</option>";
+    echo "</select>";
+    echo "</td><td colspan=3></td></tr>";
+    
+    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";	
+		echo "<tr><td colspan=6><input type='checkbox' name = 'or'>Να ισχύει ΤΟΥΛΑΧΙΣΤΟΝ ΕΝΑ από τα παραπάνω κριτήρια (λογικό OR);</td></tr>";	
 		
 		echo "	</table>";
 		echo "	<input type='hidden' name = 'set' value='$set'>";
 		echo "	<input type='submit' value='Αναζήτηση'>";
 		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-    echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Βοήθεια\" onclick=\"window.open('help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
+    echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Βοήθεια\" onclick=\"window.open('../help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
 		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";
 		
-		//mysql_close();
+		mysqli_close($mysqlconnection);
 ?>
 		</center>
 		<div id='results'></div>

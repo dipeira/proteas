@@ -55,10 +55,9 @@
 	{
 		$updates = 0;
     $need_update = 0;
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		$query = "SELECT * from employee";
                 //$query = "SELECT * from employee WHERE status NOT IN (2,4)";
                 // 07-08-2013
@@ -68,8 +67,8 @@
                 //    $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi=5";
                 //else
                 //    $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi!=5";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
+		$result = mysqli_query($mysqlconnection, $query);
+		$num=mysqli_num_rows($result);
 		$dt = $_POST['date'];
     $type=$_POST['type'];
     $editvmk = $_POST['editvmk'];
@@ -81,23 +80,23 @@
     $problems = 0;
     while ($i<$num)	
     {
-      $id = mysql_result($result, $i, "id");
-      $name = mysql_result($result, $i, "name");
-      $surname = mysql_result($result, $i, "surname");
-      $am = mysql_result($result, $i, "am");
+      $id = mysqli_result($result, $i, "id");
+      $name = mysqli_result($result, $i, "name");
+      $surname = mysqli_result($result, $i, "surname");
+      $am = mysqli_result($result, $i, "am");
                 
-      $old_wres = mysql_result($result, $i, "wres");
+      $old_wres = mysqli_result($result, $i, "wres");
 
-      $vathm = mysql_result($result, $i, "vathm");
-		  $mk = mysql_result($result, $i, "mk");
-		  $metdid = mysql_result($result, $i, "met_did");
-		  $hm_dior = mysql_result($result, $i, "hm_dior");
-      $hm_anal = mysql_result($result, $i, "hm_anal");
-		  $proyp = mysql_result($result, $i, "proyp");
-      $aney_xr = mysql_result($result, $i, "aney_xr");
+      $vathm = mysqli_result($result, $i, "vathm");
+		  $mk = mysqli_result($result, $i, "mk");
+		  $metdid = mysqli_result($result, $i, "met_did");
+		  $hm_dior = mysqli_result($result, $i, "hm_dior");
+      $hm_anal = mysqli_result($result, $i, "hm_anal");
+		  $proyp = mysqli_result($result, $i, "proyp");
+      $aney_xr = mysqli_result($result, $i, "aney_xr");
                 
       // 29-10-2012 - Skip employees from elsewhere (organikh = 388 (allo pyspe) or 394 (allo pysde)).
-      $organ = mysql_result($result, $i, "sx_organikhs");
+      $organ = mysqli_result($result, $i, "sx_organikhs");
       if ($organ == 388 || $organ == 394)
       {
           $i++;
@@ -148,7 +147,7 @@
       {
           $mkdate = date ('Y-m-d', strtotime($vdate));
           $query1 = "UPDATE employee SET wres=$wres WHERE ID=$id";
-          mysql_query($query1, $mysqlconnection);                            
+          mysqli_query($mysqlconnection, $query1);                          
           $updates+=1;
       }
 		
@@ -157,7 +156,7 @@
 		echo "</tbody></table>";
     echo "<br>";
                 
-		mysql_close();
+		mysqli_close($mysqlconnection);
                 
     if ($editvmk)
         echo "Πραγματοποιήθηκαν $updates ενημερώσεις στη Β.Δ.";

@@ -31,20 +31,19 @@
         }
         $usrlvl = $_SESSION['userlevel'];
 
-        $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-	mysql_select_db($db_name, $mysqlconnection);
-	mysql_query("SET NAMES 'greek'", $mysqlconnection);
-	mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+        $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         
     echo "<h2>Εκπαιδευτικοί και Σχολεία ανά Πράξη</h2>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<form action='' method='POST' autocomplete='off'>";
     
     $sql = "select * from praxi";
-    $result = mysql_query($sql, $mysqlconnection);
+    $result = mysqli_query($mysqlconnection, $sql);
     echo "<tr><td>Επιλογή Πράξεων:</td><td>";
     $cmb = "<select name=\"praxi[]\" class=\"praxi_select\" multiple=\"multiple\">";
-    while ($row = mysql_fetch_array($result)){
+    while ($row = mysqli_fetch_array($result)){
         if (in_array($row['id'],$_POST['praxi']))
             $cmb .= "<option value=\"".$row['id']."\" selected>".$row['name']."</option>";
         else
@@ -76,10 +75,9 @@
                 foreach ($praxeis as $pr)
                     $praxinm[] = getNamefromTbl($mysqlconnection, praxi, $pr);
 
-            	$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+                $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+                mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+                mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		if ($all)
                     $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch, p.name as praxi from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
                         join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
@@ -87,7 +85,7 @@
                     $query = "select distinct s.name as sch, s.id as schid from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
                         join school s on s.id = y.yphrethsh where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY S.NAME ASC";
                 //echo $query;
-		$result = mysql_query($query, $mysqlconnection);
+		$result = mysqli_query($mysqlconnection, $query);
 		
                 ob_start();
                 echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
@@ -97,7 +95,7 @@
                 else
                     echo "<thead><tr><th>Σχολείο</th></tr></thead><tbody>";
 
-            while ($row = mysql_fetch_array($result))	
+            while ($row = mysqli_fetch_array($result))	
             {
 		$id = $row['id'];
 		$name = $row['name'];
@@ -113,13 +111,13 @@
                 $i++;
             }
 		echo "</tbody></table>";
-                echo "<small><i>$i εγγραφές</i></small>";
-                echo "<br><br>";
+    echo "<small><i>$i εγγραφές</i></small>";
+    echo "<br><br>";
 
-		mysql_close();
+    mysqli_close($mysqlconnection);
                 
-                $page = ob_get_contents(); 
-                $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);
+    $page = ob_get_contents(); 
+    $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);
 		ob_end_flush();
 			
 		echo "<form action='../tools/2excel.php' method='post'>";

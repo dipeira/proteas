@@ -3,10 +3,9 @@
   require_once"../config.php";
   require_once"../tools/functions.php";
     
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
     include("../tools/class.login.php");
     $log = new logmein();
@@ -51,7 +50,7 @@
 	$query = "SELECT * from praxi_old where sxoletos=".$sxoletos;
 	//echo $query;
 	
-	$result = mysql_query($query, $mysqlconnection);
+	$result = mysqli_query($mysqlconnection, $query);
 		
         //echo "<center>";        
 	echo "<table id=\"mytbl\" class=\"imagetable \" border=\"2\">\n";
@@ -67,7 +66,7 @@
 	
 	echo "<tbody>\n";
 	
-	while ($row = mysql_fetch_array($result))
+	while ($row = mysqli_fetch_array($result))
 	{
 		echo "<tr>";
 		echo "<td>".$row['name']."</td>";
@@ -89,5 +88,5 @@
   </body>
 </html>
 <?php
-	mysql_close();
+	mysqli_close($mysqlconnection);
 ?>

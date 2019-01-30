@@ -2,7 +2,7 @@
 header('Content-type: text/html; charset=iso8859-7');
 require_once"../config.php";
 require_once"../tools/functions.php";
-?>	
+?>    
 <html>
     <head>      
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
@@ -17,114 +17,123 @@ require_once"../tools/functions.php";
     </head>
 
     <?php
-    include("../tools/class.login.php");
+    require "../tools/class.login.php";
     $log = new logmein();
     if ($log->logincheck($_SESSION['loggedin']) == false) {
         header("Location: ../tools/login.php");
     }
     $usrlvl = $_SESSION['userlevel'];
     // status: 1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ¶δεια, 4 Διαθεσιμότητα
-    $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-    mysql_select_db($db_name, $mysqlconnection);
-    mysql_query("SET NAMES 'greek'", $mysqlconnection);
-    mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
     
     $query = "SELECT count( * ) FROM employee WHERE status!=2 AND thesi=5";
-    $result = mysql_query($query, $mysqlconnection);
-    $idiwtikoi = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $idiwtikoi = mysqli_result($result, 0);
     
     $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi!=5";
-    $result = mysql_query($query, $mysqlconnection);
-    $monimoi_her_total = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $monimoi_her_total = mysqli_result($result, 0);
     
     $query = "SELECT count( * ) FROM ektaktoi";
-    $result = mysql_query($query, $mysqlconnection);
-    $anapl_total = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $anapl_total = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE sx_organikhs=1 AND status!=2";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_diath = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_diath = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE sx_organikhs=388 AND status!=2 AND sx_yphrethshs NOT IN (388,394)";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_apoallopispe = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_apoallopispe = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE sx_organikhs=394 AND status!=2 AND sx_yphrethshs NOT IN (388,394)";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_apoallopisde = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_apoallopisde = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=388 AND status!=2 AND sx_organikhs NOT IN (388,394)";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_seallopispe = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_seallopispe = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=389 AND status!=2 AND sx_organikhs NOT IN (388,394)";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_seforea = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_seforea = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE STATUS=3";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_seadeia = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_seadeia = mysqli_result($result, 0);
     
     $query = "SELECT count(*) FROM employee WHERE status!=2 AND (sx_organikhs=388 OR sx_organikhs=394) AND sx_yphrethshs NOT IN (388,394)";
-    $result = mysql_query($query, $mysqlconnection);
-    $mon_alloy = mysql_result($result, 0);
+    $result = mysqli_query($mysqlconnection, $query);
+    $mon_alloy = mysqli_result($result, 0);
 
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma FROM employee e 
                 JOIN klados k 
                 ON k.id = e.klados 
                 WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi!=5
                 GROUP BY klados";
-    $result_mon = mysql_query($query, $mysqlconnection);
+    $result_mon = mysqli_query($mysqlconnection, $query);
 
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma, ek.type
                 FROM ektaktoi e
                 JOIN klados k ON k.id = e.klados
                 JOIN ektaktoi_types ek ON e.type = ek.id
                 GROUP BY klados, e.type";
-    $result_anapl = mysql_query($query, $mysqlconnection);
+    $result_anapl = mysqli_query($mysqlconnection, $query);
 
     // sxoleia
     $sx_arr = array();
     $query = "SELECT count(*) FROM school WHERE type = 1";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Δημοτικά (Σύνολο)'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 0";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Δημ. Ενεργά'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 1 AND type2 = 0";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Δημ. Ανενεργά'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 2";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Δημ. Ειδικά'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 1";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Δημ. Ιδιωτικά'] = $res;
 
     $query = "SELECT count(*) FROM school WHERE type = 2";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Νηπιαγωγεία (Σύνολο)'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 0";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Νηπιαγωγεία'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 1 AND type2 = 0";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Νηπ. Ανενεργά'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 2";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Νηπ. Ειδικά'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 1";
-    $res = mysql_result((mysql_query($query, $mysqlconnection)), 0);
+    $res = mysqli_query($mysqlconnection, $query);
+    $res = mysqli_result($res, 0);
     $sx_arr['Νηπ. Ιδιωτικά'] = $res;
 
     //
     echo "<body>";
-    include('../etc/menu.php');
+    require '../etc/menu.php';
     echo "<h2>Στατιστικά</h2>";
     echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
-    echo "<h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση ".getParam('dnsh',$mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
+    echo "<h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση ".getParam('dnsh', $mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
     echo "<thead><th><b>Κλάδος</b></th><th colspan=3><b>Αριθμός</b></th></thead><tbody>";
-    while ($row = mysql_fetch_array($result_mon, MYSQL_NUM)) {
+    while ($row = mysqli_fetch_array($result_mon, MYSQLI_NUM)) {
         echo "<tr><td>$row[1] ($row[2])</td><td colspan=2>$row[0]</td></tr>";
     }
     echo "<tr><td><strong>Ιδιωτικοί εκπ/κοί</strong></td><td>$idiwtikoi</td></tr>";
@@ -143,7 +152,7 @@ require_once"../tools/functions.php";
     echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
     echo "<h3>Αναπληρωτές / Ωρομίσθιοι εκπαιδευτικοί:&nbsp;$anapl_total</h3>";
     echo "<thead><th>Τύπος</th><th>Κλάδος</th><th>Πλήθος</th></thead><tbody>";
-    while ($row = mysql_fetch_array($result_anapl, MYSQL_NUM)) {
+    while ($row = mysqli_fetch_array($result_anapl, MYSQLI_NUM)) {
         echo "<tr><td>$row[3]<td>$row[1] ($row[2])</td><td>$row[0]</td></tr>";
     }
     echo "</tbody></table>";
@@ -152,8 +161,9 @@ require_once"../tools/functions.php";
     echo "<table class=\"imagetable tablesorter\" border='1'>";
     echo "<h3>Σχολικές Μονάδες</h3>";
     echo "<thead><th>Τύπος</th><th>Αριθμός</th></thead><tbody>";
-    foreach ($sx_arr as $k => $v)
+    foreach ($sx_arr as $k => $v) {
         echo "<tr><td>$k</td><td>$v</td>";
+    }
 
     echo "</tbody></table>";
 
@@ -161,5 +171,5 @@ require_once"../tools/functions.php";
     echo "</body>";
     echo "</html>";
 
-    mysql_close();
+    mysqli_close($mysqlconnection);
     ?>

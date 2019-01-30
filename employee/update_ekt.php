@@ -16,10 +16,9 @@
   require_once"../tools/functions.php";
   error_reporting(0);
   
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
 
   $id = $_POST['id'];
@@ -95,11 +94,11 @@
       // check if record exists by checking am AND surname
       $surn = mb_convert_encoding($surname, "iso-8859-7", "utf-8");
       $query = "select afm,surname from ektaktoi WHERE afm='$afm' AND surname = '$surn'";
-      $result = mysql_query($query,$mysqlconnection);
+      $result = mysqli_query($mysqlconnection, $query);
       // hm/nia apoxwrhshs (from endofyear param)
       $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
 
-      if (!mysql_num_rows($result))
+      if (!mysqli_num_rows($result))
       {
             $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did, hm_apox, thesi,wres) ";
             $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox',$thesi,24)";
@@ -107,13 +106,13 @@
             $query = $query0.$query1;
             $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
             //echo $query;
-            mysql_query($query,$mysqlconnection);
+            mysqli_query($mysqlconnection, $query);
             // insert into yphrethsh
-            $id = mysql_insert_id();
+            $id = mysqli_insert_id();
             for ($i=0; $i<count($yphr_arr); $i++) 
             {
                     $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
-                    mysql_query($query,$mysqlconnection);
+                    mysqli_query($mysqlconnection, $query);
             }
       }
       // if already inserted display error
@@ -129,8 +128,8 @@
       {
           // get current row from db
           $qry = "SELECT * from ektaktoi WHERE id=$id";
-          $res = mysql_query($qry,$mysqlconnection);
-          $before = mysql_fetch_row($res);
+          $res = mysqli_query($mysqlconnection, $qry);
+          $before = mysqli_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres,";
@@ -139,26 +138,26 @@
 
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;
-          mysql_query($query,$mysqlconnection);
+          mysqli_query($mysqlconnection, $query);
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos=$sxol_etos";
-          mysql_query($query,$mysqlconnection);
+          mysqli_query($mysqlconnection, $query);
           for ($i=0; $i<count($yphr_arr); $i++) 
           {
                 $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
-                mysql_query($query,$mysqlconnection);
+                mysqli_query($mysqlconnection, $query);
                 $qlog = $qlog . ' \n ' . $query;
           }
           // insert 2 log
           $qlog = addslashes($qlog);
           $query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$qlog')";
-          mysql_query($query1, $mysqlconnection);
+          mysqli_query($mysqlconnection, $query1);
       }
       else
       {
           // get current row from db
           $qry = "SELECT * from employee_ekt WHERE id=$id";
-          $res = mysql_query($qry,$mysqlconnection);
-          $before = mysql_fetch_row($res);
+          $res = mysqli_query($mysqlconnection, $qry);
+          $before = mysqli_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
 	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,wres=$wres,";
@@ -167,26 +166,26 @@
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;
           //echo $query;
-          mysql_query($query,$mysqlconnection);
+          mysqli_query($mysqlconnection, $query);
           // svhse tyxon >1 yphrethseis 
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos = $sxol_etos";
-          mysql_query($query,$mysqlconnection);
+          mysqli_query($mysqlconnection, $query);
           if ($single)
           {
               $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[0]', '$hours_arr[0]', $sxol_etos)";
-              mysql_query($query,$mysqlconnection);
+              mysqli_query($mysqlconnection, $query);
               $qlog = $qlog . ' \n ' . $query;
           }
           // insert 2 log
           $qlog = addslashes($qlog);
           $query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$qlog')";
-          mysql_query($query1, $mysqlconnection);
+          mysqli_query($mysqlconnection, $query1);
       }
   }
 
   if (!$dupe)
     notify('Επιτυχής καταχώρηση!',0);
-  mysql_close();
+  mysqli_close($mysqlconnection);
 ?>
 <br>
 </body>

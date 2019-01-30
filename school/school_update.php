@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=iso8859-7'); 
         session_start();
 ?>
 <html>
@@ -13,12 +13,10 @@
   require_once"../config.php";
   require_once"../tools/functions.php";
     
-  $mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-  mysql_select_db($db_name, $mysqlconnection);
-  mysql_query("SET NAMES 'greek'", $mysqlconnection);
-  mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
+  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
   
-
   $titlos = $_POST['titlos'];
   $sch = $_POST['sch'];
   $name = $_POST['name'];
@@ -73,10 +71,10 @@
   $query = $query0.$query1.$query2.$query3;
   //$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
   //echo $query;
-  mysql_query($query,$mysqlconnection);
+  mysqli_query($mysqlconnection, $query);
 
   //echo "Επιτυχής καταχώρηση!";
-  mysql_close();
+  mysqli_close($mysqlconnection);
 ?>
 <br>
   <center>

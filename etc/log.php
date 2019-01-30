@@ -1,31 +1,32 @@
 <?php
     header('Content-type: text/html; charset=iso8859-7'); 
     require_once"../config.php";
-    include("../tools/class.login.php");
+    require "../tools/class.login.php";
     $log = new logmein();
-    if($log->logincheck($_SESSION['loggedin']) == false){
-        header("Location: ../tools/login.php");
-    }
+if($log->logincheck($_SESSION['loggedin']) == false) {
+    header("Location: ../tools/login.php");
+}
 
  // check if super-user
-  if ($_SESSION['userlevel']<>0)
+if ($_SESSION['userlevel']<>0) {
     header("Location: ../index.php");
+}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=iso8859-7" />
-		
-		<title>Employee Log Viewer</title>
-		<style type="text/css" title="currentStyle">
-			@import "../css/demo_page.css";
-			@import "../css/demo_table.css";
-		</style>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=iso8859-7" />
+        
+        <title>Employee Log Viewer</title>
+        <style type="text/css" title="currentStyle">
+            @import "../css/demo_page.css";
+            @import "../css/demo_table.css";
+        </style>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-		<script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
-		<script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script>
-		<script type="text/javascript" charset="iso8859-7">
-			(function($) {
+        <script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
+        <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="iso8859-7">
+            (function($) {
                         /*
                         * Function: fnGetColumnData
                         * Purpose:  Return an array of table values from a particular column.
@@ -107,21 +108,20 @@
                                 } );
                             } );
                         } );
-		</script>
-	</head>
-	<body id="dt_example">
-    <?php include('../etc/menu.php'); ?>
+        </script>
+    </head>
+    <body id="dt_example">
+    <?php require '../etc/menu.php'; ?>
     <h1>Αρχείο Συμβάντων</h1>
-		<div id="container">
+        <div id="container">
 <?php
-		
-		//require_once"functions.php";
-		
-		$mysqlconnection = mysql_connect($db_host, $db_user, $db_password);
-		mysql_select_db($db_name, $mysqlconnection);
-		mysql_query("SET NAMES 'greek'", $mysqlconnection);
-		mysql_query("SET CHARACTER SET 'greek'", $mysqlconnection);
-		//$query = "SELECT * from employee_log";
+        
+        //require_once"functions.php";
+        
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+        //$query = "SELECT * from employee_log";
 //                $query = "SELECT o.username,l.ip,l.timestamp,l.action,e.surname,e.am
 //                            FROM employee_log l
 //                            JOIN employee e ON e.id = l.emp_id
@@ -141,107 +141,105 @@
             LEFT JOIN employee e ON e.id = l.emp_id
             ORDER BY l.timestamp DESC
             LIMIT 300 ";
-		$result = mysql_query($query, $mysqlconnection);
-		$num=mysql_num_rows($result);
-		$i=0;
+        $result = mysqli_query($mysqlconnection, $query);
+        $num=mysqli_num_rows($result);
+        $i=0;
                 
-        function action ($action)
-        {
-            switch ($action){
-                case 0:
-                    return "add";
+function action($action)
+{
+    switch ($action){
+    case 0:
+        return "add";
+            break;
+    case 1:
+        return "edit";
                     break;
-                case 1:
-                    return "edit";
+    case 2:
+        return "delete";
                     break;
-                case 2:
-                    return "delete";
-                    break;
-            }
-        }
+    }
+}
 ?>
 <div id="demo">
 <table cellpadding="0" cellspacing="0" border="1" class="display" id="example">
-	<thead>
-		<tr>
-			<th>username</th>
-			<th>hostname</th>
-			<th>timestamp</th>
-			<th>action</th>
+    <thead>
+        <tr>
+            <th>username</th>
+            <th>hostname</th>
+            <th>timestamp</th>
+            <th>action</th>
             <th>am</th>
             <th>surname</th>
             <th>change</th>                        
-		</tr>
-	</thead>
-	<tbody>
+        </tr>
+    </thead>
+    <tbody>
 <?php
-		while ($i<$num)
-		{
-			$username = mysql_result($result, $i, "username");
-			$ip = mysql_result($result, $i, "ip");
-                        // gethostbyaddr was slooow and was removed
-                        //if (strlen($ip)>0)
-                        //    $ip = gethostbyaddr($ip);
-			$timestamp = mysql_result($result, $i, "timestamp");
-			$id = mysql_result($result, $i, "emp_id");
-                $action = mysql_result($result, $i, "action");
-                $change = mysql_result($result, $i, "query");
-                $am = mysql_result($result, $i, "am");
-                $surname = mysql_result($result, $i, "surname");
-                if ($action==2)
-                {
-                    $qry = "SELECT surname,am FROM employee_deleted WHERE id=$id";
-                    $res = mysql_query($qry, $mysqlconnection);
-                    if (mysql_num_rows($res)>0)
-                    {
-                        $surname = mysql_result($res, 0, "surname");
-                        $am = mysql_result($res, 0, "am");
-                    }
-                }
-//                        else
-//                        {
-//                            $qry1 = "SELECT surname,am FROM employee WHERE id=$id";
-//                            $res1 = mysql_query($qry1, $mysqlconnection);
-//                            if (mysql_num_rows($res1)==0)
-//                            {
-//                                $qry1 = "SELECT surname,am FROM employee_deleted WHERE id=$id";
-//                                $res1 = mysql_query($qry1, $mysqlconnection);
-//                            }
-//                            $surname = mysql_result($res1, 0, "surname");
-//                            $am = mysql_result($res1, 0, "am");
-//                        }
-			$act = action($action);
+while ($i<$num)
+{
+    $username = mysqli_result($result, $i, "username");
+    $ip = mysqli_result($result, $i, "ip");
+                      // gethostbyaddr was slooow and was removed
+                      //if (strlen($ip)>0)
+                      //    $ip = gethostbyaddr($ip);
+    $timestamp = mysqli_result($result, $i, "timestamp");
+    $id = mysqli_result($result, $i, "emp_id");
+              $action = mysqli_result($result, $i, "action");
+              $change = mysqli_result($result, $i, "query");
+              $am = mysqli_result($result, $i, "am");
+              $surname = mysqli_result($result, $i, "surname");
+    if ($action==2) {
+        $qry = "SELECT surname,am FROM employee_deleted WHERE id=$id";
+        $res = mysqli_query($mysqlconnection, $qry);
+        if (mysqli_num_rows($res)>0) {
+                      $surname = mysqli_result($res, 0, "surname");
+                      $am = mysqli_result($res, 0, "am");
+        }
+    }
+        //                        else
+        //                        {
+        //                            $qry1 = "SELECT surname,am FROM employee WHERE id=$id";
+        //                            $res1 = mysqli_query($mysqlconnection, $qry1)
+        //                            if (mysqli_num_rows($res1)==0)
+        //                            {
+        //                                $qry1 = "SELECT surname,am FROM employee_deleted WHERE id=$id";
+        //                                $res1 = mysqli_query($mysqlconnection, $qry1)
+        //                            }
+        //                            $surname = mysqli_result($res1, 0, "surname");
+        //                            $am = mysqli_result($res1, 0, "am");
+        //                        }
+        $act = action($action);
                         
-			echo "\n<tr class='gradeA'>\n<td>$username</td>";
-			echo "\n<td>$ip</td>";
-			echo "\n<td>$timestamp</td>";
-			echo "\n<td>$act</td>";
-            echo "\n<td>$am</td>";
-            echo "\n<td>$surname</td>";
-            echo "\n<td>$change</td>";
-            echo "\n</tr>";
-			$i++;
-		}
+        echo "\n<tr class='gradeA'>\n<td>$username</td>";
+        echo "\n<td>$ip</td>";
+        echo "\n<td>$timestamp</td>";
+        echo "\n<td>$act</td>";
+          echo "\n<td>$am</td>";
+          echo "\n<td>$surname</td>";
+          echo "\n<td>$change</td>";
+          echo "\n</tr>";
+        $i++;
+}
 ?>
-		
-	</tbody>
+        
+    </tbody>
         <tfoot>
-		<tr>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
+        <tr>
             <th></th>
-		</tr>
-	</tfoot>
-	
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+    
 </table>
-			</div>
-			<div class="spacer"></div>
-			
+            </div>
+            <div class="spacer"></div>
+            
 
-		</div>
+        </div>
 <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
-	</body>
+    </body>
 </html>
