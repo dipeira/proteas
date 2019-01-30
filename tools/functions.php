@@ -1426,7 +1426,6 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     $reqhrs = anagkes_wrwn($tmimata_exp);
     // ώρες Δ/ντή
     $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
-    echo $query;
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result)) {
         $dnthrs = wres_dnth($leit);
