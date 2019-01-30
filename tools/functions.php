@@ -1426,6 +1426,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     $reqhrs = anagkes_wrwn($tmimata_exp);
     // ώρες Δ/ντή
     $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
+    echo $query;
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result)) {
         $dnthrs = wres_dnth($leit);
@@ -1434,9 +1435,9 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $avhrs[$klados] = $dnthrs;
         // ώρες Δ/ντή στην ανάλυση
         $ar = Array(
-            'name' => mysqli_result($result, 0, "e.name"),
-            'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysqli_result($result, 0, "e.surname"),
-            'klados' =>  mysqli_result($result, 0, "k.perigrafh"), 
+            'name' => mysqli_result($result, 0, 1),
+            'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysqli_result($result, 0, 2),
+            'klados' =>  mysqli_result($result, 0, "perigrafh"), 
             'hours' => $dnthrs
         );
         $all[] = $ar;
@@ -1452,14 +1453,14 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             $meiwsh_ypnth = 2;
         }
         $klados = mysqli_result($result_yp, 0, "klados");
-        $meiwsh_ypnth_klados = mysqli_result($result_yp, 0, "k.perigrafh");
+        $meiwsh_ypnth_klados = mysqli_result($result_yp, 0, "perigrafh");
         $avhrs[$klados] -= $meiwsh_ypnth;
         // ώρες Υπ/ντή στην ανάλυση
         $ar = Array(
-            'name' => mysqli_result($result, 0, "e.name"),
-            'surname' =>  '<small>(Υπ/ντής)</small> ' . mysqli_result($result_yp, 0, "e.surname"), 
+            'name' => mysqli_result($result, 0, 1),
+            'surname' =>  '<small>(Υπ/ντής)</small> ' . mysqli_result($result_yp, 0, 2), 
             'klados' =>  $meiwsh_ypnth_klados, 
-            'hours' => mysqli_result($result_yp, 0, "e.wres") - $meiwsh_ypnth
+            'hours' => mysqli_result($result_yp, 0, "wres") - $meiwsh_ypnth
         );
         $all[] = $ar;
         $allcnt[$meiwsh_ypnth_klados]++;
