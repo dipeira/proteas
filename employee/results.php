@@ -256,7 +256,7 @@ if ($flag) {
         echo "<th>Επώνυμο</th>";
         echo "<th>Όνομα</th>";
         echo "<th>Κλάδος</th>";
-        echo "<th>Σχ.Οργανικής</th>";
+        echo $is_anapl ? '' : "<th>Σχ.Οργανικής</th>";
         echo "<th>Σχ.Υπηρέτησης</td></th>\n";
         
         if (isset($_POST['dsppatr'])) {
@@ -354,7 +354,9 @@ if ($flag) {
               echo "<span title=\"Επεξεργασία\"><a href=\"$table.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
             }
             echo "</td>";
-            echo "<td><a href=\"$table.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs."</td><td>".$sx_yphrethshs."</td>\n";
+            echo "<td><a href=\"$table.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td>";
+            echo $is_anapl ? '' : "<td>".$sx_organikhs."</td>";
+            echo "<td>".$sx_yphrethshs."</td>\n";
             if (isset($_POST['dsppatr'])) {
                 echo "<td>$patrwnymo</td>\n";
             }
