@@ -33,53 +33,46 @@
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
 	<script type="text/javascript">
            
-        $(document).ready(function(){
-		$("#wordfrm").validate({
-			debug: false,
-			rules: {
-			//	name: "required",
-			},
-			messages: {
-			//	name: "Please let us know who you are."
-			},
-			submitHandler: function(form) {
-				// do other stuff for a valid form
-                                $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
-				        $('#word').html(data);
-				});
-			}
-		});
-	});
+    $(document).ready(function(){
+      $("#wordfrm").validate({
+        debug: false,
+        submitHandler: function(form) {
+          // do other stuff for a valid form
+          $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
+            $('#word').html(data);
+          });
+        }
+      });
+    });
     var mylink = "<small>Παρακαλώ δώστε έγκυρη πράξη ή δημιουργήστε μία: </small><a target=\"_blank\" href=\"praxi.php\">Πράξεις</a>";
         
-  $(document).ready(function(){
-		$("#updatefrm").validate({
-			debug: false,
-                        rules: {
-				name: "required", surname: "required", afm: "required", klados: "required", praxi: {"required": true, min:2 }, type: "required"
-			},
-			messages: {
-				name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρo ΑΦΜ",
-                                klados: "Παρακαλώ δώστε έγκυρη τιμή", praxi: mylink, type: "Παρακαλώ δώστε έγκυρη τιμή"
-			},
-			submitHandler: function(form) {
-				// do other stuff for a valid form
-				$.post('update_ekt.php', $("#updatefrm").serialize(), function(data) {
-					$('#results').html(data);
-				});
-			}
-		});
-	});
-                $().ready(function(){
-                        $(".slidingDiv").hide();
-                        $(".show_hide").show();
- 
-                        $('.show_hide').click(function(){
-                            $(".slidingDiv").slideToggle();
-                        });
-                });
-    
-</script>
+    $(document).ready(function(){
+      $("#updatefrm").validate({
+        debug: false,
+                          rules: {
+          name: "required", surname: "required", afm: "required", klados: "required", praxi: {"required": true, min:2 }, type: "required"
+        },
+        messages: {
+          name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρo ΑΦΜ",
+                                  klados: "Παρακαλώ δώστε έγκυρη τιμή", praxi: mylink, type: "Παρακαλώ δώστε έγκυρη τιμή"
+        },
+        submitHandler: function(form) {
+          // do other stuff for a valid form
+          $.post('update_ekt.php', $("#updatefrm").serialize(), function(data) {
+            $('#results').html(data);
+          });
+        }
+      });
+    });
+    $().ready(function(){
+      $(".slidingDiv").hide();
+      $(".show_hide").show();
+
+      $('.show_hide').click(function(){
+          $(".slidingDiv").slideToggle();
+      });
+    });
+  </script>
 
   </head>
   <body> 
@@ -101,28 +94,28 @@
 		$result = mysqli_query($mysqlconnection, $query);
 		$num=mysqli_num_rows($result);
 		
-                if ($num > 0)
-                {
-                    $multi = 1;
-                    for ($i=0; $i<$num; $i++)
-                    {
-                        $yphr_id_arr[$i] = mysqli_result($result, $i, "yphrethsh");
-                        $yphr_arr[$i] = getSchool (mysqli_result($result, $i, "yphrethsh"), $mysqlconnection);
-                        $hours_arr[$i] = mysqli_result($result, $i, "hours");
-                    }            
-                }
-                else
-                {
-                    $query = "SELECT * from ektaktoi where id=".$_GET['id'];
-                    $result = mysqli_query($mysqlconnection, $query);
-                    $num=mysqli_num_rows($result);
-                    $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
-                    $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
-                }
+    if ($num > 0)
+    {
+        $multi = 1;
+        for ($i=0; $i<$num; $i++)
+        {
+            $yphr_id_arr[$i] = mysqli_result($result, $i, "yphrethsh");
+            $yphr_arr[$i] = getSchool (mysqli_result($result, $i, "yphrethsh"), $mysqlconnection);
+            $hours_arr[$i] = mysqli_result($result, $i, "hours");
+        }            
+    }
+    else
+    {
+        $query = "SELECT * from ektaktoi where id=".$_GET['id'];
+        $result = mysqli_query($mysqlconnection, $query);
+        $num=mysqli_num_rows($result);
+        $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
+        $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
+    }
        //}
-                $id = mysqli_result($result, 0, "id");
+    $id = mysqli_result($result, 0, 0);
 		$name = mysqli_result($result, 0, "name");
-                $type = mysqli_result($result, 0, "type");
+    $type = mysqli_result($result, 0, "type");
 		$surname = mysqli_result($result, 0, "surname");
 		$klados_id = mysqli_result($result, 0, "klados");
 		$klados = getKlados($klados_id,$mysqlconnection);
@@ -487,31 +480,23 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Α.Δ.Α.</td><td colspan=3>$ada</td></tr>";
         echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi</td></tr>";
         echo "<tr><td>Θέση</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
-        /* Future use?
-        echo "<td colspan=2 align='center'>";
+        
+        echo "<tr><td colspan=4 align='center'>";
         //Form gia Bebaiwsh
-        echo "<form id='wordfrm' name='wordfrm' action='vev_yphr.php' method='POST'>";
-        echo "<input type='hidden' name=arr[] value=$surname>";
-        echo "<input type='hidden' name=arr[] value=$name>";
-        echo "<input type='hidden' name=arr[] value=$patrwnymo>";
-        echo "<input type='hidden' name=arr[] value=$klados>";
-        echo "<input type='hidden' name=arr[] value=$am>";
-        echo "<input type='hidden' name=arr[] value=$vathm>";
-        echo "<input type='hidden' name=arr[] value=$mk>";
-        echo "<input type='hidden' name=arr[] value='$sx_organikhs'>";
-        echo "<input type='hidden' name=arr[] value=$fek_dior>";
-        echo "<input type='hidden' name=arr[] value=$hm_dior_org>";
-        echo "<input type='hidden' name=arr[] value=$hm_anal>";
-        $ymd = ypol_yphr(date("Y/m/d"),$anatr);
-        echo "<input type='hidden' name=arr[] value='$ymd'>";
-        //echo "<input type='hidden' name=$arr[] value=$surname>";
-        echo "<INPUT TYPE='submit' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
+        echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
+        echo "<input type='hidden' name='surname' value=$surname>";
+        echo "<input type='hidden' name='name' value=$name>";
+        echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
+        echo "<input type='hidden' name='klados' value=$klados>";
+        echo "<input type='hidden' name='afm' value=$afm>";
+        echo "<input type='hidden' name='anapl' value=1>";
+        echo "<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
         echo "</form>";
         ?>
-        <div id="word"></div>
+      <div id="word"></div>
         <?php
         echo "</td></tr>";
-        */              		
+        
         echo $updated > 0 ? "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>" : null;
         echo "	</table>";
         

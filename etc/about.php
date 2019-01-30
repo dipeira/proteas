@@ -37,8 +37,8 @@
         </ul>
         <br>
         <p>Επικοινωνία με το δημιουργό: sugarv@sch.gr</p>
+        <p>Ο Πρωτέας στο GitHub: <a href='https://github.com/dipeira/proteas' target="_blank"><img style='width:32px;' src="../images/github.png" alt=""></a></p>
     </p>
-    <br>
     <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
 </body>
 </html>

@@ -568,7 +568,8 @@ function get_type($typeid,$conn)
     $query = "SELECT * from ektaktoi_types WHERE id=$typeid";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+      return;
+        //die('Could not query:' . mysqli_error());
     }
     $typos=mysqli_result($result, $i, "type");
     return $typos;
@@ -1111,7 +1112,8 @@ function getNamefromTbl($conn, $tbl, $id)
     $query = "SELECT * from $tbl WHERE id=$id";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+      return;
+        //die('Could not query:' . mysqli_error());
     }
     $name=mysqli_result($result, 0, "name");
     return $name;

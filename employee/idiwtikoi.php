@@ -195,9 +195,18 @@ else {
             $num=mysqli_num_rows($result);
         }
     
-        echo "<center>";        
+        echo "<center>";  
+        echo "<h3>Ιδιωτικοί εκπαιδευτικοί</h3>";
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-        echo "<thead><tr><form id='src' name='src' action='../index.php' method='POST'>\n";
+        echo "<thead>";
+        echo "<tr><th>Ενέργεια</th>\n";
+        echo "<th>Επώνυμο</th>\n";
+        echo "<th>Όνομα</th>\n";
+        echo "<th>Ειδικότητα</th>\n";
+        echo "<th>Σχ.Οργανικής</th>\n";
+        echo "<th>Σχ.Υπηρέτησης</th>\n";
+        echo "</tr>";
+        echo "<tr><form id='src' name='src' action='../index.php' method='POST'>\n";
         if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0)) {
             echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
         } else {    
@@ -215,15 +224,7 @@ else {
         echo "</td>";
         echo "</form></tr>\n";
         
-        //echo "<thead>\n<tr><th>Ενέργεια</th>\n";
-        echo "<tr><th>Ενέργεια</th>\n";
-        //echo "<th>ID</th>\n";
-        echo "<th>Επώνυμο</th>\n";
-        echo "<th>Όνομα</th>\n";
-        echo "<th>Ειδικότητα</th>\n";
-        echo "<th>Σχ.Οργανικής</th>\n";
-        echo "<th>Σχ.Υπηρέτησης</th>\n";
-        echo "</tr>\n</thead>\n";
+        echo "</thead>\n";
     
         echo "<tbody>\n";
     
@@ -239,11 +240,11 @@ else {
             $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
             $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
             $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-                $sx_organikhs_url = "<a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-                $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-                // check if multiple schools
-                $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
-                $res = mysqli_query($mysqlconnection, $qry);
+            $sx_organikhs_url = "<a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+            $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+            // check if multiple schools
+            $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
+            $res = mysqli_query($mysqlconnection, $qry);
             if (mysqli_num_rows($res) > 0) {
                 $sx_yphrethshs .= "*";
             }

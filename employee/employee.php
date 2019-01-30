@@ -37,12 +37,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $(document).ready(function(){
             $("#yphrfrm").validate({
                 debug: false,
-                rules: {
-                //    name: "required",
-                },
-                messages: {
-                //    name: "Please let us know who you are."
-                },
                 submitHandler: function(form) {
                     // do other stuff for a valid form
                     $.post('yphr.php', $("#yphrfrm").serialize(), function(data) {
@@ -52,22 +46,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             });
         });
             
-            $(document).ready(function(){
-            $("#wordfrm").validate({
-                debug: false,
-                rules: {
-                //    name: "required",
-                },
-                messages: {
-                //    name: "Please let us know who you are."
-                },
-                submitHandler: function(form) {
-                    // do other stuff for a valid form
-                    $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
-                        $('#word').html(data);
-                    });
-                }
-            });
+        $(document).ready(function(){
+          $("#wordfrm").validate({
+              debug: false,
+              submitHandler: function(form) {
+                  // do other stuff for a valid form
+                  $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
+                      $('#word').html(data);
+                  });
+              }
+          });
         });
             
             
@@ -613,8 +601,9 @@ elseif ($_GET['op']=="view") {
         $apo = date('d', strtotime($aney_apo)) + date('m', strtotime($aney_apo))*30 + date('Y', strtotime($aney_apo))*360;
         $days_aney = $tod - $apo;
         if ($days_aney > 30) {
-            $days_aney -= 30;
-        } else { $days_aney = 0;
+          $days_aney -= 30;
+        } else { 
+          $days_aney = 0;
         }
     }
     $aney = $aney_xr + $days_aney;
@@ -719,22 +708,23 @@ elseif ($_GET['op']=="view") {
     echo "</td>";
     echo "<td colspan=2 align='center'>";
     //Form gia Bebaiwsh
-    echo "<form id='wordfrm' name='wordfrm' action='vev_yphr.php' method='POST'>";
-    echo "<input type='hidden' name=arr[] value=$surname>";
-    echo "<input type='hidden' name=arr[] value=$name>";
-    echo "<input type='hidden' name=arr[] value=$patrwnymo>";
-    echo "<input type='hidden' name=arr[] value=$klados>";
-    echo "<input type='hidden' name=arr[] value=$am>";
-    echo "<input type='hidden' name=arr[] value=$vathm>";
-    echo "<input type='hidden' name=arr[] value=$mk>";
-    echo "<input type='hidden' name=arr[] value='$sx_organikhs'>";
-    echo "<input type='hidden' name=arr[] value=$fek_dior>";
-    echo "<input type='hidden' name=arr[] value=$hm_dior_org>";
-    echo "<input type='hidden' name=arr[] value=$hm_anal>";
+    echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
+    echo "<input type='hidden' name='surname' value=$surname>";
+    echo "<input type='hidden' name='name' value=$name>";
+    echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
+    echo "<input type='hidden' name='klados' value=$klados>";
+    echo "<input type='hidden' name='am' value=$am>";
+    echo "<input type='hidden' name='vathm' value=$vathm>";
+    echo "<input type='hidden' name='mk' value=$mk>";
+    echo "<input type='hidden' name='sx_organikhs' value='$sx_organikhs'>";
+    echo "<input type='hidden' name='fek_dior' value=$fek_dior>";
+    echo "<input type='hidden' name='hm_dior_org' value=$hm_dior_org>";
+    echo "<input type='hidden' name='hm_anal' value=$hm_anal>";
     $ymd = ypol_yphr(date("Y/m/d"), $anatr);
-    echo "<input type='hidden' name=arr[] value='$ymd'>";
-    //echo "<input type='hidden' name=$arr[] value=$surname>";
-    echo "<INPUT TYPE='submit' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
+    echo "<input type='hidden' name='ymd' value='$ymd'>";
+    echo "<input type='hidden' name='afm' value=$afm>";
+    echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
+    echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
     echo "</form>";
     ?>
   <div id="word"></div>

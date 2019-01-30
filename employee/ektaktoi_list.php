@@ -35,11 +35,6 @@ else {
             $("#yphr").autocomplete("get_school.php", {
                 width: 260,
                 matchContains: true,
-                //mustMatch: true,
-                //minChars: 0,
-                //multiple: true,
-                //highlight: false,
-                //multipleSeparator: ",",
                 selectFirst: false
             });
         });
@@ -47,11 +42,6 @@ else {
             $("#surname").autocomplete("get_name_ekt.php", {
                 width: 260,
                 matchContains: true,
-                //mustMatch: true,
-                //minChars: 0,
-                //multiple: true,
-                //highlight: false,
-                //multipleSeparator: ",",
                 selectFirst: false
             });
         });
@@ -64,10 +54,6 @@ else {
   </head>
     <?php require '../etc/menu.php'; ?>
   <body> 
-  <!-- <h1> DIPE D.B.</h1> -->
-  
-  
-    
 <div>
 <?php
     $usrlvl = $_SESSION['userlevel'];
@@ -198,10 +184,16 @@ else {
     }
     echo "<center>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-    echo "<thead><tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";
-    //if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0) || ($_GET['type']>0))
-    //    echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
-    //else    
+    echo "<thead>";
+    echo "<tr><th>Ενέργεια</th>\n";
+    echo "<th>Επώνυμο</th>\n";
+    echo "<th>Όνομα</th>\n";
+    echo "<th>Ειδικότητα</th>\n";
+    echo "<th>Σχ.Υπηρέτησης</th>\n";
+    echo "<th>Τύπος Απασχόλησης</th>\n";
+    echo "<th>Πράξη</th>\n";
+    echo "</tr>";
+    echo "<tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";    
 ?>
     <script type="text/javascript">
         $().ready(function(){
@@ -237,14 +229,7 @@ else {
         echo "</td>";
         echo "</form></tr>\n";
     
-        echo "<tr><th>Ενέργεια</th>\n";
-        echo "<th>Επώνυμο</th>\n";
-        echo "<th>Όνομα</th>\n";
-        echo "<th>Ειδικότητα</th>\n";
-        echo "<th>Σχ.Υπηρέτησης<br><small>(* περισσότερα από 1 σχολ.)</small></th>\n";
-        echo "<th>Τύπος Απασχόλησης</th>\n";
-        echo "<th>Πράξη</th>\n";
-        echo "</tr>\n</thead>\n";
+        echo "</thead>\n";
     
         echo "<tbody>\n";
         if ($num == 0) {
@@ -253,26 +238,17 @@ else {
             while ($i < $num)
             {
     
-                $id = mysqli_result($result, $i, "id");
+                $id = mysqli_result($result, $i, 0);
                 $name = mysqli_result($result, $i, "name");
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
-                // an parapanw apo 1 sxoleia, deixnei mono to 1o (kyriws) kai vazei * dipla toy.
-                  $sx_yphrethshs_id_str = mysqli_result($result, $i, "sx_yphrethshs");
-                  $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
-                  $sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
-                  //$sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
+                $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
                 $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-                  $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-                //                if (count($sx_yphrethshs_id_arr)>2)
-                //                {
-                //                    $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a> *";
-                //                    $sx_yphrethshs.=" *";
-                //                }
-                  $type = mysqli_result($result, $i, "type");
-                  $praxi = mysqli_result($result, $i, "praxi");
-                  $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
+                $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+                $type = mysqli_result($result, $i, "type");
+                $praxi = mysqli_result($result, $i, "praxi");
+                $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
                   
                 echo "<tr><td>";
                 echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
@@ -321,16 +297,16 @@ else {
         echo "<FORM METHOD='POST' ACTION='ektaktoi_list.php?".$_SERVER['QUERY_STRING']."'>";
         echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
         echo "<input type=\"submit\" value=\"Μετάβαση\">";
-                echo "<br>";
-                echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
+        echo "<br>";
+        echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
         echo "<input type=\"submit\" value=\"Ορισμός\">";
         echo "</FORM>";
         echo "</td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
-                echo "&nbsp;&nbsp;&nbsp;";
-                echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Έκτακτο προσωπικό προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
-                echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
+        echo "&nbsp;&nbsp;&nbsp;";
+        echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Έκτακτο προσωπικό προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
         echo "</table>\n";
         ?>
       

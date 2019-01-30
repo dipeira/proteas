@@ -163,14 +163,14 @@ if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
 }
   // ΟΧΙ idiwtikoi
   if ($whflag) {
-      $query .= " AND thesi!=5 ";
+      $query .= " AND thesi NOT IN (5,6) ";
   } else {
-      $query .= " WHERE thesi!=5 ";
+      $query .= " WHERE thesi NOT IN (5,6) ";
       $whflag = 1;
   }
 
   // exclude employees that don't belong in d/nsh
-  if (!isset($_REQUEST['outsiders']) || !isset($_REQUEST['outsiders'])==0) {
+  if (!$_REQUEST['outsiders']) {
     $text = " (sx_yphrethshs NOT IN (388, 394) AND sx_organikhs NOT IN (388,394))";
     if ($whflag) {
       $query .= " AND $text";
@@ -180,7 +180,7 @@ if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
     }
   }
   // include inactive employees
-  if (!isset($_REQUEST['inactive']) || !isset($_REQUEST['inactive'])) {
+  if (!$_REQUEST['inactive']) {
     $text = " status IN (1,3)";
     if ($whflag) {
       $query .= " AND $text";
@@ -227,7 +227,14 @@ if ($logged) {
 }
     echo "<center>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-   echo "<thead>";
+    echo "<thead>";
+    echo "<tr><th>Ενέργεια</th>\n";
+    echo "<th>Επώνυμο</th>\n";
+    echo "<th>Όνομα</th>\n";
+    echo "<th>Ειδικότητα</th>\n";
+    echo "<th>Σχ.Οργανικής</th>\n";
+    echo "<th>Σχ.Υπηρέτησης</th>\n";
+    echo "</tr>\n</thead>\n";
    echo "<tr><form id='src' name='src' action='index.php' method='POST'>\n";
 if ($posted || 
       ($_REQUEST['klados']>0) || 
@@ -256,18 +263,10 @@ if ($posted ||
     echo "</td>";
     echo "<tr>";
     $has_outsiders = isset($_REQUEST['outsiders']) ? 'checked' : '';
-    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση</td>";	
+    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση</small></td>";	
     $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
-    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive>Εμφάνιση και όσων δεν εργάζονται <small>(λύση σχέσης, διαθεσιμότητα)</small></td>";
+    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive><small>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης, διαθεσιμότητα)</small></small></td>";
     echo "</form></tr>\n";
-
-   echo "<tr><th>Ενέργεια</th>\n";
-    echo "<th>Επώνυμο</th>\n";
-    echo "<th>Όνομα</th>\n";
-    echo "<th>Ειδικότητα</th>\n";
-    echo "<th>Σχ.Οργανικής</th>\n";
-    echo "<th>Σχ.Υπηρέτησης</th>\n";
-    echo "</tr>\n</thead>\n";
     
     echo "<tbody>\n";
 if ($num == 0) {
