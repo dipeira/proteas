@@ -71,24 +71,25 @@ class drasticSrcMySQL {
 		$res = mysqli_query($this->conn, "SET NAMES '" . $this->SQLCharset . "'");
 		// Initialize the name of the id field, column names and numeric columns:
     $idresult = $this->metadata();
-    //$primary_found = false;
+    $primary_found = false;
     // find primary key
     $r = mysqli_fetch_assoc(mysqli_query($this->conn, "SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'")); 
     $this->idname = $r['Column_name']; 
     while ($fld = mysqli_fetch_field($idresult)){
 		//for($i=0; $i < mysqli_num_fields($idresult); $i++)  {
       //$fld = mysqli_fetch_field($idresult, $i);
-			// if ($primary_found == false) {
-			// 	if ($fld->primary_key == 1) { 
-			// 		$this->idname = $fld->name;
-			// 		$this->idcolnr = $i;
-			// 		$primary_found = true;
-			// 	}
-			// 	elseif ($fld->unique_key == 1) {
-			// 		$this->idname = $fld->name;
-			// 		$this->idcolnr = $i;
-			// 	}
-			// }
+			if ($primary_found == false) {
+				//if ($fld->primary_key == 1) { 
+          // NOTICE: assume first field is primary_key because primary_key does not exist in mysqli_fetch_field
+					$this->idname = $fld->name;
+					$this->idcolnr = 0;
+					$primary_found = true;
+				//}
+				// elseif ($fld->unique_key == 1) {
+				// 	$this->idname = $fld->name;
+				// 	$this->idcolnr = $i;
+				// }
+			}
 			$this->cols[] = $fld->name;
 			if ($fld->numeric == 1) $this->cols_numeric[] = $fld->name;
     }
