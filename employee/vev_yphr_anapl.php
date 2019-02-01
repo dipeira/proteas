@@ -212,8 +212,9 @@ foreach($arr as $myarr)
     $days_ya -= $adeies['subtracted'];
     // if meiwmeno, compute yphresia
     if ($myarr['meiwmeno']) {
-        $days = compute_meiwmeno($days, $hour_sum, $mysqlconnection);
-        $days_ya = compute_meiwmeno($days_ya, $hour_sum, $mysqlconnection);
+        $ypoxr = getParam('yp_wr', $mysqlconnection);
+        $days = compute_meiwmeno($days, $hour_sum, $ypoxr);
+        $days_ya = compute_meiwmeno($days_ya, $hour_sum, $ypoxr);
     }
     $ymd = days2ymd($days);
     $ymd_ya = days2ymd($days_ya);

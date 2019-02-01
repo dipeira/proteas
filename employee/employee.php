@@ -722,9 +722,9 @@ elseif ($_GET['op']=="view") {
     echo "<input type='hidden' name='hm_anal' value=$hm_anal>";
     $ymd = ypol_yphr(date("Y/m/d"), $anatr);
     echo "<input type='hidden' name='ymd' value='$ymd'>";
-    echo "<input type='hidden' name='afm' value=$afm>";
+    //echo "<input type='hidden' name='afm' value=$afm>";
     echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
-    echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
+    //echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
     echo "</form>";
     ?>
   <div id="word"></div>

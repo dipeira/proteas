@@ -38,7 +38,7 @@
         debug: false,
         submitHandler: function(form) {
           // do other stuff for a valid form
-          $.post('vev_yphr_pw.php', $("#wordfrm").serialize(), function(data) {
+          $.post('vev_yphr_anapl_pw.php', $("#wordfrm").serialize(), function(data) {
             $('#word').html(data);
           });
         }
@@ -91,82 +91,81 @@
                 $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
            }
 
-		$result = mysqli_query($mysqlconnection, $query);
-		$num=mysqli_num_rows($result);
-		
-    if ($num > 0)
-    {
-        $multi = 1;
-        for ($i=0; $i<$num; $i++)
-        {
-            $yphr_id_arr[$i] = mysqli_result($result, $i, "yphrethsh");
-            $yphr_arr[$i] = getSchool (mysqli_result($result, $i, "yphrethsh"), $mysqlconnection);
-            $hours_arr[$i] = mysqli_result($result, $i, "hours");
-        }            
-    }
-    else
-    {
-        $query = "SELECT * from ektaktoi where id=".$_GET['id'];
-        $result = mysqli_query($mysqlconnection, $query);
-        $num=mysqli_num_rows($result);
-        $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
-        $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
-    }
-       //}
-    $id = mysqli_result($result, 0, 0);
-		$name = mysqli_result($result, 0, "name");
-    $type = mysqli_result($result, 0, "type");
-		$surname = mysqli_result($result, 0, "surname");
-		$klados_id = mysqli_result($result, 0, "klados");
-		$klados = getKlados($klados_id,$mysqlconnection);
-                // if nip or nip eidikhs
-                if ($klados_id == 1 || $klados_id == 16 || $klados_id == 17)
-                    $klados_type = 2;
-                // if ebp or sx.nosileytes
-                elseif (in_array($klados_id, [12, 25, 26, 8, 21, 9, 10, 27, 11])) {
-                    $klados_type = 0;
-                }
-                else
-                    $klados_type = 1;
-                $metakinhsh = stripslashes(mysqli_result($result, 0, "metakinhsh"));
-		$patrwnymo = mysqli_result($result, 0, "patrwnymo");
-		$mhtrwnymo = mysqli_result($result, 0, "mhtrwnymo");
-		$afm = mysqli_result($result, 0, "afm");
-		$vathm = mysqli_result($result, 0, "vathm");
-		$mk = mysqli_result($result, 0, "mk");
-                $hm_mk = mysqli_result($result, 0, "hm_mk");
-		$analipsi = mysqli_result($result, 0, "analipsi");
-                $hm_anal = mysqli_result($result, 0, "hm_anal");
-                $hm_apox = mysqli_result($result, 0, "hm_apox");
-		$met_did = mysqli_result($result, 0, "met_did");
-		//$ya = mysqli_result($result, 0, "ya");
-		//$apofasi = mysqli_result($result, 0, "apofasi");
-		$comments = mysqli_result($result, 0, "comments");
-                $comments = str_replace(" ", "&nbsp;", $comments);
-                $type = mysqli_result($result, 0, "type");
-                $stathero = mysqli_result($result, 0, "stathero");
-                $kinhto = mysqli_result($result, 0, "kinhto");
-                $praxi = mysqli_result($result, 0, "praxi");
-                $updated= mysqli_result($result, 0, "updated");
-                $thesi = mysqli_result($result, 0, "thesi");
-                $wres = mysqli_result($result, 0, "wres");
-                
-                $kat = mysqli_result($result, 0, "status");
-                switch ($kat)
-                {   
-                    case 1:
-                        $katast = "Εργάζεται";
-                        break;
-                    case 2:
-                        $katast = "Λύση Σχέσης - Παραίτηση";
-                        break;
-                    case 3:
-                        $katast = "¶δεια";
-                        break;
-                    case 4:
-                        $katast = "Διαθεσιμότητα";
-                        break;
-                }
+          $result = mysqli_query($mysqlconnection, $query);
+          $num=mysqli_num_rows($result);
+          
+          if ($num > 0)
+          {
+              $multi = 1;
+              for ($i=0; $i<$num; $i++)
+              {
+                  $yphr_id_arr[$i] = mysqli_result($result, $i, "yphrethsh");
+                  $yphr_arr[$i] = getSchool (mysqli_result($result, $i, "yphrethsh"), $mysqlconnection);
+                  $hours_arr[$i] = mysqli_result($result, $i, "hours");
+              }            
+          }
+          else
+          {
+              $query = "SELECT * from ektaktoi where id=".$_GET['id'];
+              $result = mysqli_query($mysqlconnection, $query);
+              $num=mysqli_num_rows($result);
+              $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
+              $sx_yphrethshs = getSchool ($sx_yphrethshs_id, $mysqlconnection);
+          }
+            //}
+          $id = mysqli_result($result, 0, 0);
+          $name = mysqli_result($result, 0, "name");
+          $type = mysqli_result($result, 0, "type");
+          $surname = mysqli_result($result, 0, "surname");
+          $klados_id = mysqli_result($result, 0, "klados");
+          $klados = getKlados($klados_id,$mysqlconnection);
+          // if nip or nip eidikhs
+          if ($klados_id == 1 || $klados_id == 16 || $klados_id == 17)
+              $klados_type = 2;
+          // if ebp or sx.nosileytes
+          elseif (in_array($klados_id, [12, 25, 26, 8, 21, 9, 10, 27, 11])) {
+              $klados_type = 0;
+          }
+          else
+              $klados_type = 1;
+          $metakinhsh = stripslashes(mysqli_result($result, 0, "metakinhsh"));
+          $patrwnymo = mysqli_result($result, 0, "patrwnymo");
+          $mhtrwnymo = mysqli_result($result, 0, "mhtrwnymo");
+          $afm = mysqli_result($result, 0, "afm");
+          $vathm = mysqli_result($result, 0, "vathm");
+          $mk = mysqli_result($result, 0, "mk");
+          $hm_mk = mysqli_result($result, 0, "hm_mk");
+		      $analipsi = mysqli_result($result, 0, "analipsi");
+          $hm_anal = mysqli_result($result, 0, "hm_anal");
+          $hm_apox = mysqli_result($result, 0, "hm_apox");
+          $met_did = mysqli_result($result, 0, "met_did");
+          //$ya = mysqli_result($result, 0, "ya");
+          //$apofasi = mysqli_result($result, 0, "apofasi");
+          $comments = mysqli_result($result, 0, "comments");
+          $comments = str_replace(" ", "&nbsp;", $comments);
+          $stathero = mysqli_result($result, 0, "stathero");
+          $kinhto = mysqli_result($result, 0, "kinhto");
+          $praxi = mysqli_result($result, 0, "praxi");
+          $updated= mysqli_result($result, 0, "updated");
+          $thesi = mysqli_result($result, 0, "thesi");
+          $wres = mysqli_result($result, 0, "wres");
+          
+          $kat = mysqli_result($result, 0, "status");
+          switch ($kat)
+          {   
+              case 1:
+                  $katast = "Εργάζεται";
+                  break;
+              case 2:
+                  $katast = "Λύση Σχέσης - Παραίτηση";
+                  break;
+              case 3:
+                  $katast = "¶δεια";
+                  break;
+              case 4:
+                  $katast = "Διαθεσιμότητα";
+                  break;
+          }
        }
                 ?>
         <script type="text/javascript">
@@ -306,8 +305,8 @@ if ($_GET['op']=="edit")
         $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
         $myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
         $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setYearInterval(1970, date("Y"));
-        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
+        // $myCalendar->setYearInterval(1970, date("Y"));
+        // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
         $myCalendar->setAlignment("left", "bottom");
         $myCalendar->disabledDay("sun,sat");
         $myCalendar->writeScript();
@@ -317,8 +316,8 @@ if ($_GET['op']=="edit")
         $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
         $myCalendar->setDate(date('d',strtotime($hm_apox)),date('m',strtotime($hm_apox)),date('Y',strtotime($hm_apox)));
         $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setYearInterval(1970, date("Y"));
-        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
+        // $myCalendar->setYearInterval(1970, date("Y"));
+        // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
         $myCalendar->setAlignment("left", "bottom");
         //$myCalendar->disabledDay("sun,sat");
         $myCalendar->writeScript();
@@ -343,24 +342,24 @@ if ($_GET['op']=="edit")
                 $count = count($yphr_arr);
                 for ($i=0; $i<$count; $i++)
                 {
-                        echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-                        echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-                        echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
-                        echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
-                        echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-                        echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-                        echo "</tr>";
+                    echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
+                    echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+                    echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
+                    echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
+                    echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
+                    echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+                    echo "</tr>";
                 }
                 }
         else
         {
-                echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-                echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-                echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$sx_yphrethshs' class=\"yphrow\" id=\"yphrow\" size=40/>";
-                echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
-                echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-                echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-                echo "</tr>";
+          echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
+          echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+          echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$sx_yphrethshs' class=\"yphrow\" id=\"yphrow\" size=40/>";
+          echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
+          echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
+          echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+          echo "</tr>";
         }
         
         echo "<tr><td>Μετακινήσεις<br><br><small><strong>ΠΡΟΣΟΧΗ:</strong> Συμπληρώστε ως εξής: \"Αρχικά τοποθετήθηκε στο ΧΧΧΧΧΧ και έπειτα με την ΧΧΧ απόφαση τοποθετήθηκε στο\"</small></td>";
@@ -481,21 +480,47 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi</td></tr>";
         echo "<tr><td>Θέση</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
         
-        echo "<tr><td colspan=4 align='center'>";
+
+        echo "<tr><td>Βεβαίωση υπηρεσίας έως: </td><td>";
+        //stringify schools
+        $hour_sum = 0;
+        for ($i=0; $i < count($yphr_arr); $i++)
+        {
+          $schools .=  $yphr_arr[$i] ." (" . $hours_arr[$i] ." ώρες), ";
+          $hour_sum += $hours_arr[$i];
+        }
+        $schools = substr($schools, 0, -2); 
+        
         //Form gia Bebaiwsh
         echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
+        $myCalendar = new tc_calendar("sel_date", true);
+        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
+        $myCalendar->setPath("../tools/calendar/");
+        $myCalendar->setDate(date('d'), date('m'), date('Y'));
+        $myCalendar->writeScript();
+        echo "<br>";
         echo "<input type='hidden' name='surname' value=$surname>";
         echo "<input type='hidden' name='name' value=$name>";
         echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
-        echo "<input type='hidden' name='klados' value=$klados>";
-        echo "<input type='hidden' name='afm' value=$afm>";
-        echo "<input type='hidden' name='anapl' value=1>";
-        echo "<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
+        echo "<input type='hidden' name='klados' value='$klados'>";
+        //echo "<input type='hidden' name='afm' value=$afm>";
+        echo "<input type='hidden' name='ada' value='$ada'>";
+        $meiwmeno = $type == 1 ? true : false;
+        echo "<input type='hidden' name='meiwmeno' value=$meiwmeno>";
+        echo "<input type='hidden' name='hoursum' value=$hour_sum>";
+        echo "<input type='hidden' name='date_anal' value=$date_anal>";
+        echo "<input type='hidden' name='date_apox' value=$hm_apox>";
+        echo "<input type='hidden' name='ya' value=$ya>";
+        echo "<input type='hidden' name='apofasi' value=$apofasi>";
+        echo "<input type='hidden' name='sxoletos' value=$sxol_etos>";
+        echo "<input type='hidden' name='schools' value='$schools'>";
+        echo "<INPUT TYPE='submit' value='Βεβαίωση υπηρεσίας'>"; 
         echo "</form>";
+        
         ?>
       <div id="word"></div>
         <?php
-        echo "</td></tr>";
+        echo "</td><td colspan=2></td></tr>";
         
         echo $updated > 0 ? "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>" : null;
         echo "	</table>";

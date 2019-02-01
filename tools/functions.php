@@ -1134,7 +1134,7 @@ function getParam($name,$conn)
     $query = "SELECT value from params WHERE name='$name'";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($mysqlconnection));
     }
     return mysqli_result($result, 0, "value");
 }
@@ -1789,15 +1789,11 @@ function get_ypoxrewtiko_wrario($emp_id, $conn)
     return 24;
 }
 
-    // compute_meiwmeno
-    // for teachers with reduced teaching hours
-function compute_meiwmeno($days, $days_per_week = 14, $mysqlconnection)
-{
-    $ypoxr = getParam('yp_wr', $mysqlconnection);
-    if (!isset($ypoxr)) {
-        $ypoxr = 24;
-    }
-    return round($days * ($days_per_week/$ypoxr));
+// compute_meiwmeno
+// for teachers with reduced teaching hours
+function compute_meiwmeno($days, $hours_per_week = 14, $ypoxr = 24)
+{   
+    return round($days * ($hours_per_week/$ypoxr));
 }
 function get_leitoyrgikothta($id, $mysqlconnection)
 {
@@ -1841,5 +1837,23 @@ function endsWith($haystack, $needle)
     }
 
     return (substr($haystack, -$length) === $needle);
-}  
+} 
+// $hmapox, $hmpros : YYYY-MM-DD strings
+function yphresia_anaplhrwth($hmapox, $hmpros, $meiwmeno = false, $subtracted = 0, $yp_wrario = 24, $hour_sum = 0) {
+  // ypologismos yphresias
+  $apol = substr($hmapox, 8, 2) + substr($hmapox, 5, 2)*30 + substr($hmapox, 0, 4)*360;
+  // hm proslhpshs
+  $pros = substr($hmpros, 0, 4)*360 + substr($hmpros, 5, 2)*30 + substr($hmpros, 8, 2);
+  // +1 για να περιληφθεί και η τελευταία μέρα
+  $days = $apol - $pros + 1;
+  // subtract subtracted
+  $days -= $subtracted;
+  // if meiwmeno, compute yphresia
+  if ($meiwmeno) {
+      $days = compute_meiwmeno($days, $hour_sum, $yp_wrario);
+  }
+  $ymd = days2ymd($days);
+  $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
+  return $data;
+}
 ?>

@@ -223,7 +223,9 @@ if ($num_record == 1) {
 }
 
 if ($logged) {
-    echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;".getParam('sxol_etos', $mysqlconnection)."</p>";
+  $se = getParam('sxol_etos', $mysqlconnection);
+  $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
+  echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;$sx_etos</p>";
 }
     echo "<center>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";

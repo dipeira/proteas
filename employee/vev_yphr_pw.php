@@ -6,17 +6,14 @@ require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
 require_once '../tools/functions.php';
 
 $PHPWord = new PHPWord();
-$yphr = false;
+$anadr = false;
 if (isset($_POST['yphr'])) {
   $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_vev.docx');
-  $yphr = true;
 } else {
-  if (isset($_POST['anapl'])){
-    $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_anadr_anapl.docx');
-  } else {
-    $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_anadr.docx');
-  }   
+  $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_anadr.docx');
+  $anadr = true;
 }
+
 $data_array = $_POST;
 //$current_date = date("d/m/Y");
 $document->setValue('date', date("d/m/Y"));
@@ -30,29 +27,24 @@ $document->setValue('father', $data_array['patrwnymo']);
 
 $document->setValue('klados', $data_array['klados']);
 
-if ($yphr) {
-  $am = $data_array['am'];
-  $document->setValue('am', $data_array['am']);
+$am = $data_array['am'];
+$document->setValue('am', $data_array['am']);
 
-  $document->setValue('vath', $data_array['vathm']);
+$document->setValue('vath', $data_array['vathm']);
 
-  $document->setValue('mk', $data_array['mk']);
+$document->setValue('mk', $data_array['mk']);
 
-  $document->setValue('organ', $data_array['sx_organikhs']);
+$document->setValue('organ', $data_array['sx_organikhs']);
 
-  $document->setValue('dior', $data_array['fek_dior']);
+$document->setValue('dior', $data_array['fek_dior']);
 
-  $data = date("d-m-Y", strtotime($data_array['hm_dior_org']));
-  $document->setValue('hmdior', $data);
+$data = date("d-m-Y", strtotime($data_array['hm_dior_org']));
+$document->setValue('hmdior', $data);
 
-  $data = date("d/m/Y", strtotime($data_array['hm_anal']));
-  $document->setValue('hmanal', $data);
+$data = date("d/m/Y", strtotime($data_array['hm_anal']));
+$document->setValue('hmanal', $data);
 
-  $document->setValue('yphr', $data_array['ymd']);
-} else {
-  $afm = $data_array['afm'];
-  $document->setValue('afm', $data_array['afm']);
-}
+$document->setValue('yphr', $data_array['ymd']);
 
 // head title & name
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
@@ -63,9 +55,10 @@ $document->setValue('headtitle', $data);
 $data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");
 $document->setValue('headname', $data);
 
-$output1 = $yphr ? 
-  "../word/vev_yphr_$am.docx" : 
-  "../word/vev_anadr_$afm.docx";
+$output1 = $anadr ? 
+  "../word/vev_anadr_$am.docx" :
+  "../word/vev_yphr_$am.docx";
+  
 $document->save($output1);
 
 header('Content-type: text/html; charset=iso8859-7'); 
