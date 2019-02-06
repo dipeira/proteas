@@ -1412,7 +1412,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
     $oligothesio = $leit < 4 ? true : false;
     // entaksis
-    $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
+    $entaksis = explode(',', mysqli_result($result, 0, "entaksis"));
     $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
     // synolo mathitwn (gia yp/ntes)
     $classes = explode(",", mysqli_result($result, 0, "students"));
@@ -1430,7 +1430,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     if (mysqli_num_rows($result)) {
         $dnthrs = wres_dnth($leit);
         $klados = mysqli_result($result, 0, "klados");
-        $klper = mysqli_result($result, 0, "k.perigrafh");
+        $klper = mysqli_result($result, 0, "perigrafh");
         $avhrs[$klados] = $dnthrs;
         // ώρες Δ/ντή στην ανάλυση
         $ar = Array(

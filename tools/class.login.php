@@ -1,8 +1,6 @@
 <?php
 // url: http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 
-//For security reasons, don't display any errors or warnings. Comment out in DEV.
-//error_reporting(0);
 //start session
 session_start();
 require_once dirname(__DIR__).'/config.php';
@@ -60,8 +58,7 @@ class logmein {
                 $_SESSION['adeia'] = $row['adeia'];
                 //userlevel session is optional. Use it if you have different user levels
                 $_SESSION['userlevel'] = $row[$this->user_level];
-                $result = $this->qry("UPDATE ".$this->user_table." SET lastlogin=now()WHERE ".$this->user_column."='?';" , $username);
-                $row=mysqli_fetch_assoc($result);
+                $result = $this->qry("UPDATE ".$this->user_table." SET lastlogin=now() WHERE ".$this->user_column."='?';" , $username, $password);
                 return true;
             }else{
                 session_destroy();
@@ -118,7 +115,7 @@ class logmein {
         $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->pass_column." = '?';" , $logincode);
         $rownum = mysqli_num_rows($result);
         //return true if logged in and false if not
-        if($row != "Error"){
+        if($rownum != "Error"){
             if($rownum > 0){
                 return true;
             }else{

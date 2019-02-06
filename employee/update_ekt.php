@@ -14,7 +14,6 @@
   
   require_once"../config.php";
   require_once"../tools/functions.php";
-  error_reporting(0);
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'greek'");
@@ -108,7 +107,7 @@
             //echo $query;
             mysqli_query($mysqlconnection, $query);
             // insert into yphrethsh
-            $id = mysqli_insert_id();
+            $id = mysqli_insert_id($mysqlconnection);
             for ($i=0; $i<count($yphr_arr); $i++) 
             {
                     $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";

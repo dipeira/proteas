@@ -45,7 +45,7 @@
 		  	</ul>
 		 	</li>
 		 <?php
-		 if ($usrlvl == 0):
+		 if ($_SESSION['userlevel'] == 0):
 		 ?>
 		 <li class="sub">
 		  <a href="#">Διαχειριση</a>

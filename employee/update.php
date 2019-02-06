@@ -112,7 +112,7 @@ if (isset($_POST['action']))
         $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
         mysqli_query($mysqlconnection, $query);
         // insert into yphrethsh
-        $id = mysqli_insert_id();
+        $id = mysqli_insert_id($mysqlconnection);
         for ($i=0; $i<count($yphr_arr); $i++) 
         {
             $query = "insert into yphrethsh (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
@@ -144,9 +144,9 @@ else {
     $query = $query1.$query2.$query3.$query4;
     $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     //echo $query;
-    mysqli_query($mysqlconnection, $query);
+    $res = mysqli_query($mysqlconnection, $query);
     // insert 2 log
-    if (mysqli_affected_rows()>0)
+    if (mysqli_affected_rows($res)>0)
     {
         // find changes and write them to query field
         $qry = "SELECT * from employee WHERE id=$id";

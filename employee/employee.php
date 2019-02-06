@@ -634,6 +634,8 @@ elseif ($_GET['op']=="view") {
     echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a></td><td></td><td></td></tr>";
 
     $count = count($yphr_arr);
+    $sxoleia = '';
+    $counthrs = 0;
     for ($i=0; $i<$count; $i++)
     {
         $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";

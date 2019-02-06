@@ -84,7 +84,7 @@ if (isset($_POST['rpp'])) {
     $rpp= 20;
 }
 
-if ($_POST['page']!=0) {
+if (isset($_POST['page']) && $_POST['page']!=0) {
     $curpg = $_POST['page'];
 } elseif (isset($_GET['page'])) { 
     $curpg = $_GET['page'];
@@ -99,11 +99,15 @@ if ($_POST['page']!=0) {
     $klpost = 0;
     $orgpost = 0;
     $yppost = 0;
-if (($_POST['klados']>0) || (strlen($_POST['org'])>0) || (strlen($_POST['yphr'])>0) || (strlen($_POST['surname'])>0)) {
+    $whflag = 0;
+    $posted = 0;
+    $surpost = '';
+if (isset($_POST['klados']) && ($_POST['klados']>0) || (isset($_POST['org']) && strlen($_POST['org'])>0) || 
+(isset($_POST['yphr']) && strlen($_POST['yphr'])>0) || (isset($_POST['surname']) && strlen($_POST['surname'])>0)) {
     $posted=1;
     $curpg=1;
 }
-if (($_POST['klados']>0) || ($_GET['klados']>0)) {
+if ((isset($_POST['klados']) && $_POST['klados']>0) || (isset($_GET['klados']) && $_GET['klados']>0)) {
     if ($_POST['klados']>0) {
         $klpost = $_POST['klados'];
     } else {
@@ -112,7 +116,7 @@ if (($_POST['klados']>0) || ($_GET['klados']>0)) {
     $query .= "WHERE klados = $klpost ";
     $whflag=1;
 }
-if ((strlen($_POST['org'])>0) || ($_GET['org']>0)) {
+if (isset($_REQUEST['org']) && ((strlen($_POST['org'])>0) || ($_GET['org']>0))) {
     if (strlen($_POST['org'])>0) {
         $orgpost = getSchoolID($_POST['org'], $mysqlconnection);
     }
@@ -127,7 +131,7 @@ if ((strlen($_POST['org'])>0) || ($_GET['org']>0)) {
         $whflag=1;
     }    
 }
-if ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0)) {
+if (isset($_REQUEST['klados']) && ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0))) {
     if (strlen($_POST['yphr'])>0) {
         $yppost = getSchoolID($_POST['yphr'], $mysqlconnection);
     }
@@ -142,12 +146,12 @@ if ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0)) {
     }
 }
     // if ektaktos
-if (strlen($_POST['surname'])>0 && $_POST['pinakas']==1) {
+if (isset($_POST['surname']) && strlen($_POST['surname'])>0 && $_POST['pinakas']==1) {
     $surn = explode(' ', $_POST['surname'])[0];
     $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
     echo "<script>window.location = '$url'</script>";
 }
-if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
+if (isset($_POST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)) {
     if (strlen($_POST['surname'])>0) {
         $surpost = explode(' ', $_POST['surname'])[0];
     } else {
@@ -170,7 +174,7 @@ if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
   }
 
   // exclude employees that don't belong in d/nsh
-  if (!$_REQUEST['outsiders']) {
+  if (!isset($_REQUEST['outsiders'])) {
     $text = " (sx_yphrethshs NOT IN (388, 394) AND sx_organikhs NOT IN (388,394))";
     if ($whflag) {
       $query .= " AND $text";
@@ -180,7 +184,7 @@ if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
     }
   }
   // include inactive employees
-  if (!$_REQUEST['inactive']) {
+  if (!isset($_REQUEST['inactive'])) {
     $text = " status IN (1,3)";
     if ($whflag) {
       $query .= " AND $text";
@@ -216,7 +220,7 @@ if ($result) {
 }
 
     // added 24-01-2013 - when 1 result, redirect to that employee page
-if ($num_record == 1) {
+if ($num_record == 1 && $num_record1 > 1) {
     $id = mysqli_result($result, 0, "id");
     $url = "employee/employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
@@ -239,10 +243,10 @@ if ($logged) {
     echo "</tr>\n</thead>\n";
    echo "<tr><form id='src' name='src' action='index.php' method='POST'>\n";
 if ($posted || 
-      ($_REQUEST['klados']>0) || 
-      ($_REQUEST['org']>0) || 
-      ($_REQUEST['yphr']>0) || 
-      (strlen($_REQUEST['surname'])>0) || 
+      (isset($_REQUEST['klados']) && $_REQUEST['klados']>0) || 
+      (isset($_REQUEST['org']) && $_REQUEST['org']>0) || 
+      (isset($_REQUEST['yphr']) && $_REQUEST['yphr']>0) || 
+      (isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0) || 
       (isset($_REQUEST['outsiders'])) ||
       (isset($_REQUEST['inactive']))
     ) {
@@ -251,7 +255,7 @@ if ($posted ||
 } else {    
     echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
 }
-    echo strlen($_REQUEST['surname'])>0 ? "<input type='text' value='".$_REQUEST['surname']."' name='surname' id='surname''/>\n" : "<input type='text' name='surname' id='surname''/>\n";
+    echo isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 ? "<input type='text' value='".$_REQUEST['surname']."' name='surname' id='surname''/>\n" : "<input type='text' name='surname' id='surname''/>\n";
     echo "<input type='hidden' name='pinakas' id='pinakas' />";
     echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές, εμφανίζοντας σε παρένθεση τη σχέση εργασίας'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
     echo $klpost > 0 ? kladosCombo($klpost, $mysqlconnection) : kladosCmb($mysqlconnection);
@@ -274,6 +278,7 @@ if ($posted ||
 if ($num == 0) {
     echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
 } else {
+    $i = 0;
     while ($i < $num)
     {
         $id = mysqli_result($result, $i, "id");
