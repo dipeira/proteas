@@ -685,6 +685,8 @@ elseif ($_GET['op']=="view") {
         echo "</td></tr>";
     }
     echo "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>";
+    
+    // Service time form
     echo "<form id='yphrfrm' name='yphrfrm' action='' method='POST'>";
     echo "<tr><td>Χρόνος Υπηρεσίας έως</td><td>";
     $myCalendar = new tc_calendar("yphr", true);
@@ -692,14 +694,12 @@ elseif ($_GET['op']=="view") {
     $myCalendar->setDate(date('d'), date('m'), date('Y'));
     $myCalendar->setPath("../tools/calendar/");
     // allow from diorismos 
-    $myCalendar->dateAllow($hm_dior, date("2031-01-01"));
+    $myCalendar->dateAllow($hm_dior, date("2050-01-01"));
     $myCalendar->setAlignment("left", "bottom");
     $myCalendar->disabledDay("sun,sat");
     $myCalendar->writeScript();
     echo "<br>";
-    echo "<input type='hidden' name = 'anatr' value='$anatr'>";
-    echo "<input type='hidden' name = 'proyp_not' value='$proyp_not'>";
-    echo "<input type='hidden' name = 'met_did' value='$met_did'>";
+    echo "<input type='hidden' name='id' value=$id>";
     echo "<INPUT TYPE='submit' VALUE='Υπολογισμός'>";
     echo "<br>";
     echo "</form>";
@@ -717,7 +717,7 @@ elseif ($_GET['op']=="view") {
     echo "<input type='hidden' name='klados' value=$klados>";
     echo "<input type='hidden' name='am' value=$am>";
     echo "<input type='hidden' name='vathm' value=$vathm>";
-    echo "<input type='hidden' name='mk' value=$mk>";
+    echo "<input type='hidden' name='id' value=$id>";
     echo "<input type='hidden' name='sx_organikhs' value='$sx_organikhs'>";
     echo "<input type='hidden' name='fek_dior' value=$fek_dior>";
     echo "<input type='hidden' name='hm_dior_org' value=$hm_dior_org>";
@@ -776,23 +776,23 @@ elseif ($_GET['op']=="view") {
     echo "</html>";    
 }
 if ($_GET['op']=="delete") {
-       $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = $_SERVER['REMOTE_ADDR'];
     // Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
     $query1 = "INSERT INTO employee_deleted SELECT e.* FROM employee e WHERE id =".$_GET['id'];
     $result1 = mysqli_query($mysqlconnection, $query1);
-               $query1 = "INSERT INTO employee_log (emp_id, ip, userid, action) VALUES (".$_GET['id'].",$ip,".$_SESSION['userid'].", 2)";
+    $query1 = "INSERT INTO employee_log (emp_id, ip, userid, action) VALUES (".$_GET['id'].",$ip,".$_SESSION['userid'].", 2)";
     $result1 = mysqli_query($mysqlconnection, $query1);
-               $query = "DELETE from employee where id=".$_GET['id'];
+    $query = "DELETE from employee where id=".$_GET['id'];
     $result = mysqli_query($mysqlconnection, $query);
     // Copies the deleted row to employee)deleted
         
     if ($result) {
-        echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
+      echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
     } else {
-        echo "Η διαγραφή απέτυχε...";
+      echo "Η διαγραφή απέτυχε...";
     }
     echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-               echo "  <meta http-equiv=\"refresh\" content=\"2; URL=../index.php\">";
+    echo "  <meta http-equiv=\"refresh\" content=\"2; URL=../index.php\">";
 }
 if ($_GET['op']=="add") {
        echo "<h3>Προσοχή: Παρακαλώ δώστε έγκυρα στοιχεία από τον προσωπικό φάκελο του εργαζομένου</h3><br>";

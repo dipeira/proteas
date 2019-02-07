@@ -1012,8 +1012,84 @@ function mk16_plus($days)
     $mk = floor($years/2) + 1;
     $ret[0] = $mk > 19 ? 19 : $mk;
     $ret[1] = $days - (($mk * 2) - 2);
-    print_r($ret);
+    //print_r($ret);
     return ret;
+}
+function date2days($d)
+{
+    $d = strtotime($d);
+    return date('d', $d) + date('m', $d)*30 + date('Y', $d)*360;
+}
+function get_anatr($id, $mysqlconnection){
+  $query = "SELECT * from employee WHERE id=$id";
+  $result = mysqli_query($mysqlconnection, $query);
+  $row = mysqli_fetch_assoc($result);
+  
+  $dt1 = strtotime($row['hm_anal']);
+  $dt2 = strtotime($row['hm_dior']);
+  $diafora = abs($dt1 - $dt2);
+  
+  $diafora = $diafora/86400;
+  $d1 = $diafora > 30 ? strtotime($row['hm_anal']) : strtotime($row['hm_dior']);
+  $anatr = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $row['proyp'] + $row['aney_xr'];
+  return $anatr;
+}
+// get_mk: Function for ּÊ computation
+// returns MK (mk -> int) and total days to compute MK (ymd -> array)
+function get_mk($id, $mysqlconnection, $date = null) {
+  $asked_date = $date ? $date : date("Y-m-d");
+  $subtract = 0;
+
+  $query = "SELECT * from employee WHERE id=$id";
+  $result = mysqli_query($mysqlconnection, $query);
+  $row = mysqli_fetch_assoc($result);
+  // compute anatr
+  $anatr = get_anatr($id, $mysqlconnection);
+  
+  ///////////////////
+  // compute MK time
+  // compute subtracted MK days
+  $asked = date('Y-m-d', strtotime($asked_date));
+  $start = date('Y-m-d', strtotime('2016-01-01'));
+  $end = date('Y-m-d', strtotime('2017-12-31'));
+  // if diorismos after 2016-01-01
+  if ($anatr > date2days($start)) {
+    $subtract = $anatr - date2days($start);
+    // if asked date > 2017-12-31
+  } elseif ($asked > $end) {
+    $subtract = 720;
+    // if asked between start & end
+  } elseif ($asked > $start && $asked < $end) {
+    $subtract = date2days($asked) - date2days($start);
+  } else {
+    $subtract = 0;
+  }
+  // MSc / Phd
+  // met: 4y, did: 12y, m+d: 12y
+  if ($row['met_did']==1) {
+        $anatr -= 1440;
+  } else if ($row['met_did']==2) {
+        $anatr -= 4320;
+  } else if ($row['met_did']==3) {
+        $anatr -= 4320;
+  }
+  // days for MK
+  $result = date2days($asked_date) - $anatr - $subtract;
+  $mk = mk16($result);
+  //$res = mk16_plus($result);
+  //$mk = $res[0];
+  /*
+  // Days to next MK: Left for later...
+  $ymd = days2ymd($res[1]);
+  $v99 = "-$tmp[1] day"; //may need fixing...
+  $vdate = strtotime ( $v99 , $d1 );
+  $vdate = date ( 'd-m-Y' , $vdate );
+  echo "<br>MK: $mk <small>(בנü $vdate)</small>";
+  */
+  return array(
+    'mk' => $mk,
+    'ymd' => days2ymd($result)
+  );
 }
         
 function exp2excel($data)

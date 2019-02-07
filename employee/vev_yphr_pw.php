@@ -32,8 +32,6 @@ $document->setValue('am', $data_array['am']);
 
 $document->setValue('vath', $data_array['vathm']);
 
-$document->setValue('mk', $data_array['mk']);
-
 $document->setValue('organ', $data_array['sx_organikhs']);
 
 $document->setValue('dior', $data_array['fek_dior']);
@@ -54,6 +52,9 @@ $data = mb_convert_encoding(getParam('head_title', $mysqlconnection), "utf-8", "
 $document->setValue('headtitle', $data);
 $data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");
 $document->setValue('headname', $data);
+
+$mk = get_mk($data_array['id'], $mysqlconnection)['mk'];
+$document->setValue('mk', $mk);
 
 $output1 = $anadr ? 
   "../word/vev_anadr_$am.docx" :
