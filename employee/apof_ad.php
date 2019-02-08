@@ -229,8 +229,9 @@
             $emp_num = count($emp);
             $is_anapl = $arr[4];
             
-            require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
-            $PHPWord = new PHPWord();
+            // include MyPHPWord which features cloneRow function
+            require_once('../tools/phpword.php');
+            $PHPWord = new MyPHPWord();
             if ($is_anapl)
             {
                 if ($type == 1)

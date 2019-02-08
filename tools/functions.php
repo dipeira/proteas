@@ -137,7 +137,7 @@ function ypoloipo_adeiwn($id, $sql)
         $cur_yr = date("Y");
         $prev_yr = $cur_yr - 1;
         $qry = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $cur_yr AND year(FINISH) = $cur_yr AND emp_id = $id";
-        $res = mysqli_query($qry, $sql);
+        $res = mysqli_query($sql, $qry);
         $cur_kan = mysqli_result($res, 0, "rem");
         $rem = 25 - $cur_kan;
         
