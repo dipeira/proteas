@@ -26,11 +26,11 @@ $surname = $_POST['surname'];
 $klados =$_POST['klados']; 
 
 if ($_POST['org'] == "")
-    $org = 387;
+  $org = 387;
 else
 {
-$organ = mb_convert_encoding($_POST['org'], "iso-8859-7", "utf-8");
-$org = getSchoolID($organ,$mysqlconnection);  
+  $organ = mb_convert_encoding($_POST['org'], "iso-8859-7", "utf-8");
+  $org = getSchoolID($organ,$mysqlconnection);  
 }
 // yphr array
 $count = count($_POST['yphr']);
@@ -42,11 +42,17 @@ for ($i=0; $i<$count; $i++)
         $yp_tmp = $_POST['yphr'][$i];
     $yphret[$i] = mb_convert_encoding($yp_tmp, "iso-8859-7", "utf-8");
     $yphr_arr[$i] = getSchoolID($yphret[$i],$mysqlconnection);
-    $hours_arr[$i] = $_POST['hours'][$i];
+    $hours_arr[$i] = $_POST['hours'][$i] ? $_POST['hours'][$i] : 24;
 }
 $yphret = $_POST['yphr'][0];
 $yphret = mb_convert_encoding($yphret, "iso-8859-7", "utf-8");
-$yphr = getSchoolID($yphret,$mysqlconnection);  
+$yphr = getSchoolID($yphret,$mysqlconnection);
+
+// check if valid school
+if (!$org || !$yphr){
+  notify('Σφάλμα: Παρακαλώ επιλέξτε ένα σχολείο από την αναδυόμενη λίστα',1);
+  die();
+}
 
 $patrwnymo = $_POST['patrwnymo'];
 $mhtrwnymo = $_POST['mhtrwnymo'];
@@ -63,13 +69,10 @@ $hm_mk = date('Y-m-d',strtotime($_POST['hm_mk']));
 $fek_dior = $_POST['fek_dior'];
 $hm_dior = date('Y-m-d',strtotime($_POST['hm_dior']));
 $analipsi = $_POST['analipsi'];
-//date('d-m-Y',strtotime($hm_dior))
 $hm_anal = date('Y-m-d',strtotime($_POST['hm_anal']));
 $met_did = $_POST['met_did'];
 $proyp = $_POST['pyears']*360 + $_POST['pmonths']*30 + $_POST['pdays'];
 $proyp_not = $_POST['peyears']*360 + $_POST['pemonths']*30 + $_POST['pedays'];
-//$anatr = $_POST['anatr'];
-//$anatr = $_POST['ayears']*360 + $_POST['amonths']*30 + $_POST['adays'];
 $comments = addslashes($_POST['comments']);
 $katast = $_POST['status'];
 $thesi = $_POST['thesi'];
@@ -135,32 +138,29 @@ else {
     // get current row from db
     $qry = "SELECT * from employee WHERE id=$id";
     $res = mysqli_query($mysqlconnection, $qry);
-    $before = mysqli_fetch_row($res);
+    $before = mysqli_fetch_assoc($res);
         
     $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
     $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
     $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
-    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not',anatr='$anatr', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
+    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
     $query = $query1.$query2.$query3.$query4;
     $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     //echo $query;
     $res = mysqli_query($mysqlconnection, $query);
     // insert 2 log
-    if (mysqli_affected_rows($res)>0)
+    if (mysqli_affected_rows($mysqlconnection)>0)
     {
         // find changes and write them to query field
         $qry = "SELECT * from employee WHERE id=$id";
         $res = mysqli_query($mysqlconnection, $qry);
-        $after = mysqli_fetch_row($res);
+        $after = mysqli_fetch_assoc($res);
 
         $diff = array_diff($after, $before);
+        unset($diff['updated']);
         $temp = Array();
         foreach ($diff as $key => $value) {
-            $field = mysqli_field_name($res, $key);
-            if ($field === 'updated'){
-                continue;
-            }
-            array_push($temp, $field .': '. $before[$key] .' -> '.$value);
+            array_push($temp, $key .': '. $before[$key] .' -> '.$value);
         }
         $change = implode(", ", $temp);
         //

@@ -40,7 +40,7 @@ function getSchoolID($name,$conn)
     $query = "SELECT id from school where name='".$name."'";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        return false;
     } else {
         return mysqli_result($result, 0);
     }    

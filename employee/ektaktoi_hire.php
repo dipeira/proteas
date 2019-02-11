@@ -149,7 +149,7 @@ if (isset($_POST['ektaktoi2'])) {
     //echo $query;
     $result = mysqli_query($mysqlconnection, $query);
     if ($result) {
-        echo "Έγινε επιτυχής εισαγωγή " . mysqli_affected_rows() . " εκπαιδευτικών.";
+        echo "Έγινε επιτυχής εισαγωγή " . mysqli_affected_rows($mysqlconnection) . " εκπαιδευτικών.";
     }
 
 }

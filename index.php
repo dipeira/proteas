@@ -131,7 +131,7 @@ if (isset($_REQUEST['org']) && ((strlen($_POST['org'])>0) || ($_GET['org']>0))) 
         $whflag=1;
     }    
 }
-if (isset($_REQUEST['klados']) && ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0))) {
+if (isset($_REQUEST['yphr']) && ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0))) {
     if (strlen($_POST['yphr'])>0) {
         $yppost = getSchoolID($_POST['yphr'], $mysqlconnection);
     }
@@ -175,7 +175,7 @@ if (isset($_POST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET['su
 
   // exclude employees that don't belong in d/nsh
   if (!isset($_REQUEST['outsiders'])) {
-    $text = " (sx_yphrethshs NOT IN (388, 394) AND sx_organikhs NOT IN (388,394))";
+    $text = " NOT (sx_yphrethshs IN (388, 394) AND sx_organikhs IN (388,394))";
     if ($whflag) {
       $query .= " AND $text";
     } else {
@@ -240,8 +240,8 @@ if ($logged) {
     echo "<th>Ειδικότητα</th>\n";
     echo "<th>Σχ.Οργανικής</th>\n";
     echo "<th>Σχ.Υπηρέτησης</th>\n";
-    echo "</tr>\n</thead>\n";
-   echo "<tr><form id='src' name='src' action='index.php' method='POST'>\n";
+    echo "</tr>\n\n";
+   echo "<tr class='tablesorter-ignoreRow'><form id='src' name='src' action='index.php' method='POST'>\n";
 if ($posted || 
       (isset($_REQUEST['klados']) && $_REQUEST['klados']>0) || 
       (isset($_REQUEST['org']) && $_REQUEST['org']>0) || 
@@ -269,10 +269,10 @@ if ($posted ||
     echo "</td>";
     echo "<tr>";
     $has_outsiders = isset($_REQUEST['outsiders']) ? 'checked' : '';
-    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση</small></td>";	
+    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>Εμφάνιση και όσων δεν υπηρετούν και δεν ανήκουν στη Δ/νση</small></td>";	
     $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
     echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive><small>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης, διαθεσιμότητα)</small></small></td>";
-    echo "</form></tr>\n";
+    echo "</form></tr></thead>\n";
     
     echo "<tbody>\n";
 if ($num == 0) {

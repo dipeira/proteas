@@ -63,11 +63,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $("#updatefrm").validate({
                 debug: false,
                 rules: {
-                    name: "required", surname: "required", afm: "required", am: "required", klados: "required", vathm: "required", mk: "required", org: "required"
+                    name: "required", surname: "required", 
+                    afm: {required: true, digits: true, minlength: 8}, 
+                    am: {required: true, digits: true}, klados: "required", vathm: "required", 
+                    mk: {required: true, digits: true}, org: "required",yphr:"required"
                 },
                 messages: {
                     name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρη τιμή", am: "Παρακαλώ δώστε έγκυρη τιμή", 
-                                    klados: "Παρακαλώ δώστε έγκυρη τιμή", vathm: "Παρακαλώ δώστε έγκυρη τιμή", mk: "Παρακαλώ δώστε έγκυρη τιμή", org: "Παρακαλώ δώστε έγκυρη τιμή",
+                    klados: "Παρακαλώ δώστε έγκυρη τιμή", vathm: "Παρακαλώ δώστε έγκυρη τιμή", mk: "Παρακαλώ δώστε έγκυρη τιμή", org: "Παρακαλώ επιλέξτε από την αναδυόμενη λίστα",yphr: "Παρακαλώ επιλέξτε από την αναδυόμενη λίστα"
                 },
                 submitHandler: function(form) {
                     // do other stuff for a valid form
@@ -211,7 +214,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 <script type="text/javascript">
     $().ready(function() {
         $("#org").autocomplete("get_school.php", {
-                            extraParams: {type: <?php echo $klados_type; ?>},
+            extraParams: {type: <?php echo $klados_type; ?>},
             width: 260,
             matchContains: true,
             selectFirst: false
@@ -219,7 +222,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     });
     $().ready(function() {
         $("#yphr").autocomplete("get_school.php", {
-                            extraParams: {type: <?php echo $klados_type; ?>},
+            extraParams: {type: <?php echo $klados_type; ?>},
             width: 260,
             matchContains: true,
             selectFirst: false
