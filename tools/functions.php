@@ -4,6 +4,7 @@
 // taken from https://mariolurig.com/coding/mysqli_result-function-to-match-mysqli_result/
 function mysqli_result($res,$row=0,$col=0)
 { 
+    if (!$res) return false;
     $numrows = mysqli_num_rows($res); 
     if ($numrows && $row <= ($numrows-1) && $row >=0) {
         mysqli_data_seek($res, $row);

@@ -154,7 +154,7 @@
       else
       {
           // get current row from db
-          $qry = "SELECT * from employee_ekt WHERE id=$id";
+          $qry = "SELECT * from ektaktoi WHERE id=$id";
           $res = mysqli_query($mysqlconnection, $qry);
           $before = mysqli_fetch_row($res);
           

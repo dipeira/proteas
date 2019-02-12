@@ -17,7 +17,7 @@ $sql = "select DISTINCT surname from ektaktoi_old where surname LIKE '%$q%' AND 
 //workaround for greek chars
 $sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
 
-$rsd = mysqli_query($conn, $sql);
+$rsd = mysqli_query($mysqlconnection, $sql);
 while($rs = mysqli_fetch_array($rsd)) {
 	$cname = $rs['surname'];
 	echo "$cname\n";
