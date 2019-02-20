@@ -581,7 +581,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tr></thead>\n<tbody>";
             while ($i < $num)
             {
-                $id = mysqli_result($result, $i, "id");
+                $id = mysqli_result($result, $i, 0);
                 $name = mysqli_result($result, $i, "name");
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
@@ -659,7 +659,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tr></thead>\n<tbody>";
             while ($i < $num)
             {
-                $id = mysqli_result($result, $i, "id");
+                $id = mysqli_result($result, $i, 0);
                 $name = mysqli_result($result, $i, "name");
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
@@ -827,7 +827,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tr></thead>\n<tbody>";
             while ($i < $num)
             {
-                $id = mysqli_result($result, $i, "id");
+                $id = mysqli_result($result, $i, 0);
                 $name = mysqli_result($result, $i, "name");
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
