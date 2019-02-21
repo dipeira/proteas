@@ -299,28 +299,34 @@ function vathmosCmb($conn)
 {
     echo "<select name=\"vathm\">";
     echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-    echo "<option value=\"Γ\">Γ</option>";
-    echo "<option value=\"Β\">Β</option>";
     echo "<option value=\"Α\">Α</option>";
+    echo "<option value=\"Β\">Β</option>";
+    echo "<option value=\"Γ\">Γ</option>";
+    echo "<option value=\"Δ\">Δ</option>";
     echo "</select>";
 }
 function vathmosCmb1($v, $conn)
 {
     echo "<select name=\"vathm\">";
-    if (strcmp($v, 'Γ')==0) {
-        echo "<option value=\"Γ\" selected>Γ</option>";
+    if (strcmp($v, 'Α')==0) {
+      echo "<option value=\"Α\" selected>Α</option>";
     } else {
-        echo "<option value=\"Γ\">Γ</option>";
+        echo "<option value=\"Α\">Α</option>";
     }
     if (strcmp($v, 'Β')==0) {
-        echo "<option value=\"Β\" selected>Β</option>";
+      echo "<option value=\"Β\" selected>Β</option>";
     } else {
         echo "<option value=\"Β\">Β</option>";
     }
-    if (strcmp($v, 'Α')==0) {
-        echo "<option value=\"Α\" selected>Α</option>";
+    if (strcmp($v, 'Γ')==0) {
+      echo "<option value=\"Γ\" selected>Γ</option>";
     } else {
-        echo "<option value=\"Α\">Α</option>";
+        echo "<option value=\"Γ\">Γ</option>";
+    }
+    if (strcmp($v, 'Δ')==0) {
+      echo "<option value=\"Δ\" selected>Δ</option>";
+    } else {
+        echo "<option value=\"Δ\">Δ</option>";
     }
     echo "</select>";
 }
