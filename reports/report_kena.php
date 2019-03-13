@@ -81,7 +81,7 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         $organikothta = mysqli_result($result, $i, "organikothta");
         $synorgan += $organikothta;
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
-        $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
+        $orgs = get_orgs($sch,$mysqlconnection);
         // 锺汜黹贶 麸痫桢翮栎眙弪
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
@@ -97,17 +97,31 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         for ($j=0; $j<9; $j++){
             echo "<td>".$organikes[$j]."</td>";
         }
-        for ($j=0; $j<9; $j++){
-            echo "<td>".$kena_org[$j]."</td>";
-        }
+        echo "<td>".($organikes[0] - $orgs['信70'])."</td>";
+        echo "<td>".($organikes[1] - $orgs['信11'])."</td>";
+        echo "<td>".($organikes[2] - $orgs['信06'])."</td>";
+        echo "<td>".($organikes[3] - $orgs['信79'])."</td>";
+        echo "<td>".($organikes[4] - $orgs['信05'])."</td>";
+        echo "<td>".($organikes[5] - $orgs['信07'])."</td>";
+        echo "<td>".($organikes[6] - $orgs['信08'])."</td>";
+        echo "<td>".($organikes[7] - $orgs['信86'])."</td>";
+        echo "<td>".($organikes[8] - $orgs['信91'])."</td>";
         echo "</tr>\n";
 
         for ($j=0; $j<9; $j++){
             $organikes_sum[$j] += $organikes[$j];
         }
-        for ($j=0; $j<9; $j++){
-            $kena_org_sum[$j] += $kena_org[$j];
-        }
+        
+        $kena_org_sum[0] += $organikes[0] - $orgs['信70'];
+        $kena_org_sum[1] += $organikes[1] - $orgs['信11'];
+        $kena_org_sum[2] += $organikes[2] - $orgs['信06'];
+        $kena_org_sum[3] += $organikes[3] - $orgs['信79'];
+        $kena_org_sum[4] += $organikes[4] - $orgs['信05'];
+        $kena_org_sum[5] += $organikes[5] - $orgs['信07'];
+        $kena_org_sum[6] += $organikes[6] - $orgs['信08'];
+        $kena_org_sum[7] += $organikes[7] - $orgs['信86'];
+        $kena_org_sum[8] += $organikes[8] - $orgs['信91'];
+
 
         $i++;                        
     }

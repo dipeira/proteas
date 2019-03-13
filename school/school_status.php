@@ -36,6 +36,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             matchContains: true,
             selectFirst: false
         });
+        $(".slidingDiv").hide();
+        $(".show_hide").show();
+
+        $('.show_hide').click(function(){
+            $(".slidingDiv").slideToggle();
+        });
     });
     $(document).ready(function() { 
         $(".tablesorter").tablesorter({widgets: ['zebra']}); 
@@ -138,15 +144,33 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
         }
         if ($type == 1) {
-            echo "<tr><td colspan=2>Οργανικές: ΠΕ70: $organikes[0]";
-            echo "&nbsp;&nbsp;ΠΕ11: $organikes[1]";
-            echo "&nbsp;&nbsp;ΠΕ06: $organikes[2]";
-            echo "&nbsp;&nbsp;ΠΕ79: $organikes[3]";
-            echo "&nbsp;&nbsp;ΠΕ05: $organikes[4]";
-            echo "&nbsp;&nbsp;ΠΕ07: $organikes[5]";
-            echo "&nbsp;&nbsp;ΠΕ08: $organikes[6]";
-            echo "&nbsp;&nbsp;ΠΕ86: $organikes[7]";
-            echo "&nbsp;&nbsp;ΠΕ91: $organikes[8]";
+            echo "<tr><td colspan=2><a href='#' class='show_hide'>Οργανικές</a><br>";
+            echo "<div class='slidingDiv'>";
+            echo "<table>";
+            echo "<thead><tr>";
+            echo "<th>Κλάδος</th>";
+            echo "<th>70</th>";
+            echo "<th>11</th>";
+            echo "<th>06</th>";
+            echo "<th>79</th>";
+            echo "<th>05</th>";
+            echo "<th>07</th>";
+            echo "<th>08</th>";
+            echo "<th>86</th>";
+            echo "<th>91</th>";
+            echo "</tr></thead>";
+            echo "<tr>";
+            echo "<td>Οργανικές</td>";
+            echo "<td>$organikes[0]</td>";
+            echo "<td>$organikes[1]</td>";
+            echo "<td>$organikes[2]</td>";
+            echo "<td>$organikes[3]</td>";
+            echo "<td>$organikes[4]</td>";
+            echo "<td>$organikes[5]</td>";
+            echo "<td>$organikes[6]</td>";
+            echo "<td>$organikes[7]</td>";
+            echo "<td>$organikes[8]</td>";
+            echo "</tr>";
         }
         else {
             echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
@@ -160,15 +184,59 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
         }
         if ($type == 1) {
-            echo "<tr><td colspan=2>Οργ. Κενά: &nbsp;ΠΕ70: $kena_org[0]";
-            echo "&nbsp;&nbsp;&nbsp;ΠΕ11: $kena_org[1]";
-            echo "&nbsp;&nbsp;ΠΕ06: $kena_org[2]";
-            echo "&nbsp;&nbsp;ΠΕ79: $kena_org[3]";
-            echo "&nbsp;&nbsp;ΠΕ05: $kena_org[4]";
-            echo "&nbsp;&nbsp;ΠΕ07: $kena_org[5]";
-            echo "&nbsp;&nbsp;ΠΕ08: $kena_org[6]";
-            echo "&nbsp;&nbsp;ΠΕ86: $kena_org[7]";
-            echo "&nbsp;&nbsp;ΠΕ91: $kena_org[8]";
+            // echo "<tr>";
+            // echo "<td>Οργανικά κενά</td>";
+            // echo "<td>$kena_org[0]</td>";
+            // echo "<td>$kena_org[1]</td>";
+            // echo "<td>$kena_org[2]</td>";
+            // echo "<td>$kena_org[3]</td>";
+            // echo "<td>$kena_org[4]</td>";
+            // echo "<td>$kena_org[5]</td>";
+            // echo "<td>$kena_org[6]</td>";
+            // echo "<td>$kena_org[7]</td>";
+            // echo "<td>$kena_org[8]</td>";
+            // echo "</tr>";
+            ///////
+            echo "<tr>";
+            $orgs = get_orgs($sch,$conn);
+            echo "<td>Οργανικά ανήκοντες</td>";
+            echo "<td>".$orgs['ΠΕ70']."</td>";
+            echo "<td>".$orgs['ΠΕ11']."</td>";
+            echo "<td>".$orgs['ΠΕ06']."</td>";
+            echo "<td>".$orgs['ΠΕ79']."</td>";
+            echo "<td>".$orgs['ΠΕ05']."</td>";
+            echo "<td>".$orgs['ΠΕ07']."</td>";
+            echo "<td>".$orgs['ΠΕ08']."</td>";
+            echo "<td>".$orgs['ΠΕ86']."</td>";
+            echo "<td>".$orgs['ΠΕ91']."</td>";
+            echo "</tr>";
+            ///////
+            echo "</tr>";
+            echo "<tr>";
+            $orgs = get_orgs($sch,$conn);
+            echo "<td>Οργανικά κενά</td>";
+            echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
+            echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
+            echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
+            echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
+            echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
+            echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
+            echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
+            echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
+            echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+            echo "</tr>";
+            echo "</table>";
+            echo "</div>";
+            // echo "&nbsp;&nbsp;&nbsp;ΠΕ11: ".($organikes[1] - $orgs['ΠΕ11']);
+            // echo "&nbsp;&nbsp;ΠΕ06: ".($organikes[2] - $orgs['ΠΕ06']);
+            // echo "&nbsp;&nbsp;ΠΕ79: ".($organikes[3] - $orgs['ΠΕ79']);
+            // echo "&nbsp;&nbsp;ΠΕ05: ".($organikes[4] - $orgs['ΠΕ05']);
+            // echo "&nbsp;&nbsp;ΠΕ07: ".($organikes[5] - $orgs['ΠΕ07']);
+            // echo "&nbsp;&nbsp;ΠΕ08: ".($organikes[6] - $orgs['ΠΕ08']);
+            // echo "&nbsp;&nbsp;ΠΕ86: ".($organikes[7] - $orgs['ΠΕ86']);
+            // echo "&nbsp;&nbsp;ΠΕ91: ".($organikes[8] - $orgs['ΠΕ91']);
+            // echo "</td></tr>";
+
         }
         else {
             echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0]";

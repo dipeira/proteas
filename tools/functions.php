@@ -1898,6 +1898,25 @@ function get_leitoyrgikothta($id, $mysqlconnection)
     }
         
 }
+
+// get_orgs
+// returns number of teachers who belong organically per expertise
+function get_orgs($id, $mysqlconnection)
+{
+    $query = "SELECT k.perigrafh as klname, count(*) as plithos 
+    FROM employee e join klados k on e.klados = k.id 
+    WHERE e.sx_organikhs='$id' AND status IN (1,3) AND thesi IN (0,1,2)
+    GROUP BY klados";
+    $result = mysqli_query($mysqlconnection, $query);
+    $ret = array();
+    while ($row = mysqli_fetch_array($result)){
+      $plithos = strval($row['plithos']);
+      $kl = $row['klname'];
+      $ret[$kl] += $plithos;
+    }
+    return $ret;
+}
+
 function get_wres($days)
 {
     // 0-10: 24 wres, 11-15: 23 wres, 15-20: 22 wres, >20: 21 wres

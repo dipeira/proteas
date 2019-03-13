@@ -158,15 +158,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</td></tr>";
             // 19-06-2013 - kena_org, kena_leit
             if ($type == 1) {
-                echo "<tr><td colspan=2>œÒ„.  ÂÌ‹: &nbsp;–≈70: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈11: <input type='text' name='kena_org[]' value='$kena_org[1]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈06: <input type='text' name='kena_org[]' value='$kena_org[2]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈79: <input type='text' name='kena_org[]' value='$kena_org[3]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈05: <input type='text' name='kena_org[]' value='$kena_org[4]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈07: <input type='text' name='kena_org[]' value='$kena_org[5]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈08: <input type='text' name='kena_org[]' value='$kena_org[6]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈86: <input type='text' name='kena_org[]' value='$kena_org[7]' size='2'/>";
-                echo "&nbsp;&nbsp;–≈91: <input type='text' name='kena_org[]' value='$kena_org[8]' size='2'/>";
             }
             else {
                 echo "<tr><td colspan=2>œÒ„.  ÂÌ‹: –≈60: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
