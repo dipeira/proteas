@@ -1,6 +1,6 @@
 word/anapl/
 word/*.docx
 .vscode/
-tools/mail.log
+tools/mail.*
 config.php
 vendor/

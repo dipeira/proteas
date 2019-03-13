@@ -4,7 +4,10 @@
   $db_user = "";
   $db_password = "";
   $db_name = "";
+  // Gmail
+  $smtp_username = '';
   $smtp_password = '';
+
   $db_init_pass = '';
   
   // Κατηγορίες πράξεων αναπληρωτών

@@ -203,12 +203,11 @@
             echo "&nbsp;&nbsp;&nbsp;";
             
             // check if already sent
-            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['prot']." AND YEAR(stamp) = ". $_POST['year'];
+            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['prot']." AND year = ". $_POST['year'];
             $res = mysqli_query($mysqlconnection, $qry);
             if (mysqli_num_rows($res) > 0)
                 echo "<br>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
-            else
-            {
+            else {
                 $email_msg = "Είστε σίγουροι ότι θέλετε να αποστείλετε $num email σε ισάριθμα σχολεία;";
                 echo "<INPUT name='btnEmail' TYPE='submit' VALUE='Αποστολή email στα σχολεία' onclick=\"javascript:return confirm('$email_msg');\">";
             }
@@ -305,8 +304,7 @@
         if (isset($_POST['btnEmail']))
         {
             // check if already sent
-            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['arr'][1]." AND DATE(stamp) = ". $_POST['arr'][5];
-            //echo $query;
+            $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['arr'][1]." AND year = ". $_POST['arr'][5];
             $res = mysqli_query($mysqlconnection, $qry);
             if (mysqli_num_rows($res) > 0)
             {
@@ -317,15 +315,16 @@
             // set max execution time 
             set_time_limit (1000);
             
-            // SMTP password
+            // SMTP username & password
             global $smtp_password;
-            $pass = $smtp_password;
-            
-            require_once '../tools/lib/swift_required.php';
-            $transport = Swift_SmtpTransport::newInstance('mail.sch.gr', 25)
-            ->setUsername('dipeira')
-            ->setPassword($pass)
-            ;
+            global $smtp_username;
+                        
+            require_once '../vendor/autoload.php';
+            // set up gmail transport
+            $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+            ->setUsername($smtp_username)
+            ->setPassword($smtp_password);
+
             $mailer = Swift_Mailer::newInstance($transport);
             
             // swiftmailer antiflood plugin (every 25 emails)
@@ -386,7 +385,6 @@
                 
                 //echo "<br>$subject<br>".$mail_body."<br>".$email;
                 $mymail = "mail@dipe.ira.sch.gr";
-                $testmail = "it@dipe.ira.sch.gr";
                                 
                 //utf8 encode
                 $subject = mb_convert_encoding($subject, "utf-8", "iso-8859-7");
@@ -395,7 +393,7 @@
                 $message = Swift_Message::newInstance($subject)
                 ->setFrom($mymail)
                 // *** SOS *** uncomment '$testemail', comment '$email' to test
-                //->setTo($testmail)
+                //->setTo("it@dipe.ira.sch.gr")
                 ->setTo($email)
                 ->setBody($mail_body);
                 $result = $mailer->send($message);
@@ -407,7 +405,8 @@
                 file_put_contents('../tools/mail.log', $log, FILE_APPEND);
             }                     
             // insert 2 db
-            $qry = "INSERT INTO apofaseis (prwt, sent, result) VALUES (".$_POST['arr'][1].",1,'".serialize($summary)."')";
+            $qry = "INSERT INTO apofaseis (prwt, sent, result, year) VALUES 
+            (".$_POST['arr'][1].",1,'".serialize($summary)."',".$_POST['arr'][5].")";
             $res = mysqli_query($mysqlconnection, $qry);
             
             // print results

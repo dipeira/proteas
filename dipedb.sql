@@ -199,6 +199,7 @@ INSERT INTO `adeia_type` (`id`, `type`, `descr`) VALUES
 CREATE TABLE IF NOT EXISTS `apofaseis` (
   `id` int(11) NOT NULL,
   `prwt` int(11) NOT NULL,
+  `year` int(11) NOT NULL,
   `sent` tinyint(4) NOT NULL,
   `result` text NOT NULL,
   `stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

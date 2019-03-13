@@ -2,6 +2,7 @@
   "require": {
     "phpoffice/phpexcel": "1.7.9",
     "phpoffice/phpword": "0.7.0",
-    "squizlabs/php_codesniffer": "3.*"
+    "squizlabs/php_codesniffer": "3.*",
+    "swiftmailer/swiftmailer": "5.4.12"
   }
 }
