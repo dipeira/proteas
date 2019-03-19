@@ -623,7 +623,7 @@ function katastCmb($v)
     
 function adeiaCmb($inp,$conn,$ekt = 0)
 {
-    $query = $ekt ? "SELECT * from adeia_ekt_type" : "SELECT * from adeia_type";
+    $query = $ekt ? "SELECT * from adeia_ekt_type ORDER BY type" : "SELECT * from adeia_type ORDER BY type";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
         die('Could not query:' . mysqli_error());
