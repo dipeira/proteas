@@ -282,7 +282,8 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `thesi` int(11) NOT NULL,
-  `wres` int(11) NOT NULL
+  `wres` int(11) NOT NULL,
+  `email` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=greek;
 
 -- --------------------------------------------------------
@@ -418,7 +419,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `katoikon` tinyint(4) NOT NULL,
   `katoikon_apo` date NOT NULL,
   `katoikon_ews` date NOT NULL,
-  `katoikon_comm` text NOT NULL
+  `katoikon_comm` text NOT NULL,
+  `email` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=greek;
 
 -- --------------------------------------------------------

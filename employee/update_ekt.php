@@ -27,6 +27,7 @@
   $stathero = $_POST['stathero'];
   $kinhto = $_POST['kinhto'];
   $thesi = $_POST['thesi'];
+  $email = $_POST['email'];
   
   $ip = $_SERVER['REMOTE_ADDR'];
   
@@ -131,9 +132,9 @@
           $before = mysqli_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
-	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres,";
-	  $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
-      $query = $query1.$query2.$query3;
+          $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres,";
+          $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto',email='$email' WHERE id='$id'";
+          $query = $query1.$query2.$query3;
 
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;
@@ -159,9 +160,9 @@
           $before = mysqli_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
-	  $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,wres=$wres,";
-	  $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto' WHERE id='$id'";
-	  $query = $query1.$query2.$query3;
+          $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,wres=$wres,";
+          $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto', email='$email' WHERE id='$id'";
+          $query = $query1.$query2.$query3;
           $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;
           //echo $query;

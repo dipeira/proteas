@@ -76,6 +76,7 @@ $proyp_not = $_POST['peyears']*360 + $_POST['pemonths']*30 + $_POST['pedays'];
 $comments = addslashes($_POST['comments']);
 $katast = $_POST['status'];
 $thesi = $_POST['thesi'];
+$email = $_POST['email'];
 // aney 27-02-2014
 if ($_POST['aney'])
     $aney = 1;
@@ -143,7 +144,7 @@ else {
     $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
     $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
     $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
-    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres' WHERE id='$id'";
+    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres',email='$email' WHERE id='$id'";
     $query = $query1.$query2.$query3.$query4;
     $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     //echo $query;

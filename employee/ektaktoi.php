@@ -149,6 +149,7 @@
           $updated= mysqli_result($result, 0, "updated");
           $thesi = mysqli_result($result, 0, "thesi");
           $wres = mysqli_result($result, 0, "wres");
+          $email = mysqli_result($result, 0, "email");
           
           $kat = mysqli_result($result, 0, "status");
           switch ($kat)
@@ -284,6 +285,7 @@ if ($_GET['op']=="edit")
         echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
         echo "<tr><td>Σταθερό</td><td><input type='text' name='stathero' value=$stathero /></td></tr>";
         echo "<tr><td>Κινητό</td><td><input type='text' name='kinhto' value=$kinhto /></td></tr>";
+        echo "<tr><td>email</td><td><input type='text' name='email' value=$email /></td></tr>";
         echo "<tr><td>Κλάδος</td><td>";
         kladosCombo($klados_id,$mysqlconnection);
         echo "</td></tr>";
@@ -407,7 +409,7 @@ elseif ($_GET['op']=="view")
         echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
         echo "<td colspan=3><div class=\"slidingDiv\">";
         echo "Τηλ.: $stathero - $kinhto<br>";
-        
+        echo "email: <a href='mailto:$email'>$email</a><br>";
         echo "</div>";
         echo "</td></tr>";
         
