@@ -640,10 +640,12 @@ elseif ($_GET['op']=="view") {
 
     $count = count($yphr_arr);
     $sxoleia = '';
+    $sxol_str = '';
     $counthrs = 0;
     for ($i=0; $i<$count; $i++)
     {
         $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
+        $sxol_str .=  "$yphr_arr[$i] ($hours_arr[$i] ώρες) ";
         $counthrs += $hours_arr[$i];
     }
     if ($count>1) {
@@ -732,6 +734,18 @@ elseif ($_GET['op']=="view") {
     //echo "<input type='hidden' name='afm' value=$afm>";
     echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
     //echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
+    echo "</form>";
+    //Form gia Bebaiwsh
+    echo "<form id='metakfrm' name='metakfrm' action='metakinhsh.php' method='POST'>";
+    echo "<input type='hidden' name='type' value='mon'>";
+    echo "<input type='hidden' name='surname' value=$surname>";
+    echo "<input type='hidden' name='name' value=$name>";
+    echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
+    echo "<input type='hidden' name='klados' value=$klados>";
+    echo "<input type='hidden' name='yphrethsh' value='$sxol_str'>";
+    echo "<input type='hidden' name='am' value=$am>";
+    echo "<input type='hidden' name='id' value=$id>";
+    echo "<INPUT TYPE='submit' VALUE='Μετακίνηση'>";
     echo "</form>";
     ?>
   <div id="word"></div>

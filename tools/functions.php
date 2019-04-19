@@ -1958,4 +1958,33 @@ function yphresia_anaplhrwth($hmapox, $hmpros, $meiwmeno = false, $subtracted = 
   $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
   return $data;
 }
+
+function get_diavgeia_subject($ada) {
+  if (!$ada) {
+    return;
+  }
+  //setup the request, you can also use CURLOPT_URL
+  $ch = curl_init();
+  $mystr = mb_convert_encoding('https://diavgeia.gov.gr/luminapi/opendata/decisions/'.$ada,'utf-8',"iso-8859-7");
+  curl_setopt($ch, CURLOPT_URL, $mystr);
+  // Returns the data/output as a string instead of raw data
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+  //Set your auth headers
+  // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  //     'Content-Type: application/json',
+  //     'Authorization: Bearer ' . $TOKEN
+  //     ));
+
+  // get stringified data/output. See CURLOPT_RETURNTRANSFER
+  $data = curl_exec($ch);
+  
+  // close curl resource to free up system resources 
+  curl_close($ch);
+  $dt = json_decode($data);
+
+  return mb_convert_encoding($dt->subject, 'iso-8859-7', 'utf-8');
+}
+
 ?>
