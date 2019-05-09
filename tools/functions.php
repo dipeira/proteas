@@ -1914,6 +1914,14 @@ function get_orgs($id, $mysqlconnection)
       $kl = $row['klname'];
       $ret[$kl] += $plithos;
     }
+    // @ entaksis
+    $query = "SELECT count(*) as plithos FROM employee e 
+    WHERE e.sx_organikhs='$id' AND status IN (1,3) AND org_ent=1";
+    $result = mysqli_query($mysqlconnection, $query);
+    while ($row = mysqli_fetch_array($result)){
+      $plithos = strval($row['plithos']);
+      $ret['ent'] = $plithos;
+    }
     return $ret;
 }
 

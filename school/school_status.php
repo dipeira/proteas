@@ -119,6 +119,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         }
         // entaksis (varchar): on/off, no. of students
         $entaksis = explode(",", mysqli_result($result, 0, "entaksis"));
+        $org_ent = $entaksis[0] ? 1 : 0;
         $ypodoxis = mysqli_result($result, 0, "ypodoxis");
         //$frontistiriako = mysqli_result($result, 0, "frontistiriako");
         $oloimero = mysqli_result($result, 0, "oloimero");
@@ -158,6 +159,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<th>08</th>";
             echo "<th>86</th>";
             echo "<th>91</th>";
+            echo $org_ent ? "<th>Ένταξης</th>" : '';
             echo "</tr></thead>";
             echo "<tr>";
             echo "<td>Οργανικές</td>";
@@ -170,6 +172,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>$organikes[6]</td>";
             echo "<td>$organikes[7]</td>";
             echo "<td>$organikes[8]</td>";
+            echo $org_ent ? "<td>$org_ent</td>" : '';
             echo "</tr>";
         }
         else {
@@ -209,6 +212,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>".$orgs['ΠΕ08']."</td>";
             echo "<td>".$orgs['ΠΕ86']."</td>";
             echo "<td>".$orgs['ΠΕ91']."</td>";
+            echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
             echo "</tr>";
             ///////
             echo "</tr>";
@@ -224,6 +228,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
             echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
             echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+            echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
             echo "</tr>";
             echo "</table>";
             echo "</div>";

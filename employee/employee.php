@@ -208,6 +208,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $katoikon_comm = mysqli_result($result, 0, "katoikon_comm");
             $katoikon_comm = str_replace(" ", "&nbsp;", $katoikon_comm);
             $email = mysqli_result($result, 0, "email");
+            $org_ent = mysqli_result($result, 0, 'org_ent');
                     
         } // of if not add
         ?>
@@ -462,6 +463,10 @@ if ($_GET['op']=="edit") {
         echo "</tr>";
     }       
     echo "</div>";
+
+    echo "<tr><td>Οργανική σε τμήμα ένταξης</td><td>";
+    echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
+    echo "</td></tr>";
         
         thesiselectcmb($thesi); 
         
@@ -636,7 +641,9 @@ elseif ($_GET['op']=="view") {
     //
     echo "<tr><td>Ώρες υποχρ. ωραρίου:</td><td>$wres</td><td>e-mail:</td><td><a href=\"mailto:$email\">$email</a></td></tr>";
     echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".stripslashes($comments)."</td></tr>"; 
-    echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a></td><td></td><td></td></tr>";
+    echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+    echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
+    echo "</td><td></td><td></td></tr>";
 
     $count = count($yphr_arr);
     $sxoleia = '';

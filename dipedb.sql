@@ -377,6 +377,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `sx_organikhs` int(11) NOT NULL,
   `sx_yphrethshs` int(11) NOT NULL,
   `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
+  `org_ent` BOOLEAN NOT NULL COMMENT 'Οργανική σε τμήμα ένταξης',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
   `vathm_old` varchar(4) NOT NULL,
