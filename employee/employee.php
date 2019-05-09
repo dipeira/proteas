@@ -735,18 +735,20 @@ elseif ($_GET['op']=="view") {
     echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
     //echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
     echo "</form>";
-    //Form gia Bebaiwsh
-    echo "<form id='metakfrm' name='metakfrm' action='metakinhsh.php' method='POST'>";
-    echo "<input type='hidden' name='type' value='mon'>";
-    echo "<input type='hidden' name='surname' value=$surname>";
-    echo "<input type='hidden' name='name' value=$name>";
-    echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
-    echo "<input type='hidden' name='klados' value=$klados>";
-    echo "<input type='hidden' name='yphrethsh' value='$sxol_str'>";
-    echo "<input type='hidden' name='am' value=$am>";
-    echo "<input type='hidden' name='id' value=$id>";
-    echo "<INPUT TYPE='submit' VALUE='Μετακίνηση'>";
-    echo "</form>";
+    //Form gia metakinhsh
+    if ($_SESSION['user'] === 'pispe'){
+      echo "<form id='metakfrm' name='metakfrm' action='metakinhsh.php' method='POST'>";
+      echo "<input type='hidden' name='type' value='mon'>";
+      echo "<input type='hidden' name='surname' value=$surname>";
+      echo "<input type='hidden' name='name' value=$name>";
+      echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
+      echo "<input type='hidden' name='klados' value=$klados>";
+      echo "<input type='hidden' name='yphrethsh' value='$sxol_str'>";
+      echo "<input type='hidden' name='am' value=$am>";
+      echo "<input type='hidden' name='id' value=$id>";
+      echo "<INPUT TYPE='submit' VALUE='Μετακίνηση'>";
+      echo "</form>";
+    }
     ?>
   <div id="word"></div>
     <?php

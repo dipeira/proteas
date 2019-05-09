@@ -63,7 +63,7 @@
     echo "<tr><td>Αρ.Πρωτοκόλλου</td><td><input type='text' name='prot' />";
     echo "<tr><td>Ημ/νία Πρωτοκόλλου<br><small>(ΗΗ/MM/ΕΕΕΕ)</small></td><td><input type='text' name='hmprot' />";
     echo "<tr><td>Μετακίνηση από<br><small>(ΗΗ/MM/ΕΕΕΕ)</small></td><td><input type='text' name='datefrom' />";
-    echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=50 name='comments'></textarea></td></tr>";
+    echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=50 name='comment'></textarea></td></tr>";
     echo "<tr><td colspan=2><input type='submit' value='Υποβολή'>";
     echo "<input type='hidden' name='data' value=$emp_data>";
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
@@ -80,7 +80,8 @@
     $emp_data = unserialize(urldecode($_POST['data']));
 
     $is_monimos = $emp_data['type'] === "mon" ? true : false;
-    print_r($_POST);
+    // print_r($_POST);
+    // print_r($emp_data);
     // find employee type
     if (!$is_monimos){
       if ($emp_data['type'] == 2){
@@ -121,17 +122,23 @@
     $data['klados'] = $emp_data['klados'];
     $data['surname'] = $emp_data['surname'];
     $data['name'] = $emp_data['name'];
+    $data['patrwnymo'] = $emp_data['patrwnymo'];
     if ($is_monimos){
       $data['am'] = $emp_data['am'];
     } else {
       $data['afm'] = $emp_data['afm'];
+      $data['ya'] = $emp_data['ya'];
+      $data['ada'] = $emp_data['ada'];
+      $data['apofasi'] = $emp_data['apofasi'];
+      $thema = get_diavgeia_subject($data['ada']);
+      $data['thema'] = $thema;
     }
     $data['yphrethsh'] = $emp_data['yphrethsh'];
     // metakinhsh
     $metakinhsh = array();
     $i = 0;
     foreach ($_POST['yphr'] as $value) {
-      $metakinhsh[] =  "$value (".$_POST['hours'][$i].")";
+      $metakinhsh[] =  "$value (".$_POST['hours'][$i]." ώρες)";
       $i++;
     }
     $data['metakinhsh'] = implode(', ',$metakinhsh);
@@ -150,7 +157,7 @@
     
     $output1 = "../word/apof_metak".$_SESSION['userid'].".docx";
     $document->save($output1);
-    echo "<html>";
+    echo "<h3>To έγγραφό σας δημιουργήθηκε με επιτυχία!</h3>";
     echo "<p><a href=$output1>¶νοιγμα εγγράφου</a></p>";
     $url = $is_monimos ? 
       "employee.php?id=".$emp_data['id']."&op=view" : 
