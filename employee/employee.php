@@ -114,7 +114,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         <?php
             $usrlvl = $_SESSION['userlevel'];
             $id = $_GET['id'];
-        if ($_GET['op']!="add") {
+        if ($_GET['op'] != "add") {
             //$query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id'];
             $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
             $result = mysqli_query($mysqlconnection, $query);

@@ -15,7 +15,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 else {
         $logged = 1;
 }
-      
+$idiwtikoi = true;
 ?>
 <html>
   <head>
@@ -35,11 +35,6 @@ else {
             $("#org").autocomplete("get_school.php", {
                 width: 260,
                 matchContains: true,
-                //mustMatch: true,
-                //minChars: 0,
-                //multiple: true,
-                //highlight: false,
-                //multipleSeparator: ",",
                 selectFirst: false
             });
         });
@@ -47,23 +42,14 @@ else {
             $("#yphr").autocomplete("get_school.php", {
                 width: 260,
                 matchContains: true,
-                //mustMatch: true,
-                //minChars: 0,
-                //multiple: true,
-                //highlight: false,
-                //multipleSeparator: ",",
                 selectFirst: false
             });
         });
         $().ready(function() {
             $("#surname").autocomplete("get_name.php", {
+                extraParams: {idiwtikoi: <?php echo $idiwtikoi; ?>},
                 width: 260,
                 matchContains: true,
-                //mustMatch: true,
-                //minChars: 0,
-                //multiple: true,
-                //highlight: false,
-                //multipleSeparator: ",",
                 selectFirst: false
             });
         });
@@ -78,10 +64,9 @@ else {
     <?php require '../etc/menu.php'; ?>
     
 <div>
-        <?php
-                $usrlvl = $_SESSION['userlevel'];
-                //$query = "SELECT * FROM employee";
-        //rpp = results per page
+<?php
+        $usrlvl = $_SESSION['userlevel'];
+
         if (isset($_POST['rpp'])) {
             $rpp = $_POST['rpp'];
         } elseif (isset($_GET['rpp'])) {
@@ -102,7 +87,7 @@ else {
         $limitQ = ' LIMIT ' .($curpg - 1) * $rpp .',' .$rpp;
 
         //$query = "SELECT * FROM employee ORDER BY surname ";
-                $query = "SELECT * FROM employee ";
+        $query = "SELECT * FROM employee ";
           
         $klpost = 0;
         $orgpost = 0;
@@ -149,28 +134,29 @@ else {
             }
         }
         if (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0) {
-            if (strlen($_POST['surname'])>0) {
-                            $surpost = $_POST['surname'];
-            } else {
-                            $surpost = $_GET['surname'];
-            }
+          if (strlen($_POST['surname'])>0) {
+              $surpost = explode(' ', $_POST['surname'])[0];
+          } else {
+              $surpost = $_GET['surname'];
+          }
+            
             if ($whflag) {
-                $query .= "AND surname LIKE '$surpost' ";
+                $query .= "AND surname LIKE '%$surpost%' ";
             } else
             {
-                $query .= "WHERE surname LIKE '$surpost' ";
+                $query .= "WHERE surname LIKE '%$surpost%' ";
                 $whflag=1;
             }
         }
                         
-                // Mono idiwtikoi
+        // Mono idiwtikoi
         if ($whflag) {
             $query .= " AND thesi in (5,6) ";
         } else {
-                    $query .= " WHERE thesi in (5,6) ";
+            $query .= " WHERE thesi in (5,6) ";
         }
                 
-                $query_all = $query;
+        $query_all = $query;
                 
         $query .= " ORDER BY surname ";
                 $query .= $limitQ;
@@ -206,7 +192,7 @@ else {
         echo "<th>Σχ.Οργανικής</th>\n";
         echo "<th>Σχ.Υπηρέτησης</th>\n";
         echo "</tr>";
-        echo "<tr><form id='src' name='src' action='../index.php' method='POST'>\n";
+        echo "<tr><form id='src' name='src' action='' method='POST'>\n";
         if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0)) {
             echo "<td><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
         } else {    
