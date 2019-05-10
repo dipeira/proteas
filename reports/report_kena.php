@@ -62,13 +62,13 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
     echo "<th rowspan=2>Κατ.</th>";
     echo "<th rowspan=2>Οργ.</th>";
     echo "<th rowspan=2>ΠΕ70<br>Οργ.<br>Τοποθ.</th>";
-    echo "<th colspan=9>Οργανικές</th>";
-    echo "<th colspan=9>Οργανικά Κενά</th>";
+    echo "<th colspan=10>Οργανικές</th>";
+    echo "<th colspan=10>Οργανικά Κενά</th>";
     echo "</tr>";
     echo "<tr><th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
-    echo "<th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ08</th><th>ΠΕ86</th><th>ΠΕ91</th>";
+    echo "<th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ08</th><th>ΠΕ86</th><th>ΠΕ91</th><th>Τ.Ε.</th>";
     echo "<th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
-    echo "<th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ08</th><th>ΠΕ86</th><th>ΠΕ91</th>";
+    echo "<th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ08</th><th>ΠΕ86</th><th>ΠΕ91</th><th>Τ.Ε.</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 
@@ -80,6 +80,8 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         $cat = getCategory(mysqli_result($result, $i, "category"));
         $organikothta = mysqli_result($result, $i, "organikothta");
         $synorgan += $organikothta;
+        $entaksis = explode(",", mysqli_result($result, $i, "entaksis"));
+        $org_ent = $entaksis[0] ? 1 : 0;
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
         $orgs = get_orgs($sch,$mysqlconnection);
         // οργανικά τοποθετηθέντες
@@ -95,8 +97,11 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         echo "<td>$organikothta</td>";
         echo "<td>$orgtop</td>";
         for ($j=0; $j<9; $j++){
-            echo "<td>".$organikes[$j]."</td>";
+            echo "<td>";
+            echo $organikes[$j] > 0 ? $organikes[$j] : 0;
+            echo "</td>";
         }
+        echo "<td>$org_ent</td>";
         echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
         echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
         echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
@@ -106,11 +111,13 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
         echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
         echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+        echo "<td>".($org_ent - $orgs['ent'])."</td>";
         echo "</tr>\n";
 
         for ($j=0; $j<9; $j++){
             $organikes_sum[$j] += $organikes[$j];
         }
+        $organikes_sum[9] += $org_ent;
         
         $kena_org_sum[0] += $organikes[0] - $orgs['ΠΕ70'];
         $kena_org_sum[1] += $organikes[1] - $orgs['ΠΕ11'];
@@ -121,17 +128,17 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         $kena_org_sum[6] += $organikes[6] - $orgs['ΠΕ08'];
         $kena_org_sum[7] += $organikes[7] - $orgs['ΠΕ86'];
         $kena_org_sum[8] += $organikes[8] - $orgs['ΠΕ91'];
-
+        $kena_org_sum[9] += $org_ent - $orgs['ent'];
 
         $i++;                        
     }
 
     echo "<tr><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
     echo "<td>$synorgan</td><td>$synorgtop</td>";
-    for ($j=0; $j<9; $j++){
+    for ($j=0; $j<10; $j++){
         echo "<td>".$organikes_sum[$j]."</td>";
     }
-    for ($j=0; $j<9; $j++){
+    for ($j=0; $j<10; $j++){
         echo "<td>".$kena_org_sum[$j]."</td>";
     }
     echo "</tbody></table>";

@@ -1903,9 +1903,10 @@ function get_leitoyrgikothta($id, $mysqlconnection)
 // returns number of teachers who belong organically per expertise
 function get_orgs($id, $mysqlconnection)
 {
+    // organika, not @ entaksis
     $query = "SELECT k.perigrafh as klname, count(*) as plithos 
     FROM employee e join klados k on e.klados = k.id 
-    WHERE e.sx_organikhs='$id' AND status IN (1,3) AND thesi IN (0,1,2)
+    WHERE e.sx_organikhs='$id' AND status IN (1,3) AND thesi IN (0,1,2) AND org_ent = 0
     GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
     $ret = array();
