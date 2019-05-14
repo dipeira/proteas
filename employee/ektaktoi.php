@@ -477,9 +477,10 @@ elseif ($_GET['op']=="view")
         $ya = mysqli_result($res, 0, 'ya');
         $apofasi = mysqli_result($res, 0, 'apofasi');
         $ada = mysqli_result($res, 0, 'ada');
+        $ada_apof = mysqli_result($res, 0, 'ada_apof');
         echo "<tr><td>Υπουργική Απόφαση</td><td colspan=3>$ya</td></tr>";
-        echo "<tr><td>Α.Δ.Α.</td><td colspan=3><a href='https://diavgeia.gov.gr/decision/view/$ada' target='_blank'>$ada</a></td></tr>";
-        echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi</td></tr>";
+        echo "<tr><td>Α.Δ.Α. Y.A.</td><td colspan=3><a href='https://diavgeia.gov.gr/decision/view/$ada' target='_blank'>$ada</a></td></tr>";
+        echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi&nbsp;&nbsp;<small>(Α.Δ.Α.:&nbsp;<a href='https://diavgeia.gov.gr/decision/view/$ada_apof' target='_blank'>$ada_apof</a>)</small></td></tr>";
         echo "<tr><td>Θέση</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
         
 
@@ -521,7 +522,7 @@ elseif ($_GET['op']=="view")
         //Form gia metakinhsh (only for user pispe)
         if ($_SESSION['user'] === 'pispe'){
           echo "<form id='metakfrm' name='metakfrm' action='metakinhsh.php' method='POST'>";
-          echo "<input type='hidden' name='type' value='anapl'>";
+          echo "<input type='hidden' name='type' value=$type>";
           echo "<input type='hidden' name='surname' value=$surname>";
           echo "<input type='hidden' name='name' value=$name>";
           echo "<input type='hidden' name='patrwnymo' value=$patrwnymo>";
@@ -530,6 +531,7 @@ elseif ($_GET['op']=="view")
           echo "<input type='hidden' name='ada' value='$ada'>";
           echo "<input type='hidden' name='ya' value='$ya'>";
           echo "<input type='hidden' name='apofasi' value='$apofasi'>";
+          echo "<input type='hidden' name='ada_apof' value='$ada_apof'>";
           echo "<input type='hidden' name='yphrethsh' value='$schools'>";
           echo "<input type='hidden' name='id' value=$id>";
           echo "<INPUT TYPE='submit' value='Μετακίνηση'>"; 

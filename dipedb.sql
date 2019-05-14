@@ -670,6 +670,7 @@ CREATE TABLE IF NOT EXISTS `praxi` (
   `ya` varchar(50) NOT NULL,
   `ada` varchar(20) NOT NULL,
   `apofasi` varchar(100) NOT NULL COMMENT 'απόφαση τοποθέτησης',
+  `ada_apof` varchar(30) NOT NULL,
   `sxolio` varchar(300) NOT NULL,
   `type` varchar(10) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=greek;

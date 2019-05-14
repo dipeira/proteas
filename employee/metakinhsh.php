@@ -25,13 +25,15 @@
       $().ready(function() {
         $(".addRow").btnAddRow(function(row){
           row.find(".yphrow").autocomplete("get_school.php", {
-              width: 260,
-              matchContains: true,
-              selectFirst: false
-          })
+            extraParams: {title: true},
+            width: 260,
+            matchContains: true,
+            selectFirst: false
+          });
         });
         $(".delRow").btnDelRow();
         $(".yphrow").autocomplete("get_school.php", {
+          extraParams: {title: true},
           width: 260,
           matchContains: true,
           selectFirst: false
@@ -56,7 +58,7 @@
     echo "<form action='' method='POST'>";
     echo "<table class='imagetable stable' border='1'>";
     echo "<tr><td>Σχολείο μετακίνησης</td>";
-    echo "<td><input type='text' name='yphr[]' class='yphrow' />";
+    echo "<td><input type='text' name='yphr[]' class='yphrow' size=40/>";
     echo "&nbsp;&nbsp;<input type='text' name='hours[]' size=1 />";
     echo "&nbsp;<input class='addRow' type='button' value='Προσθήκη' />";
     echo "<input class='delRow' type='button' value='Αφαίρεση' /></td></tr>";
@@ -132,17 +134,19 @@
       $data['apofasi'] = $emp_data['apofasi'];
       $thema = get_diavgeia_subject($data['ada']);
       $data['thema'] = $thema;
+      $thema_apof = get_diavgeia_subject($emp_data['ada_apof']);
+      $data['thema_apof'] = $thema_apof;
     }
     $data['yphrethsh'] = $emp_data['yphrethsh'];
     // metakinhsh
     $metakinhsh = array();
     $i = 0;
     foreach ($_POST['yphr'] as $value) {
-      $metakinhsh[] =  "$value (".$_POST['hours'][$i]." ώρες)";
+      $tmp = $_POST['hours'][$i] ? $value." (".$_POST['hours'][$i]." ώρες)" : $value;
+      $metakinhsh[] = $tmp;
       $i++;
     }
     $data['metakinhsh'] = implode(', ',$metakinhsh);
-
     // convert all values to utf8
     array_walk(
       $data,

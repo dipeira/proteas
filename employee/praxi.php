@@ -48,9 +48,10 @@ var thegrid = new drasticGrid('grid1', {
     columns: [
       {name: 'name', displayname:'Όνομα', width: 300},
       {name: 'ya', displayname:'Υπουργική Απόφαση', width: 150},
-          {name: 'ada', displayname:'Α.Δ.Α.', width: 150},
-          {name: 'apofasi', displayname:'Απόφαση Δ/ντή', width: 150},
-          {name: 'sxolio', displayname:'Σχόλια', width: 150},
+      {name: 'ada', displayname:'Α.Δ.Α. Υ.Α.', width: 150},
+      {name: 'apofasi', displayname:'Απόφαση Δ/ντή', width: 150},
+      {name: 'ada_apof', displayname:'Α.Δ.Α. Απόφασης', width: 150},
+      {name: 'sxolio', displayname:'Σχόλια', width: 150},
       {name: 'type', displayname:'Τύπος',
         type: DDTYPEKEY, 
         values: [<?php echo $pr_values; ?>],
@@ -71,11 +72,11 @@ var thegrid = new drasticGrid('grid1', {
 <table class="imagetable stable" border="1">
     <tr><th colspan="2">Επεξήγηση</th></tr>
     <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>
-    <tr><td>A/A</td><td>Δε μεταβάλλεται</td></tr>
     <tr><td>Όνομα πράξης</td><td>Να είναι περιγραφικό & σύντομο π.χ. Ολοήμερο Β', Παράλληλη Γ' κλπ.</td></tr>
     <tr><td>Υπουργική Απόφαση</td><td></td></tr>
-    <tr><td>ΑΔΑ</td><td>Να αναγράφεται μόνο ο ΑΔΑ, π.χ. 6ΠΜΦ4653ΠΣ-4ΝΠ</td></tr>
-    <tr><td>Απόφαση τοποθέτησης</td><td>(Απόφαση Δ/ντη)</td></tr>
+    <tr><td>ΑΔΑ Υ.Α. </td><td>Να αναγράφεται μόνο ο ΑΔΑ της Υ.Α., π.χ. 6ΠΜΦ4653ΠΣ-4ΝΠ</td></tr>
+    <tr><td>Απόφαση Δ/ντη</td><td>Απόφαση τοποθέτησης</td></tr>
+    <tr><td>ΑΔΑ Απόφασης</td><td>Να αναγράφεται μόνο ο ΑΔΑ απόφασης τοποθέτησης, π.χ. 6ΠΜΦ4653ΠΣ-4ΝΠ</td></tr>
     <tr><td>Τύπος πράξης</td><td>(Επιλέξτε από τη λίστα)</td></tr>
 </table>
 <p>ΠΡΟΣΟΧΗ: Η πρώτη γραμμή να μη διαγράφεται!</p>
