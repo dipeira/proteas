@@ -122,12 +122,19 @@ if (strlen($_POST['katast'])>0) {
     $query .= " status like '".$_POST['katast']."'";
     $flag=1;
 }
-if((int)$_POST['hm_dior'] && !$is_anapl) {
+if((int)$_POST['hm_dior_from'] && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " hm_dior like '".$_POST['hm_dior']."'";
+    $query .= " hm_dior >= '".$_POST['hm_dior_from']."'";
     $flag=1;
+}
+if((int)$_POST['hm_dior_to'] && !$is_anapl) {
+  if ($flag) {
+      $query .= $op;
+  }
+  $query .= " hm_dior <= '".$_POST['hm_dior_to']."'";
+  $flag=1;
 }
 
 if (strlen($_POST['vathm'])>0 && !$is_anapl) {
@@ -145,13 +152,20 @@ if (strlen($_POST['mk'])>0) {
     $flag=1;
 }
     
-if((int)$_POST['hm_anal'])
-//    if (strlen($_POST['hm_anal'])>0)
+if((int)$_POST['hm_anal_from'])
 {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " hm_anal like '".$_POST['hm_anal']."'";
+    $query .= " hm_anal >= '".$_POST['hm_anal_from']."'";
+    $flag=1;
+}
+if((int)$_POST['hm_anal_to'])
+{
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " hm_anal <= '".$_POST['hm_anal_to']."'";
     $flag=1;
 }
 if (strlen($_POST['met_did'])>0) {
@@ -265,6 +279,9 @@ if ($flag) {
         if (isset($_POST['dsphm_dior'])) {
             echo "<th>Ημ/νία Διορισμού</th>\n";
         }
+        if (isset($_POST['dsphm_anal'])) {
+          echo "<th>Ημ/νία Ανάληψης</th>\n";
+        }
         if (isset($_POST['dspmetdid'])) {
             echo "<th>Μεταπτ./Διδακτ.</th>\n";
         }
@@ -321,6 +338,7 @@ if ($flag) {
             $vathm = mysqli_result($result, $i, "vathm");
             $mk = mysqli_result($result, $i, "mk");
             $hm_dior = mysqli_result($result, $i, "hm_dior");
+            $hm_anal = mysqli_result($result, $i, "hm_anal");
             $met_did = mysqli_result($result, $i, "met_did");
             $proyp = mysqli_result($result, $i, "proyp");
             $katast = mysqli_result($result, $i, "status");
@@ -362,6 +380,9 @@ if ($flag) {
             }
             if (isset($_POST['dsphm_dior'])) {
                 echo "<td>".date('d-m-Y', strtotime($hm_dior))."</td>\n";
+            }
+            if (isset($_POST['dsphm_anal'])) {
+              echo "<td>".date('d-m-Y', strtotime($hm_anal))."</td>\n";
             }
             if (isset($_POST['dspmetdid'])) {
                 switch ($met_did)
