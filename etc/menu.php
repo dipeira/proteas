@@ -25,6 +25,7 @@
 		  	<a href="#">Αναφορες</a>
     		<ul>
 		   		<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
+           <li><a href="<?=SITE_ROOT?>/reports/report_head.php">Διευθυντές / Προϊστάμενοι</a></li>
 					<li><a href="<?=SITE_ROOT?>/reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
 					<li><a href="<?=SITE_ROOT?>/reports/report_leit.php">Λειτουργικά Κενά Δημοτικών</a></li>
 					<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php?type=4">Λειτουργικά Κενά Νηπιαγωγείων</a></li>

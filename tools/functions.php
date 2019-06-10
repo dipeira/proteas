@@ -1878,6 +1878,7 @@ function compute_meiwmeno($days, $hours_per_week = 14, $ypoxr = 24)
 {   
     return round($days * ($hours_per_week/$ypoxr));
 }
+
 function get_leitoyrgikothta($id, $mysqlconnection)
 {
     $query = "SELECT tmimata,type,klasiko from school WHERE id='$id'";
