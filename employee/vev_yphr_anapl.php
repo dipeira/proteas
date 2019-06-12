@@ -181,10 +181,11 @@ foreach($arr as $myarr)
     }
     if ($adeies['aney'] > 0) {
         $adeies_aney = $adeies['aney'] > 1 ?
-            $adeies['aney'] . " ημέρες, που αφαιρούνται από τη συνολική του/-ης προϋπηρεσία." :
-            $adeies['aney'] . " ημέρα, που αφαιρείται από τη συνολική του/-ης προϋπηρεσία.";
+            $adeies['aney'] . " ημέρες, που αφαιρούνται" :
+            $adeies['aney'] . " ημέρα, που αφαιρείται";
 
         $adeies_txt .= "Έλαβε άδεια άνευ αποδοχών σε εφαρμογή του Ν.4075/2012 άρθρο 50 για ".$adeies_aney;
+        $adeies_txt .= " από τη συνολική του/-ης εκπαιδευτική προϋπηρεσία.";
     }
     // if ($adeies['apergies'] > 0){
     //     $adeies_txt .= "Απέργησε ".$adeies['apergies']." ημέρα/-ες.";
@@ -204,11 +205,12 @@ foreach($arr as $myarr)
     $hm_ya = $temp[0] + $temp[1]*30 + $temp[2]*360;
     // hm proslhpshs
     $pros = substr($hmpros, 0, 4)*360 + substr($hmpros, 5, 2)*30 + substr($hmpros, 8, 2);
+    // days: misthologikh - days_ya: ekpaideytikh
     // +1 για να περιληφθεί και η τελευταία μέρα
     $days = $apol - $pros + 1;
     $days_ya = $apol - $hm_ya + 1;
     // subtract subtracted
-    $days -= $adeies['subtracted'];
+    //$days -= $adeies['subtracted'];
     $days_ya -= $adeies['subtracted'];
     // if meiwmeno, compute yphresia
     if ($myarr['meiwmeno']) {
