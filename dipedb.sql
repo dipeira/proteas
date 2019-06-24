@@ -334,6 +334,9 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_old` (
   `metakinhsh` text CHARACTER SET greek NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `thesi` int(11) NOT NULL,
+  `wres` int(11) NOT NULL,
+  `email` text NOT NULL,
   `sxoletos` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -685,6 +688,23 @@ INSERT INTO `praxi` (`id`, `name`, `ya`, `ada`, `apofasi`, `sxolio`, `type`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `praxi_old`
+--
+
+CREATE TABLE IF NOT EXISTS `praxi_old` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `ya` varchar(50) NOT NULL,
+  `ada` varchar(20) NOT NULL,
+  `apofasi` varchar(100) NOT NULL COMMENT 'απόφαση τοποθέτησης',
+  `ada_apof` varchar(30) NOT NULL,
+  `sxolio` varchar(300) NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `sxoletos` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=greek;
+
+
+--
 -- Table structure for table `school`
 --
 
@@ -909,6 +929,12 @@ ALTER TABLE `params`
 -- Indexes for table `praxi`
 --
 ALTER TABLE `praxi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `praxi_old`
+--
+ALTER TABLE `praxi_old`
   ADD PRIMARY KEY (`id`);
 
 --

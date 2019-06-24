@@ -2,7 +2,15 @@
 	header('Content-type: text/html; charset=iso8859-7'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
-	require('../tools/calendar/tc_calendar.php');
+  require('../tools/calendar/tc_calendar.php');
+  
+  // update_wres: Updates wres of all employees
+  include("../tools/class.login.php");
+  $log = new logmein();
+  if($log->logincheck($_SESSION['loggedin']) == false){
+      header("Location: ../tools/login.php");
+  }
+  $usrlvl = $_SESSION['userlevel'];
 ?>	
   <html>
   <head>    
@@ -20,14 +28,6 @@
         <?php include('../etc/menu.php'); ?>
         <h2>Αλλαγή ωραριου εκπ/κων</h2>
 <?php        
-	// update_wres: Updates wres of all employees
-  include("../tools/class.login.php");
-  $log = new logmein();
-  if($log->logincheck($_SESSION['loggedin']) == false){
-      header("Location: ../tools/login.php");
-  }
-  $usrlvl = $_SESSION['userlevel'];
-
   echo "<table class=\"imagetable stable\" border='1'>";
   echo "<form action='' method='POST' autocomplete='off'>";
   echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
@@ -169,11 +169,6 @@
 		echo "<input type='hidden' name = 'data' value='".$page."'>";
     echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
     echo "</form>";
-    echo "&nbsp;&nbsp;&nbsp;";
-    // serialize & write to temp file
-    $emp_ser = serialize($emp);
-    $fname = "word/tmp.txt";
-    file_put_contents($fname, $emp_ser);
 	}
 ?>
 <br>

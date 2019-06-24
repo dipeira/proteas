@@ -1254,7 +1254,8 @@ function do2yphr($mysqlconnection, $disp = 1)
         $result1 = mysqli_query($mysqlconnection, $query1);
         if (!mysqli_num_rows($result1)) {
             $ins_query = "INSERT INTO yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) VALUES ('$id', '$sx_yphrethshs', '$hours', '$sx_organikhs', '$sxol_etos')";
-            $ins_count++;
+            $result2 = mysqli_query($mysqlconnection, $ins_query);
+            if ( $result2 ) $ins_count++;
             if ($disp > 1) {
                 echo "$id, ";
             }

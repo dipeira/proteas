@@ -247,7 +247,7 @@ elseif ($_POST['type'] == 2) {
     // check if already inserted        
     $query = "select id from ektaktoi_old where sxoletos = $sxol_etos";
     $result = mysqli_query($mysqlconnection, $query);
-    if (!mysqli_num_rows($result)) {
+    if (mysqli_num_rows($result) > 0) {
         exit('Σφάλμα: H διαγραφή έχει ήδη γίνει...');
     }
     // archive into ektaktoi_old
