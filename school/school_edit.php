@@ -91,6 +91,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $fax = mysqli_result($result, 0, "fax");
             $email = mysqli_result($result, 0, "email");
             $type = mysqli_result($result, 0, "type");
+            $type2 = mysqli_result($result, 0, "type2");
             $organikothta = mysqli_result($result, 0, "organikothta");
             $leitoyrg = get_leitoyrgikothta($sch, $mysqlconnection);
             $anenergo = mysqli_result($result, 0, "anenergo");
@@ -142,18 +143,39 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
             // 05-10-2012 - organikes
             if ($type == 1) {
-                echo "<tr><td colspan=2>Οργανικές: ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2'/>";
-                echo "&nbsp;&nbsp;ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/>";
+                echo "<tr><td colspan=2>Οργανικές:<br>";
+                echo "ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
+                echo "ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
+                echo "ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
+                echo "ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
+                echo "ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
+                echo "ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
+                echo "ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
+                echo "ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
+                echo "ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/><br>";
+                if ($type2 == 2) {
+                  echo "ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[9]' size='2'/><br>";
+                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[10]' size='2'/><br>";
+                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[11]' size='2'/><br>";
+                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[12]' size='2'/><br>";
+                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[13]' size='2'/><br>";
+                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[14]' size='2'/><br>";
+                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[15]' size='2'/><br>";
+                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2'/>";
+                }
             }  
             else {
                 echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                if ($type2 == 2) {
+                  echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
+                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
+                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
+                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
+                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
+                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
+                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
+                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/>";
+                }
             }
             echo "</td></tr>";
             // 19-06-2013 - kena_org, kena_leit

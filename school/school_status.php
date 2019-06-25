@@ -76,6 +76,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $fax = mysqli_result($result, 0, "fax");
         $email = mysqli_result($result, 0, "email");
         $type = mysqli_result($result, 0, "type");
+        $type2 = mysqli_result($result, 0, "type2");
         $organikothta = mysqli_result($result, 0, "organikothta");
         $leitoyrg = get_leitoyrgikothta($sch, $conn);
         // organikes - added 05-10-2012
@@ -144,22 +145,34 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $organikes[$i]=0;
             }
         }
+        
+        // if ds
         if ($type == 1) {
             echo "<tr><td colspan=2><a href='#' class='show_hide'>Οργανικές</a><br>";
             echo "<div class='slidingDiv'>";
             echo "<table>";
             echo "<thead><tr>";
             echo "<th>Κλάδος</th>";
-            echo "<th>70</th>";
-            echo "<th>11</th>";
-            echo "<th>06</th>";
-            echo "<th>79</th>";
-            echo "<th>05</th>";
-            echo "<th>07</th>";
-            echo "<th>08</th>";
-            echo "<th>86</th>";
-            echo "<th>91</th>";
+            echo "<th><span title='Δασκάλων'>70</th>";
+            echo "<th><span title='Φυσικής Αγωγής'>11</th>";
+            echo "<th><span title='Αγγλικών'>06</th>";
+            echo "<th><span title='Μουσικών'>79</th>";
+            echo "<th><span title='Γαλλικών'>05</th>";
+            echo "<th><span title='Γερμανικών'>07</th>";
+            echo "<th><span title='Καλλιτεχνικών'>08</th>";
+            echo "<th><span title='Πληροφορικής'>86</th>";
+            echo "<th><span title='Θεατρικών Σπουδών'>91</th>";
             echo $org_ent ? "<th>Ένταξης</th>" : '';
+            if ($type2 == 2) {
+              echo "<th><span title='Λογοθεραπευτών'>21</th>";
+              echo "<th><span title='Ψυχολόγων'>23</th>";
+              echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
+              echo "<th><span title='Λογοθεραπευτών'>26</th>";
+              echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
+              echo "<th><span title='Εργοθεραπευτών'>29</th>";
+              echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
+              echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
+            }
             echo "</tr></thead>";
             echo "<tr>";
             echo "<td>Οργανικές</td>";
@@ -173,10 +186,71 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>$organikes[7]</td>";
             echo "<td>$organikes[8]</td>";
             echo $org_ent ? "<td>$org_ent</td>" : '';
+            if ($type2 == 2) {
+              echo "<td>$organikes[9]</td>";
+              echo "<td>$organikes[10]</td>";
+              echo "<td>$organikes[11]</td>";
+              echo "<td>$organikes[12]</td>";
+              echo "<td>$organikes[13]</td>";
+              echo "<td>$organikes[14]</td>";
+              echo "<td>$organikes[15]</td>";
+              echo "<td>$organikes[16]</td>";
+            }
             echo "</tr>";
         }
+        // if nip
         else {
             echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
+            if ($type2 == 2) {
+              echo "<table>";
+              echo "<thead><tr>";
+                echo "<th>Κλάδος</th>";
+                echo "<th><span title='Λογοθεραπευτών'>21</th>";
+                echo "<th><span title='Ψυχολόγων'>23</th>";
+                echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
+                echo "<th><span title='Λογοθεραπευτών'>26</th>";
+                echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
+                echo "<th><span title='Εργοθεραπευτών'>29</th>";
+                echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
+                echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
+              echo "</tr></thead><tbody>";
+              echo "<tr>";
+                echo "<td>Οργανικές</td>";
+                echo "<td>$organikes[1]</td>";
+                echo "<td>$organikes[2]</td>";
+                echo "<td>$organikes[3]</td>";
+                echo "<td>$organikes[4]</td>";
+                echo "<td>$organikes[5]</td>";
+                echo "<td>$organikes[6]</td>";
+                echo "<td>$organikes[7]</td>";
+                echo "<td>$organikes[8]</td>";
+              echo "</tr>";
+              echo "<tr>";
+                $orgs = get_orgs($sch,$conn);
+                echo "<td>Οργ.ανήκοντες</td>";
+                echo "<td>".$orgs['ΠΕ21']."</td>";
+                echo "<td>".$orgs['ΠΕ23']."</td>";
+                echo "<td>".$orgs['ΠΕ25']."</td>";
+                echo "<td>".$orgs['ΠΕ26']."</td>";
+                echo "<td>".$orgs['ΠΕ28']."</td>";
+                echo "<td>".$orgs['ΠΕ29']."</td>";
+                echo "<td>".$orgs['ΠΕ30']."</td>";
+                echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
+              echo "</tr>";
+              echo "<tr>";
+                $orgs = get_orgs($sch,$conn);
+                echo "<td>Οργ.Κενά</td>";
+                echo "<td>".($organikes[1] - $orgs['ΠΕ21'])."</td>";
+                echo "<td>".($organikes[2] - $orgs['ΠΕ23'])."</td>";
+                echo "<td>".($organikes[3] - $orgs['ΠΕ25'])."</td>";
+                echo "<td>".($organikes[4] - $orgs['ΠΕ26'])."</td>";
+                echo "<td>".($organikes[5] - $orgs['ΠΕ28'])."</td>";
+                echo "<td>".($organikes[6] - $orgs['ΠΕ29'])."</td>";
+                echo "<td>".($organikes[7] - $orgs['ΠΕ30'])."</td>";
+                echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
+              echo "</tr>";
+              echo "</tbody></table>";
+            }
         }
         
         echo "</td></tr>";
@@ -213,6 +287,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>".$orgs['ΠΕ86']."</td>";
             echo "<td>".$orgs['ΠΕ91']."</td>";
             echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
+            if ($type2 == 2) {
+              echo "<td>".$orgs['ΠΕ21']."</td>";
+              echo "<td>".$orgs['ΠΕ23']."</td>";
+              echo "<td>".$orgs['ΠΕ25']."</td>";
+              echo "<td>".$orgs['ΠΕ26']."</td>";
+              echo "<td>".$orgs['ΠΕ28']."</td>";
+              echo "<td>".$orgs['ΠΕ29']."</td>";
+              echo "<td>".$orgs['ΠΕ30']."</td>";
+              echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
+            }
             echo "</tr>";
             ///////
             echo "</tr>";
@@ -229,6 +313,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
             echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
             echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
+            if ($type2 == 2) {
+              echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";
+              echo "<td>".($organikes[10] - $orgs['ΠΕ23'])."</td>";
+              echo "<td>".($organikes[11] - $orgs['ΠΕ25'])."</td>";
+              echo "<td>".($organikes[12] - $orgs['ΠΕ26'])."</td>";
+              echo "<td>".($organikes[13] - $orgs['ΠΕ28'])."</td>";
+              echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
+              echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
+              echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
+            }
             echo "</tr>";
             echo "</table>";
             echo "</div>";

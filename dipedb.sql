@@ -721,7 +721,7 @@ CREATE TABLE IF NOT EXISTS `school` (
   `fax` varchar(18) NOT NULL,
   `email` varchar(50) NOT NULL,
   `organikothta` int(11) NOT NULL,
-  `organikes` varchar(200) NOT NULL,
+  `organikes` text NOT NULL,
   `leitoyrg` int(11) NOT NULL COMMENT 'Λειτουργικότητα',
   `students` text NOT NULL COMMENT 'Οι τάξεις να χωρίζονται με κόμμα',
   `tmimata` varchar(60) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
