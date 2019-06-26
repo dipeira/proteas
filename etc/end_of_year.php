@@ -34,6 +34,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     echo "<input type='radio' name='type' value='8'>2. Αλλαγή σχολικού έτους (τρέχον σχολικό έτος: $sxol_etos)<br>";
     echo "<input type='radio' name='type' value='10'>3. Αλλαγή ωραριου εκπ/κων<br>";
     echo "<input type='radio' name='type' value='11'>4. Πλήρωση πίνακα υπηρετήσεων<br>";
+    echo "<input type='radio' name='type' value='12'>5. Εισαγωγή μαθητών / τμημάτων<br>";
     //echo "<input type='radio' name='type' value='6' disabled>3. Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους<br>";
     //echo "<input type='radio' name='type' value='3' disabled>4. Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ<br>";
     //echo "<input type='radio' name='type' value='5' disabled>5. Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων<br>";
@@ -301,6 +302,10 @@ elseif ($_POST['type'] == 10) {
 elseif ($_POST['type'] == 11) {
     echo "<br><br><small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
     do2yphr($mysqlconnection);
+}
+elseif ($_POST['type'] == 12) {
+  echo "<br><br><a href='../tools/import.php'>Εισαγωγή μαθητών / τμημάτων</a><br>";
+  echo "<p>(Χρησιμοποιήστε τα πρότυπα αρχεία <b>Μαθητές / Τμήματα Δ.Σ./Νηπ.</b> & τις αντίστοιχες επιλογές)</p>";
 }
     mysqli_close($mysqlconnection);
 

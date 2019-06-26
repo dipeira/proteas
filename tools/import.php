@@ -41,10 +41,15 @@
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
     echo "<b>Βήμα 1.</b> Επιλογή αρχείου προς συμπλήρωση:<br>";
     echo "<ul><li><a href='employees.csv'>Μόνιμοι</a></li>";
-    echo "<li><a href='schools.csv'>Σχολεία</a></li></ul>";
+    echo "<li><a href='schools.csv'>Σχολεία</a></li>";
+    echo "<li><a href='students_ds.csv'>Μαθητές / Τμήματα Δ.Σ.</a></li>";
+    echo "<li><a href='students_nip.csv'>Μαθητές / Τμήματα Νηπ.</a></li></ul>";
     echo "<b>Βήμα 2.</b> Επιλογή τύπου δεδομένων:<br>";
-    echo "<input type='radio' name='type' value='1'>Μόνιμοι<br>";
-    echo "<input type='radio' name='type' value='2'>Σχολεία<br>";
+    echo "<input type='radio' name='type' value='1'>α) Μόνιμοι<br>";
+    echo "<input type='radio' name='type' value='2'>β) Σχολεία<br>";
+    echo "<input type='radio' name='type' value='3'>γ) Μαθητές / Τμήματα Δ.Σ.<br>";
+    echo "<input type='radio' name='type' value='4'>δ) Μαθητές / Τμήματα Νηπ.<br>";
+    echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα γ, δ να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br><b>Βήμα 3.</b> Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
     print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
@@ -74,11 +79,15 @@
       switch ($_POST['type'])
       {
           case 1:
-              $tbl = 'employee';
-              break;
+            $tbl = 'employee';
+            break;
           case 2:
-              $tbl = 'school';
-              break;
+            $tbl = 'school';
+            break;
+          case 3:
+          case 4:
+            $tbl = 'school';
+            break;
       }
       $num = 0;
       $checked = 0;
@@ -86,6 +95,9 @@
       $error = false;
       $er_msg = '';
       
+      // set max execution time (for large files)
+      set_time_limit (480);
+
       while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         // skip header line
         if ($headers){
@@ -99,8 +111,14 @@
           if ($_POST['type'] == 1){
             $tblcols = 25;
           }
-          else {
+          else if ($_POST['type'] == 2){
             $tblcols = 12;
+          }
+          else if ($_POST['type'] == 3){
+            $tblcols = 18;
+          }
+          else if ($_POST['type'] == 4){
+            $tblcols = 14;
           }
 
           if ($csvcols <> $tblcols)
@@ -111,9 +129,7 @@
           }
           else
             $checked = 1;
-        }
-        // set max execution time (for large files)
-        set_time_limit (480);
+        }  
 
         switch ($_POST['type']){
           // employees
@@ -162,7 +178,7 @@
             break;
           // schools
           case 2:
-            // check if code exists
+            // check if school code exists
             $qry = "SELECT * FROM school WHERE code = $data[0]";
             if (mysqli_num_rows(mysqli_query($mysqlconnection, $qry)) ){
               $error = true;
@@ -173,6 +189,73 @@
             $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2) 
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]','$data[6]','$data[7]','$data[8]','$data[9]','$data[10]','$data[11]')";
             $ret = mysqli_query($mysqlconnection, $import);
+            if (!$ret) {
+              $error = true;
+            }
+            break;
+          // students ds
+          case 3:
+            // check if school code exists
+            $qry = "SELECT * FROM school WHERE code = $data[0]";
+            $res = mysqli_query($mysqlconnection, $qry);
+            if (!mysqli_num_rows($res) ){
+              $error = true;
+              $er_msg ="Σφάλμα: Το σχολείο με κωδικό ".$data[0]." δεν υπάρχει...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            
+            // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';
+            $students = implode(',',Array($data[1],$data[2],$data[3],$data[4],$data[5],$data[6],$data[7],$data[8]));
+            $tm_prz = ceil($data[8]/25);
+            $tmimata = implode(',',Array($data[10],$data[11],$data[12],$data[13],$data[14],$data[15],$data[16],$data[17],$tm_prz));
+            $entaksis = $data[9] > 0 ? 'on,'.$data[9] : ',';
+            // archive 
+            $archive = mysqli_result($res, 0, "archive");
+            if (strlen($archive) > 0) {
+              $archive_arr = unserialize($archive);
+            } else $archive_arr = Array();
+            $archive_data = $students . ',' . $tmimata . ',' . $entaksis;
+            $sxoletos = find_prev_year($sxol_etos);
+            $archive_arr[$sxoletos] = $archive_data;
+            $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
+            $ret = mysqli_query($mysqlconnection, $sql);
+            // update school table
+            $sql="UPDATE school SET students='$students', tmimata='$tmimata', entaksis='$entaksis' WHERE code=".$data[0];
+            $ret = mysqli_query($mysqlconnection, $sql);
+            if (!$ret) {
+              $error = true;
+            }
+            break;
+          // students nip
+          case 4:
+            // check if school code exists
+            $qry = "SELECT * FROM school WHERE code = $data[0]";
+            $res = mysqli_query($mysqlconnection, $qry);
+            if (!mysqli_num_rows($res) ){
+              $error = true;
+              $er_msg ="Σφάλμα: Το σχολείο με κωδικό ".$data[0]." δεν υπάρχει...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+
+            // update school set klasiko='1Π,1Ν,2Π,2Ν,3Π,3Ν,ΠΖ', oloimero_nip='ΟΛ1Π,ΟΛ1Ν,ΟΛ2Π,ΟΛ2Ν',entaksis='0,0' where code=9170040;
+            $klasiko = implode(',',Array($data[1],$data[2],$data[3],$data[4],$data[5],$data[6],$data[7]));
+            $oloimero_nip = implode(',',Array($data[8],$data[9],$data[10],$data[11]));
+            $entaksis = $data[12] > 0 ? 'on,'.$data[12] : '0,0';
+            // archive 
+            $archive = mysqli_result($res, 0, "archive");
+            if (strlen($archive) > 0) {
+              $archive_arr = unserialize($archive);
+            } else $archive_arr = Array();
+            $archive_data = $klasiko . ',' . $oloimero_nip . ',' . $entaksis;
+            $sxoletos = find_prev_year($sxol_etos);
+            $archive_arr[$sxoletos] = $archive_data;
+            $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
+            $ret = mysqli_query($mysqlconnection, $sql);
+            // update school table
+            $sql="UPDATE school SET klasiko='$klasiko', oloimero_nip='$oloimero_nip', entaksis='$entaksis' WHERE code=".$data[0];
+            $ret = mysqli_query($mysqlconnection, $sql);
             if (!$ret) {
               $error = true;
             }

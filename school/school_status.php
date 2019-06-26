@@ -36,11 +36,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             matchContains: true,
             selectFirst: false
         });
-        $(".slidingDiv").hide();
-        $(".show_hide").show();
-
-        $('.show_hide').click(function(){
-            $(".slidingDiv").slideToggle();
+        $("#slidingDiv").hide();
+        $("#slidingDiv2").hide();
+        $('#show_hide').click(function(){
+            $("#slidingDiv").slideToggle();
+        });
+        $('#show_hide2').click(function(){
+            $("#slidingDiv2").slideToggle();
         });
     });
     $(document).ready(function() { 
@@ -91,6 +93,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($systeg) {
             $systegName = getSchool($systeg, $conn);
         }
+        $archive = mysqli_result($result, 0, "archive");
                         
         // if dimotiko
         if ($type == 1) {
@@ -148,8 +151,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         // if ds
         if ($type == 1) {
-            echo "<tr><td colspan=2><a href='#' class='show_hide'>Οργανικές</a><br>";
-            echo "<div class='slidingDiv'>";
+            echo "<tr><td colspan=2><a href='#' id='show_hide'>Οργανικές</a><br>";
+            echo "<div id='slidingDiv'>";
             echo "<table>";
             echo "<thead><tr>";
             echo "<th>Κλάδος</th>";
@@ -174,7 +177,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
             }
             echo "</tr></thead>";
-            echo "<tr>";
+            echo "<tbody><tr>";
             echo "<td>Οργανικές</td>";
             echo "<td>$organikes[0]</td>";
             echo "<td>$organikes[1]</td>";
@@ -425,6 +428,45 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<tr><td>Μαθ.Πρωινού<br>Σύνολο: $synolo_pr</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
                 $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
                 echo "<tr><td>Τμ./τάξη Πρωινού<br>Σύνολο: $synolo_pr</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small> (14-15)</small><br>$tmimata_exp[7]<small> (15-16)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
+                if (strlen($archive) > 0){
+                  // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',
+                  // tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';
+                  echo "<tr><td colspan=9><a href='#' id='show_hide2'>Ιστορικό</a><br>";
+                  echo "<div id='slidingDiv2'>";
+                  echo "<table>";
+                  echo "<thead><tr>";
+                  echo "<th>Σχολικό έτος</th>";
+                  echo "<th>Α</th>";
+                  echo "<th>Β</th>";
+                  echo "<th>Γ</th>";
+                  echo "<th>Δ</th>";
+                  echo "<th>Ε</th>";
+                  echo "<th>ΣΤ</th>";
+                  echo "<th>Ολοήμερο</th>";
+                  echo "<th>Πρωινή Ζώνη</th>";
+                  echo "<th>Ένταξης</th>";
+                  echo "</tr>";
+                  echo "</thead>";
+                  echo "<tbody>";
+                  $archive_arr = unserialize($archive);
+                  foreach ($archive_arr as $key => $value) {
+                    echo '<tr>';
+                    echo "<td>". substr($key, 0, 4).'-'.substr($key, 4, 2) ."</td>";
+                    $data = explode(',',$value);
+                    echo "<td>$data[0] ($data[8])</td>";
+                    echo "<td>$data[1] ($data[9])</td>";
+                    echo "<td>$data[2] ($data[10])</td>";
+                    echo "<td>$data[3] ($data[11])</td>";
+                    echo "<td>$data[4] ($data[12])</td>";
+                    echo "<td>$data[5] ($data[13])</td>";
+                    echo "<td>$data[6] (14-15: $data[14], 15-16: $data[15])</td>";
+                    echo "<td>$data[7] ($data[16])</td>";
+                    echo $data[17] == 'on' ? "<td>ΝΑΙ ($data[18] μαθ.)</td>" : "<td></td>";
+                  }
+                  echo "</tbody>";
+                  echo "</table>";
+                  echo "</div>";
+                }
                 echo "</table>";
                 echo "<br>";
             }
@@ -490,6 +532,50 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<tr><td><strong>Σύνολα</strong></td><td>$klasiko_nip<td>$klasiko_pro</td><td>$ola</td>";
                 echo "<td>$oloimero_syn_nip<td>$oloimero_syn_pro</td><td>$olola</td>";
                 echo "</tr>";
+            }
+            if (strlen($archive) > 0){
+              // update school set klasiko='1Π,1Ν,2Π,2Ν,3Π,3Ν,ΠΖ', oloimero_nip='ΟΛ1Π,ΟΛ1Ν,ΟΛ2Π,ΟΛ2Ν',entaksis='0,0' where code=XXX;              
+              echo "<tr><td colspan=9><a href='#' id='show_hide2'>Ιστορικό</a><br>";
+              echo "<div id='slidingDiv2'>";
+              echo "<table>";
+              echo "<thead><tr>";
+              echo "<th>Σχολικό έτος</th>";
+              echo "<th>Πρ.1 Προνήπια</th>";
+              echo "<th>Πρ.1 Νήπια</th>";
+              echo "<th>Πρ.2 Προνήπια</th>";
+              echo "<th>Πρ.2 Νήπια</th>";
+              echo "<th>Πρ.3 Προνήπια</th>";
+              echo "<th>Πρ.3 Νήπια</th>";
+              echo "<th>Πρωινή Ζώνη</th>";
+              echo "<th>Ολοήμ.1 Προνήπια</th>";
+              echo "<th>Ολοήμ.1 Νήπια</th>";
+              echo "<th>Ολοήμ.2 Προνήπια</th>";
+              echo "<th>Ολοήμ.2 Νήπια</th>";
+              echo "<th>Ένταξης</th>";
+              echo "</tr>";
+              echo "</thead>";
+              echo "<tbody>";
+              $archive_arr = unserialize($archive);
+              foreach ($archive_arr as $key => $value) {
+                echo '<tr>';
+                echo "<td>". substr($key, 0, 4).'-'.substr($key, 4, 2) ."</td>";
+                $data = explode(',',$value);
+                echo "<td>$data[0]</td>";
+                echo "<td>$data[1]</td>";
+                echo "<td>$data[2]</td>";
+                echo "<td>$data[3]</td>";
+                echo "<td>$data[4]</td>";
+                echo "<td>$data[5]</td>";
+                echo "<td>$data[6]</td>";
+                echo "<td>$data[7]</td>";
+                echo "<td>$data[8]</td>";
+                echo "<td>$data[9]</td>";
+                echo "<td>$data[10]</td>";
+                echo $data[11] == 'on' ? "<td>ΝΑΙ ($data[12] μαθ.)</td>" : "<td></td>";
+              }
+              echo "</tbody>";
+              echo "</table>";
+              echo "</div>";
             }
             echo "</table>";
             echo "<br>";
