@@ -215,7 +215,10 @@
             if (strlen($archive) > 0) {
               $archive_arr = unserialize($archive);
             } else $archive_arr = Array();
-            $archive_data = $students . ',' . $tmimata . ',' . $entaksis;
+            $students_old = mysqli_result($res, 0, "students");
+            $tmimata_old = mysqli_result($res, 0, "tmimata");
+            $entaksis_old = mysqli_result($res, 0, "entaksis");
+            $archive_data = $students_old . ',' . $tmimata_old . ',' . $entaksis_old;
             $sxoletos = find_prev_year($sxol_etos);
             $archive_arr[$sxoletos] = $archive_data;
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
@@ -248,7 +251,10 @@
             if (strlen($archive) > 0) {
               $archive_arr = unserialize($archive);
             } else $archive_arr = Array();
-            $archive_data = $klasiko . ',' . $oloimero_nip . ',' . $entaksis;
+            $klasiko_old = mysqli_result($res, 0, "klasiko");
+            $oloimero_nip_old = mysqli_result($res, 0, "oloimero_nip");
+            $entaksis_old = mysqli_result($res, 0, "entaksis");
+            $archive_data = $klasiko_old . ',' . $oloimero_nip_old . ',' . $entaksis_old;
             $sxoletos = find_prev_year($sxol_etos);
             $archive_arr[$sxoletos] = $archive_data;
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
