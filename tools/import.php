@@ -118,7 +118,7 @@
             $tblcols = 18;
           }
           else if ($_POST['type'] == 4){
-            $tblcols = 14;
+            $tblcols = 13;
           }
 
           if ($csvcols <> $tblcols)
