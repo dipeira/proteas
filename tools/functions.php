@@ -1530,20 +1530,21 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     $meiwsh_ypnth = 0;
     $query_yp = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
     $result_yp = mysqli_query($mysqlconnection, $query_yp);
-    if (mysqli_num_rows($result_yp)) {
+    while ($row = mysqli_fetch_assoc($result_yp)){
         // reduce if students > 120 or eidiko with >30 students
         if ($synolo_pr > 120 || ($eidiko && $synolo_pr > 30)) {
             $meiwsh_ypnth = 2;
         }
-        $klados = mysqli_result($result_yp, 0, "klados");
-        $meiwsh_ypnth_klados = mysqli_result($result_yp, 0, "perigrafh");
+        
+        $klados = $row['klados'];
+        $meiwsh_ypnth_klados = $row['perigrafh'];
         $avhrs[$klados] -= $meiwsh_ypnth;
         // ώρες Υπ/ντή στην ανάλυση
         $ar = Array(
-            'name' => mysqli_result($result, 0, 1),
-            'surname' =>  '<small>(Υπ/ντής)</small> ' . mysqli_result($result_yp, 0, 2), 
+            'name' => $row['name'],
+            'surname' =>  '<small>(Υπ/ντής/-ντρια)</small> ' . $row['surname'],
             'klados' =>  $meiwsh_ypnth_klados, 
-            'hours' => mysqli_result($result_yp, 0, "wres") - $meiwsh_ypnth
+            'hours' => $row['wres'] - $meiwsh_ypnth
         );
         $all[] = $ar;
         $allcnt[$meiwsh_ypnth_klados]++;
