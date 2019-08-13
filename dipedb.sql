@@ -1066,3 +1066,26 @@ ALTER TABLE `yphrethsh_ekt`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE TABLE `school_requests` (
+  `id` int(11) NOT NULL,
+  `request` text NOT NULL,
+  `comment` text,
+  `school` int(11) NOT NULL,
+  `done` int(11) NOT NULL DEFAULT '0',
+  `handler` int(11) DEFAULT NULL,
+  `submitted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `handled` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for table `school_requests`
+--
+ALTER TABLE `school_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for table `school_requests`
+--
+ALTER TABLE `school_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
