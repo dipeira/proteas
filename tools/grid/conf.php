@@ -10,6 +10,7 @@ $table_kl="klados";
 $table_log="logon";
 $table_pr="praxi";
 $table_opt="params";
+$table_req="school_requests";
 
 $GApiKey="";
 ?>

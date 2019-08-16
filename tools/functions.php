@@ -1999,4 +1999,37 @@ function get_diavgeia_subject($ada) {
   return mb_convert_encoding($dt->subject, 'iso-8859-7', 'utf-8');
 }
 
+function display_school_requests($sch, $sxol_etos, $mysqlconnection){
+    $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos ORDER BY submitted DESC";
+    $res = mysqli_query($mysqlconnection, $query);
+    if (mysqli_num_rows($res) > 0) {
+        echo "<h1>Αιτήματα Σχολικής Μονάδας</h1>";
+        echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Κείμενο αιτήματος</th>";
+        echo "<th>Σχόλιο Δ/νσης</th>";
+        echo "<th>Διεκπεραίωση</th>";
+        echo "<th>Ημ/νία Υποβολής</th>";
+        echo "<th>Ημ/νία Διεκπεραίωσης</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($row = mysqli_fetch_array($res)){
+            echo "<tr>";
+            echo "<td>".$row['id']."</td>";
+            echo "<td>".$row['request']."</td>";
+            echo "<td>".$row['comment']."</td>";
+            echo "<td>";
+            echo $row['done'] ? 'Ναι' : 'Όχι';
+            echo "</td>";
+            echo "<td>";
+            echo date("d-m-Y H:m:s", strtotime($row['submitted']));
+            echo "</td>";
+            echo "<td>";
+            echo $row['done'] ? date("d-m-Y H:m:s", strtotime($row['handled'])) : '';
+            echo "</td>";
+            echo "</tr>";
+        }
+        echo "</tbody></table>";
+    }
+}
 ?>

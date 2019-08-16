@@ -1132,37 +1132,9 @@
             echo "<br>";
         }
         // requests
-        $query = "SELECT * from school_requests where school=$sch";
-        $res = mysqli_query($mysqlconnection, $query);
-        if (mysqli_num_rows($res) > 0) {
-            echo "<h1>Αιτήματα</h1>";
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Κείμενο αιτήματος</th>";
-            echo "<th>Σχόλιο Δ/νσης</th>";
-            echo "<th>Διεκπεραίωση</th>";
-            echo "<th>Ημ/νία Υποβολής</th>";
-            echo "<th>Ημ/νία Διεκπεραίωσης</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($row = mysqli_fetch_array($res)){
-                echo "<tr>";
-                echo "<td>".$row['id']."</td>";
-                echo "<td>".$row['request']."</td>";
-                echo "<td>".$row['comment']."</td>";
-                echo "<td>";
-                echo $row['done'] ? 'Ναι' : 'Όχι';
-                echo "</td>";
-                echo "<td>";
-                echo date("d-m-Y H:m:s", strtotime($row['submitted']));
-                echo "</td>";
-                echo "<td>";
-                echo $row['done'] ? date("d-m-Y H:m:s", strtotime($row['handled'])) : '';
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo "</tbody></table>";
-            echo "<br>";
+        display_school_requests($sch, $sxol_etos, $mysqlconnection);
+        
+        echo "<h4>Υποβολή αιτήματος</h4>";
             echo "<form id='requestfrm' action='' method='POST' autocomplete='off'>";
             echo "<table class=\"imagetable stable\" border='1'>";
             echo "<td>Αίτημα</td><td></td>";
@@ -1171,7 +1143,6 @@
             echo "<input type='hidden' name = 'school' value='$sch'>";
             echo "<input type='submit' value='Υποβολή'>";
             echo "</form>";
-        }
     } // of school status
     ?>
 </center>

@@ -58,6 +58,7 @@
 			  <li><a href="<?=SITE_ROOT?>/employee/klados.php">Ειδικότητες</a></li>
 			  <li><a href='<?=SITE_ROOT?>/etc/users.php'>Διαχείριση Χρηστών</a></li>
 			  <li><a href='<?=SITE_ROOT?>/etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
+				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
 		  </ul>
 		 </li>
 		 <?php endif; ?>
