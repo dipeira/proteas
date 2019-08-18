@@ -622,6 +622,7 @@ CREATE TABLE IF NOT EXISTS `logon` (
   `useremail` varchar(50) NOT NULL DEFAULT '',
   `password` varchar(50) NOT NULL DEFAULT '',
   `userlevel` int(1) NOT NULL DEFAULT '0' COMMENT '0 admin, 1 add/delete/edit, 2 edit, 3 view only',
+  `requests` tinyint(1) NOT NULL,
   `adeia` tinyint(4) NOT NULL COMMENT 'an 1 tote ektypwnei adeies',
   `username` varchar(20) NOT NULL,
   `lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

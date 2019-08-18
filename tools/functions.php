@@ -1999,11 +1999,12 @@ function get_diavgeia_subject($ada) {
   return mb_convert_encoding($dt->subject, 'iso-8859-7', 'utf-8');
 }
 
-function display_school_requests($sch, $sxol_etos, $mysqlconnection){
+function display_school_requests($sch, $sxol_etos, $mysqlconnection, $guest = true){
     $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos ORDER BY submitted DESC";
     $res = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($res) > 0) {
-        echo "<h1>Αιτήματα Σχολικής Μονάδας</h1>";
+        echo $guest ? "<h1>Αιτήματα Σχολικής Μονάδας</h1>" :
+        "<h1><a href='requests.php'>Αιτήματα Σχολικής Μονάδας</a></h1>";
         echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr>";
         echo "<th>A/A</th>";

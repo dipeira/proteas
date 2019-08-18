@@ -1101,6 +1101,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tbody></table>";
             echo "<br>";
         }
+        if ($_SESSION['requests']) {
+            display_school_requests($sch, $sxol_etos, $mysqlconnection, false);
+        }
     } // of school status
     ?>
 </center>

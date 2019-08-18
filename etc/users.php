@@ -37,16 +37,29 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_log);
 <script type="text/javascript">
 var thegrid = new drasticGrid('grid1', {
   pathimg: "../tools/grid/img/",
+  columns: [
+    {name: 'userid', displayname:'A/A', width: 30},
+    {name: 'username', displayname:'Ον.Χρήστη', width: 100},
+    {name: 'useremail', displayname:'email', width: 130},
+    {name: 'userlevel', displayname:'Ρόλος', width: 110,
+        type: DDTYPEKEY, 
+        values: [0,1,2,3],
+        labels:  ['Διαχειριστής', 'Προϊστάμενος','Υπάλληλος','Χρήστης']
+    },
+    {name: 'requests', displayname:'Αιτήματα Σχολείων', width: 140},
+    {name: 'adeia', displayname:'¶δειες', width: 60},
+    {name: 'lastlogin', displayname:'Τελευταία Είσοδος', width: 150, editable: false}
+    ]
 });
 </script>
 
-<h3>Επίπεδα ασφαλείας</h3>
+<h3>Ρόλοι</h3>
 <table class="imagetable stable" border="1">
-    <tr><th>Επίπεδο</th><th>Δικαιώματα</th></tr>
-    <tr><td>0</td><td>Διαχειριστής</td></tr>
-    <tr><td>1</td><td>Προσθήκη / Διαγραφή / Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
-    <tr><td>2</td><td>Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
-    <tr><td>3</td><td>Μόνο Προβολή Υπαλλήλων & ¶δειών</td></tr>
+    <tr><th>Ρόλος</th><th>Δικαιώματα</th></tr>
+    <tr><td>Διαχειριστής</td><td>Πλήρης πρόσβαση σε όλα</td></tr>
+    <tr><td>Προϊστάμενος</td><td>Προσθήκη / Διαγραφή / Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
+    <tr><td>Υπάλληλος</td><td>Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
+    <tr><td>Χρήστης</td><td>Μόνο Προβολή Υπαλλήλων & ¶δειών</td></tr>
 </table>
 <form>
     <br>

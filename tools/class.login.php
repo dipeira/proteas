@@ -56,6 +56,7 @@ class logmein {
                 $_SESSION['user'] = $row[$this->user_column];
                 $_SESSION['userid'] = $row['userid'];
                 $_SESSION['adeia'] = $row['adeia'];
+                $_SESSION['requests'] = $row['requests'];
                 //userlevel session is optional. Use it if you have different user levels
                 $_SESSION['userlevel'] = $row[$this->user_level];
                 $result = $this->qry("UPDATE ".$this->user_table." SET lastlogin=now() WHERE ".$this->user_column."='?';" , $username, $password);

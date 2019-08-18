@@ -7,7 +7,12 @@ $log = new logmein();
 if($log->logincheck($_SESSION['loggedin']) == false) {
   header("Location: ../tools/login.php");
 }
- 
+
+if (!$_SESSION['requests']) {
+  echo "<h3>Σφάλμα: Δεν έχετε δικαίωμα προβολής αιτημάτων σχολείων...</h3>";
+  die("<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">");
+}
+
 define("PATHDRASTICTOOLS", "../tools/grid/");
 require PATHDRASTICTOOLS."conf.php";
 require PATHDRASTICTOOLS."drasticSrcMySQL.class.php";
@@ -51,7 +56,7 @@ var thegrid = new drasticGrid('grid1', {
 </script>
 
 <form>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='ektaktoi_list.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

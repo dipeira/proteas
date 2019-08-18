@@ -11,44 +11,42 @@
   
   // If in production, login using sch.gr's CAS server
   // (To be able to login via sch.gr's CAS, the app must be whitelisted from their admins)
-  // if (!$prDebug)
-  // {
-  //   // phpCAS simple client, import phpCAS lib (downloaded with composer)
-  //   require_once('vendor/jasig/phpcas/CAS.php');
-  //   //initialize phpCAS using SAML
-  //   phpCAS::client(SAML_VERSION_1_1,'sso-test.sch.gr',443,'');
-  //   // if logout
-  //   if (isset($_POST['logout']))
-  //   {
-  //     session_unset();
-  //     session_destroy(); 
-  //     phpCAS::logout();
-  //   }
+  $prDebug = 1;
+  if (!$prDebug)
+  {
+    // phpCAS simple client, import phpCAS lib (downloaded with composer)
+    require_once('../vendor/jasig/phpcas/CAS.php');
+    //initialize phpCAS using SAML
+    phpCAS::client(SAML_VERSION_1_1,'sso-test.sch.gr',443,'');
+    // if logout
+    if (isset($_POST['logout']))
+    {
+      session_unset();
+      session_destroy(); 
+      phpCAS::logout();
+    }
     
-  //   // no SSL validation for the CAS server, only for testing environments
-  //   phpCAS::setNoCasServerValidation();
-  //   // handle backend logout requests from CAS server
-  //   phpCAS::handleLogoutRequests(array('sso-test.sch.gr'));
-  //   // force CAS authentication
-  //   if (!phpCAS::checkAuthentication())
-  //     phpCAS::forceAuthentication();
-  //   // at this step, the user has been authenticated by the CAS server and the user's login name can be read with phpCAS::getUser().
-  //   $_SESSION['loggedin'] = 1;
-  // }
-  // else 
-  //   $_SESSION['loggedin'] = 1;
-  // ... ...
-  // $sch_name = phpCAS::getAttribute('description');
-	// $uid = phpCAS::getUser();
-	// $em1 = $uid . "@sch.gr";
-	// $em2 = phpCAS::getAttribute('mail');
+    // no SSL validation for the CAS server, only for testing environments
+    phpCAS::setNoCasServerValidation();
+    // handle backend logout requests from CAS server
+    phpCAS::handleLogoutRequests(array('sso-test.sch.gr'));
+    // force CAS authentication
+    if (!phpCAS::checkAuthentication())
+      phpCAS::forceAuthentication();
+    // at this step, the user has been authenticated by the CAS server and the user's login name can be read with phpCAS::getUser().
+    $_SESSION['loggedin'] = 1;
+    $sch_code = phpCAS::getAttribute('gsnunitcode');
+    $sch = getSchoolFromCode($sch_code, $mysqlconnection);
+    
+  }
+  else {
+    $sch = getSchoolFromCode($_GET['code'], $mysqlconnection);
+    //$_SESSION['loggedin'] = 1;
+  }
+  // $sch_name = phpCAS::getAttribute('gsnunitcode');
+  // $uid = phpCAS::getUser();
+  // $em2 = phpCAS::getAttribute('mail');
 
-  // Demand authorization                
-//   require "../tools/class.login.php";
-//   $log = new logmein();
-//   if($log->logincheck($_SESSION['loggedin']) == false) {
-//     header("Location: ../tools/login.php");
-//   }
 ?>
 <html>
   <head>
@@ -666,484 +664,468 @@
             echo "<br><br>";
         }
     } // of disp_school
-      
-    //echo "<div id=\"content\">";
-    // echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
-    // echo "<table class=\"imagetable stable\" border='1'>";
-    // echo "<td>Σχολείο</td><td></td>";
-    // echo "<td><input type=\"text\" name=\"org\" id=\"org\" style='width:250px;'/></td></tr>";                
-    // echo "	</table>";
-    //echo "	<input type='submit' value='Αναζήτηση'>";
-    //echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-    //echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-    //echo "	</form>";
-    //echo "</div>";
     
-    if (isset($_GET['org'])) {
-        $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    
+    $str1 = getSchool($sch, $mysqlconnection);
+    if (!$str1) {
+        die('Το σχολείο δε βρέθηκε...');
+    }
+    
+    echo "<h1>$str1</h1>";
+    if (!$sch && !$str) {
+        die('Το σχολείο δε βρέθηκε...');
+    }
+    if (isset($_GET['sxoletos'])) {
+        $sxol_etos = $_GET['sxoletos'];
+    }
+    disp_school($sch, $sxol_etos, $mysqlconnection);
+    
+    //Υπηρετούν με θητεία
+    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h3>Υπηρετούν με θητεία</h3><br>";
         
-        if (isset($_GET['org'])) {
-            $str1 = getSchool($_GET['org'], $mysqlconnection);
-            $sch = $_GET['org'];
-            if (!$str1) {
-                die('Το σχολείο δε βρέθηκε...');
-            }
+        $i=0;
+        echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Θέση</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {            
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $thesi = mysqli_result($result, $i, "thesi");
+            $th = thesicmb($thesi);
+            $comments = mysqli_result($result, $i, "comments");
+
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
         }
-        
-        echo "<h1>$str1</h1>";
-        if (!$sch && !$str) {
-            die('Το σχολείο δε βρέθηκε...');
+        echo "</tbody></table>";
+        echo "<br>";
+    }                   
+    //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
+    //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
+    //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
+    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND (klados=2 OR klados=1)";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h3>Ανήκουν οργανικά και υπηρετούν (ΠΕ60/ΠΕ70)</h3>";
+        $i=0;
+        echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {            
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
         }
-        if (isset($_GET['sxoletos'])) {
-            $sxol_etos = $_GET['sxoletos'];
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    //Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)
+    //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
+    //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
+    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND klados!=2 AND klados!=1";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h3>Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)</h3>";
+        $i=0;
+        echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {            
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
         }
-        disp_school($sch, $sxol_etos, $mysqlconnection);
-        
-        //Υπηρετούν με θητεία
-        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h3>Υπηρετούν με θητεία</h3><br>";
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    
+    
+    // Οργανική αλλού και υπηρετούν
+    $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5) AND status=1 ORDER BY klados";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h3>Με οργανική σε άλλο σχολείο και υπηρετούν</h3>";
+        $i=0;
+        echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Σχολείο Οργανικής</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
+            $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
             
-            $i=0;
-            echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Θέση</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {            
-                $id = mysqli_result($result, $i, "id");
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $thesi = mysqli_result($result, $i, "thesi");
-                $th = thesicmb($thesi);
-                $comments = mysqli_result($result, $i, "comments");
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    
+    // Οργανική αλλού και δευτερεύουσα υπηρέτηση
+    //$query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND (sx_yphrethshs='$sch' AND thesi=0";
+    $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h3>Με οργανική και κύρια υπηρέτηση σε άλλο σχολείο, που υπηρετούν με διάθεση</h3>";
+        $i=0;
+        echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Σχολείο Οργανικής</th>";
+        echo "<th>Ώρες</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {
+            $id = mysqli_result($result, $i, 0);
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
+            $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+            $hours = mysqli_result($result, $i, "hours");
+            
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    //Υπηρετούν σε τμήμα ένταξης
+    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=3";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h3>Υπηρετούν σε τμήμα ένταξης</h3>";
+        $i=0;
+        echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Σχολείο Οργανικής</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {            
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
+            $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    
+    //Αναπληρωτές
+    //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
+    $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1)";
+    //echo $query;
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
+    if ($num) {
+        echo "<h3>Αναπληρωτές</h3>";
+        $i=0;
+        echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Τύπος Απασχόλησης</th>";
+        echo "<th>Ώρες</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {
+            $id = mysqli_result($result, $i, 0);
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $typos = mysqli_result($result, $i, "type");
+            $type = get_type($typos, $mysqlconnection);
+            $thesi = mysqli_result($result, $i, "thesi");
+            $type .= $thesi == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
+            $type .= $thesi == 3 ? '<small> (Παράλληλη στήριξη)</small>' : '';
+
+            $comments = mysqli_result($result, $i, "comments");
+            $wres = mysqli_result($result, $i, "hours");
+            
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    
+    //Απουσιάζουν: Ανήκουν οργανικά και υπηρετούν αλλού
+    $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs!='$sch' order by klados";
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h2>Απουσιάζουν</h2>";
+        echo "<h3>Ανήκουν οργανικά και υπηρετούν αλλού</h3>";
+        $i=0;
+        echo "<table id=\"mytbl5\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Σχολείο/Φορέας Υπηρέτησης</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {       
+            $id = mysqli_result($result, $i, "id");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
+            $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+            
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    
+    //Σε άδεια
+    //old queries:
+    //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND status=3";
+    //$query0 = "SELECT * from adeia WHERE emp_id='$id' AND start<'$today' AND finish>'$today'";
+    $today = date("Y-m-d");
+    //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today'";
+    //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today' AND status=3";
+    //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3)";
+    //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
+    $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE (sx_organikhs='$sch' OR sx_yphrethshs='$sch') AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
+    //echo $query;
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    if ($num) {
+        echo "<h2>Σε Άδεια</h2>";
+        echo "<h3>Μόνιμοι</h3>";
+        $i=0;
+        echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Τύπος</th>";
+        echo "<th>Ημ/νία Επιστροφής</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        $apontes = array();
+        while ($i < $num)
+        {
+            $flag = $absent = 0;        
+            $id = mysqli_result($result, $i, "emp_id");
+            $adeia_id = mysqli_result($result, $i, "id");
+            $type = mysqli_result($result, $i, "type");
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+            $comm = $comments;
+            $today = date("Y-m-d");
+            $return = mysqli_result($result, $i, "finish");
+            $start = mysqli_result($result, $i, "start");
+            $status = mysqli_result($result, $i, "status");
+            // if return date exists, check if absent and print - else continue.
+            if ($return) {
+                if ($start<$today && $return>$today) {
+                    $flag = $absent = 1;
+                    $apontes[] = $id;
+                }
+                else
+                {
+                        //$flag=1;
+                    if (!in_array($id, $apontes)) {
+                            $flag = 1;
+                    }
+                        $apontes[] = $id;
+                        $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
+                }
+                $ret = date("d-m-Y", strtotime($return));
+            }
+            else
+            {
+                $ret="";
+                $id = mysqli_result($result, $i, "emp.id");
+                $flag=1;
+                $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
+            }
+            if ($flag) {
+                $query1 = "select type from adeia_type where id=$type";
+                $result1 = mysqli_query($mysqlconnection, $query1);
+                $typewrd = mysqli_result($result1, 0, "type");
+                if ($absent && $status<>3) {
+                    $comments = "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε Άδεια\"</blink><br>$comm";
+                }
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
+                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td>$ret</td><td>$comments</td>\n";
                 echo "</tr>";
-                $i++;
             }
-            echo "</tbody></table>";
-            echo "<br>";
-        }                   
-        //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
-        //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
-        //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
-        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND (klados=2 OR klados=1)";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h3>Ανήκουν οργανικά και υπηρετούν (ΠΕ60/ΠΕ70)</h3>";
-            $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {            
-                $id = mysqli_result($result, $i, "id");
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
+            $i++;
         }
-        //Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)
-        //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
-        //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
-        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND klados!=2 AND klados!=1";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h3>Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)</h3>";
-            $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {            
-                $id = mysqli_result($result, $i, "id");
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+        echo "</tbody></table>";
+    }
+    //Αναπληρωτές σε άδεια
+    $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
+    //echo $query;
+    $result = mysqli_query($mysqlconnection, $query);
+    $num = mysqli_num_rows($result);
+    $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
+    if ($num) {
+        echo "<h3>Αναπληρωτές</h3>";
+        $i=0;
+        echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>A/A</th>";
+        echo "<th>Επώνυμο</th>";
+        echo "<th>Όνομα</th>";
+        echo "<th>Κλάδος</th>";
+        echo "<th>Τύπος Απασχόλησης</th>";
+        echo "<th>Ώρες</th>";
+        echo "<th>Σχόλια</th>";
+        echo "</tr></thead>\n<tbody>";
+        while ($i < $num)
+        {
+            $id = mysqli_result($result, $i, 0);
+            $name = mysqli_result($result, $i, "name");
+            $surname = mysqli_result($result, $i, "surname");
+            $klados_id = mysqli_result($result, $i, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $typos = mysqli_result($result, $i, "type");
+            $type = get_type($typos, $mysqlconnection);
+            $comments = mysqli_result($result, $i, "comments");
+            $wres = mysqli_result($result, $i, "hours");
+            
+            echo "<tr>";
+            echo "<td>".($i+1)."</td>";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+            echo "</tr>";
+            $i++;
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+    }
+    // requests
+    display_school_requests($sch, $sxol_etos, $mysqlconnection);
+    
+    echo "<h4>Υποβολή αιτήματος</h4>";
+    echo "<form id='requestfrm' action='' method='POST' autocomplete='off'>";
+    echo "<table class=\"imagetable stable\" border='1'>";
+    echo "<td>Αίτημα</td><td></td>";
+    echo "<td><textarea name='request' rows='10' cols='80'></textarea></td></tr>";
+    echo "</table>";
+    echo "<input type='hidden' name = 'school' value='$sch'>";
+    echo "<input type='submit' value='Υποβολή'>";
+    echo "</form>";
 
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        
-        
-        // Οργανική αλλού και υπηρετούν
-        $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5) AND status=1 ORDER BY klados";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h3>Με οργανική σε άλλο σχολείο και υπηρετούν</h3>";
-            $i=0;
-            echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Σχολείο Οργανικής</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {
-                $id = mysqli_result($result, $i, "id");
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
-                $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
-                
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        
-        // Οργανική αλλού και δευτερεύουσα υπηρέτηση
-        //$query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND (sx_yphrethshs='$sch' AND thesi=0";
-        $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h3>Με οργανική και κύρια υπηρέτηση σε άλλο σχολείο, που υπηρετούν με διάθεση</h3>";
-            $i=0;
-            echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Σχολείο Οργανικής</th>";
-            echo "<th>Ώρες</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {
-                $id = mysqli_result($result, $i, 0);
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
-                $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
-                $hours = mysqli_result($result, $i, "hours");
-                
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        //Υπηρετούν σε τμήμα ένταξης
-        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=3";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h3>Υπηρετούν σε τμήμα ένταξης</h3>";
-            $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Σχολείο Οργανικής</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {            
-                $id = mysqli_result($result, $i, "id");
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
-                $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
-
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        
-        //Αναπληρωτές
-        //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
-        $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1)";
-        //echo $query;
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
-        if ($num) {
-            echo "<h3>Αναπληρωτές</h3>";
-            $i=0;
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Τύπος Απασχόλησης</th>";
-            echo "<th>Ώρες</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {
-                $id = mysqli_result($result, $i, 0);
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $typos = mysqli_result($result, $i, "type");
-                $type = get_type($typos, $mysqlconnection);
-                $thesi = mysqli_result($result, $i, "thesi");
-                $type .= $thesi == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
-                $type .= $thesi == 3 ? '<small> (Παράλληλη στήριξη)</small>' : '';
-
-                $comments = mysqli_result($result, $i, "comments");
-                $wres = mysqli_result($result, $i, "hours");
-                
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        
-        //Απουσιάζουν: Ανήκουν οργανικά και υπηρετούν αλλού
-        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs!='$sch' order by klados";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h2>Απουσιάζουν</h2>";
-            echo "<h3>Ανήκουν οργανικά και υπηρετούν αλλού</h3>";
-            $i=0;
-            echo "<table id=\"mytbl5\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Σχολείο/Φορέας Υπηρέτησης</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {       
-                $id = mysqli_result($result, $i, "id");
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
-                $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
-                
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        
-        //Σε άδεια
-        //old queries:
-        //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND status=3";
-        //$query0 = "SELECT * from adeia WHERE emp_id='$id' AND start<'$today' AND finish>'$today'";
-        $today = date("Y-m-d");
-        //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today'";
-        //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today' AND status=3";
-        //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3)";
-        //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-        $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE (sx_organikhs='$sch' OR sx_yphrethshs='$sch') AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-        //echo $query;
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        if ($num) {
-            echo "<h2>Σε Άδεια</h2>";
-            echo "<h3>Μόνιμοι</h3>";
-            $i=0;
-            echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Τύπος</th>";
-            echo "<th>Ημ/νία Επιστροφής</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            $apontes = array();
-            while ($i < $num)
-            {
-              $flag = $absent = 0;        
-              $id = mysqli_result($result, $i, "emp_id");
-              $adeia_id = mysqli_result($result, $i, "id");
-              $type = mysqli_result($result, $i, "type");
-              $name = mysqli_result($result, $i, "name");
-              $surname = mysqli_result($result, $i, "surname");
-              $klados_id = mysqli_result($result, $i, "klados");
-              $klados = getKlados($klados_id, $mysqlconnection);
-              $comments = mysqli_result($result, $i, "comments");
-              $comm = $comments;
-              $today = date("Y-m-d");
-              $return = mysqli_result($result, $i, "finish");
-              $start = mysqli_result($result, $i, "start");
-              $status = mysqli_result($result, $i, "status");
-              // if return date exists, check if absent and print - else continue.
-              if ($return) {
-                  if ($start<$today && $return>$today) {
-                      $flag = $absent = 1;
-                      $apontes[] = $id;
-                  }
-                  else
-                  {
-                          //$flag=1;
-                      if (!in_array($id, $apontes)) {
-                              $flag = 1;
-                      }
-                          $apontes[] = $id;
-                          $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
-                  }
-                  $ret = date("d-m-Y", strtotime($return));
-              }
-              else
-              {
-                  $ret="";
-                  $id = mysqli_result($result, $i, "emp.id");
-                  $flag=1;
-                  $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
-              }
-              if ($flag) {
-                  $query1 = "select type from adeia_type where id=$type";
-                  $result1 = mysqli_query($mysqlconnection, $query1);
-                  $typewrd = mysqli_result($result1, 0, "type");
-                  if ($absent && $status<>3) {
-                      $comments = "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε Άδεια\"</blink><br>$comm";
-                  }
-
-                  echo "<tr>";
-                  echo "<td>".($i+1)."</td>";
-                  echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td>$ret</td><td>$comments</td>\n";
-                  echo "</tr>";
-              }
-              $i++;
-            }
-            echo "</tbody></table>";
-        }
-        //Αναπληρωτές σε άδεια
-        $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
-        //echo $query;
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_num_rows($result);
-        $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
-        if ($num) {
-            echo "<h3>Αναπληρωτές</h3>";
-            $i=0;
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr>";
-            echo "<th>A/A</th>";
-            echo "<th>Επώνυμο</th>";
-            echo "<th>Όνομα</th>";
-            echo "<th>Κλάδος</th>";
-            echo "<th>Τύπος Απασχόλησης</th>";
-            echo "<th>Ώρες</th>";
-            echo "<th>Σχόλια</th>";
-            echo "</tr></thead>\n<tbody>";
-            while ($i < $num)
-            {
-                $id = mysqli_result($result, $i, 0);
-                $name = mysqli_result($result, $i, "name");
-                $surname = mysqli_result($result, $i, "surname");
-                $klados_id = mysqli_result($result, $i, "klados");
-                $klados = getKlados($klados_id, $mysqlconnection);
-                $typos = mysqli_result($result, $i, "type");
-                $type = get_type($typos, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
-                $wres = mysqli_result($result, $i, "hours");
-                
-                echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-                echo "</tr>";
-                $i++;
-            }
-            echo "</tbody></table>";
-            echo "<br>";
-        }
-        // requests
-        display_school_requests($sch, $sxol_etos, $mysqlconnection);
-        
-        echo "<h4>Υποβολή αιτήματος</h4>";
-            echo "<form id='requestfrm' action='' method='POST' autocomplete='off'>";
-            echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<td>Αίτημα</td><td></td>";
-            echo "<td><textarea name='request' rows='10' cols='80'></textarea></td></tr>";
-            echo "</table>";
-            echo "<input type='hidden' name = 'school' value='$sch'>";
-            echo "<input type='submit' value='Υποβολή'>";
-            echo "</form>";
-    } // of school status
     ?>
 </center>
 </body>
