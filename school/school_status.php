@@ -1102,7 +1102,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<br>";
         }
         if ($_SESSION['requests']) {
-            display_school_requests($sch, $sxol_etos, $mysqlconnection, false);
+            display_school_requests($sch, $sxol_etos, $mysqlconnection, true);
         }
     } // of school status
     ?>

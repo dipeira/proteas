@@ -1999,11 +1999,37 @@ function get_diavgeia_subject($ada) {
   return mb_convert_encoding($dt->subject, 'iso-8859-7', 'utf-8');
 }
 
-function display_school_requests($sch, $sxol_etos, $mysqlconnection, $guest = true){
+function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = false){
+    if ($auth){ ?>
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $('.submit-btn').click(function(event) {
+                event.preventDefault();
+				// do other stuff for a valid form
+                var id = event.target.id;
+                var commentid = 'comment'+id;
+                var comment = $('#'+commentid).val();
+                var doneid = 'done'+id;
+                var done = $('#'+doneid).val();
+                var theData = {
+                    id: id,
+                    comment: comment,
+                    done: done,
+                    type: 'update'
+                };
+                $.post('postrequest.php', theData, function(data) {
+                    alert(data);
+                    location.reload(true);
+                });
+            });
+          });
+        </script>
+    <?php
+    }
     $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos ORDER BY submitted DESC";
     $res = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($res) > 0) {
-        echo $guest ? "<h1>Αιτήματα Σχολικής Μονάδας</h1>" :
+        echo !$auth ? "<h1>Αιτήματα Σχολικής Μονάδας</h1>" :
         "<h1><a href='requests.php'>Αιτήματα Σχολικής Μονάδας</a></h1>";
         echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr>";
@@ -2013,14 +2039,23 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $guest = tr
         echo "<th>Διεκπεραίωση</th>";
         echo "<th>Ημ/νία Υποβολής</th>";
         echo "<th>Ημ/νία Διεκπεραίωσης</th>";
+        echo $auth ? "<th>Ενέργεια</th>" : '';
         echo "</tr></thead>\n<tbody>";
         while ($row = mysqli_fetch_array($res)){
             echo "<tr>";
             echo "<td>".$row['id']."</td>";
             echo "<td>".$row['request']."</td>";
-            echo "<td>".$row['comment']."</td>";
+            echo $auth ? "<td><textarea id='comment".$row['id']."' name='comment' rows='10' cols='80'>".$row['comment']."</textarea></td>" :
+                "<td>".$row['comment']."</td>";
             echo "<td>";
-            echo $row['done'] ? 'Ναι' : 'Όχι';
+            if ($auth) {
+                echo "<select id='done".$row['id']."'>";
+                echo $row['done'] ? "<option value='0'>Όχι</option><option value='1' selected>Ναι</option>" :
+                    "<option value='0' selected>Όχι</option><option value='1'>Ναι</option>";
+            }
+            else {
+                echo $row['done'] ? 'Ναι' : 'Όχι';
+            }
             echo "</td>";
             echo "<td>";
             echo date("d-m-Y H:m:s", strtotime($row['submitted']));
@@ -2028,9 +2063,60 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $guest = tr
             echo "<td>";
             echo $row['done'] ? date("d-m-Y H:m:s", strtotime($row['handled'])) : '';
             echo "</td>";
+            echo $auth ? "<td><input id='".$row['id']."' class='submit-btn' type='submit' value='Υποβολή'></td>" : '';
+            echo $auth ? "<input type='hidden' name = 'id' value='".$row['id']."'>" : '';
+            echo $auth ? "<input type='hidden' name = 'type' value='update'>" : '';
             echo "</tr>";
         }
         echo "</tbody></table>";
     }
+}
+
+function sendEmail($email, $subject, $body){
+    require_once '../vendor/autoload.php';
+    require_once '../config.php';
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+
+    // SMTP username & password
+    global $smtp_password;
+    global $smtp_username;
+                
+    // set up gmail transport
+    $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+    ->setUsername($smtp_username)
+    ->setPassword($smtp_password);
+
+    $mailer = Swift_Mailer::newInstance($transport);
+    
+    // swiftmailer antiflood plugin (every 25 emails)
+    //$mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(15));
+    // swiftmailer logger
+    //$logger = new Swift_Plugins_Loggers_ArrayLogger();
+    //$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+    
+    // swiftmailer echo logger
+    //$logger = new Swift_Plugins_Loggers_EchoLogger();
+    //$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+        
+    // get & validate email address
+    $email = filter_var( $email, FILTER_VALIDATE_EMAIL );
+    $from = getParam('foreas',$mysqlconnection);
+    $headers = "From:".$from;
+    $mymail = getParam('email',$mysqlconnection);
+                    
+    //utf8 encode
+    $subject = mb_convert_encoding($subject, "utf-8", "iso-8859-7");
+    $mail_body = mb_convert_encoding($body, "utf-8", "iso-8859-7");
+    
+    //echo "<br>$subject<br>$mail_body<br>$email<br>$myemail";
+
+    $message = Swift_Message::newInstance($subject)
+    ->setFrom($mymail)
+    // *** SOS *** uncomment '$testemail', comment '$email' to test
+    //->setTo("it@dipe.ira.sch.gr")
+    ->setTo($email)
+    ->setBody($mail_body);
+    $result = $mailer->send($message);
+    return $result;
 }
 ?>

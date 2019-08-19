@@ -1123,6 +1123,7 @@
     echo "<td><textarea name='request' rows='10' cols='80'></textarea></td></tr>";
     echo "</table>";
     echo "<input type='hidden' name = 'school' value='$sch'>";
+    echo "<input type='hidden' name = 'type' value='insert'>";
     echo "<input type='submit' value='Υποβολή'>";
     echo "</form>";
 
