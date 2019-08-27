@@ -2,8 +2,6 @@
   header('Content-type: text/html; charset=iso8859-7'); 
   require_once "../config.php";
   require_once "../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
-  require '../tools/calendar/tc_calendar.php';
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'greek'");
@@ -11,7 +9,7 @@
   
   // If in production, login using sch.gr's CAS server
   // (To be able to login via sch.gr's CAS, the app must be whitelisted from their admins)
-  $prDebug = 1;
+  $prDebug = 0;
   if (!$prDebug)
   {
     // phpCAS simple client, import phpCAS lib (downloaded with composer)
@@ -35,65 +33,117 @@
       phpCAS::forceAuthentication();
     // at this step, the user has been authenticated by the CAS server and the user's login name can be read with phpCAS::getUser().
     $_SESSION['loggedin'] = 1;
-    $sch_code = phpCAS::getAttribute('gsnunitcode');
+    $sch_code = phpCAS::getAttribute('edupersonorgunitdn:gsnunitcode');
     $sch = getSchoolFromCode($sch_code, $mysqlconnection);
-    
   }
   else {
+    if (!$_GET['code']){
+      die('Σφάλμα: Δεν έχει επιλεγεί σχολείο...');
+    }
     $sch = getSchoolFromCode($_GET['code'], $mysqlconnection);
     //$_SESSION['loggedin'] = 1;
   }
-  // $sch_name = phpCAS::getAttribute('gsnunitcode');
-  // $uid = phpCAS::getUser();
-  // $em2 = phpCAS::getAttribute('mail');
-
+  if (isset($_POST['type'])){
+    if ($_POST['type'] == 'insert'){
+      $text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
+      $sname = getSchool($_POST['school'], $mysqlconnection);
+      $query = "INSERT INTO school_requests (request, school, school_name, submitted, sxol_etos) VALUES ('$text', '". $_POST['school']."','".$sname."', NOW(), $sxol_etos)";
+      $result = mysqli_query($mysqlconnection, $query);
+      $ret = $result ? 'Επιτυχής καταχώρηση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την καταχώρηση';
+      echo "<h1>$ret</h1>";//mb_convert_encoding($ret, "utf-8", "iso-8859-7");  
+    } 
+    // else {
+    //   $text = mb_convert_encoding($_POST['comment'], "iso-8859-7", "utf-8");
+    //   $query = "UPDATE school_requests SET comment = '$text',done = ".$_POST['done']." WHERE id=".$_POST['id'];
+    //   $result = mysqli_query($mysqlconnection, $query);
+    //   $ret = $result ? 'Επιτυχής ενημέρωση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση';
+    //   echo mb_convert_encoding($ret, "utf-8", "iso-8859-7");
+    // }
+    ?>
+    <meta http-equiv="refresh" content="2; URL=status.php">
+    <?php
+    die();
+  }
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Open+Sans&subset=greek');
+
+      body * {
+        font-family : "Open Sans",Verdana,Helvetica,Arial,sans-serif;
+      }
+      .imagetable {
+        /* font-size : 90%; */
+        /* font-family : Verdana,Helvetica,Arial,sans-serif; */
+        font-size:15px;
+        color:#333333;
+        border-width: 1px;
+        border-color: #999999;
+        border-collapse: collapse;
+        width: 90%;
+      }
+      .imagetable th {
+        /* font-family : Verdana,Helvetica,Arial,sans-serif; */
+        background:#b5cfd2;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #999999;
+      }
+      .imagetable td {
+        /* font-size : 80%; */
+        /* font-family : Verdana,Helvetica,Arial,sans-serif; */
+        background:#dddebc;
+        border-width: 1px;
+        padding: 6px;
+        border-style: solid;
+        border-color: #999999;
+      }
+
+      .imagetable tr:nth-child(even){background-color: #f2f2f2;}
+
+      .imagetable tr:hover {background-color: #ddd;}
+
+      .imagetable th {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-align: left;
+        background-color: #2a672ddb;
+        color: white;
+      }
+      .stable {
+        width: auto;
+      }
+    </style>
+    <LINK href="./style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Καρτέλα σχολείου</title>
     
-    <script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery.validate.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
-    <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.6/js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">
-	$(document).ready(function(){
-		$('#requestfrm').submit(function(event) {
-                event.preventDefault();
-				// do other stuff for a valid form
-				$.post('postrequest.php', $("#requestfrm").serialize(), function(data) {
-					//$('#result').html(data);
-                    //$("#requestfrm")[0].reset();
-                    alert(data);
-                    location.reload(true);
-				});
-		});
-	});
-    $().ready(function() {
-        $("#slidingDiv").hide();
-        $("#slidingDiv2").hide();
-        $('#show_hide').click(function(){
-            $("#slidingDiv").slideToggle();
-        });
-        $('#show_hide2').click(function(){
-            $("#slidingDiv2").slideToggle();
-        });
-    });
-    $(document).ready(function() { 
-        $(".tablesorter").tablesorter({widgets: ['zebra']}); 
-        $('#toggleBtn').click(function(){
-            event.preventDefault();
-            $("#analysis").slideToggle();
-        });
-        $('#toggleSystegBtn').click(function(){
-            event.preventDefault();
-            $("#systeg").slideToggle();
-        });
-    });    
+      $().ready(function() {
+          $("#slidingDiv").hide();
+          $("#slidingDiv2").hide();
+          $('#show_hide').click(function(){
+              $("#slidingDiv").slideToggle();
+          });
+          $('#show_hide2').click(function(){
+              $("#slidingDiv2").slideToggle();
+          });
+      });
+      $(document).ready(function() { 
+          $(".tablesorter").tablesorter({widgets: ['zebra']}); 
+          $('#toggleBtn').click(function(){
+              event.preventDefault();
+              $("#analysis").slideToggle();
+          });
+          $('#toggleSystegBtn').click(function(){
+              event.preventDefault();
+              $("#systeg").slideToggle();
+          });
+      });    
     </script>
   </head>
   <body> 
@@ -989,16 +1039,8 @@
     }
     
     //Σε άδεια
-    //old queries:
-    //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND status=3";
-    //$query0 = "SELECT * from adeia WHERE emp_id='$id' AND start<'$today' AND finish>'$today'";
     $today = date("Y-m-d");
-    //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today'";
-    //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today' AND status=3";
-    //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3)";
-    //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
     $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE (sx_organikhs='$sch' OR sx_yphrethshs='$sch') AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-    //echo $query;
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
     if ($num) {
@@ -1124,6 +1166,7 @@
     echo "</table>";
     echo "<input type='hidden' name = 'school' value='$sch'>";
     echo "<input type='hidden' name = 'type' value='insert'>";
+    echo "<br>";
     echo "<input type='submit' value='Υποβολή'>";
     echo "</form>";
 

@@ -16,7 +16,11 @@ if (!$_SESSION['requests']) {
 define("PATHDRASTICTOOLS", "../tools/grid/");
 require PATHDRASTICTOOLS."conf.php";
 require PATHDRASTICTOOLS."drasticSrcMySQL.class.php";
-$src = new drasticSrcMySQL($server, $user, $pw, $db, $table_req);
+$options = array(
+  "add_allowed" => false,       
+  "delete_allowed" => false
+);
+$src = new drasticSrcMySQL($server, $user, $pw, $db, $table_req, $options);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

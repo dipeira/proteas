@@ -2005,7 +2005,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
           $(document).ready(function(){
             $('.submit-btn').click(function(event) {
                 event.preventDefault();
-				// do other stuff for a valid form
+				        // do other stuff for a valid form
                 var id = event.target.id;
                 var commentid = 'comment'+id;
                 var comment = $('#'+commentid).val();
