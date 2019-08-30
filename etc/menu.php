@@ -61,6 +61,13 @@
 				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
 		  </ul>
 		 </li>
+     <?php elseif($_SESSION['requests']): ?>
+		 <li class="sub">
+		  <a href="#">Διαχειριση</a>
+		  <ul>
+				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
+		  </ul>
+		 </li>
 		 <?php endif; ?>
 		 <li class="sub">
 		  <a href="<?=SITE_ROOT?>/etc/about.php">Σχετικα</a>

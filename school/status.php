@@ -22,6 +22,7 @@
       session_unset();
       session_destroy(); 
       phpCAS::logout();
+      die('Πραγματοποιήθηκε έξοδος...<br>Ευχαριστούμε για το χρόνο σας!');
     }
     
     // no SSL validation for the CAS server, only for testing environments
@@ -148,7 +149,7 @@
   </head>
   <body> 
     <center>
-        <h2>Καρτέλα σχολείου</h2>
+        <h1><?= getParam('foreas',$mysqlconnection);?> <br> Πληροφοριακό σύστημα "Πρωτέας"</h1>
     <?php
     function disp_school($sch,$sxol_etos,$conn)
     {
@@ -216,6 +217,7 @@
         $oloimero = mysqli_result($result, 0, "oloimero");
         $comments = mysqli_result($result, 0, "comments");
         
+        echo "<h2 style='text-align:left;'>Α. Στοιχεία σχολικής μονάδας</h2>";
         echo "<table class=\"imagetable\" border='1'>";
         echo "<tr><td colspan=3>Τίτλος (αναλυτικά): $titlos</td></tr>";
         echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel</td></tr>";
@@ -509,6 +511,7 @@
         
         if ($type == 1) {
             if ($synolo>0) {
+                echo "<h2 style='text-align:left;'>Β. Μαθητές - Τμήματα / Λειτουργικά κενά - πλεονάσματα</h2>";
                 echo "<table class=\"imagetable\" border='1'>";
                 echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
                 $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
@@ -555,7 +558,6 @@
                   echo "</div>";
                 }
                 echo "</table>";
-                echo "<br>";
             }
             else 
             {
@@ -700,7 +702,7 @@
         }
         //echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
         //echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
-        echo "<br><br>";
+        echo "<br>";
         // if dimotiko & leitoyrg >= 4
         if ($type == 1 ) {//&& array_sum($tmimata_exp)>3){
             ektimhseis_wrwn($sch, $conn, $sxol_etos, true);
@@ -724,7 +726,7 @@
         die('Το σχολείο δε βρέθηκε...');
     }
     
-    echo "<h1>$str1</h1>";
+    echo "<h2>Καρτέλα Σχολείου: $str1</h2>";
     if (!$sch && !$str) {
         die('Το σχολείο δε βρέθηκε...');
     }
@@ -734,11 +736,12 @@
     disp_school($sch, $sxol_etos, $mysqlconnection);
     
     //Υπηρετούν με θητεία
+    echo "<h2 style='text-align:left;'>Γ. Προσωπικό</h2>";
     $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
     if ($num) {
-        echo "<h3>Υπηρετούν με θητεία</h3><br>";
+        echo "<h3>Υπηρετούν με θητεία</h3>";
         
         $i=0;
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
@@ -748,7 +751,7 @@
         echo "<th>Όνομα</th>";
         echo "<th>Κλάδος</th>";
         echo "<th>Θέση</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {            
@@ -759,11 +762,11 @@
             $klados = getKlados($klados_id, $mysqlconnection);
             $thesi = mysqli_result($result, $i, "thesi");
             $th = thesicmb($thesi);
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
 
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$th</td>";//<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -785,7 +788,7 @@
         echo "<th>Επώνυμο</th>";
         echo "<th>Όνομα</th>";
         echo "<th>Κλάδος</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {            
@@ -794,10 +797,11 @@
             $surname = mysqli_result($result, $i, "surname");
             $klados_id = mysqli_result($result, $i, "klados");
             $klados = getKlados($klados_id, $mysqlconnection);
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td>";
+            //<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -819,7 +823,7 @@
         echo "<th>Επώνυμο</th>";
         echo "<th>Όνομα</th>";
         echo "<th>Κλάδος</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {            
@@ -828,11 +832,11 @@
             $surname = mysqli_result($result, $i, "surname");
             $klados_id = mysqli_result($result, $i, "klados");
             $klados = getKlados($klados_id, $mysqlconnection);
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
 
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td>";//<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -855,7 +859,7 @@
         echo "<th>Όνομα</th>";
         echo "<th>Κλάδος</th>";
         echo "<th>Σχολείο Οργανικής</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {
@@ -866,11 +870,12 @@
             $klados = getKlados($klados_id, $mysqlconnection);
             $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
             $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
             
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td>";
+            //<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -894,7 +899,7 @@
         echo "<th>Κλάδος</th>";
         echo "<th>Σχολείο Οργανικής</th>";
         echo "<th>Ώρες</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {
@@ -905,12 +910,13 @@
             $klados = getKlados($klados_id, $mysqlconnection);
             $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
             $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
             $hours = mysqli_result($result, $i, "hours");
             
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td>";
+            //<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -931,7 +937,7 @@
         echo "<th>Όνομα</th>";
         echo "<th>Κλάδος</th>";
         echo "<th>Σχολείο Οργανικής</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {            
@@ -942,11 +948,11 @@
             $klados = getKlados($klados_id, $mysqlconnection);
             $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
             $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
 
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td>";//<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -972,7 +978,7 @@
         echo "<th>Κλάδος</th>";
         echo "<th>Τύπος Απασχόλησης</th>";
         echo "<th>Ώρες</th>";
-        echo "<th>Σχόλια</th>";
+        //echo "<th>Σχόλια</th>";
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {
@@ -987,12 +993,12 @@
             $type .= $thesi == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
             $type .= $thesi == 3 ? '<small> (Παράλληλη στήριξη)</small>' : '';
 
-            $comments = mysqli_result($result, $i, "comments");
+            //$comments = mysqli_result($result, $i, "comments");
             $wres = mysqli_result($result, $i, "hours");
             
             echo "<tr>";
             echo "<td>".($i+1)."</td>";
-            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+            echo "<td>$surname</td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td>";//<td>$comments</td>\n";
             echo "</tr>";
             $i++;
         }
@@ -1168,6 +1174,11 @@
     echo "<input type='hidden' name = 'type' value='insert'>";
     echo "<br>";
     echo "<input type='submit' value='Υποβολή'>";
+    echo "</form>";
+
+    //logout button
+    echo "<form action='' method='POST'>";
+    echo "<input type='submit' name='logout' value='Έξοδος'>";
     echo "</form>";
 
     ?>
