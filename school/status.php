@@ -46,7 +46,8 @@
   }
   if (isset($_POST['type'])){
     if ($_POST['type'] == 'insert'){
-      $text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
+      //$text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
+      $text = $_POST['request'];
       $sname = getSchool($_POST['school'], $mysqlconnection);
       $query = "INSERT INTO school_requests (request, school, school_name, submitted, sxol_etos) VALUES ('$text', '". $_POST['school']."','".$sname."', NOW(), $sxol_etos)";
       $result = mysqli_query($mysqlconnection, $query);
