@@ -47,7 +47,8 @@
   if (isset($_POST['type'])){
     if ($_POST['type'] == 'insert'){
       //$text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
-      $text = $_POST['request'];
+      // remove single quotes
+      $text = str_replace('\'', '', $_POST['request']);
       $sname = getSchool($_POST['school'], $mysqlconnection);
       $query = "INSERT INTO school_requests (request, school, school_name, submitted, sxol_etos) VALUES ('$text', '". $_POST['school']."','".$sname."', NOW(), $sxol_etos)";
       $result = mysqli_query($mysqlconnection, $query);
@@ -144,6 +145,14 @@
           $('#toggleSystegBtn').click(function(){
               event.preventDefault();
               $("#systeg").slideToggle();
+          });
+          // alert user on empty input
+          $('#submit').click(function(){
+            if($.trim($('#request').val()) == ''){
+              event.preventDefault();
+              alert('Σφάλμα: Το αίτημα σας δεν μπορεί να είναι κενό.\nΣε περίπτωση που δεν εντοπίζετε κάποιο λάθος, δε χρειάζεται κάποια ενέργεια.');
+              return false;
+            }
           });
       });    
     </script>
@@ -1167,15 +1176,16 @@
     display_school_requests($sch, $sxol_etos, $mysqlconnection);
     
     echo "<h4>Υποβολή αιτήματος</h4>";
+    echo "<p><i>ΣΗΜ: Σε περίπτωση που δεν εντοπίζετε κάποιο λάθος, δε χρειάζεται κάποια ενέργεια.</i></p>";
     echo "<form id='requestfrm' action='' method='POST' autocomplete='off'>";
     echo "<table class=\"imagetable stable\" border='1'>";
     echo "<td>Αίτημα</td><td></td>";
-    echo "<td><textarea name='request' rows='10' cols='80'></textarea></td></tr>";
+    echo "<td><textarea id='request' name='request' rows='10' cols='80'></textarea></td></tr>";
     echo "</table>";
     echo "<input type='hidden' name = 'school' value='$sch'>";
     echo "<input type='hidden' name = 'type' value='insert'>";
     echo "<br>";
-    echo "<input type='submit' value='Υποβολή'>";
+    echo "<input id='submit' type='submit' value='Υποβολή'>";
     echo "</form>";
 
     //logout button
