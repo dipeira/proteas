@@ -577,6 +577,7 @@
             $meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
             $meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
             // Μαθητές
+            echo "<h2 style='text-align:left;'>Β. Μαθητές - Τμήματα / Λειτουργικά κενά - πλεονάσματα</h2>";
             echo "<h3>Μαθητές</h3>";
             echo "<table class=\"imagetable\" border='1'>";
             $ola = $klasiko_nip + $klasiko_pro;
