@@ -49,7 +49,9 @@
     $cmb = "<select name=\"ektaktos\" class=\"select2\" >";
     $cmd .= "<option value=''>Παρακαλώ επιλέξτε σχολείο...</option>";
     while ($row = mysqli_fetch_array($result)){
-      $cmb .= "<option value=\"".$row['id']."\">".$row['surname'].' '.$row['name']." (τ.".substr($row['patrwnymo'], 0, 3).") (".$row['perigrafh'].")</option>";
+      $cmb .= "<option value=\"".$row['id']."\"";
+      $cmb .= $_POST['ektaktos'] == $row['id'] ? "selected" : "";
+      $cmb .= ">".$row['surname'].' '.$row['name']." (τ.".substr($row['patrwnymo'], 0, 3).") (".$row['perigrafh'].")</option>";
     }
     $cmb .= "</select>";
     echo $cmb;
@@ -60,13 +62,17 @@
     echo "<tr><td>Σχολείο:</td><td>";
     $cmb = "<select name=\"school\" class=\"select2\" >";
     while ($row = mysqli_fetch_array($result)){
-        $cmb .= "<option value='".$row['id']."'>".$row['name']."</option>";
+        $cmb .= "<option value='".$row['id']."'";
+        $cmb .= $_POST['school'] == $row['id'] ? "selected" : '';
+        $cmb .= ">".$row['name']."</option>";
     }
     $cmb .= "</select>";
     echo $cmb;
     echo "</td></tr>";
     echo "<tr><td>Ώρες:</td><td colspan=2><input type='text' value='24' name='hours' />";
     echo "</td></tr>";
+    echo "<input type='hidden' name = 'id' value='".$_POST['ektaktos']."'>";
+    echo "<input type='hidden' name = 'schid' value='".$_POST['school']."'>";
     echo "<tr><td colspan=2><input type='submit' value='Προσθήκη Τοποθέτησης'>";
     echo "&nbsp;&nbsp;&nbsp;";
     echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
