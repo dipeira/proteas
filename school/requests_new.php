@@ -14,7 +14,7 @@ if (!$_SESSION['requests']) {
   die("<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">");
 }
 
-require_once '..\tools\paginator.php';
+require_once '../tools/paginator.php';
  
 $conn       = new mysqli( $db_host, $db_user, $db_password, $db_name );
 
