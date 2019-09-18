@@ -59,6 +59,18 @@ function getSchoolFromCode($code, $conn)
         return mysqli_result($result, 0);
     }    
 }
+function getSchoolNameFromCode($code, $conn)
+{
+    $query = "SELECT name from school where code = '$code'";
+    $result = mysqli_query($conn, $query);
+    if (!$result) {
+        return false;
+    }
+    //die('Could not query:' . mysqli_error());
+    else {
+        return mysqli_result($result, 0);
+    }    
+}
         
     //The function returns the no. of business days between two dates and it skips the holidays
 function getWorkingDays($startDate,$endDate,$holidays)

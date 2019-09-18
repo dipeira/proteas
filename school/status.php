@@ -2,6 +2,13 @@
   header('Content-type: text/html; charset=iso8859-7'); 
   require_once "../config.php";
   require_once "../tools/functions.php";
+
+  // logs school logins or requests to database
+  function log2db($conn, $schid, $sch, $action = 1) {
+    $actiontext = $action == 1 ? "Πραγματοποιήθηκε είσοδος" : "Καταχωρήθηκε αίτημα";
+    $query = "INSERT INTO school_log (school_id, school, action) VALUES ($schid, '$sch', '$actiontext')";
+    $res = mysqli_query($conn, $query);
+  }
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'greek'");
@@ -36,37 +43,24 @@
     $_SESSION['loggedin'] = 1;
     $sch_code = phpCAS::getAttribute('edupersonorgunitdn:gsnunitcode');
     $sch = getSchoolFromCode($sch_code, $mysqlconnection);
+    
+    if (!isset($_POST['type'])){
+      $schname = getSchoolNameFromCode($sch_code, $mysqlconnection);
+      log2db($mysqlconnection, $sch_code, $schname);
+    }
   }
   else {
     if (!$_GET['code']){
       die('Σφάλμα: Δεν έχει επιλεγεί σχολείο...');
     }
     $sch = getSchoolFromCode($_GET['code'], $mysqlconnection);
-    //$_SESSION['loggedin'] = 1;
+    
+    if (!isset($_POST['type'])){
+      $schname = getSchoolNameFromCode($_GET['code'], $mysqlconnection);
+      log2db($mysqlconnection, $_GET['code'], $schname);
+    }
   }
-  if (isset($_POST['type'])){
-    if ($_POST['type'] == 'insert'){
-      //$text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
-      // remove single quotes
-      $text = str_replace('\'', '', $_POST['request']);
-      $sname = getSchool($_POST['school'], $mysqlconnection);
-      $query = "INSERT INTO school_requests (request, school, school_name, submitted, sxol_etos) VALUES ('$text', '". $_POST['school']."','".$sname."', NOW(), $sxol_etos)";
-      $result = mysqli_query($mysqlconnection, $query);
-      $ret = $result ? 'Επιτυχής καταχώρηση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την καταχώρηση';
-      echo "<h1>$ret</h1>";//mb_convert_encoding($ret, "utf-8", "iso-8859-7");  
-    } 
-    // else {
-    //   $text = mb_convert_encoding($_POST['comment'], "iso-8859-7", "utf-8");
-    //   $query = "UPDATE school_requests SET comment = '$text',done = ".$_POST['done']." WHERE id=".$_POST['id'];
-    //   $result = mysqli_query($mysqlconnection, $query);
-    //   $ret = $result ? 'Επιτυχής ενημέρωση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση';
-    //   echo mb_convert_encoding($ret, "utf-8", "iso-8859-7");
-    // }
-    ?>
-    <meta http-equiv="refresh" content="2; URL=status.php">
-    <?php
-    die();
-  }
+  
 ?>
 <html>
   <head>
@@ -159,6 +153,26 @@
   </head>
   <body> 
     <center>
+    <?php
+      if (isset($_POST['type'])){
+        if ($_POST['type'] == 'insert'){
+          //$text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
+          // remove single quotes
+          $text = str_replace('\'', '', $_POST['request']);
+          $sname = getSchool($_POST['school'], $mysqlconnection);
+          $query = "INSERT INTO school_requests (request, school, school_name, submitted, sxol_etos) VALUES ('$text', '". $_POST['school']."','".$sname."', NOW(), $sxol_etos)";
+          $result = mysqli_query($mysqlconnection, $query);
+          $ret = $result ? 'Επιτυχής καταχώρηση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την καταχώρηση';
+          echo "<h1>$ret</h1>";//mb_convert_encoding($ret, "utf-8", "iso-8859-7");
+          // log to database
+          log2db($mysqlconnection, $_GET['code'], $sname, 2);
+        } 
+        ?>
+        <meta http-equiv="refresh" content="2; URL=status.php">
+        <?php
+        die();
+      }
+    ?>
     <IMG src="../images/logo.png" class="applogo">
         <h1><?= getParam('foreas',$mysqlconnection);?> <br> Πληροφοριακό σύστημα "Πρωτέας"</h1>
     <?php

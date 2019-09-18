@@ -11,6 +11,7 @@ $table_log="logon";
 $table_pr="praxi";
 $table_opt="params";
 $table_req="school_requests";
+$table_slog="school_log";
 
 $GApiKey="";
 ?>

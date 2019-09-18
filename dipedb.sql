@@ -1091,3 +1091,17 @@ ALTER TABLE `school_requests`
 --
 ALTER TABLE `school_requests`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Á/Á';
+
+CREATE TABLE IF NOT EXISTS `school_log` (
+  `id` int(11) NOT NULL,
+  `school_id` int(11) NOT NULL,
+  `school` varchar(100) NOT NULL,
+  `action` text NOT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `school_log`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `school_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
