@@ -46,6 +46,7 @@ var thegrid = new drasticGrid('grid1', {
     //colwidth: "300",
     pagelength:25,
     columns: [
+      {name: 'id', displayname:'Α/Α', width: 30},
       {name: 'name', displayname:'Όνομα', width: 300},
       {name: 'ya', displayname:'Υπουργική Απόφαση', width: 150},
       {name: 'ada', displayname:'Α.Δ.Α. Υ.Α.', width: 150},
