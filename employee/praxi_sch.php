@@ -78,10 +78,10 @@
     mysqli_query($mysqlconnection, "SET NAMES 'greek'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		if ($all)
-      $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch, p.name as praxi from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
+      $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch, p.name as praxi, code from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
         join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
     else
-      $query = "select distinct s.name as sch, s.id as schid from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
+      $query = "select distinct s.name as sch, s.id as schid, code from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
         join school s on s.id = y.yphrethsh where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY sch ASC";
     //echo $query;
 		$result = mysqli_query($mysqlconnection, $query);
@@ -90,9 +90,9 @@
     echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
     if ($all)
-        echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Σχολείο</th><th>Πράξη</th></tr></thead><tbody>";
+        echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Κωδ.Σχολείου</th><th>Σχολείο</th><th>Πράξη</th></tr></thead><tbody>";
     else
-        echo "<thead><tr><th>Σχολείο</th></tr></thead><tbody>";
+        echo "<thead><tr><th>Κωδ.Σχολείου</th><th>Σχολείο</th></tr></thead><tbody>";
 
     while ($row = mysqli_fetch_array($result))	
     {
@@ -101,12 +101,13 @@
 		  $surname = $row['surname'];
       $sch = $row['sch'];
       $schid = $row['schid'];
-		  $praxi = $row['praxi'];
+      $praxi = $row['praxi'];
+      $code = $row['code'];
 		                
       if ($all)
-          echo "<tr><td><a href=\"ektaktoi.php?id=$id&op=view\">$surname $name</a></td><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td><td>$praxi</td></tr>";
+          echo "<tr><td><a href=\"ektaktoi.php?id=$id&op=view\">$surname $name</a></td><td>$code</td><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td><td>$praxi</td></tr>";
       else
-          echo "<tr><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td></tr>";
+          echo "<tr><td>$code</td><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td></tr>";
       $i++;
     }
 		echo "</tbody></table>";
