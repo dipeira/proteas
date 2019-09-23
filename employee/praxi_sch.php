@@ -78,7 +78,7 @@
     mysqli_query($mysqlconnection, "SET NAMES 'greek'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
 		if ($all)
-      $query = "select s.id as schid, e.id, e.surname, e.name, s.name as sch, p.name as praxi, code from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
+      $query = "select s.id as schid, e.afm, e.hm_anal, e.id, e.surname, e.name, s.name as sch, p.name as praxi, code from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
         join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
     else
       $query = "select distinct s.name as sch, s.id as schid, code from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
@@ -90,7 +90,7 @@
     echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
     if ($all)
-        echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Κωδ.Σχολείου</th><th>Σχολείο</th><th>Πράξη</th></tr></thead><tbody>";
+        echo "<thead><tr><th>ΑΦΜ</th><th>Ονοματεπώνυμο</th><th>Κωδ.Σχολείου</th><th>Σχολείο</th><th>Ημ.Ανάληψης</th><th>Πράξη</th></tr></thead><tbody>";
     else
         echo "<thead><tr><th>Κωδ.Σχολείου</th><th>Σχολείο</th></tr></thead><tbody>";
 
@@ -98,14 +98,16 @@
     {
 		  $id = $row['id'];
 		  $name = $row['name'];
-		  $surname = $row['surname'];
+      $surname = $row['surname'];
+      $afm = $row['afm'];
+      $anal = date( 'd/m/Y', strtotime($row['hm_anal']));
       $sch = $row['sch'];
       $schid = $row['schid'];
       $praxi = $row['praxi'];
       $code = $row['code'];
 		                
       if ($all)
-          echo "<tr><td><a href=\"ektaktoi.php?id=$id&op=view\">$surname $name</a></td><td>$code</td><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td><td>$praxi</td></tr>";
+          echo "<tr><td>$afm</td><td><a href=\"ektaktoi.php?id=$id&op=view\">$surname $name</a></td><td>$code</td><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td><td>$anal</td><td>$praxi</td></tr>";
       else
           echo "<tr><td>$code</td><td><a href=\"../school/school_status.php?org=$schid\">$sch</a></td></tr>";
       $i++;
@@ -121,7 +123,7 @@
 		ob_end_flush();
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
-		echo "<input type='hidden' name = 'data' value='".  htmlspecialchars($page, ENT_QUOTES)."'>";
+		echo "<input type='hidden' name = 'data' value='".  $page."'>";
     echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
     echo "&nbsp;&nbsp;&nbsp;";
     echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";

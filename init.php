@@ -61,6 +61,9 @@ if ($_SESSION['auth'])
         die();
     }
     else {
+      // set higher time limit to avoid timeouts
+      set_time_limit(180);
+      
       $sql = "CREATE DATABASE IF NOT EXISTS $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
       $db->exec($sql);
       
