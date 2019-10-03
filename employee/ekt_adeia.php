@@ -68,8 +68,18 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
   </head>
   <body>
     <center>
-    <h2>Καταχώρηση άδειας</h2>
         <?php
+        switch ($_GET['op']) {
+          case 'add':
+            echo "<h2>Προσθήκη άδειας αναπληρωτή</h2>";
+            break;
+          case 'view':
+            echo "<h2>Προβολή άδειας αναπληρωτή</h2>";
+            break;
+          case 'edit':
+            echo "<h2>Επεξεργασία άδειας αναπληρωτή</h2>";
+            break;
+        }
         if (!isset($_GET['sxol_etos'])) {
             echo "<h2>Σφάλμα: Παρακαλώ δώστε σχολικό έτος.</h2>";
             echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
@@ -371,14 +381,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $query1 = "INSERT INTO adeia_ekt_deleted SELECT e.* FROM adeia_ekt e WHERE id =".$_GET['adeia'];
             $result1 = mysqli_query($mysqlconnection, $query1);
                 $query1 = "INSERT INTO adeia_del_log (adeia_id, userid, ektaktos) VALUES (".$_GET['adeia'].", ".$_SESSION['userid'].", '1')";
-                echo $query1;
             $result1 = mysqli_query($mysqlconnection, $query1);
                 $query = "DELETE from adeia_ekt where id=".$_GET['adeia'];
             $result = mysqli_query($mysqlconnection, $query);
             // Copies the deleted row to employee)deleted
 
             if ($result) {
-                echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
+                echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.<br>";
             } else {
                 echo "Η διαγραφή απέτυχε...";
             }
