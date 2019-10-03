@@ -714,6 +714,7 @@ elseif ($_GET['op']=="view") {
     $myCalendar->writeScript();
     echo "<br>";
     echo "<input type='hidden' name='id' value=$id>";
+    echo "<input type='hidden' name='proyp_not' value=$proyp_not>";
     echo "<INPUT TYPE='submit' VALUE='Υπολογισμός'>";
     echo "<br>";
     echo "</form>";

@@ -27,8 +27,7 @@
   $year = substr($sxol_etos, 0, 4);
   $lastday = $year . '-12-31';
   $d1 = strtotime($lastday);
-  
-  $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr - $proyp_not;
+  $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr - $_POST['proyp_not'];
   if ($result<=0) {
     die("Λάθος ημερομηνία");
   }
