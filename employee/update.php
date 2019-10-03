@@ -107,7 +107,7 @@ if (isset($_POST['action']))
 {
     // check if record exists by checking am AND surname
     $surn = mb_convert_encoding($surname, "iso-8859-7", "utf-8");
-    $query = "select am,surname from employee WHERE am='$am' AND surname = '$surn'";
+    $query = "select afm,surname from employee WHERE afm='$afm' AND surname = '$surn'";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result))
     {

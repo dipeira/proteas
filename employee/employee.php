@@ -65,8 +65,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 rules: {
                     name: "required", surname: "required", 
                     afm: {required: true, digits: true, minlength: 8}, 
-                    am: {required: true, digits: true}, klados: "required", vathm: "required", 
-                    mk: {required: true, digits: true}, org: "required",yphr:"required"
+                    klados: "required", vathm: "required", 
+                    mk: {required: true, digits: true}, org: "required", yphr:"required"
                 },
                 messages: {
                     name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρη τιμή", am: "Παρακαλώ δώστε έγκυρη τιμή", 
