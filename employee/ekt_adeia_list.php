@@ -37,57 +37,60 @@
             $sxol_etos = $_GET['sxol_etos'];
         }
         $query = "SELECT * from adeia_ekt where emp_id=".$_GET['id']." AND sxoletos = $sxol_etos";
-		$result = mysqli_query($mysqlconnection, $query);
-		$num=mysqli_num_rows($result);
-		if (!$num)
+        $result = mysqli_query($mysqlconnection, $query);
+        $num=mysqli_num_rows($result);
+        if (!$num)
         {
-            echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
-            $emp_id = $_GET['id'];
-            if ($usrlvl < 2)
-                echo "<br><span title=\"Προσθήκη ¶δειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\"><big>Προσθήκη ¶δειας</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
-            exit;
+          echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
+          $emp_id = $_GET['id'];
+          if ($usrlvl < 2)
+              echo "<br><span title=\"Προσθήκη ¶δειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\"><big>Προσθήκη ¶δειας</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
+          exit;
         }
-                
-		
-                echo "<br>";
-		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";	
-		echo "<thead><tr>";
-		echo "<th>ID</th><th>Τύπος</th><th>Αρ.Πρωτ.</th><th>Ημ.Αίτησης</th><th>Ημέρες</th><th>Ημ.Έναρξης</th><th>Ημ.Λήξης</th>";
-		echo "</tr></thead>";
-                echo "<tbody>";
-                
-                while ($i<$num)
-                {
-                    $id = mysqli_result($result, $i, "id");
-                    $emp_id = mysqli_result($result, $i, "emp_id");
-                    $type = mysqli_result($result, $i, "type");
-                    $prot = mysqli_result($result, $i, "prot");
-                    $date = mysqli_result($result, $i, "date");
-                    $days = mysqli_result($result, $i, "days");
-                    $start = mysqli_result($result, $i, "start");
-                    $finish = mysqli_result($result, $i, "finish");
-                    $comments = mysqli_result($result, $i, "comments");
-                    $sxol_etos = mysqli_result($result, $i, "sxoletos");
-                                        
-                    $query1 = "select type from adeia_ekt_type where id=$type";
-                    $result1 = mysqli_query($mysqlconnection, $query1);
-                    $typewrd = mysqli_result($result1, 0, "type");
-                    if ($usrlvl < 2)
-                        echo "<tr><td>$id<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
-                    else
-                        echo "<tr><td>$id</td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
-                    $i++;
-                }
+                    
+        echo "<br>";
+        echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";	
+        echo "<thead><tr>";
+        echo "<th>Ενέργεια</th><th>Τύπος</th><th>Αρ.Πρωτ.</th><th>Ημ.Αίτησης</th><th>Ημέρες</th><th>Ημ.Έναρξης</th><th>Ημ.Λήξης</th>";
+        echo "</tr></thead>";
+        echo "<tbody>";
+        
+        while ($i<$num)
+        {
+          $id = mysqli_result($result, $i, "id");
+          $emp_id = mysqli_result($result, $i, "emp_id");
+          $type = mysqli_result($result, $i, "type");
+          $prot = mysqli_result($result, $i, "prot");
+          $date = mysqli_result($result, $i, "date");
+          $days = mysqli_result($result, $i, "days");
+          $start = mysqli_result($result, $i, "start");
+          $finish = mysqli_result($result, $i, "finish");
+          $comments = mysqli_result($result, $i, "comments");
+          $sxol_etos = mysqli_result($result, $i, "sxoletos");
+                              
+          $query1 = "select type from adeia_ekt_type where id=$type";
+          $result1 = mysqli_query($mysqlconnection, $query1);
+          $typewrd = mysqli_result($result1, 0, "type");
+          echo "<tr><td>";
+          echo "<span title='Προβολή'><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;&nbsp;";
+          echo "<span title='Επεξεργασία'><a href='ekt_adeia.php?adeia=$id&op=edit&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/edit_action.png'></a></span>&nbsp;&nbsp;";
+          if ($usrlvl < 2){
+            echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+          }
+          echo "</td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
+          $i++;
+        }
 
         echo "</tbody>";
-                // add absense only on current year
-                if ($usrlvl < 2 && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
-                    echo "<tr><td colspan=8><span title=\"Προσθήκη ¶δειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">Προσθήκη ¶δειας<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
-                echo "</table>";
-		
-		echo "</body>";
-		echo "</html>";	
+        // add absense only on current year
+        if ($usrlvl < 2 && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
+            echo "<tr><td colspan=8><span title=\"Προσθήκη ¶δειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">Προσθήκη ¶δειας<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
+        echo "</table>";
+        
+        echo "</body>";
+        echo "</html>";	
 
-
-    mysqli_close($mysqlconnection);
-?>
+        mysqli_close($mysqlconnection);
+      ?>
+  </body>
+</html>

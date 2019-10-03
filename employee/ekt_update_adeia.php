@@ -36,18 +36,20 @@
   //$comments = mb_convert_encoding($_POST['comments'], "iso-8859-7", "utf-8");
   
 // Elegxoi:
-  if (!$prot)
-      die('Παρακαλώ εισάγετε αριθμό πρωτοκόλλου');
+  // if (!$prot)
+  //     die('Παρακαλώ εισάγετε αριθμό πρωτοκόλλου');
   
-  if (!$prot)
-  {
-    $qry = "SELECT prot FROM adeia WHERE prot = $prot";
-    $res = mysqli_query($mysqlconnection, $qry);
-    if (mysqli_num_rows($res)>0)
-        die('Η άδεια με αυτόν τον αρ.πρωτ. έχει ήδη καταχωρηθεί...');
-  }
+  // if ($prot)
+  // {
+  //   $qry = "SELECT prot FROM adeia WHERE prot = $prot";
+  //   $res = mysqli_query($mysqlconnection, $qry);
+  //   if (mysqli_num_rows($res)>0)
+  //       die('Η άδεια με αυτόν τον αρ.πρωτ. έχει ήδη καταχωρηθεί...');
+  // }
   if (!$days)
-      die('Παρακαλώ εισάγετε αριθμό ημερών');
+      die('Σφάλμα: Παρακαλώ εισάγετε αριθμό ημερών');
+  if ($start == $finish || $start > $finish)
+      die('Σφάλμα: Η ημερομηνία λήξης πρέπει να είναι μεταγενέστερη της ημερομηνίας έναρξης');      
   
 // $_POST['action']=1 for adding records  
   if (isset($_POST['action']))
