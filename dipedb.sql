@@ -1077,7 +1077,8 @@ CREATE TABLE `school_requests` (
   `submitted` datetime NOT NULL COMMENT 'Υποβλήθηκε',
   `handled` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT 'Διεκπεραιώθηκε στις',
   `school_name` text NOT NULL COMMENT 'Όνομα σχολείου',
-  `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος'
+  `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος',
+  `hidden` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

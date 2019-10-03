@@ -37,8 +37,8 @@ elseif ($stat == 1) {
 }
 $stat_radio = $stat == 2 ? $stat_radio = 2 : $stat;
 
-$query      = "SELECT id, school, school_name, request, comment, done, submitted, sxol_etos FROM school_requests ";
-$query      .= isset ($status) ? "WHERE done = $status" : '';
+$query      = "SELECT id, school, school_name, request, comment, done, submitted, sxol_etos FROM school_requests WHERE hidden = 0 ";
+$query      .= isset ($status) ? "AND done = $status" : '';
 $query      .= " ORDER BY submitted DESC";
 
 $Paginator  = new Paginator( $conn, $query );

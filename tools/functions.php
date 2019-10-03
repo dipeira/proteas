@@ -2019,16 +2019,29 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
                 event.preventDefault();
 				        // do other stuff for a valid form
                 var id = event.target.id;
-                var commentid = 'comment'+id;
-                var comment = $('#'+commentid).val();
-                var doneid = 'done'+id;
-                var done = $('#'+doneid).val();
-                var theData = {
-                    id: id,
-                    comment: comment,
-                    done: done,
-                    type: 'update'
-                };
+                var name = event.target.name;
+                if (name == 'del'){
+                  var conf = confirm('Είστε σίγουροι;\nΠατήστε ΟΚ για τη διαγραφή του αιτήματος');
+                  if (conf == true){
+                    var theData = {
+                      id: id,
+                      type: 'delete'
+                    }
+                  } else {
+                    return;
+                  }
+                } else {
+                  var commentid = 'comment'+id;
+                  var comment = $('#'+commentid).val();
+                  var doneid = 'done'+id;
+                  var done = $('#'+doneid).val();
+                  var theData = {
+                      id: id,
+                      comment: comment,
+                      done: done,
+                      type: 'update'
+                  };
+                }
                 $.post('postrequest.php', theData, function(data) {
                     alert(data);
                     location.reload(true);
@@ -2038,7 +2051,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
         </script>
     <?php
     }
-    $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos ORDER BY submitted DESC";
+    $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos AND hidden = 0 ORDER BY submitted DESC";
     $res = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($res) > 0) {
         echo !$auth ? "<h1>Αιτήματα Σχολικής Μονάδας</h1>" :
@@ -2075,7 +2088,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "<td>";
             echo $row['done'] ? date("d-m-Y H:m:s", strtotime($row['handled'])) : '';
             echo "</td>";
-            echo $auth ? "<td><input id='".$row['id']."' class='submit-btn' type='submit' value='Υποβολή'></td>" : '';
+            echo $auth ? "<td><input id='".$row['id']."' class='submit-btn' type='submit' value='Υποβολή'><br><input name='del' id='".$row['id']."' class='submit-btn btn-red' type='submit' value='Διαγραφή'></td>" : '';
             echo $auth ? "<input type='hidden' name = 'id' value='".$row['id']."'>" : '';
             echo $auth ? "<input type='hidden' name = 'type' value='update'>" : '';
             echo "</tr>";
