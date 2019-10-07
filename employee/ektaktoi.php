@@ -432,7 +432,7 @@ elseif ($_GET['op']=="view")
         }
         echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
                         
-        echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>$comments</td></tr>"; 
+        echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br($comments)."</td></tr>"; 
         echo "<tr><td>Υποχρεωτικό ωράριο</td><td colspan='3'>$wres</td></tr>";
         
         // check if multiple schools
@@ -461,7 +461,7 @@ elseif ($_GET['op']=="view")
                 $date_apox = date ("d-m-Y",  strtotime($hm_apox));
                 echo "<tr><td>Ημ/νία Αποχώρησης</td><td colspan=3>$date_apox</td>";
         }
-        echo "<tr><td>Μετακινήσεις</td><td colspan=3>$metakinhsh</td></tr>";
+        echo "<tr><td>Μετακινήσεις</td><td colspan=3>".nl2br($metakinhsh)."</td></tr>";
         echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
         echo "<tr><td>Πραξη</td><td colspan=3>";
         echo $sxoletos ? 

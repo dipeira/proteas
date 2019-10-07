@@ -2069,9 +2069,9 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
         while ($row = mysqli_fetch_array($res)){
             echo "<tr>";
             echo "<td>".$row['id']."</td>";
-            echo "<td>".$row['request']."</td>";
+            echo "<td>".nl2br($row['request'])."</td>";
             echo $auth ? "<td><textarea id='comment".$row['id']."' name='comment' rows='10' cols='80'>".$row['comment']."</textarea></td>" :
-                "<td>".$row['comment']."</td>";
+                "<td>".nl2br($row['comment'])."</td>";
             echo "<td>";
             if ($auth) {
                 echo "<select id='done".$row['id']."'>";

@@ -640,7 +640,7 @@ elseif ($_GET['op']=="view") {
     echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
     //
     echo "<tr><td>Ώρες υποχρ. ωραρίου:</td><td>$wres</td><td>e-mail:</td><td><a href=\"mailto:$email\">$email</a></td></tr>";
-    echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".stripslashes($comments)."</td></tr>"; 
+    echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br(stripslashes($comments))."</td></tr>"; 
     echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
     echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
     echo "</td><td></td><td></td></tr>";
