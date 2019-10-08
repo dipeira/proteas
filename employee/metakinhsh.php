@@ -134,6 +134,7 @@
       $data['apofasi'] = $emp_data['apofasi'];
       $thema = get_diavgeia_subject($data['ada']);
       $data['thema'] = $thema;
+      $data['ada_apof'] = $emp_data['ada_apof'];
       $thema_apof = get_diavgeia_subject($emp_data['ada_apof']);
       $data['thema_apof'] = $thema_apof;
     }
