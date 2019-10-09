@@ -668,9 +668,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $sxol_etos = $_GET['sxoletos'];
         }
         disp_school($sch, $sxol_etos, $mysqlconnection);
-        if ($_SESSION['user'] === 'pispe'){
-            display_school_requests($sch, $sxol_etos, $mysqlconnection);
-        }
+        
         //Υπηρετούν με θητεία
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
         $result = mysqli_query($mysqlconnection, $query);
