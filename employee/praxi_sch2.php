@@ -52,7 +52,7 @@
       <input type="radio" name="type" value="1" <?= $type == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Δ.Σ.
       <input type="radio" name="type" value="2" <?= $type == 2 ? 'checked' : ''?> onchange="this.form.submit()"> Νηπιαγωγεία
     </form>
-    <?
+    <?php
     $sql = "select DISTINCT s.id,s.code,s.name as sname,p.name as pname from school s join yphrethsh_ekt y on y.yphrethsh = s.id join ektaktoi e on e.id = y.emp_id join praxi p on e.praxi = p.id $wheretype ORDER BY s.name ASC";
 
     $result = mysqli_query($mysqlconnection, $sql);
