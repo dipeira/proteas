@@ -35,7 +35,7 @@
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
         
     echo "<h2>Εκπαιδευτικοί και Σχολεία ανά Πράξη</h2>";
-    echo "<p><small><a href='praxi_sch2.php'>Για Πράξεις ανά Σχολείο κάντε κλικ εδώ</a></small></p>";
+    //echo "<p><small><a href='praxi_sch2.php'>Για Πράξεις ανά Σχολείο κάντε κλικ εδώ</a></small></p>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<form action='' method='POST' autocomplete='off'>";
     
