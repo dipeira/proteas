@@ -306,7 +306,9 @@ else {
         echo "</td></tr>";
         echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
         echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\"></td></tr>";
+        echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\">";
+        echo "&nbsp;&nbsp;&nbsp;";
+        echo "<INPUT TYPE='button' VALUE='Πράξεις ανά Σχολείο' onClick=\"parent.location='praxi_sch2.php'\"></td></tr>";
         echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αναπληρωτές προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
         echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
         echo "</table>\n";
