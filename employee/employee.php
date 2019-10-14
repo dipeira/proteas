@@ -251,7 +251,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             
     $().ready(function() {
         $("#adeia").click(function() {
-            var MyVar = <?php echo $id; ?>;
+            var MyVar = <?php echo $id ? $id : 0; ?>;
             $("#adeies").load("adeia_list.php?id="+ MyVar );
         });
     });

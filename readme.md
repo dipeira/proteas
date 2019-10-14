@@ -33,6 +33,7 @@
 - [PHPWord](https://github.com/PHPOffice/PHPWord)
 - [SwiftMailer](https://swiftmailer.symfony.com/)
 - [Simple PHP/MySQL authentication/login class](http://www.emirplicanic.com/php/simple-phpmysql-authentication-class)
+- [Paginator](https://code.tutsplus.com/tutorials/how-to-paginate-data-with-php--net-2928)
 
 Το σύστημα βρίσκεται υπό συνεχή ανάπτυξη, ανάλογα με τις ανάγκες της Δ/νσης Π.Ε. Ηρακλείου.
 

@@ -34,6 +34,7 @@
             <li><a href="https://github.com/PHPOffice/PHPWord">PHPWord</a></li>
             <li><a href="https://swiftmailer.symfony.com/">SwiftMailer</a></li>
             <li><a href="http://www.emirplicanic.com/php/simple-phpmysql-authentication-class">Simple PHP/MySQL authentication/login class</a></li>
+            <li><a href="https://code.tutsplus.com/tutorials/how-to-paginate-data-with-php--net-2928">Paginator</a></li>            
         </ul>
         <br>
         <p>Επικοινωνία με το δημιουργό: sugarv@sch.gr</p>
