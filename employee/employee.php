@@ -542,7 +542,7 @@ elseif ($_GET['op']=="view") {
     // more data ends
 
     echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
-    echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
+    echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
     $hm_mk = date('d-m-Y', strtotime($hm_mk));
     if ($hm_mk > "01-01-1970") {
         echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td></tr>";

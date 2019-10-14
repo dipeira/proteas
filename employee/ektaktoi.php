@@ -405,7 +405,7 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
 
         echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
-        echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id,$mysqlconnection)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
+        echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id,$mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
         echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
         echo "<td colspan=3><div class=\"slidingDiv\">";
         echo "Τηλ.: $stathero - $kinhto<br>";

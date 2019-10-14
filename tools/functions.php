@@ -15,13 +15,15 @@ function mysqli_result($res,$row=0,$col=0)
     }
     return false;
 }
-function getKlados($id,$conn)
+function getKlados($id,$conn,$full = false)
 {
-    $query = "SELECT perigrafh from klados where id=".$id;
+    $query = "SELECT perigrafh,onoma from klados where id=".$id;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
     //    die('Could not query:' . mysqli_error());
-    return mysqli_result($result, 0);
+    $row = mysqli_fetch_assoc($result);
+    return $full ? $row['perigrafh'] . ' (' . $row['onoma'] . ')' :
+      "<span title='".$row['onoma']."'>".$row['perigrafh']."</span>";
 }
     
 function getSchool($id,$conn)
