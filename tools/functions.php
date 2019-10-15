@@ -23,7 +23,7 @@ function getKlados($id,$conn,$full = false)
     //    die('Could not query:' . mysqli_error());
     $row = mysqli_fetch_assoc($result);
     return $full ? $row['perigrafh'] . ' (' . $row['onoma'] . ')' :
-      $row['onoma'];
+      $row['perigrafh'];
       //"<span title='".$row['onoma']."'>".$row['perigrafh']."</span>";
 }
     
