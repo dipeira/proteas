@@ -26,9 +26,9 @@
 			</li>
 
       <li class="sub">
-				<a href="<?=SITE_ROOT?>/school/school_list.php?type=0">Σχολειο</a>
+				<a href="<?=SITE_ROOT?>/school/school.php">Σχολειο</a>
 				<ul>
-					<li><a href="<?=SITE_ROOT?>/school/school_list.php?type=0">Λίστα</a></li>
+					<li><a href="<?=SITE_ROOT?>/school/school.php">Λίστα</a></li>
 					<li><a href="<?=SITE_ROOT?>/school/school_status.php">Καρτέλα</a></li>
 					<li><a href="<?=SITE_ROOT?>/school/school_edit.php">Επεξεργασία</a></li>
 				</ul>

@@ -52,8 +52,9 @@ else {
     </script>
     
   </head>
-    <?php require '../etc/menu.php'; ?>
+    
   <body> 
+  <?php require '../etc/menu.php'; ?>
 <div>
 <?php
     $usrlvl = $_SESSION['userlevel'];
@@ -270,10 +271,9 @@ else {
         echo "</tbody>\n";
         if ($usrlvl < 2) {
             echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</a></span>";
-            echo "<tr><td colspan=7><span title=\"Τοποθετήσεις αναπληρωτών\"><a href=\"ektaktoi_top.php\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Τοποθετήσεις αναπληρωτών</a></span>";
         }        
         if ($usrlvl == 0) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"../tools/ektaktoi_import.php\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Μαζική εισαγωγή αναπληρωτών εκπ/κών από αρχείο excel (.xls)</a></span>";
+            echo "<tr><td colspan=7><span title=\"Προσθήκη\"></span>";
         }
         echo "<tr><td colspan=7 align=center>";
         $prevpg = $curpg-1;

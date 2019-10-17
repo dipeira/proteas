@@ -9,7 +9,7 @@
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     -->
     
-        <script type="text/javascript" src="../js/jquery-1.2.1.pack.js"></script>
+        <script type="text/javascript" src="../js/jquery.js"></script>
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">    
     $(document).ready(function() { 
