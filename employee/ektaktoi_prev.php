@@ -95,10 +95,10 @@ else
 
                 
         $query = "SELECT * FROM ektaktoi_old where sxoletos=" . $sxoletos.' ';
-        
+        echo "<center>";
 
         if (isset($sxoletos)) {
-            echo "<h3>Αναπληρωτές σχολικού έτους: " . substr($sxoletos, 0, 4) . '-' . substr($sxoletos, 4, 2) ."</h3>";
+            echo "<h2>Αναπληρωτές σχολικού έτους: " . substr($sxoletos, 0, 4) . '-' . substr($sxoletos, 4, 2) ."</h2>";
         }
                 
         $klpost = 0;
@@ -188,7 +188,7 @@ else
             }
             echo "</select><br><br>";
         }
-        echo "<center>";
+        
     
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><form id='src' name='src' action='ektaktoi_prev.php?sxoletos=$sxoletos' method='POST'>\n";

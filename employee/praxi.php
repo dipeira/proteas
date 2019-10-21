@@ -34,6 +34,7 @@ $pr_labels = implode($pr_labels, ',');
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
+<center>
 <h2>Διαχείριση Πράξεων</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
@@ -69,7 +70,7 @@ var thegrid = new drasticGrid('grid1', {
     // }
 });
 </script>
-
+</center>
 <table class="imagetable stable" border="1">
     <tr><th colspan="2">Επεξήγηση</th></tr>
     <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>

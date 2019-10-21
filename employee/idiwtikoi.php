@@ -182,7 +182,7 @@ $idiwtikoi = true;
         }
     
         echo "<center>";  
-        echo "<h3>Ιδιωτικοί εκπαιδευτικοί</h3>";
+        echo "<h2>Ιδιωτικοί εκπαιδευτικοί</h2>";
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead>";
         echo "<tr><th>Ενέργεια</th>\n";

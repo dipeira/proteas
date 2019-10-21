@@ -107,12 +107,14 @@
     echo "<h2>Μόνιμοι</h2>";
     print_table($result, $num, $mysqlconnection);
     
-    echo "<h2>Αναπληρωτές</h2>";
+    
     
     $result = mysqli_query($mysqlconnection, $query2);
     $num = mysqli_num_rows($result);
-
-    print_table($result, $num, $mysqlconnection, false);
+    if ($num){
+      echo "<h2>Αναπληρωτές</h2>";
+      print_table($result, $num, $mysqlconnection, false);
+    }
 
     $page = ob_get_contents(); 
     $_SESSION['page'] = $page;

@@ -12,6 +12,9 @@
         <style type="text/css" title="currentStyle">
             /* @import "../css/demo_page.css"; */
             @import "../js/datatables/datatables.css.min";
+            .dataTables_wrapper {
+              position: initial;
+            }
         </style>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
@@ -34,7 +37,7 @@
     <body id="dt_example">
     <?php require '../etc/menu.php'; ?>
     <center>
-      <h2>Λίστα Σχολείων</h2>
+      <h2>Σχολεία</h2>
     </center>
         <div id="container">
 <?php
@@ -50,7 +53,7 @@
     $num=mysqli_num_rows($result);
     //$i=0;
 ?>
-<div id="demo">
+<div id="sch-table">
 <table cellpadding="0" cellspacing="0" border="1" id="school-table" class='imagetable' style='width:90%'>
     <thead>
       <tr>
