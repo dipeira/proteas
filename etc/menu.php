@@ -1,23 +1,36 @@
+<a href="/"><IMG src="<?=SITE_ROOT?>/images/logo.png" class="applogo"></a>
 <div id="main-menu">
 		<ul id="navigation">
 			<li><a href="<?=SITE_ROOT?>/index.php">Αρχικη</a></li>
 			
-			<li class="sub">
-				<a href="#">Πινακας</a>
+      <li class="sub">
+        <a href="<?=SITE_ROOT?>/index.php">Μονιμοι</a>
 				<ul>
-					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Αναπληρωτές</a></li>
-					<li><a href="<?=SITE_ROOT?>/employee/praxi.php">Διαχείριση πράξεων</a></li>
+          <li><a href="<?=SITE_ROOT?>/index.php">Λίστα</a></li>
 					<li><a href="<?=SITE_ROOT?>/employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
-					<li><a href="<?=SITE_ROOT?>/school/school_edit.php">Επεξεργασία Σχολείου</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
 				</ul>
 			</li>
-			
-			<li class="sub">
-				<a href="#">Εργαλεια</a>
+
+      <li class="sub">
+				<a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Αναπληρωτες</a>
 				<ul>
-					<li><a href="<?=SITE_ROOT?>/school/school_status.php">Καρτέλα Σχολείου</a></li>
-					<li><a href="<?=SITE_ROOT?>/employee/apof_ad.php">Αποφάσεις Αδειών</a></li>						
-					<li><a href="<?=SITE_ROOT?>/etc/stats.php">Στατιστικά</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Λίστα</a></li>
+          <li><a href="<?=SITE_ROOT?>/employee/praxi.php">Διαχείριση πράξεων</a></li>
+          <li><a href="<?=SITE_ROOT?>/employee/praxi_sch.php">Εκπαιδευτικοί & Σχολεία ανά Πράξη</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_prev.php">Προηγούμενου έτους</a></li>
+          <li>&nbsp;&nbsp;- - - - - - - - - - - - -</li>
+          <li><a href="<?=SITE_ROOT?>/tools/ektaktoi_import.php">Μαζική εισαγωγή</a></li>
+          <li><a href="<?=SITE_ROOT?>/employee/ektaktoi_top.php">Μαζική τοποθέτηση</a></li>
+				</ul>
+			</li>
+
+      <li class="sub">
+				<a href="<?=SITE_ROOT?>/school/school.php">Σχολειο</a>
+				<ul>
+					<li><a href="<?=SITE_ROOT?>/school/school.php">Λίστα</a></li>
+					<li><a href="<?=SITE_ROOT?>/school/school_status.php">Καρτέλα</a></li>
+					<li><a href="<?=SITE_ROOT?>/school/school_edit.php">Επεξεργασία</a></li>
 				</ul>
 			</li>
 		 
@@ -35,6 +48,7 @@
 					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
 					<li><a href="<?=SITE_ROOT?>/employee/absents.php">Εκπ/κοί σε άδεια</a></li>
 					<li><a href="<?=SITE_ROOT?>/etc/check_wres.php">Συμπλήρωση υποχρ.ωραρίου</a></li>
+          <li><a href="<?=SITE_ROOT?>/etc/stats.php">Στατιστικά</a></li>
 		  	</ul>
 		 	</li>
                  

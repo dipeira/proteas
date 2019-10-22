@@ -636,7 +636,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     echo "	</table>";
     echo "	<input type='submit' value='Αναζήτηση'>";
     //echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='school.php'\">";
     echo "	</form>";
     echo "</div>";
     

@@ -19,7 +19,6 @@ else {
 ?>
 <html>
   <head>
-    <a href="/"><IMG src="images/logo.png" class="applogo"></a>
     <LINK href="css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
     <title>Πρωτέας</title>
@@ -225,7 +224,7 @@ if ($num_record == 1 && $num_record1 > 1) {
     $url = "employee/employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
 }
-
+echo "<center><h2>Μόνιμοι Εκπαιδευτικοί</h2></center>";
 if ($logged) {
   $se = getParam('sxol_etos', $mysqlconnection);
   $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
@@ -317,7 +316,7 @@ if ($num == 0) {
     echo "</tbody>\n";
     //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
 if ($usrlvl < 2) {
-    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?id=$id&op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
+    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
 }        
     echo "<tr><td colspan=7 align=center>";
     $prevpg = $curpg-1;
