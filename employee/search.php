@@ -201,7 +201,7 @@
     echo "</select>";
     echo "</td><td colspan=3></td></tr>";
     
-    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";	
+    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν ανήκουν στη Δ/νση;</td></tr>";	
 		echo "<tr><td colspan=6><input type='checkbox' name = 'or'>Να ισχύει ΤΟΥΛΑΧΙΣΤΟΝ ΕΝΑ από τα παραπάνω κριτήρια (λογικό OR);</td></tr>";	
 		
 		echo "	</table>";

@@ -65,7 +65,7 @@ if (!isset($_POST['outsiders']) && !$is_anapl) {
   if ($flag) {
     $query .= $op;
   }
-  $query .= " (sx_yphrethshs NOT IN (388, 394) AND sx_organikhs NOT IN (388,394))";
+  $query .= " (sx_organikhs NOT IN (388,394))";
   $flag = 1;
 }
 
@@ -258,7 +258,8 @@ if ($flag) {
         echo "<BR><p>Κανένα αποτέλεσμα...</p>";
     } else
     {
-        echo "<p>Πλήθος εγγραφών που βρέθηκαν: $num<p>";
+        $qr = str_replace("'", "", $query);
+        echo "<p>Πλήθος εγγραφών που βρέθηκαν: <span title='$qr'>$num</span><p>";
         $num1=$num;
         $num2=$num;
         echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=iso8859-7\">";
