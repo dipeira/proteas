@@ -1,94 +1,94 @@
 <a href="/"><IMG src="<?=SITE_ROOT?>/images/logo.png" class="applogo"></a>
 <div id="main-menu">
 		<ul id="navigation">
-			<li><a href="<?=SITE_ROOT?>/index.php">Αρχικη</a></li>
+			<li><a href="<?=SITE_ROOT?>/index.php">Ξ‘ΟΟ‡ΞΉΞΊΞ·</a></li>
 			
       <li class="sub">
-        <a href="<?=SITE_ROOT?>/index.php">Μονιμοι</a>
+        <a href="<?=SITE_ROOT?>/index.php">ΞΞΏΞ½ΞΉΞΌΞΏΞΉ</a>
 				<ul>
-          <li><a href="<?=SITE_ROOT?>/index.php">Λίστα</a></li>
-					<li><a href="<?=SITE_ROOT?>/employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
-					<li><a href="<?=SITE_ROOT?>/employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
+          <li><a href="<?=SITE_ROOT?>/index.php">Ξ›Ξ―ΟƒΟ„Ξ±</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/idiwtikoi.php">Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞΏΞ― ΞµΞΊΟ€/ΞΊΞΏΞ―</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/apof_ad.php">Ξ‘Ο€ΞΏΟ†Ξ¬ΟƒΞµΞΉΟ‚ Ξ‘Ξ΄ΞµΞΉΟΞ½</a></li>
 				</ul>
 			</li>
 
       <li class="sub">
-				<a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Αναπληρωτες</a>
+				<a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΞµΟ‚</a>
 				<ul>
-					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Λίστα</a></li>
-          <li><a href="<?=SITE_ROOT?>/employee/praxi.php">Διαχείριση πράξεων</a></li>
-          <li><a href="<?=SITE_ROOT?>/employee/praxi_sch.php">Εκπαιδευτικοί & Σχολεία ανά Πράξη</a></li>
-					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_prev.php">Προηγούμενου έτους</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_list.php">Ξ›Ξ―ΟƒΟ„Ξ±</a></li>
+          <li><a href="<?=SITE_ROOT?>/employee/praxi.php">Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ο€ΟΞ¬ΞΎΞµΟ‰Ξ½</a></li>
+          <li><a href="<?=SITE_ROOT?>/employee/praxi_sch.php">Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― & Ξ£Ο‡ΞΏΞ»ΞµΞ―Ξ± Ξ±Ξ½Ξ¬ Ξ ΟΞ¬ΞΎΞ·</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/ektaktoi_prev.php">Ξ ΟΞΏΞ·Ξ³ΞΏΟΞΌΞµΞ½ΞΏΟ… Ξ­Ο„ΞΏΟ…Ο‚</a></li>
           <li>&nbsp;&nbsp;- - - - - - - - - - - - -</li>
-          <li><a href="<?=SITE_ROOT?>/tools/ektaktoi_import.php">Μαζική εισαγωγή</a></li>
-          <li><a href="<?=SITE_ROOT?>/employee/ektaktoi_top.php">Μαζική τοποθέτηση</a></li>
+          <li><a href="<?=SITE_ROOT?>/tools/ektaktoi_import.php">ΞΞ±Ξ¶ΞΉΞΊΞ® ΞµΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ®</a></li>
+          <li><a href="<?=SITE_ROOT?>/employee/ektaktoi_top.php">ΞΞ±Ξ¶ΞΉΞΊΞ® Ο„ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·</a></li>
 				</ul>
 			</li>
 
       <li class="sub">
-				<a href="<?=SITE_ROOT?>/school/school.php">Σχολειο</a>
+				<a href="<?=SITE_ROOT?>/school/school.php">Ξ£Ο‡ΞΏΞ»ΞµΞΉΞΏ</a>
 				<ul>
-					<li><a href="<?=SITE_ROOT?>/school/school.php">Λίστα</a></li>
-					<li><a href="<?=SITE_ROOT?>/school/school_status.php">Καρτέλα</a></li>
-					<li><a href="<?=SITE_ROOT?>/school/school_edit.php">Επεξεργασία</a></li>
+					<li><a href="<?=SITE_ROOT?>/school/school.php">Ξ›Ξ―ΟƒΟ„Ξ±</a></li>
+					<li><a href="<?=SITE_ROOT?>/school/school_status.php">ΞΞ±ΟΟ„Ξ­Ξ»Ξ±</a></li>
+					<li><a href="<?=SITE_ROOT?>/school/school_edit.php">Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ±</a></li>
 				</ul>
 			</li>
 		 
 		 	<li class="sub">
-		  	<a href="#">Αναφορες</a>
+		  	<a href="#">Ξ‘Ξ½Ξ±Ο†ΞΏΟΞµΟ‚</a>
     		<ul>
-		   		<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
-           <li><a href="<?=SITE_ROOT?>/reports/report_head.php">Διευθυντές / Προϊστάμενοι</a></li>
-					<li><a href="<?=SITE_ROOT?>/reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
-					<li><a href="<?=SITE_ROOT?>/reports/report_leit.php">Λειτουργικά Κενά Δημοτικών</a></li>
-					<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php?type=4">Λειτουργικά Κενά Νηπιαγωγείων</a></li>
-					<li><a href="<?=SITE_ROOT?>/reports/report_leit_yp.php">Λειτουργικά Κενά (για Υπουργείο)</a></li>
-					<!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
-					<!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
-					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
-					<li><a href="<?=SITE_ROOT?>/employee/absents.php">Εκπ/κοί σε άδεια</a></li>
-					<li><a href="<?=SITE_ROOT?>/etc/check_wres.php">Συμπλήρωση υποχρ.ωραρίου</a></li>
-          <li><a href="<?=SITE_ROOT?>/etc/stats.php">Στατιστικά</a></li>
+		   		<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php">ΞΞ±ΞΈΞ·Ο„Ξ­Ο‚ & Ξ•ΞΊΟ€/ΞΊΞΏΞ―</a></li>
+           <li><a href="<?=SITE_ROOT?>/reports/report_head.php">Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ­Ο‚ / Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΞΉ</a></li>
+					<li><a href="<?=SITE_ROOT?>/reports/report_kena.php?type=1">ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΞΞµΞ½Ξ¬</a></li>
+					<li><a href="<?=SITE_ROOT?>/reports/report_leit.php">Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΞΉΞΊΞ¬ ΞΞµΞ½Ξ¬ Ξ”Ξ·ΞΌΞΏΟ„ΞΉΞΊΟΞ½</a></li>
+					<li><a href="<?=SITE_ROOT?>/reports/report_tm_ekp.php?type=4">Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΞΉΞΊΞ¬ ΞΞµΞ½Ξ¬ ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΞµΞ―Ο‰Ξ½</a></li>
+					<li><a href="<?=SITE_ROOT?>/reports/report_leit_yp.php">Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΞΉΞΊΞ¬ ΞΞµΞ½Ξ¬ (Ξ³ΞΉΞ± Ξ¥Ο€ΞΏΟ…ΟΞ³ΞµΞ―ΞΏ)</a></li>
+					<!--<li><a href="report_leit.php">Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΞΉΞΊΞ¬ ΞΞµΞ½Ξ¬ (Ξ±Ο€Ο Ο…Ο€ΞΏΞ»ΞΏΞ³ΞΉΟƒΞΌΟ)</a></li>-->
+					<!--<li><a href="report_kena_eid.php?klados=3">Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³.ΞΞµΞ½Ξ¬ Ξ Ξ•06 & Ξ Ξ•11</a></li>-->
+					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³.ΞΞµΞ½Ξ¬ Ξ•ΞΉΞ΄ΞΉΞΊΞΏΟ„Ξ®Ο„Ο‰Ξ½ Ξ•Ξ‘Ξ•Ξ </a></li>-->
+					<li><a href="<?=SITE_ROOT?>/employee/absents.php">Ξ•ΞΊΟ€/ΞΊΞΏΞ― ΟƒΞµ Ξ¬Ξ΄ΞµΞΉΞ±</a></li>
+					<li><a href="<?=SITE_ROOT?>/etc/check_wres.php">Ξ£Ο…ΞΌΟ€Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο…Ο€ΞΏΟ‡Ο.Ο‰ΟΞ±ΟΞ―ΞΏΟ…</a></li>
+          <li><a href="<?=SITE_ROOT?>/etc/stats.php">Ξ£Ο„Ξ±Ο„ΞΉΟƒΟ„ΞΉΞΊΞ¬</a></li>
 		  	</ul>
 		 	</li>
                  
       <li class="sub">
-		  	<a href="#">Αναζητηση</a>
+		  	<a href="#">Ξ‘Ξ½Ξ±Ξ¶Ξ·Ο„Ξ·ΟƒΞ·</a>
       	<ul>
-					<li><a href="<?=SITE_ROOT?>/employee/search.php">Προσωπικού</a></li>
-					<li><a href="<?=SITE_ROOT?>/employee/search_adeia.php">Αδειών</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/search.php">Ξ ΟΞΏΟƒΟ‰Ο€ΞΉΞΊΞΏΟ</a></li>
+					<li><a href="<?=SITE_ROOT?>/employee/search_adeia.php">Ξ‘Ξ΄ΞµΞΉΟΞ½</a></li>
 		  	</ul>
 		 	</li>
 		 <?php
 		 if ($_SESSION['userlevel'] == 0):
 		 ?>
 		 <li class="sub">
-		  <a href="#">Διαχειριση</a>
+		  <a href="#">Ξ”ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΞ·</a>
 		  <ul>
-			  <li><a href="<?=SITE_ROOT?>/etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
-			  <!--<li><a href="<?=SITE_ROOT?>/employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>-->
-        <li><a href='<?=SITE_ROOT?>/tools/import.php'>Εισαγωγή δεδομένων</a></li>
-			  <li><a href='<?=SITE_ROOT?>/etc/params.php'>Παράμετροι</a></li>
-			  <li><a href="<?=SITE_ROOT?>/employee/klados.php">Ειδικότητες</a></li>
-			  <li><a href='<?=SITE_ROOT?>/etc/users.php'>Διαχείριση Χρηστών</a></li>
-			  <li><a href='<?=SITE_ROOT?>/etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
-        <li><a href='<?=SITE_ROOT?>/school/school_log.php'>Αρχείο καταγραφής πρόσβασης σχολείων</a></li>
-				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
+			  <li><a href="<?=SITE_ROOT?>/etc/end_of_year.php">Ξ›Ξ®ΞΎΞ· Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞΏΟ ΞΟ„ΞΏΟ…Ο‚ - Ξ•Ξ½Ξ­ΟΞ³ΞµΞΉΞµΟ‚</a></li>
+			  <!--<li><a href="<?=SITE_ROOT?>/employee/check_vmk.php">Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚ Ξ’Ξ±ΞΈΞΌΟΞ½ - ΞΞ</a></li>-->
+        <li><a href='<?=SITE_ROOT?>/tools/import.php'>Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ® Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½</a></li>
+			  <li><a href='<?=SITE_ROOT?>/etc/params.php'>Ξ Ξ±ΟΞ¬ΞΌΞµΟ„ΟΞΏΞΉ</a></li>
+			  <li><a href="<?=SITE_ROOT?>/employee/klados.php">Ξ•ΞΉΞ΄ΞΉΞΊΟΟ„Ξ·Ο„ΞµΟ‚</a></li>
+			  <li><a href='<?=SITE_ROOT?>/etc/users.php'>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ§ΟΞ·ΟƒΟ„ΟΞ½</a></li>
+			  <li><a href='<?=SITE_ROOT?>/etc/log.php'>Ξ‘ΟΟ‡ΞµΞ―ΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†Ξ®Ο‚ ΟƒΟ…ΞΌΞ²Ξ¬Ξ½Ο„Ο‰Ξ½</a></li>
+        <li><a href='<?=SITE_ROOT?>/school/school_log.php'>Ξ‘ΟΟ‡ΞµΞ―ΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†Ξ®Ο‚ Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚ ΟƒΟ‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</a></li>
+				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Ξ‘ΞΉΟ„Ξ®ΞΌΞ±Ο„Ξ± Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</a></li>
 		  </ul>
 		 </li>
      <?php elseif($_SESSION['requests']): ?>
 		 <li class="sub">
-		  <a href="#">Διαχειριση</a>
+		  <a href="#">Ξ”ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΞ·</a>
 		  <ul>
-				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
+				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Ξ‘ΞΉΟ„Ξ®ΞΌΞ±Ο„Ξ± Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</a></li>
 		  </ul>
 		 </li>
 		 <?php endif; ?>
 		 <li class="sub">
-		  <a href="<?=SITE_ROOT?>/etc/about.php">Σχετικα</a>
+		  <a href="<?=SITE_ROOT?>/etc/about.php">Ξ£Ο‡ΞµΟ„ΞΉΞΊΞ±</a>
 		 </li>
 		<li class="sub">
-			<a href='<?=SITE_ROOT?>/tools/login.php?logout=1'>Eξοδος</a>
+			<a href='<?=SITE_ROOT?>/tools/login.php?logout=1'>EΞΎΞΏΞ΄ΞΏΟ‚</a>
 		</ul>
   
 	</div>

@@ -1,5 +1,5 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require "../tools/class.login.php";
     $log = new logmein();
@@ -15,7 +15,7 @@ if ($_SESSION['userlevel']<>0) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=iso8859-7" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
         <title>Employee Log Viewer</title>
         <style type="text/css" title="currentStyle">
@@ -25,7 +25,7 @@ if ($_SESSION['userlevel']<>0) {
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
         <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script>
-        <script type="text/javascript" charset="iso8859-7">
+        <script type="text/javascript">
             (function($) {
                         /*
                         * Function: fnGetColumnData
@@ -112,15 +112,15 @@ if ($_SESSION['userlevel']<>0) {
     </head>
     <body id="dt_example">
     <?php require '../etc/menu.php'; ?>
-    <h1>Αρχείο Συμβάντων</h1>
+    <h1>ΞΟΟΞ΅Ξ―ΞΏ Ξ£ΟΞΌΞ²Ξ¬Ξ½ΟΟΞ½</h1>
         <div id="container">
 <?php
         
         //require_once"functions.php";
         
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         //$query = "SELECT * from employee_log";
 //                $query = "SELECT o.username,l.ip,l.timestamp,l.action,e.surname,e.am
 //                            FROM employee_log l
@@ -240,6 +240,6 @@ while ($i<$num)
             
 
         </div>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick="parent.location='../index.php'">
     </body>
 </html>

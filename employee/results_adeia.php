@@ -1,11 +1,11 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     //require_once "../tools/functions.php";
 ?>
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">    
@@ -22,8 +22,8 @@
     session_start();
     
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
     $op = " AND";
 if (!$_POST['mon_anapl']) {
@@ -41,32 +41,31 @@ if (strlen($_POST['type'])>0) {
 }
         
         $i=0;
-        $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
         //    echo $query; // for debugging...
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         
 if ($num==0) {
-    echo "<BR><p>Κανένα αποτέλεσμα...</p>";
+    echo "<BR><p>ΞΞ±Ξ½Ξ­Ξ½Ξ± Ξ±ΟΞΏΟΞ­Ξ»Ξ΅ΟΞΌΞ±...</p>";
 } else
 {
-    //echo "<p>Πλήθος εγγραφών που βρέθηκαν: $num<p>";
+    //echo "<p>Ξ Ξ»Ξ®ΞΈΞΏΟ Ξ΅Ξ³Ξ³ΟΞ±ΟΟΞ½ ΟΞΏΟ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½: $num<p>";
               $num1=$num;
               $num2=$num;
               $synolo_ola = $synolo_ews = 0;
-    echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=iso8859-7\">";
+    echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";
     echo "<body>";
     echo "<center>";
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead><tr>";
-    echo "<th>Επώνυμο, Όνομα</th>";
-    echo "<th>Είδος</th>";
-      echo "<th>Έναρξη</th>";
-      echo "<th>Λήξη</th>";
-      echo "<th>Ημ.αδ<br><small>Ημ.έως</small></th>";
-      echo "<th>Αρ.Πρωτοκόλλου</th>";
-      echo "<th>Αρ.Απόφασης</th>";
+    echo "<th>ΞΟΟΞ½ΟΞΌΞΏ, ΞΞ½ΞΏΞΌΞ±</th>";
+    echo "<th>ΞΞ―Ξ΄ΞΏΟ</th>";
+      echo "<th>ΞΞ½Ξ±ΟΞΎΞ·</th>";
+      echo "<th>ΞΞ®ΞΎΞ·</th>";
+      echo "<th>ΞΞΌ.Ξ±Ξ΄<br><small>ΞΞΌ.Ξ­ΟΟ</small></th>";
+      echo "<th>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»Ξ»ΞΏΟ</th>";
+      echo "<th>ΞΟ.ΞΟΟΟΞ±ΟΞ·Ο</th>";
     echo "</th>\n";
                     
     echo "</tr></thead>\n<tbody>";
@@ -149,12 +148,12 @@ if ($num==0) {
     ob_end_flush();
             
     $num -= $del;
-    echo "<p>Πλήθος εγγραφών που βρέθηκαν: <strong>$num</strong><p>";
-    echo "<p>Σύνολο ημερών αδειών: <strong>$synolo_ola</strong><p>";
-    echo "<p>Σύνολο ημερών απουσίας έως ".date("d-m-Y", strtotime($_POST['hm_to'])).": <strong>$synolo_ews</strong><p>";
+    echo "<p>Ξ Ξ»Ξ®ΞΈΞΏΟ Ξ΅Ξ³Ξ³ΟΞ±ΟΟΞ½ ΟΞΏΟ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½: <strong>$num</strong><p>";
+    echo "<p>Ξ£ΟΞ½ΞΏΞ»ΞΏ Ξ·ΞΌΞ΅ΟΟΞ½ Ξ±Ξ΄Ξ΅ΞΉΟΞ½: <strong>$synolo_ola</strong><p>";
+    echo "<p>Ξ£ΟΞ½ΞΏΞ»ΞΏ Ξ·ΞΌΞ΅ΟΟΞ½ Ξ±ΟΞΏΟΟΞ―Ξ±Ο Ξ­ΟΟ ".date("d-m-Y", strtotime($_POST['hm_to'])).": <strong>$synolo_ews</strong><p>";
     echo "<form action='../tools/2excel.php' method='post'>";
     echo "<input type='hidden' name = 'data' value='$page'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
     //ob_end_clean();
 }
         echo "</center>";

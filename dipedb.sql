@@ -27,16 +27,16 @@ CREATE TABLE IF NOT EXISTS `adeia` (
   `id` int(11) NOT NULL,
   `emp_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `prot_apof` int(11) NOT NULL COMMENT 'Πρωτόκολλο απόφασης',
-  `hm_apof` date NOT NULL COMMENT 'Ημ/νία απόφασης',
-  `prot` int(11) NOT NULL COMMENT 'Αρ. Πρωτοκόλου',
+  `prot_apof` int(11) NOT NULL COMMENT 'Ξ ΟΟ‰Ο„ΟΞΊΞΏΞ»Ξ»ΞΏ Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚',
+  `hm_apof` date NOT NULL COMMENT 'Ξ—ΞΌ/Ξ½Ξ―Ξ± Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚',
+  `prot` int(11) NOT NULL COMMENT 'Ξ‘Ο. Ξ ΟΟ‰Ο„ΞΏΞΊΟΞ»ΞΏΟ…',
   `hm_prot` date NOT NULL,
-  `date` date NOT NULL COMMENT 'Ημ/νία  αίτησης',
-  `vev_dil` tinyint(4) NOT NULL COMMENT 'Βεβαίωση / Δήλωση (για αναρρωτική Υπ.Δηλ.)',
-  `days` int(11) NOT NULL COMMENT 'Διάρκεια σε ημέρες',
+  `date` date NOT NULL COMMENT 'Ξ—ΞΌ/Ξ½Ξ―Ξ±  Ξ±Ξ―Ο„Ξ·ΟƒΞ·Ο‚',
+  `vev_dil` tinyint(4) NOT NULL COMMENT 'Ξ’ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ· / Ξ”Ξ®Ξ»Ο‰ΟƒΞ· (Ξ³ΞΉΞ± Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® Ξ¥Ο€.Ξ”Ξ·Ξ».)',
+  `days` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ¬ΟΞΊΞµΞΉΞ± ΟƒΞµ Ξ·ΞΌΞ­ΟΞµΟ‚',
   `start` date NOT NULL,
   `finish` date NOT NULL,
-  `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
+  `logos` varchar(70) NOT NULL COMMENT 'Ξ›ΟΞ³ΞΏΟ‚ (Ξ³ΞΉΞ± ΞµΞΉΞ΄ΞΉΞΊΞ­Ο‚)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=greek;
@@ -51,14 +51,14 @@ CREATE TABLE IF NOT EXISTS `adeia_deleted` (
   `id` int(11) NOT NULL,
   `emp_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `prot` int(11) NOT NULL COMMENT 'Αρ. Πρωτοκόλου',
+  `prot` int(11) NOT NULL COMMENT 'Ξ‘Ο. Ξ ΟΟ‰Ο„ΞΏΞΊΟΞ»ΞΏΟ…',
   `hm_prot` date NOT NULL,
-  `date` date NOT NULL COMMENT 'Ημ/νία  αίτησης',
-  `vev_dil` tinyint(4) NOT NULL COMMENT 'Βεβαίωση / Δήλωση (για αναρρωτική Υπ.Δηλ.)',
-  `days` int(11) NOT NULL COMMENT 'Διάρκεια σε ημέρες',
+  `date` date NOT NULL COMMENT 'Ξ—ΞΌ/Ξ½Ξ―Ξ±  Ξ±Ξ―Ο„Ξ·ΟƒΞ·Ο‚',
+  `vev_dil` tinyint(4) NOT NULL COMMENT 'Ξ’ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ· / Ξ”Ξ®Ξ»Ο‰ΟƒΞ· (Ξ³ΞΉΞ± Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® Ξ¥Ο€.Ξ”Ξ·Ξ».)',
+  `days` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ¬ΟΞΊΞµΞΉΞ± ΟƒΞµ Ξ·ΞΌΞ­ΟΞµΟ‚',
   `start` date NOT NULL,
   `finish` date NOT NULL,
-  `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
+  `logos` varchar(70) NOT NULL COMMENT 'Ξ›ΟΞ³ΞΏΟ‚ (Ξ³ΞΉΞ± ΞµΞΉΞ΄ΞΉΞΊΞ­Ο‚)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=greek;
@@ -86,16 +86,16 @@ CREATE TABLE IF NOT EXISTS `adeia_ekt` (
   `id` int(11) NOT NULL,
   `emp_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `prot_apof` int(11) NOT NULL COMMENT 'Πρωτόκολλο απόφασης',
-  `hm_apof` date NOT NULL COMMENT 'Ημ/νία απόφασης',
-  `prot` int(11) NOT NULL COMMENT 'Αρ. Πρωτοκόλου',
+  `prot_apof` int(11) NOT NULL COMMENT 'Ξ ΟΟ‰Ο„ΟΞΊΞΏΞ»Ξ»ΞΏ Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚',
+  `hm_apof` date NOT NULL COMMENT 'Ξ—ΞΌ/Ξ½Ξ―Ξ± Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚',
+  `prot` int(11) NOT NULL COMMENT 'Ξ‘Ο. Ξ ΟΟ‰Ο„ΞΏΞΊΟΞ»ΞΏΟ…',
   `hm_prot` date NOT NULL,
-  `date` date NOT NULL COMMENT 'Ημ/νία  αίτησης',
-  `vev_dil` tinyint(4) NOT NULL COMMENT 'Βεβαίωση / Δήλωση (για αναρρωτική Υπ.Δηλ.)',
-  `days` int(11) NOT NULL COMMENT 'Διάρκεια σε ημέρες',
+  `date` date NOT NULL COMMENT 'Ξ—ΞΌ/Ξ½Ξ―Ξ±  Ξ±Ξ―Ο„Ξ·ΟƒΞ·Ο‚',
+  `vev_dil` tinyint(4) NOT NULL COMMENT 'Ξ’ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ· / Ξ”Ξ®Ξ»Ο‰ΟƒΞ· (Ξ³ΞΉΞ± Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® Ξ¥Ο€.Ξ”Ξ·Ξ».)',
+  `days` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ¬ΟΞΊΞµΞΉΞ± ΟƒΞµ Ξ·ΞΌΞ­ΟΞµΟ‚',
   `start` date NOT NULL,
   `finish` date NOT NULL,
-  `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
+  `logos` varchar(70) NOT NULL COMMENT 'Ξ›ΟΞ³ΞΏΟ‚ (Ξ³ΞΉΞ± ΞµΞΉΞ΄ΞΉΞΊΞ­Ο‚)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `sxoletos` varchar(10) NOT NULL
@@ -111,14 +111,14 @@ CREATE TABLE IF NOT EXISTS `adeia_ekt_deleted` (
   `id` int(11) NOT NULL,
   `emp_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `prot` int(11) NOT NULL COMMENT 'Αρ. Πρωτοκόλου',
+  `prot` int(11) NOT NULL COMMENT 'Ξ‘Ο. Ξ ΟΟ‰Ο„ΞΏΞΊΟΞ»ΞΏΟ…',
   `hm_prot` date NOT NULL,
-  `date` date NOT NULL COMMENT 'Ημ/νία  αίτησης',
-  `vev_dil` tinyint(4) NOT NULL COMMENT 'Βεβαίωση / Δήλωση (για αναρρωτική Υπ.Δηλ.)',
-  `days` int(11) NOT NULL COMMENT 'Διάρκεια σε ημέρες',
+  `date` date NOT NULL COMMENT 'Ξ—ΞΌ/Ξ½Ξ―Ξ±  Ξ±Ξ―Ο„Ξ·ΟƒΞ·Ο‚',
+  `vev_dil` tinyint(4) NOT NULL COMMENT 'Ξ’ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ· / Ξ”Ξ®Ξ»Ο‰ΟƒΞ· (Ξ³ΞΉΞ± Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® Ξ¥Ο€.Ξ”Ξ·Ξ».)',
+  `days` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ¬ΟΞΊΞµΞΉΞ± ΟƒΞµ Ξ·ΞΌΞ­ΟΞµΟ‚',
   `start` date NOT NULL,
   `finish` date NOT NULL,
-  `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
+  `logos` varchar(70) NOT NULL COMMENT 'Ξ›ΟΞ³ΞΏΟ‚ (Ξ³ΞΉΞ± ΞµΞΉΞ΄ΞΉΞΊΞ­Ο‚)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=greek;
@@ -140,23 +140,23 @@ CREATE TABLE IF NOT EXISTS `adeia_ekt_type` (
 --
 
 INSERT INTO `adeia_ekt_type` (`id`, `type`, `descr`) VALUES
-(1, 'Αναρρωτική', ''),
-(2, 'Κανονική', ''),
-(3, 'Αναρρωτική με Γνωμ.Υγειονομικού', ''),
-(4, 'Ειδική', ''),
-(5, 'Λοχείας', ''),
-(6, 'Κύησης', ''),
-(7, 'Ανατροφής', ''),
-(8, 'Γονική', ''),
-(9, 'Μεταφορά Κυοφορίας', ''),
-(10, '?νευ Αποδοχών', ''),
-(11, 'Λοιπές', ''),
-(12, '?νευ Αποδοχών 4 μηνών (ανατροφής)', ''),
-(13, 'Εκλογική', ''),
-(15, 'Μετάγγισης αίματος', ''),
-(16, 'Ειδική γονική άδεια', ''),
-(17, 'Απεργία', ''),
-(18, 'Στάση εργασίας', '');
+(1, 'Ξ‘Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ®', ''),
+(2, 'ΞΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ®', ''),
+(3, 'Ξ‘Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® ΞΌΞµ Ξ“Ξ½Ο‰ΞΌ.Ξ¥Ξ³ΞµΞΉΞΏΞ½ΞΏΞΌΞΉΞΊΞΏΟ', ''),
+(4, 'Ξ•ΞΉΞ΄ΞΉΞΊΞ®', ''),
+(5, 'Ξ›ΞΏΟ‡ΞµΞ―Ξ±Ο‚', ''),
+(6, 'ΞΟΞ·ΟƒΞ·Ο‚', ''),
+(7, 'Ξ‘Ξ½Ξ±Ο„ΟΞΏΟ†Ξ®Ο‚', ''),
+(8, 'Ξ“ΞΏΞ½ΞΉΞΊΞ®', ''),
+(9, 'ΞΞµΟ„Ξ±Ο†ΞΏΟΞ¬ ΞΟ…ΞΏΟ†ΞΏΟΞ―Ξ±Ο‚', ''),
+(10, '?Ξ½ΞµΟ… Ξ‘Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½', ''),
+(11, 'Ξ›ΞΏΞΉΟ€Ξ­Ο‚', ''),
+(12, '?Ξ½ΞµΟ… Ξ‘Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½ 4 ΞΌΞ·Ξ½ΟΞ½ (Ξ±Ξ½Ξ±Ο„ΟΞΏΟ†Ξ®Ο‚)', ''),
+(13, 'Ξ•ΞΊΞ»ΞΏΞ³ΞΉΞΊΞ®', ''),
+(15, 'ΞΞµΟ„Ξ¬Ξ³Ξ³ΞΉΟƒΞ·Ο‚ Ξ±Ξ―ΞΌΞ±Ο„ΞΏΟ‚', ''),
+(16, 'Ξ•ΞΉΞ΄ΞΉΞΊΞ® Ξ³ΞΏΞ½ΞΉΞΊΞ® Ξ¬Ξ΄ΞµΞΉΞ±', ''),
+(17, 'Ξ‘Ο€ΞµΟΞ³Ξ―Ξ±', ''),
+(18, 'Ξ£Ο„Ξ¬ΟƒΞ· ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚', '');
 
 -- --------------------------------------------------------
 
@@ -175,20 +175,20 @@ CREATE TABLE IF NOT EXISTS `adeia_type` (
 --
 
 INSERT INTO `adeia_type` (`id`, `type`, `descr`) VALUES
-(1, 'Αναρρωτική', ''),
-(2, 'Κανονική', ''),
-(3, 'Αναρρωτική με Γνωμ.Υγειονομικού', ''),
-(4, 'Ειδική', ''),
-(5, 'Λοχείας', ''),
-(6, 'Κύησης', ''),
-(7, 'Ανατροφής', ''),
-(8, 'Γονική', ''),
-(9, 'Κανονική Κυοφορίας', ''),
-(10, '¶νευ Αποδοχών', ''),
-(11, 'Λοιπές', ''),
-(12, '¶νευ Αποδοχών 1 έτους', ''),
-(13, 'Εκλογική', ''),
-(14, '¶δεια ασθένειας τέκνων', '');
+(1, 'Ξ‘Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ®', ''),
+(2, 'ΞΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ®', ''),
+(3, 'Ξ‘Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® ΞΌΞµ Ξ“Ξ½Ο‰ΞΌ.Ξ¥Ξ³ΞµΞΉΞΏΞ½ΞΏΞΌΞΉΞΊΞΏΟ', ''),
+(4, 'Ξ•ΞΉΞ΄ΞΉΞΊΞ®', ''),
+(5, 'Ξ›ΞΏΟ‡ΞµΞ―Ξ±Ο‚', ''),
+(6, 'ΞΟΞ·ΟƒΞ·Ο‚', ''),
+(7, 'Ξ‘Ξ½Ξ±Ο„ΟΞΏΟ†Ξ®Ο‚', ''),
+(8, 'Ξ“ΞΏΞ½ΞΉΞΊΞ®', ''),
+(9, 'ΞΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ® ΞΟ…ΞΏΟ†ΞΏΟΞ―Ξ±Ο‚', ''),
+(10, 'Ξ†Ξ½ΞµΟ… Ξ‘Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½', ''),
+(11, 'Ξ›ΞΏΞΉΟ€Ξ­Ο‚', ''),
+(12, 'Ξ†Ξ½ΞµΟ… Ξ‘Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½ 1 Ξ­Ο„ΞΏΟ…Ο‚', ''),
+(13, 'Ξ•ΞΊΞ»ΞΏΞ³ΞΉΞΊΞ®', ''),
+(14, 'Ξ†Ξ΄ΞµΞΉΞ± Ξ±ΟƒΞΈΞ­Ξ½ΞµΞΉΞ±Ο‚ Ο„Ξ­ΞΊΞ½Ο‰Ξ½', '');
 
 -- --------------------------------------------------------
 
@@ -221,14 +221,14 @@ CREATE TABLE IF NOT EXISTS `dimos` (
 --
 
 INSERT INTO `dimos` (`id`, `name`) VALUES
-(1, 'Αρχανών - Αστερουσίων'),
-(2, 'Βιάννου'),
-(3, 'Γόρτυνας'),
-(4, 'Ηρακλείου'),
-(5, 'Μαλεβιζίου'),
-(6, 'Μινώα Πεδιάδας'),
-(7, 'Φαιστού'),
-(8, 'Χερσονήσου');
+(1, 'Ξ‘ΟΟ‡Ξ±Ξ½ΟΞ½ - Ξ‘ΟƒΟ„ΞµΟΞΏΟ…ΟƒΞ―Ο‰Ξ½'),
+(2, 'Ξ’ΞΉΞ¬Ξ½Ξ½ΞΏΟ…'),
+(3, 'Ξ“ΟΟΟ„Ο…Ξ½Ξ±Ο‚'),
+(4, 'Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ…'),
+(5, 'ΞΞ±Ξ»ΞµΞ²ΞΉΞ¶Ξ―ΞΏΟ…'),
+(6, 'ΞΞΉΞ½ΟΞ± Ξ ΞµΞ΄ΞΉΞ¬Ξ΄Ξ±Ο‚'),
+(7, 'Ξ¦Ξ±ΞΉΟƒΟ„ΞΏΟ'),
+(8, 'Ξ§ΞµΟΟƒΞΏΞ½Ξ®ΟƒΞΏΟ…');
 
 -- --------------------------------------------------------
 
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `patrwnymo` varchar(30) NOT NULL,
   `mhtrwnymo` varchar(30) NOT NULL,
   `klados` int(11) NOT NULL,
-  `sx_yphrethshs` varchar(30) NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
+  `sx_yphrethshs` varchar(30) NOT NULL COMMENT '0 ΞΊΟ…ΟΞ―Ο‰Ο‚ ΟƒΟ‡ΞΏΞ»ΞµΞ―ΞΏ, 1,2... ΟƒΟ…ΞΌΟ€Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο‰ΟΞ±ΟΞ―ΞΏΟ…',
   `vathm` varchar(4) NOT NULL,
   `hm_vathm` date NOT NULL,
   `mk` tinyint(2) NOT NULL,
@@ -269,16 +269,16 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
   `hm_apox` date NOT NULL,
-  `ya` varchar(50) NOT NULL COMMENT 'Υπουργική Απόφαση',
-  `apofasi` varchar(50) NOT NULL COMMENT 'Απόφαση Δ/ντή',
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
+  `ya` varchar(50) NOT NULL COMMENT 'Ξ¥Ο€ΞΏΟ…ΟΞ³ΞΉΞΊΞ® Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ·',
+  `apofasi` varchar(50) NOT NULL COMMENT 'Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· Ξ”/Ξ½Ο„Ξ®',
+  `met_did` tinyint(11) NOT NULL COMMENT '0 ΞΏΟ‡ΞΉ, 1 ΞΌΞµΟ„Ξ±Ο€Ο„, 2 Ξ΄ΞΉΞ΄, 3 ΞΌΞµΟ„+Ξ΄ΞΉΞ΄',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 ΞµΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ, 2 Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚-Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·, 3 ?Ξ΄ΞµΞΉΞ±, 4 Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±',
   `afm` varchar(11) NOT NULL,
-  `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης (1 ωρομ, 2 αναπλ, 3 αναπλ ΕΣΠΑ, 4 ΕΕΠ, 5 ΕΒΠ)',
+  `type` int(11) NOT NULL COMMENT 'Ο„Ο…Ο€ΞΏΟ‚ Ξ±Ο€Ξ±ΟƒΟ‡ΟΞ»Ξ·ΟƒΞ·Ο‚ (1 Ο‰ΟΞΏΞΌ, 2 Ξ±Ξ½Ξ±Ο€Ξ», 3 Ξ±Ξ½Ξ±Ο€Ξ» Ξ•Ξ£Ξ Ξ‘, 4 Ξ•Ξ•Ξ , 5 Ξ•Ξ’Ξ )',
   `stathero` varchar(30) NOT NULL,
   `kinhto` varchar(30) NOT NULL,
-  `metakinhsh` text NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
+  `metakinhsh` text NOT NULL COMMENT 'ΞΞµΟ„Ξ±ΞΊΞΉΞ½Ξ®ΟƒΞµΞΉΟ‚ ΞΊΞ±Ο„Ξ¬ Ο„Ξ· ΟƒΟ‡ΞΏΞ»ΞΉΞΊΞ® Ο‡ΟΞΏΞ½ΞΉΞ¬',
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `thesi` int(11) NOT NULL,
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_old` (
   `patrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
   `mhtrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
   `klados` int(11) NOT NULL,
-  `sx_yphrethshs` varchar(30) CHARACTER SET greek NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
+  `sx_yphrethshs` varchar(30) CHARACTER SET greek NOT NULL COMMENT '0 ΞΊΟ…ΟΞ―Ο‰Ο‚ ΟƒΟ‡ΞΏΞ»ΞµΞ―ΞΏ, 1,2... ΟƒΟ…ΞΌΟ€Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο‰ΟΞ±ΟΞ―ΞΏΟ…',
   `vathm` varchar(4) CHARACTER SET greek NOT NULL,
   `hm_vathm` date NOT NULL,
   `mk` tinyint(2) NOT NULL,
@@ -322,16 +322,16 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_old` (
   `analipsi` varchar(5) CHARACTER SET greek NOT NULL,
   `hm_anal` date NOT NULL,
   `hm_apox` date NOT NULL,
-  `ya` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Υπουργική Απόφαση',
-  `apofasi` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Απόφαση Δ/ντή',
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
+  `ya` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Ξ¥Ο€ΞΏΟ…ΟΞ³ΞΉΞΊΞ® Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ·',
+  `apofasi` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· Ξ”/Ξ½Ο„Ξ®',
+  `met_did` tinyint(11) NOT NULL COMMENT '0 ΞΏΟ‡ΞΉ, 1 ΞΌΞµΟ„Ξ±Ο€Ο„, 2 Ξ΄ΞΉΞ΄, 3 ΞΌΞµΟ„+Ξ΄ΞΉΞ΄',
   `comments` longtext CHARACTER SET greek NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 ΞµΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ, 2 Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚-Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·, 3 ?Ξ΄ΞµΞΉΞ±, 4 Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±',
   `afm` varchar(11) CHARACTER SET greek NOT NULL,
-  `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης (1 ωρομ, 2 αναπλ, 3 αναπλ ΕΣΠΑ, 4 ΕΕΠ, 5 ΕΒΠ)',
+  `type` int(11) NOT NULL COMMENT 'Ο„Ο…Ο€ΞΏΟ‚ Ξ±Ο€Ξ±ΟƒΟ‡ΟΞ»Ξ·ΟƒΞ·Ο‚ (1 Ο‰ΟΞΏΞΌ, 2 Ξ±Ξ½Ξ±Ο€Ξ», 3 Ξ±Ξ½Ξ±Ο€Ξ» Ξ•Ξ£Ξ Ξ‘, 4 Ξ•Ξ•Ξ , 5 Ξ•Ξ’Ξ )',
   `stathero` varchar(30) CHARACTER SET greek NOT NULL,
   `kinhto` varchar(30) CHARACTER SET greek NOT NULL,
-  `metakinhsh` text CHARACTER SET greek NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
+  `metakinhsh` text CHARACTER SET greek NOT NULL COMMENT 'ΞΞµΟ„Ξ±ΞΊΞΉΞ½Ξ®ΟƒΞµΞΉΟ‚ ΞΊΞ±Ο„Ξ¬ Ο„Ξ· ΟƒΟ‡ΞΏΞ»ΞΉΞΊΞ® Ο‡ΟΞΏΞ½ΞΉΞ¬',
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `thesi` int(11) NOT NULL,
@@ -356,12 +356,12 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_types` (
 --
 
 INSERT INTO `ektaktoi_types` (`id`, `type`) VALUES
-(1, 'Αναπληρωτής Μ.Ω.'),
-(2, 'Αναπληρωτής'),
-(3, 'Αναπληρωτής ΕΣΠΑ'),
-(4, 'ΕΕΠ'),
-(5, 'ΕΒΠ'),
-(6, 'ΖΕΠ / ΕΚΟ');
+(1, 'Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ®Ο‚ Ξ.Ξ©.'),
+(2, 'Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ®Ο‚'),
+(3, 'Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ®Ο‚ Ξ•Ξ£Ξ Ξ‘'),
+(4, 'Ξ•Ξ•Ξ '),
+(5, 'Ξ•Ξ’Ξ '),
+(6, 'Ξ–Ξ•Ξ  / Ξ•ΞΞ');
 
 -- --------------------------------------------------------
 
@@ -379,8 +379,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `am` int(10) NOT NULL,
   `sx_organikhs` int(11) NOT NULL,
   `sx_yphrethshs` int(11) NOT NULL,
-  `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
-  `org_ent` BOOLEAN NOT NULL COMMENT 'Οργανική σε τμήμα ένταξης',
+  `thesi` tinyint(4) NOT NULL COMMENT '0 ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚, 1 Ο…Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ·Ο‚, 2 Ξ΄/Ξ½Ο„Ξ®Ο‚-Ο€Ο/Ξ½ΞΏΟ‚, 3 Ξ¤ΞΌ.ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚, 4 Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΟ‚, 5 Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΟ‚',
+  `org_ent` BOOLEAN NOT NULL COMMENT 'ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ® ΟƒΞµ Ο„ΞΌΞ®ΞΌΞ± Ξ­Ξ½Ο„Ξ±ΞΎΞ·Ο‚',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
   `vathm_old` varchar(4) NOT NULL,
@@ -393,7 +393,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `hm_mk11` date NOT NULL,
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
+  `met_did` tinyint(11) NOT NULL COMMENT '0 ΞΏΟ‡ΞΉ, 1 ΞΌΞµΟ„Ξ±Ο€Ο„, 2 Ξ΄ΞΉΞ΄, 3 ΞΌΞµΟ„+Ξ΄ΞΉΞ΄',
   `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
   `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
   `proyp_not` int(11) NOT NULL COMMENT 'proyp poy de lambanetai gia ypologismo wrarioy, se hmeres',
@@ -401,7 +401,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 ΞµΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ, 2 Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚-Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·, 3 ?Ξ΄ΞµΞΉΞ±, 4 Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -409,11 +409,11 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `idnum` varchar(40) NOT NULL,
   `amka` varchar(40) NOT NULL,
   `aney` int(11) NOT NULL,
-  `aney_xr` int(11) NOT NULL COMMENT 'Συνολ. χρόνος αδ. άνευ αποδοχών',
-  `aney_apo` date NOT NULL COMMENT 'Αδ. ανευ από',
-  `aney_ews` date NOT NULL COMMENT 'Αδ. άνευ έως',
+  `aney_xr` int(11) NOT NULL COMMENT 'Ξ£Ο…Ξ½ΞΏΞ». Ο‡ΟΟΞ½ΞΏΟ‚ Ξ±Ξ΄. Ξ¬Ξ½ΞµΟ… Ξ±Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½',
+  `aney_apo` date NOT NULL COMMENT 'Ξ‘Ξ΄. Ξ±Ξ½ΞµΟ… Ξ±Ο€Ο',
+  `aney_ews` date NOT NULL COMMENT 'Ξ‘Ξ΄. Ξ¬Ξ½ΞµΟ… Ξ­Ο‰Ο‚',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `wres` int(11) NOT NULL COMMENT 'Διδακτικές ώρες (βάσει ετών υπηρεσίας)',
+  `wres` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞ­Ο‚ ΟΟΞµΟ‚ (Ξ²Ξ¬ΟƒΞµΞΉ ΞµΟ„ΟΞ½ Ο…Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚)',
   `idiwtiko` tinyint(4) NOT NULL,
   `idiwtiko_id` tinyint(4) NOT NULL,
   `idiwtiko_liksi` date NOT NULL,
@@ -443,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `am` int(10) NOT NULL,
   `sx_organikhs` int(11) NOT NULL,
   `sx_yphrethshs` int(11) NOT NULL,
-  `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
+  `thesi` tinyint(4) NOT NULL COMMENT '0 ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚, 1 Ο…Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ·Ο‚, 2 Ξ΄/Ξ½Ο„Ξ®Ο‚-Ο€Ο/Ξ½ΞΏΟ‚, 3 Ξ¤ΞΌ.ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚, 4 Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΟ‚, 5 Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΟ‚',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
   `vathm_old` varchar(4) NOT NULL,
@@ -456,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `hm_mk11` date NOT NULL,
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
+  `met_did` tinyint(11) NOT NULL COMMENT '0 ΞΏΟ‡ΞΉ, 1 ΞΌΞµΟ„Ξ±Ο€Ο„, 2 Ξ΄ΞΉΞ΄, 3 ΞΌΞµΟ„+Ξ΄ΞΉΞ΄',
   `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
   `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
   `proyp_not` int(11) NOT NULL COMMENT 'proyp poy de lambanetai gia ypologismo wrarioy, se hmeres',
@@ -464,7 +464,7 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 ΞµΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ, 2 Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚-Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·, 3 ?Ξ΄ΞµΞΉΞ±, 4 Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -472,11 +472,11 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `idnum` varchar(40) NOT NULL,
   `amka` varchar(40) NOT NULL,
   `aney` int(11) NOT NULL,
-  `aney_xr` int(11) NOT NULL COMMENT 'Συνολ. χρόνος αδ. άνευ αποδοχών',
-  `aney_apo` date NOT NULL COMMENT 'Αδ. ανευ από',
-  `aney_ews` date NOT NULL COMMENT 'Αδ. άνευ έως',
+  `aney_xr` int(11) NOT NULL COMMENT 'Ξ£Ο…Ξ½ΞΏΞ». Ο‡ΟΟΞ½ΞΏΟ‚ Ξ±Ξ΄. Ξ¬Ξ½ΞµΟ… Ξ±Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½',
+  `aney_apo` date NOT NULL COMMENT 'Ξ‘Ξ΄. Ξ±Ξ½ΞµΟ… Ξ±Ο€Ο',
+  `aney_ews` date NOT NULL COMMENT 'Ξ‘Ξ΄. Ξ¬Ξ½ΞµΟ… Ξ­Ο‰Ο‚',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `wres` int(11) NOT NULL COMMENT 'Διδακτικές ώρες (βάσει ετών υπηρεσίας)',
+  `wres` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞ­Ο‚ ΟΟΞµΟ‚ (Ξ²Ξ¬ΟƒΞµΞΉ ΞµΟ„ΟΞ½ Ο…Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚)',
   `idiwtiko` tinyint(4) NOT NULL,
   `idiwtiko_id` tinyint(4) NOT NULL,
   `idiwtiko_liksi` date NOT NULL,
@@ -520,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `am` int(10) NOT NULL,
   `sx_organikhs` int(11) NOT NULL,
   `sx_yphrethshs` int(11) NOT NULL,
-  `thesi` tinyint(4) NOT NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 3 Τμ.Ένταξης, 4 Διοικητικός, 5 Ιδιωτικός',
+  `thesi` tinyint(4) NOT NULL COMMENT '0 ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚, 1 Ο…Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ·Ο‚, 2 Ξ΄/Ξ½Ο„Ξ®Ο‚-Ο€Ο/Ξ½ΞΏΟ‚, 3 Ξ¤ΞΌ.ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚, 4 Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΟ‚, 5 Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΟ‚',
   `fek_dior` varchar(10) NOT NULL,
   `hm_dior` date NOT NULL,
   `vathm_old` varchar(4) NOT NULL,
@@ -533,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `hm_mk11` date NOT NULL,
   `analipsi` varchar(5) NOT NULL,
   `hm_anal` date NOT NULL,
-  `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
+  `met_did` tinyint(11) NOT NULL COMMENT '0 ΞΏΟ‡ΞΉ, 1 ΞΌΞµΟ„Ξ±Ο€Ο„, 2 Ξ΄ΞΉΞ΄, 3 ΞΌΞµΟ„+Ξ΄ΞΉΞ΄',
   `proyp_old` int(11) NOT NULL COMMENT 'se hmeres',
   `proyp` int(11) NOT NULL COMMENT 'se hmeres (apo excel)',
   `proyp_not` int(11) NOT NULL COMMENT 'proyp poy de lambanetai gia ypologismo wrarioy, se hmeres',
@@ -541,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 ΞµΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ, 2 Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚-Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·, 3 ?Ξ΄ΞµΞΉΞ±, 4 Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -549,11 +549,11 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `idnum` varchar(40) NOT NULL,
   `amka` varchar(40) NOT NULL,
   `aney` int(11) NOT NULL,
-  `aney_xr` int(11) NOT NULL COMMENT 'Συνολ. χρόνος αδ. άνευ αποδοχών',
-  `aney_apo` date NOT NULL COMMENT 'Αδ. ανευ από',
-  `aney_ews` date NOT NULL COMMENT 'Αδ. άνευ έως',
+  `aney_xr` int(11) NOT NULL COMMENT 'Ξ£Ο…Ξ½ΞΏΞ». Ο‡ΟΟΞ½ΞΏΟ‚ Ξ±Ξ΄. Ξ¬Ξ½ΞµΟ… Ξ±Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½',
+  `aney_apo` date NOT NULL COMMENT 'Ξ‘Ξ΄. Ξ±Ξ½ΞµΟ… Ξ±Ο€Ο',
+  `aney_ews` date NOT NULL COMMENT 'Ξ‘Ξ΄. Ξ¬Ξ½ΞµΟ… Ξ­Ο‰Ο‚',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `wres` int(11) NOT NULL COMMENT 'Διδακτικές ώρες (βάσει ετών υπηρεσίας)',
+  `wres` int(11) NOT NULL COMMENT 'Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞ­Ο‚ ΟΟΞµΟ‚ (Ξ²Ξ¬ΟƒΞµΞΉ ΞµΟ„ΟΞ½ Ο…Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚)',
   `idiwtiko` tinyint(4) NOT NULL,
   `idiwtiko_id` tinyint(4) NOT NULL,
   `idiwtiko_liksi` date NOT NULL,
@@ -583,33 +583,33 @@ CREATE TABLE IF NOT EXISTS `klados` (
 --
 
 INSERT INTO `klados` (`id`, `perigrafh`, `onoma`) VALUES
-(1, 'ΠΕ60', 'Νηπιαγωγών'),
-(2, 'ΠΕ70', 'Δασκάλων'),
-(3, 'ΠΕ06', 'Αγγλικών'),
-(4, 'ΠΕ08', 'Καλλιτεχνικών'),
-(5, 'ΠΕ11', 'Φυσικής Αγωγής'),
-(6, 'ΠΕ79', 'Μουσικών'),
-(7, 'ΠΕ09', 'Οικονομολόγων'),
-(8, 'ΠΕ23', 'Ψυχολόγων'),
-(9, 'ΠΕ26', 'Λογοθεραπευτών'),
-(10, 'ΠΕ28', 'Φυσικοθεραπευτών'),
-(11, 'ΠΕ30', 'Κοιν.Λειτουργών'),
-(12, 'ΔΕ1ΕΒΠ', 'Βοηθ.Προσ.Ειδ.Αγ.'),
-(13, 'ΠΕ05', 'Γαλλικών'),
-(14, 'ΠΕ07', 'Γερμανικών'),
-(15, 'ΠΕ86', 'Πληροφορικής'),
-(16, 'ΠΕ60.50', 'Νηπιαγωγών Ειδ.Αγ.'),
-(17, 'ΠΕ61', 'Νηπιαγωγών Ειδ.Αγ.'),
-(18, 'ΠΕ70.50', 'Δασκάλων Ειδ.Αγωγ.'),
-(19, 'ΠΕ71', 'Δασκάλων Ειδ.Αγωγ.'),
-(20, 'ΠΕ91', 'Θεατρικών Σπουδών'),
-(21, 'ΠΕ25', 'Σχ.Νοσηλευτών'),
-(22, 'ΠΕ01', 'Διοικητικών'),
-(23, 'ΔΕ01', 'Διοικητικών'),
-(24, 'ΥΕ01', 'Διοικητικών'),
-(25, 'ΠΕ03', 'Μαθηματικών'),
-(26, 'ΠΕ21', 'Λογοθεραπευτών'),
-(27, 'ΠΕ29', 'Εργοθεραπευτών');
+(1, 'Ξ Ξ•60', 'ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΟΞ½'),
+(2, 'Ξ Ξ•70', 'Ξ”Ξ±ΟƒΞΊΞ¬Ξ»Ο‰Ξ½'),
+(3, 'Ξ Ξ•06', 'Ξ‘Ξ³Ξ³Ξ»ΞΉΞΊΟΞ½'),
+(4, 'Ξ Ξ•08', 'ΞΞ±Ξ»Ξ»ΞΉΟ„ΞµΟ‡Ξ½ΞΉΞΊΟΞ½'),
+(5, 'Ξ Ξ•11', 'Ξ¦Ο…ΟƒΞΉΞΊΞ®Ο‚ Ξ‘Ξ³Ο‰Ξ³Ξ®Ο‚'),
+(6, 'Ξ Ξ•79', 'ΞΞΏΟ…ΟƒΞΉΞΊΟΞ½'),
+(7, 'Ξ Ξ•09', 'ΞΞΉΞΊΞΏΞ½ΞΏΞΌΞΏΞ»ΟΞ³Ο‰Ξ½'),
+(8, 'Ξ Ξ•23', 'Ξ¨Ο…Ο‡ΞΏΞ»ΟΞ³Ο‰Ξ½'),
+(9, 'Ξ Ξ•26', 'Ξ›ΞΏΞ³ΞΏΞΈΞµΟΞ±Ο€ΞµΟ…Ο„ΟΞ½'),
+(10, 'Ξ Ξ•28', 'Ξ¦Ο…ΟƒΞΉΞΊΞΏΞΈΞµΟΞ±Ο€ΞµΟ…Ο„ΟΞ½'),
+(11, 'Ξ Ξ•30', 'ΞΞΏΞΉΞ½.Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΟΞ½'),
+(12, 'Ξ”Ξ•1Ξ•Ξ’Ξ ', 'Ξ’ΞΏΞ·ΞΈ.Ξ ΟΞΏΟƒ.Ξ•ΞΉΞ΄.Ξ‘Ξ³.'),
+(13, 'Ξ Ξ•05', 'Ξ“Ξ±Ξ»Ξ»ΞΉΞΊΟΞ½'),
+(14, 'Ξ Ξ•07', 'Ξ“ΞµΟΞΌΞ±Ξ½ΞΉΞΊΟΞ½'),
+(15, 'Ξ Ξ•86', 'Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞΉΞΊΞ®Ο‚'),
+(16, 'Ξ Ξ•60.50', 'ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΟΞ½ Ξ•ΞΉΞ΄.Ξ‘Ξ³.'),
+(17, 'Ξ Ξ•61', 'ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΟΞ½ Ξ•ΞΉΞ΄.Ξ‘Ξ³.'),
+(18, 'Ξ Ξ•70.50', 'Ξ”Ξ±ΟƒΞΊΞ¬Ξ»Ο‰Ξ½ Ξ•ΞΉΞ΄.Ξ‘Ξ³Ο‰Ξ³.'),
+(19, 'Ξ Ξ•71', 'Ξ”Ξ±ΟƒΞΊΞ¬Ξ»Ο‰Ξ½ Ξ•ΞΉΞ΄.Ξ‘Ξ³Ο‰Ξ³.'),
+(20, 'Ξ Ξ•91', 'ΞΞµΞ±Ο„ΟΞΉΞΊΟΞ½ Ξ£Ο€ΞΏΟ…Ξ΄ΟΞ½'),
+(21, 'Ξ Ξ•25', 'Ξ£Ο‡.ΞΞΏΟƒΞ·Ξ»ΞµΟ…Ο„ΟΞ½'),
+(22, 'Ξ Ξ•01', 'Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΞ½'),
+(23, 'Ξ”Ξ•01', 'Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΞ½'),
+(24, 'Ξ¥Ξ•01', 'Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΞ½'),
+(25, 'Ξ Ξ•03', 'ΞΞ±ΞΈΞ·ΞΌΞ±Ο„ΞΉΞΊΟΞ½'),
+(26, 'Ξ Ξ•21', 'Ξ›ΞΏΞ³ΞΏΞΈΞµΟΞ±Ο€ΞµΟ…Ο„ΟΞ½'),
+(27, 'Ξ Ξ•29', 'Ξ•ΟΞ³ΞΏΞΈΞµΟΞ±Ο€ΞµΟ…Ο„ΟΞ½');
 
 -- --------------------------------------------------------
 
@@ -643,8 +643,8 @@ INSERT INTO `logon` (`userid`, `useremail`, `password`, `userlevel`, `adeia`, `u
 
 CREATE TABLE IF NOT EXISTS `params` (
   `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL COMMENT 'Όνομα Παραμέτρου',
-  `value` varchar(100) NOT NULL COMMENT 'Τιμή Παραμέτρου',
+  `name` varchar(20) NOT NULL COMMENT 'ΞΞ½ΞΏΞΌΞ± Ξ Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ…',
+  `value` varchar(100) NOT NULL COMMENT 'Ξ¤ΞΉΞΌΞ® Ξ Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ…',
   `descr` varchar(100) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=greek;
 
@@ -653,14 +653,14 @@ CREATE TABLE IF NOT EXISTS `params` (
 --
 
 INSERT INTO `params` (`id`, `name`, `value`, `descr`) VALUES
-(5, 'sxol_etos', '201819', 'Σχολικό έτος (να αλλάζει κάθε 1η Σεπτέμβρη)'),
-(6, 'head_title', 'Ο Δ/ντής Π.Ε. XXXXXX', 'Τίτλος Δ/ντή (για βεβαιώσεις)'),
-(7, 'head_name', 'XXXXX XXXXX', 'Ονοματεπώνυμο Δ/ντή'),
-(8, 'endofyear', '21-06-2019', 'Ημέρα έκδοσης βεβαιώσεων αναπληρωτών'),
-(9, 'endofyear2', '21-06-2019', 'Τελευταία ημέρα εργασίας αναπληρωτών (για βεβαιώσεις)'),
-(10, 'protapol', '99999', 'Πρωτόκολλο απόλυσης'),
-(11, 'yp_wr', '24', 'Υποχρεωτικό ωράριο βαθμίδας'),
-(12, 'dnsh', 'Π.Ε. XXXXXXX', 'Διεύθυνση εκπαίδευσης');
+(5, 'sxol_etos', '201819', 'Ξ£Ο‡ΞΏΞ»ΞΉΞΊΟ Ξ­Ο„ΞΏΟ‚ (Ξ½Ξ± Ξ±Ξ»Ξ»Ξ¬Ξ¶ΞµΞΉ ΞΊΞ¬ΞΈΞµ 1Ξ· Ξ£ΞµΟ€Ο„Ξ­ΞΌΞ²ΟΞ·)'),
+(6, 'head_title', 'Ξ Ξ”/Ξ½Ο„Ξ®Ο‚ Ξ .Ξ•. XXXXXX', 'Ξ¤Ξ―Ο„Ξ»ΞΏΟ‚ Ξ”/Ξ½Ο„Ξ® (Ξ³ΞΉΞ± Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΞΉΟ‚)'),
+(7, 'head_name', 'XXXXX XXXXX', 'ΞΞ½ΞΏΞΌΞ±Ο„ΞµΟ€ΟΞ½Ο…ΞΌΞΏ Ξ”/Ξ½Ο„Ξ®'),
+(8, 'endofyear', '21-06-2019', 'Ξ—ΞΌΞ­ΟΞ± Ξ­ΞΊΞ΄ΞΏΟƒΞ·Ο‚ Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΟ‰Ξ½ Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½'),
+(9, 'endofyear2', '21-06-2019', 'Ξ¤ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± Ξ·ΞΌΞ­ΟΞ± ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚ Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ (Ξ³ΞΉΞ± Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΞΉΟ‚)'),
+(10, 'protapol', '99999', 'Ξ ΟΟ‰Ο„ΟΞΊΞΏΞ»Ξ»ΞΏ Ξ±Ο€ΟΞ»Ο…ΟƒΞ·Ο‚'),
+(11, 'yp_wr', '24', 'Ξ¥Ο€ΞΏΟ‡ΟΞµΟ‰Ο„ΞΉΞΊΟ Ο‰ΟΞ¬ΟΞΉΞΏ Ξ²Ξ±ΞΈΞΌΞ―Ξ΄Ξ±Ο‚'),
+(12, 'dnsh', 'Ξ .Ξ•. XXXXXXX', 'Ξ”ΞΉΞµΟΞΈΟ…Ξ½ΟƒΞ· ΞµΞΊΟ€Ξ±Ξ―Ξ΄ΞµΟ…ΟƒΞ·Ο‚');
 
 -- --------------------------------------------------------
 
@@ -673,7 +673,7 @@ CREATE TABLE IF NOT EXISTS `praxi` (
   `name` varchar(100) NOT NULL,
   `ya` varchar(50) NOT NULL,
   `ada` varchar(20) NOT NULL,
-  `apofasi` varchar(100) NOT NULL COMMENT 'απόφαση τοποθέτησης',
+  `apofasi` varchar(100) NOT NULL COMMENT 'Ξ±Ο€ΟΟ†Ξ±ΟƒΞ· Ο„ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·Ο‚',
   `ada_apof` varchar(30) NOT NULL,
   `sxolio` varchar(300) NOT NULL,
   `type` varchar(10) NOT NULL
@@ -684,7 +684,7 @@ CREATE TABLE IF NOT EXISTS `praxi` (
 --
 
 INSERT INTO `praxi` (`id`, `name`, `ya`, `ada`, `apofasi`, `sxolio`, `type`) VALUES
-(1, 'Καμία', '', '', '', '', '');
+(1, 'ΞΞ±ΞΌΞ―Ξ±', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -697,7 +697,7 @@ CREATE TABLE IF NOT EXISTS `praxi_old` (
   `name` varchar(100) NOT NULL,
   `ya` varchar(50) NOT NULL,
   `ada` varchar(20) NOT NULL,
-  `apofasi` varchar(100) NOT NULL COMMENT 'απόφαση τοποθέτησης',
+  `apofasi` varchar(100) NOT NULL COMMENT 'Ξ±Ο€ΟΟ†Ξ±ΟƒΞ· Ο„ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·Ο‚',
   `ada_apof` varchar(30) NOT NULL,
   `sxolio` varchar(300) NOT NULL,
   `type` varchar(10) NOT NULL,
@@ -711,38 +711,38 @@ CREATE TABLE IF NOT EXISTS `praxi_old` (
 
 CREATE TABLE IF NOT EXISTS `school` (
   `id` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL COMMENT '7-ψήφιος Κωδικός Υπουργείου',
-  `category` int(10) NOT NULL COMMENT 'κατηγορία σχολείου: 1 - Α, 2 - Β κλπ.',
-  `type` int(4) NOT NULL COMMENT '0 λοιπά, 1 Δημ, 2 Νηπ.',
+  `code` varchar(10) NOT NULL COMMENT '7-ΟΞ®Ο†ΞΉΞΏΟ‚ ΞΟ‰Ξ΄ΞΉΞΊΟΟ‚ Ξ¥Ο€ΞΏΟ…ΟΞ³ΞµΞ―ΞΏΟ…',
+  `category` int(10) NOT NULL COMMENT 'ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ± ΟƒΟ‡ΞΏΞ»ΞµΞ―ΞΏΟ…: 1 - Ξ‘, 2 - Ξ’ ΞΊΞ»Ο€.',
+  `type` int(4) NOT NULL COMMENT '0 Ξ»ΞΏΞΉΟ€Ξ¬, 1 Ξ”Ξ·ΞΌ, 2 ΞΞ·Ο€.',
   `eaep` int(2) NOT NULL,
   `name` varchar(40) NOT NULL,
   `address` varchar(40) NOT NULL,
-  `tk` int(5) NOT NULL COMMENT 'Ταχυδρομικός κώδικας',
+  `tk` int(5) NOT NULL COMMENT 'Ξ¤Ξ±Ο‡Ο…Ξ΄ΟΞΏΞΌΞΉΞΊΟΟ‚ ΞΊΟΞ΄ΞΉΞΊΞ±Ο‚',
   `tel` varchar(18) NOT NULL,
   `fax` varchar(18) NOT NULL,
   `email` varchar(50) NOT NULL,
   `organikothta` int(11) NOT NULL,
   `organikes` text NOT NULL,
-  `leitoyrg` int(11) NOT NULL COMMENT 'Λειτουργικότητα',
-  `students` text NOT NULL COMMENT 'Οι τάξεις να χωρίζονται με κόμμα',
-  `tmimata` varchar(60) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `ekp_ee` varchar(10) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `leitoyrg` int(11) NOT NULL COMMENT 'Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΞΉΞΊΟΟ„Ξ·Ο„Ξ±',
+  `students` text NOT NULL COMMENT 'ΞΞΉ Ο„Ξ¬ΞΎΞµΞΉΟ‚ Ξ½Ξ± Ο‡Ο‰ΟΞ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ ΞΊΟΞΌΞΌΞ±',
+  `tmimata` varchar(60) NOT NULL COMMENT 'NΞ± Ο‡Ο‰ΟΞ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ ΞΊΟΞΌΞΌΞ±',
+  `ekp_ee` varchar(10) NOT NULL COMMENT 'NΞ± Ο‡Ο‰ΟΞ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ ΞΊΟΞΌΞΌΞ±',
   `entaksis` varchar(30) NOT NULL,
   `ypodoxis` int(11) NOT NULL,
   `frontistiriako` int(11) NOT NULL,
   `ted` smallint(6) NOT NULL,
   `oloimero` int(11) NOT NULL,
   `oloimero_stud` int(11) NOT NULL,
-  `oloimero_tea` int(11) NOT NULL COMMENT 'Δάσκαλοι ολοημέρου',
-  `oloimero_nip` varchar(40) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `klasiko` varchar(40) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `nip` varchar(20) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `oloimero_tea` int(11) NOT NULL COMMENT 'Ξ”Ξ¬ΟƒΞΊΞ±Ξ»ΞΏΞΉ ΞΏΞ»ΞΏΞ·ΞΌΞ­ΟΞΏΟ…',
+  `oloimero_nip` varchar(40) NOT NULL COMMENT 'NΞ± Ο‡Ο‰ΟΞ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ ΞΊΟΞΌΞΌΞ±',
+  `klasiko` varchar(40) NOT NULL COMMENT 'NΞ± Ο‡Ο‰ΟΞ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ ΞΊΟΞΌΞΌΞ±',
+  `nip` varchar(20) NOT NULL COMMENT 'NΞ± Ο‡Ο‰ΟΞ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ ΞΊΟΞΌΞΌΞ±',
   `comments` text NOT NULL,
   `kena_org` varchar(200) NOT NULL,
   `kena_leit` varchar(200) NOT NULL,
-  `type2` tinyint(1) NOT NULL COMMENT '0 δημόσιο, 1 ιδιωτικό, 2 ειδικό',
-  `dimos` tinyint(4) NOT NULL COMMENT 'Από τον πίνακα dimos',
-  `titlos` varchar(100) NOT NULL COMMENT 'τίτλος σχολείου (ολογράφως)',
+  `type2` tinyint(1) NOT NULL COMMENT '0 Ξ΄Ξ·ΞΌΟΟƒΞΉΞΏ, 1 ΞΉΞ΄ΞΉΟ‰Ο„ΞΉΞΊΟ, 2 ΞµΞΉΞ΄ΞΉΞΊΟ',
+  `dimos` tinyint(4) NOT NULL COMMENT 'Ξ‘Ο€Ο Ο„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± dimos',
+  `titlos` varchar(100) NOT NULL COMMENT 'Ο„Ξ―Ο„Ξ»ΞΏΟ‚ ΟƒΟ‡ΞΏΞ»ΞµΞ―ΞΏΟ… (ΞΏΞ»ΞΏΞ³ΟΞ¬Ο†Ο‰Ο‚)',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `anenergo` tinyint(4) NOT NULL,
   `perif` int(11) NOT NULL,
@@ -756,14 +756,14 @@ CREATE TABLE IF NOT EXISTS `school` (
 --
 
 INSERT INTO `school` (`id`, `code`, `category`, `type`, `eaep`, `name`, `address`, `tk`, `tel`, `fax`, `email`, `organikothta`, `organikes`, `leitoyrg`, `students`, `tmimata`, `ekp_ee`, `entaksis`, `ypodoxis`, `frontistiriako`, `ted`, `oloimero`, `oloimero_stud`, `oloimero_tea`, `oloimero_nip`, `klasiko`, `nip`, `comments`, `kena_org`, `kena_leit`, `type2`, `dimos`, `titlos`, `updated`, `anenergo`, `perif`, `systeg`, `vivliothiki`) VALUES
-(1, '2222222', 0, 0, 0, 'Διάθεση ΠΥΣΠΕ', '', 0, '0', '0', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Διάθεση ΠΥΣΠΕ', '2015-06-16 12:04:27', 0, 0, 0, 0),
-(387, '1234567', 0, 0, 0, '?γνωστο', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?γνωστο', '2015-06-16 12:04:16', 0, 0, 0, 0),
-(388, '', 0, 0, 0, '¶λλο ΠΥΣΠΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?λλο ΠΥΣΠΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(389, '', 0, 0, 0, 'Απόσπαση σε φορέα', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση σε φορέα', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(394, '', 0, 0, 0, '¶λλο ΠΥΣΔΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?λλο ΠΥΣΔΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(397, '', 0, 0, 0, 'Σχολικός Σύμβουλος', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Σχολικός Σύμβουλος', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(398, '', 0, 0, 0, 'Δ/νση ΠΕ Ηρακλείου', 'Μεταξοχωρίου 15', 0, '2810529300', '', 'mail@dipe.ira.sch.gr', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', 'Για διοικητικούς', '', '', 0, 4, 'Δ/νση ΠΕ Ηρακλείου', '2018-10-15 10:33:24', 0, 0, 0, 0),
-(399, '', 0, 0, 0, 'Απόσπαση στο εξωτερικό', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση στο εξωτερικό', '0000-00-00 00:00:00', 0, 0, 0, 0);
+(1, '2222222', 0, 0, 0, 'Ξ”ΞΉΞ¬ΞΈΞµΟƒΞ· Ξ Ξ¥Ξ£Ξ Ξ•', '', 0, '0', '0', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Ξ”ΞΉΞ¬ΞΈΞµΟƒΞ· Ξ Ξ¥Ξ£Ξ Ξ•', '2015-06-16 12:04:27', 0, 0, 0, 0),
+(387, '1234567', 0, 0, 0, '?Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ', '2015-06-16 12:04:16', 0, 0, 0, 0),
+(388, '', 0, 0, 0, 'Ξ†Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(389, '', 0, 0, 0, 'Ξ‘Ο€ΟΟƒΟ€Ξ±ΟƒΞ· ΟƒΞµ Ο†ΞΏΟΞ­Ξ±', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Ξ‘Ο€ΟΟƒΟ€Ξ±ΟƒΞ· ΟƒΞµ Ο†ΞΏΟΞ­Ξ±', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(394, '', 0, 0, 0, 'Ξ†Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ”Ξ•', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ”Ξ•', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(397, '', 0, 0, 0, 'Ξ£Ο‡ΞΏΞ»ΞΉΞΊΟΟ‚ Ξ£ΟΞΌΞ²ΞΏΟ…Ξ»ΞΏΟ‚', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Ξ£Ο‡ΞΏΞ»ΞΉΞΊΟΟ‚ Ξ£ΟΞΌΞ²ΞΏΟ…Ξ»ΞΏΟ‚', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(398, '', 0, 0, 0, 'Ξ”/Ξ½ΟƒΞ· Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ…', 'ΞΞµΟ„Ξ±ΞΎΞΏΟ‡Ο‰ΟΞ―ΞΏΟ… 15', 0, '2810529300', '', 'mail@dipe.ira.sch.gr', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', 'Ξ“ΞΉΞ± Ξ΄ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΞΏΟΟ‚', '', '', 0, 4, 'Ξ”/Ξ½ΟƒΞ· Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ…', '2018-10-15 10:33:24', 0, 0, 0, 0),
+(399, '', 0, 0, 0, 'Ξ‘Ο€ΟΟƒΟ€Ξ±ΟƒΞ· ΟƒΟ„ΞΏ ΞµΞΎΟ‰Ο„ΞµΟΞΉΞΊΟ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Ξ‘Ο€ΟΟƒΟ€Ξ±ΟƒΞ· ΟƒΟ„ΞΏ ΞµΞΎΟ‰Ο„ΞµΟΞΉΞΊΟ', '0000-00-00 00:00:00', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1069,15 +1069,15 @@ ALTER TABLE `yphrethsh_ekt`
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 CREATE TABLE `school_requests` (
-  `id` int(11) NOT NULL COMMENT 'Α/Α',
-  `request` text NOT NULL COMMENT 'Αίτημα μονάδας',
-  `comment` text COMMENT 'Σχόλιο Δ/νσης',
-  `school` int(11) NOT NULL COMMENT 'Κωδ. Σχολείου',
-  `done` int(11) NOT NULL DEFAULT '0' COMMENT 'Διεκπεραιώθηκε',
-  `submitted` datetime NOT NULL COMMENT 'Υποβλήθηκε',
-  `handled` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT 'Διεκπεραιώθηκε στις',
-  `school_name` text NOT NULL COMMENT 'Όνομα σχολείου',
-  `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος',
+  `id` int(11) NOT NULL COMMENT 'Ξ‘/Ξ‘',
+  `request` text NOT NULL COMMENT 'Ξ‘Ξ―Ο„Ξ·ΞΌΞ± ΞΌΞΏΞ½Ξ¬Ξ΄Ξ±Ο‚',
+  `comment` text COMMENT 'Ξ£Ο‡ΟΞ»ΞΉΞΏ Ξ”/Ξ½ΟƒΞ·Ο‚',
+  `school` int(11) NOT NULL COMMENT 'ΞΟ‰Ξ΄. Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…',
+  `done` int(11) NOT NULL DEFAULT '0' COMMENT 'Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±ΞΉΟΞΈΞ·ΞΊΞµ',
+  `submitted` datetime NOT NULL COMMENT 'Ξ¥Ο€ΞΏΞ²Ξ»Ξ®ΞΈΞ·ΞΊΞµ',
+  `handled` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT 'Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±ΞΉΟΞΈΞ·ΞΊΞµ ΟƒΟ„ΞΉΟ‚',
+  `school_name` text NOT NULL COMMENT 'ΞΞ½ΞΏΞΌΞ± ΟƒΟ‡ΞΏΞ»ΞµΞ―ΞΏΟ…',
+  `sxol_etos` int(11) NOT NULL COMMENT 'Ξ£Ο‡ΞΏΞ»ΞΉΞΊΟ Ξ­Ο„ΞΏΟ‚',
   `hidden` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1091,7 +1091,7 @@ ALTER TABLE `school_requests`
 -- AUTO_INCREMENT for table `school_requests`
 --
 ALTER TABLE `school_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Α/Α';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ξ‘/Ξ‘';
 
 CREATE TABLE IF NOT EXISTS `school_log` (
   `id` int(11) NOT NULL,

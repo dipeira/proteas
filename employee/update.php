@@ -1,10 +1,10 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
     session_start();
 ?>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
     <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <title>Update</title>
@@ -15,8 +15,8 @@ require_once "../config.php";
 require_once "../tools/functions.php";
 
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
 $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -29,7 +29,7 @@ if ($_POST['org'] == "")
   $org = 387;
 else
 {
-  $organ = mb_convert_encoding($_POST['org'], "iso-8859-7", "utf-8");
+  $organ = $_POST['org'];
   $org = getSchoolID($organ,$mysqlconnection);  
 }
 // yphr array
@@ -40,17 +40,17 @@ for ($i=0; $i<$count; $i++)
         $yp_tmp = 387;
     else
         $yp_tmp = $_POST['yphr'][$i];
-    $yphret[$i] = mb_convert_encoding($yp_tmp, "iso-8859-7", "utf-8");
+    $yphret[$i] = $yp_tmp;
     $yphr_arr[$i] = getSchoolID($yphret[$i],$mysqlconnection);
     $hours_arr[$i] = $_POST['hours'][$i] ? $_POST['hours'][$i] : 24;
 }
 $yphret = $_POST['yphr'][0];
-$yphret = mb_convert_encoding($yphret, "iso-8859-7", "utf-8");
+$yphret = $yphret;
 $yphr = getSchoolID($yphret,$mysqlconnection);
 
 // check if valid school
 if (!$org || !$yphr){
-  notify('Σφάλμα: Παρακαλώ επιλέξτε ένα σχολείο από την αναδυόμενη λίστα',1);
+  notify('Ξ£ΟΞ¬Ξ»ΞΌΞ±: Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΟΞΉΞ»Ξ­ΞΎΟΞ΅ Ξ­Ξ½Ξ± ΟΟΞΏΞ»Ξ΅Ξ―ΞΏ Ξ±ΟΟ ΟΞ·Ξ½ Ξ±Ξ½Ξ±Ξ΄ΟΟΞΌΞ΅Ξ½Ξ· Ξ»Ξ―ΟΟΞ±',1);
   die();
 }
 
@@ -106,7 +106,7 @@ if ($_POST['katoikon']){
 if (isset($_POST['action']))
 {
     // check if record exists by checking am AND surname
-    $surn = mb_convert_encoding($surname, "iso-8859-7", "utf-8");
+    $surn = $surname;
     $query = "select afm,surname from employee WHERE afm='$afm' AND surname = '$surn'";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result))
@@ -114,7 +114,6 @@ if (isset($_POST['action']))
         $query0 = "INSERT INTO employee (name, surname, patrwnymo, mhtrwnymo, klados, am, sx_organikhs, sx_yphrethshs, fek_dior, hm_dior, vathm, mk, hm_anal, met_did, proyp, comments, afm, thesi, status, wres, proyp_not) ";
         $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$am','$org','$yphr_arr[0]','$fek_dior','$hm_dior','$vathm','$mk','$hm_anal','$met_did','$proyp','$comments', '$afm', '$thesi', '$katast', '$wres', '$proyp_not')";
         $query = $query0.$query1;
-        $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
         mysqli_query($mysqlconnection, $query);
         // insert into yphrethsh
         $id = mysqli_insert_id($mysqlconnection);
@@ -130,7 +129,7 @@ if (isset($_POST['action']))
     // if already inserted
     else 
     {
-        notify('Η εγγραφή έχει ήδη καταχωρηθεί...',1);
+        notify('Ξ Ξ΅Ξ³Ξ³ΟΞ±ΟΞ® Ξ­ΟΞ΅ΞΉ Ξ®Ξ΄Ξ· ΞΊΞ±ΟΞ±ΟΟΟΞ·ΞΈΞ΅Ξ―...',1);
         $dupe = 1;
     }
 } //of if action
@@ -147,7 +146,6 @@ else {
     $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
     $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres',email='$email',org_ent=$org_ent WHERE id='$id'";
     $query = $query1.$query2.$query3.$query4;
-    $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     //echo $query;
     $res = mysqli_query($mysqlconnection, $query);
     // insert 2 log
@@ -182,7 +180,7 @@ mysqli_close($mysqlconnection);
 
 echo "<br>";
 if (!$dupe)
-    notify('Επιτυχής καταχώρηση!',0);
+    notify('ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ·!',0);
 echo "</body>";
 echo "</html>";
 ?>

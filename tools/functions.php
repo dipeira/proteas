@@ -198,7 +198,7 @@ function ypoloipo_adeiwn($id, $sql)
         $prev_kan += $pr_after;
         $prev_rem -= $pr_after;
             
-        //echo "<small>Υπολ.$cur_yr: $rem, Yπολ.$prev_yr: $prev_rem / Κανονικές $cur_yr: $cur_kan, Κανονικές $prev_yr: $prev_kan</small><br>";
+        //echo "<small>Ξ¥Ο€ΞΏΞ».$cur_yr: $rem, YΟ€ΞΏΞ».$prev_yr: $prev_rem / ΞΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ­Ο‚ $cur_yr: $cur_kan, ΞΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ­Ο‚ $prev_yr: $prev_kan</small><br>";
         $ret[2] = $prev_yr;
         $ret[3] = $prev_rem - $cur_kan;
         if ($ret[3]<0) {
@@ -233,7 +233,7 @@ function kladosCombo($klados,$conn)
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"klados\" id=\"klados\">";
-       echo "<option value='' selected>(Επιλογή:)</option>";
+       echo "<option value='' selected>(Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
@@ -256,7 +256,7 @@ function kladosCmb($conn)
     }
     $num=mysqli_num_rows($result);
     echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
-    echo "<option value='' selected>(Επιλογή:)</option>";
+    echo "<option value='' selected>(Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
@@ -276,7 +276,7 @@ function typeCmb($conn)
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"type\" id=\"type\">";
-    echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
+    echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
@@ -296,7 +296,7 @@ function typeCmb1($typeinp,$conn)
     $num=mysqli_num_rows($result);
             $type1 = get_type($typeinp, $conn);
     echo "<select name=\"type\" id=\"type\">";
-    echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
+    echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
@@ -313,82 +313,82 @@ function typeCmb1($typeinp,$conn)
 function vathmosCmb($conn)
 {
     echo "<select name=\"vathm\">";
-    echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-    echo "<option value=\"Α\">Α</option>";
-    echo "<option value=\"Β\">Β</option>";
-    echo "<option value=\"Γ\">Γ</option>";
-    echo "<option value=\"Δ\">Δ</option>";
+    echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ:)</option>";
+    echo "<option value=\"Ξ‘\">Ξ‘</option>";
+    echo "<option value=\"Ξ’\">Ξ’</option>";
+    echo "<option value=\"Ξ“\">Ξ“</option>";
+    echo "<option value=\"Ξ”\">Ξ”</option>";
     echo "</select>";
 }
 function vathmosCmb1($v, $conn)
 {
     echo "<select name=\"vathm\">";
-    if (strcmp($v, 'Α')==0) {
-      echo "<option value=\"Α\" selected>Α</option>";
+    if (strcmp($v, 'Ξ‘')==0) {
+      echo "<option value=\"Ξ‘\" selected>Ξ‘</option>";
     } else {
-        echo "<option value=\"Α\">Α</option>";
+        echo "<option value=\"Ξ‘\">Ξ‘</option>";
     }
-    if (strcmp($v, 'Β')==0) {
-      echo "<option value=\"Β\" selected>Β</option>";
+    if (strcmp($v, 'Ξ’')==0) {
+      echo "<option value=\"Ξ’\" selected>Ξ’</option>";
     } else {
-        echo "<option value=\"Β\">Β</option>";
+        echo "<option value=\"Ξ’\">Ξ’</option>";
     }
-    if (strcmp($v, 'Γ')==0) {
-      echo "<option value=\"Γ\" selected>Γ</option>";
+    if (strcmp($v, 'Ξ“')==0) {
+      echo "<option value=\"Ξ“\" selected>Ξ“</option>";
     } else {
-        echo "<option value=\"Γ\">Γ</option>";
+        echo "<option value=\"Ξ“\">Ξ“</option>";
     }
-    if (strcmp($v, 'Δ')==0) {
-      echo "<option value=\"Δ\" selected>Δ</option>";
+    if (strcmp($v, 'Ξ”')==0) {
+      echo "<option value=\"Ξ”\" selected>Ξ”</option>";
     } else {
-        echo "<option value=\"Δ\">Δ</option>";
+        echo "<option value=\"Ξ”\">Ξ”</option>";
     }
     echo "</select>";
 }
 function taksiCmb()
 {
     echo "<select name=\"taksi\">";
-    echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-    echo "<option value=\"1\">Α</option>";
-    echo "<option value=\"2\">Β</option>";
-    echo "<option value=\"3\">Γ</option>";
-    echo "<option value=\"4\">Δ</option>";
-    echo "<option value=\"5\">Ε</option>";
-    echo "<option value=\"6\">ΣΤ</option>";
+    echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ:)</option>";
+    echo "<option value=\"1\">Ξ‘</option>";
+    echo "<option value=\"2\">Ξ’</option>";
+    echo "<option value=\"3\">Ξ“</option>";
+    echo "<option value=\"4\">Ξ”</option>";
+    echo "<option value=\"5\">Ξ•</option>";
+    echo "<option value=\"6\">Ξ£Ξ¤</option>";
     echo "</select>";
 }
 function taksiCmb1($t)
 {
     echo "<select name=\"taksi\">";
     if ($t == 1) {
-        echo "<option value=\"1\" selected>Α</option>";
+        echo "<option value=\"1\" selected>Ξ‘</option>";
     } else {
-        echo "<option value=\"1\">Α</option>";
+        echo "<option value=\"1\">Ξ‘</option>";
     }
     if ($t == 2) {
-        echo "<option value=\"2\" selected>Β</option>";
+        echo "<option value=\"2\" selected>Ξ’</option>";
     } else {
-        echo "<option value=\"2\">Β</option>";
+        echo "<option value=\"2\">Ξ’</option>";
     }
     if ($t == 3) {
-        echo "<option value=\"3\" selected>Γ</option>";
+        echo "<option value=\"3\" selected>Ξ“</option>";
     } else {
-        echo "<option value=\"3\">Γ</option>";
+        echo "<option value=\"3\">Ξ“</option>";
     }
     if ($t == 4) {
-        echo "<option value=\"4\" selected>Δ</option>";
+        echo "<option value=\"4\" selected>Ξ”</option>";
     } else {
-        echo "<option value=\"4\">Δ</option>";
+        echo "<option value=\"4\">Ξ”</option>";
     }
     if ($t == 5) {
-        echo "<option value=\"5\" selected>Ε</option>";
+        echo "<option value=\"5\" selected>Ξ•</option>";
     } else {
-        echo "<option value=\"5\">Ε</option>";
+        echo "<option value=\"5\">Ξ•</option>";
     }
     if ($t == 6) {
-        echo "<option value=\"6\" selected>ΣΤ</option>";
+        echo "<option value=\"6\" selected>Ξ£Ξ¤</option>";
     } else {
-        echo "<option value=\"6\">ΣΤ</option>";
+        echo "<option value=\"6\">Ξ£Ξ¤</option>";
     }
     echo "</select>";
 }
@@ -396,28 +396,28 @@ function metdidCombo($met_did = 0)
 {
     echo "<select name=\"met_did\">";
     if ($met_did == 0) {
-        echo "<option value='0' selected=\"selected\">Όχι</option>";
-        echo "<option value='1'>Μεταπτυχιακό</option>";
-        echo "<option value='2'>Διδακτορικό</option>";            
-        echo "<option value='3'>Μετ. & Διδ.</option>";
+        echo "<option value='0' selected=\"selected\">ΞΟ‡ΞΉ</option>";
+        echo "<option value='1'>ΞΞµΟ„Ξ±Ο€Ο„Ο…Ο‡ΞΉΞ±ΞΊΟ</option>";
+        echo "<option value='2'>Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΏΟΞΉΞΊΟ</option>";            
+        echo "<option value='3'>ΞΞµΟ„. & Ξ”ΞΉΞ΄.</option>";
     }
     elseif ($met_did == 1) {
         echo "<option value='0'></option>";
-        echo "<option value='1' selected=\"selected\">Μεταπτυχιακό</option>";
-        echo "<option value='2'>Διδακτορικό</option>";
-        echo "<option value='3'>Μετ. & Διδ.</option>";
+        echo "<option value='1' selected=\"selected\">ΞΞµΟ„Ξ±Ο€Ο„Ο…Ο‡ΞΉΞ±ΞΊΟ</option>";
+        echo "<option value='2'>Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΏΟΞΉΞΊΟ</option>";
+        echo "<option value='3'>ΞΞµΟ„. & Ξ”ΞΉΞ΄.</option>";
     }
     elseif ($met_did == 2) {
         echo "<option value='0'></option>";
-        echo "<option value='1'>Μεταπτυχιακό</option>";
-        echo "<option value='2' selected=\"selected\">Διδακτορικό</option>";            
-        echo "<option value='3'>Μετ. & Διδ.</option>";
+        echo "<option value='1'>ΞΞµΟ„Ξ±Ο€Ο„Ο…Ο‡ΞΉΞ±ΞΊΟ</option>";
+        echo "<option value='2' selected=\"selected\">Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΏΟΞΉΞΊΟ</option>";            
+        echo "<option value='3'>ΞΞµΟ„. & Ξ”ΞΉΞ΄.</option>";
     }
     elseif ($met_did == 3) {
         echo "<option value='0'></option>";
-        echo "<option value='1'>Μεταπτυχιακό</option>";
-        echo "<option value='2'>Διδακτορικό</option>";            
-        echo "<option value='3' selected=\"selected\">Μετ. & Διδ.</option>";
+        echo "<option value='1'>ΞΞµΟ„Ξ±Ο€Ο„Ο…Ο‡ΞΉΞ±ΞΊΟ</option>";
+        echo "<option value='2'>Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΏΟΞΉΞΊΟ</option>";            
+        echo "<option value='3' selected=\"selected\">ΞΞµΟ„. & Ξ”ΞΉΞ΄.</option>";
     }
     echo "</select>";
 }
@@ -434,67 +434,67 @@ function thesicmb($thesi)
     switch ($thesi)
     {
     case 0:
-        $th = "Εκπαιδευτικός";
+        $th = "Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚";
         break;
     case 1:
-        $th = "Υποδιευθυντής";
+        $th = "Ξ¥Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚";
         break;
     case 2:
-        $th = "Διευθυντής/Προϊστάμενος";
+        $th = "Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚/Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚";
         break;
     case 3:
-        $th = "Τμήμα Ένταξης";
+        $th = "Ξ¤ΞΌΞ®ΞΌΞ± ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚";
         break;
     case 4:
-        $th = "Διοικητικός";
+        $th = "Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΟ‚";
         break;
     case 5:
-        $th = "Ιδιωτικός";
+        $th = "Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΟ‚";
         break;
     case 6:
-        $th = "Δ/ντής-Πρ/νος Ιδιωτικού Σχ.";
+        $th = "Ξ”/Ξ½Ο„Ξ®Ο‚-Ξ Ο/Ξ½ΞΏΟ‚ Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞΏΟ Ξ£Ο‡.";
         break;
     }
     return $th;
 }
 function thesiselectcmb($thesi)
 {
-    echo "<tr><td>Θέση</td><td>";
+    echo "<tr><td>ΞΞ­ΟƒΞ·</td><td>";
     echo "<select name=\"thesi\">";
     if ($thesi == 0) {
-        echo "<option value='0' selected=\"selected\">Εκπαιδευτικός</option>";
+        echo "<option value='0' selected=\"selected\">Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚</option>";
     } else {
-        echo "<option value='0'>Εκπαιδευτικός</option>";
+        echo "<option value='0'>Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚</option>";
     }
     if ($thesi == 1) {
-        echo "<option value='1' selected=\"selected\">Υποδιευθυντής</option>";
+        echo "<option value='1' selected=\"selected\">Ξ¥Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚</option>";
     } else {
-        echo "<option value='1'>Υποδιευθυντής</option>";
+        echo "<option value='1'>Ξ¥Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚</option>";
     }
     if ($thesi == 2) {
-        echo "<option value='2' selected=\"selected\">Διευθυντής/Προϊστάμενος</option>";    
+        echo "<option value='2' selected=\"selected\">Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚/Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚</option>";    
     } else {
-        echo "<option value='2'>Διευθυντής/Προϊστάμενος</option>";
+        echo "<option value='2'>Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚/Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚</option>";
     }
     if ($thesi == 3) {
-        echo "<option value='3' selected=\"selected\">Τμήμα Ένταξης</option>";    
+        echo "<option value='3' selected=\"selected\">Ξ¤ΞΌΞ®ΞΌΞ± ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚</option>";    
     } else {
-        echo "<option value='3'>Τμήμα Ένταξης</option>";
+        echo "<option value='3'>Ξ¤ΞΌΞ®ΞΌΞ± ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚</option>";
     }
     if ($thesi == 4) {
-        echo "<option value='4' selected=\"selected\">Διοικητικός</option>";    
+        echo "<option value='4' selected=\"selected\">Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΟ‚</option>";    
     } else {
-        echo "<option value='4'>Διοικητικός</option>";
+        echo "<option value='4'>Ξ”ΞΉΞΏΞΉΞΊΞ·Ο„ΞΉΞΊΟΟ‚</option>";
     }
     if ($thesi == 5) {
-        echo "<option value='5' selected=\"selected\">Ιδιωτικός</option>";    
+        echo "<option value='5' selected=\"selected\">Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΟ‚</option>";    
     } else {
-        echo "<option value='5'>Ιδιωτικός</option>";
+        echo "<option value='5'>Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΟ‚</option>";
     }
     if ($thesi == 6) {
-        echo "<option value='6' selected=\"selected\">Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";    
+        echo "<option value='6' selected=\"selected\">Ξ”/Ξ½Ο„Ξ®Ο‚-Ξ Ο/Ξ½ΞΏΟ‚ Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞΏΟ Ξ£Ο‡.</option>";    
     } else {
-        echo "<option value='6'>Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";
+        echo "<option value='6'>Ξ”/Ξ½Ο„Ξ®Ο‚-Ξ Ο/Ξ½ΞΏΟ‚ Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞΏΟ Ξ£Ο‡.</option>";
     }
 }
 function thesianaplcmb($thesi)
@@ -502,43 +502,43 @@ function thesianaplcmb($thesi)
     switch ($thesi)
     {
     case 0:
-        $th = "Εκπαιδευτικός";
+        $th = "Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚";
         break;
     case 1:
-        $th = "Διευθυντής/Προϊστάμενος";
+        $th = "Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚/Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚";
         break;
     case 2:
-        $th = "Τμήμα Ένταξης";
+        $th = "Ξ¤ΞΌΞ®ΞΌΞ± ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚";
         break;
     case 3:
-        $th = "Παράλληλη στήριξη";
+        $th = "Ξ Ξ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»Ξ· ΟƒΟ„Ξ®ΟΞΉΞΎΞ·";
         break;
     }
     return $th;
 }
 function thesianaplselectcmb($thesi)
 {
-    echo "<tr><td>Θέση</td><td>";
+    echo "<tr><td>ΞΞ­ΟƒΞ·</td><td>";
     echo "<select name=\"thesi\">";
     if ($thesi == 0) {
-        echo "<option value='0' selected=\"selected\">Εκπαιδευτικός</option>";
+        echo "<option value='0' selected=\"selected\">Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚</option>";
     } else {
-        echo "<option value='0'>Εκπαιδευτικός</option>";
+        echo "<option value='0'>Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΟ‚</option>";
     }
     if ($thesi == 1) {
-        echo "<option value='1' selected=\"selected\">Διευθυντής/Προϊστάμενος</option>";    
+        echo "<option value='1' selected=\"selected\">Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚/Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚</option>";    
     } else {
-        echo "<option value='1'>Διευθυντής/Προϊστάμενος</option>";
+        echo "<option value='1'>Ξ”ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„Ξ®Ο‚/Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚</option>";
     }
     if ($thesi == 2) {
-        echo "<option value='2' selected=\"selected\">Τμήμα Ένταξης</option>";    
+        echo "<option value='2' selected=\"selected\">Ξ¤ΞΌΞ®ΞΌΞ± ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚</option>";    
     } else {
-        echo "<option value='2'>Τμήμα Ένταξης</option>";
+        echo "<option value='2'>Ξ¤ΞΌΞ®ΞΌΞ± ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚</option>";
     }
     if ($thesi == 3) {
-        echo "<option value='3' selected=\"selected\">Παράλληλη στήριξη</option>";    
+        echo "<option value='3' selected=\"selected\">Ξ Ξ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»Ξ· ΟƒΟ„Ξ®ΟΞΉΞΎΞ·</option>";    
     } else {
-        echo "<option value='3'>Παράλληλη στήριξη</option>";
+        echo "<option value='3'>Ξ Ξ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»Ξ· ΟƒΟ„Ξ®ΟΞΉΞΎΞ·</option>";
     }
 }
     
@@ -575,7 +575,7 @@ function schCombo($name1,$conn)
     }
     $num=mysqli_num_rows($result);
     echo "<select name='$name1'>";
-    echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
+    echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
@@ -605,7 +605,7 @@ function getDimos($id,$conn)
     //else
     $dimos = mysqli_result($result, 0);
     if (!$dimos) {
-        return "¶γνωστος";
+        return "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏΟ‚";
     } else {
         return $dimos;
     }
@@ -614,24 +614,24 @@ function katastCmb($v)
 {
     echo "<select name=\"status\">";
     if ($v==1) {
-        echo "<option value=\"1\" selected>Εργάζεται</option>";
+        echo "<option value=\"1\" selected>Ξ•ΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ</option>";
     } else {
-        echo "<option value=\"1\">Εργάζεται</option>";
+        echo "<option value=\"1\">Ξ•ΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ</option>";
     }
     if ($v==2) {
-        echo "<option value=\"2\" selected>Λύση Σχέσης - Παραίτηση</option>";
+        echo "<option value=\"2\" selected>Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚ - Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·</option>";
     } else {
-        echo "<option value=\"2\">Λύση Σχέσης - Παραίτηση</option>";
+        echo "<option value=\"2\">Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚ - Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·</option>";
     }
     if ($v==3) {
-        echo "<option value=\"3\" selected>¶δεια</option>";
+        echo "<option value=\"3\" selected>Ξ†Ξ΄ΞµΞΉΞ±</option>";
     } else {
-        echo "<option value=\"3\">¶δεια</option>";
+        echo "<option value=\"3\">Ξ†Ξ΄ΞµΞΉΞ±</option>";
     }
     if ($v==4) {
-        echo "<option value=\"4\" selected>Διαθεσιμότητα</option>";
+        echo "<option value=\"4\" selected>Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±</option>";
     } else {
-        echo "<option value=\"4\">Διαθεσιμότητα</option>";
+        echo "<option value=\"4\">Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±</option>";
     }
     echo "</select>";
 }
@@ -702,26 +702,26 @@ function days2date($input)
     // vathmos -> ret[0]: vathmos, ret[1]: days (pleonazwn sto vathmo)
 function vathmos($days)
 {
-    // =IF(R3<1080;"ΣΤ";IF(R3<3240;"Ε";IF(R3<5400;"Δ";IF(R3<7560;"Γ";"Β"))))
+    // =IF(R3<1080;"Ξ£Ξ¤";IF(R3<3240;"Ξ•";IF(R3<5400;"Ξ”";IF(R3<7560;"Ξ“";"Ξ’"))))
     switch ($days)
     {
     case ($days<1080):
-        $ret[0] = "ΣΤ";
+        $ret[0] = "Ξ£Ξ¤";
         break;
     case ($days>=1080 && $days<3240):
-        $ret[0] = "Ε";
+        $ret[0] = "Ξ•";
         $ret[1] = $days-1080;
         break;
     case ($days>=3240 && $days<5400):
-        $ret[0] = "Δ";
+        $ret[0] = "Ξ”";
         $ret[1] = $days-3240;
         break;
     case ($days>=5400 && $days<7560):
-        $ret[0] = "Γ";
+        $ret[0] = "Ξ“";
         $ret[1] = $days-5400;
         break;
     default:
-        $ret[0] = "Β";
+        $ret[0] = "Ξ’";
         $ret[1] = $days-7560;
         break;
     }
@@ -731,10 +731,10 @@ function mk_kat($days,$vathmos)         // mk katatakshs
 {
     switch ($vathmos[0])
     {
-    case ("ΣΤ"):    // ΣΤ'
+    case ("Ξ£Ξ¤"):    // Ξ£Ξ¤'
         $mk = 0;
         break;
-    case ("Ε"):    // Ε'
+    case ("Ξ•"):    // Ξ•'
         switch ($days)
         {
         case ($days>=1080 && $days<1800):
@@ -748,7 +748,7 @@ function mk_kat($days,$vathmos)         // mk katatakshs
             break;
         }
         break;
-    case ("Δ"):  // Δ'
+    case ("Ξ”"):  // Ξ”'
         switch ($days)
         {
         case ($days>=3240 && $days<3960):
@@ -762,7 +762,7 @@ function mk_kat($days,$vathmos)         // mk katatakshs
             break;
         }
         break;
-    case ("Γ"):    // Γ'
+    case ("Ξ“"):    // Ξ“'
         switch ($days)
         {
         case ($days>=5400 && $days<6120):
@@ -776,7 +776,7 @@ function mk_kat($days,$vathmos)         // mk katatakshs
             break;
         }
         break;
-    case ("Β"):    // Β'
+    case ("Ξ’"):    // Ξ’'
         switch ($days)
         {
         case ($days>=7560 && $days<8640):
@@ -806,15 +806,15 @@ function mk_kat($days,$vathmos)         // mk katatakshs
     return $mk;
                 
 }
-    // 16-12-2013 added Γ4
+    // 16-12-2013 added Ξ“4
 function mk($days,$vathmos)
 {
     switch ($vathmos[0])
     {
-    case ("ΣΤ"):    // ΣΤ'
+    case ("Ξ£Ξ¤"):    // Ξ£Ξ¤'
         $mk = 0;
         break;
-    case ("Ε"):    // Ε'
+    case ("Ξ•"):    // Ξ•'
         switch ($days)
         {
         case ($days>=1080 && $days<1800):
@@ -828,7 +828,7 @@ function mk($days,$vathmos)
             break;
         }
         break;
-    case ("Δ"):  // Δ'
+    case ("Ξ”"):  // Ξ”'
         switch ($days)
         {
         case ($days>=3240 && $days<3960):
@@ -845,7 +845,7 @@ function mk($days,$vathmos)
             break;
         }
         break;
-    case ("Γ"):    // Γ'
+    case ("Ξ“"):    // Ξ“'
         switch ($days)
         {
         case ($days>=5400 && $days<6120):
@@ -867,7 +867,7 @@ function mk($days,$vathmos)
         break;
 
                                 
-    case ("Β"):    // Β'
+    case ("Ξ’"):    // Ξ’'
         switch ($days)
         {
         case ($days>=7560 && $days<8640):
@@ -898,15 +898,15 @@ function mk($days,$vathmos)
 }
         
     // mk_plus: returns mk[0]: mk & mk[1]:days in mk
-    // 16-12-2013 added Γ4
+    // 16-12-2013 added Ξ“4
 function mk_plus($days,$vathmos)
 {
     switch ($vathmos)
     {
-    case ("ΣΤ"):    // ΣΤ'
+    case ("Ξ£Ξ¤"):    // Ξ£Ξ¤'
         $mk[0] = 0;
         break;
-    case ("Ε"):    // Ε'
+    case ("Ξ•"):    // Ξ•'
         switch ($days)
         {
         case ($days>=1080 && $days<1800):
@@ -924,7 +924,7 @@ function mk_plus($days,$vathmos)
         }
         break;
                         
-    case ("Δ"):  // Δ'
+    case ("Ξ”"):  // Ξ”'
         switch ($days)
         {
         case ($days>=3240 && $days<3960):
@@ -946,7 +946,7 @@ function mk_plus($days,$vathmos)
         }
         break;
                         
-    case ("Γ"):    // Γ'
+    case ("Ξ“"):    // Ξ“'
         switch ($days)
         {
         case ($days>=5400 && $days<6120):
@@ -972,7 +972,7 @@ function mk_plus($days,$vathmos)
         }
         break;
                         
-    case ("Β"):    // Β'
+    case ("Ξ’"):    // Ξ’'
         switch ($days)
         {
         case ($days>=7560 && $days<8640):
@@ -1005,7 +1005,7 @@ function mk_plus($days,$vathmos)
             break;
         }
         break;
-    case ("Α"):
+    case ("Ξ‘"):
         $mk[0]=0;
         $mk[1]=0;
         break;
@@ -1056,7 +1056,7 @@ function get_anatr($id, $mysqlconnection){
   $anatr = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $row['proyp'] + $row['aney_xr'];
   return $anatr;
 }
-// get_mk: Function for ΜΚ computation
+// get_mk: Function for ΞΞ computation
 // returns MK (mk -> int) and total days to compute MK (ymd -> array)
 function get_mk($id, $mysqlconnection, $date = null) {
   $asked_date = $date ? $date : date("Y-m-d");
@@ -1106,7 +1106,7 @@ function get_mk($id, $mysqlconnection, $date = null) {
   $v99 = "-$tmp[1] day"; //may need fixing...
   $vdate = strtotime ( $v99 , $d1 );
   $vdate = date ( 'd-m-Y' , $vdate );
-  echo "<br>MK: $mk <small>(από $vdate)</small>";
+  echo "<br>MK: $mk <small>(Ξ±Ο€Ο $vdate)</small>";
   */
   return array(
     'mk' => $mk,
@@ -1127,12 +1127,12 @@ function ypol_yphr($yphr,$anatr)
     $d1 = strtotime($yphr);
     $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr;
     if ($result<=0) {
-        echo "Λάθος ημερομηνία";
+        echo "Ξ›Ξ¬ΞΈΞΏΟ‚ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±";
     } else
     {
         $ymd=days2ymd($result);    
         //return $ymd;
-        $ret = "Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]";
+        $ret = "ΞΟ„Ξ·: $ymd[0] &nbsp; ΞΞ®Ξ½ΞµΟ‚: $ymd[1] &nbsp; Ξ—ΞΌΞ­ΟΞµΟ‚: $ymd[2]";
         return $ret;
     }
 }
@@ -1168,13 +1168,13 @@ function greek_to_greeklish($string)
 {
     return strtr(
         $string, array(
-        'Α' => 'A', 'Β' => 'V', 'Γ' => 'G', 'Δ' => 'D', 'Ε' => 'E', 'Ζ' => 'Z', 'Η' => 'I', 'Θ' => 'TH', 'Ι' => 'I', 'Κ' => 'K', 'Λ' => 'L',
-        'Μ' => 'M', 'Ν' => 'N', 'Ξ' => 'KS', 'Ο' => 'O', 'Π' => 'P', 'Ρ' => 'R', 'Σ' => 'S', 'Τ' => 'T', 'Υ' => 'Y', 'Φ' => 'F','Χ' => 'X', 'Ψ' => 'PS', 'Ω' => 'O',
-        'α' => 'a', 'β' => 'v', 'γ' => 'g', 'δ' => 'd', 'ε' => 'e', 'ζ' => 'z', 'η' => 'i',
-        'θ' => 'th', 'ι' => 'i', 'κ' => 'k', 'λ' => 'l', 'μ' => 'm', 'ν' => 'n', 'ξ' => 'ks', 'ο' => 'o', 'π' => 'p', 'ρ' => 'r',
-        'σ' => 's', 'τ' => 't', 'υ' => 'y', 'φ' => 'f', 'χ' => 'x', 'ψ' => 'ps', 'ω' => 'o', 'ς' => 's',
-        'ά' => 'a', 'έ' => 'e', 'ή' => 'i', 'ί' => 'i', 'ό' => 'o', 'ύ' => 'y', 'ώ' => 'o',
-        'ϊ' => 'i', 'ϋ' => 'y','Ϊ' => 'I', 'Ϋ' => 'Y','ΐ' => 'i', 'ΰ' => 'y'
+        'Ξ‘' => 'A', 'Ξ’' => 'V', 'Ξ“' => 'G', 'Ξ”' => 'D', 'Ξ•' => 'E', 'Ξ–' => 'Z', 'Ξ—' => 'I', 'Ξ' => 'TH', 'Ξ™' => 'I', 'Ξ' => 'K', 'Ξ›' => 'L',
+        'Ξ' => 'M', 'Ξ' => 'N', 'Ξ' => 'KS', 'Ξ' => 'O', 'Ξ ' => 'P', 'Ξ΅' => 'R', 'Ξ£' => 'S', 'Ξ¤' => 'T', 'Ξ¥' => 'Y', 'Ξ¦' => 'F','Ξ§' => 'X', 'Ξ¨' => 'PS', 'Ξ©' => 'O',
+        'Ξ±' => 'a', 'Ξ²' => 'v', 'Ξ³' => 'g', 'Ξ΄' => 'd', 'Ξµ' => 'e', 'Ξ¶' => 'z', 'Ξ·' => 'i',
+        'ΞΈ' => 'th', 'ΞΉ' => 'i', 'ΞΊ' => 'k', 'Ξ»' => 'l', 'ΞΌ' => 'm', 'Ξ½' => 'n', 'ΞΎ' => 'ks', 'ΞΏ' => 'o', 'Ο€' => 'p', 'Ο' => 'r',
+        'Οƒ' => 's', 'Ο„' => 't', 'Ο…' => 'y', 'Ο†' => 'f', 'Ο‡' => 'x', 'Ο' => 'ps', 'Ο‰' => 'o', 'Ο‚' => 's',
+        'Ξ¬' => 'a', 'Ξ­' => 'e', 'Ξ®' => 'i', 'Ξ―' => 'i', 'Ο' => 'o', 'Ο' => 'y', 'Ο' => 'o',
+        'Ο' => 'i', 'Ο‹' => 'y','Ξª' => 'I', 'Ξ«' => 'Y','Ξ' => 'i', 'Ξ°' => 'y'
         )
     );
 }
@@ -1249,7 +1249,7 @@ function setParam($name,$value,$conn)
 function do2yphr($mysqlconnection, $disp = 1)
 {
     if ($disp) {
-        echo "<h3>Πλήρωση πίνακα υπηρετήσεων</h3>";
+        echo "<h3>Ξ Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο€Ξ―Ξ½Ξ±ΞΊΞ± Ο…Ο€Ξ·ΟΞµΟ„Ξ®ΟƒΞµΟ‰Ξ½</h3>";
     }
     set_time_limit(1200);  
     $sxol_etos = getParam('sxol_etos', $mysqlconnection);
@@ -1280,7 +1280,7 @@ function do2yphr($mysqlconnection, $disp = 1)
 
     mysqli_close($mysqlconnection);
     if ($disp) {
-        echo "<br>$i υπάλληλοι<br>$ins_count αλλαγές...<br>";
+        echo "<br>$i Ο…Ο€Ξ¬Ξ»Ξ»Ξ·Ξ»ΞΏΞΉ<br>$ins_count Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚...<br>";
     }
 }
     // returns school category
@@ -1288,34 +1288,34 @@ function getCategory($cat)
 {
     switch ($cat){
     case 0:
-        return "¶γνωστο";
+        return "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ";
             exit;
     case 1:
-        return "Α' ($cat)";
+        return "Ξ‘' ($cat)";
             exit;
     case 2:
-        return "Β' ($cat)";
+        return "Ξ’' ($cat)";
             exit;
     case 3:
-        return "Γ' ($cat)";
+        return "Ξ“' ($cat)";
             exit;
     case 4:
-        return "Δ' ($cat)";
+        return "Ξ”' ($cat)";
             exit;
     case 5:
-        return "Ε' ($cat)";
+        return "Ξ•' ($cat)";
             exit;
     case 6:
-        return "ΣΤ' ($cat)";
+        return "Ξ£Ξ¤' ($cat)";
             exit;
     case 7:
-        return "Ζ' ($cat)";
+        return "Ξ–' ($cat)";
             exit;
     case 8:
-        return "Η' ($cat)";
+        return "Ξ—' ($cat)";
             exit;
     case 9:
-        return "Θ' ($cat)";
+        return "Ξ' ($cat)";
             exit;
     }
 }
@@ -1351,7 +1351,7 @@ function check_idiwtiko($conn)
     if (!mysqli_num_rows($result)) {
         return "";
     } else {
-        $ret = "Οι παρακάτω εκπ/κοί έχουν άδεια ιδιωτικού έργου σε δημόσιο φορέα που έχει λήξει:<br>";
+        $ret = "ΞΞΉ Ο€Ξ±ΟΞ±ΞΊΞ¬Ο„Ο‰ ΞµΞΊΟ€/ΞΊΞΏΞ― Ξ­Ο‡ΞΏΟ…Ξ½ Ξ¬Ξ΄ΞµΞΉΞ± ΞΉΞ΄ΞΉΟ‰Ο„ΞΉΞΊΞΏΟ Ξ­ΟΞ³ΞΏΟ… ΟƒΞµ Ξ΄Ξ·ΞΌΟΟƒΞΉΞΏ Ο†ΞΏΟΞ­Ξ± Ο€ΞΏΟ… Ξ­Ο‡ΞµΞΉ Ξ»Ξ®ΞΎΞµΞΉ:<br>";
     }
     while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)){
         $ret .= "<small><a href=\"employee.php?id=".  $row['id'] ."&op=view\" target=\"_blank\">". $row['surname'] ." ". $row['name'] ."</a></small><br>";
@@ -1371,8 +1371,8 @@ function find_prev_year($sxoletos)
     /*
     * anagkes_wrwn: Compute required hours based on oloimero schedule 2016-17
     * Returns required hours depending on number of classes
-    * tmimata: 0: A, 1: B, 2: Γ, 3: Δ, 4: E, 5: ΣΤ
-    * 6: Ολ. 15.00, 7: Ολ. 16:00, 8: ΠΖ
+    * tmimata: 0: A, 1: B, 2: Ξ“, 3: Ξ”, 4: E, 5: Ξ£Ξ¤
+    * 6: ΞΞ». 15.00, 7: ΞΞ». 16:00, 8: Ξ Ξ–
     */
 function anagkes_wrwn($tm)
 {
@@ -1500,8 +1500,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     $avhrs = [];
     $all = $allcnt = [];
     // init db
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     // get tmimata
     $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
     $result = mysqli_query($mysqlconnection, $query);
@@ -1521,9 +1521,9 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     if ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10) {
         $tmimata_exp[8] = 0;
     }
-    // Απαιτούμενες ώρες
+    // Ξ‘Ο€Ξ±ΞΉΟ„ΞΏΟΞΌΞµΞ½ΞµΟ‚ ΟΟΞµΟ‚
     $reqhrs = anagkes_wrwn($tmimata_exp);
-    // ώρες Δ/ντή
+    // ΟΟΞµΟ‚ Ξ”/Ξ½Ο„Ξ®
     $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result)) {
@@ -1531,17 +1531,17 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $klados = mysqli_result($result, 0, "klados");
         $klper = mysqli_result($result, 0, "perigrafh");
         $avhrs[$klados] = $dnthrs;
-        // ώρες Δ/ντή στην ανάλυση
+        // ΟΟΞµΟ‚ Ξ”/Ξ½Ο„Ξ® ΟƒΟ„Ξ·Ξ½ Ξ±Ξ½Ξ¬Ξ»Ο…ΟƒΞ·
         $ar = Array(
             'name' => mysqli_result($result, 0, 1),
-            'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysqli_result($result, 0, 2),
+            'surname' => "<small>(Ξ”/Ξ½Ο„Ξ®Ο‚/-Ξ½Ο„ΟΞΉΞ±)</small> ".mysqli_result($result, 0, 2),
             'klados' =>  mysqli_result($result, 0, "perigrafh"), 
             'hours' => $dnthrs
         );
         $all[] = $ar;
         $allcnt[$klper]++;
     }
-    // ώρες Υπ/ντή
+    // ΟΟΞµΟ‚ Ξ¥Ο€/Ξ½Ο„Ξ®
     $meiwsh_ypnth = 0;
     $query_yp = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
     $result_yp = mysqli_query($mysqlconnection, $query_yp);
@@ -1554,10 +1554,10 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $klados = $row['klados'];
         $meiwsh_ypnth_klados = $row['perigrafh'];
         $avhrs[$klados] -= $meiwsh_ypnth;
-        // ώρες Υπ/ντή στην ανάλυση
+        // ΟΟΞµΟ‚ Ξ¥Ο€/Ξ½Ο„Ξ® ΟƒΟ„Ξ·Ξ½ Ξ±Ξ½Ξ¬Ξ»Ο…ΟƒΞ·
         $ar = Array(
             'name' => $row['name'],
-            'surname' =>  '<small>(Υπ/ντής/-ντρια)</small> ' . $row['surname'],
+            'surname' =>  '<small>(Ξ¥Ο€/Ξ½Ο„Ξ®Ο‚/-Ξ½Ο„ΟΞΉΞ±)</small> ' . $row['surname'],
             'klados' =>  $meiwsh_ypnth_klados, 
             'hours' => $row['wres'] - $meiwsh_ypnth
         );
@@ -1565,13 +1565,13 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $allcnt[$meiwsh_ypnth_klados]++;
     }
         
-    // μείωση ωραρίου υπευθύνου βιβλιοθήκης (3 ώρες)
+    // ΞΌΞµΞ―Ο‰ΟƒΞ· Ο‰ΟΞ±ΟΞ―ΞΏΟ… Ο…Ο€ΞµΟ…ΞΈΟΞ½ΞΏΟ… Ξ²ΞΉΞ²Ξ»ΞΉΞΏΞΈΞ®ΞΊΞ·Ο‚ (3 ΟΟΞµΟ‚)
     $meiwsh_vivliothikis = 0;
     if ($vivliothiki > 0) {
         $meiwsh_vivliothikis = 3;
         $reqhrs['70'] += 3;
     }
-    // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές, εκτός Τ.Ε.)
+    // ΟΟΞµΟ‚ Ο…Ο€Ξ·ΟΞµΟ„ΞΏΟΞ½Ο„Ο‰Ξ½ (ΞµΞΊΟ€/ΞΊΞΏΞ― - Ο…Ο€/Ξ½Ο„Ξ­Ο‚, ΞµΞΊΟ„ΟΟ‚ Ξ¤.Ξ•.)
     //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
     if ($oligothesio) {
         $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
@@ -1590,7 +1590,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         }
     }
     if ($print) {
-        // αναλυτικά...
+        // Ξ±Ξ½Ξ±Ξ»Ο…Ο„ΞΉΞΊΞ¬...
         $query = "SELECT e.name, e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
@@ -1599,7 +1599,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             $allcnt[$row['perigrafh']]++;
         }
     }
-    // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
+    // Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ­Ο‚ (ΞµΞΊΟ„ΟΟ‚ Ξ–Ξ•Ξ  / Ξ•ΞΞ (type=6) & thesi 2,3 (Ξ­Ξ½Ο„Ξ±ΞΎΞ·Ο‚/Ο€Ξ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»Ξ·) & type 4,5,6 (Ξ•Ξ•Ξ ,Ξ•Ξ’Ξ ,Ξ–Ξ•Ξ /Ξ•ΞΞ))
     $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.thesi NOT IN (2,3) GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
     while ($row = mysqli_fetch_array($result)){
@@ -1607,13 +1607,13 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $avhrs[$kl] += $row['wres'];
     }
     if ($print) {
-        // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
+        // Ξ±Ξ½Ξ±Ξ»Ο…Ο„ΞΉΞΊΞ¬...(ΞµΞΊΟ„ΟΟ‚ Ξ–Ξ•Ξ  / Ξ•ΞΞ (type=6))
         $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
             $srn = $row['surname'] . ' *';
-            $srn .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
-            $srn .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
+            $srn .= $row['thesi'] == 2 ? '<small> (Ξ¤ΞΌ.ΞΞ½Ο„Ξ±ΞΎΞ·Ο‚)</small>' : '';
+            $srn .= $row['thesi'] == 3 ? '<small> (Ξ Ξ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»Ξ·)</small>' : '';
             $ar = Array('name' => $row['name'], 'surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
             $all[] = $ar;
             $allcnt[$row['perigrafh']]++;
@@ -1627,11 +1627,11 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $avhrs['TE'] = $top_ent;
         $ret['TE'] = $top_ent - $has_entaxi;
         if ($print) {
-            // αναλυτικά...
+            // Ξ±Ξ½Ξ±Ξ»Ο…Ο„ΞΉΞΊΞ¬...
             $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
             $result = mysqli_query($mysqlconnection, $query);
             while ($row = mysqli_fetch_array($result)){
-                $ar = Array('name' => $row['name'],'surname' => $row['surname'] . ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                $ar = Array('name' => $row['name'],'surname' => $row['surname'] . ' (Ξ¤.Ξ•.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                 $all[] = $ar;
                 //$allcnt[$row['perigrafh']]++;
             }
@@ -1668,52 +1668,52 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     $ret['OP'] = $ret['70'] - $reqhrs['O'] - $reqhrs['P'];
         
     if ($print) {
-        echo "<h3>Λειτουργικά Κενά / Πλεονάσματα <em>(σε ώρες)</em></h3>";
+        echo "<h3>Ξ›ΞµΞΉΟ„ΞΏΟ…ΟΞ³ΞΉΞΊΞ¬ ΞΞµΞ½Ξ¬ / Ξ Ξ»ΞµΞΏΞ½Ξ¬ΟƒΞΌΞ±Ο„Ξ± <em>(ΟƒΞµ ΟΟΞµΟ‚)</em></h3>";
         echo "<table class=\"imagetable\" border='1'>";
         echo "<thead>";
-        echo "<th>Κλάδος</th>";
-        echo "<th><span title='Γαλλικών-Γερμανικών'>05-07</span></th>";
-        echo "<th><span title='Αγγλικών'>06</span></th>";
-        echo "<th><span title='Καλλιτεχνικών'>08</span></th>";
-        echo "<th><span title='Φυσικής αγωγής'>11</span></th>";
-        echo "<th><span title='Μουσικής'>79</span></th>";
-        echo "<th><span title='Θεατρικής Αγωγής'>91</span></th>";
-        echo "<th><span title='Πληροφορικής'>86</span></th>";
-        echo "<th><span title='Δασκάλων'>70</span></th>";
-        echo "<th>Ολοήμερο</th><th>Πρωινή Ζώνη</th>";
-        echo $has_entaxi ? '<th>T.E.<small> (αρ.εκπ)</small></th>' : '';
+        echo "<th>ΞΞ»Ξ¬Ξ΄ΞΏΟ‚</th>";
+        echo "<th><span title='Ξ“Ξ±Ξ»Ξ»ΞΉΞΊΟΞ½-Ξ“ΞµΟΞΌΞ±Ξ½ΞΉΞΊΟΞ½'>05-07</span></th>";
+        echo "<th><span title='Ξ‘Ξ³Ξ³Ξ»ΞΉΞΊΟΞ½'>06</span></th>";
+        echo "<th><span title='ΞΞ±Ξ»Ξ»ΞΉΟ„ΞµΟ‡Ξ½ΞΉΞΊΟΞ½'>08</span></th>";
+        echo "<th><span title='Ξ¦Ο…ΟƒΞΉΞΊΞ®Ο‚ Ξ±Ξ³Ο‰Ξ³Ξ®Ο‚'>11</span></th>";
+        echo "<th><span title='ΞΞΏΟ…ΟƒΞΉΞΊΞ®Ο‚'>79</span></th>";
+        echo "<th><span title='ΞΞµΞ±Ο„ΟΞΉΞΊΞ®Ο‚ Ξ‘Ξ³Ο‰Ξ³Ξ®Ο‚'>91</span></th>";
+        echo "<th><span title='Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞΉΞΊΞ®Ο‚'>86</span></th>";
+        echo "<th><span title='Ξ”Ξ±ΟƒΞΊΞ¬Ξ»Ο‰Ξ½'>70</span></th>";
+        echo "<th>ΞΞ»ΞΏΞ®ΞΌΞµΟΞΏ</th><th>Ξ ΟΟ‰ΞΉΞ½Ξ® Ξ–ΟΞ½Ξ·</th>";
+        echo $has_entaxi ? '<th>T.E.<small> (Ξ±Ο.ΞµΞΊΟ€)</small></th>' : '';
         echo "</thead>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
+        echo "<tr><td>Ξ‘Ο€Ξ±ΞΉΟ„ΞΏΟΞΌΞµΞ½ΞµΟ‚</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
         echo $has_entaxi ? '<td>1</td>' : '';
         echo "</tr>";
-        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td colspan=2></td>";
+        echo "<tr><td>Ξ”ΞΉΞ±ΞΈΞ­ΟƒΞΉΞΌΞµΟ‚</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['Ξ Ξ•70'].")</td><td colspan=2></td>";
         echo $has_entaxi ? '<td>'.$avhrs['TE'].'</td>' : '';
         echo "</tr>";
-        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'], 2);
+        echo "<tr><td>Ξ”ΞΉΞ±Ο†ΞΏΟΞ¬ (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'], 2);
         echo $has_entaxi ? tdc($ret['TE']) : '';
         echo "</tr>";
         echo "</table>";
         // if meiwseis, print below table
         if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0) {
-            echo "<p>Μειώσεις υπ.ωραρίου: ";
-            echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
-            echo $meiwsh_vivliothikis > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.$meiwsh_vivliothikis.' ώρες<br>' : '';
+            echo "<p>ΞΞµΞΉΟΟƒΞµΞΉΟ‚ Ο…Ο€.Ο‰ΟΞ±ΟΞ―ΞΏΟ…: ";
+            echo $meiwsh_ypnth > 0 ? "Ξ¥Ο€ΞΏΞ΄ΞΉΞµΟ…ΞΈΟ…Ξ½Ο„ΟΞ½ ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ΟΟΞµΟ‚<br>' : '';
+            echo $meiwsh_vivliothikis > 0 ? 'Ξ¥Ο€ΞµΟ…ΞΈΟΞ½ΞΏΟ… Ξ’ΞΉΞ²Ξ»ΞΉΞΏΞΈΞ®ΞΊΞ·Ο‚ (Ξ Ξ•70): '.$meiwsh_vivliothikis.' ΟΟΞµΟ‚<br>' : '';
             echo "</p>";
         }
-        echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
+        echo "<a id='toggleBtn' href='#' onClick=>Ξ‘Ξ½Ξ±Ξ»Ο…Ο„ΞΉΞΊΞ¬</a>";
         echo "<div id='analysis' style='display: none;'>";
             echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<tr><td colspan=3><u>Σύνολα εκπ/κών:</u> ";
+            echo "<tr><td colspan=3><u>Ξ£ΟΞ½ΞΏΞ»Ξ± ΞµΞΊΟ€/ΞΊΟΞ½:</u> ";
         foreach ($allcnt as $key=>$value){
             echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
         }
             echo "</td></tr>";
-            echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
+            echo "<tr><td><b>ΞΞ½/ΞΌΞΏ</b></td><td><b>ΞΞ»Ξ¬Ξ΄ΞΏΟ‚</b></td><td><b>ΞΟΞµΟ‚</b></td></tr>";
         foreach ($all as $row) {
             echo "<tr><td>".$row['surname']." ".substr($row['name'], 0, 3).".</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
         }
             echo "</table>";
-            echo "* Αναπληρωτής";
+            echo "* Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ®Ο‚";
             echo "</div>";
             echo "<br><br>";
     }
@@ -1880,10 +1880,10 @@ function get_ypoxrewtiko_wrario($emp_id, $conn)
     $res = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($res, MYSQLI_BOTH);
     // PE60 or EEP or Anaptixi Yp.Dom.
-    if ($row['klados'] == 1 || strpos($row['praxi'], 'ΕΕΠ') !== false || $row['type'] == 'ΥΠΟΣ') {
+    if ($row['klados'] == 1 || strpos($row['praxi'], 'Ξ•Ξ•Ξ ') !== false || $row['type'] == 'Ξ¥Ξ ΞΞ£') {
         return 25;
         // EBP or PEP
-    } elseif (strpos($row['praxi'], 'ΕΒΠ') !== false || $row['type'] == 'ΠΕΠ') {
+    } elseif (strpos($row['praxi'], 'Ξ•Ξ’Ξ ') !== false || $row['type'] == 'Ξ Ξ•Ξ ') {
         return 30;
     }
     return 24;
@@ -1973,7 +1973,7 @@ function yphresia_anaplhrwth($hmapox, $hmpros, $meiwmeno = false, $subtracted = 
   $apol = substr($hmapox, 8, 2) + substr($hmapox, 5, 2)*30 + substr($hmapox, 0, 4)*360;
   // hm proslhpshs
   $pros = substr($hmpros, 0, 4)*360 + substr($hmpros, 5, 2)*30 + substr($hmpros, 8, 2);
-  // +1 για να περιληφθεί και η τελευταία μέρα
+  // +1 Ξ³ΞΉΞ± Ξ½Ξ± Ο€ΞµΟΞΉΞ»Ξ·Ο†ΞΈΞµΞ― ΞΊΞ±ΞΉ Ξ· Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± ΞΌΞ­ΟΞ±
   $days = $apol - $pros + 1;
   // subtract subtracted
   $days -= $subtracted;
@@ -1982,7 +1982,7 @@ function yphresia_anaplhrwth($hmapox, $hmpros, $meiwmeno = false, $subtracted = 
       $days = compute_meiwmeno($days, $hour_sum, $yp_wrario);
   }
   $ymd = days2ymd($days);
-  $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
+  $data = $ymd[1]." ΞΌΞ®Ξ½ΞµΟ‚, ".$ymd[2]." Ξ·ΞΌΞ­ΟΞµΟ‚";
   return $data;
 }
 
@@ -1992,7 +1992,7 @@ function get_diavgeia_subject($ada) {
   }
   //setup the request, you can also use CURLOPT_URL
   $ch = curl_init();
-  $mystr = mb_convert_encoding('https://diavgeia.gov.gr/luminapi/opendata/decisions/'.$ada,'utf-8',"iso-8859-7");
+  $mystr = 'https://diavgeia.gov.gr/luminapi/opendata/decisions/'.$ada;
   curl_setopt($ch, CURLOPT_URL, $mystr);
   // Returns the data/output as a string instead of raw data
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -2011,7 +2011,7 @@ function get_diavgeia_subject($ada) {
   curl_close($ch);
   $dt = json_decode($data);
 
-  return mb_convert_encoding($dt->subject, 'iso-8859-7', 'utf-8');
+  return $dt->subject;
 }
 
 function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = false){
@@ -2024,7 +2024,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
                 var id = event.target.id;
                 var name = event.target.name;
                 if (name == 'del'){
-                  var conf = confirm('Είστε σίγουροι;\nΠατήστε ΟΚ για τη διαγραφή του αιτήματος');
+                  var conf = confirm('Ξ•Ξ―ΟƒΟ„Ξµ ΟƒΞ―Ξ³ΞΏΟ…ΟΞΏΞΉ;\nΞ Ξ±Ο„Ξ®ΟƒΟ„Ξµ ΞΞ Ξ³ΞΉΞ± Ο„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ο„ΞΏΟ… Ξ±ΞΉΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚');
                   if (conf == true){
                     var theData = {
                       id: id,
@@ -2057,17 +2057,17 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
     $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos AND hidden = 0 ORDER BY submitted DESC";
     $res = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($res) > 0) {
-        echo !$auth ? "<h1>Αιτήματα Σχολικής Μονάδας</h1>" :
-        "<h1><a href='requests.php'>Αιτήματα Σχολικής Μονάδας</a></h1>";
+        echo !$auth ? "<h1>Ξ‘ΞΉΟ„Ξ®ΞΌΞ±Ο„Ξ± Ξ£Ο‡ΞΏΞ»ΞΉΞΊΞ®Ο‚ ΞΞΏΞ½Ξ¬Ξ΄Ξ±Ο‚</h1>" :
+        "<h1><a href='requests.php'>Ξ‘ΞΉΟ„Ξ®ΞΌΞ±Ο„Ξ± Ξ£Ο‡ΞΏΞ»ΞΉΞΊΞ®Ο‚ ΞΞΏΞ½Ξ¬Ξ΄Ξ±Ο‚</a></h1>";
         echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr>";
         echo "<th>A/A</th>";
-        echo "<th>Κείμενο αιτήματος</th>";
-        echo "<th>Σχόλιο Δ/νσης</th>";
-        echo "<th>Διεκπεραίωση</th>";
-        echo "<th>Ημ/νία Υποβολής</th>";
-        echo "<th>Ημ/νία Διεκπεραίωσης</th>";
-        echo $auth ? "<th>Ενέργεια</th>" : '';
+        echo "<th>ΞΞµΞ―ΞΌΞµΞ½ΞΏ Ξ±ΞΉΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚</th>";
+        echo "<th>Ξ£Ο‡ΟΞ»ΞΉΞΏ Ξ”/Ξ½ΟƒΞ·Ο‚</th>";
+        echo "<th>Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±Ξ―Ο‰ΟƒΞ·</th>";
+        echo "<th>Ξ—ΞΌ/Ξ½Ξ―Ξ± Ξ¥Ο€ΞΏΞ²ΞΏΞ»Ξ®Ο‚</th>";
+        echo "<th>Ξ—ΞΌ/Ξ½Ξ―Ξ± Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±Ξ―Ο‰ΟƒΞ·Ο‚</th>";
+        echo $auth ? "<th>Ξ•Ξ½Ξ­ΟΞ³ΞµΞΉΞ±</th>" : '';
         echo "</tr></thead>\n<tbody>";
         while ($row = mysqli_fetch_array($res)){
             echo "<tr>";
@@ -2078,11 +2078,11 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "<td>";
             if ($auth) {
                 echo "<select id='done".$row['id']."'>";
-                echo $row['done'] ? "<option value='0'>Όχι</option><option value='1' selected>Ναι</option>" :
-                    "<option value='0' selected>Όχι</option><option value='1'>Ναι</option>";
+                echo $row['done'] ? "<option value='0'>ΞΟ‡ΞΉ</option><option value='1' selected>ΞΞ±ΞΉ</option>" :
+                    "<option value='0' selected>ΞΟ‡ΞΉ</option><option value='1'>ΞΞ±ΞΉ</option>";
             }
             else {
-                echo $row['done'] ? 'Ναι' : 'Όχι';
+                echo $row['done'] ? 'ΞΞ±ΞΉ' : 'ΞΟ‡ΞΉ';
             }
             echo "</td>";
             echo "<td>";
@@ -2091,7 +2091,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "<td>";
             echo $row['done'] ? date("d-m-Y H:m:s", strtotime($row['handled'])) : '';
             echo "</td>";
-            echo $auth ? "<td><input id='".$row['id']."' class='submit-btn' type='submit' value='Υποβολή'><br><input name='del' id='".$row['id']."' class='submit-btn btn-red' type='submit' value='Διαγραφή'></td>" : '';
+            echo $auth ? "<td><input id='".$row['id']."' class='submit-btn' type='submit' value='Ξ¥Ο€ΞΏΞ²ΞΏΞ»Ξ®'><br><input name='del' id='".$row['id']."' class='submit-btn btn-red' type='submit' value='Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®'></td>" : '';
             echo $auth ? "<input type='hidden' name = 'id' value='".$row['id']."'>" : '';
             echo $auth ? "<input type='hidden' name = 'type' value='update'>" : '';
             echo "</tr>";
@@ -2131,10 +2131,6 @@ function sendEmail($email, $subject, $body){
     $from = getParam('foreas',$mysqlconnection);
     $headers = "From:".$from;
     $mymail = getParam('email',$mysqlconnection);
-                    
-    //utf8 encode
-    $subject = mb_convert_encoding($subject, "utf-8", "iso-8859-7");
-    $mail_body = mb_convert_encoding($body, "utf-8", "iso-8859-7");
     
     //echo "<br>$subject<br>$mail_body<br>$email<br>$myemail";
 
@@ -2143,7 +2139,7 @@ function sendEmail($email, $subject, $body){
     // *** SOS *** uncomment '$testemail', comment '$email' to test
     //->setTo("it@dipe.ira.sch.gr")
     ->setTo($email)
-    ->setBody($mail_body);
+    ->setBody($body);
     $result = $mailer->send($message);
     return $result;
 }

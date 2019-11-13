@@ -83,7 +83,7 @@ function convertThreeDigit($dig1, $dig2, $dig3)
    /*
    if($dig1 != "0")
    {
-      $output .= convertDigit($dig1)." εκατόν";
+      $output .= convertDigit($dig1)." ΞµΞΊΞ±Ο„ΟΞ½";
       if($dig2 != "0" || $dig3 != "0") $output .= " and ";
    }
    */
@@ -93,31 +93,31 @@ function convertThreeDigit($dig1, $dig2, $dig3)
     switch($dig1)
         {
             case "1": 
-                $output =  "εκατόν ";
+                $output =  "ΞµΞΊΞ±Ο„ΟΞ½ ";
                 break;
             case "2": 
-                $output =  "διακοσίων ";
+                $output =  "Ξ΄ΞΉΞ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "3": 
-                $output =  "τριακοσίων ";
+                $output =  "Ο„ΟΞΉΞ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "4": 
-                $output =  "τετρακοσίων ";
+                $output =  "Ο„ΞµΟ„ΟΞ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "5": 
-                $output =  "πεντακοσίων ";
+                $output =  "Ο€ΞµΞ½Ο„Ξ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "6": 
-                $output =  "εξακοσίων ";
+                $output =  "ΞµΞΎΞ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "7": 
-                $output =  "εφτακοσίων ";
+                $output =  "ΞµΟ†Ο„Ξ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "8": 
-                $output =  "οκτακοσίων ";
+                $output =  "ΞΏΞΊΟ„Ξ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
             case "9": 
-                $output =  "εννιακοσίων ";
+                $output =  "ΞµΞ½Ξ½ΞΉΞ±ΞΊΞΏΟƒΞ―Ο‰Ξ½ ";
                 break;
         }
         if($dig2 != "0" || $dig3 != "0") $output .= "";
@@ -135,30 +135,30 @@ function convertTwoDigit($dig1, $dig2)
    {
       switch($dig1)
       {
-         case "1": return "δέκα";
-         case "2": return "είκοσι";
-         case "3": return "τριάντα";
-         case "4": return "σαράντα";
-         case "5": return "πενήντα";
-         case "6": return "εξήντα";
-         case "7": return "εβδομήντα";
-         case "8": return "ογδόντα";
-         case "9": return "ενενήντα";
+         case "1": return "Ξ΄Ξ­ΞΊΞ±";
+         case "2": return "ΞµΞ―ΞΊΞΏΟƒΞΉ";
+         case "3": return "Ο„ΟΞΉΞ¬Ξ½Ο„Ξ±";
+         case "4": return "ΟƒΞ±ΟΞ¬Ξ½Ο„Ξ±";
+         case "5": return "Ο€ΞµΞ½Ξ®Ξ½Ο„Ξ±";
+         case "6": return "ΞµΞΎΞ®Ξ½Ο„Ξ±";
+         case "7": return "ΞµΞ²Ξ΄ΞΏΞΌΞ®Ξ½Ο„Ξ±";
+         case "8": return "ΞΏΞ³Ξ΄ΟΞ½Ο„Ξ±";
+         case "9": return "ΞµΞ½ΞµΞ½Ξ®Ξ½Ο„Ξ±";
       }
    }
    else if($dig1 == "1")
    {
       switch($dig2)
       {
-         case "1": return "ένδεκα";
-         case "2": return "δώδεκα";
-         case "3": return "δεκατριών";
-         case "4": return "δεκατεσσάρων";
-         case "5": return "δεκαπέντε";
-         case "6": return "δεκαέξι";
-         case "7": return "δεκαεφτά";
-         case "8": return "δεκαοκτώ";
-         case "9": return "δεκαεννιά";
+         case "1": return "Ξ­Ξ½Ξ΄ΞµΞΊΞ±";
+         case "2": return "Ξ΄ΟΞ΄ΞµΞΊΞ±";
+         case "3": return "Ξ΄ΞµΞΊΞ±Ο„ΟΞΉΟΞ½";
+         case "4": return "Ξ΄ΞµΞΊΞ±Ο„ΞµΟƒΟƒΞ¬ΟΟ‰Ξ½";
+         case "5": return "Ξ΄ΞµΞΊΞ±Ο€Ξ­Ξ½Ο„Ξµ";
+         case "6": return "Ξ΄ΞµΞΊΞ±Ξ­ΞΎΞΉ";
+         case "7": return "Ξ΄ΞµΞΊΞ±ΞµΟ†Ο„Ξ¬";
+         case "8": return "Ξ΄ΞµΞΊΞ±ΞΏΞΊΟ„Ο";
+         case "9": return "Ξ΄ΞµΞΊΞ±ΞµΞ½Ξ½ΞΉΞ¬";
       }
    }
    else
@@ -166,14 +166,14 @@ function convertTwoDigit($dig1, $dig2)
       $temp = convertDigit($dig2);
       switch($dig1)
       {
-         case "2": return "εικοσι$temp";
-         case "3": return "τριαντα$temp";
-         case "4": return "σαραντα$temp";
-         case "5": return "πενηντα$temp";
-         case "6": return "εξηντα$temp";
-         case "7": return "εβδομηντα$temp";
-         case "8": return "ογδοντα$temp";
-         case "9": return "ενενηντα$temp";
+         case "2": return "ΞµΞΉΞΊΞΏΟƒΞΉ$temp";
+         case "3": return "Ο„ΟΞΉΞ±Ξ½Ο„Ξ±$temp";
+         case "4": return "ΟƒΞ±ΟΞ±Ξ½Ο„Ξ±$temp";
+         case "5": return "Ο€ΞµΞ½Ξ·Ξ½Ο„Ξ±$temp";
+         case "6": return "ΞµΞΎΞ·Ξ½Ο„Ξ±$temp";
+         case "7": return "ΞµΞ²Ξ΄ΞΏΞΌΞ·Ξ½Ο„Ξ±$temp";
+         case "8": return "ΞΏΞ³Ξ΄ΞΏΞ½Ο„Ξ±$temp";
+         case "9": return "ΞµΞ½ΞµΞ½Ξ·Ξ½Ο„Ξ±$temp";
       }
    }
 }
@@ -182,16 +182,16 @@ function convertDigit($digit)
 {
    switch($digit)
    {
-      case "0": return "μηδέν";
-      case "1": return "μίας";
-      case "2": return "δύο";
-      case "3": return "τριών";
-      case "4": return "τεσσάρων";
-      case "5": return "πέντε";
-      case "6": return "έξι";
-      case "7": return "επτά";
-      case "8": return "οκτώ";
-      case "9": return "εννέα";
+      case "0": return "ΞΌΞ·Ξ΄Ξ­Ξ½";
+      case "1": return "ΞΌΞ―Ξ±Ο‚";
+      case "2": return "Ξ΄ΟΞΏ";
+      case "3": return "Ο„ΟΞΉΟΞ½";
+      case "4": return "Ο„ΞµΟƒΟƒΞ¬ΟΟ‰Ξ½";
+      case "5": return "Ο€Ξ­Ξ½Ο„Ξµ";
+      case "6": return "Ξ­ΞΎΞΉ";
+      case "7": return "ΞµΟ€Ο„Ξ¬";
+      case "8": return "ΞΏΞΊΟ„Ο";
+      case "9": return "ΞµΞ½Ξ½Ξ­Ξ±";
    }
 }
 ?>

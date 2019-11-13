@@ -1,13 +1,12 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   session_start();
   $usrlvl = $_SESSION['userlevel'];
@@ -16,7 +15,7 @@
 <html>
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-  <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <title>Employee</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
   <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
@@ -41,17 +40,17 @@
         $num=mysqli_num_rows($result);
         if (!$num)
         {
-          echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
+          echo "<br><br><big>ΞΞ΅ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ξ¬Ξ΄Ξ΅ΞΉΞ΅Ο</big>";
           $emp_id = $_GET['id'];
           if ($usrlvl < 2)
-              echo "<br><span title=\"Προσθήκη Άδειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\"><big>Προσθήκη Άδειας</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
+              echo "<br><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞ΄Ξ΅ΞΉΞ±Ο\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\"><big>Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞ΄Ξ΅ΞΉΞ±Ο</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
           exit;
         }
                     
         echo "<br>";
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";	
         echo "<thead><tr>";
-        echo "<th>Ενέργεια</th><th>Τύπος</th><th>Αρ.Πρωτ.</th><th>Ημ.Αίτησης</th><th>Ημέρες</th><th>Ημ.Έναρξης</th><th>Ημ.Λήξης</th>";
+        echo "<th>ΞΞ½Ξ­ΟΞ³Ξ΅ΞΉΞ±</th><th>Ξ€ΟΟΞΏΟ</th><th>ΞΟ.Ξ ΟΟΟ.</th><th>ΞΞΌ.ΞΞ―ΟΞ·ΟΞ·Ο</th><th>ΞΞΌΞ­ΟΞ΅Ο</th><th>ΞΞΌ.ΞΞ½Ξ±ΟΞΎΞ·Ο</th><th>ΞΞΌ.ΞΞ®ΞΎΞ·Ο</th>";
         echo "</tr></thead>";
         echo "<tbody>";
         
@@ -72,10 +71,10 @@
           $result1 = mysqli_query($mysqlconnection, $query1);
           $typewrd = mysqli_result($result1, 0, "type");
           echo "<tr><td>";
-          echo "<span title='Προβολή'><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;&nbsp;";
-          echo "<span title='Επεξεργασία'><a href='ekt_adeia.php?adeia=$id&op=edit&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/edit_action.png'></a></span>&nbsp;&nbsp;";
+          echo "<span title='Ξ ΟΞΏΞ²ΞΏΞ»Ξ®'><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;&nbsp;";
+          echo "<span title='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±'><a href='ekt_adeia.php?adeia=$id&op=edit&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/edit_action.png'></a></span>&nbsp;&nbsp;";
           if ($usrlvl < 2){
-            echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+            echo "<span title=\"ΞΞΉΞ±Ξ³ΟΞ±ΟΞ®\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
           }
           echo "</td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
           $i++;
@@ -84,7 +83,7 @@
         echo "</tbody>";
         // add absense only on current year
         if ($usrlvl < 2 && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
-            echo "<tr><td colspan=8><span title=\"Προσθήκη Άδειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">Προσθήκη Άδειας<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
+            echo "<tr><td colspan=8><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞ΄Ξ΅ΞΉΞ±Ο\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞ΄Ξ΅ΞΉΞ±Ο<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
         echo "</table>";
         
         echo "</body>";

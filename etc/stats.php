@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7');
+header('Content-type: text/html; charset=utf-8');
 require_once"../config.php";
 require_once"../tools/functions.php";
 ?>    
@@ -13,7 +13,7 @@ require_once"../tools/functions.php";
                 $(".tablesorter").tablesorter({widgets: ['zebra']}); 
             });
         </script>
-        <title>Στατιστικά Μονίμων / Αναπληρωτών</title>
+        <title>Ξ£Ο„Ξ±Ο„ΞΉΟƒΟ„ΞΉΞΊΞ¬ ΞΞΏΞ½Ξ―ΞΌΟ‰Ξ½ / Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½</title>
     </head>
 
     <?php
@@ -23,10 +23,10 @@ require_once"../tools/functions.php";
         header("Location: ../tools/login.php");
     }
     $usrlvl = $_SESSION['userlevel'];
-    // status: 1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ¶δεια, 4 Διαθεσιμότητα
+    // status: 1 ΞµΟΞ³Ξ¬Ξ¶ΞµΟ„Ξ±ΞΉ, 2 Ξ›ΟΟƒΞ· Ξ£Ο‡Ξ­ΟƒΞ·Ο‚-Ξ Ξ±ΟΞ±Ξ―Ο„Ξ·ΟƒΞ·, 3 Ξ†Ξ΄ΞµΞΉΞ±, 4 Ξ”ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ±
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
     $query = "SELECT count( * ) FROM employee WHERE status!=2 AND thesi=5";
     $result = mysqli_query($mysqlconnection, $query);
@@ -87,71 +87,71 @@ require_once"../tools/functions.php";
     $query = "SELECT count(*) FROM school WHERE type = 1";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Δημοτικά (Σύνολο)'] = $res;
+    $sx_arr['Ξ”Ξ·ΞΌΞΏΟ„ΞΉΞΊΞ¬ (Ξ£ΟΞ½ΞΏΞ»ΞΏ)'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 0";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Δημ. Ενεργά'] = $res;
+    $sx_arr['Ξ”Ξ·ΞΌ. Ξ•Ξ½ΞµΟΞ³Ξ¬'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 1 AND type2 = 0";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Δημ. Ανενεργά'] = $res;
+    $sx_arr['Ξ”Ξ·ΞΌ. Ξ‘Ξ½ΞµΞ½ΞµΟΞ³Ξ¬'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 2";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Δημ. Ειδικά'] = $res;
+    $sx_arr['Ξ”Ξ·ΞΌ. Ξ•ΞΉΞ΄ΞΉΞΊΞ¬'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 1 AND anenergo = 0 AND type2 = 1";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Δημ. Ιδιωτικά'] = $res;
+    $sx_arr['Ξ”Ξ·ΞΌ. Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞ¬'] = $res;
 
     $query = "SELECT count(*) FROM school WHERE type = 2";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Νηπιαγωγεία (Σύνολο)'] = $res;
+    $sx_arr['ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΞµΞ―Ξ± (Ξ£ΟΞ½ΞΏΞ»ΞΏ)'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 0";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Νηπιαγωγεία'] = $res;
+    $sx_arr['ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΞµΞ―Ξ±'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 1 AND type2 = 0";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Νηπ. Ανενεργά'] = $res;
+    $sx_arr['ΞΞ·Ο€. Ξ‘Ξ½ΞµΞ½ΞµΟΞ³Ξ¬'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 2";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Νηπ. Ειδικά'] = $res;
+    $sx_arr['ΞΞ·Ο€. Ξ•ΞΉΞ΄ΞΉΞΊΞ¬'] = $res;
     $query = "SELECT count(*) FROM school WHERE type = 2 AND anenergo = 0 AND type2 = 1";
     $res = mysqli_query($mysqlconnection, $query);
     $res = mysqli_result($res, 0);
-    $sx_arr['Νηπ. Ιδιωτικά'] = $res;
+    $sx_arr['ΞΞ·Ο€. Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞ¬'] = $res;
 
     //
     echo "<body>";
     require '../etc/menu.php';
-    echo "<h2>Στατιστικά</h2>";
+    echo "<h2>Ξ£Ο„Ξ±Ο„ΞΉΟƒΟ„ΞΉΞΊΞ¬</h2>";
     echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
-    echo "<h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση ".getParam('dnsh', $mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
-    echo "<thead><th><b>Κλάδος</b></th><th colspan=3><b>Αριθμός</b></th></thead><tbody>";
+    echo "<h3>ΞΟΞ½ΞΉΞΌΞΏΞΉ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― (ΞΌΞµ ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ® ΟƒΟ„Ξ· Ξ”/Ξ½ΟƒΞ· ".getParam('dnsh', $mysqlconnection)."):&nbsp;$monimoi_her_total</h3>";
+    echo "<thead><th><b>ΞΞ»Ξ¬Ξ΄ΞΏΟ‚</b></th><th colspan=3><b>Ξ‘ΟΞΉΞΈΞΌΟΟ‚</b></th></thead><tbody>";
     while ($row = mysqli_fetch_array($result_mon, MYSQLI_NUM)) {
         echo "<tr><td>$row[1] ($row[2])</td><td colspan=2>$row[0]</td></tr>";
     }
-    echo "<tr><td><strong>Ιδιωτικοί εκπ/κοί</strong></td><td>$idiwtikoi</td></tr>";
+    echo "<tr><td><strong>Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΞΏΞ― ΞµΞΊΟ€/ΞΊΞΏΞ―</strong></td><td>$idiwtikoi</td></tr>";
     echo "</tbody></table>";
     echo "<br>";
     echo "<table class=\"imagetable\" border='1'>";
-    echo "<tr><td>Υπηρετούν στο ΠΥΣΠΕ Ηρακλείου και <br>έχουν οργανική σε άλλο ΠΥΣΠΕ/ΠΥΣΔΕ</td><td>$mon_alloy</td></tr>";
-    echo "<tr><td>Απόσπασμένοι από άλλο ΠΥΣΠΕ</td><td>$mon_apoallopispe</td></tr>";
-    echo "<tr><td>Απόσπασμένοι/με διάθεση από άλλο ΠΥΣΔΕ</td><td>$mon_apoallopisde</td></tr>";
-    echo "<tr><td>Διάθεση ΠΥΣΠΕ</td><td>$mon_diath</td></tr>";
-    echo "<tr><td>Με απόσπαση σε άλλο ΠΥΣΠΕ</td><td>$mon_seallopispe</td></tr>";
-    echo "<tr><td>Με απόσπαση σε φορέα</td><td>$mon_seforea</td></tr>";
-    echo "<tr><td>Σε άδεια</td><td>$mon_seadeia</td></tr>";
+    echo "<tr><td>Ξ¥Ο€Ξ·ΟΞµΟ„ΞΏΟΞ½ ΟƒΟ„ΞΏ Ξ Ξ¥Ξ£Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ… ΞΊΞ±ΞΉ <br>Ξ­Ο‡ΞΏΟ…Ξ½ ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ® ΟƒΞµ Ξ¬Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•/Ξ Ξ¥Ξ£Ξ”Ξ•</td><td>$mon_alloy</td></tr>";
+    echo "<tr><td>Ξ‘Ο€ΟΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½ΞΏΞΉ Ξ±Ο€Ο Ξ¬Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•</td><td>$mon_apoallopispe</td></tr>";
+    echo "<tr><td>Ξ‘Ο€ΟΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½ΞΏΞΉ/ΞΌΞµ Ξ΄ΞΉΞ¬ΞΈΞµΟƒΞ· Ξ±Ο€Ο Ξ¬Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ”Ξ•</td><td>$mon_apoallopisde</td></tr>";
+    echo "<tr><td>Ξ”ΞΉΞ¬ΞΈΞµΟƒΞ· Ξ Ξ¥Ξ£Ξ Ξ•</td><td>$mon_diath</td></tr>";
+    echo "<tr><td>ΞΞµ Ξ±Ο€ΟΟƒΟ€Ξ±ΟƒΞ· ΟƒΞµ Ξ¬Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•</td><td>$mon_seallopispe</td></tr>";
+    echo "<tr><td>ΞΞµ Ξ±Ο€ΟΟƒΟ€Ξ±ΟƒΞ· ΟƒΞµ Ο†ΞΏΟΞ­Ξ±</td><td>$mon_seforea</td></tr>";
+    echo "<tr><td>Ξ£Ξµ Ξ¬Ξ΄ΞµΞΉΞ±</td><td>$mon_seadeia</td></tr>";
     echo "</table>";
     echo "<br>";
     echo "<table id='mytbl' class=\"imagetable tablesorter\" border='1'>";
-    echo "<h3>Αναπληρωτές / Ωρομίσθιοι εκπαιδευτικοί:&nbsp;$anapl_total</h3>";
-    echo "<thead><th>Τύπος</th><th>Κλάδος</th><th>Πλήθος</th></thead><tbody>";
+    echo "<h3>Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ­Ο‚ / Ξ©ΟΞΏΞΌΞ―ΟƒΞΈΞΉΞΏΞΉ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ―:&nbsp;$anapl_total</h3>";
+    echo "<thead><th>Ξ¤ΟΟ€ΞΏΟ‚</th><th>ΞΞ»Ξ¬Ξ΄ΞΏΟ‚</th><th>Ξ Ξ»Ξ®ΞΈΞΏΟ‚</th></thead><tbody>";
     while ($row = mysqli_fetch_array($result_anapl, MYSQLI_NUM)) {
         echo "<tr><td>$row[3]<td>$row[1] ($row[2])</td><td>$row[0]</td></tr>";
     }
@@ -159,15 +159,15 @@ require_once"../tools/functions.php";
     echo "<br>";
 
     echo "<table class=\"imagetable tablesorter\" border='1'>";
-    echo "<h3>Σχολικές Μονάδες</h3>";
-    echo "<thead><th>Τύπος</th><th>Αριθμός</th></thead><tbody>";
+    echo "<h3>Ξ£Ο‡ΞΏΞ»ΞΉΞΊΞ­Ο‚ ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚</h3>";
+    echo "<thead><th>Ξ¤ΟΟ€ΞΏΟ‚</th><th>Ξ‘ΟΞΉΞΈΞΌΟΟ‚</th></thead><tbody>";
     foreach ($sx_arr as $k => $v) {
         echo "<tr><td>$k</td><td>$v</td>";
     }
 
     echo "</tbody></table>";
 
-    echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='../index.php'\">";
+    echo "<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' class='btn-red' onClick=\"parent.location='../index.php'\">";
     echo "</body>";
     echo "</html>";
 

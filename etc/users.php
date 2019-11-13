@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require '../config.php';
 require "../tools/class.login.php";
   $log = new logmein();
@@ -24,11 +24,11 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_log);
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />   
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
-<title>Διαχείριση Χρηστών</title>
+<title>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ§ΟΞ·ΟƒΟ„ΟΞ½</title>
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
-    <h2>Διαχείριση Χρηστών</h2>
+    <h2>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ§ΟΞ·ΟƒΟ„ΟΞ½</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -39,31 +39,31 @@ var thegrid = new drasticGrid('grid1', {
   pathimg: "../tools/grid/img/",
   columns: [
     {name: 'userid', displayname:'A/A', width: 30},
-    {name: 'username', displayname:'Ον.Χρήστη', width: 100},
+    {name: 'username', displayname:'ΞΞ½.Ξ§ΟΞ®ΟƒΟ„Ξ·', width: 100},
     {name: 'useremail', displayname:'email', width: 130},
-    {name: 'userlevel', displayname:'Ρόλος', width: 110,
+    {name: 'userlevel', displayname:'Ξ΅ΟΞ»ΞΏΟ‚', width: 110,
         type: DDTYPEKEY, 
         values: [0,1,2,3],
-        labels:  ['Διαχειριστής', 'Προϊστάμενος','Υπάλληλος','Χρήστης']
+        labels:  ['Ξ”ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΟ„Ξ®Ο‚', 'Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚','Ξ¥Ο€Ξ¬Ξ»Ξ»Ξ·Ξ»ΞΏΟ‚','Ξ§ΟΞ®ΟƒΟ„Ξ·Ο‚']
     },
-    {name: 'requests', displayname:'Αιτήματα Σχολείων', width: 140},
-    {name: 'adeia', displayname:'¶δειες', width: 60},
-    {name: 'lastlogin', displayname:'Τελευταία Είσοδος', width: 150, editable: false}
+    {name: 'requests', displayname:'Ξ‘ΞΉΟ„Ξ®ΞΌΞ±Ο„Ξ± Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½', width: 140},
+    {name: 'adeia', displayname:'Ξ†Ξ΄ΞµΞΉΞµΟ‚', width: 60},
+    {name: 'lastlogin', displayname:'Ξ¤ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± Ξ•Ξ―ΟƒΞΏΞ΄ΞΏΟ‚', width: 150, editable: false}
     ]
 });
 </script>
 
-<h3>Ρόλοι</h3>
+<h3>Ξ΅ΟΞ»ΞΏΞΉ</h3>
 <table class="imagetable stable" border="1">
-    <tr><th>Ρόλος</th><th>Δικαιώματα</th></tr>
-    <tr><td>Διαχειριστής</td><td>Πλήρης πρόσβαση σε όλα</td></tr>
-    <tr><td>Προϊστάμενος</td><td>Προσθήκη / Διαγραφή / Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
-    <tr><td>Υπάλληλος</td><td>Επεξεργασία Υπαλλήλων & ¶δειών</td></tr>
-    <tr><td>Χρήστης</td><td>Μόνο Προβολή Υπαλλήλων & ¶δειών</td></tr>
+    <tr><th>Ξ΅ΟΞ»ΞΏΟ‚</th><th>Ξ”ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ±</th></tr>
+    <tr><td>Ξ”ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΟ„Ξ®Ο‚</td><td>Ξ Ξ»Ξ®ΟΞ·Ο‚ Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ· ΟƒΞµ ΟΞ»Ξ±</td></tr>
+    <tr><td>Ξ ΟΞΏΟΟƒΟ„Ξ¬ΞΌΞµΞ½ΞΏΟ‚</td><td>Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· / Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® / Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± Ξ¥Ο€Ξ±Ξ»Ξ»Ξ®Ξ»Ο‰Ξ½ & Ξ†Ξ΄ΞµΞΉΟΞ½</td></tr>
+    <tr><td>Ξ¥Ο€Ξ¬Ξ»Ξ»Ξ·Ξ»ΞΏΟ‚</td><td>Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± Ξ¥Ο€Ξ±Ξ»Ξ»Ξ®Ξ»Ο‰Ξ½ & Ξ†Ξ΄ΞµΞΉΟΞ½</td></tr>
+    <tr><td>Ξ§ΟΞ®ΟƒΟ„Ξ·Ο‚</td><td>ΞΟΞ½ΞΏ Ξ ΟΞΏΞ²ΞΏΞ»Ξ® Ξ¥Ο€Ξ±Ξ»Ξ»Ξ®Ξ»Ο‰Ξ½ & Ξ†Ξ΄ΞµΞΉΟΞ½</td></tr>
 </table>
 <form>
     <br>
-<INPUT TYPE='button' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

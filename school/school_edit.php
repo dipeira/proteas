@@ -1,13 +1,12 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once "../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
   require '../tools/calendar/tc_calendar.php';
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   // Demand authorization                
   require "../tools/class.login.php";
@@ -19,8 +18,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Επεξεργασία σχολείου</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ± ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ</title>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -49,28 +48,27 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
   <body>
     <?php require '../etc/menu.php'; ?>
     <center>
-        <h2>Επεξεργασία σχολείου</h2>
+        <h2>ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ± ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ</h2>
         <?php     
       
         echo "<div id=\"content\">";
         echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
         echo "<table class=\"imagetable stable\" border='1'>";
-        echo "<td>Σχολείο</td><td></td><td><input type=\"text\" name=\"org\" id=\"org\" /></td></tr>";                
+        echo "<td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ</td><td></td><td><input type=\"text\" name=\"org\" id=\"org\" /></td></tr>";                
         echo "	</table>";
-        echo "	<input type='submit' value='Αναζήτηση'>";
-        //echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "	<input type='submit' value='ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·'>";
+        //echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='reset' value=\"ΞΟΞ±Ξ½Ξ±ΟΞΏΟΞ¬\" onClick=\"window.location.reload()\">";
+        echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
         echo "	</form>";
         echo "</div>";
         
         if (isset($_POST['org']) || isset($_GET['org'])) {
             $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-            mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-            mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+            mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+            mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
                     
             if (isset($_POST['org'])) {
                     $str1 = $_POST['org'];
-                    //$str1 = mb_convert_encoding($_POST['org'], "iso-8859-7", "utf-8");
                     $sch = getSchoolID($str1, $mysqlconnection);
             }
             else
@@ -137,44 +135,44 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
             echo "<table class=\"imagetable\" border='1'>";
             echo "<form id='updatefrm' name='update' action='school_update.php' method='POST'>";
-            echo "<tr><td colspan=3>Τίτλος (αναλυτικά): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
-            echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td><td>Τηλ.: <input type='text' name='tel' value='$tel' /></td></tr>";
+            echo "<tr><td colspan=3>Ξ€Ξ―ΟΞ»ΞΏΟ (Ξ±Ξ½Ξ±Ξ»ΟΟΞΉΞΊΞ¬): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
+            echo "<tr><td>Ξ/Ξ½ΟΞ·: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td><td>Ξ€Ξ·Ξ».: <input type='text' name='tel' value='$tel' /></td></tr>";
             echo "<tr><td>email: <input type='text' name='email' value='$email' size='30'/></a></td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
-            echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
+            echo "<tr><td>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΟΟΞ·ΟΞ±: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
             // 05-10-2012 - organikes
             if ($type == 1) {
-                echo "<tr><td colspan=2>Οργανικές:<br>";
-                echo "ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
-                echo "ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
-                echo "ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
-                echo "ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
-                echo "ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
-                echo "ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
-                echo "ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
-                echo "ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
-                echo "ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/><br>";
+                echo "<tr><td colspan=2>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ­Ο:<br>";
+                echo "Ξ Ξ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
+                echo "Ξ Ξ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
+                echo "Ξ Ξ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
+                echo "Ξ Ξ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
+                echo "Ξ Ξ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
+                echo "Ξ Ξ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
+                echo "Ξ Ξ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
+                echo "Ξ Ξ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
+                echo "Ξ Ξ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/><br>";
                 if ($type2 == 2) {
-                  echo "ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[9]' size='2'/><br>";
-                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[10]' size='2'/><br>";
-                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[11]' size='2'/><br>";
-                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[12]' size='2'/><br>";
-                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[13]' size='2'/><br>";
-                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[14]' size='2'/><br>";
-                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[15]' size='2'/><br>";
-                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2'/>";
+                  echo "Ξ Ξ21 (ΞΞΏΞ³ΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[9]' size='2'/><br>";
+                  echo "Ξ Ξ23 (Ξ¨ΟΟΞΏΞ»ΟΞ³ΟΞ½): <input type='text' name='organikes[]' value='$organikes[10]' size='2'/><br>";
+                  echo "Ξ Ξ25 (Ξ£Ο.ΞΞΏΟΞ·Ξ»Ξ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[11]' size='2'/><br>";
+                  echo "Ξ Ξ26 (ΞΞΏΞ³ΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[12]' size='2'/><br>";
+                  echo "Ξ Ξ28 (Ξ¦ΟΟΞΉΞΊΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[13]' size='2'/><br>";
+                  echo "Ξ Ξ29 (ΞΟΞ³ΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[14]' size='2'/><br>";
+                  echo "Ξ Ξ30 (ΞΞΏΞΉΞ½.ΞΞ΅ΞΉΟΞΏΟΟΞ³ΟΞ½): <input type='text' name='organikes[]' value='$organikes[15]' size='2'/><br>";
+                  echo "ΞΞ1ΞΞΞ : <input type='text' name='organikes[]' value='$organikes[16]' size='2'/>";
                 }
             }  
             else {
-                echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                echo "<tr><td colspan=2>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ­Ο: Ξ Ξ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
                 if ($type2 == 2) {
-                  echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
-                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
-                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
-                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
-                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
-                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
-                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
-                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/>";
+                  echo "<br>Ξ Ξ21 (ΞΞΏΞ³ΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
+                  echo "Ξ Ξ23 (Ξ¨ΟΟΞΏΞ»ΟΞ³ΟΞ½): <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
+                  echo "Ξ Ξ25 (Ξ£Ο.ΞΞΏΟΞ·Ξ»Ξ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
+                  echo "Ξ Ξ26 (ΞΞΏΞ³ΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
+                  echo "Ξ Ξ28 (Ξ¦ΟΟΞΉΞΊΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
+                  echo "Ξ Ξ29 (ΞΟΞ³ΞΏΞΈΞ΅ΟΞ±ΟΞ΅ΟΟΟΞ½): <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
+                  echo "Ξ Ξ30 (ΞΞΏΞΉΞ½.ΞΞ΅ΞΉΟΞΏΟΟΞ³ΟΞ½): <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
+                  echo "ΞΞ1ΞΞΞ : <input type='text' name='organikes[]' value='$organikes[8]' size='2'/>";
                 }
             }
             echo "</td></tr>";
@@ -182,57 +180,57 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             if ($type == 1) {
             }
             else {
-                echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
+                echo "<tr><td colspan=2>ΞΟΞ³. ΞΞ΅Ξ½Ξ¬: Ξ Ξ60: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
             }
             echo "</td></tr>";
             // if ($type == 1)
-            //     echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ70: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
+            //     echo "<tr><td colspan=2>ΞΞ΅ΞΉΟ. ΞΞ΅Ξ½Ξ¬: Ξ Ξ70: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
             // else
-            //     echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ60: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
-            // echo "&nbsp;&nbsp;Φυσ. Αγωγής: <input type='text' name='kena_leit[]' value='$kena_leit[1]' size='2'/>";
-            // echo "&nbsp;&nbsp;Αγγλικών: <input type='text' name='kena_leit[]' value='$kena_leit[2]' size='2'/>";
-            // echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='kena_leit[]' value='$kena_leit[3]' size='2'/>";
+            //     echo "<tr><td colspan=2>ΞΞ΅ΞΉΟ. ΞΞ΅Ξ½Ξ¬: Ξ Ξ60: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
+            // echo "&nbsp;&nbsp;Ξ¦ΟΟ. ΞΞ³ΟΞ³Ξ®Ο: <input type='text' name='kena_leit[]' value='$kena_leit[1]' size='2'/>";
+            // echo "&nbsp;&nbsp;ΞΞ³Ξ³Ξ»ΞΉΞΊΟΞ½: <input type='text' name='kena_leit[]' value='$kena_leit[2]' size='2'/>";
+            // echo "&nbsp;&nbsp;ΞΞΏΟΟΞΉΞΊΞ®Ο: <input type='text' name='kena_leit[]' value='$kena_leit[3]' size='2'/>";
             // echo "</td></tr>";
             //
             echo "<tr>";
             if ($entaksis[0]) {
-                echo "<td><input type=\"checkbox\" name='entaksis' checked >Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
+                echo "<td><input type=\"checkbox\" name='entaksis' checked >Ξ€ΞΌΞ®ΞΌΞ± ΞΞ½ΟΞ±ΞΎΞ·Ο / ΞΞ±ΞΈΞ·ΟΞ­Ο: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
             } else {
-                echo "<td><input type=\"checkbox\" name='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
+                echo "<td><input type=\"checkbox\" name='entaksis'>Ξ€ΞΌΞ®ΞΌΞ± ΞΞ½ΟΞ±ΞΎΞ·Ο / ΞΞ±ΞΈΞ·ΟΞ­Ο: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
             }
             if ($ypodoxis) {
-                echo "<td><input type=\"checkbox\" name='ypodoxis' checked >Τμήμα Υποδοχής</td>";
+                echo "<td><input type=\"checkbox\" name='ypodoxis' checked >Ξ€ΞΌΞ®ΞΌΞ± Ξ₯ΟΞΏΞ΄ΞΏΟΞ®Ο</td>";
             } else {
-                echo "<td><input type=\"checkbox\" name='ypodoxis' >Τμήμα Υποδοχής</td>";
+                echo "<td><input type=\"checkbox\" name='ypodoxis' >Ξ€ΞΌΞ®ΞΌΞ± Ξ₯ΟΞΏΞ΄ΞΏΟΞ®Ο</td>";
             }
             echo "</tr>";
-            echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' /></td><td colspan=3>Εκπ/κοί Τμ.Υποδοχής: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' /></td></tr>";
+            echo "<tr><td>ΞΞΊΟ/ΞΊΞΏΞ― Ξ€ΞΌ.ΞΞ½ΟΞ±ΞΎΞ·Ο: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' /></td><td colspan=3>ΞΞΊΟ/ΞΊΞΏΞ― Ξ€ΞΌ.Ξ₯ΟΞΏΞ΄ΞΏΟΞ®Ο: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' /></td></tr>";
             echo "<tr>";
                     
                     
             if ($type == 1) {
                 echo $frontistiriako ? 
-                    "<td><input type=\"checkbox\" name='frontistiriako' checked >Φροντιστηριακό Τμήμα</td>" :
-                    "<td><input type=\"checkbox\" name='frontistiriako' >Φροντιστηριακό Τμήμα</td>";
+                    "<td><input type=\"checkbox\" name='frontistiriako' checked >Ξ¦ΟΞΏΞ½ΟΞΉΟΟΞ·ΟΞΉΞ±ΞΊΟ Ξ€ΞΌΞ®ΞΌΞ±</td>" :
+                    "<td><input type=\"checkbox\" name='frontistiriako' >Ξ¦ΟΞΏΞ½ΟΞΉΟΟΞ·ΟΞΉΞ±ΞΊΟ Ξ€ΞΌΞ®ΞΌΞ±</td>";
                 echo $oloimero ? 
-                    "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>" : 
-                    "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td>";
+                    "<td><input type=\"checkbox\" name='oloimero' checked >ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</td>" : 
+                    "<td><input type=\"checkbox\" name='oloimero' >ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</td>";
                 echo "</tr>";
                         
                 echo "<tr>";
                 echo $ted ? 
-                    "<td><input type=\"checkbox\" name='ted' checked >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>" :
-                    "<td><input type=\"checkbox\" name='ted' >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+                    "<td><input type=\"checkbox\" name='ted' checked >Ξ€ΞΌ.ΞΞ½ΞΉΟΟ.ΞΞΉΞ΄Ξ±ΟΞΊΞ±Ξ»Ξ―Ξ±Ο (Ξ€.Ξ.Ξ.)</td>" :
+                    "<td><input type=\"checkbox\" name='ted' >Ξ€ΞΌ.ΞΞ½ΞΉΟΟ.ΞΞΉΞ΄Ξ±ΟΞΊΞ±Ξ»Ξ―Ξ±Ο (Ξ€.Ξ.Ξ.)</td>";
                 //echo "<td></td>";
                 echo $anenergo ? 
-                    "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
-                    "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
+                    "<td><input type=\"checkbox\" name='anenergo' checked >ΞΞ½Ξ΅Ξ½Ξ΅ΟΞ³Ο</td>" :
+                    "<td><input type=\"checkbox\" name='anenergo' >ΞΞ½Ξ΅Ξ½Ξ΅ΟΞ³Ο</td>";
                 echo "</tr>";
                 echo $vivliothiki ? 
-                    "<td><input type=\"checkbox\" name='vivliothiki' checked >Σχολική βιβλιοθήκη</td><td></td>" :
-                    "<td><input type=\"checkbox\" name='vivliothiki' >Σχολική βιβλιοθήκη</td><td></td>";
+                    "<td><input type=\"checkbox\" name='vivliothiki' checked >Ξ£ΟΞΏΞ»ΞΉΞΊΞ® Ξ²ΞΉΞ²Ξ»ΞΉΞΏΞΈΞ®ΞΊΞ·</td><td></td>" :
+                    "<td><input type=\"checkbox\" name='vivliothiki' >Ξ£ΟΞΏΞ»ΞΉΞΊΞ® Ξ²ΞΉΞ²Ξ»ΞΉΞΏΞΈΞ®ΞΊΞ·</td><td></td>";
                         
-                echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
+                echo "<tr><td colspan=2>Ξ£ΟΟΞ»ΞΉΞ±: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                 echo "</table>";
                 echo "<br>";
                         
@@ -240,22 +238,22 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 //{
                 /*
                     echo "<table class=\"imagetable\" border='1'>";
-                    echo "<tr><td>Μαθητές Ολοημέρου: <input type='text' name='oloimero_stud' value='$oloimero_stud' size='2'/></td>";
-                    echo "<td>Εκπ/κοί Ολοημέρου: <input type='text' name='oloimero_tea' value='$oloimero_tea' size='2'/><td></tr>";
+                    echo "<tr><td>ΞΞ±ΞΈΞ·ΟΞ­Ο ΞΞ»ΞΏΞ·ΞΌΞ­ΟΞΏΟ: <input type='text' name='oloimero_stud' value='$oloimero_stud' size='2'/></td>";
+                    echo "<td>ΞΞΊΟ/ΞΊΞΏΞ― ΞΞ»ΞΏΞ·ΞΌΞ­ΟΞΏΟ: <input type='text' name='oloimero_tea' value='$oloimero_tea' size='2'/><td></tr>";
                     echo "</table>";
                 */
                 //}
                 echo "<br>";
 
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td colspan=8>Σύνολο Μαθητών Πρ.: $synolo</td></tr>";
-                echo "<tr><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Ολ.<small>(15.00/16.00)</small></td><td>ΠΖ</td></tr>";
+                echo "<tr><td colspan=8>Ξ£ΟΞ½ΞΏΞ»ΞΏ ΞΞ±ΞΈΞ·ΟΟΞ½ Ξ Ο.: $synolo</td></tr>";
+                echo "<tr><td>Ξ'</td><td>Ξ'</td><td>Ξ'</td><td>Ξ'</td><td>Ξ'</td><td>Ξ£Ξ€'</td><td>ΞΞ».<small>(15.00/16.00)</small></td><td>Ξ Ξ</td></tr>";
                 if ($synolo>0) {
                     echo "<tr><td><input type='text' name='a' size='1' value=$classes[0] /></td><td><input type='text' name='b' size='1' value=$classes[1] /></td><td><input type='text' name='c' size='1' value=$classes[2] /></td><td><input type='text' name='d' size='1' value=$classes[3] /></td><td><input type='text' name='e' size='1' value=$classes[4] /></td><td><input type='text' name='f' size='1' value=$classes[5] /></td><td><input type='text' name='g' size='1' value=$classes[6] /></td><td><input type='text' name='h' size='1' value=$classes[7] /></td></tr>";
                 } else {
                     echo "<tr><td><input type='text' name='a' size='1' value='0' /></td><td><input type='text' name='b' size='1' value='0' /></td><td><input type='text' name='c' size='1' value='0' /></td><td><input type='text' name='d' size='1' value='0' /></td><td><input type='text' name='e' size='1' value='0' /></td><td><input type='text' name='f' size='1' value='0' /></td><td><input type='text' name='g' size='1' value='0' /></td><td><input type='text' name='h' size='1' value='0' /></td></tr>";
                 }
-                echo "<tr><td colspan=8>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο Πρ: $synolo_tmim</td></tr>";
+                echo "<tr><td colspan=8>Ξ€ΞΌΞ®ΞΌΞ±ΟΞ± (ΞΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΞ―) Ξ±Ξ½Ξ¬ ΟΞ¬ΞΎΞ·<br>Ξ£ΟΞ½ΞΏΞ»ΞΏ Ξ Ο: $synolo_tmim</td></tr>";
                 if ($synolo>0) {
                     echo "<tr><td><input type='text' name='ta' size='1' value=$tmimata_exp[0] /></td><td><input type='text' name='tb' size='1' value=$tmimata_exp[1] /></td><td><input type='text' name='tc' size='1' value=$tmimata_exp[2] /></td><td><input type='text' name='td' size='1' value=$tmimata_exp[3] /></td><td><input type='text' name='te' size='1' value=$tmimata_exp[4] /></td><td><input type='text' name='tf' size='1' value=$tmimata_exp[5] /></td><td><input type='text' name='tg' size='1' value=$tmimata_exp[6] /><input type='text' name='th' size='1' value=$tmimata_exp[7] /></td><td><input type='text' name='ti' size='1' value=$tmimata_exp[8] /></td></tr>";
                 } else {
@@ -265,37 +263,37 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // if nip
             else if ($type == 2) {
                 if ($oloimero) {
-                    echo "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>";
+                    echo "<td><input type=\"checkbox\" name='oloimero' checked >ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</td>";
                 } else {
-                    echo "<td><input type=\"checkbox\" name='oloimero'>Όλοήμερο</td>";
+                    echo "<td><input type=\"checkbox\" name='oloimero'>ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</td>";
                 }
-                echo "<td>Μαθητές Πρωινής Ζώνης&nbsp;&nbsp;<input type='text' name='pz' size='1' value=$klasiko_exp[6]></td></tr>";
-                echo "<tr><td>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td>";
+                echo "<td>ΞΞ±ΞΈΞ·ΟΞ­Ο Ξ ΟΟΞΉΞ½Ξ®Ο ΞΟΞ½Ξ·Ο&nbsp;&nbsp;<input type='text' name='pz' size='1' value=$klasiko_exp[6]></td></tr>";
+                echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td>";
                 echo $anenergo ? 
-                    "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
-                    "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
+                    "<td><input type=\"checkbox\" name='anenergo' checked >ΞΞ½Ξ΅Ξ½Ξ΅ΟΞ³Ο</td>" :
+                    "<td><input type=\"checkbox\" name='anenergo' >ΞΞ½Ξ΅Ξ½Ξ΅ΟΞ³Ο</td>";
                 echo "</tr>";
                 echo "</table>";
                 echo "<br>";
                 /////////    
-                echo "<h3>Μαθητές</h3><br>";
+                echo "<h3>ΞΞ±ΞΈΞ·ΟΞ­Ο</h3><br>";
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td rowspan=2>Τμήμα</td><td colspan=2>Κλασικό</td><td colspan=2>Ολοήμερο</td></tr>";
-                echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Νήπια</td><td>Προνήπια</td></tr>";
+                echo "<tr><td rowspan=2>Ξ€ΞΌΞ®ΞΌΞ±</td><td colspan=2>ΞΞ»Ξ±ΟΞΉΞΊΟ</td><td colspan=2>ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</td></tr>";
+                echo "<tr><td>ΞΞ®ΟΞΉΞ±</td><td>Ξ ΟΞΏΞ½Ξ®ΟΞΉΞ±</td><td>ΞΞ®ΟΞΉΞ±</td><td>Ξ ΟΞΏΞ½Ξ®ΟΞΉΞ±</td></tr>";
                 // t1
-                echo "<tr><td>Τμ.1</td><td><input type='text' name='k1a' size='1' value=$klasiko_exp[0]></td><td><input type='text' name='k1b' size='1' value=$klasiko_exp[1]>";
+                echo "<tr><td>Ξ€ΞΌ.1</td><td><input type='text' name='k1a' size='1' value=$klasiko_exp[0]></td><td><input type='text' name='k1b' size='1' value=$klasiko_exp[1]>";
                 echo "<td><input type='text' name='o1a' size='1' value=$oloimero_nip_exp[0]></td><td><input type='text' name='o1b' size='1' value=$oloimero_nip_exp[1]></td></tr>";
                 // t2
-                echo "<tr><td>Τμ.2</td><td><input type='text' name='k2a' size='1' value=$klasiko_exp[2]></td><td><input type='text' name='k2b' size='1' value=$klasiko_exp[3]>";
+                echo "<tr><td>Ξ€ΞΌ.2</td><td><input type='text' name='k2a' size='1' value=$klasiko_exp[2]></td><td><input type='text' name='k2b' size='1' value=$klasiko_exp[3]>";
                 echo "<td><input type='text' name='o2a' size='1' value=$oloimero_nip_exp[2]></td><td><input type='text' name='o2b' size='1' value=$oloimero_nip_exp[3]></td></tr>";
                 // t3
-                echo "<tr><td>Τμ.3</td><td><input type='text' name='k3a' size='1' value=$klasiko_exp[4]></td><td><input type='text' name='k3b' size='1' value=$klasiko_exp[5]>";
+                echo "<tr><td>Ξ€ΞΌ.3</td><td><input type='text' name='k3a' size='1' value=$klasiko_exp[4]></td><td><input type='text' name='k3b' size='1' value=$klasiko_exp[5]>";
                 echo "<td><input type='text' name='o3a' size='1' value=$oloimero_nip_exp[4]></td><td><input type='text' name='o3b' size='1' value=$oloimero_nip_exp[5]></td></tr>";
                 echo "</table>";
                 echo "<br>";
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td colspan=3>Νηπιαγωγοί</td></tr>";
-                echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";
+                echo "<tr><td colspan=3>ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³ΞΏΞ―</td></tr>";
+                echo "<tr><td>ΞΞ»Ξ±ΟΞΉΞΊΟ</td><td>ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</td><td>Ξ€ΞΌ.ΞΞ½ΟΞ±ΞΎΞ·Ο</td></tr>";
                 echo "<tr><td><input type='text' name='ekp_kl' size='1' value=$nip_exp[0]></td><td><input type='text' name='ekp_ol' size='1' value=$nip_exp[1]></td><td><input type='text' name='ekp_te' size='1' value=$nip_exp[2]></td></tr>";
                 echo "</table>";
             }
@@ -306,10 +304,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "	<input type='hidden' name = 'sch' value='$sch'>";
             echo "	<input type='hidden' name = 'name' value='$str1'>";
                     
-            echo "<input type='submit' value='Αποθήκευση'>";
+            echo "<input type='submit' value='ΞΟΞΏΞΈΞ®ΞΊΞ΅ΟΟΞ·'>";
             echo "</form>";
             $schLink = "school_status.php?org=$sch";
-            echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='$schLink'\">";
+            echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='$schLink'\">";
                 
         }
         ?>

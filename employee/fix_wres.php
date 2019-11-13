@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once "../config.php";
 	require_once "../tools/functions.php";
 ?>	
@@ -14,13 +14,13 @@
     }
     $usrlvl = $_SESSION['userlevel'];
     if ($usrlvl)
-        die('Δεν έχετε τα προνόμια να εκτελέσετε αυτήν την ενέργεια...');
+        die('Ξ”ΞµΞ½ Ξ­Ο‡ΞµΟ„Ξµ Ο„Ξ± Ο€ΟΞΏΞ½ΟΞΌΞΉΞ± Ξ½Ξ± ΞµΞΊΟ„ΞµΞ»Ξ­ΟƒΞµΟ„Ξµ Ξ±Ο…Ο„Ξ®Ξ½ Ο„Ξ·Ξ½ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±...');
 
     if (empty($_POST)){
-        echo "<h2>Επιδιόρθωση διδακτικού ωραρίου εκπ/κών</h2>";
-        echo "<h4>ΠΡΟΣΟΧΗ: Η ακόλουθη ενέργεια προκαλεί μεταβολές στη Βάση Δεδομένων.<br>Προχωρήστε μόνο αν είστε σίγουροι...</h4>";
+        echo "<h2>Ξ•Ο€ΞΉΞ΄ΞΉΟΟΞΈΟ‰ΟƒΞ· Ξ΄ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞΏΟ Ο‰ΟΞ±ΟΞ―ΞΏΟ… ΞµΞΊΟ€/ΞΊΟΞ½</h2>";
+        echo "<h4>Ξ Ξ΅ΞΞ£ΞΞ§Ξ—: Ξ— Ξ±ΞΊΟΞ»ΞΏΟ…ΞΈΞ· ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ± Ο€ΟΞΏΞΊΞ±Ξ»ΞµΞ― ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ­Ο‚ ΟƒΟ„Ξ· Ξ’Ξ¬ΟƒΞ· Ξ”ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½.<br>Ξ ΟΞΏΟ‡Ο‰ΟΞ®ΟƒΟ„Ξµ ΞΌΟΞ½ΞΏ Ξ±Ξ½ ΞµΞ―ΟƒΟ„Ξµ ΟƒΞ―Ξ³ΞΏΟ…ΟΞΏΞΉ...</h4>";
         echo "<form action='' method='POST' autocomplete='off'>";
-        echo "<input type='submit' value='Μεταβολή'></td></tr>";
+        echo "<input type='submit' value='ΞΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ®'></td></tr>";
         echo "<input type='hidden' name = 'placeholder' value='1'>";
         echo "</form>";
     }
@@ -31,8 +31,8 @@
     $updates = $fails = 0;
     
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
     $query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = $sxol_etos";
 		$result = mysqli_query($mysqlconnection, $query);
@@ -66,11 +66,11 @@
         echo "<br>";       
         mysqli_close($mysqlconnection);
 
-        echo "Πραγματοποιήθηκαν $updates ενημερώσεις στη Β.Δ. (σε πλήθος $synolo υπαλλήλων)";
+        echo "Ξ ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞ±Ξ½ $updates ΞµΞ½Ξ·ΞΌΞµΟΟΟƒΞµΞΉΟ‚ ΟƒΟ„Ξ· Ξ’.Ξ”. (ΟƒΞµ Ο€Ξ»Ξ®ΞΈΞΏΟ‚ $synolo Ο…Ο€Ξ±Ξ»Ξ»Ξ®Ξ»Ο‰Ξ½)";
         if ($fails)
-            echo "<br>$fails αποτυχίες.";
+            echo "<br>$fails Ξ±Ο€ΞΏΟ„Ο…Ο‡Ξ―ΞµΟ‚.";
     }
 ?>
 <br><br>
-<a href="../index.php">Επιστροφή</a>
+<a href="../index.php">Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®</a>
 </html>

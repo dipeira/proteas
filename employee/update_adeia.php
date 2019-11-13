@@ -1,9 +1,9 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 ?>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Update</title>
   </head>
   <body> 
@@ -13,8 +13,8 @@
   require_once"../tools/functions.php";
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
 
   $id = $_POST['id'];
@@ -31,15 +31,13 @@
   $finish = date('Y-m-d',strtotime($_POST['finish']));
   $logos =$_POST['logos']; 
   $comments =$_POST['comments']; 
-  //$logos = mb_convert_encoding($_POST['logos'], "iso-8859-7", "utf-8");
-  //$comments = mb_convert_encoding($_POST['comments'], "iso-8859-7", "utf-8");
 
   // Elegxoi:
   if (!$prot)
-      die('Παρακαλώ εισάγετε αριθμό πρωτοκόλλου');
+      die('Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΞΉΟΞ¬Ξ³Ξ΅ΟΞ΅ Ξ±ΟΞΉΞΈΞΌΟ ΟΟΟΟΞΏΞΊΟΞ»Ξ»ΞΏΟ');
   
   if (!$days)
-      die('Παρακαλώ εισάγετε αριθμό ημερών');
+      die('Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΞΉΟΞ¬Ξ³Ξ΅ΟΞ΅ Ξ±ΟΞΉΞΈΞΌΟ Ξ·ΞΌΞ΅ΟΟΞ½');
   
 // $_POST['action']=1 for adding records  
   if (isset($_POST['action']))
@@ -47,7 +45,7 @@
 //        $qry = "SELECT prot FROM adeia WHERE prot = $prot";
 //        $res = mysqli_query($mysqlconnection, $qry);
 //        if (mysqli_num_rows($res)>0)
-//            die('Η άδεια με αυτόν τον αρ.πρωτ. έχει ήδη καταχωρηθεί...');
+//            die('Ξ Ξ¬Ξ΄Ξ΅ΞΉΞ± ΞΌΞ΅ Ξ±ΟΟΟΞ½ ΟΞΏΞ½ Ξ±Ο.ΟΟΟΟ. Ξ­ΟΞ΅ΞΉ Ξ®Ξ΄Ξ· ΞΊΞ±ΟΞ±ΟΟΟΞ·ΞΈΞ΅Ξ―...');
         
 	$query0 = "INSERT INTO adeia (emp_id, type, prot_apof, hm_apof, prot, hm_prot, date, vev_dil, days, start, finish, logos, comments) ";
 		 $query1 = "VALUES ('$emp_id','$type','$prot_apof','$hm_apof','$prot','$hm_prot','$date','$vev_dil','$days','$start', '$finish', '$logos','$comments')";
@@ -59,17 +57,16 @@
 	  $query2 = " WHERE id='$id'";
 	  $query = $query1.$query2;
   }
-  $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
   
   // for debugging...
   // echo "<br>".$query;
   
   mysqli_query($mysqlconnection, $query);
   
-  //echo "Επιτυχής καταχώρηση!";
+  //echo "ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ·!";
   mysqli_close($mysqlconnection);
 ?>
 <br>
-<h2 align="center">Επιτυχής καταχώρηση!</h2>
+<h2 align="center">ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ·!</h2>
 </body>
 </html>

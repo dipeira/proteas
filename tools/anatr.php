@@ -1,13 +1,13 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     Require "../config.php";
     Require "../functions.php";
     
     
         
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
                 $query = "SELECT * from employee";
                 

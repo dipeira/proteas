@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require_once"../config.php";
 require "../tools/class.login.php";
   $log = new logmein();
@@ -30,12 +30,12 @@ $pr_labels = implode($pr_labels, ',');
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />   
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
-<title>Διαχείριση Πράξεων</title>
+<title>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ ΟΞ¬ΞΎΞµΟ‰Ξ½</title>
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
 <center>
-<h2>Διαχείριση Πράξεων</h2>
+<h2>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ ΟΞ¬ΞΎΞµΟ‰Ξ½</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -47,14 +47,14 @@ var thegrid = new drasticGrid('grid1', {
     //colwidth: "300",
     pagelength:25,
     columns: [
-      {name: 'id', displayname:'Α/Α', width: 30},
-      {name: 'name', displayname:'Όνομα', width: 300},
-      {name: 'ya', displayname:'Υπουργική Απόφαση', width: 150},
-      {name: 'ada', displayname:'Α.Δ.Α. Υ.Α.', width: 150},
-      {name: 'apofasi', displayname:'Απόφαση Δ/ντή', width: 150},
-      {name: 'ada_apof', displayname:'Α.Δ.Α. Απόφασης', width: 150},
-      {name: 'sxolio', displayname:'Σχόλια', width: 150},
-      {name: 'type', displayname:'Τύπος',
+      {name: 'id', displayname:'Ξ‘/Ξ‘', width: 30},
+      {name: 'name', displayname:'ΞΞ½ΞΏΞΌΞ±', width: 300},
+      {name: 'ya', displayname:'Ξ¥Ο€ΞΏΟ…ΟΞ³ΞΉΞΊΞ® Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ·', width: 150},
+      {name: 'ada', displayname:'Ξ‘.Ξ”.Ξ‘. Ξ¥.Ξ‘.', width: 150},
+      {name: 'apofasi', displayname:'Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· Ξ”/Ξ½Ο„Ξ®', width: 150},
+      {name: 'ada_apof', displayname:'Ξ‘.Ξ”.Ξ‘. Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚', width: 150},
+      {name: 'sxolio', displayname:'Ξ£Ο‡ΟΞ»ΞΉΞ±', width: 150},
+      {name: 'type', displayname:'Ξ¤ΟΟ€ΞΏΟ‚',
         type: DDTYPEKEY, 
         values: [<?php echo $pr_values; ?>],
         labels:  [<?php echo $pr_labels; ?>],
@@ -63,7 +63,7 @@ var thegrid = new drasticGrid('grid1', {
     ]//,
     // onUpdateStart: function(id, colname, value) {
     //     if (id == 0 ) {
-    //         alert('Σφάλμα: Η πρώτη γραμμή δεν μπορεί να μεταβληθεί...');
+    //         alert('Ξ£Ο†Ξ¬Ξ»ΞΌΞ±: Ξ— Ο€ΟΟΟ„Ξ· Ξ³ΟΞ±ΞΌΞΌΞ® Ξ΄ΞµΞ½ ΞΌΟ€ΞΏΟΞµΞ― Ξ½Ξ± ΞΌΞµΟ„Ξ±Ξ²Ξ»Ξ·ΞΈΞµΞ―...');
     //         this.do_update = false;
     //     }
     //     else this.do_update = true;
@@ -72,18 +72,18 @@ var thegrid = new drasticGrid('grid1', {
 </script>
 </center>
 <table class="imagetable stable" border="1">
-    <tr><th colspan="2">Επεξήγηση</th></tr>
-    <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>
-    <tr><td>Όνομα πράξης</td><td>Να είναι περιγραφικό & σύντομο π.χ. Ολοήμερο Β', Παράλληλη Γ' κλπ.</td></tr>
-    <tr><td>Υπουργική Απόφαση</td><td></td></tr>
-    <tr><td>ΑΔΑ Υ.Α. </td><td>Να αναγράφεται μόνο ο ΑΔΑ της Υ.Α., π.χ. 6ΠΜΦ4653ΠΣ-4ΝΠ</td></tr>
-    <tr><td>Απόφαση Δ/ντη</td><td>Απόφαση τοποθέτησης</td></tr>
-    <tr><td>ΑΔΑ Απόφασης</td><td>Να αναγράφεται μόνο ο ΑΔΑ απόφασης τοποθέτησης, π.χ. 6ΠΜΦ4653ΠΣ-4ΝΠ</td></tr>
-    <tr><td>Τύπος πράξης</td><td>(Επιλέξτε από τη λίστα)</td></tr>
+    <tr><th colspan="2">Ξ•Ο€ΞµΞΎΞ®Ξ³Ξ·ΟƒΞ·</th></tr>
+    <tr><td><strong>Ξ ΞµΞ΄Ξ―ΞΏ</strong></td><td><strong>Ξ ΞµΟΞΉΞ³ΟΞ±Ο†Ξ®</strong></td></tr>
+    <tr><td>ΞΞ½ΞΏΞΌΞ± Ο€ΟΞ¬ΞΎΞ·Ο‚</td><td>ΞΞ± ΞµΞ―Ξ½Ξ±ΞΉ Ο€ΞµΟΞΉΞ³ΟΞ±Ο†ΞΉΞΊΟ & ΟƒΟΞ½Ο„ΞΏΞΌΞΏ Ο€.Ο‡. ΞΞ»ΞΏΞ®ΞΌΞµΟΞΏ Ξ’', Ξ Ξ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»Ξ· Ξ“' ΞΊΞ»Ο€.</td></tr>
+    <tr><td>Ξ¥Ο€ΞΏΟ…ΟΞ³ΞΉΞΊΞ® Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ·</td><td></td></tr>
+    <tr><td>Ξ‘Ξ”Ξ‘ Ξ¥.Ξ‘. </td><td>ΞΞ± Ξ±Ξ½Ξ±Ξ³ΟΞ¬Ο†ΞµΟ„Ξ±ΞΉ ΞΌΟΞ½ΞΏ ΞΏ Ξ‘Ξ”Ξ‘ Ο„Ξ·Ο‚ Ξ¥.Ξ‘., Ο€.Ο‡. 6Ξ ΞΞ¦4653Ξ Ξ£-4ΞΞ </td></tr>
+    <tr><td>Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· Ξ”/Ξ½Ο„Ξ·</td><td>Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· Ο„ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·Ο‚</td></tr>
+    <tr><td>Ξ‘Ξ”Ξ‘ Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚</td><td>ΞΞ± Ξ±Ξ½Ξ±Ξ³ΟΞ¬Ο†ΞµΟ„Ξ±ΞΉ ΞΌΟΞ½ΞΏ ΞΏ Ξ‘Ξ”Ξ‘ Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚ Ο„ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·Ο‚, Ο€.Ο‡. 6Ξ ΞΞ¦4653Ξ Ξ£-4ΞΞ </td></tr>
+    <tr><td>Ξ¤ΟΟ€ΞΏΟ‚ Ο€ΟΞ¬ΞΎΞ·Ο‚</td><td>(Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ±Ο€Ο Ο„Ξ· Ξ»Ξ―ΟƒΟ„Ξ±)</td></tr>
 </table>
-<p>ΠΡΟΣΟΧΗ: Η πρώτη γραμμή να μη διαγράφεται!</p>
+<p>Ξ Ξ΅ΞΞ£ΞΞ§Ξ—: Ξ— Ο€ΟΟΟ„Ξ· Ξ³ΟΞ±ΞΌΞΌΞ® Ξ½Ξ± ΞΌΞ· Ξ΄ΞΉΞ±Ξ³ΟΞ¬Ο†ΞµΟ„Ξ±ΞΉ!</p>
 <form>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='ektaktoi_list.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='ektaktoi_list.php'">
 </form>
 
 </body></html>

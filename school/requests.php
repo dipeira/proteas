@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require_once"../config.php";
 require_once"../tools/functions.php";
 
@@ -10,8 +10,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 }
 
 if (!$_SESSION['requests']) {
-  echo "<h3>Σφάλμα: Δεν έχετε δικαίωμα προβολής αιτημάτων σχολείων...</h3>";
-  die("<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">");
+  echo "<h3>Ξ£Ο†Ξ¬Ξ»ΞΌΞ±: Ξ”ΞµΞ½ Ξ­Ο‡ΞµΟ„Ξµ Ξ΄ΞΉΞΊΞ±Ξ―Ο‰ΞΌΞ± Ο€ΟΞΏΞ²ΞΏΞ»Ξ®Ο‚ Ξ±ΞΉΟ„Ξ·ΞΌΞ¬Ο„Ο‰Ξ½ ΟƒΟ‡ΞΏΞ»ΞµΞ―Ο‰Ξ½...</h3>";
+  die("<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='../index.php'\">");
 }
 
 require_once '../tools/paginator.php';
@@ -59,7 +59,7 @@ $results    = $Paginator->getData( $limit, $page );
     });
     </script>
 
-  <title>Διαχείριση Αιτημάτων</title>
+  <title>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ‘ΞΉΟ„Ξ·ΞΌΞ¬Ο„Ο‰Ξ½</title>
   <style>
     ul.pagination {
         display: inline-block;
@@ -86,18 +86,18 @@ $results    = $Paginator->getData( $limit, $page );
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
-<h2>Διαχείριση Αιτημάτων Σχολείων</h2>
+<h2>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ‘ΞΉΟ„Ξ·ΞΌΞ¬Ο„Ο‰Ξ½ Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</h2>
 
-<p>Εμφάνιση αιτημάτων: </p>
+<p>Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ξ±ΞΉΟ„Ξ·ΞΌΞ¬Ο„Ο‰Ξ½: </p>
 <form id="request_status">
-    <input type="radio" name="status" value="0" <?= $stat_radio == 0 ? 'checked' : ''?> onchange="this.form.submit()"> Όλα
-    <input type="radio" name="status" value="1" <?= $stat_radio == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Διεκπεραιωμένα
-    <input type="radio" name="status" value="2" <?= $stat_radio == 2 ? 'checked' : ''?> onchange="this.form.submit()"> Μη Διεκπεραιωμένα
+    <input type="radio" name="status" value="0" <?= $stat_radio == 0 ? 'checked' : ''?> onchange="this.form.submit()"> ΞΞ»Ξ±
+    <input type="radio" name="status" value="1" <?= $stat_radio == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±ΞΉΟ‰ΞΌΞ­Ξ½Ξ±
+    <input type="radio" name="status" value="2" <?= $stat_radio == 2 ? 'checked' : ''?> onchange="this.form.submit()"> ΞΞ· Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±ΞΉΟ‰ΞΌΞ­Ξ½Ξ±
 </form>
 <br>
 <?php
   echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-  echo "<thead><tr><th>A/A</th><th>Σχολείο</th><th>Αίτημα</th><th>Σχόλιο Δ/νσης</th><th>Διεκπεραίωση</th><th>Ημ/νία υποβολής</th></tr></thead><tbody>";
+  echo "<thead><tr><th>A/A</th><th>Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ</th><th>Ξ‘Ξ―Ο„Ξ·ΞΌΞ±</th><th>Ξ£Ο‡ΟΞ»ΞΉΞΏ Ξ”/Ξ½ΟƒΞ·Ο‚</th><th>Ξ”ΞΉΞµΞΊΟ€ΞµΟΞ±Ξ―Ο‰ΟƒΞ·</th><th>Ξ—ΞΌ/Ξ½Ξ―Ξ± Ο…Ο€ΞΏΞ²ΞΏΞ»Ξ®Ο‚</th></tr></thead><tbody>";
   for( $i = 0; $i < count( $results->data ); $i++ ){
         echo "<tr>";
         echo "<td>".$results->data[$i]['id']."</a></td>";
@@ -105,7 +105,7 @@ $results    = $Paginator->getData( $limit, $page );
         echo "<td>".nl2br($results->data[$i]['request'])."</td>";
         echo "<td>".nl2br($results->data[$i]['comment'])."</td>";
         echo "<td>";
-        echo $results->data[$i]['done'] ? 'Ναι' : 'Όχι';
+        echo $results->data[$i]['done'] ? 'ΞΞ±ΞΉ' : 'ΞΟ‡ΞΉ';
         echo "</td>";
         echo "<td>".$results->data[$i]['submitted']."</td>";
         //echo "<td>".$results->data[$i]['sxol_etos']."</td>";
@@ -117,7 +117,7 @@ $results    = $Paginator->getData( $limit, $page );
 
 ?>
 <form>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

@@ -1,11 +1,11 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
     require "../tools/class.login.php";
     $log = new logmein();
@@ -31,8 +31,8 @@ else
   <head>
     
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Αναπληρωτές</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο</title>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -98,7 +98,7 @@ else
         echo "<center>";
 
         if (isset($sxoletos)) {
-            echo "<h2>Αναπληρωτές σχολικού έτους: " . substr($sxoletos, 0, 4) . '-' . substr($sxoletos, 4, 2) ."</h2>";
+            echo "<h2>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο ΟΟΞΏΞ»ΞΉΞΊΞΏΟ Ξ­ΟΞΏΟΟ: " . substr($sxoletos, 0, 4) . '-' . substr($sxoletos, 4, 2) ."</h2>";
         }
                 
         $klpost = 0;
@@ -137,7 +137,6 @@ else
                 $surpost = $_POST['surname'];
             } else{
                 $surpost = urldecode($_GET['surname']);
-                //$surpost = mb_convert_encoding($surpost, "iso-8859-7", "utf-8");
             }
                             
             $query .= "AND surname LIKE '$surpost' ";
@@ -179,7 +178,7 @@ else
         $query_pr = "SELECT distinct sxoletos from praxi_old ORDER BY sxoletos DESC";
         $result_pr = mysqli_query($mysqlconnection, $query_pr);
         if (mysqli_num_rows($result_pr)) {
-            echo "Επιλέξτε έτος: ";
+            echo "ΞΟΞΉΞ»Ξ­ΞΎΟΞ΅ Ξ­ΟΞΏΟ: ";
             echo "<select id='year-change' onchange='changeYear()'>";
             while ($row = mysqli_fetch_array($result_pr)){
                 $setos = substr($row['sxoletos'], 0, 4).'-'.substr($row['sxoletos'], 4, 2);
@@ -194,9 +193,9 @@ else
         echo "<thead><tr><form id='src' name='src' action='ektaktoi_prev.php?sxoletos=$sxoletos' method='POST'>\n";
         echo "<td colspan=2><input type='text' name='surname' id='surname''/>";
         if ($posted || ($_GET['klados']>0) || ($_GET['org']>0) || ($_GET['yphr']>0) || ($_GET['type']>0)) {
-            echo "<INPUT TYPE='submit' VALUE='Επαναφορά'>";
+            echo "<INPUT TYPE='submit' VALUE='ΞΟΞ±Ξ½Ξ±ΟΞΏΟΞ¬'>";
         } else {    
-            echo "<INPUT TYPE='submit' VALUE='Αναζήτηση'>";
+            echo "<INPUT TYPE='submit' VALUE='ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·'>";
         }
     
         echo "<td>\n";
@@ -215,12 +214,12 @@ else
         echo "</td>";
         echo "</form></tr>\n";
     
-        echo "<th>Επώνυμο</th>\n";
-        echo "<th>Όνομα</th>\n";
-        echo "<th>Ειδικότητα</th>\n";
-        echo "<th>Σχ.Υπηρέτησης<br><small>(* περισσότερα από 1 σχολ.)</small></th>\n";
-        echo "<th>Τύπος Απασχόλησης</th>\n";
-        echo "<th>Πράξη</th>\n";
+        echo "<th>ΞΟΟΞ½ΟΞΌΞΏ</th>\n";
+        echo "<th>ΞΞ½ΞΏΞΌΞ±</th>\n";
+        echo "<th>ΞΞΉΞ΄ΞΉΞΊΟΟΞ·ΟΞ±</th>\n";
+        echo "<th>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο<br><small>(* ΟΞ΅ΟΞΉΟΟΟΟΞ΅ΟΞ± Ξ±ΟΟ 1 ΟΟΞΏΞ».)</small></th>\n";
+        echo "<th>Ξ€ΟΟΞΏΟ ΞΟΞ±ΟΟΟΞ»Ξ·ΟΞ·Ο</th>\n";
+        echo "<th>Ξ ΟΞ¬ΞΎΞ·</th>\n";
         echo "</tr>\n</thead>\n";
     
         echo "<tbody>\n";
@@ -260,33 +259,33 @@ else
         if ($lastpg == 0) {
             $curpg = 0;
         }
-        echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+        echo "Ξ£Ξ΅Ξ»Ξ―Ξ΄Ξ± $curpg Ξ±ΟΟ $lastpg ($num_record1 Ξ΅Ξ³Ξ³ΟΞ±ΟΞ­Ο)<br>";
         if ($curpg!=1) {
-            echo "  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
+            echo "  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Ξ ΟΟΟΞ·</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Ξ ΟΞΏΞ·Ξ³/Ξ½Ξ·</a>";
         }
         else {
-            echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
+            echo "  Ξ ΟΟΟΞ· &nbsp;&nbsp; Ξ ΟΞΏΞ·Ξ³/Ξ½Ξ·";
         }
         if ($curpg != $lastpg) {
             $nextpg = $curpg+1;
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>ΞΟΟΞΌΞ΅Ξ½Ξ·</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ±</a>";
         }
         else { 
-            echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
+            echo "  ΞΟΟΞΌΞ΅Ξ½Ξ· &nbsp;&nbsp; Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ±";
         }
         echo "<FORM METHOD=\"POST\" ACTION=\"ektaktoi_prev.php\">";
-        echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
-        echo "<input type=\"submit\" value=\"Μετάβαση\">";
+        echo " ΞΞ΅ΟΞ¬Ξ²Ξ±ΟΞ· ΟΟΞ· ΟΞ΅Ξ».  <input type=\"text\" name=\"page\" size=1 />";
+        echo "<input type=\"submit\" value=\"ΞΞ΅ΟΞ¬Ξ²Ξ±ΟΞ·\">";
                 echo "<br>";
-                echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
-        echo "<input type=\"submit\" value=\"Ορισμός\">";
+                echo "   ΞΞ³Ξ³Ο./ΟΞ΅Ξ».    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
+        echo "<input type=\"submit\" value=\"ΞΟΞΉΟΞΌΟΟ\">";
         echo "</FORM>";
         echo "</td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πρόσληψη αναπληρωτών' onClick=\"parent.location='ektaktoi_hire.php'\">";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Πράξεις έτους $sxoletos' onClick=\"parent.location='praxi_prev.php?sxoletos=$sxoletos'\">";
-        echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Ξ ΟΟΟΞ»Ξ·ΟΞ· Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½' onClick=\"parent.location='ektaktoi_hire.php'\">";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Ξ ΟΞ¬ΞΎΞ΅ΞΉΟ Ξ­ΟΞΏΟΟ $sxoletos' onClick=\"parent.location='praxi_prev.php?sxoletos=$sxoletos'\">";
+        echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\"></td></tr>";
         echo "</table>\n";
         ?>
       

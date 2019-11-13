@@ -1,12 +1,12 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once "../config.php";
 	require_once "../tools/functions.php";
 ?>	
   <html>
   <head>      
       <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-      <title>Συμπλήρωση υποχρεωτικού ωραρίου</title>
+      <title>Ξ£Ο…ΞΌΟ€Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο…Ο€ΞΏΟ‡ΟΞµΟ‰Ο„ΞΉΞΊΞΏΟ Ο‰ΟΞ±ΟΞ―ΞΏΟ…</title>
       <script type="text/javascript" src="../js/jquery.js"></script>
       <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
       <script type="text/javascript">   
@@ -32,11 +32,11 @@
       set_time_limit (180);
             
 		  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-      mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-      mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+      mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+      mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
       //$query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = $sxol_etos";
-      echo "<h2>Μη συμπλήρωση υποχρεωτικού ωραρίου</h2>";
+      echo "<h2>ΞΞ· ΟƒΟ…ΞΌΟ€Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο…Ο€ΞΏΟ‡ΟΞµΟ‰Ο„ΞΉΞΊΞΏΟ Ο‰ΟΞ±ΟΞ―ΞΏΟ…</h2>";
       // init vars
       $mon_diffs = Array();
       $ekt_diffs = Array();
@@ -68,9 +68,9 @@
       // print results
       if ($has_mon_diffs || $has_ekt_diffs){
          if ($has_mon_diffs){
-            echo "<h3>Μόνιμοι</h3>";
+            echo "<h3>ΞΟΞ½ΞΉΞΌΞΏΞΉ</h3>";
             echo "<table class=\"imagetable tablesorter\" border='1'>";
-            echo "<thead><th>Επώνυμο</th><th>Όνομα</th><th>Ώρες Υπ.Ωραρίου</th><th>Ώρες Τοποθέτησης σε Σχ.Μονάδες</th><th>Διαφορά <small>(Υποχρ. - Τοποθ.)</small></th></thead>";
+            echo "<thead><th>Ξ•Ο€ΟΞ½Ο…ΞΌΞΏ</th><th>ΞΞ½ΞΏΞΌΞ±</th><th>ΞΟΞµΟ‚ Ξ¥Ο€.Ξ©ΟΞ±ΟΞ―ΞΏΟ…</th><th>ΞΟΞµΟ‚ Ξ¤ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·Ο‚ ΟƒΞµ Ξ£Ο‡.ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚</th><th>Ξ”ΞΉΞ±Ο†ΞΏΟΞ¬ <small>(Ξ¥Ο€ΞΏΟ‡Ο. - Ξ¤ΞΏΟ€ΞΏΞΈ.)</small></th></thead>";
             echo "<tbody>";
             foreach ($mon_diffs as $row) {
                echo "<tr>";
@@ -83,9 +83,9 @@
             echo "</table>";
          }
          if ($has_ekt_diffs){
-            echo "<h3>Αναπληρωτές</h3>";
+            echo "<h3>Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ­Ο‚</h3>";
             echo "<table class=\"imagetable tablesorter\" border='1'>";
-            echo "<thead><th>Επώνυμο</th><th>Όνομα</th><th>Ώρες Υπ.Ωραρίου</th><th>Ώρες Τοποθέτησης σε Σχ.Μονάδες</th><th>Διαφορά <small>(Υποχρ. - Τοποθ.)</small></th></thead>";
+            echo "<thead><th>Ξ•Ο€ΟΞ½Ο…ΞΌΞΏ</th><th>ΞΞ½ΞΏΞΌΞ±</th><th>ΞΟΞµΟ‚ Ξ¥Ο€.Ξ©ΟΞ±ΟΞ―ΞΏΟ…</th><th>ΞΟΞµΟ‚ Ξ¤ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ·Ο‚ ΟƒΞµ Ξ£Ο‡.ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚</th><th>Ξ”ΞΉΞ±Ο†ΞΏΟΞ¬ <small>(Ξ¥Ο€ΞΏΟ‡Ο. - Ξ¤ΞΏΟ€ΞΏΞΈ.)</small></th></thead>";
             echo "<tbody>";
             foreach ($ekt_diffs as $row) {
                echo "<tr>";
@@ -98,7 +98,7 @@
             echo "</table>";
          }
       } else {
-         echo "<h3>Δε βρέθηκαν διαφορές</h3>";
+         echo "<h3>Ξ”Ξµ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ξ΄ΞΉΞ±Ο†ΞΏΟΞ­Ο‚</h3>";
       }
 
          
@@ -108,7 +108,7 @@
 	//}
 ?>
    <br>
-   <input type='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+   <input type='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 
    </body>
 </html>

@@ -1,11 +1,11 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
     include("../tools/class.login.php");
     $log = new logmein();
@@ -37,15 +37,15 @@
 <html>
 <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    	<meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    	<title>Πράξεις προηγούμενου έτους</title>
+    	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<title>Ξ ΟΞ¬ΞΎΞ΅ΞΉΟ ΟΟΞΏΞ·Ξ³ΞΏΟΞΌΞ΅Ξ½ΞΏΟ Ξ­ΟΞΏΟΟ</title>
 </head>
   <body> 
   <?php include('../etc/menu.php'); ?>
   	
 <div>
 <?php
-	echo "<h3>Πράξεις σχολικού έτους: " . substr($sxoletos,0,4) . '-' . substr($sxoletos,4,2) ."</h3>";
+	echo "<h3>Ξ ΟΞ¬ΞΎΞ΅ΞΉΟ ΟΟΞΏΞ»ΞΉΞΊΞΏΟ Ξ­ΟΞΏΟΟ: " . substr($sxoletos,0,4) . '-' . substr($sxoletos,4,2) ."</h3>";
 	
 	$query = "SELECT * from praxi_old where sxoletos=".$sxoletos;
 	//echo $query;
@@ -56,12 +56,12 @@
 	echo "<table id=\"mytbl\" class=\"imagetable \" border=\"2\">\n";
         echo "<thead>";
         echo "<tr>";
-	echo "<th>Όνομα</th>\n";
+	echo "<th>ΞΞ½ΞΏΞΌΞ±</th>\n";
 	echo "<th>Y.A.</th>\n";
-	echo "<th>Α.Δ.Α.</th>\n";
-        echo "<th>Απόφαση</th>\n";
-	echo "<th>Σχόλιο</th>\n";
-	echo "<th>Τύπος</th>\n";
+	echo "<th>Ξ.Ξ.Ξ.</th>\n";
+        echo "<th>ΞΟΟΟΞ±ΟΞ·</th>\n";
+	echo "<th>Ξ£ΟΟΞ»ΞΉΞΏ</th>\n";
+	echo "<th>Ξ€ΟΟΞΏΟ</th>\n";
 	echo "</tr>\n</thead>\n";
 	
 	echo "<tbody>\n";
@@ -82,7 +82,7 @@
       ?>
       
       <br>
-      <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick='parent.location="ektaktoi_prev.php?sxoletos=<?=$sxoletos?>"'>
+      <INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick='parent.location="ektaktoi_prev.php?sxoletos=<?=$sxoletos?>"'>
     </center>
 </div>
   </body>

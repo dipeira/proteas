@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require '../config.php';
 
 require "../tools/class.login.php";
@@ -29,11 +29,11 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_opt, $options);
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />   
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
-<title>Διαχείριση Παραμέτρων</title>
+<title>Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ Ξ±ΟΞ±ΞΌΞ­Ο„ΟΟ‰Ξ½</title>
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
-    <h2>Παράμετροι</h2>
+    <h2>Ξ Ξ±ΟΞ¬ΞΌΞµΟ„ΟΞΏΞΉ</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -45,25 +45,25 @@ var thegrid = new drasticGrid('grid1', {
       colwidth: "300",
     pagelength: 10,
     columns: [
-      //{name: 'id', displayname:'Α/Α', width:25},
-      {name: 'name', displayname:'Όνομα', width: 150, editable: false},
-      {name: 'value', displayname:'Τιμή', width: 250},
-      {name: 'descr', displayname:'Περιγραφή', width: 400, editable: false}
+      //{name: 'id', displayname:'Ξ‘/Ξ‘', width:25},
+      {name: 'name', displayname:'ΞΞ½ΞΏΞΌΞ±', width: 150, editable: false},
+      {name: 'value', displayname:'Ξ¤ΞΉΞΌΞ®', width: 250},
+      {name: 'descr', displayname:'Ξ ΞµΟΞΉΞ³ΟΞ±Ο†Ξ®', width: 400, editable: false}
     ]
 });
 </script>
 
 <table class="imagetable stable" border="1">
-    <tr><th colspan="2">Επεξήγηση</th></tr>
-    <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>
-    <tr><td>id</td><td>A/A <small>(δε μεταβάλλεται)</small></td></tr>
-    <tr><td>name</td><td>Όνομα παραμέτρου <small>(Προσοχή: Να μη μεταβάλλεται)</small></td></tr>
-    <tr><td>value</td><td>Τιμή παραμέτρου <small>(Αλλάζει κάνοντας κλικ στο μολύβι δεξιά)</small></td></tr>
-    <tr><td>descr</td><td>Περιγραφή παραμέτρου</td></tr>
+    <tr><th colspan="2">Ξ•Ο€ΞµΞΎΞ®Ξ³Ξ·ΟƒΞ·</th></tr>
+    <tr><td><strong>Ξ ΞµΞ΄Ξ―ΞΏ</strong></td><td><strong>Ξ ΞµΟΞΉΞ³ΟΞ±Ο†Ξ®</strong></td></tr>
+    <tr><td>id</td><td>A/A <small>(Ξ΄Ξµ ΞΌΞµΟ„Ξ±Ξ²Ξ¬Ξ»Ξ»ΞµΟ„Ξ±ΞΉ)</small></td></tr>
+    <tr><td>name</td><td>ΞΞ½ΞΏΞΌΞ± Ο€Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ… <small>(Ξ ΟΞΏΟƒΞΏΟ‡Ξ®: ΞΞ± ΞΌΞ· ΞΌΞµΟ„Ξ±Ξ²Ξ¬Ξ»Ξ»ΞµΟ„Ξ±ΞΉ)</small></td></tr>
+    <tr><td>value</td><td>Ξ¤ΞΉΞΌΞ® Ο€Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ… <small>(Ξ‘Ξ»Ξ»Ξ¬Ξ¶ΞµΞΉ ΞΊΞ¬Ξ½ΞΏΞ½Ο„Ξ±Ο‚ ΞΊΞ»ΞΉΞΊ ΟƒΟ„ΞΏ ΞΌΞΏΞ»ΟΞ²ΞΉ Ξ΄ΞµΞΎΞΉΞ¬)</small></td></tr>
+    <tr><td>descr</td><td>Ξ ΞµΟΞΉΞ³ΟΞ±Ο†Ξ® Ο€Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ…</td></tr>
 </table>
 <form>
     <br>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

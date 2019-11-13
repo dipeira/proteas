@@ -1,5 +1,5 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     Require "../config.php";
     Require "../functions.php";
     
@@ -11,8 +11,8 @@
     
         
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
 if ((isset($_GET['id'])) && is_numeric($_GET['id'])) {
     $query = "SELECT * from employee where id=".$_GET['id'];
@@ -66,7 +66,7 @@ while ($i<$num)
     echo "&nbsp;&nbsp;vathm: $vathm";
     echo "&nbsp;&nbsp;mk (vash): $mk";
     echo "&nbsp;&nbsp;days: $days";
-    echo "&nbsp;&nbsp;Βαθμός: $vath[0]";
+    echo "&nbsp;&nbsp;Ξ’Ξ±ΞΈΞΌΟΟ‚: $vath[0]";
     echo "&nbsp;&nbsp;MK: $mk1";
         
     if (strcmp($vathm, $vath[0])!=0) {
@@ -97,9 +97,9 @@ while ($i<$num)
     $notmk=$notvathmos=0;
 }
 if ($wrongmk || $wrongvathmos) {
-    echo "<br><br>Λάθος Βαθμός: $wrongvathmos, Λάθος ΜΚ: $wrongmk";
+    echo "<br><br>Ξ›Ξ¬ΞΈΞΏΟ‚ Ξ’Ξ±ΞΈΞΌΟΟ‚: $wrongvathmos, Ξ›Ξ¬ΞΈΞΏΟ‚ ΞΞ: $wrongmk";
 } else {
-    echo "<br><br>Όλες οι εγγραφές ($num) είναι έγκυρες...";
+    echo "<br><br>ΞΞ»ΞµΟ‚ ΞΏΞΉ ΞµΞ³Ξ³ΟΞ±Ο†Ξ­Ο‚ ($num) ΞµΞ―Ξ½Ξ±ΞΉ Ξ­Ξ³ΞΊΟ…ΟΞµΟ‚...";
 }
                 
 if ($fix) {

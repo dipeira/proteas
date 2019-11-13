@@ -1,25 +1,25 @@
 <?php
 require_once "../config.php";
 $conn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-mysqli_query($conn, "SET NAMES 'greek'");
-mysqli_query($conn, "SET CHARACTER SET 'greek'");
+mysqli_query($conn, "SET NAMES 'utf8'");
+mysqli_query($conn, "SET CHARACTER SET 'utf8'");
 if ($_POST['type'] == 'insert'){
-  $text = mb_convert_encoding($_POST['request'], "iso-8859-7", "utf-8");
+  $text = $_POST['request'];
   $sname = getSchool($_POST['school'], $conn);
   $query = "INSERT INTO school_requests (request, school, school_name, submitted, sxol_etos) VALUES ('$text', '". $_POST['school']."','".$sname."', NOW(), $sxol_etos)";
   $result = mysqli_query($conn, $query);
-  $ret = $result ? 'Επιτυχής καταχώρηση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την καταχώρηση';
-  echo mb_convert_encoding($ret, "utf-8", "iso-8859-7");
+  $ret = $result ? 'Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΊΞ±Ο„Ξ±Ο‡ΟΟΞ·ΟƒΞ· Ξ±ΞΉΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚!' : 'Ξ Ξ±ΟΞΏΟ…ΟƒΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ ΟƒΟ†Ξ¬Ξ»ΞΌΞ± ΞΊΞ±Ο„Ξ¬ Ο„Ξ·Ξ½ ΞΊΞ±Ο„Ξ±Ο‡ΟΟΞ·ΟƒΞ·';
+  echo $ret;
 } elseif ($_POST['type'] == 'delete') {
   $query = "UPDATE school_requests SET hidden = 1 WHERE id=".$_POST['id'];
   $result = mysqli_query($conn, $query);
-  $ret = $result ? 'Επιτυχής διαγραφή αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση';
-  echo mb_convert_encoding($ret, "utf-8", "iso-8859-7");
+  $ret = $result ? 'Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ±ΞΉΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚!' : 'Ξ Ξ±ΟΞΏΟ…ΟƒΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ ΟƒΟ†Ξ¬Ξ»ΞΌΞ± ΞΊΞ±Ο„Ξ¬ Ο„Ξ·Ξ½ ΞµΞ½Ξ·ΞΌΞ­ΟΟ‰ΟƒΞ·';
+  echo $ret;
 } else {
-  $text = mb_convert_encoding($_POST['comment'], "iso-8859-7", "utf-8");
+  $text = $_POST['comment'];
   $query = "UPDATE school_requests SET comment = '$text',done = ".$_POST['done']." WHERE id=".$_POST['id'];
   $result = mysqli_query($conn, $query);
-  $ret = $result ? 'Επιτυχής ενημέρωση αιτήματος!' : 'Παρουσιάστηκε σφάλμα κατά την ενημέρωση';
-  echo mb_convert_encoding($ret, "utf-8", "iso-8859-7");
+  $ret = $result ? 'Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞµΞ½Ξ·ΞΌΞ­ΟΟ‰ΟƒΞ· Ξ±ΞΉΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚!' : 'Ξ Ξ±ΟΞΏΟ…ΟƒΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ ΟƒΟ†Ξ¬Ξ»ΞΌΞ± ΞΊΞ±Ο„Ξ¬ Ο„Ξ·Ξ½ ΞµΞ½Ξ·ΞΌΞ­ΟΟ‰ΟƒΞ·';
+  echo $ret;
 }
 ?>

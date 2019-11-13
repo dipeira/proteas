@@ -1,14 +1,14 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require_once"../tools/functions.php";
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=iso8859-7" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-        <title>Σχολείο</title>
+        <title>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ</title>
         <style type="text/css" title="currentStyle">
             /* @import "../css/demo_page.css"; */
             @import "../js/datatables/datatables.css.min";
@@ -28,7 +28,7 @@
                   url: '../js/datatables/greek.json'
                 },
                 pageLength: 20,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Όλες"]]
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "ΞΞ»Ξ΅Ο"]]
               });
           } );
         </script>
@@ -37,7 +37,7 @@
     <body id="dt_example">
     <?php require '../etc/menu.php'; ?>
     <center>
-      <h2>Σχολεία</h2>
+      <h2>Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</h2>
     </center>
         <div id="container">
 <?php
@@ -45,8 +45,8 @@
     //require_once"../tools/functions.php";
         
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
     $query = "SELECT * from school ORDER BY type,name ASC";
     $result = mysqli_query($mysqlconnection, $query);
@@ -57,18 +57,18 @@
 <table cellpadding="0" cellspacing="0" border="1" id="school-table" class='imagetable' style='width:90%'>
     <thead>
       <tr>
-        <th style="max-width:50px">Ενέργεια</th>
-        <th style="max-width:200px">Όνομα</th>
-        <th>Κωδ.Υπουργείου</th>
-        <th>Τηλέφωνο</th>
+        <th style="max-width:50px">ΞΞ½Ξ­ΟΞ³Ξ΅ΞΉΞ±</th>
+        <th style="max-width:200px">ΞΞ½ΞΏΞΌΞ±</th>
+        <th>ΞΟΞ΄.Ξ₯ΟΞΏΟΟΞ³Ξ΅Ξ―ΞΏΟ</th>
+        <th>Ξ€Ξ·Ξ»Ξ­ΟΟΞ½ΞΏ</th>
         <th>e-mail</th>
-        <th>Οργανικότητα</th>
-        <th>Δ.Σ./Νηπ.</th>
-        <th>Τύπος</th>
-        <!-- <th>Τμ.Ένταξης</th>
-        <th>Τμ.Υποδοχής</th>
-        <th>Φροντιστ.Τμήμα</th>
-        <th>Ολοήμερο</th> -->
+        <th>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΟΟΞ·ΟΞ±</th>
+        <th>Ξ.Ξ£./ΞΞ·Ο.</th>
+        <th>Ξ€ΟΟΞΏΟ</th>
+        <!-- <th>Ξ€ΞΌ.ΞΞ½ΟΞ±ΞΎΞ·Ο</th>
+        <th>Ξ€ΞΌ.Ξ₯ΟΞΏΞ΄ΞΏΟΞ®Ο</th>
+        <th>Ξ¦ΟΞΏΞ½ΟΞΉΟΟ.Ξ€ΞΌΞ®ΞΌΞ±</th>
+        <th>ΞΞ»ΞΏΞ®ΞΌΞ΅ΟΞΏ</th> -->
       </tr>
     </thead>
     <tbody>
@@ -77,9 +77,9 @@ while ($row = mysqli_fetch_assoc($result))
 {
     echo "<tr id='".$row['id']."' class='gradeA'>";  
     echo "<td>";
-    echo "<span title=\"Προβολή\"><a href=\"school_status.php?org=".$row['id']."\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
+    echo "<span title=\"Ξ ΟΞΏΞ²ΞΏΞ»Ξ®\"><a href=\"school_status.php?org=".$row['id']."\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
     if ($usrlvl < 3) {
-          echo "<span title=\"Επεξεργασία\"><a href=\"school_edit.php?org=".$row['id']."\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
+          echo "<span title=\"ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±\"><a href=\"school_edit.php?org=".$row['id']."\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
     }
     echo "</td>";
     
@@ -91,26 +91,26 @@ while ($row = mysqli_fetch_assoc($result))
     echo "<td>";
     switch ($row['type']) {
       case '0':
-        echo "Λοιπά";
+        echo "ΞΞΏΞΉΟΞ¬";
         break;
       case '1':
-        echo "Δ.Σ.";
+        echo "Ξ.Ξ£.";
         break;
       case '2':
-        echo "Νηπ.";
+        echo "ΞΞ·Ο.";
         break;
     }
     echo "</td>";
     echo "<td>";
     switch ($row['type2']) {
       case '0':
-        echo "Δημόσιο";
+        echo "ΞΞ·ΞΌΟΟΞΉΞΏ";
         break;
       case '1':
-        echo "Ιδιωτικό";
+        echo "ΞΞ΄ΞΉΟΟΞΉΞΊΟ";
         break;
       case '2':
-        echo "Ειδικό";
+        echo "ΞΞΉΞ΄ΞΉΞΊΟ";
         break; 
     }
     echo "</td>";
@@ -131,6 +131,6 @@ while ($row = mysqli_fetch_assoc($result))
             
 
 </div>
-<INPUT TYPE='button' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick="parent.location='../index.php'">
     </body>
 </html>

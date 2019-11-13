@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
 	require('../tools/calendar/tc_calendar.php');  
@@ -33,12 +33,12 @@
         if ($_GET['id']==1)
             $idiwtikoi = 1;
         if ($idiwtikoi)
-            echo "<h2>M.K. Ιδιωτικών Εκπ/κών</h2>";
+            echo "<h2>M.K. Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΞ½ Ξ•ΞΊΟ€/ΞΊΟΞ½</h2>";
         else
-            echo "<h2>M.K. Μονίμων Εκπ/κών</h2>";
+            echo "<h2>M.K. ΞΞΏΞ½Ξ―ΞΌΟ‰Ξ½ Ξ•ΞΊΟ€/ΞΊΟΞ½</h2>";
         echo "<table class=\"imagetable stable\" border='1'>";
         echo "<form action='' method='POST' autocomplete='off'>";
-        echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
+        echo "<tr><td>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·Ο‚:</td><td>";
         $myCalendar = new tc_calendar("date", true);
         $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
         if((int)$_POST['date'])
@@ -51,27 +51,27 @@
         $myCalendar->writeScript();
         echo "</td></tr>";
         echo "<tr><td colspan=2>";
-        echo "<input type='radio' name='type' value='0'checked >Αλλαγή ΜΚ<br>";
-        echo "<input type='radio' name='type' value='1' disabled>Αλλαγή Βαθμών<br>";
-        echo "<input type='radio' name='type' value='2' disabled>Αλλαγή ΜΚ & Βαθμών<br>";
+        echo "<input type='radio' name='type' value='0'checked >Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΞ<br>";
+        echo "<input type='radio' name='type' value='1' disabled>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ξ’Ξ±ΞΈΞΌΟΞ½<br>";
+        echo "<input type='radio' name='type' value='2' disabled>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΞ & Ξ’Ξ±ΞΈΞΌΟΞ½<br>";
         if ($usrlvl==0)
-            echo "<input type='checkbox' name='editvmk' value='1' />Τροποποίηση ΜΚ στη ΒΔ<br />";
+            echo "<input type='checkbox' name='editvmk' value='1' />Ξ¤ΟΞΏΟ€ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· ΞΞ ΟƒΟ„Ξ· Ξ’Ξ”<br />";
         echo "</td></tr>";
-        echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
-        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "<tr><td colspan=2><input type='submit' value='Ξ‘Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·'>";
+        echo "<input type='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='../index.php'\">";
         echo "</td></tr>";
         echo "</table></form>";
         if ($idiwtikoi)
-            echo "<a href='check_vmk.php'>M.K. Μονίμων Εκπ/κών</a>";
+            echo "<a href='check_vmk.php'>M.K. ΞΞΏΞ½Ξ―ΞΌΟ‰Ξ½ Ξ•ΞΊΟ€/ΞΊΟΞ½</a>";
         else
-            echo "<a href='check_vmk.php?id=1'>M.K. Ιδιωτικών Εκπ/κών</a>";
+            echo "<a href='check_vmk.php?id=1'>M.K. Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟΞ½ Ξ•ΞΊΟ€/ΞΊΟΞ½</a>";
 		
 	if((int)$_POST['date'])
 	{
 		
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 		//$query = "SELECT * from employee";
                 //$query = "SELECT * from employee WHERE status NOT IN (2,4)";
                 // 07-08-2013
@@ -86,10 +86,10 @@
 		$dt = $_POST['date'];
                 $type=$_POST['type'];
                 $editvmk = $_POST['editvmk'];
-		echo "<br>Ημερομηνία αναζήτησης: $dt<br>";
+		echo "<br>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·Ο‚: $dt<br>";
                 ob_start();
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-                echo "<thead><tr><th>id</th><th>ΑΜ</th><th>Ονοματεπώνυμο</th><th>Πατρώνυμο</th><th>Κλάδος</th><th>Βαθμός</th><th>ΜΚ Πριν</th><th>ΜΚ Μετά</th><th>Ημ/νία</th><th>Έτη</th><th>Πλεονάζων χρόνος</th></tr></thead><tbody>";
+                echo "<thead><tr><th>id</th><th>Ξ‘Ξ</th><th>ΞΞ½ΞΏΞΌΞ±Ο„ΞµΟ€ΟΞ½Ο…ΞΌΞΏ</th><th>Ξ Ξ±Ο„ΟΟΞ½Ο…ΞΌΞΏ</th><th>ΞΞ»Ξ¬Ξ΄ΞΏΟ‚</th><th>Ξ’Ξ±ΞΈΞΌΟΟ‚</th><th>ΞΞ Ξ ΟΞΉΞ½</th><th>ΞΞ ΞΞµΟ„Ξ¬</th><th>Ξ—ΞΌ/Ξ½Ξ―Ξ±</th><th>ΞΟ„Ξ·</th><th>Ξ Ξ»ΞµΞΏΞ½Ξ¬Ξ¶Ο‰Ξ½ Ο‡ΟΟΞ½ΞΏΟ‚</th></tr></thead><tbody>";
                 $aa = 1;
                 $problems = 0;
             while ($i<$num)	
@@ -110,7 +110,7 @@
                 
                 // 29-10-2012 - Skip employees from elsewhere (organikh = 388 (allo pyspe) or 394 (allo pysde)) or vathmos = A.
                 $organ = mysqli_result($result, $i, "sx_organikhs");
-                if ($organ == 388 || $organ == 394 || strcmp($vathm,'Α')==0)
+                if ($organ == 388 || $organ == 394 || strcmp($vathm,'Ξ‘')==0)
                 {
                     $i++;
                     continue;
@@ -159,22 +159,22 @@
 			$vdate = strtotime ( $v99 , $day1 );
 			$vdate = date ( 'd-m-Y' , $vdate );
 			
-			echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>Αλλαγή βαθμού από $vathm σε <b>$vath[0]</b></td><td>$vdate</td><td>Πλεον.Χρόνος στο Βαθμό: $ymd[0] έτη, $ymd[1] μήνες, $ymd[2] ημέρες</td></tr>";
+			echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ξ²Ξ±ΞΈΞΌΞΏΟ Ξ±Ο€Ο $vathm ΟƒΞµ <b>$vath[0]</b></td><td>$vdate</td><td>Ξ Ξ»ΞµΞΏΞ½.Ξ§ΟΟΞ½ΞΏΟ‚ ΟƒΟ„ΞΏ Ξ’Ξ±ΞΈΞΌΟ: $ymd[0] Ξ­Ο„Ξ·, $ymd[1] ΞΌΞ®Ξ½ΞµΟ‚, $ymd[2] Ξ·ΞΌΞ­ΟΞµΟ‚</td></tr>";
 			$notvathmos=1;
                         $vathmchange += 1;
 		}
-		if (($type==2) && ($mk!=$mk1[0]) && (strcmp($vathm,'ΣΤ')!=0))
+		if (($type==2) && ($mk!=$mk1[0]) && (strcmp($vathm,'Ξ£Ξ¤')!=0))
 		{
 			$ymd = days2ymd($mk1[1]);
 			$v99 = "-$mk1[1] day"; //may need fixing...
 			$vdate = strtotime ( $v99 , $day1 );
 			$vdate = date ( 'd-m-Y' , $vdate );
-                        echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>Αλλαγή ΜΚ από $mk σε <b>$mk1[0]</b>&nbsp;&nbsp;(Βαθμ.:$vath[0])</td><td>$vdate</td><td>Πλεον.Χρόνος στο ΜΚ: $ymd[0] έτη, $ymd[1] μήνες, $ymd[2] ημέρες</td></tr>";
+                        echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΞ Ξ±Ο€Ο $mk ΟƒΞµ <b>$mk1[0]</b>&nbsp;&nbsp;(Ξ’Ξ±ΞΈΞΌ.:$vath[0])</td><td>$vdate</td><td>Ξ Ξ»ΞµΞΏΞ½.Ξ§ΟΟΞ½ΞΏΟ‚ ΟƒΟ„ΞΏ ΞΞ: $ymd[0] Ξ­Ο„Ξ·, $ymd[1] ΞΌΞ®Ξ½ΞµΟ‚, $ymd[2] Ξ·ΞΌΞ­ΟΞµΟ‚</td></tr>";
 			$notmk=1;
                         $mkchange += 1;
 		}
                 // allagh MK
-                if (($type==0) && ($mk!=$mk1[0]) && (strcmp($vathm,$vath[0])==0) && (strcmp($vathm,'ΣΤ')!=0))
+                if (($type==0) && ($mk!=$mk1[0]) && (strcmp($vathm,$vath[0])==0) && (strcmp($vathm,'Ξ£Ξ¤')!=0))
 		{
                         $ymd = days2ymd($mk1[1]);
 			$v99 = "-$mk1[1] day"; //may need fixing...
@@ -183,14 +183,14 @@
                         $eth = intval($days/360);
                         if ($mk1[0]=='' || $mk1[0]<$mk)
                         {
-                            echo "<tr><td>$aa</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td colspan=8>Παρουσιάστηκε πρόβλημα. Παρακαλώ ελέγξτε...<small>(Βαθ: $vathm, ΜΚ: $mk, ΜΚ Νέο: $mk1[0])</small></td></tr>";
+                            echo "<tr><td>$aa</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td colspan=8>Ξ Ξ±ΟΞΏΟ…ΟƒΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ Ο€ΟΟΞ²Ξ»Ξ·ΞΌΞ±. Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΞ»Ξ­Ξ³ΞΎΟ„Ξµ...<small>(Ξ’Ξ±ΞΈ: $vathm, ΞΞ: $mk, ΞΞ ΞΞ­ΞΏ: $mk1[0])</small></td></tr>";
                             $problem=1;
                             $problems++;
                         }
 			else
-                            //echo "<tr><td>$aa</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>Αλλαγή ΜΚ από $mk σε <b>$mk1[0]</b>&nbsp;&nbsp;(Βαθμ.:$vath[0])</td><td>$vdate</td><td>Πλεον.Χρόνος στο ΜΚ: $ymd[0] έτη, $ymd[1] μήνες, $ymd[2] ημέρες ($days)</td></tr>";
-                            //echo "<thead><tr><th>id</th><th>Ονοματεπώνυμο</th><th>Κλάδος</th><th>Βαθμός</th><th>ΜΚ Πριν</th><th>ΜΚ Μετά</th><th>Ημ/νία</th><th>Έτη Υπηρεσίας</th><th>Πλεονάζων χρόνος</th></tr></thead><tbody>";
-                            echo "<tr><td>$aa</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>$patrwnymo</td><td>$klados</td><td>$vath[0]</td><td>$mk</td><td>$mk1[0]</td><td>$vdate</td><td>$eth</td><td>$ymd[0] έτη, $ymd[1] μήνες, $ymd[2] ημέρες ($days)</td></tr>";
+                            //echo "<tr><td>$aa</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΞ Ξ±Ο€Ο $mk ΟƒΞµ <b>$mk1[0]</b>&nbsp;&nbsp;(Ξ’Ξ±ΞΈΞΌ.:$vath[0])</td><td>$vdate</td><td>Ξ Ξ»ΞµΞΏΞ½.Ξ§ΟΟΞ½ΞΏΟ‚ ΟƒΟ„ΞΏ ΞΞ: $ymd[0] Ξ­Ο„Ξ·, $ymd[1] ΞΌΞ®Ξ½ΞµΟ‚, $ymd[2] Ξ·ΞΌΞ­ΟΞµΟ‚ ($days)</td></tr>";
+                            //echo "<thead><tr><th>id</th><th>ΞΞ½ΞΏΞΌΞ±Ο„ΞµΟ€ΟΞ½Ο…ΞΌΞΏ</th><th>ΞΞ»Ξ¬Ξ΄ΞΏΟ‚</th><th>Ξ’Ξ±ΞΈΞΌΟΟ‚</th><th>ΞΞ Ξ ΟΞΉΞ½</th><th>ΞΞ ΞΞµΟ„Ξ¬</th><th>Ξ—ΞΌ/Ξ½Ξ―Ξ±</th><th>ΞΟ„Ξ· Ξ¥Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚</th><th>Ξ Ξ»ΞµΞΏΞ½Ξ¬Ξ¶Ο‰Ξ½ Ο‡ΟΟΞ½ΞΏΟ‚</th></tr></thead><tbody>";
+                            echo "<tr><td>$aa</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>$patrwnymo</td><td>$klados</td><td>$vath[0]</td><td>$mk</td><td>$mk1[0]</td><td>$vdate</td><td>$eth</td><td>$ymd[0] Ξ­Ο„Ξ·, $ymd[1] ΞΌΞ®Ξ½ΞµΟ‚, $ymd[2] Ξ·ΞΌΞ­ΟΞµΟ‚ ($days)</td></tr>";
                         // for word
                         $row = array($am,$surname,$name,$patrwnymo,$klados,$vath[0],$mk1[0],$vdate,$eth);
                         $emp[] = $row;
@@ -215,19 +215,19 @@
 		echo "</tbody></table>";
                 echo "<br>";
                 if ($vathmchange)
-                    echo "<br>$vathmchange αλλαγές βαθμών";
+                    echo "<br>$vathmchange Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚ Ξ²Ξ±ΞΈΞΌΟΞ½";
                 if ($mkchange){
                     if ($problems){
                         $mkchange -= $problems;
-                        echo "<br>$mkchange αλλαγές ΜΚ";
+                        echo "<br>$mkchange Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚ ΞΞ";
                     }
                     else
-                        echo "<br>$mkchange αλλαγές ΜΚ";
+                        echo "<br>$mkchange Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚ ΞΞ";
 		}
                 if ($problems)
-                    echo "<br>$problems προβλήματα";
+                    echo "<br>$problems Ο€ΟΞΏΞ²Ξ»Ξ®ΞΌΞ±Ο„Ξ±";
                 if ($updates)
-                    echo "<br>$updates τροποποιήσεις ΜΚ στη ΒΔ";
+                    echo "<br>$updates Ο„ΟΞΏΟ€ΞΏΟ€ΞΏΞΉΞ®ΟƒΞµΞΉΟ‚ ΞΞ ΟƒΟ„Ξ· Ξ’Ξ”";
     mysqli_close($mysqlconnection);
                 
                 $page = ob_get_contents(); 
@@ -235,7 +235,7 @@
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
 		echo "<input type='hidden' name = 'data' value='".$page."'>";
-                echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+                echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® ΟƒΟ„ΞΏ excel</BUTTON>";
                 echo "</form>";
                 echo "&nbsp;&nbsp;&nbsp;";
                 // serialize & write to temp file
@@ -245,9 +245,9 @@
                 
                 echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
                 if ($problems)
-                    echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Εκτύπωση απόφασης Μ.Κ.' disabled>";
+                    echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚ Ξ.Ξ.' disabled>";
                 else
-                    echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Εκτύπωση απόφασης Μ.Κ.'>";
+                    echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚ Ξ.Ξ.'>";
                 echo "</form>";
 	}
         // create word document
@@ -267,18 +267,13 @@
                                    
             foreach ($data as $ar)
             {
-                $data1 = mb_convert_encoding($ar[1], "utf-8", "iso-8859-7");
-                $data2 = mb_convert_encoding($ar[2], "utf-8", "iso-8859-7");
-                $data = $data1." ".$data2;
+                $data = $ar[1]." ".$ar[2];
                 $onmo[] = $data;
                 
-                $data = mb_convert_encoding($ar[3], "utf-8", "iso-8859-7");
                 $patr[] = $data;
 
-                $data = mb_convert_encoding($ar[4], "utf-8", "iso-8859-7");
                 $klados[] = $data;
 
-                $data = mb_convert_encoding($ar[5], "utf-8", "iso-8859-7");
                 $vathm[] = $data;
 
                 $mk[] = $ar[6];
@@ -289,15 +284,13 @@
             $mydata = array('onmo' => $onmo,'patr' => $patr,'klados' => $klados,'vathm' => $vathm,'mk'=> $mk,'hmnia' => $hmnia, 'eth' => $eth);
             $document->cloneRow2('TBL1', $mydata);
                         
-            $data = mb_convert_encoding(getParam('head_title', $mysqlconnection), "utf-8", "iso-8859-7");
-            $document->setValue("headtitle", $data);
-            $data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");
-            $document->setValue("headname", $data);
+            $document->setValue("headtitle", getParam('head_title', $mysqlconnection));
+            $document->setValue("headname", getParam('head_name', $mysqlconnection));
 
             $output1 = "word/apof_mk_".$_SESSION['userid'].".docx";
             $document->save($output1);
             echo "<html>";
-            echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
+            echo "<p><a href=$output1>Ξ‘Ξ½ΞΏΞΉΞ³ΞΌΞ± ΞµΞ³Ξ³ΟΞ¬Ο†ΞΏΟ…</a></p>";
         }
 ?>
 </html>

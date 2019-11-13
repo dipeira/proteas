@@ -14,8 +14,8 @@ class Paginator {
     $this->_conn = $conn;
     $this->_query = $query;
     
-    $this->_conn->query("SET NAMES 'greek'");
-    $this->_conn->query("SET CHARACTER SET 'greek'");
+    $this->_conn->query("SET NAMES 'utf8'");
+    $this->_conn->query("SET CHARACTER SET 'utf8'");
  
     $rs= $this->_conn->query( $this->_query );
     $this->_total = $rs->num_rows;   

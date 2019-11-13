@@ -1,11 +1,11 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
     require "../tools/class.login.php";
     $log = new logmein();
@@ -21,8 +21,8 @@ else {
   <head>
     
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Αναπληρωτές</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο</title>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -130,7 +130,6 @@ else {
             $surpost = $_POST['surname'];
         } else{
             $surpost = urldecode($_GET['surname']);
-            //$surpost = mb_convert_encoding($surpost, "iso-8859-7", "utf-8");
         }
                         
         if ($whflag) {
@@ -184,16 +183,16 @@ else {
         echo "<script>window.location = '$url'</script>";
     }
     echo "<center>";
-    echo "<h2>Αναπληρωτές</h2>";
+    echo "<h2>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο</h2>";
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
-    echo "<tr><th>Ενέργεια</th>\n";
-    echo "<th>Επώνυμο</th>\n";
-    echo "<th>Όνομα</th>\n";
-    echo "<th>Ειδικότητα</th>\n";
-    echo "<th>Σχ.Υπηρέτησης</th>\n";
-    echo "<th>Τύπος Απασχόλησης</th>\n";
-    echo "<th>Πράξη</th>\n";
+    echo "<tr><th>ΞΞ½Ξ­ΟΞ³Ξ΅ΞΉΞ±</th>\n";
+    echo "<th>ΞΟΟΞ½ΟΞΌΞΏ</th>\n";
+    echo "<th>ΞΞ½ΞΏΞΌΞ±</th>\n";
+    echo "<th>ΞΞΉΞ΄ΞΉΞΊΟΟΞ·ΟΞ±</th>\n";
+    echo "<th>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</th>\n";
+    echo "<th>Ξ€ΟΟΞΏΟ ΞΟΞ±ΟΟΟΞ»Ξ·ΟΞ·Ο</th>\n";
+    echo "<th>Ξ ΟΞ¬ΞΎΞ·</th>\n";
     echo "</tr>";
     echo "<tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";    
 ?>
@@ -210,8 +209,8 @@ else {
         });
     </script>
         <?php
-        echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση' />"
-            . "<br><center><button type='button' id='resetBtn' style='margin: 3px'><small>Επαναφορά</small></button></center>"
+        echo "<td><INPUT TYPE='submit' VALUE='ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·' />"
+            . "<br><center><button type='button' id='resetBtn' style='margin: 3px'><small>ΞΟΞ±Ξ½Ξ±ΟΞΏΟΞ¬</small></button></center>"
             . "</td><td>\n";
                 
         echo "<input type='text' name='surname' id='surname' value='$surpost' />\n";
@@ -235,7 +234,7 @@ else {
     
         echo "<tbody>\n";
         if ($num == 0) {
-            echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
+            echo "<tr><td colspan=7><b><h3>ΞΞ΅ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ξ±ΟΞΏΟΞ΅Ξ»Ξ­ΟΞΌΞ±ΟΞ±...</h3></b></td></tr>";
         } else {
             while ($i < $num)
             {
@@ -253,12 +252,12 @@ else {
                 $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
                   
                 echo "<tr><td>";
-                echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
+                echo "<span title=\"Ξ ΟΞΏΞ²ΞΏΞ»Ξ®\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
                 if ($usrlvl < 3) {
-                      echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
+                      echo "<span title=\"ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
                 }
                 if ($usrlvl < 2) {
-                      echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+                      echo "<span title=\"ΞΞΉΞ±Ξ³ΟΞ±ΟΞ®\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
                 }
                 echo "</td>";
                   $typos = get_type($type, $mysqlconnection);
@@ -270,48 +269,48 @@ else {
         }
         echo "</tbody>\n";
         if ($usrlvl < 2) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</a></span>";
+            echo "<tr><td colspan=7><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ® Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΟ</a></span>";
         }        
         if ($usrlvl == 0) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"></span>";
+            echo "<tr><td colspan=7><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·\"></span>";
         }
         echo "<tr><td colspan=7 align=center>";
         $prevpg = $curpg-1;
         if ($lastpg == 0) {
             $curpg = 0;
         }
-        echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+        echo "Ξ£Ξ΅Ξ»Ξ―Ξ΄Ξ± $curpg Ξ±ΟΟ $lastpg ($num_record1 Ξ΅Ξ³Ξ³ΟΞ±ΟΞ­Ο)<br>";
         if ($curpg!=1) {
-            echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Πρώτη</a>";
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Προηγ/νη</a>";
+            echo "  <a href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Ξ ΟΟΟΞ·</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Ξ ΟΞΏΞ·Ξ³/Ξ½Ξ·</a>";
         }
         else {
-            echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
+            echo "  Ξ ΟΟΟΞ· &nbsp;&nbsp; Ξ ΟΞΏΞ·Ξ³/Ξ½Ξ·";
         }
         if ($curpg != $lastpg) {
             $nextpg = $curpg+1;
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Επόμενη</a>";
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Τελευταία</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>ΞΟΟΞΌΞ΅Ξ½Ξ·</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ±</a>";
         }
         else { 
-            echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
+            echo "  ΞΟΟΞΌΞ΅Ξ½Ξ· &nbsp;&nbsp; Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ±";
         }
         echo "<FORM METHOD='POST' ACTION='ektaktoi_list.php?".$_SERVER['QUERY_STRING']."'>";
-        echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
-        echo "<input type=\"submit\" value=\"Μετάβαση\">";
+        echo " ΞΞ΅ΟΞ¬Ξ²Ξ±ΟΞ· ΟΟΞ· ΟΞ΅Ξ».  <input type=\"text\" name=\"page\" size=1 />";
+        echo "<input type=\"submit\" value=\"ΞΞ΅ΟΞ¬Ξ²Ξ±ΟΞ·\">";
         echo "<br>";
-        echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
-        echo "<input type=\"submit\" value=\"Ορισμός\">";
+        echo "   ΞΞ³Ξ³Ο./ΟΞ΅Ξ».    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
+        echo "<input type=\"submit\" value=\"ΞΟΞΉΟΞΌΟΟ\">";
         echo "</FORM>";
         echo "</td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ± Ξ ΟΞ¬ΞΎΞ΅ΟΞ½' onClick=\"parent.location='praxi.php'\">";
         echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\">";
+        echo "<INPUT TYPE='button' VALUE='ΞΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΞ― & Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ± Ξ±Ξ½Ξ¬ Ξ ΟΞ¬ΞΎΞ·' onClick=\"parent.location='praxi_sch.php'\">";
         //echo "&nbsp;&nbsp;&nbsp;";
-        //echo "<INPUT TYPE='button' VALUE='Πράξεις ανά Σχολείο' onClick=\"parent.location='praxi_sch2.php'\">";
+        //echo "<INPUT TYPE='button' VALUE='Ξ ΟΞ¬ΞΎΞ΅ΞΉΟ Ξ±Ξ½Ξ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ' onClick=\"parent.location='praxi_sch2.php'\">";
         echo "</td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αναπληρωτές προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο ΟΟΞΏΞ·Ξ³ΞΏΟΞΌΞ΅Ξ½ΞΏΟ Ξ­ΟΞΏΟΟ' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
+        echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\"></td></tr>";
         echo "</table>\n";
         ?>
       

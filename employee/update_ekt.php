@@ -1,10 +1,10 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
         session_start();
 ?>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
     <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <title>Update</title>
@@ -16,8 +16,8 @@
   require_once"../tools/functions.php";
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
 
   $id = $_POST['id'];
@@ -39,7 +39,7 @@
         $multi = 1;
         for ($i=0; $i<$count; $i++)
         {
-            $yphret[$i] = mb_convert_encoding($_POST['yphr'][$i], "iso-8859-7", "utf-8");
+            $yphret[$i] = $_POST['yphr'][$i];
             $yphr_arr[$i] = getSchoolID($yphret[$i],$mysqlconnection);
             $hours_arr[$i] = $_POST['hours'][$i];
         }
@@ -51,7 +51,7 @@
       else
       {
         $yphret = $_POST['yphr'][0];
-        $yphret = mb_convert_encoding($yphret, "iso-8859-7", "utf-8");
+        $yphret = $yphret;
         $yphr = getSchoolID($yphret,$mysqlconnection);  
       }
       if (count($_POST['hours'])==1 && $_POST['hours'][0]>0)
@@ -92,7 +92,7 @@
   if (isset($_POST['action']))
   {
       // check if record exists by checking am AND surname
-      $surn = mb_convert_encoding($surname, "iso-8859-7", "utf-8");
+      $surn = $surname;
       $query = "select afm,surname from ektaktoi WHERE afm='$afm' AND surname = '$surn'";
       $result = mysqli_query($mysqlconnection, $query);
       // hm/nia apoxwrhshs (from endofyear param)
@@ -104,7 +104,6 @@
             $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox',$thesi,24)";
 
             $query = $query0.$query1;
-            $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
             //echo $query;
             mysqli_query($mysqlconnection, $query);
             // insert into yphrethsh
@@ -118,7 +117,7 @@
       // if already inserted display error
       else 
       {
-        notify('Η εγγραφή έχει ήδη καταχωρηθεί...',1);
+        notify('Ξ Ξ΅Ξ³Ξ³ΟΞ±ΟΞ® Ξ­ΟΞ΅ΞΉ Ξ®Ξ΄Ξ· ΞΊΞ±ΟΞ±ΟΟΟΞ·ΞΈΞ΅Ξ―...',1);
         $dupe = 1;
       }
   }
@@ -136,7 +135,6 @@
           $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto',email='$email' WHERE id='$id'";
           $query = $query1.$query2.$query3;
 
-          $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;
           mysqli_query($mysqlconnection, $query);
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos=$sxol_etos";
@@ -163,7 +161,6 @@
           $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,wres=$wres,";
           $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto', email='$email' WHERE id='$id'";
           $query = $query1.$query2.$query3;
-          $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
           $qlog .= $query;
           //echo $query;
           mysqli_query($mysqlconnection, $query);
@@ -184,7 +181,7 @@
   }
 
   if (!$dupe)
-    notify('Επιτυχής καταχώρηση!',0);
+    notify('ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ·!',0);
   mysqli_close($mysqlconnection);
 ?>
 <br>

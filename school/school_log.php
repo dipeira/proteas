@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require_once"../config.php";
 
 require "../tools/class.login.php";
@@ -30,11 +30,11 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, $table_slog, $options);
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />   
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
-<title>Αρχείο καταγραφής πρόσβασης σχολείων</title>
+<title>Ξ‘ΟΟ‡ΞµΞ―ΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†Ξ®Ο‚ Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚ ΟƒΟ‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</title>
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
-<h2>Αρχείο καταγραφής πρόσβασης σχολείων</h2>
+<h2>Ξ‘ΟΟ‡ΞµΞ―ΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†Ξ®Ο‚ Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚ ΟƒΟ‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</h2>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-core.js"></script>
 <script type="text/javascript" src="../tools/grid/js/mootools-1.2-more.js"></script>
 <script type="text/javascript" src="../tools/grid/js/drasticGrid.js"></script>
@@ -46,16 +46,16 @@ var thegrid = new drasticGrid('grid1', {
     pagelength: 25,
     columns: [
       {name: 'id', displayname:'A/A', width: 30},
-      {name: 'school_id', displayname:'Κωδ.Σχολείου', width: 100, editable: false},
-      {name: 'school', displayname:'Όνομα Σχολείου', width: 350, editable: false},
-      {name: 'action', displayname:'Ενέργεια', width: 250, editable: false},
-      {name: 'datetime', displayname:'Ημ/νία - Ώρα', width: 150, editable: false},
+      {name: 'school_id', displayname:'ΞΟ‰Ξ΄.Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…', width: 100, editable: false},
+      {name: 'school', displayname:'ΞΞ½ΞΏΞΌΞ± Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…', width: 350, editable: false},
+      {name: 'action', displayname:'Ξ•Ξ½Ξ­ΟΞ³ΞµΞΉΞ±', width: 250, editable: false},
+      {name: 'datetime', displayname:'Ξ—ΞΌ/Ξ½Ξ―Ξ± - ΞΟΞ±', width: 150, editable: false},
     ]
 });
 </script>
 
 <form>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

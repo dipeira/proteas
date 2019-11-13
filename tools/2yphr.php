@@ -1,11 +1,11 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
         session_start();
 ?>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Πλήρωση πίνακα υπηρετήσεων</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Ξ Ξ»Ξ®ΟΟΟΞ· ΟΞ―Ξ½Ξ±ΞΊΞ± ΟΟΞ·ΟΞ΅ΟΞ®ΟΞ΅ΟΞ½</title>
   </head>
   <body> 
 <?php
@@ -14,23 +14,23 @@
   //Require_once "../functions.php";
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
   set_time_limit(1200);  
   
-  echo "<h2>Βοηθητικό Εργαλείο για γέμισμα πίνακα υπηρετήσεων με τρέχουσες υπηρετήσεις</h2>";
-  echo "<br>ΣΗΜ. Πρέπει να εκτελείται με κάθε αλλαγή σχολικού έτους. Αν εκτελεστεί παραπάνω από μία φορές δεν καταστρέφει τα δεδομένα.";
-  echo "<br><strong>ΠΡΟΣΟΧΗ:</strong>Η διαδικασία διαρκεί αρκετά λεπτά.";
+  echo "<h2>ΞΞΏΞ·ΞΈΞ·ΟΞΉΞΊΟ ΞΟΞ³Ξ±Ξ»Ξ΅Ξ―ΞΏ Ξ³ΞΉΞ± Ξ³Ξ­ΞΌΞΉΟΞΌΞ± ΟΞ―Ξ½Ξ±ΞΊΞ± ΟΟΞ·ΟΞ΅ΟΞ®ΟΞ΅ΟΞ½ ΞΌΞ΅ ΟΟΞ­ΟΞΏΟΟΞ΅Ο ΟΟΞ·ΟΞ΅ΟΞ®ΟΞ΅ΞΉΟ</h2>";
+  echo "<br>Ξ£ΞΞ. Ξ ΟΞ­ΟΞ΅ΞΉ Ξ½Ξ± Ξ΅ΞΊΟΞ΅Ξ»Ξ΅Ξ―ΟΞ±ΞΉ ΞΌΞ΅ ΞΊΞ¬ΞΈΞ΅ Ξ±Ξ»Ξ»Ξ±Ξ³Ξ® ΟΟΞΏΞ»ΞΉΞΊΞΏΟ Ξ­ΟΞΏΟΟ. ΞΞ½ Ξ΅ΞΊΟΞ΅Ξ»Ξ΅ΟΟΞ΅Ξ― ΟΞ±ΟΞ±ΟΞ¬Ξ½Ο Ξ±ΟΟ ΞΌΞ―Ξ± ΟΞΏΟΞ­Ο Ξ΄Ξ΅Ξ½ ΞΊΞ±ΟΞ±ΟΟΟΞ­ΟΞ΅ΞΉ ΟΞ± Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½Ξ±.";
+  echo "<br><strong>Ξ Ξ‘ΞΞ£ΞΞ§Ξ:</strong>Ξ Ξ΄ΞΉΞ±Ξ΄ΞΉΞΊΞ±ΟΞ―Ξ± Ξ΄ΞΉΞ±ΟΞΊΞ΅Ξ― Ξ±ΟΞΊΞ΅ΟΞ¬ Ξ»Ξ΅ΟΟΞ¬.";
 if ($usrlvl > 0) {
-      echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
-      echo "<br><a href=\"index.php\">Επιστροφή</a>";
+      echo "<br><br><h3>ΞΞ΅Ξ½ Ξ­ΟΞ΅ΟΞ΅ Ξ΄ΞΉΞΊΞ±Ξ―ΟΞΌΞ± Ξ³ΞΉΞ± ΟΞ·Ξ½ ΟΟΞ±Ξ³ΞΌΞ±ΟΞΏΟΞΏΞ―Ξ·ΟΞ· Ξ±ΟΟΟΞ½ ΟΟΞ½ Ξ΅Ξ½Ξ΅ΟΞ³Ξ΅ΞΉΟΞ½. ΞΟΞΉΞΊΞΏΞΉΞ½ΟΞ½Ξ®ΟΟΞ΅ ΞΌΞ΅ ΟΞΏ Ξ΄ΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® ΟΞ±Ο.</h3>";
+      echo "<br><a href=\"index.php\">ΞΟΞΉΟΟΟΞΏΟΞ®</a>";
       mysqli_close($mysqlconnection);
       exit;
 }
     echo "<form action='' method='POST' autocomplete='off'>";
-    echo "<input type='submit' name='submit' value='Πραγματοποίηση'>";
-    echo "<br><br><input type='button' onclick=\"parent.location='../index.php'\" value=\"Αρχική σελίδα\">";
+    echo "<input type='submit' name='submit' value='Ξ ΟΞ±Ξ³ΞΌΞ±ΟΞΏΟΞΏΞ―Ξ·ΟΞ·'>";
+    echo "<br><br><input type='button' onclick=\"parent.location='../index.php'\" value=\"ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±\">";
     echo "</form>";
 if (isset($_POST['submit'])) {
     do2yphr($mysqlconnection, 1);

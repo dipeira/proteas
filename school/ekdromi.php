@@ -1,13 +1,12 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
   require '../tools/calendar/tc_calendar.php';
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   session_start();
   $usrlvl = $_SESSION['userlevel'];
@@ -16,8 +15,8 @@
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Εκδρομές σχολείου</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞΊΞ΄ΟΞΏΞΌΞ­Ο ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/common.js"></script>
@@ -57,19 +56,19 @@
                 return "A";
                         break;
             case 2:
-                return "Β";
+                return "Ξ";
                         break;
             case 3:
-                return "Γ";
+                return "Ξ";
                         break;
             case 4:
-                return "Δ";
+                return "Ξ";
                         break;
             case 5:
-                return "Ε";
+                return "Ξ";
                         break;
             case 6:
-                return "ΣΤ";
+                return "Ξ£Ξ€";
                         break;
             }
         }
@@ -79,20 +78,20 @@
                 $query = "SELECT * from ekdromi where sch=".$_GET['sch'];
                 //echo $query;
                 $school = getSchool($_GET['sch'], $mysqlconnection);
-                echo "<h2>Λίστα εκδρομών: $school</h2>";
+                echo "<h2>ΞΞ―ΟΟΞ± Ξ΅ΞΊΞ΄ΟΞΏΞΌΟΞ½: $school</h2>";
             $result = mysqli_query($mysqlconnection, $query);
             $num=mysqli_num_rows($result);
             if (!$num) {
-                    echo "<br><br><big>Δε βρέθηκαν εκδρομές</big>";
+                    echo "<br><br><big>ΞΞ΅ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ξ΅ΞΊΞ΄ΟΞΏΞΌΞ­Ο</big>";
                     $sch = $_GET['sch'];
-                    echo "<br><span title=\"Προσθήκη εκδρομής\"><a href=\"ekdromi.php?sch=$sch&op=add\"><big>Προσθήκη Εκδρομής</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
+                    echo "<br><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· Ξ΅ΞΊΞ΄ΟΞΏΞΌΞ®Ο\"><a href=\"ekdromi.php?sch=$sch&op=add\"><big>Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞΊΞ΄ΟΞΏΞΌΞ®Ο</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
             }
             else
                 {
                 echo "<br>";
                 echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";    
                 echo "<thead><tr>";
-                echo "<th>Αρ.Πρωτ.</th><th>Τάξη</th><th>Τμήμα</th><th>Προορισμός</th><th>Ημ/νία</th><th>Σχόλια</th>";
+                echo "<th>ΞΟ.Ξ ΟΟΟ.</th><th>Ξ€Ξ¬ΞΎΞ·</th><th>Ξ€ΞΌΞ®ΞΌΞ±</th><th>Ξ ΟΞΏΞΏΟΞΉΟΞΌΟΟ</th><th>ΞΞΌ/Ξ½Ξ―Ξ±</th><th>Ξ£ΟΟΞ»ΞΉΞ±</th>";
                 echo "</tr></thead>";
                 echo "<tbody>";
                 while ($i<$num)
@@ -106,49 +105,49 @@
                     $proorismos = mysqli_result($result, $i, "proorismos");
                     $comm = mysqli_result($result, $i, "comments");
                     $comments = substr($comm, 0, 30);
-                    echo "<tr><td><a href='ekdromi.php?id=$id&op=view'>$prot</a><span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ekdromi.php?id=$id&sch=$sch&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span><span title=\"Επεξεργασία\"><a href=\"ekdromi.php?id=$id&sch=$sch&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span></td><td>".taksi_switch($taksi)."</td><td>$tmima</td><td>$proorismos</td><td>".date('d-m-Y', strtotime($date))."</td><td>$comments</td></tr>";
+                    echo "<tr><td><a href='ekdromi.php?id=$id&op=view'>$prot</a><span title=\"ΞΞΉΞ±Ξ³ΟΞ±ΟΞ®\"><a href=\"javascript:confirmDelete('ekdromi.php?id=$id&sch=$sch&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span><span title=\"ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±\"><a href=\"ekdromi.php?id=$id&sch=$sch&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span></td><td>".taksi_switch($taksi)."</td><td>$tmima</td><td>$proorismos</td><td>".date('d-m-Y', strtotime($date))."</td><td>$comments</td></tr>";
                     $i++;
                 }
 
                 echo "</tbody>";
                 //if ($usrlvl < 2)
-                    echo "<tr><td colspan=8><span title=\"Προσθήκη Εκδρομής\"><a href=\"ekdromi.php?sch=$sch&op=add\">Προσθήκη Εκδρομής<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";        
+                    echo "<tr><td colspan=8><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞΊΞ΄ΟΞΏΞΌΞ®Ο\"><a href=\"ekdromi.php?sch=$sch&op=add\">Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· ΞΞΊΞ΄ΟΞΏΞΌΞ®Ο<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";        
                 echo "</table>";
             }
-                echo "<br><br><INPUT TYPE='button' VALUE='Καρτέλα Σχολείου' onClick=\"parent.location='school_status.php?org=$sch'\">";
-                echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                echo "<br><br><INPUT TYPE='button' VALUE='ΞΞ±ΟΟΞ­Ξ»Ξ± Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏΟ' onClick=\"parent.location='school_status.php?org=$sch'\">";
+                echo "<br><br><INPUT TYPE='button' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
         }
         elseif ($_GET['op']=="view") {
                 $ekdr = read_ekdromi($_GET['id'], $mysqlconnection);    
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td>Αρ.Πρωτ.</td><td>".$ekdr['prot']."</td></tr>";
+                echo "<tr><td>ΞΟ.Ξ ΟΟΟ.</td><td>".$ekdr['prot']."</td></tr>";
                 $school = getSchool($ekdr['sch'], $mysqlconnection);
-                echo "<tr><td>Σχολείο</td><td>$school</td></tr>";
-                echo "<tr><td>Τάξη</td><td>".taksi_switch($ekdr['taksi'])."</td></tr>";
-                echo "<tr><td>Τμήμα</td><td>".$ekdr['tmima']."</td></tr>";
-                echo "<tr><td>Προορισμός</td><td>".$ekdr['proorismos']."</td></tr>";
-                echo "<tr><td>Ημ/νία</td><td>".$ekdr['date']."</td></tr>";
-                echo "<tr><td>Σχόλια</td><td>".$ekdr['comments']."</td></tr>";
+                echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ</td><td>$school</td></tr>";
+                echo "<tr><td>Ξ€Ξ¬ΞΎΞ·</td><td>".taksi_switch($ekdr['taksi'])."</td></tr>";
+                echo "<tr><td>Ξ€ΞΌΞ®ΞΌΞ±</td><td>".$ekdr['tmima']."</td></tr>";
+                echo "<tr><td>Ξ ΟΞΏΞΏΟΞΉΟΞΌΟΟ</td><td>".$ekdr['proorismos']."</td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ±</td><td>".$ekdr['date']."</td></tr>";
+                echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td>".$ekdr['comments']."</td></tr>";
             echo "	</table>";
-                echo "<br><br><INPUT TYPE='button' VALUE='Εκδρομές Σχολείου' onClick=\"parent.location='ekdromi.php?sch=".$ekdr['sch']."&op=list'\">";
-                echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                echo "<br><br><INPUT TYPE='button' VALUE='ΞΞΊΞ΄ΟΞΏΞΌΞ­Ο Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏΟ' onClick=\"parent.location='ekdromi.php?sch=".$ekdr['sch']."&op=list'\">";
+                echo "<br><br><INPUT TYPE='button' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
         }
         elseif ($_GET['op']=="edit") {
                 $ekdr = read_ekdromi($_GET['id'], $mysqlconnection);
                 echo "<form id='update_ekdr' name='update' action='ekdromi.php' method='POST'>";
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot' value=".$ekdr['prot']."></td></tr>";
-                //echo "<tr><td>Σχολείο</td><td><input type='text' name='sch' value=".$ekdr['sch']."></td></tr>";
+                echo "<tr><td>ΞΟ.Ξ ΟΟΟ.</td><td><input type='text' name='prot' value=".$ekdr['prot']."></td></tr>";
+                //echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ</td><td><input type='text' name='sch' value=".$ekdr['sch']."></td></tr>";
                 $school = getSchool($_GET['sch'], $mysqlconnection);
                 echo "<input type='hidden' name='sch' value='".$_GET['sch']."' />";
-                echo "<tr><td>Σχολείο</td><td><input type='text' name='tmp' value='$school' disabled size='35' /></td></tr>";
-                echo "<tr><td>Τάξη</td><td>";
+                echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ</td><td><input type='text' name='tmp' value='$school' disabled size='35' /></td></tr>";
+                echo "<tr><td>Ξ€Ξ¬ΞΎΞ·</td><td>";
                 taksiCmb1($ekdr['taksi']);
                 echo "</td></tr>";
-                echo "<tr><td>Τμήμα</td><td><input type='text' name='tmima' value=".$ekdr['tmima']."></td></tr>";
-                echo "<tr><td>Προορισμός</td><td><input type='text' name='proorismos' value=".$ekdr['proorismos']." size='35'></td></tr>";
+                echo "<tr><td>Ξ€ΞΌΞ®ΞΌΞ±</td><td><input type='text' name='tmima' value=".$ekdr['tmima']."></td></tr>";
+                echo "<tr><td>Ξ ΟΞΏΞΏΟΞΉΟΞΌΟΟ</td><td><input type='text' name='proorismos' value=".$ekdr['proorismos']." size='35'></td></tr>";
                 $date = $ekdr['date'];
-                echo "<tr><td>Ημ/νία</td><td>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ±</td><td>";
             $myCalendar = new tc_calendar("date", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -159,31 +158,31 @@
             $myCalendar->disabledDay("sun,sat");
             $myCalendar->writeScript();
             echo "</td></tr>";
-                echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' value=".$ekdr['comments']." size='35'></td></tr>";
+                echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td><input type='text' name='comments' value=".$ekdr['comments']." size='35'></td></tr>";
             echo "</table>";
                 // update: update=2
                 echo "<input type='hidden' name = 'update' value='1'>";
                 echo "<input type='hidden' name = 'id' value=".$_GET['id'].">";
-                echo "<input type='submit' value='Επεξεργασία'>";
+                echo "<input type='submit' value='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±'>";
                 echo "</form>";
-                echo "<INPUT TYPE='button' VALUE='Εκδρομές Σχολείου' onClick=\"parent.location='ekdromi.php?sch=".$ekdr['sch']."&op=list'\">";
-                echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                echo "<INPUT TYPE='button' VALUE='ΞΞΊΞ΄ΟΞΏΞΌΞ­Ο Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏΟ' onClick=\"parent.location='ekdromi.php?sch=".$ekdr['sch']."&op=list'\">";
+                echo "<br><br><INPUT TYPE='button' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
         }
         elseif ($_GET['op']=="add") {
                 echo "<form id='add_ekdr' name='add' action='ekdromi.php' method='POST'>";
                 echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot' /></td></tr>";
+                echo "<tr><td>ΞΟ.Ξ ΟΟΟ.</td><td><input type='text' name='prot' /></td></tr>";
                 $school = getSchool($_GET['sch'], $mysqlconnection);
                 echo "<input type='hidden' name='sch' value='".$_GET['sch']."' />";
-                echo "<tr><td>Σχολείο</td><td><input type='text' name='tmp' value='$school' disabled size='35' /></td></tr>";
-                //echo "<tr><td>Τάξη</td><td><input type='text' name='taksi' /></td></tr>";
-                echo "<tr><td>Τάξη</td><td>";
+                echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ</td><td><input type='text' name='tmp' value='$school' disabled size='35' /></td></tr>";
+                //echo "<tr><td>Ξ€Ξ¬ΞΎΞ·</td><td><input type='text' name='taksi' /></td></tr>";
+                echo "<tr><td>Ξ€Ξ¬ΞΎΞ·</td><td>";
                 taksiCmb();
                 echo "</td></tr>";
-                echo "<tr><td>Τμήμα</td><td><input type='text' name='tmima' /></td></tr>";
-                echo "<tr><td>Προορισμός</td><td><input type='text' name='proorismos' size='35' /></td></tr>";
-                //echo "<tr><td>Ημ/νία</td><td><input type='text' name='date' /></td></tr>";
-                echo "<tr><td>Ημ/νία</td><td>";
+                echo "<tr><td>Ξ€ΞΌΞ®ΞΌΞ±</td><td><input type='text' name='tmima' /></td></tr>";
+                echo "<tr><td>Ξ ΟΞΏΞΏΟΞΉΟΞΌΟΟ</td><td><input type='text' name='proorismos' size='35' /></td></tr>";
+                //echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ±</td><td><input type='text' name='date' /></td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ±</td><td>";
             $myCalendar = new tc_calendar("date", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -193,25 +192,25 @@
             $myCalendar->disabledDay("sun,sat");
             $myCalendar->writeScript();
             echo "</td></tr>";
-                echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' size='35' /></td></tr>";
+                echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td><input type='text' name='comments' size='35' /></td></tr>";
             echo "</table>";
                 // add: update=2
                 echo "<input type='hidden' name = 'update' value='2'>";
-                echo "<input type='submit' value='Προσθήκη'>";
+                echo "<input type='submit' value='Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·'>";
                 echo "</form>";
-                echo "<br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-                echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές Σχολείου' onClick=\"parent.location='ekdromi.php?sch=".$_GET['sch']."&op=list'\">";
+                echo "<br><INPUT TYPE='button' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
+                echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='ΞΞΊΞ΄ΟΞΏΞΌΞ­Ο Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏΟ' onClick=\"parent.location='ekdromi.php?sch=".$_GET['sch']."&op=list'\">";
         }
         elseif ($_GET['op']=="delete") {
                 $query = "DELETE from ekdromi where id=".$_GET['id'];
                 //echo $query;
             $result = mysqli_query($mysqlconnection, $query);
             if ($result) {
-                echo "Η εγγραφή με κωδικό ".$_GET['id']." διαγράφηκε με επιτυχία.";
+                echo "Ξ Ξ΅Ξ³Ξ³ΟΞ±ΟΞ® ΞΌΞ΅ ΞΊΟΞ΄ΞΉΞΊΟ ".$_GET['id']." Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±.";
             } else {
-                        echo "Η διαγραφή απέτυχε...";
+                        echo "Ξ Ξ΄ΞΉΞ±Ξ³ΟΞ±ΟΞ® Ξ±ΟΞ­ΟΟΟΞ΅...";
             }
-            echo "<INPUT TYPE='button' VALUE='Επιστροφή στις εκδρομές' onClick=\"parent.location='ekdromi.php?sch=".$_GET['sch']."&op=list'\">";
+            echo "<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞΉΟ Ξ΅ΞΊΞ΄ΟΞΏΞΌΞ­Ο' onClick=\"parent.location='ekdromi.php?sch=".$_GET['sch']."&op=list'\">";
                 echo "<meta http-equiv=\"refresh\" content=\"2; URL=ekdromi.php?sch=".$_GET['sch']."&op=list\">";
         }
         
@@ -238,11 +237,10 @@
                 $query1 = " VALUES ('$sch', '$taksi', '$tmima', '$proorismos', '$date', '$comments', $prot, $sxol_etos)";
                 $query = $query0.$query1;
             }
-            //$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
             // for debugging...
             //echo "<br>".$query;
             mysqli_query($mysqlconnection, $query);
-            echo "<INPUT TYPE='button' VALUE='Επιστροφή στις εκδρομές' onClick=\"parent.location='ekdromi.php?sch=".$sch."&op=list'\">";
+            echo "<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞΉΟ Ξ΅ΞΊΞ΄ΟΞΏΞΌΞ­Ο' onClick=\"parent.location='ekdromi.php?sch=".$sch."&op=list'\">";
             echo "<meta http-equiv=\"refresh\" content=\"2; URL=ekdromi.php?sch=".$sch."&op=list\">";
         }
         

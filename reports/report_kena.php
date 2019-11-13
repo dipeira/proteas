@@ -1,14 +1,14 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     //require_once "../tools/functions.php";
 ?>
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <!--
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     -->
-    <title>Πίνακας οργανικών κενών</title>
+    <title>Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΟΞ½ ΞΊΞ΅Ξ½ΟΞ½</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -26,17 +26,17 @@
     session_start();
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
     echo "<body>";
     require '../etc/menu.php';
-    echo "<h3>Οργανικά κενά</h3>";
-    echo "<p>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
-    echo "<a href='report_kena.php?type=1'>Δημοτικά Σχολεία</a><br>";
-    echo "<a href='report_kena.php?type=2'>Νηπιαγωγεία</a><br>";
-    echo "<a href='report_kena.php?type=3'>Ειδικά Σχολεία</a><br>";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<h3>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΞΊΞ΅Ξ½Ξ¬</h3>";
+    echo "<p>Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΟΞΉΞ»Ξ­ΞΎΟΞ΅ ΟΟΟΞΏ ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ:</p>";
+    echo "<a href='report_kena.php?type=1'>ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</a><br>";
+    echo "<a href='report_kena.php?type=2'>ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³Ξ΅Ξ―Ξ±</a><br>";
+    echo "<a href='report_kena.php?type=3'>ΞΞΉΞ΄ΞΉΞΊΞ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</a><br>";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
 
 if ($_GET['type'] == 1 || $_GET['type'] == 3) {
     $type = 1;
@@ -57,18 +57,18 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
     $synorgtop = $synorgan = 0;
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
     echo "<thead>";
-    echo "<tr><th rowspan=2>Κωδ.</th>";
-    echo "<th rowspan=2>Ονομασία</th>";
-    echo "<th rowspan=2>Κατ.</th>";
-    echo "<th rowspan=2>Οργ.</th>";
-    echo "<th rowspan=2>ΠΕ70<br>Οργ.<br>Τοποθ.</th>";
-    echo "<th colspan=10>Οργανικές</th>";
-    echo "<th colspan=10>Οργανικά Κενά</th>";
+    echo "<tr><th rowspan=2>ΞΟΞ΄.</th>";
+    echo "<th rowspan=2>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+    echo "<th rowspan=2>ΞΞ±Ο.</th>";
+    echo "<th rowspan=2>ΞΟΞ³.</th>";
+    echo "<th rowspan=2>Ξ Ξ70<br>ΞΟΞ³.<br>Ξ€ΞΏΟΞΏΞΈ.</th>";
+    echo "<th colspan=10>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ­Ο</th>";
+    echo "<th colspan=10>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΞΞ΅Ξ½Ξ¬</th>";
     echo "</tr>";
-    echo "<tr><th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
-    echo "<th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ08</th><th>ΠΕ86</th><th>ΠΕ91</th><th>Τ.Ε.</th>";
-    echo "<th>ΠΕ70</th><th>ΠΕ11</th><th>ΠΕ06</th><th>ΠΕ79</th>";
-    echo "<th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ08</th><th>ΠΕ86</th><th>ΠΕ91</th><th>Τ.Ε.</th>";
+    echo "<tr><th>Ξ Ξ70</th><th>Ξ Ξ11</th><th>Ξ Ξ06</th><th>Ξ Ξ79</th>";
+    echo "<th>Ξ Ξ05</th><th>Ξ Ξ07</th><th>Ξ Ξ08</th><th>Ξ Ξ86</th><th>Ξ Ξ91</th><th>Ξ€.Ξ.</th>";
+    echo "<th>Ξ Ξ70</th><th>Ξ Ξ11</th><th>Ξ Ξ06</th><th>Ξ Ξ79</th>";
+    echo "<th>Ξ Ξ05</th><th>Ξ Ξ07</th><th>Ξ Ξ08</th><th>Ξ Ξ86</th><th>Ξ Ξ91</th><th>Ξ€.Ξ.</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 
@@ -84,7 +84,7 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         $org_ent = $entaksis[0] ? 1 : 0;
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
         $orgs = get_orgs($sch,$mysqlconnection);
-        // οργανικά τοποθετηθέντες
+        // ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΟΞΏΟΞΏΞΈΞ΅ΟΞ·ΞΈΞ­Ξ½ΟΞ΅Ο
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
@@ -102,15 +102,15 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
             echo "</td>";
         }
         echo "<td>$org_ent</td>";
-        echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
-        echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
-        echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
-        echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
-        echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
-        echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
-        echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
-        echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
-        echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+        echo "<td>".($organikes[0] - $orgs['Ξ Ξ70'])."</td>";
+        echo "<td>".($organikes[1] - $orgs['Ξ Ξ11'])."</td>";
+        echo "<td>".($organikes[2] - $orgs['Ξ Ξ06'])."</td>";
+        echo "<td>".($organikes[3] - $orgs['Ξ Ξ79'])."</td>";
+        echo "<td>".($organikes[4] - $orgs['Ξ Ξ05'])."</td>";
+        echo "<td>".($organikes[5] - $orgs['Ξ Ξ07'])."</td>";
+        echo "<td>".($organikes[6] - $orgs['Ξ Ξ08'])."</td>";
+        echo "<td>".($organikes[7] - $orgs['Ξ Ξ86'])."</td>";
+        echo "<td>".($organikes[8] - $orgs['Ξ Ξ91'])."</td>";
         echo "<td>".($org_ent - $orgs['ent'])."</td>";
         echo "</tr>\n";
 
@@ -119,21 +119,21 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         }
         $organikes_sum[9] += $org_ent;
         
-        $kena_org_sum[0] += $organikes[0] - $orgs['ΠΕ70'];
-        $kena_org_sum[1] += $organikes[1] - $orgs['ΠΕ11'];
-        $kena_org_sum[2] += $organikes[2] - $orgs['ΠΕ06'];
-        $kena_org_sum[3] += $organikes[3] - $orgs['ΠΕ79'];
-        $kena_org_sum[4] += $organikes[4] - $orgs['ΠΕ05'];
-        $kena_org_sum[5] += $organikes[5] - $orgs['ΠΕ07'];
-        $kena_org_sum[6] += $organikes[6] - $orgs['ΠΕ08'];
-        $kena_org_sum[7] += $organikes[7] - $orgs['ΠΕ86'];
-        $kena_org_sum[8] += $organikes[8] - $orgs['ΠΕ91'];
+        $kena_org_sum[0] += $organikes[0] - $orgs['Ξ Ξ70'];
+        $kena_org_sum[1] += $organikes[1] - $orgs['Ξ Ξ11'];
+        $kena_org_sum[2] += $organikes[2] - $orgs['Ξ Ξ06'];
+        $kena_org_sum[3] += $organikes[3] - $orgs['Ξ Ξ79'];
+        $kena_org_sum[4] += $organikes[4] - $orgs['Ξ Ξ05'];
+        $kena_org_sum[5] += $organikes[5] - $orgs['Ξ Ξ07'];
+        $kena_org_sum[6] += $organikes[6] - $orgs['Ξ Ξ08'];
+        $kena_org_sum[7] += $organikes[7] - $orgs['Ξ Ξ86'];
+        $kena_org_sum[8] += $organikes[8] - $orgs['Ξ Ξ91'];
         $kena_org_sum[9] += $org_ent - $orgs['ent'];
 
         $i++;                        
     }
 
-    echo "<tr><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
+    echo "<tr><td></td><td></td><td>Ξ£Ξ₯ΞΞΞΞ</td>";
     echo "<td>$synorgan</td><td>$synorgtop</td>";
     for ($j=0; $j<10; $j++){
         echo "<td>".$organikes_sum[$j]."</td>";
@@ -150,9 +150,9 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
 
     echo "<form action='../tools/2excel_ses.php' method='post'>";
     //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
     //ob_end_clean();
 }
@@ -171,12 +171,12 @@ else if ($_GET['type'] == 2) {
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
     echo "<thead>";
-    echo "<tr><th rowspan=2>Κωδ.</th>";
-    echo "<th rowspan=2>Ονομασία</th>";
-    echo "<th rowspan=2>Κατ.</th>";
-    echo "<th>Οργανικές</th>";
-    echo "<th>Οργ.Τοπ.</th>";
-    echo "<th>Οργανικά Κενά</th>";
+    echo "<tr><th rowspan=2>ΞΟΞ΄.</th>";
+    echo "<th rowspan=2>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+    echo "<th rowspan=2>ΞΞ±Ο.</th>";
+    echo "<th>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ­Ο</th>";
+    echo "<th>ΞΟΞ³.Ξ€ΞΏΟ.</th>";
+    echo "<th>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΞΞ΅Ξ½Ξ¬</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 
@@ -189,7 +189,7 @@ else if ($_GET['type'] == 2) {
         $students = mysqli_result($result, $i, "students");
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
         $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
-        // οργανικά τοποθετηθέντες
+        // ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΟΞΏΟΞΏΞΈΞ΅ΟΞ·ΞΈΞ­Ξ½ΟΞ΅Ο
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3)";
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
@@ -211,7 +211,7 @@ else if ($_GET['type'] == 2) {
 
         $i++;                        
     }
-    echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td></tr>";
+    echo "<tr><td></td><td>Ξ£Ξ₯ΞΞΞΞ</td><td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td></tr>";
     echo "</tbody></table>";
     echo "<br>";
 
@@ -221,9 +221,9 @@ else if ($_GET['type'] == 2) {
 
     echo "<form action='../tools/2excel_ses.php' method='post'>";
     //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
 }
 ?>

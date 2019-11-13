@@ -1,5 +1,5 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     Require "../config.php";
     Require "../functions.php";
         session_start();
@@ -16,8 +16,8 @@ if ($_SESSION['userlevel'] > 0) {
 }
         
         $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+        mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
 if ((isset($_GET['id'])) && is_numeric($_GET['id'])) {
     $query = "SELECT * from employee where id=".$_GET['id'];

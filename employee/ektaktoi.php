@@ -1,13 +1,12 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -21,8 +20,8 @@
 <html>
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Αναπληρωτές</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
@@ -44,7 +43,7 @@
         }
       });
     });
-    var mylink = "<small>Παρακαλώ δώστε έγκυρη πράξη ή δημιουργήστε μία: </small><a target=\"_blank\" href=\"praxi.php\">Πράξεις</a>";
+    var mylink = "<small>Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ Ξ­Ξ³ΞΊΟΟΞ· ΟΟΞ¬ΞΎΞ· Ξ® Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ®ΟΟΞ΅ ΞΌΞ―Ξ±: </small><a target=\"_blank\" href=\"praxi.php\">Ξ ΟΞ¬ΞΎΞ΅ΞΉΟ</a>";
         
     $(document).ready(function(){
       $("#updatefrm").validate({
@@ -53,8 +52,8 @@
           name: "required", surname: "required", afm: "required", klados: "required", praxi: {"required": true, min:2 }, type: "required"
         },
         messages: {
-          name: "Παρακαλώ δώστε όνομα", surname: "Παρακαλώ δώστε επώνυμο", afm: "Παρακαλώ δώστε έγκυρo ΑΦΜ",
-                                  klados: "Παρακαλώ δώστε έγκυρη τιμή", praxi: mylink, type: "Παρακαλώ δώστε έγκυρη τιμή"
+          name: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ ΟΞ½ΞΏΞΌΞ±", surname: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ Ξ΅ΟΟΞ½ΟΞΌΞΏ", afm: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ Ξ­Ξ³ΞΊΟΟo ΞΞ¦Ξ",
+                                  klados: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ Ξ­Ξ³ΞΊΟΟΞ· ΟΞΉΞΌΞ®", praxi: mylink, type: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ Ξ­Ξ³ΞΊΟΟΞ· ΟΞΉΞΌΞ®"
         },
         submitHandler: function(form) {
           // do other stuff for a valid form
@@ -155,16 +154,16 @@
           switch ($kat)
           {   
               case 1:
-                  $katast = "Εργάζεται";
+                  $katast = "ΞΟΞ³Ξ¬ΞΆΞ΅ΟΞ±ΞΉ";
                   break;
               case 2:
-                  $katast = "Λύση Σχέσης - Παραίτηση";
+                  $katast = "ΞΟΟΞ· Ξ£ΟΞ­ΟΞ·Ο - Ξ Ξ±ΟΞ±Ξ―ΟΞ·ΟΞ·";
                   break;
               case 3:
-                  $katast = "Άδεια";
+                  $katast = "ΞΞ΄Ξ΅ΞΉΞ±";
                   break;
               case 4:
-                  $katast = "Διαθεσιμότητα";
+                  $katast = "ΞΞΉΞ±ΞΈΞ΅ΟΞΉΞΌΟΟΞ·ΟΞ±";
                   break;
           }
        }
@@ -200,25 +199,25 @@
         <?php
 if ($_GET['op']=="add")
 {
-        echo "<h3>Προσθήκη αναπληρωτή εκπαιδευτικού</h3>";
+        echo "<h3>Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ® Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΟ</h3>";
         echo "<form id='updatefrm' action='update_ekt.php' method='POST'>";
         echo "<table class=\"imagetable\" border='1'>";
         
-        echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' /></td></tr>";
-        echo "<tr><td>Όνομα</td><td><input type='text' name='name' /></td></tr>";
-        echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' /></td></tr>";
-        echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' /></td></tr>";
-        echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' /></td></tr>";
-        echo "<tr><td>Σταθερό</td><td><input type='text' name='stathero' /></td></tr>";
-        echo "<tr><td>Κινητό</td><td><input type='text' name='kinhto' /></td></tr>";
-        echo "<tr><td>Κλάδος</td><td>";
+        echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td><input type='text' name='surname' /></td></tr>";
+        echo "<tr><td>ΞΞ½ΞΏΞΌΞ±</td><td><input type='text' name='name' /></td></tr>";
+        echo "<tr><td>Ξ Ξ±ΟΟΟΞ½ΟΞΌΞΏ</td><td><input type='text' name='patrwnymo' /></td></tr>";
+        echo "<tr><td>ΞΞ·ΟΟΟΞ½ΟΞΌΞΏ</td><td><input type='text' name='mhtrwnymo' /></td></tr>";
+        echo "<tr><td>Ξ.Ξ¦.Ξ.</td><td><input type='text' name='afm' /></td></tr>";
+        echo "<tr><td>Ξ£ΟΞ±ΞΈΞ΅ΟΟ</td><td><input type='text' name='stathero' /></td></tr>";
+        echo "<tr><td>ΞΞΉΞ½Ξ·ΟΟ</td><td><input type='text' name='kinhto' /></td></tr>";
+        echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td>";
         kladosCmb($mysqlconnection);
         echo "</td></tr>";
-        //echo "<tr><td>Βαθμός</td><td><input type='text' name='vathm' /></td></tr>";
-        //echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' /></td></tr>";
+        //echo "<tr><td>ΞΞ±ΞΈΞΌΟΟ</td><td><input type='text' name='vathm' /></td></tr>";
+        //echo "<tr><td>Ξ.Ξ.</td><td><input type='text' name='mk' /></td></tr>";
         
-        //echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
-        echo "<tr><td>Ημ/νία ανάληψης</td><td>";
+        //echo "<tr><td>ΞΞ½Ξ¬Ξ»Ξ·ΟΞ· ΟΟΞ·ΟΞ΅ΟΞ―Ξ±Ο</td><td><input type='text' name='analipsi' /></td></tr>";
+        echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±Ξ½Ξ¬Ξ»Ξ·ΟΞ·Ο</td><td>";
         $myCalendar = new tc_calendar("hm_anal", true);
         $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
         $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -230,27 +229,27 @@ if ($_GET['op']=="add")
         $myCalendar->writeScript();
         echo "</td></tr>";		
                         
-        echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
+        echo "<tr><td>ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ/ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ</td><td>";
         metdidCombo(0);		
         
-        echo "<tr><td>Τύπος Απασχόλησης</td><td>";
+        echo "<tr><td>Ξ€ΟΟΞΏΟ ΞΟΞ±ΟΟΟΞ»Ξ·ΟΞ·Ο</td><td>";
         typeCmb($mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' ></textarea></td></tr>";
-        //echo "<tr><td>Υπουργική Απόφαση</td><td><input type='text' name='ya' /></td></tr>";
-        //echo "<tr><td>Απόφαση Δ/ντή</td><td><input type='text' name='apofasi' /></td></tr>";
-        echo "<tr><td>Πράξη:</td><td>";
+        echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td><textarea rows=4 cols=80 name='comments' ></textarea></td></tr>";
+        //echo "<tr><td>Ξ₯ΟΞΏΟΟΞ³ΞΉΞΊΞ® ΞΟΟΟΞ±ΟΞ·</td><td><input type='text' name='ya' /></td></tr>";
+        //echo "<tr><td>ΞΟΟΟΞ±ΟΞ· Ξ/Ξ½ΟΞ®</td><td><input type='text' name='apofasi' /></td></tr>";
+        echo "<tr><td>Ξ ΟΞ¬ΞΎΞ·:</td><td>";
         tblCmb($mysqlconnection, "praxi",$praxi);
         echo "</td></tr>"; 
         echo "<div id=\"content\">";
         echo "<form autocomplete=\"off\">";
-        echo "<tr><td>Σχολείο(-α) Υπηρέτησης";
+        echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ(-Ξ±) Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο";
         echo "<a href=\"\" onclick=\"window.open('../help/help.html#school_ekt','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
         //echo "</td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" size=50/>";
         echo "</td><td><input type=\"text\" name=\"yphr[]\" class=\"yphrow\" id=\"yphrow\" />";
         echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
-        echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-        echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+        echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·\" />";
+        echo "<input class=\"delRow\" type=\"button\" value=\"ΞΟΞ±Ξ―ΟΞ΅ΟΞ·\" />";
         //echo "</form>";
         echo "</div>";
         thesianaplselectcmb(0);
@@ -260,10 +259,10 @@ if ($_GET['op']=="add")
         echo "  <input type='hidden' name = 'status' value='1'>";
         echo "  <input type='hidden' name = 'action' value='1'>";
         echo "<br>";
-        echo "	<input type='submit' value='Καταχώρηση'>";
-        echo "	<INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
+        echo "	<input type='submit' value='ΞΞ±ΟΞ±ΟΟΟΞ·ΟΞ·'>";
+        echo "	<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞ· Ξ»Ξ―ΟΟΞ± Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½' onClick=\"parent.location='ektaktoi_list.php'\">";
         echo "<br>";
-        echo "	<br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική Σελίδα' onClick=\"parent.location='../index.php'\">";
+        echo "	<br><INPUT TYPE='button' class='btn-red' VALUE='ΞΟΟΞΉΞΊΞ® Ξ£Ξ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
         echo "	</form>";
 ?>
 <div id='results'></div>
@@ -275,34 +274,34 @@ if ($_GET['op']=="add")
 
 if ($_GET['op']=="edit")
 {
-        echo "<h3>Επεξεργασία αναπληρωτή εκπαιδευτικού</h3>";
+        echo "<h3>ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ± Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ® Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΟ</h3>";
         echo "<form id='updatefrm' name='update' action='update_ekt.php' method='POST'>";
         echo "<table class=\"imagetable\" border='1'>";
-        echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
-        echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
-        echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' value=$patrwnymo /></td></tr>";
-        echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' value=$mhtrwnymo /></td></tr>";
-        echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
-        echo "<tr><td>Σταθερό</td><td><input type='text' name='stathero' value=$stathero /></td></tr>";
-        echo "<tr><td>Κινητό</td><td><input type='text' name='kinhto' value=$kinhto /></td></tr>";
+        echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td><input type='text' name='surname' value=$surname /></td></tr>";
+        echo "<tr><td>ΞΞ½ΞΏΞΌΞ±</td><td><input type='text' name='name' value=$name /></td></tr>";
+        echo "<tr><td>Ξ Ξ±ΟΟΟΞ½ΟΞΌΞΏ</td><td><input type='text' name='patrwnymo' value=$patrwnymo /></td></tr>";
+        echo "<tr><td>ΞΞ·ΟΟΟΞ½ΟΞΌΞΏ</td><td><input type='text' name='mhtrwnymo' value=$mhtrwnymo /></td></tr>";
+        echo "<tr><td>Ξ.Ξ¦.Ξ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
+        echo "<tr><td>Ξ£ΟΞ±ΞΈΞ΅ΟΟ</td><td><input type='text' name='stathero' value=$stathero /></td></tr>";
+        echo "<tr><td>ΞΞΉΞ½Ξ·ΟΟ</td><td><input type='text' name='kinhto' value=$kinhto /></td></tr>";
         echo "<tr><td>email</td><td><input type='text' name='email' value=$email /></td></tr>";
-        echo "<tr><td>Κλάδος</td><td>";
+        echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td>";
         kladosCombo($klados_id,$mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Κατάσταση</td><td>";
+        echo "<tr><td>ΞΞ±ΟΞ¬ΟΟΞ±ΟΞ·</td><td>";
         katastCmb($kat);
         echo "</td></tr>";
-        //echo "<tr><td>Βαθμός</td><td>";
+        //echo "<tr><td>ΞΞ±ΞΈΞΌΟΟ</td><td>";
         //vathmosCmb1($vathm, $mysqlconnection);
         //echo "</td><tr>";
         //<input type='text' name='vathm' value=$vathm /></td></tr>";
-        //echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
-        echo "<tr><td>Τύπος απασχόλησης</td><td>";
+        //echo "<tr><td>Ξ.Ξ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
+        echo "<tr><td>Ξ€ΟΟΞΏΟ Ξ±ΟΞ±ΟΟΟΞ»Ξ·ΟΞ·Ο</td><td>";
         typeCmb1($type, $mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Ανάληψη</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
+        echo "<tr><td>ΞΞ½Ξ¬Ξ»Ξ·ΟΞ·</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
         
-        echo "<tr><td>Ημ/νία ανάληψης</td><td>";
+        echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±Ξ½Ξ¬Ξ»Ξ·ΟΞ·Ο</td><td>";
         $myCalendar = new tc_calendar("hm_anal", true);
         $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
         $myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
@@ -313,7 +312,7 @@ if ($_GET['op']=="edit")
         $myCalendar->disabledDay("sun,sat");
         $myCalendar->writeScript();
         echo "</td></tr>";
-        echo "<tr><td>Ημ/νία αποχώρησης</td><td>";
+        echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±ΟΞΏΟΟΟΞ·ΟΞ·Ο</td><td>";
         $myCalendar = new tc_calendar("hm_apox", true);
         $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
         $myCalendar->setDate(date('d',strtotime($hm_apox)),date('m',strtotime($hm_apox)),date('Y',strtotime($hm_apox)));
@@ -325,15 +324,15 @@ if ($_GET['op']=="edit")
         $myCalendar->writeScript();
         echo "</td></tr>";		
                         
-        echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
+        echo "<tr><td>ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ/ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ</td><td>";
         metdidCombo($met_did);
-        //echo "<tr><td>Υπουργική Απόφαση</td><td><input size=50 type='text' name='ya' value=$ya /></td></tr>";
-        //echo "<tr><td>Απόφαση Δ/ντή</td><td><input size=50 type='text' name='apofasi' value=$apofasi /></td></tr>";
-        echo "<tr><td>Πράξη:</td><td>";
+        //echo "<tr><td>Ξ₯ΟΞΏΟΟΞ³ΞΉΞΊΞ® ΞΟΟΟΞ±ΟΞ·</td><td><input size=50 type='text' name='ya' value=$ya /></td></tr>";
+        //echo "<tr><td>ΞΟΟΟΞ±ΟΞ· Ξ/Ξ½ΟΞ®</td><td><input size=50 type='text' name='apofasi' value=$apofasi /></td></tr>";
+        echo "<tr><td>Ξ ΟΞ¬ΞΎΞ·:</td><td>";
         tblCmb($mysqlconnection, "praxi",$praxi);
         echo "</td></tr>";
-        echo "<tr><td>Υποχρεωτικό ωράριο</td><td><input type='text' name='wres' value=$wres /></td></tr>";
-        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
+        echo "<tr><td>Ξ₯ΟΞΏΟΟΞ΅ΟΟΞΉΞΊΟ ΟΟΞ¬ΟΞΉΞΏ</td><td><input type='text' name='wres' value=$wres /></td></tr>";
+        echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
         
         //new 15-02-2012: implemented with jquery.autocomplete
         echo "<div id=\"content\">";
@@ -344,27 +343,27 @@ if ($_GET['op']=="edit")
                 $count = count($yphr_arr);
                 for ($i=0; $i<$count; $i++)
                 {
-                    echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
+                    echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ (-Ξ±) Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο";
                     echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
                     echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
                     echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
-                    echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-                    echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+                    echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·\" />";
+                    echo "<input class=\"delRow\" type=\"button\" value=\"ΞΟΞ±Ξ―ΟΞ΅ΟΞ·\" />";
                     echo "</tr>";
                 }
                 }
         else
         {
-          echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
+          echo "<tr><td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ (-Ξ±) Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο";
           echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
           echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$sx_yphrethshs' class=\"yphrow\" id=\"yphrow\" size=40/>";
           echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
-          echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-          echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+          echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·\" />";
+          echo "<input class=\"delRow\" type=\"button\" value=\"ΞΟΞ±Ξ―ΟΞ΅ΟΞ·\" />";
           echo "</tr>";
         }
         
-        echo "<tr><td>Μετακινήσεις<br><br><small><strong>ΠΡΟΣΟΧΗ:</strong> Συμπληρώστε ως εξής: \"Αρχικά τοποθετήθηκε στο ΧΧΧΧΧΧ και έπειτα με την ΧΧΧ απόφαση τοποθετήθηκε στο\"</small></td>";
+        echo "<tr><td>ΞΞ΅ΟΞ±ΞΊΞΉΞ½Ξ®ΟΞ΅ΞΉΟ<br><br><small><strong>Ξ Ξ‘ΞΞ£ΞΞ§Ξ:</strong> Ξ£ΟΞΌΟΞ»Ξ·ΟΟΟΟΞ΅ ΟΟ Ξ΅ΞΎΞ®Ο: \"ΞΟΟΞΉΞΊΞ¬ ΟΞΏΟΞΏΞΈΞ΅ΟΞ®ΞΈΞ·ΞΊΞ΅ ΟΟΞΏ Ξ§Ξ§Ξ§Ξ§Ξ§Ξ§ ΞΊΞ±ΞΉ Ξ­ΟΞ΅ΞΉΟΞ± ΞΌΞ΅ ΟΞ·Ξ½ Ξ§Ξ§Ξ§ Ξ±ΟΟΟΞ±ΟΞ· ΟΞΏΟΞΏΞΈΞ΅ΟΞ®ΞΈΞ·ΞΊΞ΅ ΟΟΞΏ\"</small></td>";
         echo "<td><textarea rows=4 cols=50 name='metakinhsh'>$metakinhsh</textarea></td></tr>";
         echo "</form>";
         echo "</div>";
@@ -372,8 +371,8 @@ if ($_GET['op']=="edit")
         echo "	</table>";
         
         echo "	<input type='hidden' name = 'id' value='$id'>";
-        echo "	<input type='submit' value='Επεξεργασία'>";
-        echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi.php?id=$id&op=view'\">";
+        echo "	<input type='submit' value='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±'>";
+        echo "	<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' class='btn-red' onClick=\"parent.location='ektaktoi.php?id=$id&op=view'\">";
         echo "	</form>";
         echo "    </center>";
         echo "</body>";
@@ -399,41 +398,41 @@ elseif ($_GET['op']=="view")
         echo "<table class=\"imagetable\" border='1'>";	
         echo "<tr>";
         //echo "<td colspan=2>ID</td><td colspan=2>$id</td>";
-        echo "<th colspan=4 align=center>Καρτέλα αναπληρωτή εκπαιδευτικού</th>";
+        echo "<th colspan=4 align=center>ΞΞ±ΟΟΞ­Ξ»Ξ± Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ® Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΟ</th>";
         echo "</tr>";
-        echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
-        echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
+        echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td>$surname</td><td>ΞΞ½ΞΏΞΌΞ±</td><td>$name</td></tr>";
+        echo "<tr><td>Ξ Ξ±ΟΟΟΞ½ΟΞΌΞΏ</td><td>$patrwnymo</td><td>ΞΞ·ΟΟΟΞ½ΟΞΌΞΏ</td><td>$mhtrwnymo</td></tr>";
 
-        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
-        echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id,$mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
-        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+        echo "<tr><td>Ξ.Ξ¦.Ξ.</td><td>$afm</td><td></td><td></td></tr>";
+        echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td>".getKlados($klados_id,$mysqlconnection, true)."</td><td>ΞΞ±ΟΞ¬ΟΟΞ±ΟΞ·</td><td>$katast</td></tr>";
+        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>ΞΞΌΟΞ¬Ξ½ΞΉΟΞ·/ΞΟΟΞΊΟΟΟΞ·<br>ΟΞ΅ΟΞΉΟΟΞΏΟΞ­ΟΟΞ½ ΟΟΞΏΞΉΟΞ΅Ξ―ΟΞ½</small></a></td>";
         echo "<td colspan=3><div class=\"slidingDiv\">";
-        echo "Τηλ.: $stathero - $kinhto<br>";
+        echo "Ξ€Ξ·Ξ».: $stathero - $kinhto<br>";
         echo "email: <a href='mailto:$email'>$email</a><br>";
         echo "</div>";
         echo "</td></tr>";
         
         //$hm_mk = date ('d-m-Y', strtotime($hm_mk));
-        //echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td></tr>";
+        //echo "<tr><td>ΞΞ±ΞΈΞΌΟΟ</td><td>$vathm</td><td>Ξ.Ξ.</td><td>$mk &nbsp;<small>(Ξ±ΟΟ $hm_mk)</small></td></tr>";
         switch ($met_did)
         {
                 case 0:
-                        $met="Όχι";
+                        $met="ΞΟΞΉ";
                         break;
                 case 1:
-                        $met="Μεταπτυχιακό";
+                        $met="ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ";
                         break;
                 case 2:
-                        $met="Διδακτορικό";
+                        $met="ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ";
                         break;
                 case 3:
-                        $met="Μετ. + Διδ.";
+                        $met="ΞΞ΅Ο. + ΞΞΉΞ΄.";
                         break;
         }
-        echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
+        echo "<tr><td colspan>ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ/ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ</td><td colspan=3>$met</td></tr>";
                         
-        echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br($comments)."</td></tr>"; 
-        echo "<tr><td>Υποχρεωτικό ωράριο</td><td colspan='3'>$wres</td></tr>";
+        echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±<br><br></td><td colspan='3'>".nl2br($comments)."</td></tr>"; 
+        echo "<tr><td>Ξ₯ΟΞΏΟΟΞ΅ΟΟΞΉΞΊΟ ΟΟΞ¬ΟΞΉΞΏ</td><td colspan='3'>$wres</td></tr>";
         
         // check if multiple schools
         if ($multi)
@@ -441,29 +440,29 @@ elseif ($_GET['op']=="view")
                 $count = count($yphr_arr);
                 for ($i=0; $i<$count; $i++)
                 {
-                $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
+                $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ΟΟΞ΅Ο)<br>";
                 $counthrs += $hours_arr[$i];
                 }
                 if ($count > 1)
-                echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
+                echo "<tr><td>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</td><td colspan=3>$sxoleia<br><small>($counthrs ΟΟΞ΅Ο ΟΞ΅ $count Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±)</small></td></tr>";
                 else
-                echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+                echo "<tr><td>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</td><td colspan=3>$sxoleia</td></tr>";
         }
         else
         {
-                echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3><a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a></td></tr>";
+                echo "<tr><td>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</td><td colspan=3><a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a></td></tr>";
         }
         $typos = get_type($type,$mysqlconnection);
-        echo "<tr><td>Ανάληψη υπηρεσίας</td><td colspan=3>$analipsi</td>";
+        echo "<tr><td>ΞΞ½Ξ¬Ξ»Ξ·ΟΞ· ΟΟΞ·ΟΞ΅ΟΞ―Ξ±Ο</td><td colspan=3>$analipsi</td>";
         $date_anal = date ("d-m-Y",  strtotime($hm_anal));
-        echo "<tr><td>Ημ/νία Ανάληψης</td><td colspan=3>$date_anal</td>";
+        echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞ½Ξ¬Ξ»Ξ·ΟΞ·Ο</td><td colspan=3>$date_anal</td>";
         if ($kat == 2){
                 $date_apox = date ("d-m-Y",  strtotime($hm_apox));
-                echo "<tr><td>Ημ/νία Αποχώρησης</td><td colspan=3>$date_apox</td>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± ΞΟΞΏΟΟΟΞ·ΟΞ·Ο</td><td colspan=3>$date_apox</td>";
         }
-        echo "<tr><td>Μετακινήσεις</td><td colspan=3>".nl2br($metakinhsh)."</td></tr>";
-        echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
-        echo "<tr><td>Πραξη</td><td colspan=3>";
+        echo "<tr><td>ΞΞ΅ΟΞ±ΞΊΞΉΞ½Ξ®ΟΞ΅ΞΉΟ</td><td colspan=3>".nl2br($metakinhsh)."</td></tr>";
+        echo "<tr><td>Ξ€ΟΟΞΏΟ ΞΟΞ±ΟΟΟΞ»Ξ·ΟΞ·Ο</td><td colspan=3>$typos</td>";
+        echo "<tr><td>Ξ ΟΞ±ΞΎΞ·</td><td colspan=3>";
         echo $sxoletos ? 
                 "<a href='ektaktoi_prev.php?praxi=$praxi'>".getNamefromTbl($mysqlconnection, "praxi_old", $praxi)."</a>" :
                 "<a href='ektaktoi_list.php?praxi=$praxi'>".getNamefromTbl($mysqlconnection, "praxi", $praxi)."</a>";
@@ -478,18 +477,18 @@ elseif ($_GET['op']=="view")
         $apofasi = mysqli_result($res, 0, 'apofasi');
         $ada = mysqli_result($res, 0, 'ada');
         $ada_apof = mysqli_result($res, 0, 'ada_apof');
-        echo "<tr><td>Υπουργική Απόφαση</td><td colspan=3>$ya</td></tr>";
-        echo "<tr><td>Α.Δ.Α. Y.A.</td><td colspan=3><a href='https://diavgeia.gov.gr/decision/view/$ada' target='_blank'>$ada</a></td></tr>";
-        echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi&nbsp;&nbsp;<small>(Α.Δ.Α.:&nbsp;<a href='https://diavgeia.gov.gr/decision/view/$ada_apof' target='_blank'>$ada_apof</a>)</small></td></tr>";
-        echo "<tr><td>Θέση</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
+        echo "<tr><td>Ξ₯ΟΞΏΟΟΞ³ΞΉΞΊΞ® ΞΟΟΟΞ±ΟΞ·</td><td colspan=3>$ya</td></tr>";
+        echo "<tr><td>Ξ.Ξ.Ξ. Y.A.</td><td colspan=3><a href='https://diavgeia.gov.gr/decision/view/$ada' target='_blank'>$ada</a></td></tr>";
+        echo "<tr><td>ΞΟΟΟΞ±ΟΞ· Ξ/Ξ½ΟΞ®</td><td colspan=3>$apofasi&nbsp;&nbsp;<small>(Ξ.Ξ.Ξ.:&nbsp;<a href='https://diavgeia.gov.gr/decision/view/$ada_apof' target='_blank'>$ada_apof</a>)</small></td></tr>";
+        echo "<tr><td>ΞΞ­ΟΞ·</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
         
 
-        echo "<tr><td>Βεβαίωση υπηρεσίας έως: </td><td>";
+        echo "<tr><td>ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ· ΟΟΞ·ΟΞ΅ΟΞ―Ξ±Ο Ξ­ΟΟ: </td><td>";
         //stringify schools
         $hour_sum = 0;
         for ($i=0; $i < count($yphr_arr); $i++)
         {
-          $schools .=  $yphr_arr[$i] ." (" . $hours_arr[$i] ." ώρες), ";
+          $schools .=  $yphr_arr[$i] ." (" . $hours_arr[$i] ." ΟΟΞ΅Ο), ";
           $hour_sum += $hours_arr[$i];
         }
         $schools = substr($schools, 0, -2); 
@@ -517,7 +516,7 @@ elseif ($_GET['op']=="view")
         echo "<input type='hidden' name='apofasi' value=$apofasi>";
         echo "<input type='hidden' name='sxoletos' value=$sxol_etos>";
         echo "<input type='hidden' name='schools' value='$schools'>";
-        echo "<INPUT TYPE='submit' value='Βεβαίωση υπηρεσίας'>"; 
+        echo "<INPUT TYPE='submit' value='ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ· ΟΟΞ·ΟΞ΅ΟΞ―Ξ±Ο'>"; 
         echo "</form>";
         //Form gia metakinhsh (only for user pispe)
         if ($_SESSION['user'] === 'pispe'){
@@ -534,7 +533,7 @@ elseif ($_GET['op']=="view")
           echo "<input type='hidden' name='ada_apof' value='$ada_apof'>";
           echo "<input type='hidden' name='yphrethsh' value='$schools'>";
           echo "<input type='hidden' name='id' value=$id>";
-          echo "<INPUT TYPE='submit' value='Μετακίνηση'>"; 
+          echo "<INPUT TYPE='submit' value='ΞΞ΅ΟΞ±ΞΊΞ―Ξ½Ξ·ΟΞ·'>"; 
           echo "</form>";
         }
         ?>
@@ -542,22 +541,22 @@ elseif ($_GET['op']=="view")
         <?php
         echo "</td><td colspan=2></td></tr>";
         
-        echo $updated > 0 ? "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>" : null;
+        echo $updated > 0 ? "<tr><td colspan=4 align='right'><small>Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ± Ξ΅Ξ½Ξ·ΞΌΞ­ΟΟΟΞ·: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>" : null;
         echo "	</table>";
         
         echo "<br>";
-        // echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>"; future use?
+        // echo "  <INPUT TYPE='submit' id='adeia' VALUE='ΞΞ΄Ξ΅ΞΉΞ΅Ο'>"; future use?
         if ($usrlvl < 3){
                 $can_edit = $_GET['sxoletos'] ? 'disabled' : '';
-                echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
+                echo "	<INPUT TYPE='button' VALUE='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
         }
-        echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
-        echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+        echo "  <input type='button' value='ΞΞΊΟΟΟΟΟΞ·' onclick='javascript:window.print()' />";
+        echo "  <INPUT TYPE='submit' id='adeia' VALUE='ΞΞ΄Ξ΅ΞΉΞ΅Ο'>";
         echo $sxoletos ?
-                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
-                "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
+                "   <INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞ· Ξ»Ξ―ΟΟΞ± Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
+                "   <INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞ· Ξ»Ξ―ΟΟΞ± Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½' onClick=\"parent.location='ektaktoi_list.php'\">";
 
-        echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+        echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
         ?>
         <div id="adeies"></div>
         <?php
@@ -578,10 +577,10 @@ if ($_GET['op']=="delete")
         // Copies the deleted row to employee)deleted
         
         if ($result)
-                echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
+                echo "Ξ Ξ΅Ξ³Ξ³ΟΞ±ΟΞ® ΞΌΞ΅ ΞΊΟΞ΄ΞΉΞΊΟ $id Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±.";
         else
-                echo "Η διαγραφή απέτυχε...";
-        echo "	<INPUT TYPE='button' class=btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+                echo "Ξ Ξ΄ΞΉΞ±Ξ³ΟΞ±ΟΞ® Ξ±ΟΞ­ΟΟΟΞ΅...";
+        echo "	<INPUT TYPE='button' class=btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='ektaktoi_list.php'\">";
 }
 
 mysqli_close($mysqlconnection);

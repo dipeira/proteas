@@ -1,11 +1,11 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
         session_start();
 ?>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Επεξεργασία σχολείου</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ± ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ</title>
   </head>
   <body> 
 <?php
@@ -14,8 +14,8 @@
   require_once"../tools/functions.php";
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   $titlos = $_POST['titlos'];
   $sch = $_POST['sch'];
@@ -69,16 +69,15 @@
   $query2 = ", klasiko = '$klasiko', oloimero_nip = '$oloimero_nip', nip = '$nip', kena_org = '$kena_org', kena_leit = '$kena_leit', titlos = '$titlos', tk = '$tk'";
   $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki' WHERE id=$sch";
   $query = $query0.$query1.$query2.$query3;
-  //$query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
   //echo $query;
   mysqli_query($mysqlconnection, $query);
 
-  //echo "Επιτυχής καταχώρηση!";
+  //echo "ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ·!";
   mysqli_close($mysqlconnection);
 ?>
 <br>
   <center>
-<h3>Επιτυχής καταχώρηση!</h3>
+<h3>ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ·!</h3>
 <br>
 <meta http-equiv="refresh" content="2; URL=school_status.php?org=<?php echo $sch;?>">
 </center>

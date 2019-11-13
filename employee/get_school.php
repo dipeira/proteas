@@ -1,9 +1,9 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7');
+header('Content-type: text/html; charset=utf-8');
 require_once "../config.php";
 $conn = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-mysqli_query($conn, "SET NAMES 'greek'");
-mysqli_query($conn, "SET CHARACTER SET 'greek'");
+mysqli_query($conn, "SET NAMES 'utf8'");
+mysqli_query($conn, "SET CHARACTER SET 'utf8'");
 
 $q = strtolower($_GET["q"]);
 $type = $_GET['type'];
@@ -18,7 +18,6 @@ if ($type > 0) {
 } else {
   $sql = "select DISTINCT name from school where name LIKE '%$q%'";
 }
-$sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
 
 $rsd = mysqli_query($conn,$sql);
 while($rs = mysqli_fetch_array($rsd)) {

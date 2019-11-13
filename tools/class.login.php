@@ -212,13 +212,13 @@ Your new password is: ".$newpassword."
     <img src="../images/logo.png" alt="Avatar" class="avatar">
 </div>
 <div class="container">
-    <label for="username"><b>Όνομα Χρήστη</b></label>
-    <input type="text" id="username" placeholder="Εισάγετε όνομα χρήστη" name="username" required>
+    <label for="username"><b>ΞΞ½ΞΏΞΌΞ± Ξ§ΟΞ®ΟƒΟ„Ξ·</b></label>
+    <input type="text" id="username" placeholder="Ξ•ΞΉΟƒΞ¬Ξ³ΞµΟ„Ξµ ΟΞ½ΞΏΞΌΞ± Ο‡ΟΞ®ΟƒΟ„Ξ·" name="username" required>
 
-    <label for="password"><b>Κωδικός</b></label>
-    <input type="password" id="password" placeholder="Εισάγετε κωδικό" name="password" required>
+    <label for="password"><b>ΞΟ‰Ξ΄ΞΉΞΊΟΟ‚</b></label>
+    <input type="password" id="password" placeholder="Ξ•ΞΉΟƒΞ¬Ξ³ΞµΟ„Ξµ ΞΊΟ‰Ξ΄ΞΉΞΊΟ" name="password" required>
     <input name="action" id="action" value="login" type="hidden">
-    <button type="submit" id="submit">Είσοδος στο σύστημα</button>
+    <button type="submit" id="submit">Ξ•Ξ―ΟƒΞΏΞ΄ΞΏΟ‚ ΟƒΟ„ΞΏ ΟƒΟΟƒΟ„Ξ·ΞΌΞ±</button>
 </div>
 </form>
 ';

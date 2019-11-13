@@ -1,5 +1,5 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
 ?>
 <!DOCTYPE html>
@@ -7,22 +7,22 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Σχετικά</title>
+    <title>Ξ£Ο‡ΞµΟ„ΞΉΞΊΞ¬</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/style.css" />
 </head>
 <body>
     <?php require '../etc/menu.php'; ?>
-    <h2>Σχετικά</h2>
+    <h2>Ξ£Ο‡ΞµΟ„ΞΉΞΊΞ¬</h2>
     <p>
-        Το project <b>Πρωτέας</b> σχεδιάστηκε και αναπτύσσεται από τον εκπαιδευτικό Πληροφορικής Δ.Ε. ΠΕ20 Βαγγέλη Ζαχαριουδάκη <br>
-        από το σχολικό έτος 2011-2012 έως σήμερα, για λογαριασμό της Δ/νσης Πρωτοβάθμιας Εκπαίδευσης Ν.Ηρακλείου.
+        Ξ¤ΞΏ project <b>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</b> ΟƒΟ‡ΞµΞ΄ΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ ΞΊΞ±ΞΉ Ξ±Ξ½Ξ±Ο€Ο„ΟΟƒΟƒΞµΟ„Ξ±ΞΉ Ξ±Ο€Ο Ο„ΞΏΞ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟ Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞΉΞΊΞ®Ο‚ Ξ”.Ξ•. Ξ Ξ•20 Ξ’Ξ±Ξ³Ξ³Ξ­Ξ»Ξ· Ξ–Ξ±Ο‡Ξ±ΟΞΉΞΏΟ…Ξ΄Ξ¬ΞΊΞ· <br>
+        Ξ±Ο€Ο Ο„ΞΏ ΟƒΟ‡ΞΏΞ»ΞΉΞΊΟ Ξ­Ο„ΞΏΟ‚ 2011-2012 Ξ­Ο‰Ο‚ ΟƒΞ®ΞΌΞµΟΞ±, Ξ³ΞΉΞ± Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΟ Ο„Ξ·Ο‚ Ξ”/Ξ½ΟƒΞ·Ο‚ Ξ ΟΟ‰Ο„ΞΏΞ²Ξ¬ΞΈΞΌΞΉΞ±Ο‚ Ξ•ΞΊΟ€Ξ±Ξ―Ξ΄ΞµΟ…ΟƒΞ·Ο‚ Ξ.Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ….
         <br><br>
-        Η ανάπτυξη γίνεται εξ'ολοκλήρου με <a href="http://www.gnu.org/philosophy/free-sw.html">λογισμικό ανοιχτού κώδικα (open-source)</a>.<br>
+        Ξ— Ξ±Ξ½Ξ¬Ο€Ο„Ο…ΞΎΞ· Ξ³Ξ―Ξ½ΞµΟ„Ξ±ΞΉ ΞµΞΎ'ΞΏΞ»ΞΏΞΊΞ»Ξ®ΟΞΏΟ… ΞΌΞµ <a href="http://www.gnu.org/philosophy/free-sw.html">Ξ»ΞΏΞ³ΞΉΟƒΞΌΞΉΞΊΟ Ξ±Ξ½ΞΏΞΉΟ‡Ο„ΞΏΟ ΞΊΟΞ΄ΞΉΞΊΞ± (open-source)</a>.<br>
 
-        Τα εργαλεία που χρησιμοποιούνται είναι η γλώσσα <a href="http://www.php.net/">PHP</a>, η βάση δεδομένων <a href="http://www.mysql.com/">MySQL</a> και ο web server <a href="http://www.apache.org/">Apache</a>.
+        Ξ¤Ξ± ΞµΟΞ³Ξ±Ξ»ΞµΞ―Ξ± Ο€ΞΏΟ… Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½Ο„Ξ±ΞΉ ΞµΞ―Ξ½Ξ±ΞΉ Ξ· Ξ³Ξ»ΟΟƒΟƒΞ± <a href="http://www.php.net/">PHP</a>, Ξ· Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ <a href="http://www.mysql.com/">MySQL</a> ΞΊΞ±ΞΉ ΞΏ web server <a href="http://www.apache.org/">Apache</a>.
         <br><br><br>
-        Βιβλιοθήκες - εργαλεία που χρησιμοποιούνται:
+        Ξ’ΞΉΞ²Ξ»ΞΉΞΏΞΈΞ®ΞΊΞµΟ‚ - ΞµΟΞ³Ξ±Ξ»ΞµΞ―Ξ± Ο€ΞΏΟ… Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½Ο„Ξ±ΞΉ:
         <ul>
             <li><a href="https://jquery.com/">jQuery</a></li>
             <li><a href="https://datatables.net/">DataTables</a></li>
@@ -37,9 +37,9 @@
             <li><a href="https://code.tutsplus.com/tutorials/how-to-paginate-data-with-php--net-2928">Paginator</a></li>            
         </ul>
         <br>
-        <p>Επικοινωνία με το δημιουργό: sugarv@sch.gr</p>
-        <p>Ο Πρωτέας στο GitHub: <a href='https://github.com/dipeira/proteas' target="_blank"><img style='width:32px;' src="../images/github.png" alt=""></a></p>
+        <p>Ξ•Ο€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ―Ξ± ΞΌΞµ Ο„ΞΏ Ξ΄Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ο: sugarv@sch.gr</p>
+        <p>Ξ Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚ ΟƒΟ„ΞΏ GitHub: <a href='https://github.com/dipeira/proteas' target="_blank"><img style='width:32px;' src="../images/github.png" alt=""></a></p>
     </p>
-    <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+    <INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </body>
 </html>

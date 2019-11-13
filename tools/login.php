@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Πρωτέας</title>
+    <title>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/login.css" />
 </head>
 <body>
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     require_once("../config.php");
     include("class.login.php");
     $log = new logmein();     //Instentiate the class
@@ -33,8 +33,8 @@
         }
         else {
           $log->loginform("login", "login-form", "");
-          echo "<center><h2>H είσοδος απέτυχε...</h2>";
-          echo "<p>Παρακαλώ δοκιμάστε με έναν έγκυρο συνδυασμό ονόματος χρήστη - κωδικού...</p></center>";
+          echo "<center><h2>H ΞµΞ―ΟƒΞΏΞ΄ΞΏΟ‚ Ξ±Ο€Ξ­Ο„Ο…Ο‡Ξµ...</h2>";
+          echo "<p>Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΞΏΞΊΞΉΞΌΞ¬ΟƒΟ„Ξµ ΞΌΞµ Ξ­Ξ½Ξ±Ξ½ Ξ­Ξ³ΞΊΟ…ΟΞΏ ΟƒΟ…Ξ½Ξ΄Ο…Ξ±ΟƒΞΌΟ ΞΏΞ½ΟΞΌΞ±Ο„ΞΏΟ‚ Ο‡ΟΞ®ΟƒΟ„Ξ· - ΞΊΟ‰Ξ΄ΞΉΞΊΞΏΟ...</p></center>";
         }
     }
 ?>    

@@ -1,13 +1,12 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once "../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -20,8 +19,8 @@
 <html>
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Αναζήτηση Αδειών</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ· ΞΞ΄Ξ΅ΞΉΟΞ½</title>
 	
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -51,7 +50,7 @@
   <body> 
   <?php include('../etc/menu.php'); ?>
     <center>
-	 <h2>Αναζήτηση αδειών</h2>
+	 <h2>ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ· Ξ±Ξ΄Ξ΅ΞΉΟΞ½</h2>
 	 <br>
       <?php
         //session_start();
@@ -59,8 +58,8 @@
         //echo $usrlvl;
          if ($usrlvl>2)
             {
-                echo "Δεν έχετε δικαίωμα να αναζητήσετε στις άδειες.<br>";
-                echo "Πατήστε <a href='../index.php'>εδώ</a> για επιστροφή...";
+                echo "ΞΞ΅Ξ½ Ξ­ΟΞ΅ΟΞ΅ Ξ΄ΞΉΞΊΞ±Ξ―ΟΞΌΞ± Ξ½Ξ± Ξ±Ξ½Ξ±ΞΆΞ·ΟΞ®ΟΞ΅ΟΞ΅ ΟΟΞΉΟ Ξ¬Ξ΄Ξ΅ΞΉΞ΅Ο.<br>";
+                echo "Ξ Ξ±ΟΞ®ΟΟΞ΅ <a href='../index.php'>Ξ΅Ξ΄Ο</a> Ξ³ΞΉΞ± Ξ΅ΟΞΉΟΟΟΞΏΟΞ®...";
                 //sleep (6);
                 //header("Location: index.php");
                 //header("Refresh: 6; url=index.php");  
@@ -70,7 +69,7 @@
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
 		echo "<table class=\"imagetable stable\" border='1'>";
-		echo "<tr><td>Ημ/νία από: </td><td>";
+		echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±ΟΟ: </td><td>";
 		$myCalendar = new tc_calendar("hm_from", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		$myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -84,7 +83,7 @@
 		$myCalendar->writeScript();
 	  	echo "</td></tr>";
 		
-		echo "<tr><td>Ημ/νία έως</td><td>";
+		echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ­ΟΟ</td><td>";
 		$myCalendar = new tc_calendar("hm_to", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		$myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -96,19 +95,19 @@
 		$myCalendar->writeScript();
 	  	echo "</td></tr>";	
 		
-                echo "<tr><td>Είδος</td><td>";
+                echo "<tr><td>ΞΞ―Ξ΄ΞΏΟ</td><td>";
                 adeiaCmb($type,$mysqlconnection);
                 echo "</td></tr>";
                 
                 echo "<tr><td colspan=2>";
-                echo "<input type='radio' name='mon_anapl' value='0' checked >Μόνιμοι<br>";
-                echo "<input type='radio' name='mon_anapl' value='1'>Αναπληρωτές<br>";
+                echo "<input type='radio' name='mon_anapl' value='0' checked >ΞΟΞ½ΞΉΞΌΞΏΞΉ<br>";
+                echo "<input type='radio' name='mon_anapl' value='1'>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο<br>";
                 echo "</td></tr>";
                 		
 		echo "	</table>";
-		echo "	<input type='submit' value='Αναζήτηση'>";
-		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+		echo "	<input type='submit' value='ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·'>";
+		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"ΞΟΞ±Ξ½Ξ±ΟΞΏΟΞ¬\" onClick=\"window.location.reload()\">";
+		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";
          }	

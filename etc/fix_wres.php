@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once "config.php";
 	require_once "functions.php";
 	require('calendar/tc_calendar.php');  
@@ -32,8 +32,8 @@
             
 		$updates = $fails = 0;
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 		//$query = "SELECT * from employee";
                 $query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = 201415";
 		$result = mysqli_query($mysqlconnection, $query);
@@ -70,13 +70,13 @@
                 
     mysqli_close($mysqlconnection);
                 
-                echo "ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ $updates ÿÿÿÿÿÿÿÿÿÿÿ ÿÿÿ ÿ.ÿ. (ÿÿ ÿÿÿÿÿÿ $synolo ÿÿÿÿÿÿÿÿÿ)";
+                echo "ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£» $updates ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£» ï£»ï£»ï£» ï£».ï£». (ï£»ï£» ï£»ï£»ï£»ï£»ï£»ï£» $synolo ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»)";
                 if ($fails)
-                    echo "<br>$fails ÿÿÿÿÿÿÿÿÿ.";
+                    echo "<br>$fails ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£».";
                 
 
 	//}
 ?>
 <br><br>
-<a href="index.php">ÿÿÿÿÿÿÿÿÿ</a>
+<a href="index.php">ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»ï£»</a>
 </html>

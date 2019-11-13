@@ -1,8 +1,8 @@
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Πίνακας λειτουργικών κενών</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΟΞ½ ΞΊΞ΅Ξ½ΟΞ½</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -27,8 +27,8 @@
     session_start();
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
     // only dhmosia (type2 = 0)
     $query = "SELECT * from school WHERE type2 = 0 AND type = 1 AND anenergo=0";
@@ -39,10 +39,10 @@
 
     echo "<body>";
     require '../etc/menu.php';
-    echo "<h3>Πίνακας λειτουργικών κενών</h3>";
+    echo "<h3>Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΟΞ½ ΞΊΞ΅Ξ½ΟΞ½</h3>";
     echo $oligothesia ? 
-        "<p><a href='report_leit.php'>4/θέσια & άνω</a>&nbsp;&nbsp;Ολιγοθέσια</p>" :
-        "<p>4/θέσια & άνω&nbsp;&nbsp;<a href='report_leit.php?oligothesia=1'>Ολιγοθέσια</a></p>";
+        "<p><a href='report_leit.php'>4/ΞΈΞ­ΟΞΉΞ± & Ξ¬Ξ½Ο</a>&nbsp;&nbsp;ΞΞ»ΞΉΞ³ΞΏΞΈΞ­ΟΞΉΞ±</p>" :
+        "<p>4/ΞΈΞ­ΟΞΉΞ± & Ξ¬Ξ½Ο&nbsp;&nbsp;<a href='report_leit.php?oligothesia=1'>ΞΞ»ΞΉΞ³ΞΏΞΈΞ­ΟΞΉΞ±</a></p>";
     echo "<center>";
     $i=0;
     ob_start();
@@ -50,45 +50,45 @@
     echo "<thead>";
     
 if ($oligothesia) {
-    echo "<tr><th>Κωδ.</th>";
-    echo "<th>Ονομασία</th>";
-    echo "<th>Οργ.</th>";
-    echo "<th>Λειτ.</th>";
-    echo "<th>Ολ.</th>";
-    echo "<th>Τοπ.<br>ΠΕ70</th>";
-    echo "<th>Ωρ. Πρ.</th>";
-    echo "<th>Ωρ. Ολ.</th>";
-    echo "<th>Συν. Ωρ.</th>";
+    echo "<tr><th>ΞΟΞ΄.</th>";
+    echo "<th>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+    echo "<th>ΞΟΞ³.</th>";
+    echo "<th>ΞΞ΅ΞΉΟ.</th>";
+    echo "<th>ΞΞ».</th>";
+    echo "<th>Ξ€ΞΏΟ.<br>Ξ Ξ70</th>";
+    echo "<th>Ξ©Ο. Ξ Ο.</th>";
+    echo "<th>Ξ©Ο. ΞΞ».</th>";
+    echo "<th>Ξ£ΟΞ½. Ξ©Ο.</th>";
 }
 if (!$oligothesia) {
-    echo "<tr><th rowspan=2>Κωδ.</th>";
-    echo "<th rowspan=2>Ονομασία</th>";
-    echo "<th rowspan=2>Οργ.</th>";
-    echo "<th rowspan=2>Λειτ.</th>";
-    echo "<th rowspan=2>Ολ.</th>";
-    echo "<th rowspan=2>Τοπ.<br>ΠΕ70</th>";
+    echo "<tr><th rowspan=2>ΞΟΞ΄.</th>";
+    echo "<th rowspan=2>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+    echo "<th rowspan=2>ΞΟΞ³.</th>";
+    echo "<th rowspan=2>ΞΞ΅ΞΉΟ.</th>";
+    echo "<th rowspan=2>ΞΞ».</th>";
+    echo "<th rowspan=2>Ξ€ΞΏΟ.<br>Ξ Ξ70</th>";
     // new
-    echo "<th rowspan=2>Ωρ. Πρ.</th>";
-    echo "<th rowspan=2>Ωρ. Ολ.</th>";
-    echo "<th rowspan=2>Συν. Ωρ.</th>";
-    echo "<th rowspan=2>Συν. Παρ.</th>";
-    //echo "<th rowspan=2>Yπαρ. Ωρ.06,<br>11,79</th>";
+    echo "<th rowspan=2>Ξ©Ο. Ξ Ο.</th>";
+    echo "<th rowspan=2>Ξ©Ο. ΞΞ».</th>";
+    echo "<th rowspan=2>Ξ£ΟΞ½. Ξ©Ο.</th>";
+    echo "<th rowspan=2>Ξ£ΟΞ½. Ξ Ξ±Ο.</th>";
+    //echo "<th rowspan=2>YΟΞ±Ο. Ξ©Ο.06,<br>11,79</th>";
     //echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
     //echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
-    echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
-    echo "<th colspan=11>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
+    echo "<th colspan=8>Ξ₯ΟΞ¬ΟΟΞΏΟΞ½ +/- <small>(ΞΌΞ΅ Ξ/Ξ½ΟΞ®, ΟΞ΅ ΟΟΞ΅Ο)</small></th>";
+    echo "<th colspan=11>ΞΞ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΞ¬ ΞΞ΅Ξ½Ξ¬ +/- <small>(ΟΞ΅ ΟΟΞ΅Ο)</small></th>";
     echo "</tr>";
     echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
     echo "<th>70</th>";
 } else {
-    echo "<th>Υπ.70</th>";
+    echo "<th>Ξ₯Ο.70</th>";
 }
     
 if (!$oligothesia) {
     echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
-    echo "<th>70</th><th>70+Ολ+ΠΖ <strong>(A)</strong></th>";
+    echo "<th>70</th><th>70+ΞΞ»+Ξ Ξ <strong>(A)</strong></th>";
 } else {
-    echo "<th>Απαιτ.70</th><th>Απαιτ.70<br>+(Ολ+ΠΖ) <strong>(A)</strong></th>";
+    echo "<th>ΞΟΞ±ΞΉΟ.70</th><th>ΞΟΞ±ΞΉΟ.70<br>+(ΞΞ»+Ξ Ξ) <strong>(A)</strong></th>";
 }
     
     echo "<th>+/- 08,11,<br>79,91 <strong>(B)</strong></th><th>A+B</th><th>+/- T.E.</th>";
@@ -133,7 +133,7 @@ while ($i < $num)
         continue;
     }
         
-    // τοποθετηθέντες ΠΕ70
+    // ΟΞΏΟΞΏΞΈΞ΅ΟΞ·ΞΈΞ­Ξ½ΟΞ΅Ο Ξ Ξ70
     $qry = "SELECT count(*) as cnt FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 AND thesi IN (0,1,2)";
     $rs = mysqli_query($mysqlconnection, $qry);
     $top70 = mysqli_result($rs, 0, "cnt");
@@ -226,7 +226,7 @@ while ($i < $num)
     
     echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
 if (!$oligothesia) {
-    echo "</td><td colspan=3>ΣΥΝΟΛΑ</td>";
+    echo "</td><td colspan=3>Ξ£Ξ₯ΞΞΞΞ</td>";
     echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['79']."</td><td>".$par_sum['91']."</td><td>".$par_sum['86']."</td>";
 }
     echo "<td>".$par_sum['70']."</td>\n";
@@ -238,7 +238,7 @@ if (!$oligothesia) {
     
     echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
 if (!$oligothesia) {
-    echo "</td><td colspan=3>ΣΥΝΟΛΑ (εκπ)</td>";
+    echo "</td><td colspan=3>Ξ£Ξ₯ΞΞΞΞ (Ξ΅ΞΊΟ)</td>";
     echo "<td>".$par_sum_t['05-07']."</td><td>".$par_sum_t['06']."</td><td>".$par_sum_t['08']."</td><td>".$par_sum_t['11']."</td><td>".$par_sum_t['79']."</td><td>".$par_sum_t['91']."</td><td>".$par_sum_t['86']."</td>";
 }
     echo "<td>".$par_sum_t['70']."</td>\n";
@@ -253,14 +253,14 @@ if (!$oligothesia) {
     //echo "<td>".$kena_sum['05-07']."</td><td>".$kena_sum['06']."</td><td>".$kena_sum['08']."</td><td>".$kena_sum['11']."</td><td>".$kena_sum['79']."</td><td>".$kena_sum['91']."</td><td>".$kena_sum['86']."</td><td>".$kena_sum['70']."</td><td></td><td></td><td></td>\n";
 
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td>";
-    //echo "<td></td><td></td><td colspan=3>MONO KENA (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+    //echo "<td></td><td></td><td colspan=3>MONO KENA (Ξ΅ΞΊΟ)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
     //echo "<td>".$kena_sum_t['05-07']."</td><td>".$kena_sum_t['06']."</td><td>".$kena_sum_t['08']."</td><td>".$kena_sum_t['11']."</td><td>".$kena_sum_t['79']."</td><td>".$kena_sum_t['91']."</td><td>".$kena_sum_t['86']."</td><td>".$kena_sum_t['70']."</td><td></td><td></td><td></td>\n";
     
 if (!$oligothesia) {
     echo "<tr><td></td><td></td><td></td><td></td><td></td>";//<td></td>";
     echo "<td></td><td></td><td></td><td></td><td></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
-    echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
+    echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(ΞΞ»+Ξ Ξ)</i></td><td></td><td></td></i>";
     echo "<td></td></tr>";
 }
     echo "</tbody></table>";
@@ -271,9 +271,9 @@ if (!$oligothesia) {
     ob_end_flush();
 
     echo "<form action='../tools/2excel_ses.php' method='post'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
     //ob_end_clean();
 ?>

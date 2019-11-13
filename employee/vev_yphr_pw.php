@@ -46,11 +46,11 @@ $document->setValue('yphr', $data_array['ymd']);
 
 // head title & name
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
-$data = mb_convert_encoding(getParam('head_title', $mysqlconnection), "utf-8", "iso-8859-7");
+mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+$data = getParam('head_title', $mysqlconnection);
 $document->setValue('headtitle', $data);
-$data = mb_convert_encoding(getParam('head_name', $mysqlconnection), "utf-8", "iso-8859-7");
+$data = getParam('head_name', $mysqlconnection);
 $document->setValue('headname', $data);
 
 $mk = get_mk($data_array['id'], $mysqlconnection)['mk'];
@@ -62,8 +62,8 @@ $output1 = $anadr ?
   
 $document->save($output1);
 
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 echo "<html>";
-echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
+echo "<p><a href=$output1>Ξ‘Ξ½ΞΏΞΉΞ³ΞΌΞ± ΞµΞ³Ξ³ΟΞ¬Ο†ΞΏΟ…</a></p>";
 echo "</html>";
 ?>

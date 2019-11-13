@@ -1,11 +1,11 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
 ?>
 <html>
   <head>
 	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Εισαγωγή δεδομένων από αρχείο</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ Ξ±ΟΟ Ξ±ΟΟΞ΅Ξ―ΞΏ</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
   </head>
   <body>
@@ -30,49 +30,49 @@
   // check if admin
   if ($_SESSION['userlevel'] > 0)
   {
-    echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτής της ενέργειας. Επικοινωνήστε με το διαχειριστή σας.</h3>";
+    echo "<br><br><h3>ΞΞ΅Ξ½ Ξ­ΟΞ΅ΟΞ΅ Ξ΄ΞΉΞΊΞ±Ξ―ΟΞΌΞ± Ξ³ΞΉΞ± ΟΞ·Ξ½ ΟΟΞ±Ξ³ΞΌΞ±ΟΞΏΟΞΏΞ―Ξ·ΟΞ· Ξ±ΟΟΞ®Ο ΟΞ·Ο Ξ΅Ξ½Ξ­ΟΞ³Ξ΅ΞΉΞ±Ο. ΞΟΞΉΞΊΞΏΞΉΞ½ΟΞ½Ξ®ΟΟΞ΅ ΞΌΞ΅ ΟΞΏ Ξ΄ΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® ΟΞ±Ο.</h3>";
     die();
   }
 
   if (!isset($_POST['submit']))
   {
     echo "<IMG src='../images/logo.png' class='applogo'></a>";
-    echo "<h2> Εισαγωγή δεδομένων στη βάση δεδομένων </h2>";
+    echo "<h2> ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ ΟΟΞ· Ξ²Ξ¬ΟΞ· Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ </h2>";
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
-    echo "<b>Βήμα 1.</b> Επιλογή αρχείου προς συμπλήρωση:<br>";
-    echo "<ul><li><a href='employees.csv'>Μόνιμοι</a></li>";
-    echo "<li><a href='schools.csv'>Σχολεία</a></li>";
-    echo "<li><a href='students_ds.csv'>Μαθητές / Τμήματα Δ.Σ.</a></li>";
-    echo "<li><a href='students_nip.csv'>Μαθητές / Τμήματα Νηπ.</a></li></ul>";
-    echo "<b>Βήμα 2.</b> Επιλογή τύπου δεδομένων:<br>";
-    echo "<input type='radio' name='type' value='1'>α) Μόνιμοι<br>";
-    echo "<input type='radio' name='type' value='2'>β) Σχολεία<br>";
-    echo "<input type='radio' name='type' value='3'>γ) Μαθητές / Τμήματα Δ.Σ.<br>";
-    echo "<input type='radio' name='type' value='4'>δ) Μαθητές / Τμήματα Νηπ.<br>";
-    echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα γ, δ να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
-    echo "<br><b>Βήμα 3.</b> Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
+    echo "<b>ΞΞ®ΞΌΞ± 1.</b> ΞΟΞΉΞ»ΞΏΞ³Ξ® Ξ±ΟΟΞ΅Ξ―ΞΏΟ ΟΟΞΏΟ ΟΟΞΌΟΞ»Ξ®ΟΟΟΞ·:<br>";
+    echo "<ul><li><a href='employees.csv'>ΞΟΞ½ΞΉΞΌΞΏΞΉ</a></li>";
+    echo "<li><a href='schools.csv'>Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</a></li>";
+    echo "<li><a href='students_ds.csv'>ΞΞ±ΞΈΞ·ΟΞ­Ο / Ξ€ΞΌΞ®ΞΌΞ±ΟΞ± Ξ.Ξ£.</a></li>";
+    echo "<li><a href='students_nip.csv'>ΞΞ±ΞΈΞ·ΟΞ­Ο / Ξ€ΞΌΞ®ΞΌΞ±ΟΞ± ΞΞ·Ο.</a></li></ul>";
+    echo "<b>ΞΞ®ΞΌΞ± 2.</b> ΞΟΞΉΞ»ΞΏΞ³Ξ® ΟΟΟΞΏΟ Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½:<br>";
+    echo "<input type='radio' name='type' value='1'>Ξ±) ΞΟΞ½ΞΉΞΌΞΏΞΉ<br>";
+    echo "<input type='radio' name='type' value='2'>Ξ²) Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±<br>";
+    echo "<input type='radio' name='type' value='3'>Ξ³) ΞΞ±ΞΈΞ·ΟΞ­Ο / Ξ€ΞΌΞ®ΞΌΞ±ΟΞ± Ξ.Ξ£.<br>";
+    echo "<input type='radio' name='type' value='4'>Ξ΄) ΞΞ±ΞΈΞ·ΟΞ­Ο / Ξ€ΞΌΞ®ΞΌΞ±ΟΞ± ΞΞ·Ο.<br>";
+    echo "<br><b>Ξ Ξ‘ΞΞ£ΞΞ§Ξ: </b> Ξ€Ξ± Ξ³, Ξ΄ Ξ½Ξ± Ξ΅ΞΉΟΞ¬Ξ³ΞΏΞ½ΟΞ±ΞΉ Ξ±ΟΞΏΟ Ξ±Ξ»Ξ»Ξ¬ΞΎΞ΅ΞΉ ΟΞΏ ΟΟ. Ξ­ΟΞΏΟ.<br />\n";
+    echo "<br><b>ΞΞ®ΞΌΞ± 3.</b> Ξ₯ΟΞΏΞ²ΞΏΞ»Ξ® ΟΟΞΌΟΞ»Ξ·ΟΟΞΌΞ­Ξ½ΞΏΟ Ξ±ΟΟΞ΅Ξ―ΞΏΟ ΟΟΞΏΟ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ®:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
-    print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
-    echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small>";
+    print "<input type='submit' name='submit' value='ΞΞ΅ΟΞ±ΟΟΟΟΟΟΞ·'></form>";
+    echo "<small>Ξ£ΞΞ.: Ξ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ΅Ξ½Ξ΄Ξ­ΟΞ΅ΟΞ±ΞΉ Ξ½Ξ± Ξ΄ΞΉΞ±ΟΞΊΞ­ΟΞ΅ΞΉ ΞΌΞ΅ΟΞΉΞΊΞ¬ Ξ»Ξ΅ΟΟΞ¬, Ξ΅ΞΉΞ΄ΞΉΞΊΞ¬ Ξ³ΞΉΞ± ΞΌΞ΅Ξ³Ξ¬Ξ»Ξ± Ξ±ΟΟΞ΅Ξ―Ξ±.<br>ΞΞ· ΟΟΞ³Ξ΅ΟΞ΅ Ξ±ΟΟ ΟΞ· ΟΞ΅Ξ»Ξ―Ξ΄Ξ± Ξ±Ξ½ Ξ΄Ξ΅Ξ½ ΟΞ¬ΟΞ΅ΟΞ΅ ΞΊΞ¬ΟΞΏΞΉΞΏ ΞΌΞ®Ξ½ΟΞΌΞ±.</small>";
     echo "</form>";
-    echo "<br><a href='ektaktoi_import.php'>Εισαγωγή αναπληρωτών</a>";
+    echo "<br><a href='ektaktoi_import.php'>ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½</a>";
     echo "<br><br>";
-    echo "<a href='../index.php'>Επιστροφή</a>";
+    echo "<a href='../index.php'>ΞΟΞΉΟΟΟΞΏΟΞ®</a>";
     exit;
   }
 		
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   if (!isset($_POST['type'])){
-    echo "<h3>Σφάλμα: Δεν επιλέξατε τύπο δεδομένων.</h3>";
-    echo "<br><a href='import.php'>Επιστροφή</a>";
+    echo "<h3>Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ΅Ξ½ Ξ΅ΟΞΉΞ»Ξ­ΞΎΞ±ΟΞ΅ ΟΟΟΞΏ Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½.</h3>";
+    echo "<br><a href='import.php'>ΞΟΞΉΟΟΟΞΏΟΞ®</a>";
     die();
   }
   //Upload File
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
-      echo "<h3>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</h3>";
+      echo "<h3>" . "To Ξ±ΟΟΞ΅Ξ―ΞΏ ". $_FILES['filename']['name'] ." Ξ±Ξ½Ξ­Ξ²Ξ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±." . "</h3>";
 
       //Import uploaded file to Database
       $handle = fopen($_FILES['filename']['tmp_name'], "r");
@@ -123,8 +123,8 @@
 
           if ($csvcols <> $tblcols)
           {
-            echo "<h3>Σφάλμα: Λάθος αρχείο (Στήλες αρχείου: $csvcols <> στήλες πίνακα: $tblcols)</h3>";
-            echo "<a href='import.php'>Επιστροφή</a>";
+            echo "<h3>Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ¬ΞΈΞΏΟ Ξ±ΟΟΞ΅Ξ―ΞΏ (Ξ£ΟΞ®Ξ»Ξ΅Ο Ξ±ΟΟΞ΅Ξ―ΞΏΟ: $csvcols <> ΟΟΞ®Ξ»Ξ΅Ο ΟΞ―Ξ½Ξ±ΞΊΞ±: $tblcols)</h3>";
+            echo "<a href='import.php'>ΞΟΞΉΟΟΟΞΏΟΞ®</a>";
             die();
           }
           else
@@ -140,17 +140,17 @@
             $sx_yphr = getSchoolFromCode($data[24],$mysqlconn);
             if (!$sx_organ || !$sx_yphr){
               $error = true;
-              $er_msg = 'Σφάλμα: Δε βρέθηκε ο 7ψήφιος κωδικός σχολείου: ';
+              $er_msg = 'Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ΅ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ΅ ΞΏ 7ΟΞ®ΟΞΉΞΏΟ ΞΊΟΞ΄ΞΉΞΊΟΟ ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ: ';
               $er_msg .= !$sx_organ ? $data[24] : $data[23];
-              $er_msg .= " (γραμμή ".($num+1).")";
+              $er_msg .= " (Ξ³ΟΞ±ΞΌΞΌΞ® ".($num+1).")";
               break;
             }
             // check if am exists
             $qry = "SELECT * FROM employee WHERE am = $data[5]";
             if (mysqli_num_rows(mysqli_query($mysqlconnection, $qry)) ){
               $error = true;
-              $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΜ ".$data[5]." υπάρχει ήδη...";
-              $er_msg .= " (γραμμή ".($num+1).")";
+              $er_msg ="Ξ£ΟΞ¬Ξ»ΞΌΞ±: Ξ ΟΟΞ¬Ξ»Ξ»Ξ·Ξ»ΞΏΟ ΞΌΞ΅ ΞΞ ".$data[5]." ΟΟΞ¬ΟΟΞ΅ΞΉ Ξ®Ξ΄Ξ·...";
+              $er_msg .= " (Ξ³ΟΞ±ΞΌΞΌΞ® ".($num+1).")";
               break;
             }
             // fix dates
@@ -182,8 +182,8 @@
             $qry = "SELECT * FROM school WHERE code = $data[0]";
             if (mysqli_num_rows(mysqli_query($mysqlconnection, $qry)) ){
               $error = true;
-              $er_msg ="Σφάλμα: Το σχολείο με κωδικό ".$data[0]." υπάρχει ήδη...";
-              $er_msg .= " (γραμμή ".($num+1).")";
+              $er_msg ="Ξ£ΟΞ¬Ξ»ΞΌΞ±: Ξ€ΞΏ ΟΟΞΏΞ»Ξ΅Ξ―ΞΏ ΞΌΞ΅ ΞΊΟΞ΄ΞΉΞΊΟ ".$data[0]." ΟΟΞ¬ΟΟΞ΅ΞΉ Ξ®Ξ΄Ξ·...";
+              $er_msg .= " (Ξ³ΟΞ±ΞΌΞΌΞ® ".($num+1).")";
               break;
             }
             $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2) 
@@ -200,12 +200,12 @@
             $res = mysqli_query($mysqlconnection, $qry);
             if (!mysqli_num_rows($res) ){
               $error = true;
-              $er_msg ="Σφάλμα: Το σχολείο με κωδικό ".$data[0]." δεν υπάρχει...";
-              $er_msg .= " (γραμμή ".($num+1).")";
+              $er_msg ="Ξ£ΟΞ¬Ξ»ΞΌΞ±: Ξ€ΞΏ ΟΟΞΏΞ»Ξ΅Ξ―ΞΏ ΞΌΞ΅ ΞΊΟΞ΄ΞΉΞΊΟ ".$data[0]." Ξ΄Ξ΅Ξ½ ΟΟΞ¬ΟΟΞ΅ΞΉ...";
+              $er_msg .= " (Ξ³ΟΞ±ΞΌΞΌΞ® ".($num+1).")";
               break;
             }
             
-            // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';
+            // update school set students='Ξ,Ξ,Ξ,Ξ,Ξ,Ξ£Ξ€,ΞΞ,Ξ Ξ‘-Ξ',tmimata='Ξ,Ξ,Ξ,Ξ,Ξ,Ξ£Ξ€,ΞΞ,ΞΞ16,Ξ Ξ‘-Ξ' WHERE code='9170117';
             $students = implode(',',Array($data[1],$data[2],$data[3],$data[4],$data[5],$data[6],$data[7],$data[8]));
             $tm_prz = ceil($data[8]/25);
             $tmimata = implode(',',Array($data[10],$data[11],$data[12],$data[13],$data[14],$data[15],$data[16],$data[17],$tm_prz));
@@ -237,12 +237,12 @@
             $res = mysqli_query($mysqlconnection, $qry);
             if (!mysqli_num_rows($res) ){
               $error = true;
-              $er_msg ="Σφάλμα: Το σχολείο με κωδικό ".$data[0]." δεν υπάρχει...";
-              $er_msg .= " (γραμμή ".($num+1).")";
+              $er_msg ="Ξ£ΟΞ¬Ξ»ΞΌΞ±: Ξ€ΞΏ ΟΟΞΏΞ»Ξ΅Ξ―ΞΏ ΞΌΞ΅ ΞΊΟΞ΄ΞΉΞΊΟ ".$data[0]." Ξ΄Ξ΅Ξ½ ΟΟΞ¬ΟΟΞ΅ΞΉ...";
+              $er_msg .= " (Ξ³ΟΞ±ΞΌΞΌΞ® ".($num+1).")";
               break;
             }
 
-            // update school set klasiko='1Π,1Ν,2Π,2Ν,3Π,3Ν,ΠΖ', oloimero_nip='ΟΛ1Π,ΟΛ1Ν,ΟΛ2Π,ΟΛ2Ν',entaksis='0,0' where code=9170040;
+            // update school set klasiko='1Ξ ,1Ξ,2Ξ ,2Ξ,3Ξ ,3Ξ,Ξ Ξ', oloimero_nip='ΞΞ1Ξ ,ΞΞ1Ξ,ΞΞ2Ξ ,ΞΞ2Ξ',entaksis='0,0' where code=9170040;
             $klasiko = implode(',',Array($data[1],$data[2],$data[3],$data[4],$data[5],$data[6],$data[7]));
             $oloimero_nip = implode(',',Array($data[8],$data[9],$data[10],$data[11]));
             $entaksis = $data[12] > 0 ? 'on,'.$data[12] : '0,0';
@@ -276,23 +276,23 @@
 
       fclose($handle);
       if (!$error){
-          print "<h3>Η εισαγωγή πραγματοποιήθηκε με επιτυχία!</h3>";
-          echo "Έγινε εισαγωγή $num εγγραφών στον πίνακα $tbl.<br>";
+          print "<h3>Ξ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ® ΟΟΞ±Ξ³ΞΌΞ±ΟΞΏΟΞΏΞΉΞ®ΞΈΞ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±!</h3>";
+          echo "ΞΞ³ΞΉΞ½Ξ΅ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ® $num Ξ΅Ξ³Ξ³ΟΞ±ΟΟΞ½ ΟΟΞΏΞ½ ΟΞ―Ξ½Ξ±ΞΊΞ± $tbl.<br>";
       }
       else
       {
-          echo "<h3>Παρουσιάστηκε σφάλμα κατά την εισαγωγή</h3>";
+          echo "<h3>Ξ Ξ±ΟΞΏΟΟΞΉΞ¬ΟΟΞ·ΞΊΞ΅ ΟΟΞ¬Ξ»ΞΌΞ± ΞΊΞ±ΟΞ¬ ΟΞ·Ξ½ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ®</h3>";
           
-          echo mysqli_error($mysqlconnection) ? "Μήνυμα λάθους:".mysqli_error($mysqlconnection) : '';
+          echo mysqli_error($mysqlconnection) ? "ΞΞ®Ξ½ΟΞΌΞ± Ξ»Ξ¬ΞΈΞΏΟΟ:".mysqli_error($mysqlconnection) : '';
           echo $er_msg ? "<h3>$er_msg</h3>" : '';
-          echo "<h4>Ελέγξτε το αρχείο ή επικοινωνήστε με το διαχειριστή.</h4>";
+          echo "<h4>ΞΞ»Ξ­Ξ³ΞΎΟΞ΅ ΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ Ξ® Ξ΅ΟΞΉΞΊΞΏΞΉΞ½ΟΞ½Ξ®ΟΟΞ΅ ΞΌΞ΅ ΟΞΏ Ξ΄ΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ®.</h4>";
       }
     }
     else {
-        echo "<h3>Σφάλμα: Δεν επιλέξατε αρχείο</h3><br><br>";
+        echo "<h3>Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ΅Ξ½ Ξ΅ΟΞΉΞ»Ξ­ΞΎΞ±ΟΞ΅ Ξ±ΟΟΞ΅Ξ―ΞΏ</h3><br><br>";
     }
                 
-    echo "<a href='import.php'>Επιστροφή</a>";
+    echo "<a href='import.php'>ΞΟΞΉΟΟΟΞΏΟΞ®</a>";
 ?>
 
 </body>

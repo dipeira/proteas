@@ -1,5 +1,5 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   session_start();
   require_once "config.php";
   $_SESSION['auth']=null;
@@ -8,7 +8,7 @@
 <html>
 <head>
   <LINK href="css/style.css" rel="stylesheet" type="text/css">
-  <title>Πρωτέας: Αρχικοποίηση βάσης δεδομένων</title>
+  <title>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚: Ξ‘ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ²Ξ¬ΟƒΞ·Ο‚ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½</title>
 </head>
 
   <body>
@@ -16,33 +16,33 @@
   if (!isset($_POST['pass']) && !isset($_SESSION['auth']))
   {
     echo "<IMG src='images/logo.png' class='applogo'></a>";
-    echo "<h1>Πρωτέας</h1>";
-    echo "<h2> Αρχικοποίηση βάσης δεδομένων </h2>";
-    echo "<h3>Δημιουργία βάσης δεδομένων</h3>";
-    echo "<p>ΣΗΜ.: To script αυτό δημιουργεί τη βάση με όνομα <strong>$db_name</strong>.<br><br>";
-    echo "ΠΡΟΣΟΧΗ: Πριν προχωρήσετε, πρέπει να ρυθμίσετε τις παραμέτρους στο αρχείο <strong><i>config.php</i></strong><br>";
-    echo "Αφού αρχικοποιήσετε, μην ξεχάσετε να <b>διαγράψετε</b> το αρχείο init.php<br><br></p>";
-    echo "<strong>ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η ενέργεια αυτή δεν είναι αναστρέψιμη...</strong><br><br>";
+    echo "<h1>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</h1>";
+    echo "<h2> Ξ‘ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ²Ξ¬ΟƒΞ·Ο‚ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ </h2>";
+    echo "<h3>Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ²Ξ¬ΟƒΞ·Ο‚ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½</h3>";
+    echo "<p>Ξ£Ξ—Ξ.: To script Ξ±Ο…Ο„Ο Ξ΄Ξ·ΞΌΞΉΞΏΟ…ΟΞ³ΞµΞ― Ο„Ξ· Ξ²Ξ¬ΟƒΞ· ΞΌΞµ ΟΞ½ΞΏΞΌΞ± <strong>$db_name</strong>.<br><br>";
+    echo "Ξ Ξ΅ΞΞ£ΞΞ§Ξ—: Ξ ΟΞΉΞ½ Ο€ΟΞΏΟ‡Ο‰ΟΞ®ΟƒΞµΟ„Ξµ, Ο€ΟΞ­Ο€ΞµΞΉ Ξ½Ξ± ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ„Ξµ Ο„ΞΉΟ‚ Ο€Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ…Ο‚ ΟƒΟ„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ <strong><i>config.php</i></strong><br>";
+    echo "Ξ‘Ο†ΞΏΟ Ξ±ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞΉΞ®ΟƒΞµΟ„Ξµ, ΞΌΞ·Ξ½ ΞΎΞµΟ‡Ξ¬ΟƒΞµΟ„Ξµ Ξ½Ξ± <b>Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞµΟ„Ξµ</b> Ο„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ init.php<br><br></p>";
+    echo "<strong>Ξ Ξ΅ΞΞ•Ξ™Ξ”ΞΞ ΞΞ™Ξ—Ξ£Ξ—: Ξ— ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ± Ξ±Ο…Ο„Ξ® Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ Ξ±Ξ½Ξ±ΟƒΟ„ΟΞ­ΟΞΉΞΌΞ·...</strong><br><br>";
     echo "<form action='init.php' method='POST'>";
-    echo "Δώστε κωδικό ασφαλείας για αρχικοποίηση <small>(βλ. config.php)</small>:&nbsp;&nbsp;&nbsp;<input type='password' id='pass' name='pass'><br><input type='submit' value='Αρχικοποίηση'></form>";
+    echo "Ξ”ΟΟƒΟ„Ξµ ΞΊΟ‰Ξ΄ΞΉΞΊΟ Ξ±ΟƒΟ†Ξ±Ξ»ΞµΞ―Ξ±Ο‚ Ξ³ΞΉΞ± Ξ±ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· <small>(Ξ²Ξ». config.php)</small>:&nbsp;&nbsp;&nbsp;<input type='password' id='pass' name='pass'><br><input type='submit' value='Ξ‘ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·'></form>";
     exit;
   }
 if (($_POST['pass'] == $db_init_pass) && !isset($_SESSION['auth'])) {
     $_SESSION['auth'] = 1;
 }
 elseif (!isset ($_SESSION['auth'])) {
-  echo '<h3>Λάθος κωδικός!</h3>';
-  echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='init.php'\">";
+  echo '<h3>Ξ›Ξ¬ΞΈΞΏΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚!</h3>';
+  echo "<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' class='btn-red' onClick=\"parent.location='init.php'\">";
   die();
 }
 
 if ($_SESSION['auth'])
 {
   echo "<IMG src='images/logo.png' class='applogo'></a>";
-  echo "<h1>Πρωτέας</h1>";
+  echo "<h1>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</h1>";
   if (!$_SESSION['inserted'])
   {
-    echo "<h3>Αρχικοποίηση βάσης δεδομένων...</h3>";      
+    echo "<h3>Ξ‘ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ²Ξ¬ΟƒΞ·Ο‚ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½...</h3>";      
     
     // create database
     # MySQL with PDO_MYSQL  
@@ -56,8 +56,8 @@ if ($_SESSION['auth'])
 
     if($stmt->rowCount() == 1)
     {
-        echo '<p>Η δημιουργία απέτυχε: Η βάση δεδομένων υπάρχει ήδη...</p>';
-        echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='init.php'\">";
+        echo '<p>Ξ— Ξ΄Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ±Ο€Ξ­Ο„Ο…Ο‡Ξµ: Ξ— Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο…Ο€Ξ¬ΟΟ‡ΞµΞΉ Ξ®Ξ΄Ξ·...</p>';
+        echo "<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' class='btn-red' onClick=\"parent.location='init.php'\">";
         die();
     }
     else {
@@ -73,18 +73,18 @@ if ($_SESSION['auth'])
         $db->exec($query);
       }
       catch (PDOException $e){
-        echo "H αρχικοποίηση της Βάσης Δεδομένων απέτυχε...";
+        echo "H Ξ±ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„Ξ·Ο‚ Ξ’Ξ¬ΟƒΞ·Ο‚ Ξ”ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ο€Ξ­Ο„Ο…Ο‡Ξµ...";
         echo $e->getMessage();
-        echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='init.php'\">";
+        echo "<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' class='btn-red' onClick=\"parent.location='init.php'\">";
         die();
       }
       $db = NULL;
-      echo "<h3>H αρχικοποίηση της Βάσης Δεδομένων ήταν επιτυχής!</h3>";
+      echo "<h3>H Ξ±ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„Ξ·Ο‚ Ξ’Ξ¬ΟƒΞ·Ο‚ Ξ”ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ξ®Ο„Ξ±Ξ½ ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚!</h3>";
     }
     $_SESSION['inserted']=1;
   }
-  echo "<h3>Για λόγους ασφαλείας, παρακαλώ διαγράψτε το αρχείο init.php αφου τελειώσετε...</h3><br>";
-  echo "<INPUT TYPE='button' VALUE='Είσοδος' onClick=\"parent.location='index.php'\">";
+  echo "<h3>Ξ“ΞΉΞ± Ξ»ΟΞ³ΞΏΟ…Ο‚ Ξ±ΟƒΟ†Ξ±Ξ»ΞµΞ―Ξ±Ο‚, Ο€Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΟ„Ξµ Ο„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ init.php Ξ±Ο†ΞΏΟ… Ο„ΞµΞ»ΞµΞΉΟΟƒΞµΟ„Ξµ...</h3><br>";
+  echo "<INPUT TYPE='button' VALUE='Ξ•Ξ―ΟƒΞΏΞ΄ΞΏΟ‚' onClick=\"parent.location='index.php'\">";
 }	
 	
 ?>

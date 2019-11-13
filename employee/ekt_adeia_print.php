@@ -5,8 +5,8 @@ require_once '../tools/num2wordgen.php';
 
 session_start();
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
 
 // Get employee data
@@ -127,9 +127,9 @@ switch ($type)
 
 
         if ($days==1) {
-            $data = "(μίας) ημέρας";
+            $data = "(ΞΌΞ―Ξ±Ο‚) Ξ·ΞΌΞ­ΟΞ±Ο‚";
         } else {
-            $data = "(".convertNumber($data).") ημερών";
+            $data = "(".convertNumber($data).") Ξ·ΞΌΞµΟΟΞ½";
         }
         $bookmarkname = "DAYSFULL";
         $objBookmark = $word->ActiveDocument->Bookmarks($bookmarkname);
@@ -140,9 +140,9 @@ switch ($type)
     $start = $_POST['arr']['7'];
     $finish = $_POST['arr']['8'];
     if ($days==1) {
-        $duration = "στις $start";
+        $duration = "ΟƒΟ„ΞΉΟ‚ $start";
     } else {
-        $duration = "από $start έως $finish";
+        $duration = "Ξ±Ο€Ο $start Ξ­Ο‰Ο‚ $finish";
     }
     $data = $duration;
     $bookmarkname = "DURATION";
@@ -154,9 +154,9 @@ switch ($type)
     if ($type==1) {
         $vevdil = $_POST['arr']['5'];
         if ($vevdil==1) {
-            $data = "Ιατρική Βεβαίωση";
+            $data = "Ξ™Ξ±Ο„ΟΞΉΞΊΞ® Ξ’ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ·";
         } else {
-            $data = "Υπεύθυνη Δήλωση";
+            $data = "Ξ¥Ο€ΞµΟΞΈΟ…Ξ½Ξ· Ξ”Ξ®Ξ»Ο‰ΟƒΞ·";
         }
         $bookmarkname = "VEVDIL";
         $objBookmark = $word->ActiveDocument->Bookmarks($bookmarkname);
@@ -182,9 +182,9 @@ switch ($type)
     $word->Quit();
     //$word->Release();
     $word = null;
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
 
     echo "<html>";
-    echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
+    echo "<p><a href=$output1>Ξ‘Ξ½ΞΏΞΉΞ³ΞΌΞ± ΞµΞ³Ξ³ΟΞ¬Ο†ΞΏΟ…</a></p>";
     ?>
 </html>

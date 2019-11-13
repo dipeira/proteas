@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
 ?>	
@@ -18,23 +18,23 @@
         echo "<link rel='stylesheet' type='text/css' href='../css/style.css' />";
         echo "</head><body>";
         include('../etc/menu.php');
-        echo "<h2>Αποφάσεις αδειών</h2>";
+        echo "<h2>Ξ‘Ο€ΞΏΟ†Ξ¬ΟƒΞµΞΉΟ‚ Ξ±Ξ΄ΞµΞΉΟΞ½</h2>";
         echo "<table class='imagetable stable' border='1'>";
         echo "<form action='' method='POST'>";
-        echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot'></td></tr>";
-        echo "<tr><td>Ημερολογιακό Έτος</td><td><input type='text' name='year' value='".date('Y')."'></td></tr>";
+        echo "<tr><td>Ξ‘ΟΞΉΞΈΞΌΟΟ‚ Ξ ΟΟ‰Ο„ΞΏΞΊΟΞ»ΞΏΟ…:</td><td><input type='text' name='prot'></td></tr>";
+        echo "<tr><td>Ξ—ΞΌΞµΟΞΏΞ»ΞΏΞ³ΞΉΞ±ΞΊΟ ΞΟ„ΞΏΟ‚</td><td><input type='text' name='year' value='".date('Y')."'></td></tr>";
         echo "<tr>";
-        echo "<td colspan=2><input type='radio' name='type' value='1' checked >Μόνιμοι";
-        echo "<input type='radio' name='type' value='2' >Αναπληρωτές<br></td>";
+        echo "<td colspan=2><input type='radio' name='type' value='1' checked >ΞΟΞ½ΞΉΞΌΞΏΞΉ";
+        echo "<input type='radio' name='type' value='2' >Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„Ξ­Ο‚<br></td>";
         echo "</tr>";
-        echo "<tr><td colspan=2><input type='submit' value='Υποβολή'>";
-        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "<tr><td colspan=2><input type='submit' value='Ξ¥Ο€ΞΏΞ²ΞΏΞ»Ξ®'>";
+        echo "<input type='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='../index.php'\">";
         echo "</td></tr>";
         echo "</form></table>";
         
         $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+        mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
         function getEmail($id,$conn)
         {
@@ -47,11 +47,11 @@
         if(isset($_POST['prot']) && isset($_POST['year']))
         {   
             if (!$_POST['year'] && !$_POST['prot'])
-                exit('Παρακαλώ δώστε αρ.πρωτοκόλλου & έτος.');
+                exit('Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟƒΟ„Ξµ Ξ±Ο.Ο€ΟΟ‰Ο„ΞΏΞΊΟΞ»Ξ»ΞΏΟ… & Ξ­Ο„ΞΏΟ‚.');
             if (!$_POST['year'])
-                exit('Παρακαλώ δώστε έτος.');
+                exit('Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟƒΟ„Ξµ Ξ­Ο„ΞΏΟ‚.');
             if (!$_POST['prot'])
-                exit('Παρακαλώ δώστε αρ.πρωτοκόλλου.');
+                exit('Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟƒΟ„Ξµ Ξ±Ο.Ο€ΟΟ‰Ο„ΞΏΞΊΟΞ»Ξ»ΞΏΟ….');
 
             $has_errors = 0;
             // if monimoi
@@ -70,31 +70,31 @@
             $num=mysqli_num_rows($result);
             if (!$num)
             {
-                echo "Δεν υπάρχουν εγγραφές για τον αρ.πρωτ. ".$_POST['prot'];
-                echo "<br><a href=\"../index.php\">Επιστροφή</a>";
+                echo "Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†Ξ­Ο‚ Ξ³ΞΉΞ± Ο„ΞΏΞ½ Ξ±Ο.Ο€ΟΟ‰Ο„. ".$_POST['prot'];
+                echo "<br><a href=\"../index.php\">Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®</a>";
                 exit;
             }
 
             $type = mysqli_result($result, 0, "type");
             if ($type == 1)
-                $typewrd = "αναρρωτικών";
+                $typewrd = "Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΟΞ½";
             elseif ($type == 2)
-                $typewrd = "κανονικών";
+                $typewrd = "ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΟΞ½";
             elseif ($type == 3)
-                $typewrd = "αναρρωτικών με γνωμάτευση Α/θμιας Υγ/κής Επιτροπής";
+                $typewrd = "Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΟΞ½ ΞΌΞµ Ξ³Ξ½Ο‰ΞΌΞ¬Ο„ΞµΟ…ΟƒΞ· Ξ‘/ΞΈΞΌΞΉΞ±Ο‚ Ξ¥Ξ³/ΞΊΞ®Ο‚ Ξ•Ο€ΞΉΟ„ΟΞΏΟ€Ξ®Ο‚";
             elseif ($type == 4)
-                $typewrd = "ειδικών";
+                $typewrd = "ΞµΞΉΞ΄ΞΉΞΊΟΞ½";
             $hm_apof_org = $hm_apof = mysqli_result($result, 0, "hm_apof");
             $hm_apof = date('d-m-Y',strtotime($hm_apof));
             $prot_apof = $_POST['prot'];
-            echo "<h3>Απόφαση $typewrd αδειών με αρ.πρωτ. $prot_apof/$hm_apof</h3>";
+            echo "<h3>Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· $typewrd Ξ±Ξ΄ΞµΞΉΟΞ½ ΞΌΞµ Ξ±Ο.Ο€ΟΟ‰Ο„. $prot_apof/$hm_apof</h3>";
             echo "<table class='imagetable' border='1'>";
             if ($type == 1)
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Δικ/κό</td>";
+                echo "<tr><td>Ξ•Ο€ΟΞ½Ο…ΞΌΞΏ</td><td>ΞΞ½ΞΏΞΌΞ±</td><td>Ξ—ΞΌΞ­ΟΞµΟ‚</td><td>ΞΞ½Ξ±ΟΞΎΞ·</td><td>Ξ‘Ο.Ξ ΟΟ‰Ο„.</td><td>Ξ”ΞΉΞΊ/ΞΊΟ</td>";
             elseif ($type == 2)
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Υπολ.</td>";
+                echo "<tr><td>Ξ•Ο€ΟΞ½Ο…ΞΌΞΏ</td><td>ΞΞ½ΞΏΞΌΞ±</td><td>Ξ—ΞΌΞ­ΟΞµΟ‚</td><td>ΞΞ½Ξ±ΟΞΎΞ·</td><td>Ξ‘Ο.Ξ ΟΟ‰Ο„.</td><td>Ξ¥Ο€ΞΏΞ».</td>";
             else
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Λόγος</td>";
+                echo "<tr><td>Ξ•Ο€ΟΞ½Ο…ΞΌΞΏ</td><td>ΞΞ½ΞΏΞΌΞ±</td><td>Ξ—ΞΌΞ­ΟΞµΟ‚</td><td>ΞΞ½Ξ±ΟΞΎΞ·</td><td>Ξ‘Ο.Ξ ΟΟ‰Ο„.</td><td>Ξ›ΟΞ³ΞΏΟ‚</td>";
             $i=0;
             while ($i < $num)
             {
@@ -122,18 +122,18 @@
                 if ($hm_apof_org <> $hm_apof_1)
                 {
                     if ($is_anapl)
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στην ημ/νία ΑΠΟΦΑΣΗΣ άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                        echo "<strong>Ξ Ξ΅ΞΞ£ΞΞ§Ξ—:</strong> Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ·Ξ½ Ξ·ΞΌ/Ξ½Ξ―Ξ± Ξ‘Ξ ΞΞ¦Ξ‘Ξ£Ξ—Ξ£ Ξ¬Ξ΄ΞµΞΉΞ±Ο‚. Ξ•ΞΊΟ€/ΞΊΟΟ‚: $surname $name, ?Ξ΄ΞµΞΉΞ±: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
                     else
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στην ημ/νία ΑΠΟΦΑΣΗΣ άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                        echo "<strong>Ξ Ξ΅ΞΞ£ΞΞ§Ξ—:</strong> Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ·Ξ½ Ξ·ΞΌ/Ξ½Ξ―Ξ± Ξ‘Ξ ΞΞ¦Ξ‘Ξ£Ξ—Ξ£ Ξ¬Ξ΄ΞµΞΉΞ±Ο‚. Ξ•ΞΊΟ€/ΞΊΟΟ‚: $surname $name, ?Ξ΄ΞµΞΉΞ±: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
                     $error_found = 1;
                 }
                 //if different type of adeia
                 if ($typei <> $type)
                 {
                     if ($is_anapl)
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                        echo "<strong>Ξ Ξ΅ΞΞ£ΞΞ§Ξ—:</strong> Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„ΞΏΞ½ Ο„ΟΟ€ΞΏ Ξ¬Ξ΄ΞµΞΉΞ±Ο‚. Ξ•ΞΊΟ€/ΞΊΟΟ‚: $surname $name, ?Ξ΄ΞµΞΉΞ±: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
                     else
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                        echo "<strong>Ξ Ξ΅ΞΞ£ΞΞ§Ξ—:</strong> Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„ΞΏΞ½ Ο„ΟΟ€ΞΏ Ξ¬Ξ΄ΞµΞΉΞ±Ο‚. Ξ•ΞΊΟ€/ΞΊΟΟ‚: $surname $name, ?Ξ΄ΞµΞΉΞ±: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
                     $error_found = 1;
                 }
                 
@@ -143,13 +143,13 @@
                     switch ($vev_dil)
                     {
                         case 0:
-                            $dik = "Όχι";
+                            $dik = "ΞΟ‡ΞΉ";
                             break;
                         case 1:
-                            $dik = "Βεβαίωση";
+                            $dik = "Ξ’ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ·";
                             break;
                         case 2:
-                            $dik = "Υπεύθ.Δήλωση";
+                            $dik = "Ξ¥Ο€ΞµΟΞΈ.Ξ”Ξ®Ξ»Ο‰ΟƒΞ·";
                             break;
                     }
                 }
@@ -188,8 +188,8 @@
             $emp_ser = serialize($emp);
             if ($has_errors)
             {
-                echo "Βρέθηκαν ΛΑΘΗ. Παρακαλώ διορθώστε.<br>";
-                echo "<a href=\"../index.php\">Επιστροφή στην αρχική σελίδα</a>";
+                echo "Ξ’ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ξ›Ξ‘ΞΞ—. Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΞΉΞΏΟΞΈΟΟƒΟ„Ξµ.<br>";
+                echo "<a href=\"../index.php\">Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® ΟƒΟ„Ξ·Ξ½ Ξ±ΟΟ‡ΞΉΞΊΞ® ΟƒΞµΞ»Ξ―Ξ΄Ξ±</a>";
                 exit;
             }
             echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
@@ -199,20 +199,20 @@
             echo "<input type='hidden' name=arr[] value='$emp_ser'>";
             echo "<input type='hidden' name=arr[] value='$is_anapl'>";
             echo "<input type='hidden' name=arr[] value='".$_POST['year']."'>";
-            echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Εκτύπωση απόφασης αδειών'>";
+            echo "<INPUT name='btnSubmit' TYPE='submit' VALUE='Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·Ο‚ Ξ±Ξ΄ΞµΞΉΟΞ½'>";
             echo "&nbsp;&nbsp;&nbsp;";
             
             // check if already sent
             $qry = "SELECT * FROM apofaseis WHERE prwt = ".$_POST['prot']." AND year = ". $_POST['year'];
             $res = mysqli_query($mysqlconnection, $qry);
             if (mysqli_num_rows($res) > 0)
-                echo "<br>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
+                echo "<br>Ξ¤Ξ± email Ξ³ΞΉ' Ξ±Ο…Ο„Ξ®Ξ½ Ο„Ξ·Ξ½ Ξ±Ο€ΟΟ†Ξ±ΟƒΞ· Ξ­Ο‡ΞΏΟ…Ξ½ Ξ®Ξ΄Ξ· ΟƒΟ„Ξ±Ξ»ΞµΞ―.</h3>";
             else {
-                $email_msg = "Είστε σίγουροι ότι θέλετε να αποστείλετε $num email σε ισάριθμα σχολεία;";
-                echo "<INPUT name='btnEmail' TYPE='submit' VALUE='Αποστολή email στα σχολεία' onclick=\"javascript:return confirm('$email_msg');\">";
+                $email_msg = "Ξ•Ξ―ΟƒΟ„Ξµ ΟƒΞ―Ξ³ΞΏΟ…ΟΞΏΞΉ ΟΟ„ΞΉ ΞΈΞ­Ξ»ΞµΟ„Ξµ Ξ½Ξ± Ξ±Ο€ΞΏΟƒΟ„ΞµΞ―Ξ»ΞµΟ„Ξµ $num email ΟƒΞµ ΞΉΟƒΞ¬ΟΞΉΞΈΞΌΞ± ΟƒΟ‡ΞΏΞ»ΞµΞ―Ξ±;";
+                echo "<INPUT name='btnEmail' TYPE='submit' VALUE='Ξ‘Ο€ΞΏΟƒΟ„ΞΏΞ»Ξ® email ΟƒΟ„Ξ± ΟƒΟ‡ΞΏΞ»ΞµΞ―Ξ±' onclick=\"javascript:return confirm('$email_msg');\">";
             }
             echo "</form>";
-            echo "<small>ΣΗΜ.: Οι παραπάνω ενέργειες ίσως χρειαστούν αρκετό χρόνο (ειδικά τα email).<br>Μην επιχειρείτε να τις επαναλάβετε αν δεν εκτελεστούν αμέσως και δε λάβετε σχετικό μήνυμα.</small>";
+            echo "<small>Ξ£Ξ—Ξ.: ΞΞΉ Ο€Ξ±ΟΞ±Ο€Ξ¬Ξ½Ο‰ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞµΟ‚ Ξ―ΟƒΟ‰Ο‚ Ο‡ΟΞµΞΉΞ±ΟƒΟ„ΞΏΟΞ½ Ξ±ΟΞΊΞµΟ„Ο Ο‡ΟΟΞ½ΞΏ (ΞµΞΉΞ΄ΞΉΞΊΞ¬ Ο„Ξ± email).<br>ΞΞ·Ξ½ ΞµΟ€ΞΉΟ‡ΞµΞΉΟΞµΞ―Ο„Ξµ Ξ½Ξ± Ο„ΞΉΟ‚ ΞµΟ€Ξ±Ξ½Ξ±Ξ»Ξ¬Ξ²ΞµΟ„Ξµ Ξ±Ξ½ Ξ΄ΞµΞ½ ΞµΞΊΟ„ΞµΞ»ΞµΟƒΟ„ΞΏΟΞ½ Ξ±ΞΌΞ­ΟƒΟ‰Ο‚ ΞΊΞ±ΞΉ Ξ΄Ξµ Ξ»Ξ¬Ξ²ΞµΟ„Ξµ ΟƒΟ‡ΞµΟ„ΞΉΞΊΟ ΞΌΞ®Ξ½Ο…ΞΌΞ±.</small>";
         }
         // if 'export to doc button' is pushed...
         if (isset($_POST['btnSubmit']))
@@ -265,38 +265,29 @@
             
             foreach ($emp as $ar)
             {
-                $data = mb_convert_encoding($ar[0], "utf-8", "iso-8859-7");
                 $document->setValue("epwnymo#$i", $data);
-                $data = mb_convert_encoding($ar[1], "utf-8", "iso-8859-7");
                 $document->setValue("onoma#$i", $data);
-                $data = mb_convert_encoding($ar[2], "utf-8", "iso-8859-7");
                 $document->setValue("days#$i", $data);
-                $data = mb_convert_encoding($ar[3], "utf-8", "iso-8859-7");
                 $document->setValue("start#$i", $data);
-                $data = mb_convert_encoding($ar[4], "utf-8", "iso-8859-7");
                 $document->setValue("protait#$i", $data);
-                $data = mb_convert_encoding($ar[5], "utf-8", "iso-8859-7");
                 $document->setValue("ypol#$i", $data);
                 
                 $schwrd = getSchool($ar[6], $mysqlconnection);
-                $data = mb_convert_encoding($schwrd, "utf-8", "iso-8859-7");
                 $document->setValue("sch#$i", $data);
                 
                 $i++;
             }
             // head_title & head_name
             $data = getParam('head_title', $mysqlconnection);
-            $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
             $document->setValue('head_title', $data);
             $data = getParam('head_name', $mysqlconnection);
-            $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
             $document->setValue('head_name', $data);
             
             $output1 = "../word/adeia_apof_".$_SESSION['userid'].".docx";
             $document->save($output1);
             echo "<html>";
-            echo "<p><a href=$output1>Ανοιγμα εγγράφου</a></p>";
-            //echo "<br><a href=\"apof_ad.php\">Επιστροφή</a>"; 
+            echo "<p><a href=$output1>Ξ‘Ξ½ΞΏΞΉΞ³ΞΌΞ± ΞµΞ³Ξ³ΟΞ¬Ο†ΞΏΟ…</a></p>";
+            //echo "<br><a href=\"apof_ad.php\">Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®</a>"; 
             //echo "</html>";
             
         }
@@ -308,8 +299,8 @@
             $res = mysqli_query($mysqlconnection, $qry);
             if (mysqli_num_rows($res) > 0)
             {
-                echo "<h3>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
-                echo "<br><a href=\"../index.php\">Επιστροφή</a>";
+                echo "<h3>Ξ¤Ξ± email Ξ³ΞΉ' Ξ±Ο…Ο„Ξ®Ξ½ Ο„Ξ·Ξ½ Ξ±Ο€ΟΟ†Ξ±ΟƒΞ· Ξ­Ο‡ΞΏΟ…Ξ½ Ξ®Ξ΄Ξ· ΟƒΟ„Ξ±Ξ»ΞµΞ―.</h3>";
+                echo "<br><a href=\"../index.php\">Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®</a>";
                 exit;
             }
             // set max execution time 
@@ -346,21 +337,21 @@
             }
             $type1 = $_POST['arr'][0];
             if ($type1 == 1)
-                $type = "αναρρωτική άδεια";
+                $type = "Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® Ξ¬Ξ΄ΞµΞΉΞ±";
             elseif ($type1 == 2)
-                $type = "κανονική άδεια";
+                $type = "ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ® Ξ¬Ξ΄ΞµΞΉΞ±";
             elseif ($type1 == 3)
-                $type = "αναρρωτική άδεια με γνωμ. Α/θμιας Υγ/κής Επιτροπής";
+                $type = "Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ® Ξ¬Ξ΄ΞµΞΉΞ± ΞΌΞµ Ξ³Ξ½Ο‰ΞΌ. Ξ‘/ΞΈΞΌΞΉΞ±Ο‚ Ξ¥Ξ³/ΞΊΞ®Ο‚ Ξ•Ο€ΞΉΟ„ΟΞΏΟ€Ξ®Ο‚";
             elseif ($type1 == 4)
-                $type = "ειδική άδεια";
+                $type = "ΞµΞΉΞ΄ΞΉΞΊΞ® Ξ¬Ξ΄ΞµΞΉΞ±";
             elseif ($type1 == 13)
-                $type = "εκλογική άδεια";
+                $type = "ΞµΞΊΞ»ΞΏΞ³ΞΉΞΊΞ® Ξ¬Ξ΄ΞµΞΉΞ±";
                 
-            $tmpl = "Σας ενημερώνουμε ότι με την υπ.αριθμ. PROT/HMPRT απόφαση έχει χορηγηθεί TYPE DAYS ημερών από START στον/στην εκπ/κό με ον/μο SURNME NAME.\n\nΔ/νση Π.Ε. Ηρακλείου";
-            $tmpl .= "\n\n\n\nΣΗΜ.: Το μήνυμα αυτό είναι αυτοματοποιημένο. Παρακαλούμε μην απαντάτε σε αυτήν την ηλ/κή δ/νση.";
+            $tmpl = "Ξ£Ξ±Ο‚ ΞµΞ½Ξ·ΞΌΞµΟΟΞ½ΞΏΟ…ΞΌΞµ ΟΟ„ΞΉ ΞΌΞµ Ο„Ξ·Ξ½ Ο…Ο€.Ξ±ΟΞΉΞΈΞΌ. PROT/HMPRT Ξ±Ο€ΟΟ†Ξ±ΟƒΞ· Ξ­Ο‡ΞµΞΉ Ο‡ΞΏΟΞ·Ξ³Ξ·ΞΈΞµΞ― TYPE DAYS Ξ·ΞΌΞµΟΟΞ½ Ξ±Ο€Ο START ΟƒΟ„ΞΏΞ½/ΟƒΟ„Ξ·Ξ½ ΞµΞΊΟ€/ΞΊΟ ΞΌΞµ ΞΏΞ½/ΞΌΞΏ SURNME NAME.\n\nΞ”/Ξ½ΟƒΞ· Ξ .Ξ•. Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ…";
+            $tmpl .= "\n\n\n\nΞ£Ξ—Ξ.: Ξ¤ΞΏ ΞΌΞ®Ξ½Ο…ΞΌΞ± Ξ±Ο…Ο„Ο ΞµΞ―Ξ½Ξ±ΞΉ Ξ±Ο…Ο„ΞΏΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ·ΞΌΞ­Ξ½ΞΏ. Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞµ ΞΌΞ·Ξ½ Ξ±Ο€Ξ±Ξ½Ο„Ξ¬Ο„Ξµ ΟƒΞµ Ξ±Ο…Ο„Ξ®Ξ½ Ο„Ξ·Ξ½ Ξ·Ξ»/ΞΊΞ® Ξ΄/Ξ½ΟƒΞ·.";
             
             $data = unserialize($_POST['arr'][3]);
-            echo "<br><h3>Αποστολή email για την απόφαση: ".$_POST['arr'][1]."/".$_POST['arr'][2]."</h3><br>";
+            echo "<br><h3>Ξ‘Ο€ΞΏΟƒΟ„ΞΏΞ»Ξ® email Ξ³ΞΉΞ± Ο„Ξ·Ξ½ Ξ±Ο€ΟΟ†Ξ±ΟƒΞ·: ".$_POST['arr'][1]."/".$_POST['arr'][2]."</h3><br>";
             foreach ($data as $dat)
             {
                 $mail_body = str_replace('PROT', $_POST['arr'][1], $tmpl);
@@ -380,16 +371,12 @@
                     $summary[] = array('name' => $dat[0], 'res' => -1);
                     continue;
                 }
-                $subject = "Ενημέρωση για ".$type;
-                $from = "Δ/νση ΠΕ Ηρακλείου";
+                $subject = "Ξ•Ξ½Ξ·ΞΌΞ­ΟΟ‰ΟƒΞ· Ξ³ΞΉΞ± ".$type;
+                $from = "Ξ”/Ξ½ΟƒΞ· Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ…";
                 //$headers = "From:".$from;
                 
                 //echo "<br>$subject<br>".$mail_body."<br>".$email;
                 $mymail = "mail@dipe.ira.sch.gr";
-                                
-                //utf8 encode
-                $subject = mb_convert_encoding($subject, "utf-8", "iso-8859-7");
-                $mail_body = mb_convert_encoding($mail_body, "utf-8", "iso-8859-7");
                 
                 $message = Swift_Message::newInstance($subject)
                 ->setFrom($mymail)
@@ -413,7 +400,7 @@
             // print results
             $oks = $errs = 0;
             echo "<br>";
-            echo "<h3>Αποτελέσματα</h3>";
+            echo "<h3>Ξ‘Ο€ΞΏΟ„ΞµΞ»Ξ­ΟƒΞΌΞ±Ο„Ξ±</h3>";
             echo "<table border='1'>";
             foreach ($summary as $sum) {
                 if ($sum['res'] == 1)
@@ -423,12 +410,12 @@
                 }
                 else
                 {
-                    echo "<tr><td>".$sum['name']."</td><td>".$sum['email']."</td><td>Πρόβλημα (err.:".$sum['res'].")</td></tr>";
+                    echo "<tr><td>".$sum['name']."</td><td>".$sum['email']."</td><td>Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± (err.:".$sum['res'].")</td></tr>";
                     $errs++;
                 }
             }
             echo "</table>";
-            echo "$oks επιτυχημένες αποστολές.<br>$errs λάθη.";
+            echo "$oks ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ·ΞΌΞ­Ξ½ΞµΟ‚ Ξ±Ο€ΞΏΟƒΟ„ΞΏΞ»Ξ­Ο‚.<br>$errs Ξ»Ξ¬ΞΈΞ·.";
         }
         mysqli_close($mysqlconnection);
 ?>

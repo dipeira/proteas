@@ -1,12 +1,12 @@
 <?php
-    //header('Content-type: text/html; charset=iso8859-7'); 
+    //header('Content-type: text/html; charset=utf-8'); 
     //require_once "../tools/functions.php";
 ?>
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <!--
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     -->
     
         <script type="text/javascript" src="../js/jquery.js"></script>
@@ -25,8 +25,8 @@
   session_start();      
  
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
 if ($_GET['type'] == 1) {
   $type = 1;
@@ -41,13 +41,13 @@ if ($_GET['type'] == 1) {
   echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
   echo "<thead>";
 //                    echo "<tr><td>aaa</td></tr>";
-  echo "<tr><th rowspan=2>Ονομασία</th>";
-  //echo "<th colspan=4>Οργανικά Κενά</th>";
-  echo "<th colspan=6>Οργανικές - Κενά</th>";
+  echo "<tr><th rowspan=2>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+  //echo "<th colspan=4>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΞΞ΅Ξ½Ξ¬</th>";
+  echo "<th colspan=6>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ­Ο - ΞΞ΅Ξ½Ξ¬</th>";
   echo "</tr>";
-  echo "<th colspan=2>ΠΕ11</th><th colspan=2>ΠΕ06</th><th colspan=2>ΠΕ79</th>";
-  //echo "<th>ΠΕ60/70</th>";
-  //echo "<th>KENA</th><th>Διαφορα</th><th>org&anhk&energoi</th><th>tmimata (dntis)</th>";
+  echo "<th colspan=2>Ξ Ξ11</th><th colspan=2>Ξ Ξ06</th><th colspan=2>Ξ Ξ79</th>";
+  //echo "<th>Ξ Ξ60/70</th>";
+  //echo "<th>KENA</th><th>ΞΞΉΞ±ΟΞΏΟΞ±</th><th>org&anhk&energoi</th><th>tmimata (dntis)</th>";
   echo "</tr>";
   echo "</thead>\n<tbody>\n";
 
@@ -77,7 +77,7 @@ if ($_GET['type'] == 1) {
       }
       $i++;
   }
-  //echo "<tr><td>ΣΥΝΟΛΑ</td>";
+  //echo "<tr><td>Ξ£Ξ₯ΞΞΞΞ</td>";
   //echo "<td>$kena_leit_sum[0]</td><td>$kena_leit_sum[1]</td><td>$kena_leit_sum[2]</td><td>$kena_leit_sum[3]</td></tr>";
   echo "</tbody></table>";
 
@@ -87,8 +87,8 @@ if ($_GET['type'] == 1) {
 
   echo "<form action='../tools/2excel_ses.php' method='post'>";
   //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-  echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-  echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+  echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
+  echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
   echo "</form>";
   //ob_end_clean();
                        
@@ -106,11 +106,11 @@ else if ($_GET['type'] == 2) {
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
-    echo "<tr><th rowspan=2>Ονομασία</th>";
-    echo "<th>Οργανικά Κενά</th>";
-    echo "<th>Λειτουργικά Κενά</th>";
+    echo "<tr><th rowspan=2>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+    echo "<th>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ¬ ΞΞ΅Ξ½Ξ¬</th>";
+    echo "<th>ΞΞ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΞ¬ ΞΞ΅Ξ½Ξ¬</th>";
     echo "</tr>";
-    echo "<tr><th>ΠΕ60</th><th>ΠΕ60</th>";
+    echo "<tr><th>Ξ Ξ60</th><th>Ξ Ξ60</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 
@@ -139,7 +139,7 @@ else if ($_GET['type'] == 2) {
               
       $i++;                        
     }
-    echo "<tr><td>ΣΥΝΟΛΑ</td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
+    echo "<tr><td>Ξ£Ξ₯ΞΞΞΞ</td><td>$kena_org_sum[0]</td><td>$kena_leit_sum[0]</td></tr>";
     echo "</tbody></table>";            
 
     $page = ob_get_contents(); 
@@ -148,8 +148,8 @@ else if ($_GET['type'] == 2) {
 
     echo "<form action='../tools/2excel_ses.php' method='post'>";
     //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
+    echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
 }
 ?>

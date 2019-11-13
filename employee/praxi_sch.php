@@ -1,12 +1,12 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
 ?>	
   <html>
   <head>      
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <title>Εκπαιδευτικοί και Σχολεία ανά Πράξη</title>
+    <title>Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― ΞΊΞ±ΞΉ Ξ£Ο‡ΞΏΞ»ΞµΞ―Ξ± Ξ±Ξ½Ξ¬ Ξ ΟΞ¬ΞΎΞ·</title>
     <link href="../css/select2.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
     <script src="../js/select2.min.js"></script>
@@ -31,17 +31,17 @@
     $usrlvl = $_SESSION['userlevel'];
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
-    echo "<h2>Εκπαιδευτικοί και Σχολεία ανά Πράξη</h2>";
-    //echo "<p><small><a href='praxi_sch2.php'>Για Πράξεις ανά Σχολείο κάντε κλικ εδώ</a></small></p>";
+    echo "<h2>Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― ΞΊΞ±ΞΉ Ξ£Ο‡ΞΏΞ»ΞµΞ―Ξ± Ξ±Ξ½Ξ¬ Ξ ΟΞ¬ΞΎΞ·</h2>";
+    //echo "<p><small><a href='praxi_sch2.php'>Ξ“ΞΉΞ± Ξ ΟΞ¬ΞΎΞµΞΉΟ‚ Ξ±Ξ½Ξ¬ Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ ΞΊΞ¬Ξ½Ο„Ξµ ΞΊΞ»ΞΉΞΊ ΞµΞ΄Ο</a></small></p>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<form action='' method='POST' autocomplete='off'>";
     
     $sql = "select * from praxi";
     $result = mysqli_query($mysqlconnection, $sql);
-    echo "<tr><td>Επιλογή Πράξεων:</td><td>";
+    echo "<tr><td>Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ ΟΞ¬ΞΎΞµΟ‰Ξ½:</td><td>";
     $cmb = "<select name=\"praxi[]\" class=\"praxi_select\" multiple=\"multiple\">";
     while ($row = mysqli_fetch_array($result)){
       if (isset($_POST['praxi']) && in_array($row['id'],$_POST['praxi']))
@@ -54,14 +54,14 @@
     
     echo "</td></tr>";
     
-    echo "<tr><td>Επιλογή:</td><td>";
-    echo "<input type='radio' name='type' value='0' checked >Εμφάνιση μόνο Σχολείων<br>";
-    echo "<input type='radio' name='type' value='1'>Εμφάνιση Εκπ/κών & Σχολείων<br>";
+    echo "<tr><td>Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®:</td><td>";
+    echo "<input type='radio' name='type' value='0' checked >Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΌΟΞ½ΞΏ Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½<br>";
+    echo "<input type='radio' name='type' value='1'>Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ξ•ΞΊΟ€/ΞΊΟΞ½ & Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½<br>";
     echo "</td></tr>";
     
-    echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
+    echo "<tr><td colspan=2><input type='submit' value='Ξ‘Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·'>";
     echo "&nbsp;&nbsp;&nbsp;";
-    echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
+    echo "<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' class='btn-red' onClick=\"parent.location='ektaktoi_list.php'\"></td></tr>";
     echo "</table></form>";
 
 	if(isset($_POST['praxi']))
@@ -76,8 +76,8 @@
         $praxinm[] = getNamefromTbl($mysqlconnection, praxi, $pr);
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 		if ($all)
       $query = "select s.id as schid, e.afm, e.hm_anal, e.id, e.surname, e.name, s.name as sch, p.name as praxi, code, y.hours from ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
         join school s on s.id = y.yphrethsh join praxi p on p.id = e.praxi where y.sxol_etos=$sxol_etos AND e.praxi in (" . implode(',',$_POST['praxi']) . ") ORDER BY SURNAME,NAME ASC";
@@ -88,12 +88,12 @@
 		$result = mysqli_query($mysqlconnection, $query);
 		
     ob_start();
-    echo "<h2>Πράξη(-εις): ". implode(', ', $praxinm)."</h2>";
+    echo "<h2>Ξ ΟΞ¬ΞΎΞ·(-ΞµΞΉΟ‚): ". implode(', ', $praxinm)."</h2>";
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
     if ($all)
-        echo "<thead><tr><th>ΑΦΜ</th><th>Ονοματεπώνυμο</th><th>Κωδ.Σχολείου</th><th>Σχολείο</th><th>Ώρες</th><th>Ημ.Ανάληψης</th><th>Πράξη</th></tr></thead><tbody>";
+        echo "<thead><tr><th>Ξ‘Ξ¦Ξ</th><th>ΞΞ½ΞΏΞΌΞ±Ο„ΞµΟ€ΟΞ½Ο…ΞΌΞΏ</th><th>ΞΟ‰Ξ΄.Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…</th><th>Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ</th><th>ΞΟΞµΟ‚</th><th>Ξ—ΞΌ.Ξ‘Ξ½Ξ¬Ξ»Ξ·ΟΞ·Ο‚</th><th>Ξ ΟΞ¬ΞΎΞ·</th></tr></thead><tbody>";
     else
-        echo "<thead><tr><th>Κωδ.Σχολείου</th><th>Σχολείο</th></tr></thead><tbody>";
+        echo "<thead><tr><th>ΞΟ‰Ξ΄.Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…</th><th>Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ</th></tr></thead><tbody>";
 
     while ($row = mysqli_fetch_array($result))	
     {
@@ -115,7 +115,7 @@
       $i++;
     }
 		echo "</tbody></table>";
-    echo "<small><i>$i εγγραφές</i></small>";
+    echo "<small><i>$i ΞµΞ³Ξ³ΟΞ±Ο†Ξ­Ο‚</i></small>";
     echo "<br><br>";
 
     mysqli_close($mysqlconnection);
@@ -126,9 +126,9 @@
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
 		echo "<input type='hidden' name = 'data' value='".  $page."'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® ΟƒΟ„ΞΏ excel</BUTTON>";
     echo "&nbsp;&nbsp;&nbsp;";
-    echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+    echo "<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='ektaktoi_list.php'\">";
     echo "</form>";
 	}
 ?>

@@ -1,20 +1,20 @@
 <html>
     <head>
-        <title>Βεβαιώσεις υπηρεσίας αναπληρωτών</title>
+        <title>Ξ’ΞµΞ²Ξ±ΞΉΟΟƒΞµΞΉΟ‚ Ο…Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚ Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½</title>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
 <?php
 
 session_start();
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
 require_once '../config.php';
 require_once '../tools/functions.php';
 
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
 set_time_limit(180);
 
@@ -47,9 +47,8 @@ foreach($arr as $myarr)
                 $document = $PHPWord->loadTemplate('../word/tmpl_anapl/tmpl_eepebp.docx');
             }
             $data = $myarr['eepebp'] == 1 ?
-                'Ειδικού Εκπαιδευτικού Προσωπικού ΕΕΠ' :
-                'Ειδικού Βοηθητικού Προσωπικού (ΕΒΠ)';
-            $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+                'Ξ•ΞΉΞ΄ΞΉΞΊΞΏΟ Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΟ Ξ ΟΞΏΟƒΟ‰Ο€ΞΉΞΊΞΏΟ Ξ•Ξ•Ξ ' :
+                'Ξ•ΞΉΞ΄ΞΉΞΊΞΏΟ Ξ’ΞΏΞ·ΞΈΞ·Ο„ΞΉΞΊΞΏΟ Ξ ΟΞΏΟƒΟ‰Ο€ΞΉΞΊΞΏΟ (Ξ•Ξ’Ξ )';
             $document->setValue('eepebp', $data);
         }
         else {
@@ -67,12 +66,10 @@ foreach($arr as $myarr)
     $document->setValue('protapol', $data);
 
     $data = $myarr['surname']." ".$myarr['name'];
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     //$fullname = $data;
     $document->setValue('fullname', $data);
     
     $data = $myarr['patrwnymo'];
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7"); 
     $document->setValue('patrwnymo', $data);
     
     $klados = $myarr['klados'];
@@ -81,23 +78,19 @@ foreach($arr as $myarr)
     $kl1 = mysqli_result($res1, 0, "perigrafh");
     $kl2 = mysqli_result($res1, 0, "onoma");
     $data = $kl2." (".$kl1.")";
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('kladosfull', $data);
     
     $data = $myarr['ya'];
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('ya', $data);
     
     $data = $myarr['ada'];
     $data = str_replace(array( '(', ')' ), "", $data);
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('ada', $data);
     
     $didetos = substr($sxol_etos, 0, 4).'-'.substr($sxol_etos, 4, 2);
     $document->setValue('didetos', $didetos);
     
     $data = $myarr['apof'];
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('apof', $data);
     
     //sxoleio/-a
@@ -111,7 +104,7 @@ foreach($arr as $myarr)
                 $sxoleia .= '';
             }
             if ($k === 'hours' && $v>0) {
-                $sxoleia .= " ($v ώρες), ";
+                $sxoleia .= " ($v ΟΟΞµΟ‚), ";
             } else {
                 $sxoleia .= '';
             }
@@ -123,14 +116,14 @@ foreach($arr as $myarr)
     }
     $sxoleia = substr($sxoleia, 0, -2);
 
-    $data = mb_convert_encoding($sxoleia, "utf-8", "iso-8859-7");
+    $data = $sxoleia;
     $document->setValue('schools', $data);
 
     // metakinhsh
     $metakinhsh = $myarr['metakinhsh'];
     if ($myarr['ebp']) {
         if (strlen($metakinhsh)<2) {
-            $top_metak = "και τοποθετήθηκε με την ταυτάριθμη απόφαση στο (-α) $sxoleia";
+            $top_metak = "ΞΊΞ±ΞΉ Ο„ΞΏΟ€ΞΏΞΈΞµΟ„Ξ®ΞΈΞ·ΞΊΞµ ΞΌΞµ Ο„Ξ·Ξ½ Ο„Ξ±Ο…Ο„Ξ¬ΟΞΉΞΈΞΌΞ· Ξ±Ο€ΟΟ†Ξ±ΟƒΞ· ΟƒΟ„ΞΏ (-Ξ±) $sxoleia";
         } else {
             $top_metak = $metakinhsh . " " . $sxoleia;
         }
@@ -138,13 +131,13 @@ foreach($arr as $myarr)
     else
     {
         if (strlen($metakinhsh)<2) {
-            $top_metak = "Τοποθετήθηκε με την αριθμ. ".$myarr['apof']." Απόφαση του Δ/ντή Π.Ε. Ηρακλείου στο (-α) $sxoleia";
+            $top_metak = "Ξ¤ΞΏΟ€ΞΏΞΈΞµΟ„Ξ®ΞΈΞ·ΞΊΞµ ΞΌΞµ Ο„Ξ·Ξ½ Ξ±ΟΞΉΞΈΞΌ. ".$myarr['apof']." Ξ‘Ο€ΟΟ†Ξ±ΟƒΞ· Ο„ΞΏΟ… Ξ”/Ξ½Ο„Ξ® Ξ .Ξ•. Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ… ΟƒΟ„ΞΏ (-Ξ±) $sxoleia";
         } else {
             
             $top_metak = $metakinhsh . " " . $sxoleia;
         }
     }
-    $data = mb_convert_encoding($top_metak, "utf-8", "iso-8859-7");
+    $data = $top_metak;
     $document->setValue('top_metak', $data);
     
     $data = $hmpros = $myarr['hmpros'];
@@ -159,9 +152,8 @@ foreach($arr as $myarr)
     // }
     //
     $data = $myarr['meiwmeno'] ? 
-        "μειωμένο ωράριο $hour_sum ώρες/εβδομάδα (πλήρες υποχρ.ωράριο $ypoxr ώρες/εβδ.)" :
-        "πλήρες ωράριο ($ypoxr ώρες/εβδομάδα)";
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
+        "ΞΌΞµΞΉΟ‰ΞΌΞ­Ξ½ΞΏ Ο‰ΟΞ¬ΟΞΉΞΏ $hour_sum ΟΟΞµΟ‚/ΞµΞ²Ξ΄ΞΏΞΌΞ¬Ξ΄Ξ± (Ο€Ξ»Ξ®ΟΞµΟ‚ Ο…Ο€ΞΏΟ‡Ο.Ο‰ΟΞ¬ΟΞΉΞΏ $ypoxr ΟΟΞµΟ‚/ΞµΞ²Ξ΄.)" :
+        "Ο€Ξ»Ξ®ΟΞµΟ‚ Ο‰ΟΞ¬ΟΞΉΞΏ ($ypoxr ΟΟΞµΟ‚/ΞµΞ²Ξ΄ΞΏΞΌΞ¬Ξ΄Ξ±)";
     $document->setValue('wrario', $data);
 
     //////////////////////////////
@@ -177,21 +169,21 @@ foreach($arr as $myarr)
     // }
     $adeies_txt = '';
     if ($adeies['anar_sub'] > 0) {
-        $adeies_txt .= "Έλαβε αναρρωτικές άδειες σύνολο: ".$adeies['anar']." ημέρες, από τις οποίες μόνο 15 ημέρες υπολογίζονται για προϋπηρεσία σύμφωνα με το άρθρο 657 και 658 του αστικού κώδικα, το άρθρο 11 του Ν. 2874/2000, την εγκύκλιο αριθμ. 79/14-07-1999 ΙΚΑ, έγγραφο αρ. πρωτ. Π06/40/29-04-2013 ΙΚΑ. ";
+        $adeies_txt .= "ΞΞ»Ξ±Ξ²Ξµ Ξ±Ξ½Ξ±ΟΟΟ‰Ο„ΞΉΞΊΞ­Ο‚ Ξ¬Ξ΄ΞµΞΉΞµΟ‚ ΟƒΟΞ½ΞΏΞ»ΞΏ: ".$adeies['anar']." Ξ·ΞΌΞ­ΟΞµΟ‚, Ξ±Ο€Ο Ο„ΞΉΟ‚ ΞΏΟ€ΞΏΞ―ΞµΟ‚ ΞΌΟΞ½ΞΏ 15 Ξ·ΞΌΞ­ΟΞµΟ‚ Ο…Ο€ΞΏΞ»ΞΏΞ³Ξ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ Ξ³ΞΉΞ± Ο€ΟΞΏΟ‹Ο€Ξ·ΟΞµΟƒΞ―Ξ± ΟƒΟΞΌΟ†Ο‰Ξ½Ξ± ΞΌΞµ Ο„ΞΏ Ξ¬ΟΞΈΟΞΏ 657 ΞΊΞ±ΞΉ 658 Ο„ΞΏΟ… Ξ±ΟƒΟ„ΞΉΞΊΞΏΟ ΞΊΟΞ΄ΞΉΞΊΞ±, Ο„ΞΏ Ξ¬ΟΞΈΟΞΏ 11 Ο„ΞΏΟ… Ξ. 2874/2000, Ο„Ξ·Ξ½ ΞµΞ³ΞΊΟΞΊΞ»ΞΉΞΏ Ξ±ΟΞΉΞΈΞΌ. 79/14-07-1999 Ξ™ΞΞ‘, Ξ­Ξ³Ξ³ΟΞ±Ο†ΞΏ Ξ±Ο. Ο€ΟΟ‰Ο„. Ξ 06/40/29-04-2013 Ξ™ΞΞ‘. ";
     }
     if ($adeies['aney'] > 0) {
         $adeies_aney = $adeies['aney'] > 1 ?
-            $adeies['aney'] . " ημέρες, που αφαιρούνται" :
-            $adeies['aney'] . " ημέρα, που αφαιρείται";
+            $adeies['aney'] . " Ξ·ΞΌΞ­ΟΞµΟ‚, Ο€ΞΏΟ… Ξ±Ο†Ξ±ΞΉΟΞΏΟΞ½Ο„Ξ±ΞΉ" :
+            $adeies['aney'] . " Ξ·ΞΌΞ­ΟΞ±, Ο€ΞΏΟ… Ξ±Ο†Ξ±ΞΉΟΞµΞ―Ο„Ξ±ΞΉ";
 
-        $adeies_txt .= "Έλαβε άδεια άνευ αποδοχών σε εφαρμογή του Ν.4075/2012 άρθρο 50 για ".$adeies_aney;
-        $adeies_txt .= " από τη συνολική του/-ης εκπαιδευτική προϋπηρεσία.";
+        $adeies_txt .= "ΞΞ»Ξ±Ξ²Ξµ Ξ¬Ξ΄ΞµΞΉΞ± Ξ¬Ξ½ΞµΟ… Ξ±Ο€ΞΏΞ΄ΞΏΟ‡ΟΞ½ ΟƒΞµ ΞµΟ†Ξ±ΟΞΌΞΏΞ³Ξ® Ο„ΞΏΟ… Ξ.4075/2012 Ξ¬ΟΞΈΟΞΏ 50 Ξ³ΞΉΞ± ".$adeies_aney;
+        $adeies_txt .= " Ξ±Ο€Ο Ο„Ξ· ΟƒΟ…Ξ½ΞΏΞ»ΞΉΞΊΞ® Ο„ΞΏΟ…/-Ξ·Ο‚ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞ® Ο€ΟΞΏΟ‹Ο€Ξ·ΟΞµΟƒΞ―Ξ±.";
     }
     // if ($adeies['apergies'] > 0){
-    //     $adeies_txt .= "Απέργησε ".$adeies['apergies']." ημέρα/-ες.";
+    //     $adeies_txt .= "Ξ‘Ο€Ξ­ΟΞ³Ξ·ΟƒΞµ ".$adeies['apergies']." Ξ·ΞΌΞ­ΟΞ±/-ΞµΟ‚.";
     // }
 
-    $data = mb_convert_encoding($adeies_txt, "utf-8", "iso-8859-7");
+    $data = $adeies_txt;
     $document->setValue('adeies', $data);
     //////////////////
     
@@ -206,7 +198,7 @@ foreach($arr as $myarr)
     // hm proslhpshs
     $pros = substr($hmpros, 0, 4)*360 + substr($hmpros, 5, 2)*30 + substr($hmpros, 8, 2);
     // days: misthologikh - days_ya: ekpaideytikh
-    // +1 για να περιληφθεί και η τελευταία μέρα
+    // +1 Ξ³ΞΉΞ± Ξ½Ξ± Ο€ΞµΟΞΉΞ»Ξ·Ο†ΞΈΞµΞ― ΞΊΞ±ΞΉ Ξ· Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± ΞΌΞ­ΟΞ±
     $days = $apol - $pros + 1;
     $days_ya = $apol - $hm_ya + 1;
     // subtract subtracted
@@ -220,21 +212,17 @@ foreach($arr as $myarr)
     }
     $ymd = days2ymd($days);
     $ymd_ya = days2ymd($days_ya);
-    $data = $ymd[1]." μήνες, ".$ymd[2]." ημέρες";
-    $data_ya = $ymd_ya[1]." μήνες, ".$ymd_ya[2]." ημέρες";
+    $data = $ymd[1]." ΞΌΞ®Ξ½ΞµΟ‚, ".$ymd[2]." Ξ·ΞΌΞ­ΟΞµΟ‚";
+    $data_ya = $ymd_ya[1]." ΞΌΞ®Ξ½ΞµΟ‚, ".$ymd_ya[2]." Ξ·ΞΌΞ­ΟΞµΟ‚";
     // debug
     // echo "hm_ya: $tempya -> p: $data /// p_ya: $data_ya<br>";
     //
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('yphr', $data);
-    $data = mb_convert_encoding($data_ya, "utf-8", "iso-8859-7");
-    $document->setValue('yphr_ya', $data);
+    $document->setValue('yphr_ya', $data_ya);
 
     $data = getParam('head_title', $mysqlconnection);
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('head_title', $data);
     $data = getParam('head_name', $mysqlconnection);
-    $data = mb_convert_encoding($data, "utf-8", "iso-8859-7");
     $document->setValue('head_name', $data);
     
     // write to file
@@ -276,17 +264,17 @@ foreach ($filenames as $file) {
     unlink($file);
 }
 $vev = $i-1;
-echo "<h3>Επιτυχής εξαγωγή βεβαιώσεων αναπληρωτών ";
+echo "<h3>Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞµΞΎΞ±Ξ³Ο‰Ξ³Ξ® Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΟ‰Ξ½ Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ";
 if ($_POST['kratikoy']) {
-    echo "κρατικού προϋπολογισμού";
+    echo "ΞΊΟΞ±Ο„ΞΉΞΊΞΏΟ Ο€ΟΞΏΟ‹Ο€ΞΏΞ»ΞΏΞ³ΞΉΟƒΞΌΞΏΟ";
 } else {
-    echo "ΕΣΠΑ";
+    echo "Ξ•Ξ£Ξ Ξ‘";
 }
 echo "</h3>";
-echo "<br><p>Εκπ/κοί που βρέθηκαν: ".$_POST['plithos'];
-echo "<br>Βεβαιώσεις που εξήχθησαν: ".$vev;
-echo "</p><br><br><a href=$zipname>Ανοιγμα zip εγγράφου</a><br>";
-echo "<input type='button' class='btn-red' value='Επιστροφή' onclick=\"parent.location='../etc/end_of_year.php'\">";
+echo "<br><p>Ξ•ΞΊΟ€/ΞΊΞΏΞ― Ο€ΞΏΟ… Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½: ".$_POST['plithos'];
+echo "<br>Ξ’ΞµΞ²Ξ±ΞΉΟΟƒΞµΞΉΟ‚ Ο€ΞΏΟ… ΞµΞΎΞ®Ο‡ΞΈΞ·ΟƒΞ±Ξ½: ".$vev;
+echo "</p><br><br><a href=$zipname>Ξ‘Ξ½ΞΏΞΉΞ³ΞΌΞ± zip ΞµΞ³Ξ³ΟΞ¬Ο†ΞΏΟ…</a><br>";
+echo "<input type='button' class='btn-red' value='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onclick=\"parent.location='../etc/end_of_year.php'\">";
 echo "</p>";
 
 ?>

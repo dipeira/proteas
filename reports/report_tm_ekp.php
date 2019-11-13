@@ -1,8 +1,8 @@
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Μαθητές & Εκπαιδευτικοί</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞ±ΞΈΞ·ΟΞ­Ο & ΞΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΞ―</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -20,27 +20,27 @@
   session_start();
   
   require '../etc/menu.php';
-  echo "<h3>Μαθητές & Εκπαιδευτικοί</h3>";
+  echo "<h3>ΞΞ±ΞΈΞ·ΟΞ­Ο & ΞΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΞ―</h3>";
   echo "<table class=\"imagetable\" border='1'>";
   echo "<form action='' method='POST' autocomplete='off'>";
   echo "<tr><td colspan>";
-  echo "<input type='radio' name='type' value='1' checked >Δημόσια Δημοτικά (όχι ειδικά)<br>";
-  echo "<input type='radio' name='type' value='2' >Ιδιωτικά Δημοτικά<br>";
-  echo "<input type='radio' name='type' value='3' >Ειδικά Δημοτικά<br>";
-  echo "<input type='radio' name='type' value='7' >Ολιγοθέσια Δημοτικά<br>";
-  echo "<input type='radio' name='type' value='4' >Δημόσια Νηπιαγωγεία (όχι ειδικά) (και λειτουργικά κενά)<br>";
-  echo "<input type='radio' name='type' value='5' >Ιδιωτικά Νηπιαγωγεία<br>";
-  echo "<input type='radio' name='type' value='6' >Ειδικά Νηπιαγωγεία<br>";
+  echo "<input type='radio' name='type' value='1' checked >ΞΞ·ΞΌΟΟΞΉΞ± ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬ (ΟΟΞΉ Ξ΅ΞΉΞ΄ΞΉΞΊΞ¬)<br>";
+  echo "<input type='radio' name='type' value='2' >ΞΞ΄ΞΉΟΟΞΉΞΊΞ¬ ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬<br>";
+  echo "<input type='radio' name='type' value='3' >ΞΞΉΞ΄ΞΉΞΊΞ¬ ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬<br>";
+  echo "<input type='radio' name='type' value='7' >ΞΞ»ΞΉΞ³ΞΏΞΈΞ­ΟΞΉΞ± ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬<br>";
+  echo "<input type='radio' name='type' value='4' >ΞΞ·ΞΌΟΟΞΉΞ± ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³Ξ΅Ξ―Ξ± (ΟΟΞΉ Ξ΅ΞΉΞ΄ΞΉΞΊΞ¬) (ΞΊΞ±ΞΉ Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΞ¬ ΞΊΞ΅Ξ½Ξ¬)<br>";
+  echo "<input type='radio' name='type' value='5' >ΞΞ΄ΞΉΟΟΞΉΞΊΞ¬ ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³Ξ΅Ξ―Ξ±<br>";
+  echo "<input type='radio' name='type' value='6' >ΞΞΉΞ΄ΞΉΞΊΞ¬ ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³Ξ΅Ξ―Ξ±<br>";
   echo "</td></tr>";
-  echo "<tr><td colspan><input type='submit' value='Προβολή'>";
-  echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+  echo "<tr><td colspan><input type='submit' value='Ξ ΟΞΏΞ²ΞΏΞ»Ξ®'>";
+  echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
   echo "</td></tr>";
   echo "</table></form>";
   echo "<br>";
                 
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
 if ($_REQUEST['type']) {
     $dim_ar = array('1', '2', '3', '7');
@@ -48,7 +48,7 @@ if ($_REQUEST['type']) {
     //if ($_GET['type'] == 1)
     if (in_array($_REQUEST['type'], $dim_ar)) {
         $type = 1;
-        //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
+        //type2: 0 Ξ΄Ξ·ΞΌΟΟΞΉΞΏ, 1 ΞΉΞ΄ΞΉΟΟΞΉΞΊΟ, 2 Ξ΅ΞΉΞ΄ΞΉΞΊΟ
         if ($_REQUEST['type'] == 7) {
             $query = "SELECT * from school WHERE type = $type AND type2=0 AND anenergo=0 AND leitoyrg <4";
         } else {
@@ -62,33 +62,33 @@ if ($_REQUEST['type']) {
         $i=0;
         ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-        echo "<thead><tr><th>Ονομασία</th>";
-        echo "<th>Οργ.</th>";
-        echo "<th>Λειτ.</th>";
-        echo "<th>Α'</th>";
-        echo "<th>Β'</th>";
-        echo "<th>Γ'</th>";
-        echo "<th>Δ'</th>";
-        echo "<th>Ε'</th>";
-        echo "<th>ΣΤ'</th>";
-        echo "<th>Σύν.</th>";
-        echo "<th>Τμ. Α'</th>";
-        echo "<th>Τμ. Β'</th>";
-        echo "<th>Τμ. Γ'</th>";
-        echo "<th>Τμ. Δ'</th>";
-        echo "<th>Τμ. Ε'</th>";
-        echo "<th>Τμ. ΣΤ'</th>";
-        echo "<th>Σύν. Τμ.</th>";
-        echo "<th>Τ.Ε.</th>";
-        echo "<th>Μαθ Τ.Ε.</th>";
-        echo "<th>ΠΕ70</th>";
-        echo "<th>ΠΕ06</th>";
-        echo "<th>ΠΕ11</th>";
-        echo "<th>ΠΕ79</th>";
-        echo "<th>Τμ. Ολ.</th>";
-        echo "<th>Μαθ. Ολ.</th>";
-        //echo "<th>Εκπ. T.E.</th>";
-        //echo "<th>Εκπ. T.Y.</th>";
+        echo "<thead><tr><th>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+        echo "<th>ΞΟΞ³.</th>";
+        echo "<th>ΞΞ΅ΞΉΟ.</th>";
+        echo "<th>Ξ'</th>";
+        echo "<th>Ξ'</th>";
+        echo "<th>Ξ'</th>";
+        echo "<th>Ξ'</th>";
+        echo "<th>Ξ'</th>";
+        echo "<th>Ξ£Ξ€'</th>";
+        echo "<th>Ξ£ΟΞ½.</th>";
+        echo "<th>Ξ€ΞΌ. Ξ'</th>";
+        echo "<th>Ξ€ΞΌ. Ξ'</th>";
+        echo "<th>Ξ€ΞΌ. Ξ'</th>";
+        echo "<th>Ξ€ΞΌ. Ξ'</th>";
+        echo "<th>Ξ€ΞΌ. Ξ'</th>";
+        echo "<th>Ξ€ΞΌ. Ξ£Ξ€'</th>";
+        echo "<th>Ξ£ΟΞ½. Ξ€ΞΌ.</th>";
+        echo "<th>Ξ€.Ξ.</th>";
+        echo "<th>ΞΞ±ΞΈ Ξ€.Ξ.</th>";
+        echo "<th>Ξ Ξ70</th>";
+        echo "<th>Ξ Ξ06</th>";
+        echo "<th>Ξ Ξ11</th>";
+        echo "<th>Ξ Ξ79</th>";
+        echo "<th>Ξ€ΞΌ. ΞΞ».</th>";
+        echo "<th>ΞΞ±ΞΈ. ΞΞ».</th>";
+        //echo "<th>ΞΞΊΟ. T.E.</th>";
+        //echo "<th>ΞΞΊΟ. T.Y.</th>";
         echo "</tr></thead>\n<tbody>\n";
 
         while ($i < $num)
@@ -128,10 +128,10 @@ if ($_REQUEST['type']) {
             echo "<tr>";
             echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
             echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
-            echo $has_entaxi ? "<td>Ναι</td>" : "<td>Όχι</td>";
+            echo $has_entaxi ? "<td>ΞΞ±ΞΉ</td>" : "<td>ΞΟΞΉ</td>";
             echo $has_entaxi ? "<td>$entaksis[1]</td>" : "<td>0</td>";
         
-            echo "<td>".$ekp_ar['ΠΕ70']."</td><td>".$ekp_ar['ΠΕ06']."</td><td>".$ekp_ar['ΠΕ11']."</td><td>".$ekp_ar['ΠΕ79']."</td>";
+            echo "<td>".$ekp_ar['Ξ Ξ70']."</td><td>".$ekp_ar['Ξ Ξ06']."</td><td>".$ekp_ar['Ξ Ξ11']."</td><td>".$ekp_ar['Ξ Ξ79']."</td>";
             echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
             echo "</tr>\n";
 
@@ -151,21 +151,21 @@ if ($_REQUEST['type']) {
             $sumolstud += $oloimero_stud;
             //$sumee[0] += $ekp_ee_exp[0];
             //$sumee[1] += $ekp_ee_exp[1];
-            $sum70 += $ekp_ar['ΠΕ70'];
-            $sum06 += $ekp_ar['ΠΕ06'];
-            $sum11 += $ekp_ar['ΠΕ11'];
-            $sum16 += $ekp_ar['ΠΕ79'];
+            $sum70 += $ekp_ar['Ξ Ξ70'];
+            $sum06 += $ekp_ar['Ξ Ξ06'];
+            $sum11 += $ekp_ar['Ξ Ξ11'];
+            $sum16 += $ekp_ar['Ξ Ξ79'];
         
             $i++;                        
         }
 
         $synolo_stud = array_sum($sums);
         $synolo_teach =  array_sum($sumt);
-        echo "<tr><td>Σύνολα</td><td></td><td></td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
+        echo "<tr><td>Ξ£ΟΞ½ΞΏΞ»Ξ±</td><td></td><td></td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
-        echo "<tr><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
-        echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
+        echo "<tr><td></td><td></td><td></td><td>Ξ'</td><td>Ξ'</td><td>Ξ'</td><td>Ξ'</td><td>Ξ'</td><td>Ξ£Ξ€'</td><td>Ξ£ΟΞ½.</td>";
+        echo "<td>Ξ€ΞΌ.Ξ'</td><td>Ξ€ΞΌ.Ξ'</td><td>Ξ€ΞΌ.Ξ'</td><td>Ξ€ΞΌ.Ξ'</td><td>Ξ€ΞΌ.Ξ'</td><td>Ξ€ΞΌ.Ξ£Ξ€'</td><td>Ξ£ΟΞ½.Ξ€ΞΌ.</td><td>Ξ Ξ70</td><td>Ξ Ξ06</td><td>Ξ Ξ11</td><td>Ξ Ξ79</td><td>Ξ€ΞΌ. ΞΞ».</td><td>ΞΞ±ΞΈ. ΞΞ».</td>";//<td>ΞΞΊΟ. T.E.</td><td>ΞΞΊΟ. T.Y.</td>";
         echo "</tr>";
         echo "</tbody></table>";
 
@@ -175,9 +175,9 @@ if ($_REQUEST['type']) {
 
         echo "<form action='../tools/2excel_ses.php' method='post'>";
         //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
         echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
         echo "</form>";
         //ob_end_clean();                   
     }
@@ -185,12 +185,12 @@ if ($_REQUEST['type']) {
     else if (in_array($_REQUEST['type'], $nip_ar)) {
         //nipiagogeia
         $type = 2;
-        //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
+        //type2: 0 Ξ΄Ξ·ΞΌΟΟΞΉΞΏ, 1 ΞΉΞ΄ΞΉΟΟΞΉΞΊΟ, 2 Ξ΅ΞΉΞ΄ΞΉΞΊΟ
         $type2 = $_REQUEST['type'] - 4;
         $kenapl = isset($_GET['kenapl']) ? true : false;
         echo $kenapl ? 
-        "<p><a href='report_tm_ekp.php?type=4'>Όλα</a>&nbsp;&nbsp;Μόνο Κενά/Πλεονάσματα</p>" :
-        "<p>Όλα&nbsp;&nbsp;<a href='report_tm_ekp.php?type=4&kenapl=1'>Μόνο Κενά/Πλεονάσματα</a></p>";
+        "<p><a href='report_tm_ekp.php?type=4'>ΞΞ»Ξ±</a>&nbsp;&nbsp;ΞΟΞ½ΞΏ ΞΞ΅Ξ½Ξ¬/Ξ Ξ»Ξ΅ΞΏΞ½Ξ¬ΟΞΌΞ±ΟΞ±</p>" :
+        "<p>ΞΞ»Ξ±&nbsp;&nbsp;<a href='report_tm_ekp.php?type=4&kenapl=1'>ΞΟΞ½ΞΏ ΞΞ΅Ξ½Ξ¬/Ξ Ξ»Ξ΅ΞΏΞ½Ξ¬ΟΞΌΞ±ΟΞ±</a></p>";
         
         $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0 ORDER BY name";
         $result = mysqli_query($mysqlconnection, $query);
@@ -200,27 +200,27 @@ if ($_REQUEST['type']) {
         $i=0;
         ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr><th>Ονομασία</th>";
-            echo "<th>Οργ.</th>";
-            echo "<th>Λειτ.</th>";
+            echo "<thead><tr><th>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+            echo "<th>ΞΟΞ³.</th>";
+            echo "<th>ΞΞ΅ΞΉΟ.</th>";
             
-            //echo "<th>Τμήματα<br>Πρωινού</th>";
-            echo "<th>Νήπια<br>Πρωινού</th>";
-            echo "<th>Προνήπια<br>Πρωινού</th>";
+            //echo "<th>Ξ€ΞΌΞ®ΞΌΞ±ΟΞ±<br>Ξ ΟΟΞΉΞ½ΞΏΟ</th>";
+            echo "<th>ΞΞ®ΟΞΉΞ±<br>Ξ ΟΟΞΉΞ½ΞΏΟ</th>";
+            echo "<th>Ξ ΟΞΏΞ½Ξ®ΟΞΉΞ±<br>Ξ ΟΟΞΉΞ½ΞΏΟ</th>";
             
-            echo "<th>Τμήματα<br>Ολοήμ.</th>";
-            echo "<th>Νήπια<br>Ολοήμ.</th>";
-            echo "<th>Προνήπια<br>Ολοήμ.</th>";
+            echo "<th>Ξ€ΞΌΞ®ΞΌΞ±ΟΞ±<br>ΞΞ»ΞΏΞ®ΞΌ.</th>";
+            echo "<th>ΞΞ®ΟΞΉΞ±<br>ΞΞ»ΞΏΞ®ΞΌ.</th>";
+            echo "<th>Ξ ΟΞΏΞ½Ξ®ΟΞΉΞ±<br>ΞΞ»ΞΏΞ®ΞΌ.</th>";
 
-            echo "<th>Τ.Ε.</th>";
-            echo "<th>Μαθ Τ.Ε.</th>";
+            echo "<th>Ξ€.Ξ.</th>";
+            echo "<th>ΞΞ±ΞΈ Ξ€.Ξ.</th>";
             
-            echo "<th>Απαιτ.Εκπ/κοί<br><small>(όχι Τ.Ε.)</small></th>";
-            echo "<th>Τοπ/νοι Εκπ/κοί<br><small>(όχι Τ.Ε.)</small></th>";
+            echo "<th>ΞΟΞ±ΞΉΟ.ΞΞΊΟ/ΞΊΞΏΞ―<br><small>(ΟΟΞΉ Ξ€.Ξ.)</small></th>";
+            echo "<th>Ξ€ΞΏΟ/Ξ½ΞΏΞΉ ΞΞΊΟ/ΞΊΞΏΞ―<br><small>(ΟΟΞΉ Ξ€.Ξ.)</small></th>";
             echo $kenapl ?
-                "<th>Κενά</th><th>Πλεονάσματα</th>" :
+                "<th>ΞΞ΅Ξ½Ξ¬</th><th>Ξ Ξ»Ξ΅ΞΏΞ½Ξ¬ΟΞΌΞ±ΟΞ±</th>" :
                 "<th>+ / -</th>";
-            echo "<th>+ / - Τ.Ε.</th>";
+            echo "<th>+ / - Ξ€.Ξ.</th>";
             echo "</tr></thead>\n<tbody>\n";
 
         while ($i < $num)
@@ -242,7 +242,7 @@ if ($_REQUEST['type']) {
             $oloimero_tm += $oloimero_nip_exp[2]+$oloimero_nip_exp[3]>0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[4]+$oloimero_nip_exp[5]>0 ? 1:0;
 
-            // τοποθετημένοι εκπ/κοί
+            // ΟΞΏΟΞΏΞΈΞ΅ΟΞ·ΞΌΞ­Ξ½ΞΏΞΉ Ξ΅ΞΊΟ/ΞΊΞΏΞ―
             $top60 = $top60m = $top60ana = $top60ent = 0;
             // exclude ekp/koys@tmima entaksis
             $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi != 3";
@@ -284,7 +284,7 @@ if ($_REQUEST['type']) {
             echo "<td><strong>$oloimero_tm</strong></td>";
             echo "<td>$oloimero_syn_nip</td><td>$oloimero_syn_pro</td>";
             
-            echo $has_entaxi ? "<td>Ναι</td>" : "<td>Όχι</td>";
+            echo $has_entaxi ? "<td>ΞΞ±ΞΉ</td>" : "<td>ΞΟΞΉ</td>";
             echo $has_entaxi ? "<td>$entaksis[1]</td>" : "<td>0</td>";
             echo "<td>$apait</td>";
             echo "<td>$top60</td>";
@@ -320,7 +320,7 @@ if ($_REQUEST['type']) {
         }
         
         echo "<tr>";
-        echo "<td>Σύνολα</td><td></td>";
+        echo "<td>Ξ£ΟΞ½ΞΏΞ»Ξ±</td><td></td>";
         echo "<td>$synolo_tm_klas</td>";
         echo "<td>$synolo_nip</td>";
         echo "<td>$synolo_tm_olo</td>";
@@ -346,9 +346,9 @@ if ($_REQUEST['type']) {
 
         echo "<form action='../tools/2excel_ses.php' method='post'>";
         //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
         echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+        echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
         echo "</form>";
     }
 }

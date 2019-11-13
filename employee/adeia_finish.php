@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 //	require_once"../config.php";
 	
 			
@@ -9,14 +9,14 @@
 	$result = (date('d',$d1)+$days + date('m',$d1) + date('Y',$d1));
 	/*
         if ($result<=0)
-		echo "Λάθος ημερομηνία";
+		echo "Ξ›Ξ¬ΞΈΞΏΟ‚ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±";
 	else
 	{
 		$ymd=days2ymd($result);	
-		echo "Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]";
+		echo "ΞΟ„Ξ·: $ymd[0] &nbsp; ΞΞ®Ξ½ΞµΟ‚: $ymd[1] &nbsp; Ξ—ΞΌΞ­ΟΞµΟ‚: $ymd[2]";
 		$vath = vathmos($result);
 		$mk = mk($result);
-		echo "<br>Βαθμός: $vath[0]";
+		echo "<br>Ξ’Ξ±ΞΈΞΌΟΟ‚: $vath[0]";
 		echo "<br>MK: $mk";
 	}
 	*/

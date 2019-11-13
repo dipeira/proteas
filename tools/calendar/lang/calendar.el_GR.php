@@ -87,8 +87,8 @@ define("L_S_SAT", "Σαβ");
 define("L_S_SUN", "Κυρ");
 
 // Windows encoding
-//define("WIN_DEFAULT", "windows-1253");
-define("WIN_DEFAULT", "iso8859-7");
+define("WIN_DEFAULT", "windows-1253");
+//define("WIN_DEFAULT", "iso8859-7");
 define("L_CAL_FORMAT", "%d %B %Y");
 if(!defined("L_LANG") || L_LANG == "L_LANG") define("L_LANG", "el_GR"); // en_US format of your language
 

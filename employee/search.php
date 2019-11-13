@@ -1,13 +1,12 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once "../tools/functions.php";
-  //define("L_LANG", "el_GR"); Needs fixing
   require('../tools/calendar/tc_calendar.php');
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   // Demand authorization                
   include("../tools/class.login.php");
@@ -19,8 +18,8 @@
 <html>
   <head>
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Αναζήτηση</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·</title>
 	
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -71,16 +70,16 @@
   <body> 
   <?php include('../etc/menu.php'); ?>
     <center>
-	 <h2>Αναζήτηση προσωπικού</h2>
-   <h3>(μονίμων & αναπληρωτών)</h3>
+	 <h2>ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ· ΟΟΞΏΟΟΟΞΉΞΊΞΏΟ</h2>
+   <h3>(ΞΌΞΏΞ½Ξ―ΞΌΟΞ½ & Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½)</h3>
       <?php
 		echo "<div id=\"content\">";
 		echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";
     echo "<table class=\"imagetable\" border='1'>";
-    echo "<thead><th>Κριτήριο</th><th><span title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφ.</span></th><th>Τιμή</th>";
-    echo "<th>Κριτήριο</th><th><span title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφ.</span></th><th>Τιμή</th></thead>";
-		echo "<tr><td>Όνομα</td><td></td><td><input type='text' id='name' name='name' /></td><td>Ημ/νία Διορισμού</td><td><input type='checkbox' name = 'dsphm_dior'></td><td>";
-    echo "Από:&nbsp;<br>";
+    echo "<thead><th>ΞΟΞΉΟΞ®ΟΞΉΞΏ</th><th><span title='ΞΞΌΟΞ¬Ξ½ΞΉΟΞ· ΟΞ΅Ξ΄Ξ―ΞΏΟ ΟΟΞ± Ξ±ΟΞΏΟΞ΅Ξ»Ξ­ΟΞΌΞ±ΟΞ±'>ΞΞΌΟ.</span></th><th>Ξ€ΞΉΞΌΞ®</th>";
+    echo "<th>ΞΟΞΉΟΞ®ΟΞΉΞΏ</th><th><span title='ΞΞΌΟΞ¬Ξ½ΞΉΟΞ· ΟΞ΅Ξ΄Ξ―ΞΏΟ ΟΟΞ± Ξ±ΟΞΏΟΞ΅Ξ»Ξ­ΟΞΌΞ±ΟΞ±'>ΞΞΌΟ.</span></th><th>Ξ€ΞΉΞΌΞ®</th></thead>";
+		echo "<tr><td>ΞΞ½ΞΏΞΌΞ±</td><td></td><td><input type='text' id='name' name='name' /></td><td>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞΉΞΏΟΞΉΟΞΌΞΏΟ</td><td><input type='checkbox' name = 'dsphm_dior'></td><td>";
+    echo "ΞΟΟ:&nbsp;<br>";
     $myCalendar = new tc_calendar("hm_dior_from", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		$myCalendar->setPath("../tools/calendar/");
@@ -90,7 +89,7 @@
     $myCalendar->disabledDay("sun,sat");
     $myCalendar->setDatePair('hm_dior_from', 'hm_dior_to');
     $myCalendar->writeScript();
-    echo "&nbsp;έως:&nbsp;<br>";
+    echo "&nbsp;Ξ­ΟΟ:&nbsp;<br>";
     $myCalendar = new tc_calendar("hm_dior_to", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		$myCalendar->setPath("../tools/calendar/");
@@ -102,8 +101,8 @@
 		$myCalendar->writeScript();
 	  echo "</td></tr>";
 		
-    echo "<tr><td>Επώνυμο</td><td></td><td><input type='text' name='surname' id='surname'/></td><td>Ημ/νία Ανάληψης</td><td><input type='checkbox' name = 'dsphm_anal'></td><td>";
-    echo "Από:&nbsp;<br>";
+    echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td></td><td><input type='text' name='surname' id='surname'/></td><td>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞ½Ξ¬Ξ»Ξ·ΟΞ·Ο</td><td><input type='checkbox' name = 'dsphm_anal'></td><td>";
+    echo "ΞΟΟ:&nbsp;<br>";
 		$myCalendar = new tc_calendar("hm_anal_from", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		$myCalendar->setPath("../tools/calendar/");
@@ -113,7 +112,7 @@
     $myCalendar->disabledDay("sun,sat");
     $myCalendar->setDatePair('hm_anal_from', 'hm_anal_to');
     $myCalendar->writeScript();
-    echo "&nbsp;έως:&nbsp;<br>";
+    echo "&nbsp;Ξ­ΟΟ:&nbsp;<br>";
     $myCalendar = new tc_calendar("hm_anal_to", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		$myCalendar->setPath("../tools/calendar/");
@@ -125,62 +124,62 @@
     $myCalendar->writeScript();
 	  echo "</td></tr>";	
 		
-		echo "<tr><td>Πατρώνυμο</td><td><input type='checkbox' name = 'dsppatr'></td><td><input type='text' name='patrwnymo' /></td>";
-		echo "<td>Μεταπτυχιακό/Διδακτορικό</td><td><input type='checkbox' name = 'dspmetdid'></td><td>";
+		echo "<tr><td>Ξ Ξ±ΟΟΟΞ½ΟΞΌΞΏ</td><td><input type='checkbox' name = 'dsppatr'></td><td><input type='text' name='patrwnymo' /></td>";
+		echo "<td>ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ/ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ</td><td><input type='checkbox' name = 'dspmetdid'></td><td>";
 		echo "<select name=\"met_did\">";
 		echo "<option value=''></option>";
-		echo "<option value='0'>Όχι</option>";
-		echo "<option value='1'>Μεταπτυχιακό</option>";
-		echo "<option value='2'>Διδακτορικό</option>";		
+		echo "<option value='0'>ΞΟΞΉ</option>";
+		echo "<option value='1'>ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ</option>";
+		echo "<option value='2'>ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ</option>";		
 		echo "</select></td></tr>";
 		
-		echo "<tr><td>Α.Μ.</td><td><input type='checkbox' name = 'dspam'></td><td><input type='text' name='am' /></td>";
-		echo "<td>Προϋπηρεσία</td><td><input type='checkbox' name = 'dspproyhp'></td><td>";
+		echo "<tr><td>Ξ.Ξ.</td><td><input type='checkbox' name = 'dspam'></td><td><input type='text' name='am' /></td>";
+		echo "<td>Ξ ΟΞΏΟΟΞ·ΟΞ΅ΟΞ―Ξ±</td><td><input type='checkbox' name = 'dspproyhp'></td><td>";
 		echo "<select name=\"opp\">";
 		echo "<option value=\"=\" selected>=</option>";
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
 		echo "</select>";
-		echo "Έτη<input type='text' name='pyears' size=1 />Μήνες<input type='text' name='pmonths' size=1 />Ημέρες<input type='text' name='pdays' size=1 /></td></tr>";
+		echo "ΞΟΞ·<input type='text' name='pyears' size=1 />ΞΞ®Ξ½Ξ΅Ο<input type='text' name='pmonths' size=1 />ΞΞΌΞ­ΟΞ΅Ο<input type='text' name='pdays' size=1 /></td></tr>";
 		
-    echo "<tr><td>Α.Φ.Μ.</td><td><input type='checkbox' name = 'dspafm'></td><td><input type='text' name='afm' /></td>";
-    echo "<td>Τηλέφωνο</td><td></td><td><input type='text' name='tel' /></td>";
+    echo "<tr><td>Ξ.Ξ¦.Ξ.</td><td><input type='checkbox' name = 'dspafm'></td><td><input type='text' name='afm' /></td>";
+    echo "<td>Ξ€Ξ·Ξ»Ξ­ΟΟΞ½ΞΏ</td><td></td><td><input type='text' name='tel' /></td>";
     echo "</tr>";
                 
-		echo "<tr><td>Κλάδος</td><td></td><td>";
+		echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td></td><td>";
 		kladosCmb($mysqlconnection);
 		echo "</td>";
-		echo "<td>Σχολείο Οργανικής</td><td></td><td><input type=\"text\" name=\"org\" id=\"org\" /></td></tr>";
+		echo "<td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ®Ο</td><td></td><td><input type=\"text\" name=\"org\" id=\"org\" /></td></tr>";
 				
-		echo "<tr><td>Βαθμός</td><td><input type='checkbox' name = 'dspvathmos'></td><td>";
+		echo "<tr><td>ΞΞ±ΞΈΞΌΟΟ</td><td><input type='checkbox' name = 'dspvathmos'></td><td>";
 		
 		
 		vathmosCmb($mysqlconnection);
 		
 		
 		
-		echo "<td>Σχολείο Υπηρέτησης</td><td></td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td></tr>";
+		echo "<td>Ξ£ΟΞΏΞ»Ξ΅Ξ―ΞΏ Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</td><td></td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td></tr>";
 		
-		echo "<tr><td>Μ.Κ.</td><td><input type='checkbox' name = 'dspmk'></td><td><input type='text' name='mk' /></td>";
-		echo "<td>Σχόλια</td><td></td><td><input type='text' name='comments' /></td></tr>";
+		echo "<tr><td>Ξ.Ξ.</td><td><input type='checkbox' name = 'dspmk'></td><td><input type='text' name='mk' /></td>";
+		echo "<td>Ξ£ΟΟΞ»ΞΉΞ±</td><td></td><td><input type='text' name='comments' /></td></tr>";
                 
-    echo "<tr><td>Κατάσταση</td><td><input type='checkbox' name = 'dspkatast'></td><td>";
+    echo "<tr><td>ΞΞ±ΟΞ¬ΟΟΞ±ΟΞ·</td><td><input type='checkbox' name = 'dspkatast'></td><td>";
     echo "<select name=\"katast\">";
-		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-		echo "<option value=\"1\">Εργάζεται</option>";
-		echo "<option value=\"2\">Λύση Σχέσης-Παραίτηση</option>";
-		echo "<option value=\"3\">Άδεια</option>";
-		echo "<option value=\"4\">Διαθεσιμότητα</option>";
+		echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΟΞΉΞ»Ξ­ΞΎΟΞ΅:)</option>";
+		echo "<option value=\"1\">ΞΟΞ³Ξ¬ΞΆΞ΅ΟΞ±ΞΉ</option>";
+		echo "<option value=\"2\">ΞΟΟΞ· Ξ£ΟΞ­ΟΞ·Ο-Ξ Ξ±ΟΞ±Ξ―ΟΞ·ΟΞ·</option>";
+		echo "<option value=\"3\">ΞΞ΄Ξ΅ΞΉΞ±</option>";
+		echo "<option value=\"4\">ΞΞΉΞ±ΞΈΞ΅ΟΞΉΞΌΟΟΞ·ΟΞ±</option>";
 		echo "</select>";
     //echo "</td><td></td><td></td><td></td>";
-    echo "</td><td>Συνολική Υπηρεσία <br><small>(από διορισμό + προϋπηρεσία)</small></td><td><input type='checkbox' name = 'dspsynol'></td><td>";
+    echo "</td><td>Ξ£ΟΞ½ΞΏΞ»ΞΉΞΊΞ® Ξ₯ΟΞ·ΟΞ΅ΟΞ―Ξ± <br><small>(Ξ±ΟΟ Ξ΄ΞΉΞΏΟΞΉΟΞΌΟ + ΟΟΞΏΟΟΞ·ΟΞ΅ΟΞ―Ξ±)</small></td><td><input type='checkbox' name = 'dspsynol'></td><td>";
     echo "<select name=\"ops\">";
 		echo "<option value=\"=\" selected>=</option>";
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
 		echo "</select>";
-		echo "Έτη<input type='text' name='syears' size=1 />Μήνες<input type='text' name='smonths' size=1 />Ημέρες<input type='text' name='sdays' size=1 /><br>";
-    echo "<small>Συνολική Υπηρεσία έως:</small><br>";
+		echo "ΞΟΞ·<input type='text' name='syears' size=1 />ΞΞ®Ξ½Ξ΅Ο<input type='text' name='smonths' size=1 />ΞΞΌΞ­ΟΞ΅Ο<input type='text' name='sdays' size=1 /><br>";
+    echo "<small>Ξ£ΟΞ½ΞΏΞ»ΞΉΞΊΞ® Ξ₯ΟΞ·ΟΞ΅ΟΞ―Ξ± Ξ­ΟΟ:</small><br>";
     $myCalendar = new tc_calendar("hm_synol", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
 		//$myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
@@ -191,25 +190,25 @@
 		$myCalendar->disabledDay("sun,sat");
 		$myCalendar->writeScript();
     echo "</td></tr>";
-    echo "<tr><td>Τύπος</td><td></td><td>";
+    echo "<tr><td>Ξ€ΟΟΞΏΟ</td><td></td><td>";
     echo "<select name=\"emptype\">";
-		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-		echo "<option value=\"1\">Μόνιμος</option>";
-		echo "<option value=\"2\">Αναπληρωτής</option>";
-		echo "<option value=\"3\">Διοικητικός</option>";
-		echo "<option value=\"4\">Ιδιωτικός</option>";
+		echo "<option value=\"\" selected>(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΟΞΉΞ»Ξ­ΞΎΟΞ΅:)</option>";
+		echo "<option value=\"1\">ΞΟΞ½ΞΉΞΌΞΏΟ</option>";
+		echo "<option value=\"2\">ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ®Ο</option>";
+		echo "<option value=\"3\">ΞΞΉΞΏΞΉΞΊΞ·ΟΞΉΞΊΟΟ</option>";
+		echo "<option value=\"4\">ΞΞ΄ΞΉΟΟΞΉΞΊΟΟ</option>";
     echo "</select>";
     echo "</td><td colspan=3></td></tr>";
     
-    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν ανήκουν στη Δ/νση;</td></tr>";	
-		echo "<tr><td colspan=6><input type='checkbox' name = 'or'>Να ισχύει ΤΟΥΛΑΧΙΣΤΟΝ ΕΝΑ από τα παραπάνω κριτήρια (λογικό OR);</td></tr>";	
+    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>ΞΞΌΟΞ¬Ξ½ΞΉΟΞ· ΞΊΞ±ΞΉ ΟΟΟΞ½ Ξ΄Ξ΅Ξ½ Ξ±Ξ½Ξ®ΞΊΞΏΟΞ½ ΟΟΞ· Ξ/Ξ½ΟΞ·;</td></tr>";	
+		echo "<tr><td colspan=6><input type='checkbox' name = 'or'>ΞΞ± ΞΉΟΟΟΞ΅ΞΉ Ξ€ΞΞ₯ΞΞΞ§ΞΞ£Ξ€ΞΞ ΞΞΞ Ξ±ΟΟ ΟΞ± ΟΞ±ΟΞ±ΟΞ¬Ξ½Ο ΞΊΟΞΉΟΞ®ΟΞΉΞ± (Ξ»ΞΏΞ³ΞΉΞΊΟ OR);</td></tr>";	
 		
 		echo "	</table>";
 		echo "	<input type='hidden' name = 'set' value='$set'>";
-		echo "	<input type='submit' value='Αναζήτηση'>";
-		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Επαναφορά\" onClick=\"window.location.reload()\">";
-    echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"Βοήθεια\" onclick=\"window.open('../help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
-		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+		echo "	<input type='submit' value='ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·'>";
+		echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"ΞΟΞ±Ξ½Ξ±ΟΞΏΟΞ¬\" onClick=\"window.location.reload()\">";
+    echo "  &nbsp;&nbsp;&nbsp;&nbsp;<input type='button' value=\"ΞΞΏΞ®ΞΈΞ΅ΞΉΞ±\" onclick=\"window.open('../help/help.html#search','', 'width=450, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=yes, resizable=no'); return false\">";
+		echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
 		echo "	</form>";
 		echo "</div>";
 		

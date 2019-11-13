@@ -1,9 +1,9 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7');
+header('Content-type: text/html; charset=utf-8');
 require_once "../config.php";
 $conn = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-mysqli_query($conn, "SET NAMES 'greek'");
-mysqli_query($conn, "SET CHARACTER SET 'greek'");
+mysqli_query($conn, "SET NAMES 'utf8'");
+mysqli_query($conn, "SET CHARACTER SET 'utf8'");
 
 //$q = strtolower($_GET["q"]);
 $idiwtikoi = $_GET['idiwtikoi'];
@@ -20,12 +20,10 @@ if ($idiwtikoi){
   $sql = "select 0 as t_nm,surname from employee where thesi NOT IN (5,6) AND surname LIKE '%$q%' LIMIT 0, 10 UNION select DISTINCT 1 as t_nm,surname from ektaktoi where surname LIKE '%$q%' LIMIT 0, 10";
 }
 
-//workaround for greek chars
-$sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
 
 $rsd = mysqli_query($conn,$sql);
 while($rs = mysqli_fetch_array($rsd)) {
-  $postfix = $rs['t_nm'] ? ' (Áí)' : ' (Ìïí)';
+  $postfix = $rs['t_nm'] ? ' (Î‘Î½)' : ' (ÎœÎ¿Î½)';
   $cname = $rs['surname'].$postfix;
   $ctbl = $rs['t_nm'];
 	$out =  "$cname|$ctbl\n";

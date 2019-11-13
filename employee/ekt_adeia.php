@@ -1,14 +1,13 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7');
+  header('Content-type: text/html; charset=utf-8');
   require_once"../config.php";
   require_once"../tools/functions.php";
   require_once '../tools/num2word.php';
-  //define("L_LANG", "el_GR"); Needs fixing
   require '../tools/calendar/tc_calendar.php';
 
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
   // Demand authorization                
   require "../tools/class.login.php";
@@ -21,7 +20,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Employee</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -71,18 +70,18 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         <?php
         switch ($_GET['op']) {
           case 'add':
-            echo "<h2>Προσθήκη άδειας αναπληρωτή</h2>";
+            echo "<h2>Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· Ξ¬Ξ΄Ξ΅ΞΉΞ±Ο Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ®</h2>";
             break;
           case 'view':
-            echo "<h2>Προβολή άδειας αναπληρωτή</h2>";
+            echo "<h2>Ξ ΟΞΏΞ²ΞΏΞ»Ξ® Ξ¬Ξ΄Ξ΅ΞΉΞ±Ο Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ®</h2>";
             break;
           case 'edit':
-            echo "<h2>Επεξεργασία άδειας αναπληρωτή</h2>";
+            echo "<h2>ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ± Ξ¬Ξ΄Ξ΅ΞΉΞ±Ο Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ®</h2>";
             break;
         }
         if (!isset($_GET['sxol_etos'])) {
-            echo "<h2>Σφάλμα: Παρακαλώ δώστε σχολικό έτος.</h2>";
-            echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+            echo "<h2>Ξ£ΟΞ¬Ξ»ΞΌΞ±: Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟΟΞ΅ ΟΟΞΏΞ»ΞΉΞΊΟ Ξ­ΟΞΏΟ.</h2>";
+            echo "<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"history.back()\">";
             die();
         }
         $usrlvl = $_SESSION['userlevel'];
@@ -117,8 +116,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
         if ($_GET['op']=="edit") {
             if ($prev_year) {
-                echo "<h2>Σφάλμα: Δεν μπορείτε να επεξεργαστείτε άδειες προηγούμενου έτους</h2>";
-                echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+                echo "<h2>Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ―ΟΞ΅ Ξ½Ξ± Ξ΅ΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΟΞ΅Ξ―ΟΞ΅ Ξ¬Ξ΄Ξ΅ΞΉΞ΅Ο ΟΟΞΏΞ·Ξ³ΞΏΟΞΌΞ΅Ξ½ΞΏΟ Ξ­ΟΞΏΟΟ</h2>";
+                echo "<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"history.back()\">";
                 die();
             }
                 echo "<form id='updatefrm' name='update' action='ekt_update_adeia.php' method='POST'>";
@@ -135,16 +134,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $q2 = "select * from klados where id=$kl1";
             $res2 = mysqli_query($mysqlconnection, $q2);
             $klados = mysqli_result($res2, 0, "perigrafh");
-            echo "<tr><td>Όνομα</td><td>$name</td></tr>";
-            echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
-            echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
+            echo "<tr><td>ΞΞ½ΞΏΞΌΞ±</td><td>$name</td></tr>";
+            echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td>$surname</td></tr>";
+            echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td>$klados</td></tr>";
 
             echo "<tr><td>type</td><td>";
             adeiaCmb($type, $mysqlconnection, 1);
             echo "</td></tr>";
 
-            echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' value=$prot_apof /></td></tr>";
-            echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
+            echo "<tr><td>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±ΟΟΟΞ±ΟΞ·Ο</td><td><input type='text' name='prot_apof' value=$prot_apof /></td></tr>";
+            echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±ΟΟΟΞ±ΟΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("hm_apof", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -157,9 +156,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
                 
-            echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' value=$prot /></td></tr>";
+            echo "<tr><td>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td><input type='text' name='prot' value=$prot /></td></tr>";
                 
-            echo "<tr><td>Ημ/νία Πρωτοκόλου αίτησης</td><td>";
+            echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("hm_prot", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -172,7 +171,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
                 
-            echo "<tr><td>Ημ/νία αίτησης</td><td>";
+            echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("date", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date('d', strtotime($date)), date('m', strtotime($date)), date('Y', strtotime($date)));
@@ -183,28 +182,28 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
 
-            echo "<tr><td>Βεβαίωση / Δήλωση</td><td>";
+            echo "<tr><td>ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ· / ΞΞ®Ξ»ΟΟΞ·</td><td>";
             echo "<select name='vev_dil'>";
               if ($vev_dil==0) {
-                echo "<option value=\"0\" selected>Όχι</option>";
+                echo "<option value=\"0\" selected>ΞΟΞΉ</option>";
               } else {
-                echo "<option value=\"0\">Όχι</option>";
+                echo "<option value=\"0\">ΞΟΞΉ</option>";
               }
             if ($vev_dil==1) {
-              echo "<option value=\"1\" selected>Βεβαίωση</option>";
+              echo "<option value=\"1\" selected>ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ·</option>";
             } else {
-              echo "<option value=\"1\">Βεβαίωση</option>";
+              echo "<option value=\"1\">ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ·</option>";
             }
             if ($vev_dil==2) {
-              echo "<option value=\"2\" selected>Υπεύθυνη Δήλωση</option>";
+              echo "<option value=\"2\" selected>Ξ₯ΟΞ΅ΟΞΈΟΞ½Ξ· ΞΞ®Ξ»ΟΟΞ·</option>";
             } else {
-              echo "<option value=\"2\">Υπεύθυνη Δήλωση</option>";
+              echo "<option value=\"2\">Ξ₯ΟΞ΅ΟΞΈΟΞ½Ξ· ΞΞ®Ξ»ΟΟΞ·</option>";
             }
             echo "</select>";
             echo "</td></tr>";
 
-            echo "<tr><td>Ημέρες</td><td><input type='text' name='days' value=$days /></td></tr>";
-            echo "<tr><td>Ημ/νία έναρξης</td><td>";
+            echo "<tr><td>ΞΞΌΞ­ΟΞ΅Ο</td><td><input type='text' name='days' value=$days /></td></tr>";
+            echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ­Ξ½Ξ±ΟΞΎΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("start", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             //$myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -217,7 +216,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
 
-                echo "<tr><td>Ημ/νία λήξης</td><td>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ»Ξ®ΞΎΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("finish", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             //$myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -230,16 +229,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
 
-            echo "<tr><td>Λόγος</td><td><input type='text' name='logos' value=$logos /></td></tr>";
+            echo "<tr><td>ΞΟΞ³ΞΏΟ</td><td><input type='text' name='logos' value=$logos /></td></tr>";
 
-            echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' value=$comments /></td></tr>";
+            echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td><input type='text' name='comments' value=$comments /></td></tr>";
 
             echo "	</table>";
             echo "	<input type='hidden' name = 'id' value='$id'>";
                 echo "	<input type='hidden' name = 'emp_id' value='$emp_id'>";
-            echo "	<input type='submit' value='Επεξεργασία'>";
-            echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ekt_adeia.php?adeia=$id&op=view'\">";
-            //echo "    <INPUT TYPE='button' VALUE='Επιστροφή' onClick='history.go(-1);return true;'>";
+            echo "	<input type='submit' value='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±'>";
+            echo "	<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='ekt_adeia.php?adeia=$id&op=view'\">";
+            //echo "    <INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick='history.go(-1);return true;'>";
             echo "	</form>";
             echo "    </center>";
             echo "</body>";
@@ -265,57 +264,57 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $q2 = "select * from klados where id=$kl1";
                 $res2 = mysqli_query($mysqlconnection, $q2);
                 $klados = mysqli_result($res2, 0, "perigrafh");
-            echo "<tr><td>Όνομα</td><td>$name</td></tr>";
-            echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
-                echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
+            echo "<tr><td>ΞΞ½ΞΏΞΌΞ±</td><td>$name</td></tr>";
+            echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td>$surname</td></tr>";
+                echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td>$klados</td></tr>";
 
             $query1 = "select type from adeia_ekt_type where id=$type";
                 $result1 = mysqli_query($mysqlconnection, $query1);
             $typewrd = mysqli_result($result1, 0, "type");
-                echo "<tr><td>Τύπος</td><td>$typewrd</td></tr>";
+                echo "<tr><td>Ξ€ΟΟΞΏΟ</td><td>$typewrd</td></tr>";
             if (!$prot_apof) {
                 $prot_apof = '';
             }
-            echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td>$prot_apof</td></tr>";
+            echo "<tr><td>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±ΟΟΟΞ±ΟΞ·Ο</td><td>$prot_apof</td></tr>";
             if (!(int)$hm_apof) {
                 $hm_apof = '';
             } else {
                     $hm_apof = date('d-m-Y', strtotime($hm_apof));
             }
-                echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>$hm_apof</td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±ΟΟΟΞ±ΟΞ·Ο</td><td>$hm_apof</td></tr>";
                 
-            echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td>$prot</td></tr>";
+            echo "<tr><td>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>$prot</td></tr>";
                 $hm_prot = date('d-m-Y', strtotime($hm_prot));
-                echo "<tr><td>Ημ/νία Πρωτοκόλου αίτησης</td><td>$hm_prot</td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>$hm_prot</td></tr>";
                 $date = date('d-m-Y', strtotime($date));
-                echo "<tr><td>Ημ/νία αίτησης</td><td>$date</td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>$date</td></tr>";
             if ($type==1) {
-                    echo "<tr><td>Βεβαίωση / Δήλωση</td><td>";
+                    echo "<tr><td>ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ· / ΞΞ®Ξ»ΟΟΞ·</td><td>";
                     switch ($vev_dil)
                         {
                 case 0:
-                    echo "Όχι";
+                    echo "ΞΟΞΉ";
                     break;
                 case 1:
-                    echo "Βεβαίωση";
+                    echo "ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ·";
                     break;
                 case 2:
-                    echo "Υπεύθυνη Δήλωση";
+                    echo "Ξ₯ΟΞ΅ΟΞΈΟΞ½Ξ· ΞΞ®Ξ»ΟΟΞ·";
                     break;
                     }
                     echo "</td></tr>";
             }
                 $daysfull = convertNumber($days);
-            echo "<tr><td>Ημέρες</td><td>$days ($daysfull)</td></tr>";
+            echo "<tr><td>ΞΞΌΞ­ΟΞ΅Ο</td><td>$days ($daysfull)</td></tr>";
                 $start = date('d-m-Y', strtotime($start));
-            echo "<tr><td>Ημ/νία Έναρξης</td><td>$start</td></tr>";
+            echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞ½Ξ±ΟΞΎΞ·Ο</td><td>$start</td></tr>";
                 $finish = date('d-m-Y', strtotime($finish));
-                echo "<tr><td>Ημ/νία Λήξης</td><td>$finish</td></tr>";
-            echo "<tr><td>Λόγος</td><td>$logos</td></tr>";
-            echo "<tr><td>Σχόλια</td><td>$comments</td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞ®ΞΎΞ·Ο</td><td>$finish</td></tr>";
+            echo "<tr><td>ΞΟΞ³ΞΏΟ</td><td>$logos</td></tr>";
+            echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td>$comments</td></tr>";
             if ($created != 0) {
                 $created= date('d-m-Y, g:i a', strtotime($created));
-                echo "<tr><td colspan=2 align='right'><small>Τελευταία τροποποίηση:<br> $created</small></td></tr>";
+                echo "<tr><td colspan=2 align='right'><small>Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ± ΟΟΞΏΟΞΏΟΞΏΞ―Ξ·ΟΞ·:<br> $created</small></td></tr>";
             }
 
             echo "</td></tr>";
@@ -334,7 +333,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<input type='hidden' name=arr[] value=$finish>";
                 echo "<input type='hidden' name=arr[] value=$logos>";
 
-                echo "<INPUT TYPE='submit' VALUE='Εκτύπωση άδειας'>";
+                echo "<INPUT TYPE='submit' VALUE='ΞΞΊΟΟΟΟΟΞ· Ξ¬Ξ΄Ξ΅ΞΉΞ±Ο'>";
                 echo "</form>";
                 ?>
                     <div id="word"></div>
@@ -359,13 +358,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$previd&op=view'\">";
             }
             if ($usrlvl < 3 && $sxol_etos != $sxoletos) {
-                echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$id&op=edit&sxol_etos=$sxol_etos'\">";
+                echo "	<INPUT TYPE='button' VALUE='ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$id&op=edit&sxol_etos=$sxol_etos'\">";
             }
-                echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"history.back()\">";
+                echo "	<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞ·Ξ½ ΞΊΞ±ΟΟΞ­Ξ»Ξ± Ξ΅ΞΊΟ/ΞΊΞΏΟ' onClick=\"history.back()\">";
             if ($nextid) {
                 echo "	<INPUT TYPE='button' VALUE='>>' onClick=\"parent.location='ekt_adeia.php?id=$emp_id&adeia=$nextid&op=view'\">";
             }
-                echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                echo "<br><br><INPUT TYPE='button' VALUE='ΞΟΟΞΉΞΊΞ® ΟΞ΅Ξ»Ξ―Ξ΄Ξ±' onClick=\"parent.location='../index.php'\">";
             echo "    </center>";
 
             echo "</body>";
@@ -373,8 +372,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         }
         if ($_GET['op']=="delete") {
             if ($prev_year) {
-                echo "<h2>Σφάλμα: Δεν μπορείτε να διαγράψετε άδειες προηγούμενου έτους</h2>";
-                echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+                echo "<h2>Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ―ΟΞ΅ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞ΅ΟΞ΅ Ξ¬Ξ΄Ξ΅ΞΉΞ΅Ο ΟΟΞΏΞ·Ξ³ΞΏΟΞΌΞ΅Ξ½ΞΏΟ Ξ­ΟΞΏΟΟ</h2>";
+                echo "<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"history.back()\">";
                 die();
             }
             // Copies the to-be-deleted row to adeia_deleted table for backup purposes.Also adds a row to adeia_del_log for logging purposes...
@@ -387,16 +386,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // Copies the deleted row to employee)deleted
 
             if ($result) {
-                echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.<br>";
+                echo "Ξ Ξ΅Ξ³Ξ³ΟΞ±ΟΞ® ΞΌΞ΅ ΞΊΟΞ΄ΞΉΞΊΟ $id Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±.<br>";
             } else {
-                echo "Η διαγραφή απέτυχε...";
+                echo "Ξ Ξ΄ΞΉΞ±Ξ³ΟΞ±ΟΞ® Ξ±ΟΞ­ΟΟΟΞ΅...";
             }
-            echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='ektaktoi.php?id=$emp_id&op=view'\">";
+            echo "	<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞ·Ξ½ ΞΊΞ±ΟΟΞ­Ξ»Ξ± Ξ΅ΞΊΟ/ΞΊΞΏΟ' onClick=\"parent.location='ektaktoi.php?id=$emp_id&op=view'\">";
         }
         if ($_GET['op']=="add") {
             if ($prev_year) {
-                echo "<h2>Σφάλμα: Δεν μπορείτε να προσθέσετε άδειες σε προηγούμενο έτος</h2>";
-                echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"history.back()\">";
+                echo "<h2>Ξ£ΟΞ¬Ξ»ΞΌΞ±: ΞΞ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ―ΟΞ΅ Ξ½Ξ± ΟΟΞΏΟΞΈΞ­ΟΞ΅ΟΞ΅ Ξ¬Ξ΄Ξ΅ΞΉΞ΅Ο ΟΞ΅ ΟΟΞΏΞ·Ξ³ΞΏΟΞΌΞ΅Ξ½ΞΏ Ξ­ΟΞΏΟ</h2>";
+                echo "<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"history.back()\">";
                 die();
             }
             echo "<form id='updatefrm' name='updatefrm' action='ekt_update_adeia.php' method='POST'>";
@@ -413,16 +412,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $q2 = "select * from klados where id=$kl1";
                 $res2 = mysqli_query($mysqlconnection, $q2);
                 $klados = mysqli_result($res2, 0, "perigrafh");
-            echo "<tr><td>Όνομα</td><td>$name</td></tr>";
-            echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
-                echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
+            echo "<tr><td>ΞΞ½ΞΏΞΌΞ±</td><td>$name</td></tr>";
+            echo "<tr><td>ΞΟΟΞ½ΟΞΌΞΏ</td><td>$surname</td></tr>";
+                echo "<tr><td>ΞΞ»Ξ¬Ξ΄ΞΏΟ</td><td>$klados</td></tr>";
 
-            echo "<tr><td>Τύπος</td><td>";
+            echo "<tr><td>Ξ€ΟΟΞΏΟ</td><td>";
                 adeiaCmb($type, $mysqlconnection, 1);
                 echo "</td></tr>";
                 
-                echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' /></td></tr>";
-                echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
+                echo "<tr><td>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±ΟΟΟΞ±ΟΞ·Ο</td><td><input type='text' name='prot_apof' /></td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±ΟΟΟΞ±ΟΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("hm_apof", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -433,9 +432,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
 
-            echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' /></td></tr>";
+            echo "<tr><td>ΞΟ.Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td><input type='text' name='prot' /></td></tr>";
                 
-                echo "<tr><td>Ημ/νία Πρωτοκόλου αίτησης</td><td>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ ΟΟΟΞΏΞΊΟΞ»ΞΏΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("hm_prot", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -446,7 +445,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
                 
-                echo "<tr><td>Ημ/νία αίτησης</td><td>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ±Ξ―ΟΞ·ΟΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("date", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
                 $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -457,20 +456,20 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
 
-            //echo "<tr><td>Βεβαίωση / Δήλωση</td><td><input type='text' name='vev_dil' /></td></tr>";
+            //echo "<tr><td>ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ· / ΞΞ®Ξ»ΟΟΞ·</td><td><input type='text' name='vev_dil' /></td></tr>";
                 // Need to check - hide-unhide depending on adeia type...
-                echo "<div id='vevdil' style='display:none'><tr><td>Βεβαίωση / Δήλωση<br>(για αναρρωτικές)</td><td>";
+                echo "<div id='vevdil' style='display:none'><tr><td>ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ· / ΞΞ®Ξ»ΟΟΞ·<br>(Ξ³ΞΉΞ± Ξ±Ξ½Ξ±ΟΟΟΟΞΉΞΊΞ­Ο)</td><td>";
                 
                 //<input type='text' name='vev_dil' value=$vev_dil /></td></tr>";
                 echo "<select name='vev_dil'>";
-            echo "<option value=\"0\" selected>Όχι</option>";
-                echo "<option value=\"1\">Βεβαίωση</option>";
-                echo "<option value=\"2\">Υπεύθυνη Δήλωση</option>";
+            echo "<option value=\"0\" selected>ΞΟΞΉ</option>";
+                echo "<option value=\"1\">ΞΞ΅Ξ²Ξ±Ξ―ΟΟΞ·</option>";
+                echo "<option value=\"2\">Ξ₯ΟΞ΅ΟΞΈΟΞ½Ξ· ΞΞ®Ξ»ΟΟΞ·</option>";
                 echo "</select>";
                 echo "</td></tr></div>";
 
-                echo "<tr><td>Ημέρες</td><td><input type='text' name='days' /></td></tr>";
-                echo "<tr><td>Ημ/νία έναρξης</td><td>";
+                echo "<tr><td>ΞΞΌΞ­ΟΞ΅Ο</td><td><input type='text' name='days' /></td></tr>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ­Ξ½Ξ±ΟΞΎΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("start", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -493,10 +492,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     //document.updatefrm.finish.value = tmp;
                 }
                 </script>
-                <a href="javascript:addDays2Date();"><small>Υπολογισμός<br>Ημ.Λήξης</small></a>
+                <a href="javascript:addDays2Date();"><small>Ξ₯ΟΞΏΞ»ΞΏΞ³ΞΉΟΞΌΟΟ<br>ΞΞΌ.ΞΞ®ΞΎΞ·Ο</small></a>
             <?php              
                 echo "</td></tr>";
-                echo "<tr><td>Ημ/νία λήξης</td><td>";
+                echo "<tr><td>ΞΞΌ/Ξ½Ξ―Ξ± Ξ»Ξ®ΞΎΞ·Ο</td><td>";
             $myCalendar = new tc_calendar("finish", true);
             $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
             $myCalendar->setDate(date("d"), date("m"), date("Y"));
@@ -508,9 +507,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $myCalendar->writeScript();
             echo "</td></tr>";
 
-            echo "<tr><td>Λόγος</td><td><input type='text' name='logos' /></td></tr>";
+            echo "<tr><td>ΞΟΞ³ΞΏΟ</td><td><input type='text' name='logos' /></td></tr>";
 
-            echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' /></td></tr>";
+            echo "<tr><td>Ξ£ΟΟΞ»ΞΉΞ±</td><td><input type='text' name='comments' /></td></tr>";
 
             echo "	</table>";
             echo "	<input type='hidden' name = 'id' value='$id'>";
@@ -518,9 +517,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // action = 1 gia prosthiki
             echo "  <input type='hidden' name = 'action' value='1'>";
                 echo "  <input type='hidden' name = 'sxoletos' value=$sxol_etos>";
-            echo "	<input type='submit' value='Προσθήκη'>";
-            //echo "    <INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-                echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='ektaktoi.php?id=$emp_id&op=view'\">";
+            echo "	<input type='submit' value='Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·'>";
+            //echo "    <INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
+                echo "	<INPUT TYPE='button' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞ·Ξ½ ΞΊΞ±ΟΟΞ­Ξ»Ξ± Ξ΅ΞΊΟ/ΞΊΞΏΟ' onClick=\"parent.location='ektaktoi.php?id=$emp_id&op=view'\">";
             echo "	</form>";
             ?>
         <div id='results'></div>

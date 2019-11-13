@@ -1,5 +1,5 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
   require('../tools/calendar/tc_calendar.php');
@@ -14,7 +14,7 @@
 ?>	
   <html>
   <head>    
-        <title>Αλλαγή ωραριου εκπ/κων</title>
+        <title>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ο‰ΟΞ±ΟΞΉΞΏΟ… ΞµΞΊΟ€/ΞΊΟ‰Ξ½</title>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
         <script type="text/javascript">   
@@ -26,11 +26,11 @@
         </head>
         <body>
         <?php include('../etc/menu.php'); ?>
-        <h2>Αλλαγή ωραριου εκπ/κων</h2>
+        <h2>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ο‰ΟΞ±ΟΞΉΞΏΟ… ΞµΞΊΟ€/ΞΊΟ‰Ξ½</h2>
 <?php        
   echo "<table class=\"imagetable stable\" border='1'>";
   echo "<form action='' method='POST' autocomplete='off'>";
-  echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
+  echo "<tr><td>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·Ο‚:</td><td>";
   $myCalendar = new tc_calendar("date", true);
   $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
   if((int)$_POST['date'])
@@ -43,12 +43,12 @@
   $myCalendar->writeScript();
   echo "</td></tr>";
   echo "<tr><td colspan=2>";
-  echo "<input type='radio' name='type' value='0'checked >Αλλαγή ωρών<br>";
+  echo "<input type='radio' name='type' value='0'checked >Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ο‰ΟΟΞ½<br>";
   
   if ($usrlvl==0)
-      echo "<input type='checkbox' name='editvmk' value='1' />Τροποποίηση ωρών στη ΒΔ<br />";
+      echo "<input type='checkbox' name='editvmk' value='1' />Ξ¤ΟΞΏΟ€ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο‰ΟΟΞ½ ΟƒΟ„Ξ· Ξ’Ξ”<br />";
   echo "</td></tr>";
-  echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'></td></tr>";
+  echo "<tr><td colspan=2><input type='submit' value='Ξ‘Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·'></td></tr>";
   echo "</table></form>";
 		
 	if((int)$_POST['date'])
@@ -56,8 +56,8 @@
 		$updates = 0;
     $need_update = 0;
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 		$query = "SELECT * from employee";
                 //$query = "SELECT * from employee WHERE status NOT IN (2,4)";
                 // 07-08-2013
@@ -72,10 +72,10 @@
 		$dt = $_POST['date'];
     $type=$_POST['type'];
     $editvmk = $_POST['editvmk'];
-		echo "<br>Ημερομηνία αναζήτησης: $dt<br>";
+		echo "<br>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·Ο‚: $dt<br>";
     ob_start();
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-    echo "<thead><tr><th>id</th><th>ΑΜ</th><th>Ονοματεπώνυμο</th><th>Ώρες</th><th>Ημέρες</th><th>Υ - Μ - D</th></tr></thead><tbody>";
+    echo "<thead><tr><th>id</th><th>Ξ‘Ξ</th><th>ΞΞ½ΞΏΞΌΞ±Ο„ΞµΟ€ΟΞ½Ο…ΞΌΞΏ</th><th>ΞΟΞµΟ‚</th><th>Ξ—ΞΌΞ­ΟΞµΟ‚</th><th>Ξ¥ - Ξ - D</th></tr></thead><tbody>";
     $aa = 1;
     $problems = 0;
     while ($i<$num)	
@@ -159,19 +159,19 @@
 		mysqli_close($mysqlconnection);
                 
     if ($editvmk)
-        echo "Πραγματοποιήθηκαν $updates ενημερώσεις στη Β.Δ.";
+        echo "Ξ ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞ±Ξ½ $updates ΞµΞ½Ξ·ΞΌΞµΟΟΟƒΞµΞΉΟ‚ ΟƒΟ„Ξ· Ξ’.Ξ”.";
     else
-        echo "Απαιτούνται $need_update ενημερώσεις στη Β.Δ.";
+        echo "Ξ‘Ο€Ξ±ΞΉΟ„ΞΏΟΞ½Ο„Ξ±ΞΉ $need_update ΞµΞ½Ξ·ΞΌΞµΟΟΟƒΞµΞΉΟ‚ ΟƒΟ„Ξ· Ξ’.Ξ”.";
     $page = ob_get_contents(); 
 		ob_end_flush();
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
 		echo "<input type='hidden' name = 'data' value='".$page."'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® ΟƒΟ„ΞΏ excel</BUTTON>";
     echo "</form>";
 	}
 ?>
 <br>
-<input type='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<input type='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </body>
 </html>

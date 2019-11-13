@@ -1,8 +1,8 @@
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Πίνακας λειτουργικών κενών (για Υπουργείο)</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΟΞ½ ΞΊΞ΅Ξ½ΟΞ½ (Ξ³ΞΉΞ± Ξ₯ΟΞΏΟΟΞ³Ξ΅Ξ―ΞΏ)</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -20,8 +20,8 @@
     session_start();
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
     echo "<body>";
     require '../etc/menu.php';
@@ -41,18 +41,18 @@ while ($row = mysqli_fetch_array($result))
     $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
     // required hours
     $req = $results['required'];
-    $req_sum['ΠΕ05'] += floor($req['05-07']/2);
-    $req_sum['ΠΕ07'] += floor($req['05-07']/2);
-    $req_sum['ΠΕ06'] += $req['06'];
-    $req_sum['ΠΕ08'] += $req['08'];
-    $req_sum['ΠΕ11'] += $req['11'];
-    $req_sum['ΠΕ79'] += $req['79'];
-    $req_sum['ΠΕ91'] += $req['91'];
-    $req_sum['ΠΕ86'] += $req['86'];
-    $req_sum['ΠΕ70'] += $req['70'];
+    $req_sum['Ξ Ξ05'] += floor($req['05-07']/2);
+    $req_sum['Ξ Ξ07'] += floor($req['05-07']/2);
+    $req_sum['Ξ Ξ06'] += $req['06'];
+    $req_sum['Ξ Ξ08'] += $req['08'];
+    $req_sum['Ξ Ξ11'] += $req['11'];
+    $req_sum['Ξ Ξ79'] += $req['79'];
+    $req_sum['Ξ Ξ91'] += $req['91'];
+    $req_sum['Ξ Ξ86'] += $req['86'];
+    $req_sum['Ξ Ξ70'] += $req['70'];
     // add oloimero teacher if leitoyrg < 4
     if ($leit < 4) {
-        $req_sum['ΠΕ70'] += 24;
+        $req_sum['Ξ Ξ70'] += 24;
     }                       
 }
     
@@ -69,13 +69,13 @@ while ($row = mysqli_fetch_array($result))
     $req_sum_teachers = array_map('hours_to_teachers', $req_sum);
 
     // prepare array for table
-    $eidikothtes = Array('ΠΕ70','ΠΕ60','ΠΕ05','ΠΕ06','ΠΕ07','ΠΕ08','ΠΕ11','ΠΕ79','ΠΕ86','ΠΕ91');
+    $eidikothtes = Array('Ξ Ξ70','Ξ Ξ60','Ξ Ξ05','Ξ Ξ06','Ξ Ξ07','Ξ Ξ08','Ξ Ξ11','Ξ Ξ79','Ξ Ξ86','Ξ Ξ91');
     $tbl_arr = [];
 foreach ($eidikothtes as $eid) {
     $tbl_tmp = [];
     $tbl_tmp['eidikothta'] = $eid;
     $tbl_tmp['organikes'] = $organikes[$eid];
-    $tbl_tmp['required'] = $eid == 'ΠΕ60' ? $tmimata_nip_req : $req_sum_teachers[$eid];
+    $tbl_tmp['required'] = $eid == 'Ξ Ξ60' ? $tmimata_nip_req : $req_sum_teachers[$eid];
     $tbl_tmp['thiteia'] = $thiteia[$eid];
     $tbl_tmp['ekswteriko'] = $ekswteriko[$eid];
     $tbl_tmp['kena'] = $tbl_tmp['organikes'] - $tbl_tmp['required'] - $tbl_tmp['thiteia'] - $tbl_tmp['ekswteriko'];
@@ -83,20 +83,20 @@ foreach ($eidikothtes as $eid) {
 }
     
     // print table
-    echo "<h2>Πίνακας λειτουργικών κενών</h2>";
-    echo "<h4>(Η αναφορά είναι υπό κατασκευή)</h4>";
+    echo "<h2>Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΟΞ½ ΞΊΞ΅Ξ½ΟΞ½</h2>";
+    echo "<h4>(Ξ Ξ±Ξ½Ξ±ΟΞΏΟΞ¬ Ξ΅Ξ―Ξ½Ξ±ΞΉ ΟΟΟ ΞΊΞ±ΟΞ±ΟΞΊΞ΅ΟΞ®)</h4>";
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
     echo "<thead>";
-    echo "<tr><th>Κλάδος</th>";
-    echo "<th>Οργανικές</th>";
-    echo "<th>Απαιτούμενοι</th>";
-    echo "<th>Θητεία</th>";
-    echo "<th>Άδειες</th>";
-    echo "<th>Παραιτήσεις</th>";
-    echo "<th>Αποσπάσεις<br>Εξωτερικό</th>";
-    echo "<th>Άλλο</th>";
-    echo "<th>Λειτ.Κενά</th>";
+    echo "<tr><th>ΞΞ»Ξ¬Ξ΄ΞΏΟ</th>";
+    echo "<th>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ­Ο</th>";
+    echo "<th>ΞΟΞ±ΞΉΟΞΏΟΞΌΞ΅Ξ½ΞΏΞΉ</th>";
+    echo "<th>ΞΞ·ΟΞ΅Ξ―Ξ±</th>";
+    echo "<th>ΞΞ΄Ξ΅ΞΉΞ΅Ο</th>";
+    echo "<th>Ξ Ξ±ΟΞ±ΞΉΟΞ®ΟΞ΅ΞΉΟ</th>";
+    echo "<th>ΞΟΞΏΟΟΞ¬ΟΞ΅ΞΉΟ<br>ΞΞΎΟΟΞ΅ΟΞΉΞΊΟ</th>";
+    echo "<th>ΞΞ»Ξ»ΞΏ</th>";
+    echo "<th>ΞΞ΅ΞΉΟ.ΞΞ΅Ξ½Ξ¬</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
     
@@ -122,9 +122,9 @@ foreach ($tbl_arr as $row) {
     ob_end_flush();
     
     echo "<form action='../tools/2excel_ses.php' method='post'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
     //ob_end_clean();
 ?>

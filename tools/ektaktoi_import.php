@@ -1,8 +1,8 @@
 <html>
   <head>
 	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Εισαγωγή εκπαιδευτικών από αρχείο excel</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΟΞ½ Ξ±ΟΟ Ξ±ΟΟΞ΅Ξ―ΞΏ excel</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
   </head>
   <body>
@@ -17,7 +17,7 @@ $showRows = 10;
 
 if (isset($_POST['submit'])) {
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
-    echo "<h3>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</h3>";
+    echo "<h3>" . "To Ξ±ΟΟΞ΅Ξ―ΞΏ ". $_FILES['filename']['name'] ." Ξ±Ξ½Ξ­Ξ²Ξ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±." . "</h3>";
 
     //Import uploaded file to Database
     $path = $_FILES['filename']['tmp_name'];
@@ -27,8 +27,7 @@ if (isset($_POST['submit'])) {
     // get only 1st worksheet
     $worksheet = $objPHPExcel->getSheet(0);
     $worksheetTitle = $worksheet->getTitle();
-    $worksheetTitle = mb_convert_encoding($worksheetTitle, "iso-8859-7", "utf-8");
-    if (!strcmp($worksheetTitle,'Κλάδοι'))
+    if (!strcmp($worksheetTitle,'ΞΞ»Ξ¬Ξ΄ΞΏΞΉ'))
         continue;
     $highestRow = $worksheet->getHighestRow(); // e.g. 10
     if ($highestRow > $showRows)
@@ -40,12 +39,12 @@ if (isset($_POST['submit'])) {
 
     $nrColumns = ord($highestColumn) - 64;
     
-    echo "<p>Το φύλλο '".$worksheetTitle."' έχει: ";
-    echo $nrColumns . ' στήλες';
-    echo ' και ' . $highestRow . ' γραμμές (<strong>' . ($highestRow-1) . ' εγγραφές</strong>).</p>';
+    echo "<p>Ξ€ΞΏ ΟΟΞ»Ξ»ΞΏ '".$worksheetTitle."' Ξ­ΟΞ΅ΞΉ: ";
+    echo $nrColumns . ' ΟΟΞ®Ξ»Ξ΅Ο';
+    echo ' ΞΊΞ±ΞΉ ' . $highestRow . ' Ξ³ΟΞ±ΞΌΞΌΞ­Ο (<strong>' . ($highestRow-1) . ' Ξ΅Ξ³Ξ³ΟΞ±ΟΞ­Ο</strong>).</p>';
     if ($highestRow == 1)
         continue;
-    echo '<h4>Δείγμα Δεδομένων (πρώτες '. $showRows . ' γραμμές):</h4> <table width="100%" cellpadding="1" cellspacing="0" border="1">';
+    echo '<h4>ΞΞ΅Ξ―Ξ³ΞΌΞ± ΞΞ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ (ΟΟΟΟΞ΅Ο '. $showRows . ' Ξ³ΟΞ±ΞΌΞΌΞ­Ο):</h4> <table width="100%" cellpadding="1" cellspacing="0" border="1">';
     for ($row = 1; $row <= $highestRowprint; ++ $row) {
       echo '<tr>';
       for ($col = 0; $col < $highestColumnIndex; ++ $col) {
@@ -55,19 +54,17 @@ if (isset($_POST['submit'])) {
         if (!in_array($col, $row_arr))
             continue;
         if($row === 1){
-            $val = mb_convert_encoding($val, "iso-8859-7", "utf-8");
             echo '<td style="background:#000; color:#fff;">' . $val . '</td>';
         }
         else
         {
-            $val = mb_convert_encoding($val, "iso-8859-7", "utf-8");
             echo '<td>' . $val . '</td>';
         }
       }
       echo '</tr>';
     }
     echo '</table>';
-    echo "<p>κλπ.</p>";
+    echo "<p>ΞΊΞ»Ο.</p>";
 
     for ($row = 2; $row <= $highestRow; ++ $row) {
       $val=array();
@@ -79,8 +76,8 @@ if (isset($_POST['submit'])) {
       $val[12] = date ("Y-m-d", $val[12]);
       // prepare connection
       $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-      mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-      mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+      mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+      mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
       // prepare hm/nia apoxwrhshs (endofyear)
       $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
       // prepare query
@@ -88,7 +85,6 @@ if (isset($_POST['submit'])) {
       values('$hm_apox','".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "')";
 
       //Run your mysqli_query
-      $sql = mb_convert_encoding($sql, "iso-8859-7", "utf-8");
       // check if already inserted...
       $sql1 = "select afm from ektaktoi where afm=$val[18]";
       $result1 = mysqli_query($mysqlconnection, $sql1);
@@ -102,29 +98,29 @@ if (isset($_POST['submit'])) {
           $inserted++;
       //echo $sql. "<br>";
     }
-    echo "<h2><u>Αποτέλεσμα</u></h2>";
+    echo "<h2><u>ΞΟΞΏΟΞ­Ξ»Ξ΅ΟΞΌΞ±</u></h2>";
     if (!$count)
-        echo "<h3>Δεν έγινε εισαγωγή εγγραφών...</h3><i>($inserted εγγραφές έχουν ήδη καταχωρηθεί)</i><br><br>";
+        echo "<h3>ΞΞ΅Ξ½ Ξ­Ξ³ΞΉΞ½Ξ΅ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ΅Ξ³Ξ³ΟΞ±ΟΟΞ½...</h3><i>($inserted Ξ΅Ξ³Ξ³ΟΞ±ΟΞ­Ο Ξ­ΟΞΏΟΞ½ Ξ®Ξ΄Ξ· ΞΊΞ±ΟΞ±ΟΟΟΞ·ΞΈΞ΅Ξ―)</i><br><br>";
     else
-        echo "<h3>Επιτυχής καταχώρηση $count εγγραφών...<h3><br><br>";
+        echo "<h3>ΞΟΞΉΟΟΟΞ®Ο ΞΊΞ±ΟΞ±ΟΟΟΞ·ΟΞ· $count Ξ΅Ξ³Ξ³ΟΞ±ΟΟΞ½...<h3><br><br>";
 
-    echo "	<INPUT TYPE='button' VALUE='Εισαγωγή περισσότερων' onClick=\"parent.location='ektaktoi_import.php'\">";
-    echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
+    echo "	<INPUT TYPE='button' VALUE='ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® ΟΞ΅ΟΞΉΟΟΟΟΞ΅ΟΟΞ½' onClick=\"parent.location='ektaktoi_import.php'\">";
+    echo "	<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
   }
 }
 else {
   require '../etc/menu.php';
-  echo "<h2>Εισαγωγή αναπληρωτών εκπαιδευτικών από αρχείο excel</h2>";
-  print "<p>Πραγματοποιήστε μαζική εισαγωγή αναπληρωτών εκπ/κών στο σύστημα.</p>\n";
-  print '<p>Χρησιμοποιήστε το <a href="import_sample.xls">πρότυπο βιβλίο excel</a>, ακολουθώντας τις οδηγίες που βρίσκονται σε αυτό <small>(ως σχόλια στα κελιά των κεφαλίδων)</small>.</p>';
+  echo "<h2>ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½ Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΟΞ½ Ξ±ΟΟ Ξ±ΟΟΞ΅Ξ―ΞΏ excel</h2>";
+  print "<p>Ξ ΟΞ±Ξ³ΞΌΞ±ΟΞΏΟΞΏΞΉΞ®ΟΟΞ΅ ΞΌΞ±ΞΆΞΉΞΊΞ® Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΟΞ½ Ξ΅ΞΊΟ/ΞΊΟΞ½ ΟΟΞΏ ΟΟΟΟΞ·ΞΌΞ±.</p>\n";
+  print '<p>Ξ§ΟΞ·ΟΞΉΞΌΞΏΟΞΏΞΉΞ®ΟΟΞ΅ ΟΞΏ <a href="import_sample.xls">ΟΟΟΟΟΟΞΏ Ξ²ΞΉΞ²Ξ»Ξ―ΞΏ excel</a>, Ξ±ΞΊΞΏΞ»ΞΏΟΞΈΟΞ½ΟΞ±Ο ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο ΟΞΏΟ Ξ²ΟΞ―ΟΞΊΞΏΞ½ΟΞ±ΞΉ ΟΞ΅ Ξ±ΟΟΟ <small>(ΟΟ ΟΟΟΞ»ΞΉΞ± ΟΟΞ± ΞΊΞ΅Ξ»ΞΉΞ¬ ΟΟΞ½ ΞΊΞ΅ΟΞ±Ξ»Ξ―Ξ΄ΟΞ½)</small>.</p>';
   print "<form enctype='multipart/form-data' action='' method='post'>";
-  print "Aρχείο προς εισαγωγή:<br />\n";
+  print "AΟΟΞ΅Ξ―ΞΏ ΟΟΞΏΟ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ®:<br />\n";
   print "<input size='50' type='file' name='filename'><br />\n";
-  print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
-  echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small><br><br>";
-  echo "<a href='import.php'>Εισαγωγή μονίμων και σχολείων</a><br>";
+  print "<input type='submit' name='submit' value='ΞΞ΅ΟΞ±ΟΟΟΟΟΟΞ·'></form>";
+  echo "<small>Ξ£ΞΞ.: Ξ Ξ΅ΞΉΟΞ±Ξ³ΟΞ³Ξ® Ξ΅Ξ½Ξ΄Ξ­ΟΞ΅ΟΞ±ΞΉ Ξ½Ξ± Ξ΄ΞΉΞ±ΟΞΊΞ­ΟΞ΅ΞΉ ΞΌΞ΅ΟΞΉΞΊΞ¬ Ξ»Ξ΅ΟΟΞ¬, Ξ΅ΞΉΞ΄ΞΉΞΊΞ¬ Ξ³ΞΉΞ± ΞΌΞ΅Ξ³Ξ¬Ξ»Ξ± Ξ±ΟΟΞ΅Ξ―Ξ±.<br>ΞΞ· ΟΟΞ³Ξ΅ΟΞ΅ Ξ±ΟΟ ΟΞ· ΟΞ΅Ξ»Ξ―Ξ΄Ξ± Ξ±Ξ½ Ξ΄Ξ΅Ξ½ ΟΞ¬ΟΞ΅ΟΞ΅ ΞΊΞ¬ΟΞΏΞΉΞΏ ΞΌΞ®Ξ½ΟΞΌΞ±.</small><br><br>";
+  echo "<a href='import.php'>ΞΞΉΟΞ±Ξ³ΟΞ³Ξ® ΞΌΞΏΞ½Ξ―ΞΌΟΞ½ ΞΊΞ±ΞΉ ΟΟΞΏΞ»Ξ΅Ξ―ΟΞ½</a><br>";
 
-  echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
+  echo "	<INPUT TYPE='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
   exit;
 }
 ?>

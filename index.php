@@ -1,11 +1,11 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     Require_once "config.php";
     Require_once "tools/functions.php";
         
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
   require "tools/class.login.php";
   $log = new logmein();
@@ -20,8 +20,8 @@ else {
 <html>
   <head>
     <LINK href="css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
-    <title>Πρωτέας</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Ξ ΟΟΟΞ­Ξ±Ο</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script type="text/javascript" src="js/jquery.js"></script>
@@ -67,7 +67,7 @@ else {
   // notify admin to delete init.php if it exists
 if ($usrlvl == 0) {
     if (file_exists('init.php')) {
-        notify("ΠΡΟΣΟΧΗ: Παρακαλώ διαγράψτε το αρχείο <b>init.php</b> για λόγους ασφαλείας!</p>", 'error');
+        notify("Ξ Ξ‘ΞΞ£ΞΞ§Ξ: Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΟΞ΅ ΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ <b>init.php</b> Ξ³ΞΉΞ± Ξ»ΟΞ³ΞΏΟΟ Ξ±ΟΟΞ±Ξ»Ξ΅Ξ―Ξ±Ο!</p>", 'error');
     }
 }
 if (isset($_POST['clearall'])) {
@@ -164,7 +164,7 @@ if (isset($_POST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET['su
         $whflag=1;
     }
 }
-  // ΟΧΙ idiwtikoi
+  // ΞΞ§Ξ idiwtikoi
   if ($whflag) {
       $query .= " AND thesi NOT IN (5,6) ";
   } else {
@@ -224,21 +224,21 @@ if ($num_record == 1 && $num_record1 > 1) {
     $url = "employee/employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
 }
-echo "<center><h2>Μόνιμοι Εκπαιδευτικοί</h2></center>";
+echo "<center><h2>ΞΟΞ½ΞΉΞΌΞΏΞΉ ΞΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΞ―</h2></center>";
 if ($logged) {
   $se = getParam('sxol_etos', $mysqlconnection);
   $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
-  echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;$sx_etos</p>";
+  echo "<p class='userdata'>ΞΞ½Ξ΅ΟΞ³ΟΟ Ξ§ΟΞ®ΟΟΞ·Ο: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Ξ£ΟΞΏΞ».ΞΟΞΏΟ:&nbsp;$sx_etos</p>";
 }
     echo "<center>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
-    echo "<tr><th>Ενέργεια</th>\n";
-    echo "<th>Επώνυμο</th>\n";
-    echo "<th>Όνομα</th>\n";
-    echo "<th>Ειδικότητα</th>\n";
-    echo "<th>Σχ.Οργανικής</th>\n";
-    echo "<th>Σχ.Υπηρέτησης</th>\n";
+    echo "<tr><th>ΞΞ½Ξ­ΟΞ³Ξ΅ΞΉΞ±</th>\n";
+    echo "<th>ΞΟΟΞ½ΟΞΌΞΏ</th>\n";
+    echo "<th>ΞΞ½ΞΏΞΌΞ±</th>\n";
+    echo "<th>ΞΞΉΞ΄ΞΉΞΊΟΟΞ·ΟΞ±</th>\n";
+    echo "<th>Ξ£Ο.ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ®Ο</th>\n";
+    echo "<th>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</th>\n";
     echo "</tr>\n\n";
    echo "<tr class='tablesorter-ignoreRow'><form id='src' name='src' action='index.php' method='POST'>\n";
 if ($posted || 
@@ -250,13 +250,13 @@ if ($posted ||
       (isset($_REQUEST['inactive']))
     ) {
     echo "<input type='hidden' name='clearall' id='clearall' />";
-    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
+    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='ΞΟΞ±Ξ½Ξ±ΟΞΏΟΞ¬'></td><td>\n";
 } else {    
-    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
+    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='ΞΞ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·'></td><td>\n";
 }
     echo isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 ? "<input type='text' value='".$_REQUEST['surname']."' name='surname' id='surname''/>\n" : "<input type='text' name='surname' id='surname''/>\n";
     echo "<input type='hidden' name='pinakas' id='pinakas' />";
-    echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές, εμφανίζοντας σε παρένθεση τη σχέση εργασίας'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
+    echo "<td><span title='Ξ¨Ξ¬ΟΞ½Ξ΅ΞΉ ΟΞ΅ ΞΌΟΞ½ΞΉΞΌΞΏΟΟ & Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο, Ξ΅ΞΌΟΞ±Ξ½Ξ―ΞΆΞΏΞ½ΟΞ±Ο ΟΞ΅ ΟΞ±ΟΞ­Ξ½ΞΈΞ΅ΟΞ· ΟΞ· ΟΟΞ­ΟΞ· Ξ΅ΟΞ³Ξ±ΟΞ―Ξ±Ο'><small>(Ξ£Ξ΅ ΞΌΟΞ½ΞΉΞΌΞΏΟΟ<br> & Ξ±Ξ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
     echo $klpost > 0 ? kladosCombo($klpost, $mysqlconnection) : kladosCmb($mysqlconnection);
   //  kladosCmb($mysqlconnection);
     echo "</td>\n";
@@ -268,14 +268,14 @@ if ($posted ||
     echo "</td>";
     echo "<tr>";
     $has_outsiders = isset($_REQUEST['outsiders']) ? 'checked' : '';
-    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>Εμφάνιση και όσων δεν υπηρετούν και δεν ανήκουν στη Δ/νση</small></td>";	
+    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>ΞΞΌΟΞ¬Ξ½ΞΉΟΞ· ΞΊΞ±ΞΉ ΟΟΟΞ½ Ξ΄Ξ΅Ξ½ ΟΟΞ·ΟΞ΅ΟΞΏΟΞ½ ΞΊΞ±ΞΉ Ξ΄Ξ΅Ξ½ Ξ±Ξ½Ξ®ΞΊΞΏΟΞ½ ΟΟΞ· Ξ/Ξ½ΟΞ·</small></td>";	
     $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
-    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive><small>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης, διαθεσιμότητα)</small></small></td>";
+    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive><small>ΞΞΌΟΞ¬Ξ½ΞΉΟΞ· ΞΊΞ±ΞΉ ΟΟΟΞ½ Ξ΄Ξ΅Ξ½ Ξ΅ΟΞ³Ξ¬ΞΆΞΏΞ½ΟΞ±ΞΉ (Ξ»ΟΟΞ· ΟΟΞ­ΟΞ·Ο, Ξ΄ΞΉΞ±ΞΈΞ΅ΟΞΉΞΌΟΟΞ·ΟΞ±)</small></small></td>";
     echo "</form></tr></thead>\n";
     
     echo "<tbody>\n";
 if ($num == 0) {
-    echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
+    echo "<tr><td colspan=7><b><h3>ΞΞ΅ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ξ±ΟΞΏΟΞ΅Ξ»Ξ­ΟΞΌΞ±ΟΞ±...</h3></b></td></tr>";
 } else {
     $i = 0;
     while ($i < $num)
@@ -299,12 +299,12 @@ if ($num == 0) {
         }
                   
         echo "<tr><td>";
-        echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>&nbsp;&nbsp;";
+        echo "<span title=\"Ξ ΟΞΏΞ²ΞΏΞ»Ξ®\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>&nbsp;&nbsp;";
         if ($usrlvl < 3) {
-            echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
+            echo "<span title=\"ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
         }
         if ($usrlvl < 2) {
-            echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
+            echo "<span title=\"ΞΞΉΞ±Ξ³ΟΞ±ΟΞ®\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
         }
         echo "</td>";
         echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
@@ -314,39 +314,39 @@ if ($num == 0) {
     }  
 } 
     echo "</tbody>\n";
-    //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
+    //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>ΞΞΌΟΞ¬Ξ½ΞΉΟΞ· ΞΊΞ±ΞΉ ΟΟΟΞ½ Ξ΄Ξ΅Ξ½ ΟΟΞ·ΟΞ΅ΟΞΏΟΞ½ Ξ® Ξ±Ξ½Ξ®ΞΊΞΏΟΞ½ ΟΟΞ· Ξ/Ξ½ΟΞ·;</td></tr>";
 if ($usrlvl < 2) {
-    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
+    echo "<tr><td colspan=7><span title=\"Ξ ΟΞΏΟΞΈΞ®ΞΊΞ·\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Ξ ΟΞΏΟΞΈΞ®ΞΊΞ· Ξ΅ΞΊΟΞ±ΞΉΞ΄Ξ΅ΟΟΞΉΞΊΞΏΟ</a></span>";
 }        
     echo "<tr><td colspan=7 align=center>";
     $prevpg = $curpg-1;
 if ($lastpg == 0) {
     $curpg = 0;
 }
-    echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+    echo "Ξ£Ξ΅Ξ»Ξ―Ξ΄Ξ± $curpg Ξ±ΟΟ $lastpg ($num_record1 Ξ΅Ξ³Ξ³ΟΞ±ΟΞ­Ο)<br>";
 $outsiders = isset($_REQUEST['outsiders']) ? '&outsiders=1' : '';
 $inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
 if ($curpg!=1) {
-    echo "  <a href=index.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Πρώτη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Προηγ/νη</a>";
+    echo "  <a href=index.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Ξ ΟΟΟΞ·</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Ξ ΟΞΏΞ·Ξ³/Ξ½Ξ·</a>";
 }
 else {
-        echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
+        echo "  Ξ ΟΟΟΞ· &nbsp;&nbsp; Ξ ΟΞΏΞ·Ξ³/Ξ½Ξ·";
 }
 if ($curpg != $lastpg) {
     $nextpg = $curpg+1;
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Επόμενη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Τελευταία</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>ΞΟΟΞΌΞ΅Ξ½Ξ·</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ±</a>";
 }
 else { 
-        echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
+        echo "  ΞΟΟΞΌΞ΅Ξ½Ξ· &nbsp;&nbsp; Ξ€Ξ΅Ξ»Ξ΅ΟΟΞ±Ξ―Ξ±";
 }
     echo "<FORM METHOD='POST' ACTION='index.php?".$_SERVER['QUERY_STRING']."'>";
-    echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
-    echo "<input type=\"submit\" value=\"Μετάβαση\">";
+    echo " ΞΞ΅ΟΞ¬Ξ²Ξ±ΟΞ· ΟΟΞ· ΟΞ΅Ξ».  <input type=\"text\" name=\"page\" size=1 />";
+    echo "<input type=\"submit\" value=\"ΞΞ΅ΟΞ¬Ξ²Ξ±ΟΞ·\">";
     echo "<br>";
-    echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
-    echo "<input type=\"submit\" value=\"Ορισμός\">";
+    echo "   ΞΞ³Ξ³Ο./ΟΞ΅Ξ».    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
+    echo "<input type=\"submit\" value=\"ΞΟΞΉΟΞΌΟΟ\">";
     echo "</FORM>";
     echo "</td></tr>";
     echo "</table>\n";

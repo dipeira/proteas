@@ -1,7 +1,7 @@
 <?php
   //require_once('../config.php');
   require_once('functions.php');
-  // getParam1: Διαβάζει παραμέτρους από τη βάση
+  // getParam1: Ξ”ΞΉΞ±Ξ²Ξ¬Ξ¶ΞµΞΉ Ο€Ξ±ΟΞ±ΞΌΞ­Ο„ΟΞΏΟ…Ο‚ Ξ±Ο€Ο Ο„Ξ· Ξ²Ξ¬ΟƒΞ·
   function getParam1($name,$conn)
   {
     $query = "SELECT value from params WHERE name='$name'";
@@ -21,16 +21,16 @@
   // if exists, init params
   if($stmt->fetch()) {
     $myconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-    mysqli_query($myconn, "SET NAMES 'greek'");
-    mysqli_query($myconn, "SET CHARACTER SET 'greek'");
+    mysqli_query($myconn, "SET NAMES 'utf8'");
+    mysqli_query($myconn, "SET CHARACTER SET 'utf8'");
     
     $sxol_etos = getParam1('sxol_etos',$myconn);
     
-    // Δ/ντής-τρια
+    // Ξ”/Ξ½Ο„Ξ®Ο‚-Ο„ΟΞΉΞ±
     $head_title = getParam1('head_title',$myconn);
     $head_name = getParam1('head_name',$myconn);
     
-    // Για βεβαιώσεις αναπληρωτών στο τέλος της χρονιάς - endofyear: ημέρα έκδοσης βεβαίωσης, endofyear2: τελευταία ημέρα εργασίας
+    // Ξ“ΞΉΞ± Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΞΉΟ‚ Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ΟƒΟ„ΞΏ Ο„Ξ­Ξ»ΞΏΟ‚ Ο„Ξ·Ο‚ Ο‡ΟΞΏΞ½ΞΉΞ¬Ο‚ - endofyear: Ξ·ΞΌΞ­ΟΞ± Ξ­ΞΊΞ΄ΞΏΟƒΞ·Ο‚ Ξ²ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ·Ο‚, endofyear2: Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± Ξ·ΞΌΞ­ΟΞ± ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚
     $endofyear = getParam1('endofyear',$myconn);
     $endofyear2 = getParam1('endofyear2',$myconn);
     $protapol = getParam1('protapol',$myconn);
@@ -41,21 +41,23 @@
     error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
     
     define('SITE_ROOT', '/'.explode('/',$_SERVER['REQUEST_URI'])[1]); 
+    // set calendar language to el_GR
+    define("L_LANG", "el_GR");
   }
   // if not exists
   else {
     ?>
     <head>
       <LINK href="css/style.css" rel="stylesheet" type="text/css">
-      <title>Πρωτέας</title>
+      <title>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</title>
     </head>
   <?php
     // if the executed script is not init.php alert the user and die...
     if (!endsWith($_SERVER['PHP_SELF'],'init.php')){
       echo "<IMG src='images/logo.png' class='applogo'></a>";
-      echo "<h1>Πρωτέας</h1>";
-      echo "<h2>Σφάλμα: Η βάση δεδομένων δεν υπάρχει.</h2>";
-      echo "<h3>Δημιουργήστε την με το <a href='./init.php'>init.php</a> ή επικοινωνήστε με το διαχειριστή.</h3>";
+      echo "<h1>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</h1>";
+      echo "<h2>Ξ£Ο†Ξ¬Ξ»ΞΌΞ±: Ξ— Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ξ΄ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞµΞΉ.</h2>";
+      echo "<h3>Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ®ΟƒΟ„Ξµ Ο„Ξ·Ξ½ ΞΌΞµ Ο„ΞΏ <a href='./init.php'>init.php</a> Ξ® ΞµΟ€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ®ΟƒΟ„Ξµ ΞΌΞµ Ο„ΞΏ Ξ΄ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΟ„Ξ®.</h3>";
       die();
     }
   }

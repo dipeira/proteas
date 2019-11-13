@@ -1,14 +1,14 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require_once"../tools/functions.php";
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 ?>    
 <html>
     <head>
-        <title>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</title>
+        <title>Ξ¤Ξ­Ξ»ΞΏΟ‚ Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞΏΟ/Ξ£Ο‡ΞΏΞ»ΞΉΞΊΞΏΟ Ξ­Ο„ΞΏΟ…Ο‚ - Ξ•Ξ½Ξ­ΟΞ³ΞµΞΉΞµΟ‚</title>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
@@ -24,36 +24,36 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             
     $sxol_etos = getParam('sxol_etos', $mysqlconnection);
     $tbl_bkp_mon = "employee_bkp_$sxol_etos";
-    echo "<html><head><h2>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</h2></head><body>";
-    echo "<h3><blink>Προσοχή: Μη αναστρέψιμες ενέργειες</blink></h3>";
-    echo "<tr><td><p>Επιβάλλεται η εκτέλεση με τη σειρά του αριθμού που αναγράφεται.</p>";
+    echo "<html><head><h2>Ξ¤Ξ­Ξ»ΞΏΟ‚ Ξ”ΞΉΞ΄Ξ±ΞΊΟ„ΞΉΞΊΞΏΟ/Ξ£Ο‡ΞΏΞ»ΞΉΞΊΞΏΟ Ξ­Ο„ΞΏΟ…Ο‚ - Ξ•Ξ½Ξ­ΟΞ³ΞµΞΉΞµΟ‚</h2></head><body>";
+    echo "<h3><blink>Ξ ΟΞΏΟƒΞΏΟ‡Ξ®: ΞΞ· Ξ±Ξ½Ξ±ΟƒΟ„ΟΞ­ΟΞΉΞΌΞµΟ‚ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞµΟ‚</blink></h3>";
+    echo "<tr><td><p>Ξ•Ο€ΞΉΞ²Ξ¬Ξ»Ξ»ΞµΟ„Ξ±ΞΉ Ξ· ΞµΞΊΟ„Ξ­Ξ»ΞµΟƒΞ· ΞΌΞµ Ο„Ξ· ΟƒΞµΞΉΟΞ¬ Ο„ΞΏΟ… Ξ±ΟΞΉΞΈΞΌΞΏΟ Ο€ΞΏΟ… Ξ±Ξ½Ξ±Ξ³ΟΞ¬Ο†ΞµΟ„Ξ±ΞΉ.</p>";
     echo "<table class=\"imagetable\" border='1'>";
     echo "<form action='' method='POST' autocomplete='off'>";
-    echo "<tr><td>Ενέργεια</td><td>";
-    echo "<input type='radio' name='type' value='2'>1. Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων (να γίνει πριν την αλλαγή Σχ.έτους)<br>";
-    echo "<input type='radio' name='type' value='8'>2. Αλλαγή σχολικού έτους (τρέχον σχολικό έτος: $sxol_etos)<br>";
-    echo "<input type='radio' name='type' value='10'>3. Αλλαγή ωραριου εκπ/κων<br>";
-    echo "<input type='radio' name='type' value='11'>4. Πλήρωση πίνακα υπηρετήσεων<br>";
-    echo "<input type='radio' name='type' value='12'>5. Εισαγωγή μαθητών / τμημάτων<br>";
-    //echo "<input type='radio' name='type' value='6' disabled>3. Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους<br>";
-    //echo "<input type='radio' name='type' value='3' disabled>4. Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ<br>";
-    //echo "<input type='radio' name='type' value='5' disabled>5. Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων<br>";
+    echo "<tr><td>Ξ•Ξ½Ξ­ΟΞ³ΞµΞΉΞ±</td><td>";
+    echo "<input type='radio' name='type' value='2'>1. Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ / Ξ©ΟΞΏΞΌΞΉΟƒΞΈΞ―Ο‰Ξ½ Ξ±Ο€Ο Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ (Ξ½Ξ± Ξ³Ξ―Ξ½ΞµΞΉ Ο€ΟΞΉΞ½ Ο„Ξ·Ξ½ Ξ±Ξ»Ξ»Ξ±Ξ³Ξ® Ξ£Ο‡.Ξ­Ο„ΞΏΟ…Ο‚)<br>";
+    echo "<input type='radio' name='type' value='8'>2. Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΟƒΟ‡ΞΏΞ»ΞΉΞΊΞΏΟ Ξ­Ο„ΞΏΟ…Ο‚ (Ο„ΟΞ­Ο‡ΞΏΞ½ ΟƒΟ‡ΞΏΞ»ΞΉΞΊΟ Ξ­Ο„ΞΏΟ‚: $sxol_etos)<br>";
+    echo "<input type='radio' name='type' value='10'>3. Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ο‰ΟΞ±ΟΞΉΞΏΟ… ΞµΞΊΟ€/ΞΊΟ‰Ξ½<br>";
+    echo "<input type='radio' name='type' value='11'>4. Ξ Ξ»Ξ®ΟΟ‰ΟƒΞ· Ο€Ξ―Ξ½Ξ±ΞΊΞ± Ο…Ο€Ξ·ΟΞµΟ„Ξ®ΟƒΞµΟ‰Ξ½<br>";
+    echo "<input type='radio' name='type' value='12'>5. Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ® ΞΌΞ±ΞΈΞ·Ο„ΟΞ½ / Ο„ΞΌΞ·ΞΌΞ¬Ο„Ο‰Ξ½<br>";
+    //echo "<input type='radio' name='type' value='6' disabled>3. Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ο„ΞΏΟ… Ξ Ξ¥Ξ£Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ… ΟƒΟ„Ξ·Ξ½ ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ® Ο„ΞΏΟ…Ο‚<br>";
+    //echo "<input type='radio' name='type' value='3' disabled>4. Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ξ±Ο€Ο Ξ¬Ξ»Ξ»Ξ± Ξ Ξ¥Ξ£Ξ Ξ•<br>";
+    //echo "<input type='radio' name='type' value='5' disabled>5. Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ο€Ο Ξ¬Ξ»Ξ»Ξ± Ξ Ξ¥Ξ£Ξ Ξ• / Ξ Ξ¥Ξ£Ξ”Ξ• Ξ±Ο€Ο Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½<br>";
     echo "<br>";
-    echo "<input type='radio' name='type' value='4'>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31/08)<br>";
+    echo "<input type='radio' name='type' value='4'>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ξ±Ο€Ο Ο†ΞΏΟΞµΞ―Ο‚ (Ξ³ΞΉΞ± 31/08)<br>";
     echo "<br>";
-    echo "<input type='radio' name='type' value='1'>Εκτύπωση βεβαιώσεων Αναπληρωτών Κρατικού Προυπολογισμού<br>";
-    echo "<input type='radio' name='type' value='7'>Εκτύπωση βεβαιώσεων Αναπληρωτών ΕΣΠΑ<br>";
+    echo "<input type='radio' name='type' value='1'>Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΟ‰Ξ½ Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ΞΟΞ±Ο„ΞΉΞΊΞΏΟ Ξ ΟΞΏΟ…Ο€ΞΏΞ»ΞΏΞ³ΞΉΟƒΞΌΞΏΟ<br>";
+    echo "<input type='radio' name='type' value='7'>Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΟ‰Ξ½ Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ Ξ•Ξ£Ξ Ξ‘<br>";
     echo "</td></tr>";
 if ($usrlvl > 0) {
-    echo "<tr><td colspan=2><input type='submit' value='Πραγματοποίηση' disabled>";
+    echo "<tr><td colspan=2><input type='submit' value='Ξ ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·' disabled>";
 } else {
-    echo "<tr><td colspan=2><input type='submit' value='Πραγματοποίηση'>";
+    echo "<tr><td colspan=2><input type='submit' value='Ξ ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·'>";
 }
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='../index.php'\">";
     echo "</td></tr>";
     echo "</form></table>";
 if ($usrlvl > 0) {
-    echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
+    echo "<br><br><h3>Ξ”ΞµΞ½ Ξ­Ο‡ΞµΟ„Ξµ Ξ΄ΞΉΞΊΞ±Ξ―Ο‰ΞΌΞ± Ξ³ΞΉΞ± Ο„Ξ·Ξ½ Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ±Ο…Ο„ΟΞ½ Ο„Ο‰Ξ½ ΞµΞ½ΞµΟΞ³ΞµΞΉΟΞ½. Ξ•Ο€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ®ΟƒΟ„Ξµ ΞΌΞµ Ο„ΞΏ Ξ΄ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΟ„Ξ® ΟƒΞ±Ο‚.</h3>";
     mysqli_close($mysqlconnection);
     exit;
 }
@@ -63,11 +63,11 @@ if (isset($_POST['sxoletos'])) {
     $curSxoletos = getParam('sxol_etos', $mysqlconnection);
     if ($curSxoletos == $_POST['sxoletos']) {
         echo "<br><br>";
-        die('Σφάλμα: Το έτος έχει ήδη αλλάξει...');
+        die('Ξ£Ο†Ξ¬Ξ»ΞΌΞ±: Ξ¤ΞΏ Ξ­Ο„ΞΏΟ‚ Ξ­Ο‡ΞµΞΉ Ξ®Ξ΄Ξ· Ξ±Ξ»Ξ»Ξ¬ΞΎΞµΞΉ...');
     }
     setParam('sxol_etos', $_POST['sxoletos'], $mysqlconnection);
     // more...
-    echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
+    echo "<h3>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ο„ΞΏΟ… Ξ Ξ¥Ξ£Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ… ΟƒΟ„Ξ·Ξ½ ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ® Ο„ΞΏΟ…Ο‚</h3>";
     $query = "CREATE TABLE $tbl_bkp_mon SELECT * FROM employee";
     $result = mysqli_query($mysqlconnection, $query);
     $query = "DROP TABLE employee_moved";
@@ -81,12 +81,12 @@ if (isset($_POST['sxoletos'])) {
     $num = mysqli_affected_rows($mysqlconnection);
     //echo $query;
     if ($result) {
-        echo "Επιτυχής μεταβολή $num εγγραφών.";
+        echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
         
-    echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
+    echo "<h3>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ξ±Ο€Ο Ξ¬Ξ»Ξ»Ξ± Ξ Ξ¥Ξ£Ξ Ξ•</h3>";
     $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 388";
     $result = mysqli_query($mysqlconnection, $query);
     $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 388";
@@ -94,15 +94,15 @@ if (isset($_POST['sxoletos'])) {
     $num = mysqli_affected_rows($mysqlconnection);
     //echo $query;
     if ($result) {
-        echo "Επιτυχής μεταβολή $num εγγραφών.";
+        echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
         
-    // echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
+    // echo "<h3>Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ο€Ο Ξ¬Ξ»Ξ»Ξ± Ξ Ξ¥Ξ£Ξ Ξ• / Ξ Ξ¥Ξ£Ξ”Ξ• Ξ±Ο€Ο Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½</h3>";
     // $query = "DROP TABLE employee_deleted";
     // $result = mysqli_query($mysqlconnection, $query);
-    // // 388: ¶λλο ΠΥΣΠΕ, 394: ¶λλο ΠΥΣΔΕ
+    // // 388: Ξ†Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•, 394: Ξ†Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ”Ξ•
     // $query = "CREATE TABLE employee_deleted SELECT * FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397,389)";
     // $result = mysqli_query($mysqlconnection, $query);
     // $query = "DELETE FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397,389)";
@@ -110,12 +110,12 @@ if (isset($_POST['sxoletos'])) {
     // $num = mysqli_affected_rows();
     // //echo $query;
     // if ($result)
-    //     echo "Επιτυχής μεταβολή $num εγγραφών.";
+    //     echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
     // else 
-    //     echo "Πρόβλημα στη διαγραφή...";
+    //     echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     //
     //do2yphr($mysqlconnection);
-    echo "<br><br>H διαδικασία ολοκληρώθηκε...";
+    echo "<br><br>H Ξ΄ΞΉΞ±Ξ΄ΞΉΞΊΞ±ΟƒΞ―Ξ± ΞΏΞ»ΞΏΞΊΞ»Ξ·ΟΟΞΈΞ·ΞΊΞµ...";
 }
     ////////////////////////////////////////
     // vevaiwseis proyphresias anaplhrwtwn
@@ -125,27 +125,27 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
         $kratikoy = 1;
     }
     $sxol_etos = getParam('sxol_etos', $mysqlconnection);
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     // kratikoy or ESPA 
     if ($kratikoy) {
-        $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='ΚΡΑΤ'";
+        $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='ΞΞ΅Ξ‘Ξ¤'";
     } else {
-        $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='ΚΡΑΤ'";
+        $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='ΞΞ΅Ξ‘Ξ¤'";
     }
 
     $result = mysqli_query($mysqlconnection, $query);
     $num=mysqli_num_rows($result);
 
-    echo "<h3>Εκτύπωση βεβαιώσεων Αναπληρωτών ";
+    echo "<h3>Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ²ΞµΞ²Ξ±ΞΉΟΟƒΞµΟ‰Ξ½ Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ";
     if ($kratikoy) {
-        echo "κρατικού προύπολογισμού";
+        echo "ΞΊΟΞ±Ο„ΞΉΞΊΞΏΟ Ο€ΟΞΏΟΟ€ΞΏΞ»ΞΏΞ³ΞΉΟƒΞΌΞΏΟ";
     } else {
-        echo "ΕΣΠΑ";
+        echo "Ξ•Ξ£Ξ Ξ‘";
     }
     echo "</h3>";
     if ($num == 0) {
-        echo "<p>Δε βρέθηκαν εγγραφές!</p>";
+        echo "<p>Ξ”Ξµ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†Ξ­Ο‚!</p>";
         die();
     }
     echo "<form name='anaplfrm' action=\"../employee/vev_yphr_anapl.php\" method='POST'>";
@@ -200,7 +200,7 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
                         
         if (strpos($prefix, 'PEP') !== false) {
             $eepebp = 2;
-        } elseif (strpos($prefix, 'YPOS') !== false || strpos($praksi, 'ΕΕΠ') !== false || strpos($praksi, 'ΕΒΠ') !== false) { 
+        } elseif (strpos($prefix, 'YPOS') !== false || strpos($praksi, 'Ξ•Ξ•Ξ ') !== false || strpos($praksi, 'Ξ•Ξ’Ξ ') !== false) { 
             $eepebp = 1;
         }
 
@@ -224,32 +224,32 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
     echo "<input type='hidden' name='emp_arr' value='". serialize($submit_array) ."'>";
     echo "<input type='hidden' name='kratikoy' value=$kratikoy>";
     echo "<input type='hidden' name='plithos' value=$num>";
-    echo "<input type='submit' VALUE='Υποβολή αιτήματος'>"; 
+    echo "<input type='submit' VALUE='Ξ¥Ο€ΞΏΞ²ΞΏΞ»Ξ® Ξ±ΞΉΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚'>"; 
     echo "</form>";
 }
 elseif ($_POST['type'] == 8) {
-    echo "<h3>Αλλαγή Σχολικού έτους</h3>";
-    echo "Τρέχον σχολικό έτος: $sxol_etos<br>";
-    echo "Δώστε νέο σχολικό έτος (π.χ. για το σχολ.έτος 2014-15 εισάγετε <strong>201415</strong><br>";
+    echo "<h3>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ξ£Ο‡ΞΏΞ»ΞΉΞΊΞΏΟ Ξ­Ο„ΞΏΟ…Ο‚</h3>";
+    echo "Ξ¤ΟΞ­Ο‡ΞΏΞ½ ΟƒΟ‡ΞΏΞ»ΞΉΞΊΟ Ξ­Ο„ΞΏΟ‚: $sxol_etos<br>";
+    echo "Ξ”ΟΟƒΟ„Ξµ Ξ½Ξ­ΞΏ ΟƒΟ‡ΞΏΞ»ΞΉΞΊΟ Ξ­Ο„ΞΏΟ‚ (Ο€.Ο‡. Ξ³ΞΉΞ± Ο„ΞΏ ΟƒΟ‡ΞΏΞ».Ξ­Ο„ΞΏΟ‚ 2014-15 ΞµΞΉΟƒΞ¬Ξ³ΞµΟ„Ξµ <strong>201415</strong><br>";
     echo "<form action='' method='POST'>";
     echo "<input type='text' name='sxoletos'>";
-    echo "<input type='submit' value='Υποβολή'>";
+    echo "<input type='submit' value='Ξ¥Ο€ΞΏΞ²ΞΏΞ»Ξ®'>";
     echo "</form>";
-    echo "<small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
+    echo "<small>Ξ£Ξ—Ξ: Ξ— Ξ΄ΞΉΞ±Ξ΄ΞΉΞΊΞ±ΟƒΞ―Ξ± Ξ΄ΞΉΞ±ΟΞΊΞµΞ― Ξ±ΟΞΊΞµΟ„Ξ® ΟΟΞ±. Ξ¥Ο€ΞΏΞΌΞΏΞ½Ξ®...</small>";
 }
 elseif ($_POST['type'] == 2) {
-    echo "<h3>Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων</h3>";
+    echo "<h3>Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ‘Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ / Ξ©ΟΞΏΞΌΞΉΟƒΞΈΞ―Ο‰Ξ½ Ξ±Ο€Ο Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½</h3>";
     // check if not empty
     $query = "select id from ektaktoi";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result)) {
-        exit('Σφάλμα: O πίνακας αναπληρωτών είναι κενός...');
+        exit('Ξ£Ο†Ξ¬Ξ»ΞΌΞ±: O Ο€Ξ―Ξ½Ξ±ΞΊΞ±Ο‚ Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ΞµΞ―Ξ½Ξ±ΞΉ ΞΊΞµΞ½ΟΟ‚...');
     }
     // check if already inserted        
     $query = "select id from ektaktoi_old where sxoletos = $sxol_etos";
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result) > 0) {
-        exit('Σφάλμα: H διαγραφή έχει ήδη γίνει...');
+        exit('Ξ£Ο†Ξ¬Ξ»ΞΌΞ±: H Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ­Ο‡ΞµΞΉ Ξ®Ξ΄Ξ· Ξ³Ξ―Ξ½ΞµΞΉ...');
     }
     // archive into ektaktoi_old
     $query = "insert into ektaktoi_old select *, '$sxol_etos' as sxoletos from ektaktoi where 1";
@@ -264,18 +264,18 @@ elseif ($_POST['type'] == 2) {
     $query = "TRUNCATE table praxi";
     $result = mysqli_query($mysqlconnection, $query);
     if ($result) {
-        echo "Επιτυχής Διαγραφή. <br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα 'ektaktoi_old'</small>";
+        echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®. <br><small>ΞΞΉ ΞµΞΊΟ€/ΞΊΞΏΞ― ΞΌΞµΟ„Ξ±Ο†Ξ­ΟΞΈΞ·ΞΊΞ±Ξ½ ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± 'ektaktoi_old'</small>";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
 }
 elseif ($_POST['type'] == 4) {
-    echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31-08)</h3>";
+    echo "<h3>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ξ±Ο€Ο Ο†ΞΏΟΞµΞ―Ο‚ (Ξ³ΞΉΞ± 31-08)</h3>";
     // check...
     $query = "SELECT * FROM employee WHERE sx_yphrethshs = 389";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result)) {
-        exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
+        exit('Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― Ξ³ΞΉ\'Ξ±Ο…Ο„Ξ® Ο„Ξ·Ξ½ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±...');
     }
     //
     //$query = "DROP TABLE employee_bkp";
@@ -289,23 +289,23 @@ elseif ($_POST['type'] == 4) {
     $num = mysqli_affected_rows();
     //echo $query;
     if ($result) {
-        echo "Επιτυχής μεταβολή $num εγγραφών.";
+        echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
 }
-    // Αλλαγή ωραριου εκπ/κων
+    // Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ο‰ΟΞ±ΟΞΉΞΏΟ… ΞµΞΊΟ€/ΞΊΟ‰Ξ½
 elseif ($_POST['type'] == 10) {
-    echo "<br><br><a href='../employee/update_wres.php'>Αλλαγή ωραριου εκπ/κων</a><br>";
-    echo "(Παρακαλώ βεβαιωθείτε ότι επιλέγετε 31/12 του τρέχοντος έτους και έχετε επιλέξει Τροποποίηση ωρών στη ΒΔ)";
+    echo "<br><br><a href='../employee/update_wres.php'>Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® Ο‰ΟΞ±ΟΞΉΞΏΟ… ΞµΞΊΟ€/ΞΊΟ‰Ξ½</a><br>";
+    echo "(Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ²ΞµΞ²Ξ±ΞΉΟ‰ΞΈΞµΞ―Ο„Ξµ ΟΟ„ΞΉ ΞµΟ€ΞΉΞ»Ξ­Ξ³ΞµΟ„Ξµ 31/12 Ο„ΞΏΟ… Ο„ΟΞ­Ο‡ΞΏΞ½Ο„ΞΏΟ‚ Ξ­Ο„ΞΏΟ…Ο‚ ΞΊΞ±ΞΉ Ξ­Ο‡ΞµΟ„Ξµ ΞµΟ€ΞΉΞ»Ξ­ΞΎΞµΞΉ Ξ¤ΟΞΏΟ€ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο‰ΟΟΞ½ ΟƒΟ„Ξ· Ξ’Ξ”)";
 }
 elseif ($_POST['type'] == 11) {
-    echo "<br><br><small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
+    echo "<br><br><small>Ξ£Ξ—Ξ: Ξ— Ξ΄ΞΉΞ±Ξ΄ΞΉΞΊΞ±ΟƒΞ―Ξ± Ξ΄ΞΉΞ±ΟΞΊΞµΞ― Ξ±ΟΞΊΞµΟ„Ξ® ΟΟΞ±. Ξ¥Ο€ΞΏΞΌΞΏΞ½Ξ®...</small>";
     do2yphr($mysqlconnection);
 }
 elseif ($_POST['type'] == 12) {
-  echo "<br><br><a href='../tools/import.php'>Εισαγωγή μαθητών / τμημάτων</a><br>";
-  echo "<p>(Χρησιμοποιήστε τα πρότυπα αρχεία <b>Μαθητές / Τμήματα Δ.Σ./Νηπ.</b> & τις αντίστοιχες επιλογές)</p>";
+  echo "<br><br><a href='../tools/import.php'>Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ® ΞΌΞ±ΞΈΞ·Ο„ΟΞ½ / Ο„ΞΌΞ·ΞΌΞ¬Ο„Ο‰Ξ½</a><br>";
+  echo "<p>(Ξ§ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞ®ΟƒΟ„Ξµ Ο„Ξ± Ο€ΟΟΟ„Ο…Ο€Ξ± Ξ±ΟΟ‡ΞµΞ―Ξ± <b>ΞΞ±ΞΈΞ·Ο„Ξ­Ο‚ / Ξ¤ΞΌΞ®ΞΌΞ±Ο„Ξ± Ξ”.Ξ£./ΞΞ·Ο€.</b> & Ο„ΞΉΟ‚ Ξ±Ξ½Ο„Ξ―ΟƒΟ„ΞΏΞΉΟ‡ΞµΟ‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚)</p>";
 }
     mysqli_close($mysqlconnection);
 
@@ -313,12 +313,12 @@ elseif ($_POST['type'] == 12) {
     /*
     elseif ($_POST['type'] == 6)
     {
-        echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
+        echo "<h3>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ο„ΞΏΟ… Ξ Ξ¥Ξ£Ξ Ξ• Ξ—ΟΞ±ΞΊΞ»ΞµΞ―ΞΏΟ… ΟƒΟ„Ξ·Ξ½ ΞΏΟΞ³Ξ±Ξ½ΞΉΞΊΞ® Ο„ΞΏΟ…Ο‚</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_yphrethshs NOT IN (389,397,399) AND sx_yphrethshs != sx_organikhs AND thesi NOT IN (2,4)";
         $result = mysqli_query($mysqlconnection, $query);
         if (!mysqli_num_rows($result))
-            exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
+            exit('Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― Ξ³ΞΉ\'Ξ±Ο…Ο„Ξ® Ο„Ξ·Ξ½ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±...');
         //
         //$query = "DROP TABLE employee_bkp";
         //$result = mysqli_query($mysqlconnection, $query);
@@ -335,18 +335,18 @@ elseif ($_POST['type'] == 12) {
         $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
-            echo "Επιτυχής μεταβολή $num εγγραφών.";
+            echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
         else 
-            echo "Πρόβλημα στη διαγραφή...";
+            echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
     elseif ($_POST['type'] == 3)
     {
-        echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
+        echo "<h3>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ξ±Ο€Ο Ξ¬Ξ»Ξ»Ξ± Ξ Ξ¥Ξ£Ξ Ξ•</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_yphrethshs = 388 AND sx_organikhs != 388";
         $result = mysqli_query($mysqlconnection, $query);
         if (!mysqli_num_rows($result))
-            exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
+            exit('Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― Ξ³ΞΉ\'Ξ±Ο…Ο„Ξ® Ο„Ξ·Ξ½ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±...');
         //
         //$query = "DROP TABLE employee_bkp";
         //$result = mysqli_query($mysqlconnection, $query);
@@ -359,19 +359,19 @@ elseif ($_POST['type'] == 12) {
         $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
-            echo "Επιτυχής μεταβολή $num εγγραφών.";
+            echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
         else 
-            echo "Πρόβλημα στη διαγραφή...";
+            echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
     // diagrafh ekpkwn apo alla pyspe/pysde
     elseif ($_POST['type'] == 5)
     {
-        echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
+        echo "<h3>Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ±Ο€ΞΏΟƒΟ€Ξ±ΟƒΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ο€Ο Ξ¬Ξ»Ξ»Ξ± Ξ Ξ¥Ξ£Ξ Ξ• / Ξ Ξ¥Ξ£Ξ”Ξ• Ξ±Ο€Ο Ξ²Ξ¬ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½</h3>";
         // check...
         $query = "SELECT * FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397)";
         $result = mysqli_query($mysqlconnection, $query);
         if (!mysqli_num_rows($result))
-            exit('Δεν υπάρχουν εκπαιδευτικοί γι\' αυτή την ενέργεια...');
+            exit('Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞΏΞ― Ξ³ΞΉ\' Ξ±Ο…Ο„Ξ® Ο„Ξ·Ξ½ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±...');
         //
         //$query = "DROP TABLE employee_bkp";
         //$result = mysqli_query($mysqlconnection, $query);
@@ -379,7 +379,7 @@ elseif ($_POST['type'] == 12) {
         //$result = mysqli_query($mysqlconnection, $query);
         $query = "DROP TABLE employee_deleted";
         $result = mysqli_query($mysqlconnection, $query);
-        // 388: ¶λλο ΠΥΣΠΕ, 394: ¶λλο ΠΥΣΔΕ
+        // 388: Ξ†Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ Ξ•, 394: Ξ†Ξ»Ξ»ΞΏ Ξ Ξ¥Ξ£Ξ”Ξ•
         $query = "CREATE TABLE employee_deleted SELECT * FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397)";
         $result = mysqli_query($mysqlconnection, $query);
         $query = "DELETE FROM employee WHERE sx_organikhs IN (388,394) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (397)";
@@ -387,9 +387,9 @@ elseif ($_POST['type'] == 12) {
         $num = mysqli_affected_rows();
         //echo $query;
         if ($result)
-            echo "Επιτυχής μεταβολή $num εγγραφών.";
+            echo "Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞΌΞµΟ„Ξ±Ξ²ΞΏΞ»Ξ® $num ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½.";
         else 
-            echo "Πρόβλημα στη διαγραφή...";
+            echo "Ξ ΟΟΞ²Ξ»Ξ·ΞΌΞ± ΟƒΟ„Ξ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®...";
     }
     */
 ?>

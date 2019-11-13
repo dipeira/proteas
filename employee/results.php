@@ -1,11 +1,11 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     //require_once "../tools/functions.php";
 ?>
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">    
@@ -27,8 +27,8 @@
   $is_anapl = false;
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     $flag=0;
   if (isset($_POST['or'])) {
       $op = " OR";
@@ -198,7 +198,7 @@ if (strlen($_POST['org'])>0 && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $str1 = mb_convert_encoding($_POST['org'], "iso-8859-7", "utf-8");
+    $str1 = $_POST['org'];
     $org = getSchoolID($str1, $mysqlconnection);
     $query .= " sx_organikhs = '$org'";
     $flag=1;
@@ -207,7 +207,7 @@ if (strlen($_POST['yphr'])>0) {
     if ($flag) {
         $query .= $op;
     }
-    $str1 = mb_convert_encoding($_POST['yphr'], "iso-8859-7", "utf-8");
+    $str1 = $_POST['yphr'];
     $yphr = getSchoolID($str1, $mysqlconnection);
     //$query .= " sx_yphrethshs = '$yphr'";
     $query .= " (sx_yphrethshs = '$yphr' OR yphrethsh = '$yphr')";
@@ -240,14 +240,13 @@ if (strlen($_POST['comments'])>0) {
         
         
 if (!$flag) {
-    echo "<p>Παρακαλώ επιλέξτε κάποιο κριτήριο αναζήτησης...</p>";
+    echo "<p>Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΟΞΉΞ»Ξ­ΞΎΟΞ΅ ΞΊΞ¬ΟΞΏΞΉΞΏ ΞΊΟΞΉΟΞ®ΟΞΉΞΏ Ξ±Ξ½Ξ±ΞΆΞ®ΟΞ·ΟΞ·Ο...</p>";
 }
 if ($flag && $onlysynol) {
         $query = "SELECT * from employee";
 }
 if ($flag) {
     $i=0;
-    $query = mb_convert_encoding($query, "iso-8859-7", "utf-8");
     /////////////////////////////////
     // echo $query; // for debugging...
     /////////////////////////////////
@@ -255,57 +254,57 @@ if ($flag) {
     $num = mysqli_num_rows($result);
         
     if ($num==0) {
-        echo "<BR><p>Κανένα αποτέλεσμα...</p>";
+        echo "<BR><p>ΞΞ±Ξ½Ξ­Ξ½Ξ± Ξ±ΟΞΏΟΞ­Ξ»Ξ΅ΟΞΌΞ±...</p>";
     } else
     {
         $qr = str_replace("'", "", $query);
-        echo "<p>Πλήθος εγγραφών που βρέθηκαν: <span title='$qr'>$num</span><p>";
+        echo "<p>Ξ Ξ»Ξ®ΞΈΞΏΟ Ξ΅Ξ³Ξ³ΟΞ±ΟΟΞ½ ΟΞΏΟ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½: <span title='$qr'>$num</span><p>";
         $num1=$num;
         $num2=$num;
-        echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=iso8859-7\">";
+        echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";
         echo "<body>";
         echo "<center>";
         ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-        echo "<thead><tr><th>Ενέργεια</th>";
-        echo "<th>Επώνυμο</th>";
-        echo "<th>Όνομα</th>";
-        echo "<th>Κλάδος</th>";
-        echo $is_anapl ? '' : "<th>Σχ.Οργανικής</th>";
-        echo "<th>Σχ.Υπηρέτησης</td></th>\n";
+        echo "<thead><tr><th>ΞΞ½Ξ­ΟΞ³Ξ΅ΞΉΞ±</th>";
+        echo "<th>ΞΟΟΞ½ΟΞΌΞΏ</th>";
+        echo "<th>ΞΞ½ΞΏΞΌΞ±</th>";
+        echo "<th>ΞΞ»Ξ¬Ξ΄ΞΏΟ</th>";
+        echo $is_anapl ? '' : "<th>Ξ£Ο.ΞΟΞ³Ξ±Ξ½ΞΉΞΊΞ®Ο</th>";
+        echo "<th>Ξ£Ο.Ξ₯ΟΞ·ΟΞ­ΟΞ·ΟΞ·Ο</td></th>\n";
         
         if (isset($_POST['dsppatr'])) {
-            echo "<th>Πατρώνυμο</th>\n";
+            echo "<th>Ξ Ξ±ΟΟΟΞ½ΟΞΌΞΏ</th>\n";
         }
         if (isset($_POST['dsphm_dior'])) {
-            echo "<th>Ημ/νία Διορισμού</th>\n";
+            echo "<th>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞΉΞΏΟΞΉΟΞΌΞΏΟ</th>\n";
         }
         if (isset($_POST['dsphm_anal'])) {
-          echo "<th>Ημ/νία Ανάληψης</th>\n";
+          echo "<th>ΞΞΌ/Ξ½Ξ―Ξ± ΞΞ½Ξ¬Ξ»Ξ·ΟΞ·Ο</th>\n";
         }
         if (isset($_POST['dspmetdid'])) {
-            echo "<th>Μεταπτ./Διδακτ.</th>\n";
+            echo "<th>ΞΞ΅ΟΞ±ΟΟ./ΞΞΉΞ΄Ξ±ΞΊΟ.</th>\n";
         }
         if (isset($_POST['dspam'])) {
             echo "<th>A.M.</th>\n";
         }
         if (isset($_POST['dspafm'])) {
-            echo "<th>A.Φ.M.</th>\n";
+            echo "<th>A.Ξ¦.M.</th>\n";
         }
         if (isset($_POST['dspproyhp'])) {
-            echo "<th>Προϋπηρεσία</th>\n";
+            echo "<th>Ξ ΟΞΏΟΟΞ·ΟΞ΅ΟΞ―Ξ±</th>\n";
         }
         if (isset($_POST['dspvathmos'])) {
-            echo "<th>Βαθμός</th>\n";
+            echo "<th>ΞΞ±ΞΈΞΌΟΟ</th>\n";
         }
         if (isset($_POST['dspmk'])) {
             echo "<th>M.K.</th>\n";
         }
         if (isset($_POST['dspkatast'])) {
-            echo "<th>Κατάσταση</th>\n";
+            echo "<th>ΞΞ±ΟΞ¬ΟΟΞ±ΟΞ·</th>\n";
         }
         if (isset($_POST['dspsynol'])) {
-            echo "<th>Συνολική Υπηρεσία</th>\n";
+            echo "<th>Ξ£ΟΞ½ΞΏΞ»ΞΉΞΊΞ® Ξ₯ΟΞ·ΟΞ΅ΟΞ―Ξ±</th>\n";
         }
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
@@ -368,9 +367,9 @@ if ($flag) {
                                         
             echo "<tr><td>";
             $table = $is_anapl ? 'ektaktoi' : 'employee';
-            echo "<span title=\"Προβολή\"><a href=\"$table.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>";
+            echo "<span title=\"Ξ ΟΞΏΞ²ΞΏΞ»Ξ®\"><a href=\"$table.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>";
             if ($usrlvl < 3) {
-              echo "<span title=\"Επεξεργασία\"><a href=\"$table.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
+              echo "<span title=\"ΞΟΞ΅ΞΎΞ΅ΟΞ³Ξ±ΟΞ―Ξ±\"><a href=\"$table.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
             }
             echo "</td>";
             echo "<td><a href=\"$table.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td>";
@@ -389,13 +388,13 @@ if ($flag) {
                 switch ($met_did)
                 {
                 case 0:
-                    echo "<td>Όχι</td>\n";
+                    echo "<td>ΞΟΞΉ</td>\n";
                     break;
                 case 1:
-                    echo "<td>Μεταπτυχιακό</td>\n";
+                    echo "<td>ΞΞ΅ΟΞ±ΟΟΟΟΞΉΞ±ΞΊΟ</td>\n";
                     break;
                 case 2:
-                    echo "<td>Διδακτορικό</td>\n";
+                    echo "<td>ΞΞΉΞ΄Ξ±ΞΊΟΞΏΟΞΉΞΊΟ</td>\n";
                     break;
                 }
             }
@@ -407,7 +406,7 @@ if ($flag) {
             }
             if (isset($_POST['dspproyhp'])) {
                 $ymd=days2ymd($proyp);
-                echo "<td>$ymd[0] Έτη, $ymd[1] Μήνες, $ymd[2] Ημέρες</td>\n";
+                echo "<td>$ymd[0] ΞΟΞ·, $ymd[1] ΞΞ®Ξ½Ξ΅Ο, $ymd[2] ΞΞΌΞ­ΟΞ΅Ο</td>\n";
             }
             if (isset($_POST['dspvathmos'])) {
                 echo "<td>$vathm</td>\n";
@@ -419,22 +418,22 @@ if ($flag) {
                 switch ($katast)
                 {
                 case 1:
-                    echo "<td>Εργάζεται</td>\n";
+                    echo "<td>ΞΟΞ³Ξ¬ΞΆΞ΅ΟΞ±ΞΉ</td>\n";
                     break;
                 case 2:
-                    echo "<td>Λύση Σχέσης-Παραίτηση</td>\n";
+                    echo "<td>ΞΟΟΞ· Ξ£ΟΞ­ΟΞ·Ο-Ξ Ξ±ΟΞ±Ξ―ΟΞ·ΟΞ·</td>\n";
                     break;
                 case 3:
-                    echo "<td>Άδεια</td>\n";
+                    echo "<td>ΞΞ΄Ξ΅ΞΉΞ±</td>\n";
                     break;
                 case 4:
-                    echo "<td>Διαθεσιμότητα</td>\n";
+                    echo "<td>ΞΞΉΞ±ΞΈΞ΅ΟΞΉΞΌΟΟΞ·ΟΞ±</td>\n";
                     break;
                 }
             }
             if (isset($_POST['dspsynol'])) {
                 $ymd=days2ymd($res1);    
-                echo "<td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td>";
+                echo "<td>ΞΟΞ·: $ymd[0] &nbsp; ΞΞ®Ξ½Ξ΅Ο: $ymd[1] &nbsp; ΞΞΌΞ­ΟΞ΅Ο: $ymd[2]</td>";
             }
             echo "</tr>";
 
@@ -445,15 +444,15 @@ if ($flag) {
                         
         if ($synol_find) {
             $asd = $num1;
-            echo "Εγγραφές που πληρούν τα κριτήρια: $asd";
+            echo "ΞΞ³Ξ³ΟΞ±ΟΞ­Ο ΟΞΏΟ ΟΞ»Ξ·ΟΞΏΟΞ½ ΟΞ± ΞΊΟΞΉΟΞ®ΟΞΉΞ±: $asd";
         }
         $page = ob_get_contents(); 
         ob_end_flush();
             
         echo "<form action='../tools/2excel.php' method='post'>";
         echo "<input type='hidden' name = 'data' value='$page'>";
-        //echo "<INPUT TYPE='submit' VALUE='Εξαγωγή στο excel'></form>";
-        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+        //echo "<INPUT TYPE='submit' VALUE='ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel'></form>";
+        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
         //ob_end_clean();
     }
     echo "</center>";

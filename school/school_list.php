@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=iso8859-7'); 
+header('Content-type: text/html; charset=utf-8'); 
 require_once"../config.php";
 require_once"../tools/functions.php";
 
@@ -65,7 +65,7 @@ $results    = $Paginator->getData( $limit, $page );
       // });
     </script>
 
-  <title>Λίστα Σχολείων</title>
+  <title>Ξ›Ξ―ΟƒΟ„Ξ± Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</title>
   <style>
     ul.pagination {
         display: inline-block;
@@ -92,27 +92,27 @@ $results    = $Paginator->getData( $limit, $page );
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
-<h2>Λίστα Σχολείων</h2>
+<h2>Ξ›Ξ―ΟƒΟ„Ξ± Ξ£Ο‡ΞΏΞ»ΞµΞ―Ο‰Ξ½</h2>
 <?php
 
     // echo "<form id='searchfrm' name='searchfrm' action='school_status.php' method='GET' autocomplete='off'>";
-    // echo "Σχολείο&nbsp;";
+    // echo "Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ&nbsp;";
     // echo "<input type=\"text\" name=\"org\" id=\"org\" style='width:250px;'/>";                
-    // echo "	<input type='submit' value='Αναζήτηση'>";
-    // //echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    // echo "	<input type='submit' value='Ξ‘Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·'>";
+    // //echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='../index.php'\">";
     // echo "	</form>";
 
     ?>
-<p>Τύπος Σχολείου: </p>
+<p>Ξ¤ΟΟ€ΞΏΟ‚ Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…: </p>
 <form id="request_status">
-    <input type="radio" name="type" value="0" <?= $type == 0 ? 'checked' : ''?> onchange="this.form.submit()"> Όλα
-    <input type="radio" name="type" value="1" <?= $type == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Δημοτικό Σχολέιο
-    <input type="radio" name="type" value="2" <?= $type == 2 ? 'checked' : ''?> onchange="this.form.submit()"> Νηπιαγωγείο
+    <input type="radio" name="type" value="0" <?= $type == 0 ? 'checked' : ''?> onchange="this.form.submit()"> ΞΞ»Ξ±
+    <input type="radio" name="type" value="1" <?= $type == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Ξ”Ξ·ΞΌΞΏΟ„ΞΉΞΊΟ Ξ£Ο‡ΞΏΞ»Ξ­ΞΉΞΏ
+    <input type="radio" name="type" value="2" <?= $type == 2 ? 'checked' : ''?> onchange="this.form.submit()"> ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΞµΞ―ΞΏ
 </form>
 <br>
 <?php
   echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-  echo "<thead><tr><th>A/A</th><th>Κωδ.Υπουργείο</th><th>Όνομα</th><th>Τηλ.</th><th>email</th><th>Οργανικότητα</th><th>Δ.Σ./Νηπ.</th><th>Τύπος</th></tr></thead><tbody>";
+  echo "<thead><tr><th>A/A</th><th>ΞΟ‰Ξ΄.Ξ¥Ο€ΞΏΟ…ΟΞ³ΞµΞ―ΞΏ</th><th>ΞΞ½ΞΏΞΌΞ±</th><th>Ξ¤Ξ·Ξ».</th><th>email</th><th>ΞΟΞ³Ξ±Ξ½ΞΉΞΊΟΟ„Ξ·Ο„Ξ±</th><th>Ξ”.Ξ£./ΞΞ·Ο€.</th><th>Ξ¤ΟΟ€ΞΏΟ‚</th></tr></thead><tbody>";
   for( $i = 0; $i < count( $results->data ); $i++ ){
         echo "<tr>";
         echo "<td>".$results->data[$i]['id']."</a></td>";
@@ -124,26 +124,26 @@ $results    = $Paginator->getData( $limit, $page );
         echo "<td>";
         switch ($results->data[$i]['type']) {
           case '0':
-            echo "Λοιπά";
+            echo "Ξ›ΞΏΞΉΟ€Ξ¬";
             break;
           case '1':
-            echo "Δ.Σ.";
+            echo "Ξ”.Ξ£.";
             break;
           case '2':
-            echo "Νηπ.";
+            echo "ΞΞ·Ο€.";
             break;
         }
         echo "</td>";
         echo "<td>";
         switch ($results->data[$i]['type2']) {
           case '0':
-            echo "Δημόσιο";
+            echo "Ξ”Ξ·ΞΌΟΟƒΞΉΞΏ";
             break;
           case '1':
-            echo "Ιδιωτικό";
+            echo "Ξ™Ξ΄ΞΉΟ‰Ο„ΞΉΞΊΟ";
             break;
           case '2':
-            echo "Ειδικό";
+            echo "Ξ•ΞΉΞ΄ΞΉΞΊΟ";
             break; 
         }
         echo "</td>";
@@ -155,7 +155,7 @@ $results    = $Paginator->getData( $limit, $page );
 
 ?>
 <form>
-<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick="parent.location='../index.php'">
 </form>
 
 </body></html>

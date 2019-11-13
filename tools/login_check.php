@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
 ?>
 <html>
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta http-equiv="refresh" content="2; URL=login.php">
-        <title>Πρωτέας</title>
+        <title>Ξ ΟΟ‰Ο„Ξ­Ξ±Ο‚</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../css/login.css" />
     </head>
     <body>
-        <h3>Γίνεται ανακατεύθυνση...</h3>
+        <h3>Ξ“Ξ―Ξ½ΞµΟ„Ξ±ΞΉ Ξ±Ξ½Ξ±ΞΊΞ±Ο„ΞµΟΞΈΟ…Ξ½ΟƒΞ·...</h3>
     </body>
 </html>
 

@@ -1,5 +1,5 @@
 <?php
-  header('Content-type: text/html; charset=iso8859-7'); 
+  header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../tools/functions.php";
   
@@ -11,15 +11,15 @@
   $d1 = strtotime($_POST['yphr']);
   $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr;
   if ($result<=0) {
-    die("Λάθος ημερομηνία");
+    die("Ξ›Ξ¬ΞΈΞΏΟ‚ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±");
   }
   $ymd = days2ymd($result);    
-  echo "<b>Συνολικός Χρόνος Υπηρεσίας:</b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]<br>";
+  echo "<b>Ξ£Ο…Ξ½ΞΏΞ»ΞΉΞΊΟΟ‚ Ξ§ΟΟΞ½ΞΏΟ‚ Ξ¥Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚:</b><br>ΞΟ„Ξ·: $ymd[0] &nbsp; ΞΞ®Ξ½ΞµΟ‚: $ymd[1] &nbsp; Ξ—ΞΌΞ­ΟΞµΟ‚: $ymd[2]<br>";
   
   // print MK
   $mk = get_mk($id, $mysqlconnection, $yphr);
   $ymd = $mk['ymd'];
-  echo "<br><b>Χρόνος για Μ.Κ.:</b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]";
+  echo "<br><b>Ξ§ΟΟΞ½ΞΏΟ‚ Ξ³ΞΉΞ± Ξ.Ξ.:</b><br>ΞΟ„Ξ·: $ymd[0] &nbsp; ΞΞ®Ξ½ΞµΟ‚: $ymd[1] &nbsp; Ξ—ΞΌΞ­ΟΞµΟ‚: $ymd[2]";
   echo "&nbsp;(M.K.: ".$mk['mk'].")<br>";
 
   // compute days of educational service for teaching hour reduction
@@ -29,9 +29,9 @@
   $d1 = strtotime($lastday);
   $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr - $_POST['proyp_not'];
   if ($result<=0) {
-    die("Λάθος ημερομηνία");
+    die("Ξ›Ξ¬ΞΈΞΏΟ‚ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±");
   }
   $ymd = days2ymd($result);
   $hours = get_wres($result);
-  echo "<br><b>Χρόνος υπηρεσίας για μείωση ωραρίου:<br><small>(έως 31/12/$year)</small></b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] &nbsp;($hours ώρες)<br>";
+  echo "<br><b>Ξ§ΟΟΞ½ΞΏΟ‚ Ο…Ο€Ξ·ΟΞµΟƒΞ―Ξ±Ο‚ Ξ³ΞΉΞ± ΞΌΞµΞ―Ο‰ΟƒΞ· Ο‰ΟΞ±ΟΞ―ΞΏΟ…:<br><small>(Ξ­Ο‰Ο‚ 31/12/$year)</small></b><br>ΞΟ„Ξ·: $ymd[0] &nbsp; ΞΞ®Ξ½ΞµΟ‚: $ymd[1] &nbsp; Ξ—ΞΌΞ­ΟΞµΟ‚: $ymd[2] &nbsp;($hours ΟΟΞµΟ‚)<br>";
 ?>

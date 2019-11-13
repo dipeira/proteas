@@ -1,14 +1,14 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     //require_once "../tools/functions.php";
 ?>
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <!--
-    <meta http-equiv="content-type" content="text/html; charset=iso8859-7">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     -->
-    <title>Αναφορά Διευθυντών / Προϊσταμένων</title>
+    <title>ΞΞ½Ξ±ΟΞΏΟΞ¬ ΞΞΉΞ΅ΟΞΈΟΞ½ΟΟΞ½ / Ξ ΟΞΏΟΟΟΞ±ΞΌΞ­Ξ½ΟΞ½</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -26,32 +26,32 @@
     session_start();
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
     echo "<body>";
     require '../etc/menu.php';
 
     $req_type = $_GET['type'] ? $_GET['type'] : 0;
-    echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
-    echo "<p>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
-    echo $req_type == 0 ? "<b>Δημοτικά Σχολεία</b><br>" : "<a href='report_head.php?type=0'>Δημοτικά Σχολεία</a><br>";
-    echo $req_type == 1 ? "<b>Νηπιαγωγεία</b><br>" : "<a href='report_head.php?type=1'>Νηπιαγωγεία</a><br>";
-    echo $req_type == 2 ? '<b>Ειδικά Σχολεία</b><br>' : "<a href='report_head.php?type=2'>Ειδικά Σχολεία</a><br>";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<h3>ΞΞ½Ξ±ΟΞΏΟΞ¬ ΞΞΉΞ΅ΟΞΈΟΞ½ΟΟΞ½ / Ξ ΟΞΏΟΟΟΞ±ΞΌΞ­Ξ½ΟΞ½</h3>";
+    echo "<p>Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΅ΟΞΉΞ»Ξ­ΞΎΟΞ΅ ΟΟΟΞΏ ΟΟΞΏΞ»Ξ΅Ξ―ΞΏΟ:</p>";
+    echo $req_type == 0 ? "<b>ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</b><br>" : "<a href='report_head.php?type=0'>ΞΞ·ΞΌΞΏΟΞΉΞΊΞ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</a><br>";
+    echo $req_type == 1 ? "<b>ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³Ξ΅Ξ―Ξ±</b><br>" : "<a href='report_head.php?type=1'>ΞΞ·ΟΞΉΞ±Ξ³ΟΞ³Ξ΅Ξ―Ξ±</a><br>";
+    echo $req_type == 2 ? '<b>ΞΞΉΞ΄ΞΉΞΊΞ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</b><br>' : "<a href='report_head.php?type=2'>ΞΞΉΞ΄ΞΉΞΊΞ¬ Ξ£ΟΞΏΞ»Ξ΅Ξ―Ξ±</a><br>";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     
     function print_table($result, $num, $mysqlconnection, $mon = true){
       $i=0;
       echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
       echo "<thead>";
-      echo "<tr><th>Κωδ.</th>";
-      echo "<th>Ονομασία</th>";
-      echo "<th>Λειτ.</th>";
-      echo "<th>Θέση</th>";
-      echo "<th>Επώνυμο</th>";
-      echo "<th>Όνομα</th>";
-      echo "<th>Κλάδος</th>";
-      echo "<th>Τηλέφωνο</th>";
+      echo "<tr><th>ΞΟΞ΄.</th>";
+      echo "<th>ΞΞ½ΞΏΞΌΞ±ΟΞ―Ξ±</th>";
+      echo "<th>ΞΞ΅ΞΉΟ.</th>";
+      echo "<th>ΞΞ­ΟΞ·</th>";
+      echo "<th>ΞΟΟΞ½ΟΞΌΞΏ</th>";
+      echo "<th>ΞΞ½ΞΏΞΌΞ±</th>";
+      echo "<th>ΞΞ»Ξ¬Ξ΄ΞΏΟ</th>";
+      echo "<th>Ξ€Ξ·Ξ»Ξ­ΟΟΞ½ΞΏ</th>";
       echo "</tr>";
       echo "</thead>\n<tbody>\n";
 
@@ -65,8 +65,8 @@
           $name = mysqli_result($result, $i, "name");
           $surname = mysqli_result($result, $i, "surname");
           $thesi = $leitoyrg > 3 ? 
-            mysqli_result($result, $i, "thesi") == 2 ? 'Διευθυντής/-ντρια' : 'Υποδιευθυντής/-ντρια' :
-            'Πρ/νος/-η';
+            mysqli_result($result, $i, "thesi") == 2 ? 'ΞΞΉΞ΅ΟΞΈΟΞ½ΟΞ®Ο/-Ξ½ΟΟΞΉΞ±' : 'Ξ₯ΟΞΏΞ΄ΞΉΞ΅ΟΞΈΟΞ½ΟΞ®Ο/-Ξ½ΟΟΞΉΞ±' :
+            'Ξ Ο/Ξ½ΞΏΟ/-Ξ·';
           $klados = getKlados(mysqli_result($result, $i, "klados"),$mysqlconnection);
           $tel = $mon ? mysqli_result($result, $i, "tel") : mysqli_result($result, $i, "stathero") . ' / ' . mysqli_result($result, $i, "kinhto");
 
@@ -104,7 +104,7 @@
     echo "<center>";
     
     ob_start();
-    echo "<h2>Μόνιμοι</h2>";
+    echo "<h2>ΞΟΞ½ΞΉΞΌΞΏΞΉ</h2>";
     print_table($result, $num, $mysqlconnection);
     
     
@@ -112,7 +112,7 @@
     $result = mysqli_query($mysqlconnection, $query2);
     $num = mysqli_num_rows($result);
     if ($num){
-      echo "<h2>Αναπληρωτές</h2>";
+      echo "<h2>ΞΞ½Ξ±ΟΞ»Ξ·ΟΟΟΞ­Ο</h2>";
       print_table($result, $num, $mysqlconnection, false);
     }
 
@@ -122,9 +122,9 @@
 
     echo "<form action='../tools/2excel_ses.php' method='post'>";
     //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>ΞΞΎΞ±Ξ³ΟΞ³Ξ® ΟΟΞΏ excel</BUTTON>";
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='btn-red' VALUE='ΞΟΞΉΟΟΟΞΏΟΞ®' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
     //ob_end_clean();
 

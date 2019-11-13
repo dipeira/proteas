@@ -1,12 +1,12 @@
 <?php
-	header('Content-type: text/html; charset=iso8859-7'); 
+	header('Content-type: text/html; charset=utf-8'); 
 	require_once"../config.php";
 	require_once"../tools/functions.php";
 ?>	
   <html>
   <head>      
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <title>Πράξεις ανά Σχολείο</title>
+    <title>Ξ ΟΞ¬ΞΎΞµΞΉΟ‚ Ξ±Ξ½Ξ¬ Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ</title>
     <script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">   
@@ -28,8 +28,8 @@
     $usrlvl = $_SESSION['userlevel'];
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
     $type = $_REQUEST['type'];
     switch ($type) {
@@ -44,13 +44,13 @@
         break;
     }
 
-    echo "<h2>Πράξεις ανά Σχολείο</h2>";
+    echo "<h2>Ξ ΟΞ¬ΞΎΞµΞΉΟ‚ Ξ±Ξ½Ξ¬ Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ</h2>";
     ?>
-    <p>Τύπος Σχολείου:</p>
+    <p>Ξ¤ΟΟ€ΞΏΟ‚ Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏΟ…:</p>
     <form id="school_type">
-      <input type="radio" name="type" value="0" <?= $type == 0 ? 'checked' : ''?> onchange="this.form.submit()"> Όλα
-      <input type="radio" name="type" value="1" <?= $type == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Δ.Σ.
-      <input type="radio" name="type" value="2" <?= $type == 2 ? 'checked' : ''?> onchange="this.form.submit()"> Νηπιαγωγεία
+      <input type="radio" name="type" value="0" <?= $type == 0 ? 'checked' : ''?> onchange="this.form.submit()"> ΞΞ»Ξ±
+      <input type="radio" name="type" value="1" <?= $type == 1 ? 'checked' : ''?> onchange="this.form.submit()"> Ξ”.Ξ£.
+      <input type="radio" name="type" value="2" <?= $type == 2 ? 'checked' : ''?> onchange="this.form.submit()"> ΞΞ·Ο€ΞΉΞ±Ξ³Ο‰Ξ³ΞµΞ―Ξ±
     </form>
     <?php
     $sql = "select DISTINCT s.id,s.code,s.name as sname,p.name as pname from school s join yphrethsh_ekt y on y.yphrethsh = s.id join ektaktoi e on e.id = y.emp_id join praxi p on e.praxi = p.id $wheretype ORDER BY s.name ASC";
@@ -65,10 +65,10 @@
     }
 		
     ob_start();
-    echo "<h2>Σχολεία</h2>";
+    echo "<h2>Ξ£Ο‡ΞΏΞ»ΞµΞ―Ξ±</h2>";
     
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-    echo "<thead><tr><th>Κωδικός</th><th>Σχολείο</th><th>Πράξεις</th></tr></thead><tbody>";
+    echo "<thead><tr><th>ΞΟ‰Ξ΄ΞΉΞΊΟΟ‚</th><th>Ξ£Ο‡ΞΏΞ»ΞµΞ―ΞΏ</th><th>Ξ ΟΞ¬ΞΎΞµΞΉΟ‚</th></tr></thead><tbody>";
 
     foreach ($schools as $key => $sch)
     {
@@ -88,9 +88,9 @@
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
 		echo "<input type='hidden' name = 'data' value='$page'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® ΟƒΟ„ΞΏ excel</BUTTON>";
     echo "&nbsp;&nbsp;&nbsp;";
-    echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+    echo "<INPUT TYPE='button' class='btn-red' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' onClick=\"parent.location='ektaktoi_list.php'\">";
     echo "</form>";
 	
 ?>

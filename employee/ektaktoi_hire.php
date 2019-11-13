@@ -1,5 +1,5 @@
 <?php
-    header('Content-type: text/html; charset=iso8859-7'); 
+    header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require_once"../tools/functions.php";
         require '../tools/calendar/tc_calendar.php';  
@@ -9,7 +9,7 @@
   <html>
   <head>      
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-        <title>Πρόσληψη αναπληρωτών εκπαιδευτικών προηγούμενου έτους</title>
+        <title>Ξ ΟΟΟƒΞ»Ξ·ΟΞ· Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ο€ΟΞΏΞ·Ξ³ΞΏΟΞΌΞµΞ½ΞΏΟ… Ξ­Ο„ΞΏΟ…Ο‚</title>
         <link href="../css/select2.min.css" rel="stylesheet" />
            <script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
         <script type="text/javascript" src="../js/jquery.validate.js"></script>
@@ -29,7 +29,7 @@
                 ektaktoi: "required", type: "required", praxi: "required"
             },
             messages: {
-                ektaktoi: "Παρακαλώ επιλέξτε εκπ/κούς!", type: "Παρακαλώ επιλέξτε τύπο πρόσληψης!", praxi: "Παρακαλώ δώστε πράξη!"
+                ektaktoi: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ ΞµΞΊΟ€/ΞΊΞΏΟΟ‚!", type: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο ΞµΟ€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ο„ΟΟ€ΞΏ Ο€ΟΟΟƒΞ»Ξ·ΟΞ·Ο‚!", praxi: "Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»Ο Ξ΄ΟΟƒΟ„Ξµ Ο€ΟΞ¬ΞΎΞ·!"
             }
         });
             });
@@ -47,23 +47,23 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $usrlvl = $_SESSION['userlevel'];
 
         $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-        mysqli_query($mysqlconnection, "SET NAMES 'greek'");
-        mysqli_query($mysqlconnection, "SET CHARACTER SET 'greek'");
+        mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+        mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
-        echo "<html><head><h2>Πρόσληψη αναπληρωτών εκπαιδευτικών προηγούμενου έτους</h2></head><body>";
+        echo "<html><head><h2>Ξ ΟΟΟƒΞ»Ξ·ΟΞ· Ξ±Ξ½Ξ±Ο€Ξ»Ξ·ΟΟ‰Ο„ΟΞ½ ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½ Ο€ΟΞΏΞ·Ξ³ΞΏΟΞΌΞµΞ½ΞΏΟ… Ξ­Ο„ΞΏΟ…Ο‚</h2></head><body>";
         
         echo "<form action='' id='hirefrm' method='POST' autocomplete='off'>";
         echo "<table class=\"imagetable\" border='1'>";
         
         $sql = "select * from ektaktoi_".$_SESSION['sxoletos'];
         $result = mysqli_query($mysqlconnection, $sql);
-        echo "<tr><td>Επιλογή εκπ/κών:</td><td>";
+        echo "<tr><td>Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® ΞµΞΊΟ€/ΞΊΟΞ½:</td><td>";
         $cmb = "<select name=\"ektaktoi[]\" class=\"ektaktoi_select\" multiple=\"multiple\">";
 while ($row = mysqli_fetch_array($result)){
     if (in_array($row['id'], $_POST['ektaktoi'])) {
         $cmb .= "<option value=\"".$row['id']."\" selected>".$row['surname'].' '.$row['name']."</option>";
     } else {
-        $cmb .= "<option value=\"".$row['id']."\">".$row['surname'].' '.$row['name']." (τ.".substr($row['patrwnymo'], 0, 3).")</option>";
+        $cmb .= "<option value=\"".$row['id']."\">".$row['surname'].' '.$row['name']." (Ο„.".substr($row['patrwnymo'], 0, 3).")</option>";
     }
 }
         $cmb .= "</select>";
@@ -71,7 +71,7 @@ while ($row = mysqli_fetch_array($result)){
         
         echo "</td></tr>";
         
-        echo "<tr><td>Ημερομηνία πρόσληψης:</td><td>";
+        echo "<tr><td>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ο€ΟΟΟƒΞ»Ξ·ΟΞ·Ο‚:</td><td>";
         $myCal = new tc_calendar("date", true);
         $myCal->setIcon("../tools/calendar/images/iconCalendar.gif");
         $myCal->setDate(date('d'), date('m'), date('Y'));
@@ -81,17 +81,17 @@ while ($row = mysqli_fetch_array($result)){
         $myCal->setAlignment("left", "bottom");
         $myCal->writeScript();
         echo "</td></tr>";
-        echo "<tr><td>Τύπος πρόσληψης</td><td>";
+        echo "<tr><td>Ξ¤ΟΟ€ΞΏΟ‚ Ο€ΟΟΟƒΞ»Ξ·ΟΞ·Ο‚</td><td>";
         typeCmb($mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Πράξη</td><td>";
+        echo "<tr><td>Ξ ΟΞ¬ΞΎΞ·</td><td>";
         tblCmb($mysqlconnection, 'praxi');
-        echo "  <small><a target=\"_blank\" href=\"praxi.php\">Πράξεις</a></small>";
+        echo "  <small><a target=\"_blank\" href=\"praxi.php\">Ξ ΟΞ¬ΞΎΞµΞΉΟ‚</a></small>";
         echo "</td></tr>";
         
-        echo "<tr><td colspan=2><input type='submit' value='Πρόσληψη'>";
+        echo "<tr><td colspan=2><input type='submit' value='Ξ ΟΟΟƒΞ»Ξ·ΟΞ·'>";
         echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=".$_SESSION['sxoletos']."'\"></td></tr>";
+        echo "<INPUT TYPE='button' VALUE='Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®' class='btn-red' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=".$_SESSION['sxoletos']."'\"></td></tr>";
         echo "</table></form>";
 
     // submitted: now prompt user to confirm
@@ -101,17 +101,17 @@ if (isset($_POST['ektaktoi'])) {
         $query = "SELECT surname,name,patrwnymo FROM ektaktoi_".$_SESSION['sxoletos']." WHERE id IN (".$ektaktoi_csv.")";
         $result = mysqli_query($mysqlconnection, $query);
 
-        echo "<br><br><h2>Επιβεβαίωση προσλήψεων</h2>";
-        echo "<h5>Ημερομηνία:".date('d-m-Y', strtotime($_POST['date']))."</h5>";
-        echo "<h5>Πράξη:". getNamefromTbl($mysqlconnection, 'praxi', $_POST['praxi']). "</h5>";
-        echo "<h5>Τύπος απασχόλησης:". get_type($_POST['type'], $mysqlconnection). "</h5>";
+        echo "<br><br><h2>Ξ•Ο€ΞΉΞ²ΞµΞ²Ξ±Ξ―Ο‰ΟƒΞ· Ο€ΟΞΏΟƒΞ»Ξ®ΟΞµΟ‰Ξ½</h2>";
+        echo "<h5>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±:".date('d-m-Y', strtotime($_POST['date']))."</h5>";
+        echo "<h5>Ξ ΟΞ¬ΞΎΞ·:". getNamefromTbl($mysqlconnection, 'praxi', $_POST['praxi']). "</h5>";
+        echo "<h5>Ξ¤ΟΟ€ΞΏΟ‚ Ξ±Ο€Ξ±ΟƒΟ‡ΟΞ»Ξ·ΟƒΞ·Ο‚:". get_type($_POST['type'], $mysqlconnection). "</h5>";
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-        echo "<thead><tr><th>Επώνυμο</th><th>Όνομα</th><th>Πατρώνυμο</th></tr></thead>";
+        echo "<thead><tr><th>Ξ•Ο€ΟΞ½Ο…ΞΌΞΏ</th><th>ΞΞ½ΞΏΞΌΞ±</th><th>Ξ Ξ±Ο„ΟΟΞ½Ο…ΞΌΞΏ</th></tr></thead>";
     while ($row = mysqli_fetch_array($result))
         {
                     echo "<tr><td>".$row['surname']."</td><td>".$row['name']."</td><td>".$row['patrwnymo']."</td></tr>";
     }
-        echo "<tr><td colspan=3><small>Αριθμός εγγραφών: ".mysqli_num_rows($result)."</small></td></tr>";
+        echo "<tr><td colspan=3><small>Ξ‘ΟΞΉΞΈΞΌΟΟ‚ ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½: ".mysqli_num_rows($result)."</small></td></tr>";
                 
                 
         echo "<form action='' method='POST' autocomplete='off'>";
@@ -120,7 +120,7 @@ if (isset($_POST['ektaktoi'])) {
         echo "<input type='hidden' name = 'type2' value='".$_POST['type']."'>";
         echo "<input type='hidden' name = 'praxi2' value='".$_POST['praxi']."'>";
 
-        echo "<tr><td colspan=3><input type='submit' name='confirm' value='Ολοκλήρωση Πρόσληψης'>";
+        echo "<tr><td colspan=3><input type='submit' name='confirm' value='ΞΞ»ΞΏΞΊΞ»Ξ®ΟΟ‰ΟƒΞ· Ξ ΟΟΟƒΞ»Ξ·ΟΞ·Ο‚'>";
         echo "</table>";
         echo "</form>";
 }
@@ -133,13 +133,13 @@ if (isset($_POST['ektaktoi2'])) {
     //echo $query;
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result) > 0) {
-        echo '<br><strong>Σφάλμα:</strong> Οι παρακάτω εκπ/κοί έχουν ήδη προσληφθεί: <br>';
+        echo '<br><strong>Ξ£Ο†Ξ¬Ξ»ΞΌΞ±:</strong> ΞΞΉ Ο€Ξ±ΟΞ±ΞΊΞ¬Ο„Ο‰ ΞµΞΊΟ€/ΞΊΞΏΞ― Ξ­Ο‡ΞΏΟ…Ξ½ Ξ®Ξ΄Ξ· Ο€ΟΞΏΟƒΞ»Ξ·Ο†ΞΈΞµΞ―: <br>';
         echo "<ul>";
         while ($row = mysqli_fetch_array($result)) {
-            echo '<li>'.$row['surname'] . ' ' . $row['name'] . ' (πατρ. ' . $row['patrwnymo'] . '), ΑΦΜ: ' . $row['afm'] .'</li>';
+            echo '<li>'.$row['surname'] . ' ' . $row['name'] . ' (Ο€Ξ±Ο„Ο. ' . $row['patrwnymo'] . '), Ξ‘Ξ¦Ξ: ' . $row['afm'] .'</li>';
         }
         echo "</ul>";
-        echo "<br><strong>Δεν πραγματοποιήθηκε καμία εισαγωγή.</strong>";
+        echo "<br><strong>Ξ”ΞµΞ½ Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞµ ΞΊΞ±ΞΌΞ―Ξ± ΞµΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ®.</strong>";
         exit();
     }
     // proceed
@@ -149,7 +149,7 @@ if (isset($_POST['ektaktoi2'])) {
     //echo $query;
     $result = mysqli_query($mysqlconnection, $query);
     if ($result) {
-        echo "Έγινε επιτυχής εισαγωγή " . mysqli_affected_rows($mysqlconnection) . " εκπαιδευτικών.";
+        echo "ΞΞ³ΞΉΞ½Ξµ ΞµΟ€ΞΉΟ„Ο…Ο‡Ξ®Ο‚ ΞµΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ® " . mysqli_affected_rows($mysqlconnection) . " ΞµΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΟΞ½.";
     }
 
 }
