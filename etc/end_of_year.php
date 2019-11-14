@@ -2,6 +2,9 @@
     header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require_once"../tools/functions.php";
+
+    session_start();
+    
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");

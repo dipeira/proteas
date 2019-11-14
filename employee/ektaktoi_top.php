@@ -51,7 +51,7 @@
     while ($row = mysqli_fetch_array($result)){
       $cmb .= "<option value=\"".$row['id']."\"";
       $cmb .= $_POST['ektaktos'] == $row['id'] ? "selected" : "";
-      $cmb .= ">".$row['surname'].' '.$row['name']." (τ.".substr($row['patrwnymo'], 0, 3).") (".$row['perigrafh'].")</option>";
+      $cmb .= ">".$row['surname'].' '.$row['name']." (τ.".substr($row['patrwnymo'], 0, 6).") (".$row['perigrafh'].")</option>";
     }
     $cmb .= "</select>";
     echo $cmb;

@@ -43,6 +43,7 @@
   mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
 if ($_REQUEST['type']) {
+  $oligothesia = 0;
     $dim_ar = array('1', '2', '3', '7');
     $nip_ar = array('4', '5', '6');       
     //if ($_GET['type'] == 1)
@@ -50,11 +51,12 @@ if ($_REQUEST['type']) {
         $type = 1;
         //type2: 0 δημόσιο, 1 ιδιωτικό, 2 ειδικό
         if ($_REQUEST['type'] == 7) {
-            $query = "SELECT * from school WHERE type = $type AND type2=0 AND anenergo=0 AND leitoyrg <4";
+          $oligothesia = 1;
+          $type2 = 0;
         } else {
-            $type2 = $_REQUEST['type'] - 1;
-            $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
+          $type2 = $_REQUEST['type'] - 1;
         }
+        $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
 
@@ -111,7 +113,10 @@ if ($_REQUEST['type']) {
 
             $synolo = $classes[0] + $classes[1] + $classes[2] + $classes[3] + $classes[4] + $classes[5];
             $leitoyrg = $synolo_tmim = $tmimata_exp[0] + $tmimata_exp[1] + $tmimata_exp[2] + $tmimata_exp[3] + $tmimata_exp[4] + $tmimata_exp[5];
-        
+            if (($oligothesia & $leitoyrg >=4) || (!$oligothesia && $leitoyrg < 4)) {
+              $i++;
+              continue;
+            }
             // count employees per specialty
             $ekp_ar = [];
             $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) GROUP BY e.klados";
@@ -147,6 +152,7 @@ if ($_REQUEST['type']) {
             $sumt[3] += $tmimata_exp[3];
             $sumt[4] += $tmimata_exp[4];
             $sumt[5] += $tmimata_exp[5];
+            $sumte += $has_entaxi ? $entaksis[1] : 0;
             $sumol += $oloimero_tea;
             $sumolstud += $oloimero_stud;
             //$sumee[0] += $ekp_ee_exp[0];
@@ -162,10 +168,10 @@ if ($_REQUEST['type']) {
         $synolo_stud = array_sum($sums);
         $synolo_teach =  array_sum($sumt);
         echo "<tr><td>Σύνολα</td><td></td><td></td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
-        echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
+        echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
         echo "<tr><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
-        echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
+        echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         echo "</tr>";
         echo "</tbody></table>";
 

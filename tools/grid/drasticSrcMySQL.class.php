@@ -34,7 +34,7 @@ class drasticSrcMySQL {
 	public $sortcol;					// name of column to sort on initially. Defaults to the id column.
 	public $sort;						// sort ascending (a) or descending (d)? Default is a.
 	public $SQLCharset		= "utf8";	// character set of the strings in the table		
-	public $HTMLCharset		= "iso8859-7";	// character set for xhttprequest
+	public $HTMLCharset		= "utf8";	// character set for xhttprequest
 	
 	// General variables
 	public $orderbystr, $wherestr, $addstr;

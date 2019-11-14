@@ -95,7 +95,8 @@ if (!$oligothesia) {
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 while ($i < $num)
-    //while ($i < 4) // for testing
+    // while ($i < 4) // for testing
+    // (problem @ 87)
 {        
     $sch = mysqli_result($result, $i, "id");
     $name = getSchool($sch, $mysqlconnection);
@@ -141,7 +142,7 @@ while ($i < $num)
     //
     echo "<tr>";
     echo "<td>$code</td>";
-    echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
+    echo "<td><a href=\"../school/school_status.php?org=$sch\" target=\"_blank\">$name</a></td>";
     echo "<td>$organikothta</td>";
     echo "<td>".$results['leit']."</td>";
     echo "<td>$oloimero</td>";
@@ -234,7 +235,7 @@ if (!$oligothesia) {
     echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td>";
 }
     echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td><td></td>\n";
-    
+    echo "</tr>";
     
     echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
 if (!$oligothesia) {
@@ -261,10 +262,10 @@ if (!$oligothesia) {
     echo "<td></td><td></td><td></td><td></td><td></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
-    echo "<td></td></tr>";
+    echo "<td></td>";
 }
+    echo "</tr>";
     echo "</tbody></table>";
-    echo "<br>";
 
     $page = ob_get_contents(); 
     $_SESSION['page'] = $page;
