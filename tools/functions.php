@@ -459,7 +459,11 @@ function thesicmb($thesi)
 }
 function thesiselectcmb($thesi)
 {
-    echo "<tr><td>Θέση</td><td>";
+    echo "<tr><td>";
+    echo "<div class='tooltip'>Θέση";
+    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Υποδιευθυντής, Διευθυντής/Προϊστάμενος, Τμήμα ένταξης, Διοικητικός, Ιδιωτικός, Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</span>";
+    echo "</div>";
+    echo "</td><td>";
     echo "<select name=\"thesi\">";
     if ($thesi == 0) {
         echo "<option value='0' selected=\"selected\">Εκπαιδευτικός</option>";
@@ -518,7 +522,11 @@ function thesianaplcmb($thesi)
 }
 function thesianaplselectcmb($thesi)
 {
-    echo "<tr><td>Θέση</td><td>";
+    echo "<tr><td>";
+    echo "<div class='tooltip'>Θέση";
+    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Διευθυντής/Προϊστάμενος, Τμήμα Ένταξης, Παράλληλη στήριξη</span>";
+    echo "</div>";
+    echo "</td><td>";
     echo "<select name=\"thesi\">";
     if ($thesi == 0) {
         echo "<option value='0' selected=\"selected\">Εκπαιδευτικός</option>";
@@ -2142,5 +2150,11 @@ function sendEmail($email, $subject, $body){
     ->setBody($body);
     $result = $mailer->send($message);
     return $result;
+}
+
+function show_tooltip($text, $tooltip) {
+  echo "<div class='tooltip'>$text";
+  echo "<span class='tooltiptext'>$tooltip</span>";
+  echo "</div>";
 }
 ?>

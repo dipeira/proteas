@@ -288,7 +288,9 @@ if ($_GET['op']=="edit")
         echo "<tr><td>Κλάδος</td><td>";
         kladosCombo($klados_id,$mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Κατάσταση</td><td>";
+        echo "<tr><td>";
+        show_tooltip('Κατάσταση','Επιλέξτε ένα από: Εργάζεται, Λύση Σχέσης-Παραίτηση, Άδεια, Διαθεσιμότητα');
+        echo "</td><td>";
         katastCmb($kat);
         echo "</td></tr>";
         //echo "<tr><td>Βαθμός</td><td>";
@@ -296,10 +298,13 @@ if ($_GET['op']=="edit")
         //echo "</td><tr>";
         //<input type='text' name='vathm' value=$vathm /></td></tr>";
         //echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
-        echo "<tr><td>Τύπος απασχόλησης</td><td>";
+        echo "<tr><td>";
+        show_tooltip("Τύπος απασχόλησης","Επιλέξτε ένα από: Αναπληρωτής Μ.Ω., Αναπληρωτής, Αναπληρωτής ΕΣΠΑ, ΕΕΠ, ΕΒΠ, ΖΕΠ / ΕΚΟ");
+        echo "</td><td>";
+        
         typeCmb1($type, $mysqlconnection);
         echo "</td></tr>";
-        echo "<tr><td>Ανάληψη</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
+        //echo "<tr><td>Ανάληψη</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
         
         echo "<tr><td>Ημ/νία ανάληψης</td><td>";
         $myCalendar = new tc_calendar("hm_anal", true);
@@ -329,7 +334,7 @@ if ($_GET['op']=="edit")
         //echo "<tr><td>Υπουργική Απόφαση</td><td><input size=50 type='text' name='ya' value=$ya /></td></tr>";
         //echo "<tr><td>Απόφαση Δ/ντή</td><td><input size=50 type='text' name='apofasi' value=$apofasi /></td></tr>";
         echo "<tr><td>Πράξη:</td><td>";
-        tblCmb($mysqlconnection, "praxi",$praxi);
+        tblCmb($mysqlconnection, "praxi",$praxi, null, 'name');
         echo "</td></tr>";
         echo "<tr><td>Υποχρεωτικό ωράριο</td><td><input type='text' name='wres' value=$wres /></td></tr>";
         echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
@@ -343,8 +348,10 @@ if ($_GET['op']=="edit")
                 $count = count($yphr_arr);
                 for ($i=0; $i<$count; $i++)
                 {
-                    echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-                    echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+                    echo "<tr><td>";
+                    show_tooltip("Σχολείο (-α) Υπηρέτησης","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).<br>
+                    Πατώντας 'Προσθήκη' προστίθεται μια επιπλέον υπηρέτηση σε άλλο σχολείο, με 'Αφαίρεση' διαγράφεται η υπηρέτηση αυτή.");
+                    echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
                     echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
                     echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
                     echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
@@ -354,8 +361,10 @@ if ($_GET['op']=="edit")
                 }
         else
         {
-          echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-          echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+          echo "<tr><td>";
+          show_tooltip("Σχολείο (-α) Υπηρέτησης","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).<br>
+          Πατώντας 'Προσθήκη' προστίθεται μια επιπλέον υπηρέτηση σε άλλο σχολείο, με 'Αφαίρεση' διαγράφεται η υπηρέτηση αυτή.");
+          echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
           echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$sx_yphrethshs' class=\"yphrow\" id=\"yphrow\" size=40/>";
           echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
           echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";

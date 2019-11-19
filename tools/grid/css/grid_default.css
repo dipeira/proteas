@@ -22,8 +22,8 @@ input {margin: 0; padding: 0; background: white; color: #505050; font: 12px aria
 input.inset {margin: 0; padding: 0;border-style: solid; border-width: 1px; border-color: #D3D3D3;}
 select {background: white; color: #505050; font: 12px arial; border-style: solid; border-width: 1px; border-color: #D3D3D3;}
 
-div.tddiv {position: relative;}
-div.divth {position: relative;}
+/* div.tddiv {position: relative;}
+div.divth {position: relative;} */
 img.imgedit {position: absolute; right:0px; top:0px; z-index:1; cursor: pointer;}
 
 .divth {overflow: hidden; white-space: nowrap; text-align: left;}

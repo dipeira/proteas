@@ -275,10 +275,12 @@ if ($_GET['op']=="edit") {
     echo "<tr><td>Α.Μ.</td><td><input type='text' name='am' value=$am /></td></tr>";
     echo "<tr><td>Κλάδος</td><td>";
     kladosCombo($klados_id, $mysqlconnection);
-        echo "</td></tr>";
-        echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
-        echo "<tr><td>Κατάσταση</td><td>";
-        katastCmb($kat);
+    echo "</td></tr>";
+    echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
+    echo "<tr><td>";
+    show_tooltip('Κατάσταση','Επιλέξτε ένα από: Εργάζεται, Λύση Σχέσης-Παραίτηση, Άδεια, Διαθεσιμότητα');
+    echo "</td><td>";
+    katastCmb($kat);
     echo "</td></tr>";
     echo "<tr><td>Βαθμός</td><td>";
     vathmosCmb1($vathm, $mysqlconnection);
@@ -445,15 +447,18 @@ if ($_GET['op']=="edit") {
     //new 15-02-2012: implemented with jquery.autocomplete
     echo "<div id=\"content\">";
     echo "<form autocomplete=\"off\">";
-    echo "<tr><td>Σχολείο Οργανικής";
-        echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
+    echo "<tr><td>";
+    show_tooltip("Σχολείο Οργανικής","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).");
+        echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
         echo "<td><input type=\"text\" name=\"org\" id=\"org\" value='$sx_organikhs' size='40' />";
 
         $count = count($yphr_arr);
     for ($i=0; $i<$count; $i++)
         {
-        echo "<tr><td>Σχολείο (-α) Υπηρέτησης";
-        echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+        echo "<tr><td>";
+        show_tooltip("Σχολείο (-α) Υπηρέτησης","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).<br>
+    Πατώντας 'Προσθήκη' προστίθεται μια επιπλέον υπηρέτηση σε άλλο σχολείο, με 'Αφαίρεση' διαγράφεται η υπηρέτηση αυτή.");
+        echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
         echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
         echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
         echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
@@ -466,7 +471,7 @@ if ($_GET['op']=="edit") {
     echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
     echo "</td></tr>";
         
-        thesiselectcmb($thesi); 
+    thesiselectcmb($thesi); 
         
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
@@ -700,7 +705,7 @@ elseif ($_GET['op']=="view") {
     
     // Service time form
     echo "<form id='yphrfrm' name='yphrfrm' action='' method='POST'>";
-    echo "<tr><td>Χρόνος Υπηρεσίας έως</td><td>";
+    echo "<tr><td>Χρόνοι Υπηρεσίας</td><td>";
     $myCalendar = new tc_calendar("yphr", true);
     $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
     $myCalendar->setDate(date('d'), date('m'), date('Y'));
@@ -874,12 +879,10 @@ if ($_GET['op']=="add") {
     echo "<div id=\"content\">";
     echo "<form autocomplete=\"off\">";
     echo "<tr><td>Σχολείο Οργανικής";
-               echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+               echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
                echo "</td><td><input type=\"text\" name=\"org\" id=\"org\" />";
     echo "<tr><td>Σχολείο Υπηρέτησης";
-               //echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-               //echo "</td><td><input type=\"text\" name=\"yphr\" id=\"yphr\" />";
-               echo "<a href=\"\" onclick=\"window.open('help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+               echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
                echo "</td><td><input type=\"text\" name=\"yphr[]\" class=\"yphrow\" id=\"yphrow\" />";
                echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
                echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";

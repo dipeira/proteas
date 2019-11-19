@@ -1,7 +1,9 @@
 <?php
 	header('Content-type: text/html; charset=utf-8'); 
 	require_once"../config.php";
-	require_once"../tools/functions.php";
+  require_once"../tools/functions.php";
+  
+  session_start();
 ?>	
   <html>
   <head>      
@@ -94,10 +96,15 @@
         echo "<thead><tr><th>ΑΦΜ</th><th>Ονοματεπώνυμο</th><th>Κωδ.Σχολείου</th><th>Σχολείο</th><th>Ώρες</th><th>Ημ.Ανάληψης</th><th>Πράξη</th></tr></thead><tbody>";
     else
         echo "<thead><tr><th>Κωδ.Σχολείου</th><th>Σχολείο</th></tr></thead><tbody>";
-
+    $previd = $employees = 0;
     while ($row = mysqli_fetch_array($result))	
     {
-		  $id = $row['id'];
+      $id = $row['id'];
+      if ($previd <> $id) {
+        $employees++;
+        $previd = $id;
+      }
+      $employees += ($previd <> $id) ? 1 : 0;
 		  $name = $row['name'];
       $surname = $row['surname'];
       $afm = $row['afm'];
@@ -115,7 +122,7 @@
       $i++;
     }
 		echo "</tbody></table>";
-    echo "<small><i>$i εγγραφές</i></small>";
+    echo "<small><i>$employees εκπ/κοί, $i τοποθετήσεις</i></small>";
     echo "<br><br>";
 
     mysqli_close($mysqlconnection);

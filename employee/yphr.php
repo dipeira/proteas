@@ -17,14 +17,14 @@
   echo "<b>Συνολικός Χρόνος Υπηρεσίας:</b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]<br>";
   
   // print MK
-  $mk = get_mk($id, $mysqlconnection, $yphr);
+  $mk = get_mk($id, $mysqlconnection, $_POST['yphr']);
   $ymd = $mk['ymd'];
   echo "<br><b>Χρόνος για Μ.Κ.:</b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]";
   echo "&nbsp;(M.K.: ".$mk['mk'].")<br>";
 
   // compute days of educational service for teaching hour reduction
   // find last day of year
-  $year = substr($sxol_etos, 0, 4);
+  $year = date('Y', strtotime($_POST['yphr']));
   $lastday = $year . '-12-31';
   $d1 = strtotime($lastday);
   $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr - $_POST['proyp_not'];
