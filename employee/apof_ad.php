@@ -265,17 +265,17 @@
             
             foreach ($emp as $ar)
             {
-                $document->setValue("epwnymo#$i", $data);
-                $document->setValue("onoma#$i", $data);
-                $document->setValue("days#$i", $data);
-                $document->setValue("start#$i", $data);
-                $document->setValue("protait#$i", $data);
-                $document->setValue("ypol#$i", $data);
+              $document->setValue("epwnymo#$i", $ar[0]);
+              $document->setValue("onoma#$i", $ar[1]);
+              $document->setValue("days#$i", $ar[2]);
+              $document->setValue("start#$i", $ar[3]);
+              $document->setValue("protait#$i", $ar[4]);
+              $document->setValue("ypol#$i", $ar[5]);
                 
-                $schwrd = getSchool($ar[6], $mysqlconnection);
-                $document->setValue("sch#$i", $data);
-                
-                $i++;
+              $schwrd = getSchool($ar[6], $mysqlconnection);
+              $document->setValue("sch#$i", $schwrd);
+              
+              $i++;
             }
             // head_title & head_name
             $data = getParam('head_title', $mysqlconnection);

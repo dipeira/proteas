@@ -28,23 +28,23 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript">
-      $(document).ready(function(){
-        $("#wordfrm").validate({
-            debug: false,
-            rules: {
-            //    name: "required",
-            },
-            messages: {
-            //    name: "Please let us know who you are."
-            },
-            submitHandler: function(form) {
-                // do other stuff for a valid form
-                $.post('ekt_adeia_print.php', $("#wordfrm").serialize(), function(data) {
-                    $('#word').html(data);
-                });
-            }
-        });
-      });
+      // $(document).ready(function(){
+      //   $("#wordfrm").validate({
+      //       debug: false,
+      //       rules: {
+      //       //    name: "required",
+      //       },
+      //       messages: {
+      //       //    name: "Please let us know who you are."
+      //       },
+      //       submitHandler: function(form) {
+      //           // do other stuff for a valid form
+      //           $.post('ekt_adeia_print.php', $("#wordfrm").serialize(), function(data) {
+      //               $('#word').html(data);
+      //           });
+      //       }
+      //   });
+      // });
 
       $(document).ready(function(){
         $("#updatefrm").validate({
@@ -318,28 +318,25 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
 
             echo "</td></tr>";
-            if ($_SESSION['adeia']) {
-                echo "<tr><td colspan=2 align='center'>";
-                //Form gia Bebaiwsh
-                echo "<form id='wordfrm' name='wordfrm' action='ekt_adeia_print.php' method='POST'>";
-                echo "<input type='hidden' name=arr[] value=$emp_id>";
-                echo "<input type='hidden' name=arr[] value=$type>";
-                echo "<input type='hidden' name=arr[] value=$prot>";
-                echo "<input type='hidden' name=arr[] value=$hm_prot>";
-                echo "<input type='hidden' name=arr[] value=$date>";
-                echo "<input type='hidden' name=arr[] value=$vev_dil>";
-                echo "<input type='hidden' name=arr[] value=$days>";
-                echo "<input type='hidden' name=arr[] value=$start>";
-                echo "<input type='hidden' name=arr[] value=$finish>";
-                echo "<input type='hidden' name=arr[] value=$logos>";
+            // if ($_SESSION['adeia']) {
+            //     echo "<tr><td colspan=2 align='center'>";
+            //     //Form gia Bebaiwsh
+            //     echo "<form id='wordfrm' name='wordfrm' action='ekt_adeia_print.php' method='POST'>";
+            //     echo "<input type='hidden' name=arr[] value=$emp_id>";
+            //     echo "<input type='hidden' name=arr[] value=$type>";
+            //     echo "<input type='hidden' name=arr[] value=$prot>";
+            //     echo "<input type='hidden' name=arr[] value=$hm_prot>";
+            //     echo "<input type='hidden' name=arr[] value=$date>";
+            //     echo "<input type='hidden' name=arr[] value=$vev_dil>";
+            //     echo "<input type='hidden' name=arr[] value=$days>";
+            //     echo "<input type='hidden' name=arr[] value=$start>";
+            //     echo "<input type='hidden' name=arr[] value=$finish>";
+            //     echo "<input type='hidden' name=arr[] value=$logos>";
 
-                echo "<INPUT TYPE='submit' VALUE='Εκτύπωση άδειας'>";
-                echo "</form>";
-                ?>
-                    <div id="word"></div>
-                    <?php
-                    echo "</td></tr>";
-            }
+            //     echo "<INPUT TYPE='submit' VALUE='Εκτύπωση άδειας'>";
+            //     echo "</form>";
+            //         echo "</td></tr>";
+            // }
             echo "	</table>";
 
             // Find prev - next row id

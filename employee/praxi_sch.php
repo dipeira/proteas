@@ -122,7 +122,7 @@
       $i++;
     }
 		echo "</tbody></table>";
-    echo "<small><i>$employees εκπ/κοί, $i τοποθετήσεις</i></small>";
+    echo $all ? "<small><i>$employees εκπ/κοί, $i τοποθετήσεις</i></small>" : "<small><i>$i εγγραφές</i></small>";
     echo "<br><br>";
 
     mysqli_close($mysqlconnection);
