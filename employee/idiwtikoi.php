@@ -148,6 +148,17 @@ $idiwtikoi = true;
                 $whflag=1;
             }
         }
+
+        // include inactive employees
+        if (!isset($_REQUEST['inactive'])) {
+          $text = " status IN (1,3)";
+          if ($whflag) {
+            $query .= " AND $text";
+          } else {
+            $query .= " WHERE $text";
+            $whflag = 1;
+          }
+        }
                         
         // Mono idiwtikoi
         if ($whflag) {
@@ -208,6 +219,10 @@ $idiwtikoi = true;
         echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td>";
         echo "</div>";
         echo "</td>";
+        echo "</tr>";
+        echo "<tr>";
+        $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
+        echo "<td colspan=6><input type='checkbox' name = 'inactive' $has_inactive><small>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης)</small></small></td>";
         echo "</form></tr>\n";
         
         echo "</thead>\n";
@@ -259,17 +274,18 @@ $idiwtikoi = true;
             $curpg = 0;
         }
         echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+        $inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
         if ($curpg!=1) {
-            echo "  <a href=idiwtikoi.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Πρώτη</a>";
-            echo "&nbsp;&nbsp;  <a href=idiwtikoi.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Προηγ/νη</a>";
+            echo "  <a href=idiwtikoi.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost&inactive>Πρώτη</a>";
+            echo "&nbsp;&nbsp;  <a href=idiwtikoi.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$inactive>Προηγ/νη</a>";
         }
         else {
             echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
         }
         if ($curpg != $lastpg) {
             $nextpg = $curpg+1;
-            echo "&nbsp;&nbsp;  <a href=idiwtikoi.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Επόμενη</a>";
-            echo "&nbsp;&nbsp;  <a href=idiwtikoi.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost>Τελευταία</a>";
+            echo "&nbsp;&nbsp;  <a href=idiwtikoi.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$inactive>Επόμενη</a>";
+            echo "&nbsp;&nbsp;  <a href=idiwtikoi.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$inactive>Τελευταία</a>";
         }
         else { 
             echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
