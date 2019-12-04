@@ -129,6 +129,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $comments = mysqli_result($result, 0, "comments");
         
         echo "<table class=\"imagetable\" border='1'>";
+        echo "<tr><td colspan=2>Τύπος: ".get_school_type($sch, $conn)."</td></tr>";
         echo "<tr><td colspan=3>Τίτλος (αναλυτικά): $titlos</td></tr>";
         echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel</td></tr>";
         echo "<tr><td>email: <a href=\"mailto:$email\">$email</a></td><td>Fax: $fax</td></tr>";

@@ -74,6 +74,35 @@ function getSchoolNameFromCode($code, $conn)
         return mysqli_result($result, 0);
     }    
 }
+
+function get_school_type($id, $conn) {
+  $query = "SELECT type,type2 from school where id = $id";
+  $result = mysqli_query($conn, $query);
+  $row = mysqli_fetch_array($result);
+  switch ($row['type2']) {
+    case 0:
+      $sch_type2 = 'Δημόσιο';
+      break;
+    case 1:
+      $sch_type2 = 'Ιδιωτικό';
+      break;
+    case 2:
+      $sch_type2 = 'Ειδικό';
+      break;
+  }
+  switch ($row['type']) {
+    case 0:
+      $sch_type = 'ς Φορέας/Περιοχή κλπ';
+      break;
+    case 1:
+      $sch_type = ' Δημοτικό Σχολείο';
+      break;
+    case 2:
+      $sch_type = ' Νηπιαγωγείο';
+      break;
+  }
+  return $sch_type2.$sch_type;
+}
         
     //The function returns the no. of business days between two dates and it skips the holidays
 function getWorkingDays($startDate,$endDate,$holidays)
