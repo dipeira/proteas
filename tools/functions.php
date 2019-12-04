@@ -1747,7 +1747,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             echo "</td></tr>";
             echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
         foreach ($all as $row) {
-            echo "<tr><td>".$row['surname']." ".substr($row['name'], 0, 3).".</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
+            echo "<tr><td>".$row['surname']." ".substr($row['name'], 0, 6).".</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
         }
             echo "</table>";
             echo "* Αναπληρωτής";
