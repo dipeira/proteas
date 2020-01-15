@@ -512,7 +512,15 @@
                 echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
             }
             if ($vivliothiki) {
-                echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη</td>";
+              echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη";
+              $qry1 = "SELECT surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE e.id=$vivliothiki";
+              $res1 = mysqli_query($conn, $qry1);
+              if ($row = mysqli_fetch_assoc($res1)) {
+                echo "<i><small> (Υπευθυνος/-η: ".$row['surname'].' '.$row['name'].', '.$row['perigrafh'].')</small></i>';
+              } else {
+                echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
+              }
+              echo '</td>';
             } else {
                 echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
             }

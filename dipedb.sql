@@ -747,7 +747,7 @@ CREATE TABLE IF NOT EXISTS `school` (
   `anenergo` tinyint(4) NOT NULL,
   `perif` int(11) NOT NULL,
   `systeg` int(11) NOT NULL,
-  `vivliothiki` tinyint(1) NOT NULL,
+  `vivliothiki` int(11) NOT NULL,
   `archive` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=greek;
 

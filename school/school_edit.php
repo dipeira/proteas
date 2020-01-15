@@ -26,6 +26,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+    <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
+    <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
     <script type="text/javascript">    
         $().ready(function() {
@@ -35,6 +37,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 selectFirst: false
             });
         });
+        function valueChanged() {
+              if($('#vivliothiki').is(":checked"))   
+                $("#workerdiv").show();
+              else
+                $("#workerdiv").hide();
+        };
         $(document).ready(function() { 
             $("#mytbl").tablesorter({widgets: ['zebra']}); 
             $("#mytbl2").tablesorter({widgets: ['zebra']});
@@ -42,6 +50,20 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $("#mytbl4").tablesorter({widgets: ['zebra']});
             $("#mytbl5").tablesorter({widgets: ['zebra']});
             $("#mytbl6").tablesorter({widgets: ['zebra']});
+        });
+        $(document).ready(function(){
+          $('#updatefrm').on('submit', function(e){
+            //Stop the form from submitting itself to the server.
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: 'school_update.php',
+                data: $("#updatefrm").serialize(),
+                success: function(data){
+                  $('#results').html(data);
+                }
+            });
+          });
         });
     </script>
   </head>
@@ -226,9 +248,17 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
                     "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
                 echo "</tr>";
-                echo $vivliothiki ? 
-                    "<td><input type=\"checkbox\" name='vivliothiki' checked >Σχολική βιβλιοθήκη</td><td></td>" :
-                    "<td><input type=\"checkbox\" name='vivliothiki' >Σχολική βιβλιοθήκη</td><td></td>";
+                
+                echo "<td colspan=2><input type=\"checkbox\" name='vivliothiki' id='vivliothiki'";
+                echo $vivliothiki ? 'checked' : '';
+                echo " onchange='valueChanged()'>Σχολική βιβλιοθήκη&nbsp;&nbsp;";
+                echo "<div id='workerdiv'";
+                echo $vivliothiki ? '' : " style='display:none;'";
+                echo ">";
+                echo "Υπεύθυνος/-η: ";
+                workersCmb($vivliothiki, $sch, $mysqlconnection);
+                echo "</div>";
+                echo "</td>";
                         
                 echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
                 echo "</table>";

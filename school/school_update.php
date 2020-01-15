@@ -1,14 +1,5 @@
 <?php
-    header('Content-type: text/html; charset=utf-8'); 
-        session_start();
-?>
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Επεξεργασία σχολείου</title>
-  </head>
-  <body> 
-<?php
+  header('Content-type: text/html; charset=utf-8'); 
   
   require_once"../config.php";
   require_once"../tools/functions.php";
@@ -46,7 +37,7 @@
   
   $oloimero = $_POST['oloimero'] == 'on' ? 1 : 0;
   
-  $vivliothiki = $_POST['vivliothiki'] == 'on' ? 1 : 0;
+  $vivliothiki = $_POST['vivliothiki'] == 'on' ? $_POST['workercmb'] : 0;
   
   $comments = $_POST['comments'];
   $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'].",".$_POST['g'].",".$_POST['h'];
@@ -71,15 +62,6 @@
   $query = $query0.$query1.$query2.$query3;
   //echo $query;
   mysqli_query($mysqlconnection, $query);
-
-  //echo "Επιτυχής καταχώρηση!";
   mysqli_close($mysqlconnection);
+  notify('Επιτυχής καταχώρηση!',0);
 ?>
-<br>
-  <center>
-<h3>Επιτυχής καταχώρηση!</h3>
-<br>
-<meta http-equiv="refresh" content="2; URL=school_status.php?org=<?php echo $sch;?>">
-</center>
-</body>
-</html>

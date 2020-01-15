@@ -145,12 +145,12 @@ if (isset($_REQUEST['yphr']) && ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0)
     }
 }
     // if ektaktos
-if (isset($_POST['surname']) && strlen($_POST['surname'])>0 && $_POST['pinakas']==1) {
+if (isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 && $_POST['pinakas']==1) {
     $surn = explode(' ', $_POST['surname'])[0];
     $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
     echo "<script>window.location = '$url'</script>";
 }
-if (isset($_POST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)) {
+if (isset($_REQUEST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)) {
     if (strlen($_POST['surname'])>0) {
         $surpost = explode(' ', $_POST['surname'])[0];
     } else {

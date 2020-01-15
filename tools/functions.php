@@ -695,6 +695,26 @@ function adeiaCmb($inp,$conn,$ekt = 0)
     }
     echo "</select>";
 }
+
+function workersCmb($inp, $sch, $conn)
+{
+  $query = "SELECT e.id,surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 ORDER BY surname ASC";
+  $result = mysqli_query($conn, $query);
+  if (!$result) { 
+      die('Could not query:' . mysqli_connect_error());
+  }
+    echo "<select id='workercmb' name='workercmb' >";
+    echo "<option value=0>Παρακαλώ επιλέξτε</option>";
+    while ($row = mysqli_fetch_assoc($result)) 
+    {
+        if (strcmp($row['id'], $inp)==0) {
+            echo "<option value='".$row['id']."' selected='selected'>".$row['surname'].' '.$row['name']."</option>";
+        } else {
+          echo "<option value='".$row['id']."'>".$row['surname'].' '.$row['name'].' ('.$row['perigrafh'].')'."</option>";
+        }
+    }
+    echo "</select>";
+}
         
 function days2ymd($input)
 {
@@ -1369,7 +1389,7 @@ function notify($msg, $type)
             message: '$msg',
             type: '$typewrd',
             autoClose: true,
-            duration: 3
+            duration: 4
             });
         });
         </script>";
@@ -1570,8 +1590,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $avhrs[$klados] = $dnthrs;
         // ώρες Δ/ντή στην ανάλυση
         $ar = Array(
-            'name' => mysqli_result($result, 0, 1),
-            'surname' => "<small>(Δ/ντής/-ντρια)</small> ".mysqli_result($result, 0, 2),
+            'fullname' => mysqli_result($result, 0, 2).' '.mysqli_result($result, 0, 1)." <small>(Δ/ντής/-ντρια)</small> ",
             'klados' =>  mysqli_result($result, 0, "perigrafh"), 
             'hours' => $dnthrs
         );
@@ -1593,22 +1612,15 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $avhrs[$klados] -= $meiwsh_ypnth;
         // ώρες Υπ/ντή στην ανάλυση
         $ar = Array(
-            'name' => $row['name'],
-            'surname' =>  '<small>(Υπ/ντής/-ντρια)</small> ' . $row['surname'],
+            'fullname' => $row['surname'].' '.substr($row['name'], 0, 6).'<small> (Υπ/ντής/-ντρια)</small>',
             'klados' =>  $meiwsh_ypnth_klados, 
             'hours' => $row['wres'] - $meiwsh_ypnth
         );
         $all[] = $ar;
         $allcnt[$meiwsh_ypnth_klados]++;
     }
-        
-    // μείωση ωραρίου υπευθύνου βιβλιοθήκης (3 ώρες)
-    $meiwsh_vivliothikis = 0;
-    if ($vivliothiki > 0) {
-        $meiwsh_vivliothikis = 3;
-        $reqhrs['70'] += 3;
-    }
-    // ώρες υπηρετούντων (εκπ/κοί - υπ/ντές, εκτός Τ.Ε.)
+
+    // ώρες υπηρετούντων (Μόνιμοι εκπ/κοί - υπ/ντές, εκτός Τ.Ε.)
     //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
     if ($oligothesio) {
         $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
@@ -1628,12 +1640,25 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
     if ($print) {
         // αναλυτικά...
-        $query = "SELECT e.name, e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
+        $query = "SELECT e.id,e.name, e.surname,e.klados,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
-            $ar = Array('name' => $row['name'], 'surname' => $row['surname'], 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
-            $all[] = $ar;
-            $allcnt[$row['perigrafh']]++;
+          $extra = '';
+          $hours = $row['hours'];
+          // check if ypeythinos vivliothikis
+          if ($row['id'] == $vivliothiki) {
+            $avhrs[$row['klados']] -= MEIWSH_VIVLIOTHIKIS;
+            $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
+            $hours -= MEIWSH_VIVLIOTHIKIS;
+          }
+          $ar = Array(
+            'fullname' => $row['surname'].' '.substr($row['name'], 0, 6).$extra,
+            'klados' => $row['perigrafh'], 
+            'hours' => $hours
+          );
+          $all[] = $ar;
+          $allcnt[$row['perigrafh']]++;
+            
         }
     }
     // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
@@ -1648,10 +1673,10 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
-            $srn = $row['surname'] . ' *';
-            $srn .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
-            $srn .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
-            $ar = Array('name' => $row['name'], 'surname' => $srn, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+            $fname = $row['surname'] . ' '. substr($row['name'], 0, 6).' *';
+            $fname .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
+            $fname .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
+            $ar = Array('fullname' => $fname, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
             $all[] = $ar;
             $allcnt[$row['perigrafh']]++;
         }
@@ -1668,7 +1693,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
             $result = mysqli_query($mysqlconnection, $query);
             while ($row = mysqli_fetch_array($result)){
-                $ar = Array('name' => $row['name'],'surname' => $row['surname'] . ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+                $ar = Array('fullname' => $row['surname'].' '.substr($row['name'], 0, 6). ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
                 $all[] = $ar;
                 //$allcnt[$row['perigrafh']]++;
             }
@@ -1734,7 +1759,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0) {
             echo "<p>Μειώσεις υπ.ωραρίου: ";
             echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
-            echo $meiwsh_vivliothikis > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.$meiwsh_vivliothikis.' ώρες<br>' : '';
+            echo $vivliothiki > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.MEIWSH_VIVLIOTHIKIS.' ώρες<br>' : '';
             echo "</p>";
         }
         echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
@@ -1747,7 +1772,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             echo "</td></tr>";
             echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
         foreach ($all as $row) {
-            echo "<tr><td>".$row['surname']." ".substr($row['name'], 0, 6).".</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
+            echo "<tr><td>".$row['fullname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
         }
             echo "</table>";
             echo "* Αναπληρωτής";

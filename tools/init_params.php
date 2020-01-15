@@ -43,6 +43,8 @@
     define('SITE_ROOT', '/'.explode('/',$_SERVER['REQUEST_URI'])[1]); 
     // set calendar language to el_GR
     define("L_LANG", "el_GR");
+    // meiwsh ypeythinoy vivliothikis
+    define('MEIWSH_VIVLIOTHIKIS',3);
   }
   // if not exists
   else {
