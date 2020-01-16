@@ -212,3 +212,15 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
   visibility: visible;
   opacity: 1;
 }
+
+.ui-tabs .ui-tabs-nav
+{
+  background: #49ad4f;
+  border-width: 0px 0px 1px 0px; 
+  -moz-border-radius: 0px; 
+  -webkit-border-radius: 0px; 
+  border-radius: 0px; 
+}
+/* .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+  color: #ea150b;
+} */

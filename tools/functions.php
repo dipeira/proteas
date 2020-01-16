@@ -2108,42 +2108,42 @@ function get_diavgeia_subject($ada) {
 
 function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = false){
     if ($auth){ ?>
-        <script type="text/javascript">
-          $(document).ready(function(){
-            $('.submit-btn').click(function(event) {
-                event.preventDefault();
-				        // do other stuff for a valid form
-                var id = event.target.id;
-                var name = event.target.name;
-                if (name == 'del'){
-                  var conf = confirm('Είστε σίγουροι;\nΠατήστε ΟΚ για τη διαγραφή του αιτήματος');
-                  if (conf == true){
-                    var theData = {
-                      id: id,
-                      type: 'delete'
-                    }
-                  } else {
-                    return;
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $('.submit-btn').click(function(event) {
+              event.preventDefault();
+              // do other stuff for a valid form
+              var id = event.target.id;
+              var name = event.target.name;
+              if (name == 'del'){
+                var conf = confirm('Είστε σίγουροι;\nΠατήστε ΟΚ για τη διαγραφή του αιτήματος');
+                if (conf == true){
+                  var theData = {
+                    id: id,
+                    type: 'delete'
                   }
                 } else {
-                  var commentid = 'comment'+id;
-                  var comment = $('#'+commentid).val();
-                  var doneid = 'done'+id;
-                  var done = $('#'+doneid).val();
-                  var theData = {
-                      id: id,
-                      comment: comment,
-                      done: done,
-                      type: 'update'
-                  };
+                  return;
                 }
-                $.post('postrequest.php', theData, function(data) {
-                    alert(data);
-                    location.reload(true);
-                });
-            });
+              } else {
+                var commentid = 'comment'+id;
+                var comment = $('#'+commentid).val();
+                var doneid = 'done'+id;
+                var done = $('#'+doneid).val();
+                var theData = {
+                    id: id,
+                    comment: comment,
+                    done: done,
+                    type: 'update'
+                };
+              }
+              $.post('postrequest.php', theData, function(data) {
+                  alert(data);
+                  location.reload(true);
+              });
           });
-        </script>
+        });
+      </script>
     <?php
     }
     $query = "SELECT * from school_requests where school=$sch AND sxol_etos=$sxol_etos AND hidden = 0 ORDER BY submitted DESC";
@@ -2165,7 +2165,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "<tr>";
             echo "<td>".$row['id']."</td>";
             echo "<td>".nl2br($row['request'])."</td>";
-            echo $auth ? "<td><textarea id='comment".$row['id']."' name='comment' rows='10' cols='80'>".$row['comment']."</textarea></td>" :
+            echo $auth ? "<td><textarea id='comment".$row['id']."' name='comment' rows='10' cols='60'>".$row['comment']."</textarea></td>" :
                 "<td>".nl2br($row['comment'])."</td>";
             echo "<td>";
             if ($auth) {
@@ -2189,7 +2189,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "</tr>";
         }
         echo "</tbody></table>";
-    }
+    } else echo "<h3>Δεν έχουν υποβληθεί αιτήματα από τη σχολική μονάδα!</h3>";
 }
 
 function sendEmail($email, $subject, $body){

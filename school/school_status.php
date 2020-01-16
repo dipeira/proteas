@@ -18,42 +18,46 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Καρτέλα σχολείου</title>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript">
-    
+    $(function() {
+        $( "#tabs" ).tabs();
+    });
     $().ready(function() {
-        $("#org").autocomplete("../employee/get_school.php", {
-            width: 260,
-            matchContains: true,
-            selectFirst: false
-        });
-        $("#slidingDiv").hide();
-        $("#slidingDiv2").hide();
-        $('#show_hide').click(function(){
-            $("#slidingDiv").slideToggle();
-        });
-        $('#show_hide2').click(function(){
-            $("#slidingDiv2").slideToggle();
-        });
+      $("#org").autocomplete("../employee/get_school.php", {
+          width: 260,
+          matchContains: true,
+          selectFirst: false
+      });
+      $("#slidingDiv").hide();
+      $("#slidingDiv2").hide();
+      $('#show_hide').click(function(){
+          $("#slidingDiv").slideToggle();
+      });
+      $('#show_hide2').click(function(){
+          $("#slidingDiv2").slideToggle();
+      });
     });
     $(document).ready(function() { 
-        $(".tablesorter").tablesorter({widgets: ['zebra']}); 
-        $('#toggleBtn').click(function(){
-            event.preventDefault();
-            $("#analysis").slideToggle();
-        });
-        $('#toggleSystegBtn').click(function(){
-            event.preventDefault();
-            $("#systeg").slideToggle();
-        });
+      $(".tablesorter").tablesorter({widgets: ['zebra']}); 
+      $('#toggleBtn').click(function(){
+          event.preventDefault();
+          $("#analysis").slideToggle();
+      });
+      $('#toggleSystegBtn').click(function(){
+          event.preventDefault();
+          $("#systeg").slideToggle();
+      });
     });    
     </script>
   </head>
@@ -64,70 +68,70 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <?php
     function disp_school($sch,$sxol_etos,$conn)
     {
-        $query = "SELECT * from school where id=$sch";
-        $result = mysqli_query($conn, $query);
-                
-        $titlos = mysqli_result($result, 0, "titlos");
-        $address = mysqli_result($result, 0, "address");
-        $tk = mysqli_result($result, 0, "tk");
-        $dimos = mysqli_result($result, 0, "dimos");
-        $dimos = getDimos($dimos, $conn);
-        $cat = getCategory(mysqli_result($result, 0, "category"));
-        $tel = mysqli_result($result, 0, "tel");
-        $fax = mysqli_result($result, 0, "fax");
-        $email = mysqli_result($result, 0, "email");
-        $type = mysqli_result($result, 0, "type");
-        $type2 = mysqli_result($result, 0, "type2");
-        $organikothta = mysqli_result($result, 0, "organikothta");
-        $leitoyrg = get_leitoyrgikothta($sch, $conn);
-        // organikes - added 05-10-2012
-        $organikes = unserialize(mysqli_result($result, 0, "organikes"));
-        // kena_org, kena_leit - added 19-06-2013
-        $kena_org = unserialize(mysqli_result($result, 0, "kena_org"));
-        $code = mysqli_result($result, 0, "code");
-        $updated = mysqli_result($result, 0, "updated");
-        $perif = mysqli_result($result, 0, "perif");
-        $systeg = mysqli_result($result, 0, "systeg");
-        $anenergo = mysqli_result($result, 0, "anenergo");
-        if ($systeg) {
-            $systegName = getSchool($systeg, $conn);
-        }
-        $archive = mysqli_result($result, 0, "archive");
-                        
-        // if dimotiko
-        if ($type == 1) {
-            $students = mysqli_result($result, 0, "students");
-            $classes = explode(",", $students);
-            $frontistiriako = mysqli_result($result, 0, "frontistiriako");
-            $ted = mysqli_result($result, 0, "ted");
-            //$oloimero_stud = mysqli_result($result, 0, "oloimero_stud");
-            $tmimata = mysqli_result($result, 0, "tmimata");
-            $tmimata_exp = explode(",", $tmimata);
-            //$oloimero_tea = mysqli_result($result, 0, "oloimero_tea");
-            $ekp_ee = mysqli_result($result, 0, "ekp_ee");
-            $ekp_ee_exp = explode(",", $ekp_ee);
-            
-            $synolo = array_sum($classes);
-            //$synolo_tmim = array_sum($tmimata_exp);
-            $vivliothiki = mysqli_result($result, 0, "vivliothiki");
-        }
-        //if nipiagwgeio
-        if ($type == 2) {
-            $klasiko = mysqli_result($result, 0, "klasiko");
-            $klasiko_exp = explode(",", $klasiko);
-            $oloimero_nip = mysqli_result($result, 0, "oloimero_nip");
-            $oloimero_nip_exp = explode(",", $oloimero_nip);
-            $nip = mysqli_result($result, 0, "nip");
-            $nip_exp = explode(",", $nip);
-        }
-        // entaksis (varchar): on/off, no. of students
-        $entaksis = explode(",", mysqli_result($result, 0, "entaksis"));
-        $org_ent = $entaksis[0] ? 1 : 0;
-        $ypodoxis = mysqli_result($result, 0, "ypodoxis");
-        //$frontistiriako = mysqli_result($result, 0, "frontistiriako");
-        $oloimero = mysqli_result($result, 0, "oloimero");
-        $comments = mysqli_result($result, 0, "comments");
-        
+      $query = "SELECT * from school where id=$sch";
+      $result = mysqli_query($conn, $query);
+              
+      $titlos = mysqli_result($result, 0, "titlos");
+      $address = mysqli_result($result, 0, "address");
+      $tk = mysqli_result($result, 0, "tk");
+      $dimos = mysqli_result($result, 0, "dimos");
+      $dimos = getDimos($dimos, $conn);
+      $cat = getCategory(mysqli_result($result, 0, "category"));
+      $tel = mysqli_result($result, 0, "tel");
+      $fax = mysqli_result($result, 0, "fax");
+      $email = mysqli_result($result, 0, "email");
+      $type = mysqli_result($result, 0, "type");
+      $type2 = mysqli_result($result, 0, "type2");
+      $organikothta = mysqli_result($result, 0, "organikothta");
+      $leitoyrg = get_leitoyrgikothta($sch, $conn);
+      // organikes - added 05-10-2012
+      $organikes = unserialize(mysqli_result($result, 0, "organikes"));
+      // kena_org, kena_leit - added 19-06-2013
+      $kena_org = unserialize(mysqli_result($result, 0, "kena_org"));
+      $code = mysqli_result($result, 0, "code");
+      $updated = mysqli_result($result, 0, "updated");
+      $perif = mysqli_result($result, 0, "perif");
+      $systeg = mysqli_result($result, 0, "systeg");
+      $anenergo = mysqli_result($result, 0, "anenergo");
+      if ($systeg) {
+          $systegName = getSchool($systeg, $conn);
+      }
+      $archive = mysqli_result($result, 0, "archive");
+                      
+      // if dimotiko
+      if ($type == 1) {
+          $students = mysqli_result($result, 0, "students");
+          $classes = explode(",", $students);
+          $frontistiriako = mysqli_result($result, 0, "frontistiriako");
+          $ted = mysqli_result($result, 0, "ted");
+          //$oloimero_stud = mysqli_result($result, 0, "oloimero_stud");
+          $tmimata = mysqli_result($result, 0, "tmimata");
+          $tmimata_exp = explode(",", $tmimata);
+          //$oloimero_tea = mysqli_result($result, 0, "oloimero_tea");
+          $ekp_ee = mysqli_result($result, 0, "ekp_ee");
+          $ekp_ee_exp = explode(",", $ekp_ee);
+          
+          $synolo = array_sum($classes);
+          //$synolo_tmim = array_sum($tmimata_exp);
+          $vivliothiki = mysqli_result($result, 0, "vivliothiki");
+      }
+      //if nipiagwgeio
+      if ($type == 2) {
+          $klasiko = mysqli_result($result, 0, "klasiko");
+          $klasiko_exp = explode(",", $klasiko);
+          $oloimero_nip = mysqli_result($result, 0, "oloimero_nip");
+          $oloimero_nip_exp = explode(",", $oloimero_nip);
+          $nip = mysqli_result($result, 0, "nip");
+          $nip_exp = explode(",", $nip);
+      }
+      // entaksis (varchar): on/off, no. of students
+      $entaksis = explode(",", mysqli_result($result, 0, "entaksis"));
+      $org_ent = $entaksis[0] ? 1 : 0;
+      $ypodoxis = mysqli_result($result, 0, "ypodoxis");
+      //$frontistiriako = mysqli_result($result, 0, "frontistiriako");
+      $oloimero = mysqli_result($result, 0, "oloimero");
+      $comments = mysqli_result($result, 0, "comments");
+      echo "<div id='general'>";
         echo "<table class=\"imagetable\" border='1'>";
         echo "<tr><td colspan=2>Τύπος: ".get_school_type($sch, $conn)."</td></tr>";
         echo "<tr><td colspan=3>Τίτλος (αναλυτικά): $titlos</td></tr>";
@@ -151,22 +155,63 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         // if ds
         if ($type == 1) {
-            echo "<tr><td colspan=2><a href='#' id='show_hide'>Οργανικές</a><br>";
-            echo "<div id='slidingDiv'>";
+          echo "<tr><td colspan=2><a href='#' id='show_hide'>Οργανικές</a><br>";
+          echo "<div id='slidingDiv'>";
+          echo "<table>";
+          echo "<thead><tr>";
+          echo "<th>Κλάδος</th>";
+          echo "<th><span title='Δασκάλων'>70</th>";
+          echo "<th><span title='Φυσικής Αγωγής'>11</th>";
+          echo "<th><span title='Αγγλικών'>06</th>";
+          echo "<th><span title='Μουσικών'>79</th>";
+          echo "<th><span title='Γαλλικών'>05</th>";
+          echo "<th><span title='Γερμανικών'>07</th>";
+          echo "<th><span title='Καλλιτεχνικών'>08</th>";
+          echo "<th><span title='Πληροφορικής'>86</th>";
+          echo "<th><span title='Θεατρικών Σπουδών'>91</th>";
+          echo $org_ent ? "<th>Ένταξης</th>" : '';
+          if ($type2 == 2) {
+            echo "<th><span title='Λογοθεραπευτών'>21</th>";
+            echo "<th><span title='Ψυχολόγων'>23</th>";
+            echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
+            echo "<th><span title='Λογοθεραπευτών'>26</th>";
+            echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
+            echo "<th><span title='Εργοθεραπευτών'>29</th>";
+            echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
+            echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
+          }
+          echo "</tr></thead>";
+          echo "<tbody><tr>";
+          echo "<td>Οργανικές</td>";
+          echo "<td>$organikes[0]</td>";
+          echo "<td>$organikes[1]</td>";
+          echo "<td>$organikes[2]</td>";
+          echo "<td>$organikes[3]</td>";
+          echo "<td>$organikes[4]</td>";
+          echo "<td>$organikes[5]</td>";
+          echo "<td>$organikes[6]</td>";
+          echo "<td>$organikes[7]</td>";
+          echo "<td>$organikes[8]</td>";
+          echo $org_ent ? "<td>$org_ent</td>" : '';
+          if ($type2 == 2) {
+            echo "<td>$organikes[9]</td>";
+            echo "<td>$organikes[10]</td>";
+            echo "<td>$organikes[11]</td>";
+            echo "<td>$organikes[12]</td>";
+            echo "<td>$organikes[13]</td>";
+            echo "<td>$organikes[14]</td>";
+            echo "<td>$organikes[15]</td>";
+            echo "<td>$organikes[16]</td>";
+          }
+          echo "</tr>";
+        }
+          // if nip
+        else {
+          echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
+          if ($type2 == 2) {
             echo "<table>";
             echo "<thead><tr>";
-            echo "<th>Κλάδος</th>";
-            echo "<th><span title='Δασκάλων'>70</th>";
-            echo "<th><span title='Φυσικής Αγωγής'>11</th>";
-            echo "<th><span title='Αγγλικών'>06</th>";
-            echo "<th><span title='Μουσικών'>79</th>";
-            echo "<th><span title='Γαλλικών'>05</th>";
-            echo "<th><span title='Γερμανικών'>07</th>";
-            echo "<th><span title='Καλλιτεχνικών'>08</th>";
-            echo "<th><span title='Πληροφορικής'>86</th>";
-            echo "<th><span title='Θεατρικών Σπουδών'>91</th>";
-            echo $org_ent ? "<th>Ένταξης</th>" : '';
-            if ($type2 == 2) {
+              echo "<th>Κλάδος</th>";
               echo "<th><span title='Λογοθεραπευτών'>21</th>";
               echo "<th><span title='Ψυχολόγων'>23</th>";
               echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
@@ -175,122 +220,21 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               echo "<th><span title='Εργοθεραπευτών'>29</th>";
               echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
               echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
-            }
-            echo "</tr></thead>";
-            echo "<tbody><tr>";
-            echo "<td>Οργανικές</td>";
-            echo "<td>$organikes[0]</td>";
-            echo "<td>$organikes[1]</td>";
-            echo "<td>$organikes[2]</td>";
-            echo "<td>$organikes[3]</td>";
-            echo "<td>$organikes[4]</td>";
-            echo "<td>$organikes[5]</td>";
-            echo "<td>$organikes[6]</td>";
-            echo "<td>$organikes[7]</td>";
-            echo "<td>$organikes[8]</td>";
-            echo $org_ent ? "<td>$org_ent</td>" : '';
-            if ($type2 == 2) {
-              echo "<td>$organikes[9]</td>";
-              echo "<td>$organikes[10]</td>";
-              echo "<td>$organikes[11]</td>";
-              echo "<td>$organikes[12]</td>";
-              echo "<td>$organikes[13]</td>";
-              echo "<td>$organikes[14]</td>";
-              echo "<td>$organikes[15]</td>";
-              echo "<td>$organikes[16]</td>";
-            }
-            echo "</tr>";
-        }
-        // if nip
-        else {
-            echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
-            if ($type2 == 2) {
-              echo "<table>";
-              echo "<thead><tr>";
-                echo "<th>Κλάδος</th>";
-                echo "<th><span title='Λογοθεραπευτών'>21</th>";
-                echo "<th><span title='Ψυχολόγων'>23</th>";
-                echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
-                echo "<th><span title='Λογοθεραπευτών'>26</th>";
-                echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
-                echo "<th><span title='Εργοθεραπευτών'>29</th>";
-                echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
-                echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
-              echo "</tr></thead><tbody>";
-              echo "<tr>";
-                echo "<td>Οργανικές</td>";
-                echo "<td>$organikes[1]</td>";
-                echo "<td>$organikes[2]</td>";
-                echo "<td>$organikes[3]</td>";
-                echo "<td>$organikes[4]</td>";
-                echo "<td>$organikes[5]</td>";
-                echo "<td>$organikes[6]</td>";
-                echo "<td>$organikes[7]</td>";
-                echo "<td>$organikes[8]</td>";
-              echo "</tr>";
-              echo "<tr>";
-                $orgs = get_orgs($sch,$conn);
-                echo "<td>Οργ.ανήκοντες</td>";
-                echo "<td>".$orgs['ΠΕ21']."</td>";
-                echo "<td>".$orgs['ΠΕ23']."</td>";
-                echo "<td>".$orgs['ΠΕ25']."</td>";
-                echo "<td>".$orgs['ΠΕ26']."</td>";
-                echo "<td>".$orgs['ΠΕ28']."</td>";
-                echo "<td>".$orgs['ΠΕ29']."</td>";
-                echo "<td>".$orgs['ΠΕ30']."</td>";
-                echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
-              echo "</tr>";
-              echo "<tr>";
-                $orgs = get_orgs($sch,$conn);
-                echo "<td>Οργ.Κενά</td>";
-                echo "<td>".($organikes[1] - $orgs['ΠΕ21'])."</td>";
-                echo "<td>".($organikes[2] - $orgs['ΠΕ23'])."</td>";
-                echo "<td>".($organikes[3] - $orgs['ΠΕ25'])."</td>";
-                echo "<td>".($organikes[4] - $orgs['ΠΕ26'])."</td>";
-                echo "<td>".($organikes[5] - $orgs['ΠΕ28'])."</td>";
-                echo "<td>".($organikes[6] - $orgs['ΠΕ29'])."</td>";
-                echo "<td>".($organikes[7] - $orgs['ΠΕ30'])."</td>";
-                echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
-              echo "</tr>";
-              echo "</tbody></table>";
-            }
-        }
-        
-        echo "</td></tr>";
-        // 05-10-2012 - kena_leit, kena_org
-        for ($i=0; $i<count($kena_org); $i++) {
-            if (!$kena_org[$i]) {
-                $kena_org[$i]=0;
-            }
-        }
-        if ($type == 1) {
-            // echo "<tr>";
-            // echo "<td>Οργανικά κενά</td>";
-            // echo "<td>$kena_org[0]</td>";
-            // echo "<td>$kena_org[1]</td>";
-            // echo "<td>$kena_org[2]</td>";
-            // echo "<td>$kena_org[3]</td>";
-            // echo "<td>$kena_org[4]</td>";
-            // echo "<td>$kena_org[5]</td>";
-            // echo "<td>$kena_org[6]</td>";
-            // echo "<td>$kena_org[7]</td>";
-            // echo "<td>$kena_org[8]</td>";
-            // echo "</tr>";
-            ///////
+            echo "</tr></thead><tbody>";
             echo "<tr>";
-            $orgs = get_orgs($sch,$conn);
-            echo "<td>Οργανικά ανήκοντες</td>";
-            echo "<td>".$orgs['ΠΕ70']."</td>";
-            echo "<td>".$orgs['ΠΕ11']."</td>";
-            echo "<td>".$orgs['ΠΕ06']."</td>";
-            echo "<td>".$orgs['ΠΕ79']."</td>";
-            echo "<td>".$orgs['ΠΕ05']."</td>";
-            echo "<td>".$orgs['ΠΕ07']."</td>";
-            echo "<td>".$orgs['ΠΕ08']."</td>";
-            echo "<td>".$orgs['ΠΕ86']."</td>";
-            echo "<td>".$orgs['ΠΕ91']."</td>";
-            echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
-            if ($type2 == 2) {
+              echo "<td>Οργανικές</td>";
+              echo "<td>$organikes[1]</td>";
+              echo "<td>$organikes[2]</td>";
+              echo "<td>$organikes[3]</td>";
+              echo "<td>$organikes[4]</td>";
+              echo "<td>$organikes[5]</td>";
+              echo "<td>$organikes[6]</td>";
+              echo "<td>$organikes[7]</td>";
+              echo "<td>$organikes[8]</td>";
+            echo "</tr>";
+            echo "<tr>";
+              $orgs = get_orgs($sch,$conn);
+              echo "<td>Οργ.ανήκοντες</td>";
               echo "<td>".$orgs['ΠΕ21']."</td>";
               echo "<td>".$orgs['ΠΕ23']."</td>";
               echo "<td>".$orgs['ΠΕ25']."</td>";
@@ -299,46 +243,105 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               echo "<td>".$orgs['ΠΕ29']."</td>";
               echo "<td>".$orgs['ΠΕ30']."</td>";
               echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
-            }
-            echo "</tr>";
-            ///////
             echo "</tr>";
             echo "<tr>";
-            $orgs = get_orgs($sch,$conn);
-            echo "<td>Οργανικά κενά</td>";
-            echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
-            echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
-            echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
-            echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
-            echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
-            echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
-            echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
-            echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
-            echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
-            echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
-            if ($type2 == 2) {
-              echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";
-              echo "<td>".($organikes[10] - $orgs['ΠΕ23'])."</td>";
-              echo "<td>".($organikes[11] - $orgs['ΠΕ25'])."</td>";
-              echo "<td>".($organikes[12] - $orgs['ΠΕ26'])."</td>";
-              echo "<td>".($organikes[13] - $orgs['ΠΕ28'])."</td>";
-              echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
-              echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
-              echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
-            }
+              $orgs = get_orgs($sch,$conn);
+              echo "<td>Οργ.Κενά</td>";
+              echo "<td>".($organikes[1] - $orgs['ΠΕ21'])."</td>";
+              echo "<td>".($organikes[2] - $orgs['ΠΕ23'])."</td>";
+              echo "<td>".($organikes[3] - $orgs['ΠΕ25'])."</td>";
+              echo "<td>".($organikes[4] - $orgs['ΠΕ26'])."</td>";
+              echo "<td>".($organikes[5] - $orgs['ΠΕ28'])."</td>";
+              echo "<td>".($organikes[6] - $orgs['ΠΕ29'])."</td>";
+              echo "<td>".($organikes[7] - $orgs['ΠΕ30'])."</td>";
+              echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
             echo "</tr>";
-            echo "</table>";
-            echo "</div>";
-            // echo "&nbsp;&nbsp;&nbsp;ΠΕ11: ".($organikes[1] - $orgs['ΠΕ11']);
-            // echo "&nbsp;&nbsp;ΠΕ06: ".($organikes[2] - $orgs['ΠΕ06']);
-            // echo "&nbsp;&nbsp;ΠΕ79: ".($organikes[3] - $orgs['ΠΕ79']);
-            // echo "&nbsp;&nbsp;ΠΕ05: ".($organikes[4] - $orgs['ΠΕ05']);
-            // echo "&nbsp;&nbsp;ΠΕ07: ".($organikes[5] - $orgs['ΠΕ07']);
-            // echo "&nbsp;&nbsp;ΠΕ08: ".($organikes[6] - $orgs['ΠΕ08']);
-            // echo "&nbsp;&nbsp;ΠΕ86: ".($organikes[7] - $orgs['ΠΕ86']);
-            // echo "&nbsp;&nbsp;ΠΕ91: ".($organikes[8] - $orgs['ΠΕ91']);
-            // echo "</td></tr>";
-
+            echo "</tbody></table>";
+          }
+        }
+          
+        echo "</td></tr>";
+        // 05-10-2012 - kena_leit, kena_org
+        for ($i=0; $i<count($kena_org); $i++) {
+            if (!$kena_org[$i]) {
+                $kena_org[$i]=0;
+            }
+        }
+        if ($type == 1) {
+          // echo "<tr>";
+          // echo "<td>Οργανικά κενά</td>";
+          // echo "<td>$kena_org[0]</td>";
+          // echo "<td>$kena_org[1]</td>";
+          // echo "<td>$kena_org[2]</td>";
+          // echo "<td>$kena_org[3]</td>";
+          // echo "<td>$kena_org[4]</td>";
+          // echo "<td>$kena_org[5]</td>";
+          // echo "<td>$kena_org[6]</td>";
+          // echo "<td>$kena_org[7]</td>";
+          // echo "<td>$kena_org[8]</td>";
+          // echo "</tr>";
+          ///////
+          echo "<tr>";
+          $orgs = get_orgs($sch,$conn);
+          echo "<td>Οργανικά ανήκοντες</td>";
+          echo "<td>".$orgs['ΠΕ70']."</td>";
+          echo "<td>".$orgs['ΠΕ11']."</td>";
+          echo "<td>".$orgs['ΠΕ06']."</td>";
+          echo "<td>".$orgs['ΠΕ79']."</td>";
+          echo "<td>".$orgs['ΠΕ05']."</td>";
+          echo "<td>".$orgs['ΠΕ07']."</td>";
+          echo "<td>".$orgs['ΠΕ08']."</td>";
+          echo "<td>".$orgs['ΠΕ86']."</td>";
+          echo "<td>".$orgs['ΠΕ91']."</td>";
+          echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
+          if ($type2 == 2) {
+            echo "<td>".$orgs['ΠΕ21']."</td>";
+            echo "<td>".$orgs['ΠΕ23']."</td>";
+            echo "<td>".$orgs['ΠΕ25']."</td>";
+            echo "<td>".$orgs['ΠΕ26']."</td>";
+            echo "<td>".$orgs['ΠΕ28']."</td>";
+            echo "<td>".$orgs['ΠΕ29']."</td>";
+            echo "<td>".$orgs['ΠΕ30']."</td>";
+            echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
+          }
+          echo "</tr>";
+          ///////
+          echo "</tr>";
+          echo "<tr>";
+          $orgs = get_orgs($sch,$conn);
+          echo "<td>Οργανικά κενά</td>";
+          echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
+          echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
+          echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
+          echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
+          echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
+          echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
+          echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
+          echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
+          echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+          echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
+          if ($type2 == 2) {
+            echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";
+            echo "<td>".($organikes[10] - $orgs['ΠΕ23'])."</td>";
+            echo "<td>".($organikes[11] - $orgs['ΠΕ25'])."</td>";
+            echo "<td>".($organikes[12] - $orgs['ΠΕ26'])."</td>";
+            echo "<td>".($organikes[13] - $orgs['ΠΕ28'])."</td>";
+            echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
+            echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
+            echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
+          }
+          echo "</tr>";
+          echo "</table>";
+          echo "</div>";
+          // echo "&nbsp;&nbsp;&nbsp;ΠΕ11: ".($organikes[1] - $orgs['ΠΕ11']);
+          // echo "&nbsp;&nbsp;ΠΕ06: ".($organikes[2] - $orgs['ΠΕ06']);
+          // echo "&nbsp;&nbsp;ΠΕ79: ".($organikes[3] - $orgs['ΠΕ79']);
+          // echo "&nbsp;&nbsp;ΠΕ05: ".($organikes[4] - $orgs['ΠΕ05']);
+          // echo "&nbsp;&nbsp;ΠΕ07: ".($organikes[5] - $orgs['ΠΕ07']);
+          // echo "&nbsp;&nbsp;ΠΕ08: ".($organikes[6] - $orgs['ΠΕ08']);
+          // echo "&nbsp;&nbsp;ΠΕ86: ".($organikes[7] - $orgs['ΠΕ86']);
+          // echo "&nbsp;&nbsp;ΠΕ91: ".($organikes[8] - $orgs['ΠΕ91']);
+          // echo "</td></tr>";
         }
         else {
             echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0]";
@@ -425,215 +428,218 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td colspan=2 align=right><small>Τελ.ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."<small></td></tr>";
         }
         echo "</table>";
-        echo "<br>";
-        
-        
-        if ($type == 1) {
-            if ($synolo>0) {
-                echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
-                $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
-                echo "<tr><td>Μαθ.Πρωινού<br>Σύνολο: $synolo_pr</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
-                $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
-                echo "<tr><td>Τμ./τάξη Πρωινού<br>Σύνολο: $synolo_pr</td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small> (14-15)</small><br>$tmimata_exp[7]<small> (15-16)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
-                if (strlen($archive) > 0){
-                  // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',
-                  // tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';
-                  echo "<tr><td colspan=9><a href='#' id='show_hide2'>Ιστορικό</a><br>";
-                  echo "<div id='slidingDiv2'>";
-                  echo "<table>";
-                  echo "<thead><tr>";
-                  echo "<th>Σχολικό έτος</th>";
-                  echo "<th>Α</th>";
-                  echo "<th>Β</th>";
-                  echo "<th>Γ</th>";
-                  echo "<th>Δ</th>";
-                  echo "<th>Ε</th>";
-                  echo "<th>ΣΤ</th>";
-                  echo "<th>Ολοήμερο</th>";
-                  echo "<th>Πρωινή Ζώνη</th>";
-                  echo "<th>Ένταξης</th>";
-                  echo "</tr>";
-                  echo "</thead>";
-                  echo "<tbody>";
-                  $archive_arr = unserialize($archive);
-                  foreach ($archive_arr as $key => $value) {
-                    echo '<tr>';
-                    echo "<td>". substr($key, 0, 4).'-'.substr($key, 4, 2) ."</td>";
-                    $data = explode(',',$value);
-                    echo "<td>$data[0] ($data[8])</td>";
-                    echo "<td>$data[1] ($data[9])</td>";
-                    echo "<td>$data[2] ($data[10])</td>";
-                    echo "<td>$data[3] ($data[11])</td>";
-                    echo "<td>$data[4] ($data[12])</td>";
-                    echo "<td>$data[5] ($data[13])</td>";
-                    echo "<td>$data[6] (14-15: $data[14], 15-16: $data[15])</td>";
-                    echo "<td>$data[7] ($data[16])</td>";
-                    echo $data[17] == 'on' ? "<td>ΝΑΙ ($data[18] μαθ.)</td>" : "<td></td>";
-                  }
-                  echo "</tbody>";
-                  echo "</table>";
-                  echo "</div>";
-                }
-                echo "</table>";
-                echo "<br>";
-            }
-            else 
-            {
-                echo "Δεν έχει καταχωρηθεί πλήθος μαθητών";
-                echo "<br><br>";
-            }
-        }
-        else if ($type == 2) {
-            // klasiko_nip/pro: klasiko
-            // klasiko pos 0-5: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p
-            // prwinh zvnh @ pos 7 -> klasiko[6]
-            // oloimero_syn_nip/pro: oloimero
-            $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];
-            $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];
-            $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
-            $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
-            $meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
-            $meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
-            // Μαθητές
-            echo "<h3>Μαθητές</h3>";
-            echo "<table class=\"imagetable\" border='1'>";
-            $ola = $klasiko_nip + $klasiko_pro;
-            $olola = $oloimero_syn_nip + $oloimero_syn_pro;
-            echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
-            echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
-            // t1
-            $syn = $klasiko_exp[0]+$klasiko_exp[1];
-            $tmimata_nip = 1;
-            $tmimata_nip_ol = 0;
-            echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td>$syn</td>";
-            $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
-            if ($syn_ol > 0) {
-                $tmimata_nip_ol += 1;
-            }
-            echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td>$syn_ol</td></tr>";
-            // print t2 + t3 only if they have students
-            // t2
-            $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
-            $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
-            if (($syn2+$syn_ol2) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol2 > 0) {
-                    $tmimata_nip_ol += 1;
-                }
-                echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td>$syn2</td>";
-                echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td>$syn_ol2</td></tr>";
-            }
-            // t3
-            $syn3 = $klasiko_exp[4]+$klasiko_exp[5];
-            $syn_ol3 = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
-            if (($syn3+$syn_ol3) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol3 > 0) {
-                    $tmimata_nip_ol += 1;
-                }
-                echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td>$syn3</td>";
-                echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td>$syn_ol3</td></tr>";
-            }
-            // totals (if more than one tmima)
-            if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
-                echo "<tr><td><strong>Σύνολα</strong></td><td>$klasiko_nip<td>$klasiko_pro</td><td>$ola</td>";
-                echo "<td>$oloimero_syn_nip<td>$oloimero_syn_pro</td><td>$olola</td>";
-                echo "</tr>";
-            }
-            if (strlen($archive) > 0){
-              // update school set klasiko='1Π,1Ν,2Π,2Ν,3Π,3Ν,ΠΖ', oloimero_nip='ΟΛ1Π,ΟΛ1Ν,ΟΛ2Π,ΟΛ2Ν',entaksis='0,0' where code=XXX;              
-              echo "<tr><td colspan=9><a href='#' id='show_hide2'>Ιστορικό</a><br>";
-              echo "<div id='slidingDiv2'>";
-              echo "<table>";
-              echo "<thead><tr>";
-              echo "<th>Σχολικό έτος</th>";
-              echo "<th>Πρ.1 Προνήπια</th>";
-              echo "<th>Πρ.1 Νήπια</th>";
-              echo "<th>Πρ.2 Προνήπια</th>";
-              echo "<th>Πρ.2 Νήπια</th>";
-              echo "<th>Πρ.3 Προνήπια</th>";
-              echo "<th>Πρ.3 Νήπια</th>";
-              echo "<th>Πρωινή Ζώνη</th>";
-              echo "<th>Ολοήμ.1 Προνήπια</th>";
-              echo "<th>Ολοήμ.1 Νήπια</th>";
-              echo "<th>Ολοήμ.2 Προνήπια</th>";
-              echo "<th>Ολοήμ.2 Νήπια</th>";
-              echo "<th>Ένταξης</th>";
-              echo "</tr>";
-              echo "</thead>";
-              echo "<tbody>";
-              $archive_arr = unserialize($archive);
-              foreach ($archive_arr as $key => $value) {
-                echo '<tr>';
-                echo "<td>". substr($key, 0, 4).'-'.substr($key, 4, 2) ."</td>";
-                $data = explode(',',$value);
-                echo "<td>$data[0]</td>";
-                echo "<td>$data[1]</td>";
-                echo "<td>$data[2]</td>";
-                echo "<td>$data[3]</td>";
-                echo "<td>$data[4]</td>";
-                echo "<td>$data[5]</td>";
-                echo "<td>$data[6]</td>";
-                echo "<td>$data[7]</td>";
-                echo "<td>$data[8]</td>";
-                echo "<td>$data[9]</td>";
-                echo "<td>$data[10]</td>";
-                echo $data[11] == 'on' ? "<td>ΝΑΙ ($data[12] μαθ.)</td>" : "<td></td>";
-              }
-              echo "</tbody>";
-              echo "</table>";
-              echo "</div>";
-            }
-            echo "</table>";
-            echo "<br>";
-            
-            $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
-            // τοποθετημένοι εκπ/κοί
-            $top60 = $top60m = $top60ana = 0;
-            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
-            $res = mysqli_query($conn, $qry);
-            $top60m = mysqli_result($res, 0, 'pe60');
-            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
-            $res = mysqli_query($conn, $qry);
-            $top60ana = mysqli_result($res, 0, 'pe60');
-            $top60 = $top60m+$top60ana;
-            
-            $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
-
-            echo "<h3>Λειτουργικά κενά</h3>";
-            echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
-
-            echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
-            echo "<td>$syn_apait</td>";
-            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
-
-            echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
-            $k_pl = $top60-$syn_apait;
-            $k_pl_class = $k_pl >= 0 ? 
-                "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
-                "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
-            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
-
-            echo "</tbody></table>";
-            echo "<br>";
-        }
         echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
         echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
-        echo "<br><br>";
-        // if dimotiko & leitoyrg >= 4
-        if ($type == 1 ) {//&& array_sum($tmimata_exp)>3){
-            ektimhseis_wrwn($sch, $conn, $sxol_etos, true);
-        }
-        // if systegazomeno
-        if ($systeg) {
-            echo "<a id='toggleSystegBtn' href='#'>Συστεγαζόμενο: $systegName</a>";
-            echo "<div id='systeg' style='display: none;'>";
-            ektimhseis_wrwn($systeg, $conn, $sxol_etos, true);
+      echo "</div>";
+      echo "<div id='leit'>";
+        
+      if ($type == 1) {
+        if ($synolo>0) {
+          echo "<h3>Μαθητικό Δυναμικό</h3>";
+          echo "<table class=\"imagetable\" border='1'>";
+          echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
+          $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
+          echo "<tr><td>Μαθ.Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
+          $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+          echo "<tr><td>Τμ./τάξη Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small> (14-15)</small><br>$tmimata_exp[7]<small> (15-16)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
+          if (strlen($archive) > 0){
+            // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',
+            // tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';
+            echo "<tr><td colspan=9><a href='#' id='show_hide2'>Ιστορικό</a><br>";
+            echo "<div id='slidingDiv2'>";
+            echo "<table>";
+            echo "<thead><tr>";
+            echo "<th>Σχολικό έτος</th>";
+            echo "<th>Α</th>";
+            echo "<th>Β</th>";
+            echo "<th>Γ</th>";
+            echo "<th>Δ</th>";
+            echo "<th>Ε</th>";
+            echo "<th>ΣΤ</th>";
+            echo "<th>Ολοήμερο</th>";
+            echo "<th>Πρωινή Ζώνη</th>";
+            echo "<th>Ένταξης</th>";
+            echo "</tr>";
+            echo "</thead>";
+            echo "<tbody>";
+            $archive_arr = unserialize($archive);
+            foreach ($archive_arr as $key => $value) {
+              echo '<tr>';
+              echo "<td>". substr($key, 0, 4).'-'.substr($key, 4, 2) ."</td>";
+              $data = explode(',',$value);
+              echo "<td>$data[0] ($data[8])</td>";
+              echo "<td>$data[1] ($data[9])</td>";
+              echo "<td>$data[2] ($data[10])</td>";
+              echo "<td>$data[3] ($data[11])</td>";
+              echo "<td>$data[4] ($data[12])</td>";
+              echo "<td>$data[5] ($data[13])</td>";
+              echo "<td>$data[6] (14-15: $data[14], 15-16: $data[15])</td>";
+              echo "<td>$data[7] ($data[16])</td>";
+              echo $data[17] == 'on' ? "<td>ΝΑΙ ($data[18] μαθ.)</td>" : "<td></td>";
+            }
+            echo "</tbody>";
+            echo "</table>";
             echo "</div>";
-            echo "<br><br>";
+          }
+          echo "</table>";
+          echo "<br>";
         }
+        else 
+        {
+          echo "Δεν έχει καταχωρηθεί πλήθος μαθητών";
+          echo "<br><br>";
+        }
+      }
+      else if ($type == 2) {
+        // klasiko_nip/pro: klasiko
+        // klasiko pos 0-5: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p
+        // prwinh zvnh @ pos 7 -> klasiko[6]
+        // oloimero_syn_nip/pro: oloimero
+        $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];
+        $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];
+        $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
+        $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
+        $meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
+        $meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
+        // Μαθητές
+        echo "<h3>Μαθητές</h3>";
+        echo "<table class=\"imagetable\" border='1'>";
+        $ola = $klasiko_nip + $klasiko_pro;
+        $olola = $oloimero_syn_nip + $oloimero_syn_pro;
+        echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
+        echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
+        // t1
+        $syn = $klasiko_exp[0]+$klasiko_exp[1];
+        $tmimata_nip = 1;
+        $tmimata_nip_ol = 0;
+        echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td><b>$syn</b></td>";
+        $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
+        if ($syn_ol > 0) {
+            $tmimata_nip_ol += 1;
+        }
+        echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td><b>$syn_ol</b></td></tr>";
+        // print t2 + t3 only if they have students
+        // t2
+        $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
+        $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
+        if (($syn2+$syn_ol2) > 0) {
+            $tmimata_nip += 1;
+            if ($syn_ol2 > 0) {
+                $tmimata_nip_ol += 1;
+            }
+            echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td><b>$syn2</b></td>";
+            echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td><b>$syn_ol2</b></td></tr>";
+        }
+        // t3
+        $syn3 = $klasiko_exp[4]+$klasiko_exp[5];
+        $syn_ol3 = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
+        if (($syn3+$syn_ol3) > 0) {
+            $tmimata_nip += 1;
+            if ($syn_ol3 > 0) {
+                $tmimata_nip_ol += 1;
+            }
+            echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td><b>$syn3</b></td>";
+            echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td><b>$syn_ol3</b></td></tr>";
+        }
+        // totals (if more than one tmima)
+        if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
+            echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
+            echo "<td><b>$oloimero_syn_nip</b><td><b>$oloimero_syn_pro</b></td><td><b>$olola</b></td>";
+            echo "</tr>";
+        }
+        if (strlen($archive) > 0){
+          // update school set klasiko='1Π,1Ν,2Π,2Ν,3Π,3Ν,ΠΖ', oloimero_nip='ΟΛ1Π,ΟΛ1Ν,ΟΛ2Π,ΟΛ2Ν',entaksis='0,0' where code=XXX;              
+          echo "<tr><td colspan=9><a href='#' id='show_hide2'>Ιστορικό</a><br>";
+          echo "<div id='slidingDiv2'>";
+          echo "<table>";
+          echo "<thead><tr>";
+          echo "<th>Σχολικό έτος</th>";
+          echo "<th>Πρ.1 Προνήπια</th>";
+          echo "<th>Πρ.1 Νήπια</th>";
+          echo "<th>Πρ.2 Προνήπια</th>";
+          echo "<th>Πρ.2 Νήπια</th>";
+          echo "<th>Πρ.3 Προνήπια</th>";
+          echo "<th>Πρ.3 Νήπια</th>";
+          echo "<th>Πρωινή Ζώνη</th>";
+          echo "<th>Ολοήμ.1 Προνήπια</th>";
+          echo "<th>Ολοήμ.1 Νήπια</th>";
+          echo "<th>Ολοήμ.2 Προνήπια</th>";
+          echo "<th>Ολοήμ.2 Νήπια</th>";
+          echo "<th>Ένταξης</th>";
+          echo "</tr>";
+          echo "</thead>";
+          echo "<tbody>";
+          $archive_arr = unserialize($archive);
+          foreach ($archive_arr as $key => $value) {
+            echo '<tr>';
+            echo "<td>". substr($key, 0, 4).'-'.substr($key, 4, 2) ."</td>";
+            $data = explode(',',$value);
+            echo "<td>$data[0]</td>";
+            echo "<td>$data[1]</td>";
+            echo "<td>$data[2]</td>";
+            echo "<td>$data[3]</td>";
+            echo "<td>$data[4]</td>";
+            echo "<td>$data[5]</td>";
+            echo "<td>$data[6]</td>";
+            echo "<td>$data[7]</td>";
+            echo "<td>$data[8]</td>";
+            echo "<td>$data[9]</td>";
+            echo "<td>$data[10]</td>";
+            echo $data[11] == 'on' ? "<td>ΝΑΙ ($data[12] μαθ.)</td>" : "<td></td>";
+          }
+          echo "</tbody>";
+          echo "</table>";
+          echo "</div>";
+        }
+        echo "</table>";
+        echo "<br>";
+        
+        $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
+        // τοποθετημένοι εκπ/κοί
+        $top60 = $top60m = $top60ana = 0;
+        $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+        $res = mysqli_query($conn, $qry);
+        $top60m = mysqli_result($res, 0, 'pe60');
+        $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+        $res = mysqli_query($conn, $qry);
+        $top60ana = mysqli_result($res, 0, 'pe60');
+        $top60 = $top60m+$top60ana;
+        
+        $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
+
+        echo "<h3>Λειτουργικά κενά</h3>";
+        echo "<table class=\"imagetable stable\" border='1'>";
+        echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
+
+        echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
+        echo "<td>$syn_apait</td>";
+        echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
+
+        echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
+        $k_pl = $top60-$syn_apait;
+        $k_pl_class = $k_pl >= 0 ? 
+            "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
+            "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+        echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
+
+        echo "</tbody></table>";
+        echo "<br>";
+      }
+      echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
+      echo "<br><br>";
+      // if dimotiko & leitoyrg >= 4
+      if ($type == 1 ) {//&& array_sum($tmimata_exp)>3){
+          ektimhseis_wrwn($sch, $conn, $sxol_etos, true);
+      }
+      // if systegazomeno
+      if ($systeg) {
+          echo "<a id='toggleSystegBtn' href='#'>Συστεγαζόμενο: $systegName</a>";
+          echo "<div id='systeg' style='display: none;'>";
+          ektimhseis_wrwn($systeg, $conn, $sxol_etos, true);
+          echo "</div>";
+          echo "<br><br>";
+      }
+      echo "</div>";
     } // of disp_school
       
     echo "<div id=\"content\">";
@@ -649,30 +655,45 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     echo "</div>";
     
     if (isset($_POST['org']) || isset($_GET['org'])) {
-        if (isset($_POST['org'])) {
-            $str1 = $_POST['org'];
-            $sch = getSchoolID($_POST['org'], $mysqlconnection);
-            if (!$sch) {
-                die('Το σχολείο δε βρέθηκε...');
-            }
-        }
-        elseif (isset($_GET['org'])) {
-            $str1 = getSchool($_GET['org'], $mysqlconnection);
-            $sch = $_GET['org'];
-            if (!$str1) {
-                die('Το σχολείο δε βρέθηκε...');
-            }
-        }
-        
-        echo "<h1>$str1</h1>";
-        if (!$sch && !$str) {
-            die('Το σχολείο δε βρέθηκε...');
-        }
-        if (isset($_GET['sxoletos'])) {
-            $sxol_etos = $_GET['sxoletos'];
-        }
-        disp_school($sch, $sxol_etos, $mysqlconnection);
-        
+      if (isset($_POST['org'])) {
+          $str1 = $_POST['org'];
+          $sch = getSchoolID($_POST['org'], $mysqlconnection);
+          if (!$sch) {
+              die('Το σχολείο δε βρέθηκε...');
+          }
+      }
+      elseif (isset($_GET['org'])) {
+          $str1 = getSchool($_GET['org'], $mysqlconnection);
+          $sch = $_GET['org'];
+          if (!$str1) {
+              die('Το σχολείο δε βρέθηκε...');
+          }
+      }
+      
+      echo "<h1>$str1</h1>";
+      echo "<div align='right'>";
+      echo "<p style='margin-block-end: 1px; margin-block-start: -10px;'><small><a href='./school_status_old.php?org=".$sch."'>Μετάβαση στην παλιά προβολή</a></small></p>";
+      echo "</div>";
+      if (!$sch && !$str) {
+          die('Το σχολείο δε βρέθηκε...');
+      }
+      if (isset($_GET['sxoletos'])) {
+          $sxol_etos = $_GET['sxoletos'];
+      }
+
+      // Tabs
+      echo "<div id='container' style='width: 98%; padding: 8px;'>";
+        echo "<div id='tabs'>";
+          echo "<ul>";
+          echo "<li><a href='#general'>Γενικά Στοιχεία</a></li>";
+          echo "<li><a href='#leit'>Μαθ.Δυναμικό - Κενά/Πλεονάσματα</a></li>";
+          echo "<li><a href='#personnel'>Προσωπικό</a></li>";
+          echo $_SESSION['requests'] ? "<li><a href='#requests'>Αιτήματα</a></li>" : '';
+          echo "</ul>";
+
+          disp_school($sch, $sxol_etos, $mysqlconnection);
+
+        echo "<div id='personnel'>";
         //Υπηρετούν με θητεία
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
         $result = mysqli_query($mysqlconnection, $query);
@@ -1140,10 +1161,18 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             echo "</tbody></table>";
             echo "<br>";
-        }
-        if ($_SESSION['requests']) {
-            display_school_requests($sch, $sxol_etos, $mysqlconnection, true);
-        }
+          }
+          echo "</div>"; // of personnel tab
+          
+          // requests tab
+          if ($_SESSION['requests']) {
+            echo "<div id='requests'>";
+              display_school_requests($sch, $sxol_etos, $mysqlconnection, true);
+            echo "</div>";
+          }
+        echo "</div>"; // of tabs
+      echo "</div>"; // of container
+
     } // of school status
     ?>
 </center>
