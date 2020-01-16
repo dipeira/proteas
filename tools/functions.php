@@ -1728,7 +1728,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             //$allcnt[$row['perigrafh']]++;
         }
     }
-    
+
     // replace kladoi @ array
     //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/91
     $avar = $avhrs;
@@ -2240,5 +2240,39 @@ function show_tooltip($text, $tooltip) {
   echo "<div class='tooltip'>$text";
   echo "<span class='tooltiptext'>$tooltip</span>";
   echo "</div>";
+}
+
+function print_latest_commits($lines = 20) {
+  //setup the request, you can also use CURLOPT_URL
+  $ch = curl_init();
+  $apiurl = 'https://api.github.com/repos/dipeira/proteas/commits';
+  $url = 'https://github.com/dipeira/proteas/commit/';
+  curl_setopt($ch, CURLOPT_URL, $apiurl);
+  // Returns the data/output as a string instead of raw data
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0');
+  
+  // get stringified data/output. See CURLOPT_RETURNTRANSFER
+  $data = curl_exec($ch);
+  // close curl resource to free up system resources 
+  curl_close($ch);
+  if (!$data)
+    return;
+
+  $decoded = json_decode($data);
+  $dt = array_slice($decoded, 0, $lines);
+  echo "<h3>Πρόσφατες αλλαγές - προσθήκες</h3>";
+  echo "<table id='commits' class='imagetable' border='2'>";
+  echo "<thead><th>ID</th><th>Μήνυμα Αλλαγής</th><th>Ημερομηνία - ώρα</th></thead><tbody>";
+  foreach ($dt as $row) {
+    echo "<tr>";
+    echo "<td><a href='".$url.$row->sha."' target ='_blank'>".substr($row->sha,0,6).'</a></td>';
+    echo "<td>".$row->commit->message.'</td>';
+    echo "<td>".date('d-m-Y, H:i:s',strtotime($row->commit->author->date)).'</td>';
+    echo "</tr>";
+  }
+  echo '</tbody></table>';
+  return;
 }
 ?>

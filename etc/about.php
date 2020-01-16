@@ -41,5 +41,8 @@
         <p>Ο Πρωτέας στο GitHub: <a href='https://github.com/dipeira/proteas' target="_blank"><img style='width:32px;' src="../images/github.png" alt=""></a></p>
     </p>
     <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../index.php'">
+    <?php
+    print_latest_commits(15);
+    ?>
 </body>
 </html>
