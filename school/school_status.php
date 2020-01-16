@@ -893,6 +893,42 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tbody></table>";
             echo "<br>";
         }
+        //Υπηρετούν σε τάξη υποδοχής
+        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=7";
+        $result = mysqli_query($mysqlconnection, $query);
+        $num = mysqli_num_rows($result);
+        if ($num) {
+            echo "<h3>Υπηρετούν σε τάξη υποδοχής</h3>";
+            $i=0;
+            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<thead><tr>";
+            echo "<th>A/A</th>";
+            echo "<th>Επώνυμο</th>";
+            echo "<th>Όνομα</th>";
+            echo "<th>Κλάδος</th>";
+            echo "<th>Σχολείο Οργανικής</th>";
+            echo "<th>Σχόλια</th>";
+            echo "</tr></thead>\n<tbody>";
+            while ($i < $num)
+            {            
+                $id = mysqli_result($result, $i, "id");
+                $name = mysqli_result($result, $i, "name");
+                $surname = mysqli_result($result, $i, "surname");
+                $klados_id = mysqli_result($result, $i, "klados");
+                $klados = getKlados($klados_id, $mysqlconnection);
+                $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
+                $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
+                $comments = mysqli_result($result, $i, "comments");
+
+                echo "<tr>";
+                echo "<td>".($i+1)."</td>";
+                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "</tr>";
+                $i++;
+            }
+            echo "</tbody></table>";
+            echo "<br>";
+        }
         
         //Αναπληρωτές
         //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";

@@ -474,6 +474,9 @@ function thesicmb($thesi)
     case 3:
         $th = "Τμήμα Ένταξης";
         break;
+    case 7:
+      $th = "Τάξη Υποδοχής";
+      break;
     case 4:
         $th = "Διοικητικός";
         break;
@@ -490,7 +493,7 @@ function thesiselectcmb($thesi)
 {
     echo "<tr><td>";
     echo "<div class='tooltip'>Θέση";
-    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Υποδιευθυντής, Διευθυντής/Προϊστάμενος, Τμήμα ένταξης, Διοικητικός, Ιδιωτικός, Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</span>";
+    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Υποδιευθυντής, Διευθυντής/Προϊστάμενος, Τμήμα ένταξης, Τάξη υποδοχής, Διοικητικός, Ιδιωτικός, Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</span>";
     echo "</div>";
     echo "</td><td>";
     echo "<select name=\"thesi\">";
@@ -513,6 +516,11 @@ function thesiselectcmb($thesi)
         echo "<option value='3' selected=\"selected\">Τμήμα Ένταξης</option>";    
     } else {
         echo "<option value='3'>Τμήμα Ένταξης</option>";
+    }
+    if ($thesi == 7) {
+      echo "<option value='7' selected=\"selected\">Τάξη Υποδοχής</option>";    
+    } else {
+        echo "<option value='7'>Τάξη Υποδοχής</option>";
     }
     if ($thesi == 4) {
         echo "<option value='4' selected=\"selected\">Διοικητικός</option>";    
@@ -543,6 +551,9 @@ function thesianaplcmb($thesi)
     case 2:
         $th = "Τμήμα Ένταξης";
         break;
+    case 4:
+      $th = "Τάξη Υποδοχής";
+      break;
     case 3:
         $th = "Παράλληλη στήριξη";
         break;
@@ -553,7 +564,7 @@ function thesianaplselectcmb($thesi)
 {
     echo "<tr><td>";
     echo "<div class='tooltip'>Θέση";
-    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Διευθυντής/Προϊστάμενος, Τμήμα Ένταξης, Παράλληλη στήριξη</span>";
+    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Διευθυντής/Προϊστάμενος, Τμήμα Ένταξης, Τάξη Υποδοχής, Παράλληλη στήριξη</span>";
     echo "</div>";
     echo "</td><td>";
     echo "<select name=\"thesi\">";
@@ -571,6 +582,11 @@ function thesianaplselectcmb($thesi)
         echo "<option value='2' selected=\"selected\">Τμήμα Ένταξης</option>";    
     } else {
         echo "<option value='2'>Τμήμα Ένταξης</option>";
+    }
+    if ($thesi == 4) {
+      echo "<option value='4' selected=\"selected\">Τάξη Υποδοχής</option>";    
+    } else {
+        echo "<option value='4'>Τάξη Υποδοχής</option>";
     }
     if ($thesi == 3) {
         echo "<option value='3' selected=\"selected\">Παράλληλη στήριξη</option>";    
@@ -1620,7 +1636,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $allcnt[$meiwsh_ypnth_klados]++;
     }
 
-    // ώρες υπηρετούντων (Μόνιμοι εκπ/κοί - υπ/ντές, εκτός Τ.Ε.)
+    // ώρες υπηρετούντων (Μόνιμοι εκπ/κοί - υπ/ντές, εκτός Τ.Ε., T.Y.)
     //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
     if ($oligothesio) {
         $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
@@ -1661,8 +1677,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             
         }
     }
-    // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3 (ένταξης/παράλληλη) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
-    $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.thesi NOT IN (2,3) GROUP BY klados";
+    // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3,4 (ένταξης/παράλληλη/ΤΥ) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
+    $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.thesi NOT IN (2,3,4) GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
     while ($row = mysqli_fetch_array($result)){
         $kl = strval($row['klados']);
@@ -1676,6 +1692,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             $fname = $row['surname'] . ' '. substr($row['name'], 0, 6).' *';
             $fname .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
             $fname .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
+            $fname .= $row['thesi'] == 4 ? '<small> (Τάξη Υποδοχής)</small>' : '';
             $ar = Array('fullname' => $fname, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
             $all[] = $ar;
             $allcnt[$row['perigrafh']]++;
@@ -1699,6 +1716,19 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             }
         }
     }
+    
+    // PE70 @ T.Y.
+    if ($print) {
+        // αναλυτικά...
+        $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 7 ORDER BY e.klados";
+        $result = mysqli_query($mysqlconnection, $query);
+        while ($row = mysqli_fetch_array($result)){
+            $ar = Array('fullname' => $row['surname'].' '.substr($row['name'], 0, 6). ' (Τ.Y.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
+            $all[] = $ar;
+            //$allcnt[$row['perigrafh']]++;
+        }
+    }
+    
     // replace kladoi @ array
     //kladoi: 2/70, 3/06, 4/08, 5/11, 6/79(ex 16), 15/86 (ex 19-20), 13/05-07, 14/05-07, 20/91
     $avar = $avhrs;
