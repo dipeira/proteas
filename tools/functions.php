@@ -1615,22 +1615,31 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
     // ώρες Υπ/ντή
     $meiwsh_ypnth = 0;
-    $query_yp = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
+    $query_yp = "SELECT e.id,e.name, e.surname,e.klados,k.perigrafh,e.wres from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1";
     $result_yp = mysqli_query($mysqlconnection, $query_yp);
     while ($row = mysqli_fetch_assoc($result_yp)){
-        // reduce if students > 120 or eidiko with >30 students
+        $extra = '';
+        // reduce hours if students > 120 or eidiko with >30 students
         if ($synolo_pr > 120 || ($eidiko && $synolo_pr > 30)) {
-            $meiwsh_ypnth = 2;
+            $meiwsh_ypnth = MEIWSH_YPNTH;
         }
         
         $klados = $row['klados'];
         $meiwsh_ypnth_klados = $row['perigrafh'];
         $avhrs[$klados] -= $meiwsh_ypnth;
+        $hours = $row['wres'];
+        // check if ypeythinos vivliothikis
+        if ($row['id'] == $vivliothiki) {
+          $avhrs[$row['klados']] -= MEIWSH_VIVLIOTHIKIS;
+          $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
+          $hours -= MEIWSH_VIVLIOTHIKIS;
+        }
+
         // ώρες Υπ/ντή στην ανάλυση
         $ar = Array(
-            'fullname' => $row['surname'].' '.substr($row['name'], 0, 6).'<small> (Υπ/ντής/-ντρια)</small>',
+            'fullname' => $row['surname'].' '.substr($row['name'], 0, 6).'<small> (Υπ/ντής/-ντρια)</small>'.$extra,
             'klados' =>  $meiwsh_ypnth_klados, 
-            'hours' => $row['wres'] - $meiwsh_ypnth
+            'hours' => $hours - $meiwsh_ypnth
         );
         $all[] = $ar;
         $allcnt[$meiwsh_ypnth_klados]++;

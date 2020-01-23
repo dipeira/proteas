@@ -45,6 +45,8 @@
     define("L_LANG", "el_GR");
     // meiwsh ypeythinoy vivliothikis
     define('MEIWSH_VIVLIOTHIKIS',3);
+    // meiwsh ypodieythinth
+    define('MEIWSH_YPNTH',2);
   }
   // if not exists
   else {
