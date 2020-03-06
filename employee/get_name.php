@@ -17,7 +17,7 @@ if (strlen($q) < 2) {
 if ($idiwtikoi){
   $sql = "select 0 as t_nm,surname from employee where thesi in (5,6) AND surname LIKE '%$q%' LIMIT 0, 10";
 } else {
-  $sql = "select 0 as t_nm,surname from employee where thesi NOT IN (5,6) AND surname LIKE '%$q%' LIMIT 0, 10 UNION select DISTINCT 1 as t_nm,surname from ektaktoi where surname LIKE '%$q%' LIMIT 0, 10";
+  $sql = "(select 0 as t_nm,surname from employee where thesi NOT IN (5,6) AND surname LIKE '%$q%' LIMIT 0, 10) UNION (select DISTINCT 1 as t_nm,surname from ektaktoi where surname LIKE '%$q%' LIMIT 0, 10)";
 }
 
 
