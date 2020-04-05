@@ -36,6 +36,7 @@
     echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
     echo "<p>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
     echo $req_type == 0 ? "<b>Δημοτικά Σχολεία</b><br>" : "<a href='report_head.php?type=0'>Δημοτικά Σχολεία</a><br>";
+    echo $req_type == 3 ? "<b>Δημοτικά Σχολεία (μόνο Δ/ντές)</b><br>" : "<a href='report_head.php?type=3'>Δημοτικά Σχολεία (μόνο Δ/ντές)</a><br>";
     echo $req_type == 1 ? "<b>Νηπιαγωγεία</b><br>" : "<a href='report_head.php?type=1'>Νηπιαγωγεία</a><br>";
     echo $req_type == 2 ? '<b>Ειδικά Σχολεία</b><br>' : "<a href='report_head.php?type=2'>Ειδικά Σχολεία</a><br>";
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
@@ -52,6 +53,7 @@
       echo "<th>Όνομα</th>";
       echo "<th>Κλάδος</th>";
       echo "<th>Τηλέφωνο</th>";
+      echo "<th>email</th>";
       echo "</tr>";
       echo "</thead>\n<tbody>\n";
 
@@ -64,6 +66,7 @@
           $id = mysqli_result($result, $i, "id");
           $name = mysqli_result($result, $i, "name");
           $surname = mysqli_result($result, $i, "surname");
+          $email = mysqli_result($result, $i, "email");
           $thesi = $leitoyrg > 3 ? 
             mysqli_result($result, $i, "thesi") == 2 ? 'Διευθυντής/-ντρια' : 'Υποδιευθυντής/-ντρια' :
             'Πρ/νος/-η';
@@ -80,6 +83,7 @@
           echo "<td>$name</td>";
           echo "<td>$klados</td>";
           echo "<td>$tel</td>";
+          echo "<td><a href='mailto:$email'>$email</a></td>";
           echo "</tr>\n";
           $i++;                        
       }
@@ -92,9 +96,14 @@
       $type = 1;
       $type2 = $req_type;
     }
-    
+    if ($req_type == 3) {
+      $thesi = "(2)";
+      $type2 = 0;
+    } else {
+      $thesi = "(1,2)";
+    }
     $query = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
-    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi IN (1,2) AND status IN (1,3)";
+    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi IN $thesi AND status IN (1,3)";
     $query2 = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
     WHERE s.type2 = $type2 AND s.type = $type AND e.thesi = 1 AND status IN (1,3)";
 
