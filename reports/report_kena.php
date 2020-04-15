@@ -174,6 +174,7 @@ else if ($_GET['type'] == 2) {
     echo "<tr><th rowspan=2>Κωδ.</th>";
     echo "<th rowspan=2>Ονομασία</th>";
     echo "<th rowspan=2>Κατ.</th>";
+    echo "<th>Οργανικότητα</th>";
     echo "<th>Οργανικές</th>";
     echo "<th>Οργ.Τοπ.</th>";
     echo "<th>Οργανικά Κενά</th>";
@@ -187,6 +188,7 @@ else if ($_GET['type'] == 2) {
         $code = mysqli_result($result, $i, "code");
         $cat = getCategory(mysqli_result($result, $i, "category"));
         $students = mysqli_result($result, $i, "students");
+        $organikothta = mysqli_result($result, $i, "organikothta");
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
         $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
         // οργανικά τοποθετηθέντες
@@ -199,6 +201,7 @@ else if ($_GET['type'] == 2) {
         echo "<td>$code</td>";
         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
+        echo "<td>$organikothta</td>";
         echo "<td>$organikes[0]</td>";
         echo "<td>$orgtop</td>";
         echo "<td>$kena_org[0]</td>";
