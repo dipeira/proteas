@@ -166,8 +166,10 @@ else if ($_GET['type'] == 2) {
     $num = mysqli_num_rows($result);
 
     echo "<body>";
+    echo "<small><p>ΣΗΜ: Με κίτρινο χρώμα οι οργανικές που είναι περισσότερες από την οργανικότητα και με κόκκινο οι οργανικά τοποθετημένοι που είναι περισσότεροι από την οργανικότητα.</p></small>";
     echo "<center>";
     $i=0;
+    
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
     echo "<thead>";
@@ -202,8 +204,12 @@ else if ($_GET['type'] == 2) {
         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
         echo "<td>$organikothta</td>";
-        echo "<td>$organikes[0]</td>";
-        echo "<td>$orgtop</td>";
+        echo $organikes[0] > $organikothta ? 
+            "<td style='background:none;background-color:rgba(234, 238, 17, 0.3)'>$organikes[0]</td>" : 
+            "<td>$organikes[0]</td>";
+        echo $orgtop > $organikothta ? 
+            "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$orgtop</td>" : 
+            "<td>$orgtop</td>" ;
         echo "<td>$kena_org[0]</td>";
         echo "</tr>\n";
 
@@ -214,7 +220,7 @@ else if ($_GET['type'] == 2) {
 
         $i++;                        
     }
-    echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td></tr>";
+    echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td><td></td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td></tr>";
     echo "</tbody></table>";
     echo "<br>";
 
