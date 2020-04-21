@@ -192,7 +192,7 @@ else if ($_GET['type'] == 2) {
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
         $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
         // οργανικά τοποθετηθέντες
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3)";
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
         $synorgtop += $orgtop;
