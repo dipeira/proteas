@@ -470,9 +470,9 @@ if ($_GET['op']=="edit") {
     echo "<tr><td>Οργανική σε τμήμα ένταξης</td><td>";
     echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
     echo "</td></tr>";
-        
+    echo "<tr>";    
     thesiselectcmb($thesi); 
-        
+    echo "</tr>";    
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
     echo "	<input type='submit' value='Επεξεργασία'>";
@@ -887,8 +887,9 @@ if ($_GET['op']=="add") {
                echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
                echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
                echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-                
+               echo "<tr>";     
                thesiselectcmb(0);
+               echo "</tr>";
         
     echo "</div>";
     echo "</tbody>";

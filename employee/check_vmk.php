@@ -45,7 +45,7 @@
                 $myCalendar->setDate(date('d',strtotime($_POST['date'])),date('m',strtotime($_POST['date'])),date('Y',strtotime($_POST['date'])));
         $myCalendar->setPath("../tools/calendar/");        
         $myCalendar->setYearInterval(1970, 2030);
-        $myCalendar->dateAllow("1970-01-01", date("2020-01-01"));
+        $myCalendar->dateAllow("1970-01-01", date("2030-01-01"));
         $myCalendar->setAlignment("left", "bottom");
         //$myCalendar->disabledDay("sun,sat");
         $myCalendar->writeScript();

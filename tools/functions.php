@@ -489,13 +489,14 @@ function thesicmb($thesi)
     }
     return $th;
 }
-function thesiselectcmb($thesi)
+function thesiselectcmb($thesi,$hasblank = false)
 {
-    echo "<tr><td>";
+    echo "<td>";
     echo "<div class='tooltip'>Θέση";
     echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Υποδιευθυντής, Διευθυντής/Προϊστάμενος, Τμήμα ένταξης, Τάξη υποδοχής, Διοικητικός, Ιδιωτικός, Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</span>";
     echo "</div>";
     echo "</td><td>";
+    echo $hasblank ? "</td><td>" : '';
     echo "<select name=\"thesi\">";
     if ($thesi == 0) {
         echo "<option value='0' selected=\"selected\">Εκπαιδευτικός</option>";
@@ -537,6 +538,7 @@ function thesiselectcmb($thesi)
     } else {
         echo "<option value='6'>Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";
     }
+    echo "</td>";
 }
 function thesianaplcmb($thesi)
 {

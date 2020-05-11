@@ -43,33 +43,49 @@ if (strlen($_POST['emptype'])>0 && $_POST['emptype'] == 2) {
 } else {
   $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
 }
-if (strlen($_POST['emptype'])>0) {
-  switch ($_POST['emptype']) {
-    case 3:
-      $thesi = ' = 4';
-      break;
-    case 4:
-      $thesi = ' = 5';
-      break;
-    default:
-      $thesi = 'IN (0, 1, 2, 3)';
-      break;
-  }
-  $query .= " thesi ".$thesi;
-  $flag = 1;
-} else {
-  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
+// if SMEAE
+if (isset($_POST['smeae'])) {
+    $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id 
+    JOIN school s on e.sx_organikhs = s.id 
+    WHERE sxol_etos=$sxol_etos AND s.type2=2 ";
+    $flag = 1;
 }
+if ((int)$_POST['thesi']>0 && !$is_anapl) {
+    $flag ? $query .= $op : '';
+    $query .= " thesi = '".$_POST['thesi']."'";
+    $flag=1;
+}
+
+// if (strlen($_POST['emptype'])>0) {
+//   switch ($_POST['emptype']) {
+//     case 3:
+//       $thesi = ' = 4';
+//       break;
+//     case 4:
+//       $thesi = ' = 5';
+//       break;
+//     default:
+//       $thesi = 'IN (0, 1, 2, 3)';
+//       break;
+//   }
+//   $query .= " thesi ".$thesi;
+//   $flag = 1;
+// } //else {
+//  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
+//}
 
 if (!isset($_POST['outsiders']) && !$is_anapl) {
   if ($flag) {
     $query .= $op;
   }
-  $query .= " (sx_organikhs NOT IN (388,394))";
+  $query .= " (sx_organikhs NOT IN (388,394)) ";
   $flag = 1;
 }
 
 if (strlen($_POST['name'])>0) {
+    if ($flag) {
+        $query .= $op;
+    }
     $query .= " name like '".$_POST['name']."'";
     $flag=1;
 }
@@ -252,13 +268,13 @@ if ($flag) {
     /////////////////////////////////
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
-        
+    $qr = str_replace("'", "", $query);    
     if ($num==0) {
-        echo "<BR><p>Κανένα αποτέλεσμα...</p>";
+        echo "<BR><p><span title = '$qr'>Κανένα αποτέλεσμα...</span></p>";
     } else
     {
-        $qr = str_replace("'", "", $query);
-        echo "<p>Πλήθος εγγραφών που βρέθηκαν: <span title='$qr'>$num</span><p>";
+        
+        echo "<p><span title='$qr'>Πλήθος εγγραφών που βρέθηκαν: $num</span><p>";
         $num1=$num;
         $num2=$num;
         echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";

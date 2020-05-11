@@ -89,7 +89,7 @@
 		$myCalendar->setDate(date("d"), date("m"), date("Y"));
 		$myCalendar->setPath("../tools/calendar/");
 		$myCalendar->setYearInterval(2011, date("Y")+1);
-		$myCalendar->dateAllow("2011-01-01", "2020-12-31");
+		$myCalendar->dateAllow("2011-01-01", "2030-12-31");
 		$myCalendar->setAlignment("left", "bottom");
 		$myCalendar->disabledDay("sun,sat");
 		$myCalendar->writeScript();

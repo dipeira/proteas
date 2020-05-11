@@ -185,23 +185,27 @@
 		//$myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
 		$myCalendar->setPath("../tools/calendar/");
 		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", "2020-12-31");
+		$myCalendar->dateAllow("1970-01-01", "2030-12-31");
 		$myCalendar->setAlignment("left", "bottom");
 		$myCalendar->disabledDay("sun,sat");
 		$myCalendar->writeScript();
     echo "</td></tr>";
-    echo "<tr><td>Τύπος</td><td></td><td>";
+    echo "<tr><td>Μον./Αναπλ.</td><td></td><td>";
     echo "<select name=\"emptype\">";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		echo "<option value=\"1\">Μόνιμος</option>";
 		echo "<option value=\"2\">Αναπληρωτής</option>";
-		echo "<option value=\"3\">Διοικητικός</option>";
-		echo "<option value=\"4\">Ιδιωτικός</option>";
+		//echo "<option value=\"3\">Διοικητικός</option>";
+		//echo "<option value=\"4\">Ιδιωτικός</option>";
     echo "</select>";
-    echo "</td><td colspan=3></td></tr>";
+		echo "</td>";
+		thesiselectcmb(0,true);
+		echo "</tr>";
+
+		echo "<tr><td colspan=6><input type='checkbox' name = 'smeae'>&nbsp;Οργανική σε Ειδικό Σχολείο;</td></tr>";	
     
-    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν ανήκουν στη Δ/νση;</td></tr>";	
-		echo "<tr><td colspan=6><input type='checkbox' name = 'or'>Να ισχύει ΤΟΥΛΑΧΙΣΤΟΝ ΕΝΑ από τα παραπάνω κριτήρια (λογικό OR);</td></tr>";	
+    echo "<tr><td colspan=6><input type='checkbox' name = 'outsiders'>&nbsp;Εμφάνιση και όσων δεν ανήκουν στη Δ/νση;</td></tr>";	
+		echo "<tr><td colspan=6><input type='checkbox' name = 'or'>&nbsp;Να ισχύει ΤΟΥΛΑΧΙΣΤΟΝ ΕΝΑ από τα παραπάνω κριτήρια (λογικό OR);</td></tr>";	
 		
 		echo "	</table>";
 		echo "	<input type='hidden' name = 'set' value='$set'>";
