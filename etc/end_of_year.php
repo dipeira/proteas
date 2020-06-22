@@ -134,7 +134,7 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
     if ($kratikoy) {
         $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2) AND p.type ='ΚΡΑΤ'";
     } else {
-        $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,3,4,5,6) AND p.type !='ΚΡΑΤ'";
+        $query = "SELECT e.id,e.name,e.surname,e.patrwnymo,e.klados,p.name as praksi,p.ya,p.ada,p.apofasi,p.type,e.hm_anal,e.hm_apox,e.metakinhsh,e.afm,e.type as typos from ektaktoi e JOIN praxi p ON e.praxi = p.id WHERE e.type IN (1,2,3,4,5,6) AND p.type !='ΚΡΑΤ'";
     }
 
     $result = mysqli_query($mysqlconnection, $query);
