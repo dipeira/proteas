@@ -74,6 +74,7 @@
 			  <li><a href='<?=SITE_ROOT?>/etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
         <li><a href='<?=SITE_ROOT?>/school/school_log.php'>Αρχείο καταγραφής πρόσβασης σχολείων</a></li>
 				<li><a href='<?=SITE_ROOT?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
+        <li><a href='<?=SITE_ROOT?>/tools/fix_leitoyrg.php'>Επιδιόρθωση λειτουργικότητας</a></li>
 		  </ul>
 		 </li>
      <?php elseif($_SESSION['requests']): ?>

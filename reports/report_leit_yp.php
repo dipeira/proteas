@@ -126,7 +126,8 @@ foreach ($tbl_arr as $row) {
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
-    //ob_end_clean();
+    echo "<p>ΣΗΜ.: Στις θέσεις θητείας δεν περιλαμβάνονται ο Δ/ντής Εκπ/σης, οι Προϊστάμενοι Τμημάτων Δ/νσης (αν είναι εκπ/κοί) και τα στελέχη του Γραφείου Φυσικής Αγωγής.</p >";
+
 ?>
 </body>
 </html>
