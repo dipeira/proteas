@@ -90,6 +90,7 @@
             break;
       }
       $num = 0;
+      $saves = 0;
       $checked = 0;
       $headers = 1;
       $error = false;
@@ -169,6 +170,7 @@
             if (!$ret) {
               $error = true;
             } else {
+              $saves++;
               // insert yphrethsh as well
               $id = mysqli_insert_id($mysqlconnection);
               $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
@@ -191,6 +193,8 @@
             $ret = mysqli_query($mysqlconnection, $import);
             if (!$ret) {
               $error = true;
+            } else {
+              $saves++;
             }
             break;
           // students ds
@@ -220,14 +224,22 @@
             $entaksis_old = mysqli_result($res, 0, "entaksis");
             $archive_data = $students_old . ',' . $tmimata_old . ',' . $entaksis_old;
             $sxoletos = find_prev_year($sxol_etos);
-            $archive_arr[$sxoletos] = $archive_data;
+            // archive last year only once (in case of reinserting data)
+            if (is_string($archive_arr[$sxoletos]) && strlen($archive_arr[$sxoletos]) > 0) {
+            } else {
+              $archive_arr[$sxoletos] = $archive_data;
+            }
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
             $ret = mysqli_query($mysqlconnection, $sql);
             // update school table
-            $sql="UPDATE school SET students='$students', tmimata='$tmimata', entaksis='$entaksis' WHERE code=".$data[0];
-            $ret = mysqli_query($mysqlconnection, $sql);
-            if (!$ret) {
-              $error = true;
+            if ($students <> $students_old || $tmimata <> $tmimata_old || $entaksis <> $entaksis_old){
+              $sql="UPDATE school SET students='$students', tmimata='$tmimata', entaksis='$entaksis' WHERE code=".$data[0];
+              $ret = mysqli_query($mysqlconnection, $sql);
+              if (!$ret) {
+                $error = true;
+              } else {
+                $saves++;
+              }
             }
             break;
           // students nip
@@ -256,14 +268,22 @@
             $entaksis_old = mysqli_result($res, 0, "entaksis");
             $archive_data = $klasiko_old . ',' . $oloimero_nip_old . ',' . $entaksis_old;
             $sxoletos = find_prev_year($sxol_etos);
-            $archive_arr[$sxoletos] = $archive_data;
+            // archive last year only once (in case of reinserting data)
+            if (is_string($archive_arr[$sxoletos]) && strlen($archive_arr[$sxoletos]) > 0) {
+            } else {
+              $archive_arr[$sxoletos] = $archive_data;
+            }
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
             $ret = mysqli_query($mysqlconnection, $sql);
             // update school table
-            $sql="UPDATE school SET klasiko='$klasiko', oloimero_nip='$oloimero_nip', entaksis='$entaksis' WHERE code=".$data[0];
-            $ret = mysqli_query($mysqlconnection, $sql);
-            if (!$ret) {
-              $error = true;
+            if ($klasiko <> $klasiko_old || $oloimero_nip <> $oloimero_nip_old || $entaksis <> $entaksis_old){
+              $sql="UPDATE school SET klasiko='$klasiko', oloimero_nip='$oloimero_nip', entaksis='$entaksis' WHERE code=".$data[0];
+              $ret = mysqli_query($mysqlconnection, $sql);
+              if (!$ret) {
+                $error = true;
+              } else {
+                $saves++;
+              }
             }
             break;
         }
@@ -276,8 +296,12 @@
 
       fclose($handle);
       if (!$error){
+        if ($saves > 0){ 
           print "<h3>Η εισαγωγή πραγματοποιήθηκε με επιτυχία!</h3>";
-          echo "Έγινε εισαγωγή $num εγγραφών στον πίνακα $tbl.<br>";
+          echo "Έγινε εισαγωγή $saves εγγραφών στον πίνακα $tbl.<br>";
+        } else {
+          echo "Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.<br>";
+        }
       }
       else
       {
