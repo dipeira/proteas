@@ -47,7 +47,7 @@
     echo "<b>Βήμα 2.</b> Επιλογή τύπου δεδομένων:<br>";
     echo "<input type='radio' name='type' value='1'>α) Μόνιμοι<br>";
     echo "<input type='radio' name='type' value='2'>β) Σχολεία<br>";
-    echo "<input type='radio' name='type' value='3'>γ) Μαθητές / Τμήματα Δ.Σ.<br>";
+    echo "<input type='radio' name='type' value='3'>γ) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
     echo "<input type='radio' name='type' value='4'>δ) Μαθητές / Τμήματα Νηπ.<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα γ, δ να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br><b>Βήμα 3.</b> Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";

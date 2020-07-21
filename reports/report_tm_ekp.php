@@ -19,12 +19,24 @@
   require_once"../tools/functions.php";
   session_start();
   
+  $subtitle_array = Array(
+    '1' => 'Δημόσια Δημοτικά (όχι ειδικά)',
+    '8' => 'Δημόσια Δημοτικά (προηγούμενου σχολικού έτους)',
+    '2' => 'Ιδιωτικά Δημοτικά',
+    '3' => 'Ειδικά Δημοτικά',
+    '7' => 'Ολιγοθέσια Δημοτικά',
+    '4' => 'Δημόσια Νηπιαγωγεία (όχι ειδικά) (και λειτουργικά κενά)',
+    '5' => 'Ιδιωτικά Νηπιαγωγεία',
+    '6' => 'Ειδικά Νηπιαγωγεία'
+  );
   require '../etc/menu.php';
   echo "<h3>Μαθητές & Εκπαιδευτικοί</h3>";
+  echo "<h4>".$subtitle_array[$_REQUEST['type']]."</h4>";
   echo "<table class=\"imagetable\" border='1'>";
   echo "<form action='' method='POST' autocomplete='off'>";
   echo "<tr><td colspan>";
   echo "<input type='radio' name='type' value='1' checked >Δημόσια Δημοτικά (όχι ειδικά)<br>";
+  echo "<input type='radio' name='type' value='8' >Δημόσια Δημοτικά (προηγούμενου σχολικού έτους)<br>";
   echo "<input type='radio' name='type' value='2' >Ιδιωτικά Δημοτικά<br>";
   echo "<input type='radio' name='type' value='3' >Ειδικά Δημοτικά<br>";
   echo "<input type='radio' name='type' value='7' >Ολιγοθέσια Δημοτικά<br>";
@@ -44,7 +56,7 @@
     
 if ($_REQUEST['type']) {
   $oligothesia = 0;
-    $dim_ar = array('1', '2', '3', '7');
+    $dim_ar = array('1', '2', '3', '7', '8');
     $nip_ar = array('4', '5', '6');       
     //if ($_GET['type'] == 1)
     if (in_array($_REQUEST['type'], $dim_ar)) {
@@ -53,15 +65,18 @@ if ($_REQUEST['type']) {
         if ($_REQUEST['type'] == 7) {
           $oligothesia = 1;
           $type2 = 0;
+        } else if ($_REQUEST['type'] == 8) {
+            $type2 = 0;
         } else {
           $type2 = $_REQUEST['type'] - 1;
         }
         $query = "SELECT * from school WHERE type = $type AND type2=$type2 AND anenergo=0";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
+        $previous_year = find_prev_year($sxol_etos);
 
         echo "<center>";
-        $i=0;
+        $i = $sumschools = 0;
         ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><th>Ονομασία</th>";
@@ -98,19 +113,33 @@ if ($_REQUEST['type']) {
             $organikothta = mysqli_result($result, $i, "organikothta");
             $sch = mysqli_result($result, $i, "id");
             $name = getSchool($sch, $mysqlconnection);
-            $students = mysqli_result($result, $i, "students");
-            $classes = explode(",", $students);
-            //$frontistiriako = mysqli_result($result, $i, "frontistiriako");
-            $tmimata = mysqli_result($result, $i, "tmimata");
-            $tmimata_exp = explode(",", $tmimata);
-            $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
-            $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
+            // if user requests archives
+            if ($_REQUEST['type'] == 8){
+                $archive = mysqli_result($result, $i, "archive");
+                $archive_unser = $archive ? unserialize($archive) : null;
+                $archive_arr = explode(',',$archive_unser[$previous_year]);
+                if ($archive_arr) {
+                    $classes = array_slice($archive_arr, 0, 8);
+                    $tmimata_exp = array_slice($archive_arr, 8, 9);
+                    $has_entaxi = strlen($archive_arr[17])>1 ? 1 : 0;
+                    $entaksis = Array(0,$archive_arr[18]);
+                }
+            } else {
+                $students = mysqli_result($result, $i, "students");
+                $tmimata = mysqli_result($result, $i, "tmimata");
+                $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
+                $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
 
+                $classes = explode(",", $students);
+                $tmimata_exp = explode(",", $tmimata);
+            }
+            //$frontistiriako = mysqli_result($result, $i, "frontistiriako");
+            
             $oloimero_stud = $classes[6];
             $oloimero_tea = $tmimata_exp[6];
             //$ekp_ee = mysqli_result($result, $i, "ekp_ee");
             //$ekp_ee_exp = explode(",",$ekp_ee);
-
+            
             $synolo = $classes[0] + $classes[1] + $classes[2] + $classes[3] + $classes[4] + $classes[5];
             $leitoyrg = $synolo_tmim = $tmimata_exp[0] + $tmimata_exp[1] + $tmimata_exp[2] + $tmimata_exp[3] + $tmimata_exp[4] + $tmimata_exp[5];
             if (($oligothesia & $leitoyrg >=4) || (!$oligothesia && $leitoyrg < 4)) {
@@ -135,8 +164,11 @@ if ($_REQUEST['type']) {
             echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
             echo $has_entaxi ? "<td>Ναι</td>" : "<td>Όχι</td>";
             echo $has_entaxi ? "<td>$entaksis[1]</td>" : "<td>0</td>";
-        
-            echo "<td>".$ekp_ar['ΠΕ70']."</td><td>".$ekp_ar['ΠΕ06']."</td><td>".$ekp_ar['ΠΕ11']."</td><td>".$ekp_ar['ΠΕ79']."</td>";
+            if ($_REQUEST['type'] == 8){
+                echo "<td> - </td><td> - </td><td> - </td><td> - </td>";
+            } else {
+                echo "<td>".$ekp_ar['ΠΕ70']."</td><td>".$ekp_ar['ΠΕ06']."</td><td>".$ekp_ar['ΠΕ11']."</td><td>".$ekp_ar['ΠΕ79']."</td>";
+            }
             echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
             echo "</tr>\n";
 
@@ -161,13 +193,14 @@ if ($_REQUEST['type']) {
             $sum06 += $ekp_ar['ΠΕ06'];
             $sum11 += $ekp_ar['ΠΕ11'];
             $sum16 += $ekp_ar['ΠΕ79'];
+            $sumschools += 1;
         
             $i++;                        
         }
 
         $synolo_stud = array_sum($sums);
         $synolo_teach =  array_sum($sumt);
-        echo "<tr><td>Σύνολα</td><td></td><td></td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
+        echo "<tr><td>Πλήθος: $sumschools</td><td colspan=2>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
         echo "<tr><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
