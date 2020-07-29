@@ -319,6 +319,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 // t3
                 echo "<tr><td>Τμ.3</td><td><input type='text' name='k3a' size='1' value=$klasiko_exp[4]></td><td><input type='text' name='k3b' size='1' value=$klasiko_exp[5]>";
                 echo "<td><input type='text' name='o3a' size='1' value=$oloimero_nip_exp[4]></td><td><input type='text' name='o3b' size='1' value=$oloimero_nip_exp[5]></td></tr>";
+                // t4
+                echo "<tr><td>Τμ.4</td><td><input type='text' name='k4a' size='1' value=$klasiko_exp[7]></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[8]>";
+                echo "<td><input type='text' name='o4a' size='1' value=$oloimero_nip_exp[6]></td><td><input type='text' name='o4b' size='1' value=$oloimero_nip_exp[7]></td></tr>";
                 echo "</table>";
                 echo "<br>";
                 echo "<table class=\"imagetable\" border='1'>";

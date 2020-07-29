@@ -2011,6 +2011,7 @@ function get_leitoyrgikothta($id, $mysqlconnection)
         $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
         $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
         $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
+        $klasiko_tm += $klasiko_exp[7]+$klasiko_exp[8]>0 ? 1:0;
         return $klasiko_tm;
     } else {
         $tmimata_exp = explode(",", mysqli_result($result, 0, "tmimata"));

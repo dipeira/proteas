@@ -51,6 +51,8 @@
   $klasiko = $_POST['k1a'].",".$_POST['k1b'].",".$_POST['k2a'].",".$_POST['k2b'].",".$_POST['k3a'].",".$_POST['k3b'];  
   // PZ
   $klasiko .= ",".$_POST['pz'];
+  // tm4
+  $klasiko .=",".$_POST['k4a'].",".$_POST['k4b'];
   // oloimero nip
   $oloimero_nip = $_POST['o1a'].",".$_POST['o1b'].",".$_POST['o2a'].",".$_POST['o2b'].",".$_POST['o3a'].",".$_POST['o3b'].",".$_POST['o4a'].",".$_POST['o4b'];
   $nip = $_POST['ekp_kl'].",".$_POST['ekp_ol'].",".$_POST['ekp_te'];
