@@ -141,14 +141,14 @@ else
                             
             $query .= "AND surname LIKE '$surpost' ";
         }
-        if ((strlen($_POST['praxi'])>0) || ($_GET['praxi']>0)) {
-            if ($_GET['praxi']>0) {
-                $yppost = $_GET['praxi'];
+        if ((strlen($_POST['praxi_old'])>0) || ($_GET['praxi_old']>0)) {
+            if ($_GET['praxi_old']>0) {
+                $praxipost = $_GET['praxi_old'];
             } else {
-                            $yppost = $_POST['praxi'];
+                $praxipost = $_POST['praxi_old'];
             }
             
-            $query .= "AND praxi = $yppost ";
+            $query .= "AND praxi = $praxipost ";
         }
         $query_all = $query;
         $query .= " ORDER BY surname ";
@@ -261,16 +261,16 @@ else
         }
         echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
         if ($curpg!=1) {
-            echo "  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Πρώτη</a>";
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Προηγ/νη</a>";
+            echo "  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=1&rpp=$rpp&klados=$klpost&type=$typepost&praxi_old=$praxipost&yphr=$yppost>Πρώτη</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$prevpg&rpp=$rpp&klados=$klpost&type=$typepost&praxi_old=$praxipost&yphr=$yppost>Προηγ/νη</a>";
         }
         else {
             echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
         }
         if ($curpg != $lastpg) {
             $nextpg = $curpg+1;
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Επόμενη</a>";
-            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost>Τελευταία</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$nextpg&rpp=$rpp&klados=$klpost&type=$typepost&praxi_old=$praxipost&yphr=$yppost>Επόμενη</a>";
+            echo "&nbsp;&nbsp;  <a href=ektaktoi_prev.php?sxoletos=$sxoletos&page=$lastpg&rpp=$rpp&klados=$klpost&type=$typepost&praxi_old=$praxipost&yphr=$yppost>Τελευταία</a>";
         }
         else { 
             echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
