@@ -37,7 +37,7 @@ elseif ($stat == 1) {
 }
 $stat_radio = $stat == 2 ? $stat_radio = 2 : $stat;
 
-$query      = "SELECT id, school, school_name, request, comment, done, submitted, sxol_etos FROM school_requests WHERE hidden = 0 ";
+$query      = "SELECT id, school, school_name, request, comment, done, submitted, sxol_etos FROM school_requests WHERE sxol_etos = $sxol_etos AND hidden = 0 ";
 $query      .= isset ($status) ? "AND done = $status" : '';
 $query      .= " ORDER BY submitted DESC";
 
@@ -87,7 +87,9 @@ $results    = $Paginator->getData( $limit, $page );
 <body>
 <?php require '../etc/menu.php'; ?>
 <h2>Διαχείριση Αιτημάτων Σχολείων</h2>
-
+<?php
+if (count($results->data)){
+?>
 <p>Εμφάνιση αιτημάτων: </p>
 <form id="request_status">
     <input type="radio" name="status" value="0" <?= $stat_radio == 0 ? 'checked' : ''?> onchange="this.form.submit()"> Όλα
@@ -96,6 +98,7 @@ $results    = $Paginator->getData( $limit, $page );
 </form>
 <br>
 <?php
+
   echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
   echo "<thead><tr><th>A/A</th><th>Σχολείο</th><th>Αίτημα</th><th>Σχόλιο Δ/νσης</th><th>Διεκπεραίωση</th><th>Ημ/νία υποβολής</th></tr></thead><tbody>";
   for( $i = 0; $i < count( $results->data ); $i++ ){
@@ -112,8 +115,10 @@ $results    = $Paginator->getData( $limit, $page );
         echo "</tr>";
   }
   echo "</tbody></table>";
-  
   echo $Paginator->createLinks( $links, 'pagination');
+} else {
+  echo "<h3>Δε βρέθηκαν αιτήματα</h3>";
+}
 
 ?>
 <form>
