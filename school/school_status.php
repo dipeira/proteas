@@ -492,15 +492,15 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       }
       else if ($type == 2) {
         // klasiko_nip/pro: klasiko
-        // klasiko pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p, 7,8 t4n,p
+        // klasiko pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p / 7,8 t4n,p / 9,10 t5n,p / 11,12 t6n,p
         // prwinh zvnh @ pos 7 -> klasiko[6]
         // oloimero_nip/pro: oloimero
-        // oloimero pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p, 6,7 t4n,p
+        // oloimero pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p / 6,7 t4n,p / 8,9 t5n,p / 10,11 t6n,p
 
-        $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7];
-        $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8];
-        $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
-        $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
+        $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
+        $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
+        $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
+        $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
         // Μαθητές
         echo "<h3>Μαθητές</h3>";
         echo "<table class=\"imagetable\" border='1'>";
@@ -518,7 +518,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $tmimata_nip_ol += 1;
         }
         echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td><b>$syn_ol</b></td></tr>";
-        // print t2 + t3 + t4 only if they have students
+        // print t2 + t3 + t4 + t5 + t6 only if they have students
         // t2
         $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
         $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
@@ -551,6 +551,28 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             echo "<tr><td>Τμ.4</td><td>$klasiko_exp[7]</td><td>$klasiko_exp[8]</td><td><b>$syn4</b></td>";
             echo "<td>$oloimero_nip_exp[6]</td><td>$oloimero_nip_exp[7]</td><td><b>$syn_ol4</b></td></tr>";
+        }
+        // t5
+        $syn5 = $klasiko_exp[9]+$klasiko_exp[10];
+        $syn_ol5 = $oloimero_nip_exp[8]+$oloimero_nip_exp[9];
+        if (($syn5+$syn_ol5) > 0) {
+            $tmimata_nip += 1;
+            if ($syn_ol5 > 0) {
+                $tmimata_nip_ol += 1;
+            }
+            echo "<tr><td>Τμ.5</td><td>$klasiko_exp[9]</td><td>$klasiko_exp[10]</td><td><b>$syn5</b></td>";
+            echo "<td>$oloimero_nip_exp[8]</td><td>$oloimero_nip_exp[9]</td><td><b>$syn_ol5</b></td></tr>";
+        }
+        // t6
+        $syn6 = $klasiko_exp[11]+$klasiko_exp[12];
+        $syn_ol6 = $oloimero_nip_exp[10]+$oloimero_nip_exp[11];
+        if (($syn6+$syn_ol6) > 0) {
+            $tmimata_nip += 1;
+            if ($syn_ol6 > 0) {
+                $tmimata_nip_ol += 1;
+            }
+            echo "<tr><td>Τμ.6</td><td>$klasiko_exp[11]</td><td>$klasiko_exp[12]</td><td><b>$syn6</b></td>";
+            echo "<td>$oloimero_nip_exp[10]</td><td>$oloimero_nip_exp[11]</td><td><b>$syn_ol6</b></td></tr>";
         }
         // totals (if more than one tmima)
         if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {

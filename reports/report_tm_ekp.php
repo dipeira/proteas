@@ -278,10 +278,14 @@ if ($_REQUEST['type']) {
             $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
             $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5] >0 ? 1:0;
             $klasiko_tm += $klasiko_exp[7]+$klasiko_exp[8] >0 ? 1:0;
+            $klasiko_tm += $klasiko_exp[9]+$klasiko_exp[10] >0 ? 1:0;
+            $klasiko_tm += $klasiko_exp[11]+$klasiko_exp[12] >0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[0]+$oloimero_nip_exp[1]>0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[2]+$oloimero_nip_exp[3]>0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[4]+$oloimero_nip_exp[5]>0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[6]+$oloimero_nip_exp[7]>0 ? 1:0;
+            $oloimero_tm += $oloimero_nip_exp[8]+$oloimero_nip_exp[9]>0 ? 1:0;
+            $oloimero_tm += $oloimero_nip_exp[10]+$oloimero_nip_exp[11]>0 ? 1:0;
 
             // τοποθετημένοι εκπ/κοί
             $top60 = $top60m = $top60ana = $top60ent = 0;
@@ -316,12 +320,12 @@ if ($_REQUEST['type']) {
             echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td><td>$organikothta</td>";
             echo "<td><strong>$klasiko_tm</strong></td>";
 
-            $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7];
-            $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8];
+            $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
+            $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
             echo "<td>$klasiko_nip</td><td>$klasiko_pro</td>";
             
-            $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
-            $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
+            $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
+            $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
             echo "<td><strong>$oloimero_tm</strong></td>";
             echo "<td>$oloimero_syn_nip</td><td>$oloimero_syn_pro</td>";
             

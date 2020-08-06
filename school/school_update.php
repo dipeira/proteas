@@ -53,8 +53,12 @@
   $klasiko .= ",".$_POST['pz'];
   // tm4
   $klasiko .=",".$_POST['k4a'].",".$_POST['k4b'];
+  // tm5
+  $klasiko .=",".$_POST['k5a'].",".$_POST['k5b'];
+  // tm6
+  $klasiko .=",".$_POST['k6a'].",".$_POST['k6b'];
   // oloimero nip
-  $oloimero_nip = $_POST['o1a'].",".$_POST['o1b'].",".$_POST['o2a'].",".$_POST['o2b'].",".$_POST['o3a'].",".$_POST['o3b'].",".$_POST['o4a'].",".$_POST['o4b'];
+  $oloimero_nip = $_POST['o1a'].",".$_POST['o1b'].",".$_POST['o2a'].",".$_POST['o2b'].",".$_POST['o3a'].",".$_POST['o3b'].",".$_POST['o4a'].",".$_POST['o4b'].",".$_POST['o5a'].",".$_POST['o5b'].",".$_POST['o6a'].",".$_POST['o6b'];
   $nip = $_POST['ekp_kl'].",".$_POST['ekp_ol'].",".$_POST['ekp_te'];
   
   $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', fax='$fax', email='$email', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";

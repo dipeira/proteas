@@ -322,6 +322,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 // t4
                 echo "<tr><td>Τμ.4</td><td><input type='text' name='k4a' size='1' value=$klasiko_exp[7]></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[8]>";
                 echo "<td><input type='text' name='o4a' size='1' value=$oloimero_nip_exp[6]></td><td><input type='text' name='o4b' size='1' value=$oloimero_nip_exp[7]></td></tr>";
+                // t5
+                echo "<tr><td>Τμ.5</td><td><input type='text' name='k5a' size='1' value=$klasiko_exp[9]></td><td><input type='text' name='k5b' size='1' value=$klasiko_exp[10]>";
+                echo "<td><input type='text' name='o5a' size='1' value=$oloimero_nip_exp[8]></td><td><input type='text' name='o5b' size='1' value=$oloimero_nip_exp[9]></td></tr>";
+                // t6
+                echo "<tr><td>Τμ.6</td><td><input type='text' name='k6a' size='1' value=$klasiko_exp[11]></td><td><input type='text' name='k6b' size='1' value=$klasiko_exp[12]>";
+                echo "<td><input type='text' name='o6a' size='1' value=$oloimero_nip_exp[10]></td><td><input type='text' name='o6b' size='1' value=$oloimero_nip_exp[11]></td></tr>";
                 echo "</table>";
                 echo "<br>";
                 echo "<table class=\"imagetable\" border='1'>";
