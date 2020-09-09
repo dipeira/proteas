@@ -665,6 +665,21 @@ function getDimos($id,$conn)
         return $dimos;
     }
 }
+function getSchDimos($id,$conn)
+{
+    $query = "SELECT d.name from school s JOIN dimos d ON s.dimos = d.id where s.id=".$id;
+    //echo $query;
+    $result = mysqli_query($conn, $query);
+    //if (!$result) 
+    //    die('Could not query:' . mysqli_error());
+    //else
+    $dimos = mysqli_result($result, 0);
+    if (!$dimos) {
+        return "Άγνωστος";
+    } else {
+        return $dimos;
+    }
+}
 function katastCmb($v)
 {
     echo "<select name=\"status\">";

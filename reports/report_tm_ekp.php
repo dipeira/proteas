@@ -80,6 +80,7 @@ if ($_REQUEST['type']) {
         ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><th>Ονομασία</th>";
+        echo "<th>Δήμος</th>";
         echo "<th>Οργ.</th>";
         echo "<th>Λειτ.</th>";
         echo "<th>Α'</th>";
@@ -160,7 +161,9 @@ if ($_REQUEST['type']) {
             }
 
             echo "<tr>";
-            echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td><td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
+            echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
+            echo "<td>".substr(getSchDimos($sch, $mysqlconnection),0,10).".</td>";
+            echo "<td>$organikothta</td><td>$leitoyrg</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td>$synolo</td>\n";
             echo "<td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td>$synolo_tmim</td>\n";
             echo $has_entaxi ? "<td>Ναι</td>" : "<td>Όχι</td>";
             echo $has_entaxi ? "<td>$entaksis[1]</td>" : "<td>0</td>";
@@ -200,10 +203,10 @@ if ($_REQUEST['type']) {
 
         $synolo_stud = array_sum($sums);
         $synolo_teach =  array_sum($sumt);
-        echo "<tr><td>Πλήθος: $sumschools</td><td colspan=2>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
+        echo "<tr><td>Πλήθος: $sumschools</td><td colspan=3>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
-        echo "<tr><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
+        echo "<tr><td colspan=4></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
         echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         echo "</tr>";
         echo "</tbody></table>";
@@ -240,6 +243,7 @@ if ($_REQUEST['type']) {
         ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr><th>Ονομασία</th>";
+            echo "<th>Δήμος</th>";
             echo "<th>Οργ.</th>";
             echo "<th>Λειτ.</th>";
             
@@ -317,7 +321,9 @@ if ($_REQUEST['type']) {
                 continue;
             }
             echo "<tr>";
-            echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td><td>$organikothta</td>";
+            echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td>";
+            echo "<td>".substr(getSchDimos($sch, $mysqlconnection),0,10).".</td>";
+            echo "<td>$organikothta</td>";
             echo "<td><strong>$klasiko_tm</strong></td>";
 
             $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
@@ -365,7 +371,7 @@ if ($_REQUEST['type']) {
         }
         
         echo "<tr>";
-        echo "<td>Σύνολα</td><td></td>";
+        echo "<td colspan=3>Σύνολα</td>";
         echo "<td>$synolo_tm_klas</td>";
         echo "<td>$synolo_nip</td>";
         echo "<td>$synolo_tm_olo</td>";
