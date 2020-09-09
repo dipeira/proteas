@@ -255,7 +255,7 @@ if ($_REQUEST['type']) {
             echo "<th>Μαθ Τ.Ε.</th>";
             
             echo "<th>Απαιτ.Εκπ/κοί<br><small>(όχι Τ.Ε.)</small></th>";
-            echo "<th>Τοπ/νοι Εκπ/κοί<br><small>(όχι Τ.Ε.)</small></th>";
+            echo "<th>Τοπ/νοι Εκπ/κοί<br><small>(όχι Τ.Ε. & Παράλ.)</small></th>";
             echo $kenapl ?
                 "<th>Κενά</th><th>Πλεονάσματα</th>" :
                 "<th>+ / -</th>";
@@ -293,7 +293,7 @@ if ($_REQUEST['type']) {
             $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi != 3";
             $res = mysqli_query($mysqlconnection, $qry);
             $top60m = mysqli_result($res, 0, 'pe60');
-            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi not in (2,3)";
             $res = mysqli_query($mysqlconnection, $qry);
             $top60ana = mysqli_result($res, 0, 'pe60');
             // only T.E.
