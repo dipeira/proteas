@@ -103,6 +103,7 @@ if ($_REQUEST['type']) {
         echo "<th>ΠΕ06</th>";
         echo "<th>ΠΕ11</th>";
         echo "<th>ΠΕ79</th>";
+        echo "<th>Συν.προσ.</th>";
         echo "<th>Τμ. Ολ.</th>";
         echo "<th>Μαθ. Ολ.</th>";
         //echo "<th>Εκπ. T.E.</th>";
@@ -159,6 +160,16 @@ if ($_REQUEST['type']) {
             while ($row = mysqli_fetch_array($res)){
                 $ekp_ar[$row['klados']] += $row['count'];
             }
+            // count all employees
+            $ekp_count = 0;
+            $qry = "SELECT count(*) as count FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1";
+            $res = mysqli_query($mysqlconnection, $qry);
+            $row = mysqli_fetch_array($res);
+            $ekp_count = $row['count'];
+            $qry = "SELECT count(*) as count FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1";
+            $res = mysqli_query($mysqlconnection, $qry);
+            $row = mysqli_fetch_array($res);
+            $ekp_count += $row['count'];
 
             echo "<tr>";
             echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
@@ -172,6 +183,7 @@ if ($_REQUEST['type']) {
             } else {
                 echo "<td>".$ekp_ar['ΠΕ70']."</td><td>".$ekp_ar['ΠΕ06']."</td><td>".$ekp_ar['ΠΕ11']."</td><td>".$ekp_ar['ΠΕ79']."</td>";
             }
+            echo "<td>$ekp_count</td>";
             echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
             echo "</tr>\n";
 
@@ -196,6 +208,7 @@ if ($_REQUEST['type']) {
             $sum06 += $ekp_ar['ΠΕ06'];
             $sum11 += $ekp_ar['ΠΕ11'];
             $sum16 += $ekp_ar['ΠΕ79'];
+            $ekp_count_sum += $ekp_count;
             $sumschools += 1;
         
             $i++;                        
@@ -205,9 +218,9 @@ if ($_REQUEST['type']) {
         $synolo_teach =  array_sum($sumt);
         echo "<tr><td>Πλήθος: $sumschools</td><td colspan=3>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
-        echo "<td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
+        echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
         echo "<tr><td colspan=4></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
-        echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
+        echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         echo "</tr>";
         echo "</tbody></table>";
 
