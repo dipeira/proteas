@@ -10,7 +10,7 @@
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <title>Εκπαιδευτικοί και Σχολεία ανά Πράξη</title>
     <link href="../css/select2.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.js"></script>
     <script src="../js/select2.min.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">   

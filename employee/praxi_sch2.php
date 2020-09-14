@@ -7,7 +7,7 @@
   <head>      
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <title>Πράξεις ανά Σχολείο</title>
-    <script type="text/javascript" src="../js/1.7.2.jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">   
       $(document).ready(function() { 

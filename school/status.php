@@ -117,7 +117,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Καρτέλα σχολείου</title>
     
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.6/js/jquery.tablesorter.js"></script> 
     <script type="text/javascript">
       $().ready(function() {
