@@ -1815,7 +1815,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         if (($meiwsh_ypnth + $meiwsh_vivliothikis) > 0) {
             echo "<p>Μειώσεις υπ.ωραρίου: ";
             echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
-            echo $vivliothiki > 0 ? 'Υπευθύνου Βιβλιοθήκης (ΠΕ70): '.MEIWSH_VIVLIOTHIKIS.' ώρες<br>' : '';
+            echo $vivliothiki > 0 ? 'Υπευθύνου Βιβλιοθήκης: '.MEIWSH_VIVLIOTHIKIS.' ώρες<br>' : '';
             echo "</p>";
         }
         echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
