@@ -37,6 +37,13 @@
   if ($count > 1)
   { 
         $multi = 1;
+        // check if has duplicate schools
+        if (count($_POST['yphr']) != count(array_unique($_POST['yphr']))){
+          notify('Σφάλμα: διπλή καταχώρηση σχολείου υπηρέτησης!',1);
+          mysqli_close($mysqlconnection);
+          die();
+        }
+
         for ($i=0; $i<$count; $i++)
         {
             $yphret[$i] = $_POST['yphr'][$i];
