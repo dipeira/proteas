@@ -6,7 +6,7 @@
 <?php
   header('Content-type: text/html; charset=utf-8'); 
   require_once "../config.php";
-  require_once "functions.php";
+  require_once "../include/functions.php";
   
   echo "<h2>Επιδιόρθωση λειτουργικότητας</h2>";
   echo "<h4>fix_leitoyrg: Utility που επιδιορθώνει τη λειτουργικότητα στον πίνακα σχολείων.<br>";

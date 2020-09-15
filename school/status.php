@@ -1,7 +1,7 @@
 <?php
   header('Content-type: text/html; charset=utf-8'); 
   require_once "../config.php";
-  require_once "../tools/functions.php";
+  require_once "../include/functions.php";
 
   // logs school logins or requests to database
   function log2db($conn, $schid, $sch, $action = 1) {

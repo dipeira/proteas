@@ -1,7 +1,7 @@
 <?php
     header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
-    require_once"../tools/functions.php";
+    require_once"../include/functions.php";
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -42,7 +42,7 @@
         <div id="container">
 <?php
     require_once"../config.php";
-    //require_once"../tools/functions.php";
+    //require_once"../include/functions.php";
         
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");

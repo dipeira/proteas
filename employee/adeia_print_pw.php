@@ -2,7 +2,7 @@
 session_start();
 
 require_once "../config.php";
-require_once "../tools/functions.php";
+require_once "../include/functions.php";
 require_once '../tools/num2wordgen.php';
 
 require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';

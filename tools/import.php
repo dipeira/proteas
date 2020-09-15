@@ -14,7 +14,7 @@
   session_start();
 
   require_once "../config.php";
-  require_once 'functions.php';
+  require_once '../include/functions.php';
   
   include_once("class.login.php");
   $log = new logmein();

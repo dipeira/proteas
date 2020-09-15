@@ -11,7 +11,7 @@
 require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
 require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 require_once "../config.php";
-require_once "./functions.php";
+require_once "../include/functions.php";
 
 $showRows = 10;
 

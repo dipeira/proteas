@@ -1,7 +1,7 @@
 <?php
     header('Content-type: text/html; charset=utf-8'); 
     Require "../config.php";
-    Require "../functions.php";
+    Require "../include/functions.php";
     
     echo "vmk: Checks & fixes vathmos & mk of employee records for 01-11-2011";
         echo "<br>vmk.php?id=			number: checks specified id";
