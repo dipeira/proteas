@@ -305,6 +305,8 @@ if ($num == 0) {
         }
         if ($usrlvl < 2) {
             echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
+        } else {
+            echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></span>";
         }
         echo "</td>";
         echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
@@ -317,6 +319,8 @@ if ($num == 0) {
     //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
 if ($usrlvl < 2) {
     echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
+} else {
+    echo "<tr><td colspan=7><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
 }        
     echo "<tr><td colspan=7 align=center>";
     $prevpg = $curpg-1;

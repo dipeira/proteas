@@ -10,7 +10,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 define("PATHDRASTICTOOLS", "../tools/grid/");
 require PATHDRASTICTOOLS."conf.php";
 require PATHDRASTICTOOLS."drasticSrcMySQL.class.php";
-$src = new drasticSrcMySQL($server, $user, $pw, $db, $table_pr);
+
+// allow delete only for users with level < 2
+$options = array (
+  "delete_allowed" => $_SESSION['userlevel'] < 2 ? true : false
+);
+
+$src = new drasticSrcMySQL($server, $user, $pw, $db, $table_pr, $options);
 
 // Prepare $anapl_praxeis keys/values for DrasticGrid
 $pr_values = $pr_labels = Array();
@@ -81,7 +87,7 @@ var thegrid = new drasticGrid('grid1', {
     <tr><td>ΑΔΑ Απόφασης</td><td>Να αναγράφεται μόνο ο ΑΔΑ απόφασης τοποθέτησης, π.χ. 6ΠΜΦ4653ΠΣ-4ΝΠ</td></tr>
     <tr><td>Τύπος πράξης</td><td>(Επιλέξτε από τη λίστα)</td></tr>
 </table>
-<p>ΠΡΟΣΟΧΗ: Η πρώτη γραμμή να μη διαγράφεται!</p>
+<p>ΠΡΟΣΟΧΗ: Η πρώτη γραμμή να μη διαγράφεται!<br>Διαγραφή πράξης μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή</p>
 <form>
 <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='ektaktoi_list.php'">
 </form>
