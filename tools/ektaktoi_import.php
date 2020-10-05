@@ -25,10 +25,10 @@ else {
   $logged = 1;
 }
 require_once '../etc/menu.php';
-//session_start();
-$usrlvl = $_SESSION['userlevel'];
 
-if ($usrlvl < 3) {
+$usrlvl = $_SESSION['userlevel'];
+echo $usrlvl;
+if ($usrlvl > 1) {
   echo "<h3>Σφάλμα: Αυτή η ενέργεια μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή...</h3>";
   echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
   die();
