@@ -1,6 +1,12 @@
 <?php
     header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
+    require "../tools/class.login.php";
+    
+    $log = new logmein();
+    if($log->logincheck($_SESSION['loggedin']) == false) {
+        header("Location: ../tools/login.php");
+    }
 ?>
 <!DOCTYPE html>
 <html>

@@ -3,7 +3,7 @@
 session_start();
 require_once "../config.php";
 require_once '../vendor/phpoffice/phpword/Classes/PHPWord.php';
-require_once '../tools/functions.php';
+require_once '../include/functions.php';
 
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
 

@@ -1,20 +1,21 @@
 <?php
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
-  require_once"../tools/functions.php";
+  require_once"../include/functions.php";
     
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
   mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
-    require "../tools/class.login.php";
-    $log = new logmein();
-if($log->logincheck($_SESSION['loggedin']) == false) {   
+  session_start();
+  require_once "../tools/class.login.php";
+  $log = new logmein();
+  if($log->logincheck($_SESSION['loggedin']) == false) {   
     header("Location: ../tools/login.php");
-}
-else {
-        $logged = 1;
-}
+  }
+  else {
+    $logged = 1;
+  }
       
 ?>
 <html>
@@ -258,6 +259,8 @@ else {
                 }
                 if ($usrlvl < 2) {
                       echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+                } else {
+                    echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></span>";
                 }
                 echo "</td>";
                   $typos = get_type($type, $mysqlconnection);
@@ -269,8 +272,10 @@ else {
         }
         echo "</tbody>\n";
         if ($usrlvl < 2) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</a></span>";
-        }        
+            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</a></span></td></tr>";
+        } else {
+            echo "<tr><td colspan=7><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</span></td></tr>";
+        }
         if ($usrlvl == 0) {
             echo "<tr><td colspan=7><span title=\"Προσθήκη\"></span>";
         }

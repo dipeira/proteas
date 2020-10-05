@@ -1,6 +1,6 @@
 <?php
 require_once"../config.php";
-require_once"../tools/functions.php";
+require_once"../include/functions.php";
 require_once '../tools/num2wordgen.php';
 
 session_start();

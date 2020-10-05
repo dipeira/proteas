@@ -1,6 +1,6 @@
 <?php
     //header('Content-type: text/html; charset=utf-8'); 
-    //require_once "../tools/functions.php";
+    //require_once "../include/functions.php";
 ?>
 <html>
   <head>
@@ -21,7 +21,7 @@
 
 <?php
     require_once"../config.php";
-    require_once"../tools/functions.php";
+    require_once"../include/functions.php";
   session_start();      
  
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  

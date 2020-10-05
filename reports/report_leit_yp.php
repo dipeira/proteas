@@ -16,7 +16,7 @@
 
 <?php
     require_once"../config.php";
-    require_once"../tools/functions.php";
+    require_once"../include/functions.php";
     session_start();
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  

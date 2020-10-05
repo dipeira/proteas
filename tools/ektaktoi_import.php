@@ -11,9 +11,29 @@
 require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
 require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 require_once "../config.php";
-require_once "./functions.php";
+require_once "../include/functions.php";
 
 $showRows = 10;
+
+
+require_once "../tools/class.login.php";
+$log = new logmein();
+if($log->logincheck($_SESSION['loggedin']) == false) {   
+  header("Location: login.php");
+}
+else {
+  $logged = 1;
+}
+require_once '../etc/menu.php';
+//session_start();
+$usrlvl = $_SESSION['userlevel'];
+
+if ($usrlvl < 3) {
+  echo "<h3>Σφάλμα: Αυτή η ενέργεια μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή...</h3>";
+  echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+  die();
+}
+
 
 if (isset($_POST['submit'])) {
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
@@ -27,8 +47,8 @@ if (isset($_POST['submit'])) {
     // get only 1st worksheet
     $worksheet = $objPHPExcel->getSheet(0);
     $worksheetTitle = $worksheet->getTitle();
-    if (!strcmp($worksheetTitle,'Κλάδοι'))
-        continue;
+    // if (!strcmp($worksheetTitle,'Κλάδοι'))
+    //     continue;
     $highestRow = $worksheet->getHighestRow(); // e.g. 10
     if ($highestRow > $showRows)
         $highestRowprint = $showRows;
@@ -42,8 +62,8 @@ if (isset($_POST['submit'])) {
     echo "<p>Το φύλλο '".$worksheetTitle."' έχει: ";
     echo $nrColumns . ' στήλες';
     echo ' και ' . $highestRow . ' γραμμές (<strong>' . ($highestRow-1) . ' εγγραφές</strong>).</p>';
-    if ($highestRow == 1)
-        continue;
+    // if ($highestRow == 1)
+    //     continue;
     echo '<h4>Δείγμα Δεδομένων (πρώτες '. $showRows . ' γραμμές):</h4> <table width="100%" cellpadding="1" cellspacing="0" border="1">';
     for ($row = 1; $row <= $highestRowprint; ++ $row) {
       echo '<tr>';
@@ -109,7 +129,6 @@ if (isset($_POST['submit'])) {
   }
 }
 else {
-  require '../etc/menu.php';
   echo "<h2>Εισαγωγή αναπληρωτών εκπαιδευτικών από αρχείο excel</h2>";
   print "<p>Πραγματοποιήστε μαζική εισαγωγή αναπληρωτών εκπ/κών στο σύστημα.</p>\n";
   print '<p>Χρησιμοποιήστε το <a href="import_sample.xls">πρότυπο βιβλίο excel</a>, ακολουθώντας τις οδηγίες που βρίσκονται σε αυτό <small>(ως σχόλια στα κελιά των κεφαλίδων)</small>.</p>';

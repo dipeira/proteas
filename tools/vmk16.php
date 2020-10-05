@@ -1,7 +1,7 @@
 <?php
     header('Content-type: text/html; charset=utf-8'); 
     Require "../config.php";
-    Require "../functions.php";
+    Require "../include/functions.php";
         session_start();
         ini_set('max_execution_time', 300);  //300 seconds = 5 minutes
     
