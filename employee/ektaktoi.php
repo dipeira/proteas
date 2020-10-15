@@ -165,6 +165,9 @@
               case 4:
                   $katast = "Διαθεσιμότητα";
                   break;
+              case 5:
+                  $katast = "Απουσία COVID-19";
+                  break;
           }
        }
                 ?>

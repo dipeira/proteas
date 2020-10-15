@@ -183,6 +183,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               case 4:
                   $katast = "Διαθεσιμότητα";
                   break;
+              case 5:
+                  $katast = "Απουσία COVID-19";
+                  break;
             }
             // updated: 05-09-2013
             $updated = mysqli_result($result, 0, "updated");

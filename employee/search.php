@@ -170,6 +170,7 @@
 		echo "<option value=\"2\">Λύση Σχέσης-Παραίτηση</option>";
 		echo "<option value=\"3\">Άδεια</option>";
 		echo "<option value=\"4\">Διαθεσιμότητα</option>";
+		echo "<option value=\"5\">Απουσία COVID-19</option>";
 		echo "</select>";
     //echo "</td><td></td><td></td><td></td>";
     echo "</td><td>Συνολική Υπηρεσία <br><small>(από διορισμό + προϋπηρεσία)</small></td><td><input type='checkbox' name = 'dspsynol'></td><td>";

@@ -445,6 +445,9 @@ if ($flag) {
                 case 4:
                     echo "<td>Διαθεσιμότητα</td>\n";
                     break;
+                case 5:
+                    echo "<td>Απουσία COVID-19</td>\n";
+                    break;
                 }
             }
             if (isset($_POST['dspsynol'])) {
