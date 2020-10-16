@@ -46,8 +46,8 @@ if ($_SESSION['auth'])
     
     // create database
     # MySQL with PDO_MYSQL  
-    $db = new PDO("mysql:host=$db_host", $db_user, $db_password);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db = new PDO( "mysql:host=$db_host", $db_user, $db_password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8") );
     $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
     $stmt = $db->prepare("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME =:dbname");

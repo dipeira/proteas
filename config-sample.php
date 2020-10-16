@@ -27,5 +27,5 @@
     'ΠΕΠ' => 'ΠΕΠ Κρήτης'
   );
 
-  require_once('tools/init_params.php');
+  require_once('include/init_params.php');
 ?>

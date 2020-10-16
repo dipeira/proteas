@@ -1141,6 +1141,83 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tbody></table>";
             echo "<br>";
         }
+        
+        //Aπουσία COVID-19
+        $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
+        $query_ekt = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
+        //echo $query;
+        $result = mysqli_query($mysqlconnection, $query);
+        $result_ekt = mysqli_query($mysqlconnection, $query_ekt);
+        $num = mysqli_num_rows($result);
+        $num_ekt = mysqli_num_rows($result_ekt);
+        //$sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
+        if (($num + $num_ekt) > 0){
+            echo "<h2>Απουσία COVID-19</h2>";
+            if ($num > 0){
+                echo "<h3>Μόνιμοι</h3>";
+                echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                echo "<thead><tr>";
+                echo "<th>A/A</th>";
+                echo "<th>Επώνυμο</th>";
+                echo "<th>Όνομα</th>";
+                echo "<th>Κλάδος</th>";
+                echo "<th>Τύπος Απασχόλησης</th>";
+                echo "<th>Ώρες</th>";
+                echo "<th>Σχόλια</th>";
+                echo "</tr></thead>\n<tbody>";
+                while ($row = mysqli_fetch_assoc($result))
+                {
+                    $id = $row['id'];
+                    $name = $row['name'];
+                    $surname = $row['surname'];
+                    $klados_id = $row['klados'];
+                    $klados = getKlados($klados_id, $mysqlconnection);
+                    $typos = $row['type'];
+                    $type = get_type($typos, $mysqlconnection);
+                    $comments = $row['comments'];
+                    $wres = $row['hours'];
+                    
+                    echo "<tr>";
+                    echo "<td>".($i+1)."</td>";
+                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                    echo "</tr>";
+                    echo "</tbody></table>";
+                }
+            }
+            // ektaktoi
+            if ($num_ekt > 0){
+                echo "<h3>Αναπληρωτές</h3>";
+                // $i=0;
+                echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                echo "<thead><tr>";
+                echo "<th>A/A</th>";
+                echo "<th>Επώνυμο</th>";
+                echo "<th>Όνομα</th>";
+                echo "<th>Κλάδος</th>";
+                echo "<th>Τύπος Απασχόλησης</th>";
+                echo "<th>Ώρες</th>";
+                echo "<th>Σχόλια</th>";
+                echo "</tr></thead>\n<tbody>";
+                while ($row = mysqli_fetch_assoc($result_ekt))
+                {
+                    $id = $row['id'];
+                    $name = $row['name'];
+                    $surname = $row['surname'];
+                    $klados_id = $row['klados'];
+                    $klados = getKlados($klados_id, $mysqlconnection);
+                    $typos = $row['type'];
+                    $type = get_type($typos, $mysqlconnection);
+                    $comments = $row['comments'];
+                    $wres = $row['hours'];
+                    
+                    echo "<tr>";
+                    echo "<td>".($i+1)."</td>";
+                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                    echo "</tr>";
+                    echo "</tbody></table>";
+                }
+            }
+        }
         if ($_SESSION['requests']) {
             display_school_requests($sch, $sxol_etos, $mysqlconnection, true);
         }
