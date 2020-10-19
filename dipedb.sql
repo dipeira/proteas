@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES greek */;
+/*!40101 SET NAMES utf8 */;
 
 
 -- --------------------------------------------------------
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `adeia` (
   `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `adeia_deleted` (
   `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `adeia_del_log` (
   `userid` int(11) NOT NULL,
   `ektaktos` tinyint(4) NOT NULL COMMENT '1 gia ektakto proswpiko',
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `adeia_ekt` (
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `sxoletos` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `adeia_ekt_deleted` (
   `logos` varchar(70) NOT NULL COMMENT 'Λόγος (για ειδικές)',
   `comments` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `adeia_ekt_type` (
   `id` int(11) NOT NULL,
   `type` varchar(50) NOT NULL,
   `descr` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `adeia_ekt_type`
@@ -151,7 +151,7 @@ INSERT INTO `adeia_ekt_type` (`id`, `type`, `descr`) VALUES
 (9, 'Μεταφορά Κυοφορίας', ''),
 (10, 'Άνευ Αποδοχών', ''),
 (11, 'Λοιπές', ''),
-(12, '?νευ Αποδοχών 4 μηνών (ανατροφής)', ''),
+(12, 'Άνευ Αποδοχών 4 μηνών (ανατροφής)', ''),
 (13, 'Εκλογική', ''),
 (15, 'Μετάγγισης αίματος', ''),
 (16, 'Ειδική γονική άδεια', ''),
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `adeia_type` (
   `id` int(11) NOT NULL,
   `type` varchar(50) NOT NULL,
   `descr` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `adeia_type`
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `apofaseis` (
   `sent` tinyint(4) NOT NULL,
   `result` text NOT NULL,
   `stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `apofaseis` (
 CREATE TABLE IF NOT EXISTS `dimos` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `dimos`
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `ekdromi` (
   `date` date NOT NULL,
   `comments` text NOT NULL,
   `sxol_etos` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `thesi` int(11) NOT NULL COMMENT '0 Εκπαιδευτικός,1 Διευθυντής/Προϊστάμενος,2 Τμήμα Ένταξης,3 Παράλληλη στήριξη,4 Τάξη Υποδοχής',
   `wres` int(11) NOT NULL,
   `email` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_log` (
   `action` int(11) NOT NULL COMMENT '0 add, 1 edit, 2 delete',
   `ip` varchar(30) NOT NULL,
   `query` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -309,29 +309,29 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_log` (
 
 CREATE TABLE IF NOT EXISTS `ektaktoi_old` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(20) CHARACTER SET greek NOT NULL,
-  `surname` varchar(30) CHARACTER SET greek NOT NULL,
-  `patrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
-  `mhtrwnymo` varchar(30) CHARACTER SET greek NOT NULL,
+  `name` varchar(20) CHARACTER SET utf8 NOT NULL,
+  `surname` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `patrwnymo` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `mhtrwnymo` varchar(30) CHARACTER SET utf8 NOT NULL,
   `klados` int(11) NOT NULL,
-  `sx_yphrethshs` varchar(30) CHARACTER SET greek NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
-  `vathm` varchar(4) CHARACTER SET greek NOT NULL,
+  `sx_yphrethshs` varchar(30) CHARACTER SET utf8 NOT NULL COMMENT '0 κυρίως σχολείο, 1,2... συμπλήρωση ωραρίου',
+  `vathm` varchar(4) CHARACTER SET utf8 NOT NULL,
   `hm_vathm` date NOT NULL,
   `mk` tinyint(2) NOT NULL,
   `hm_mk` date NOT NULL,
-  `analipsi` varchar(5) CHARACTER SET greek NOT NULL,
+  `analipsi` varchar(5) CHARACTER SET utf8 NOT NULL,
   `hm_anal` date NOT NULL,
   `hm_apox` date NOT NULL,
-  `ya` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Υπουργική Απόφαση',
-  `apofasi` varchar(50) CHARACTER SET greek NOT NULL COMMENT 'Απόφαση Δ/ντή',
+  `ya` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT 'Υπουργική Απόφαση',
+  `apofasi` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT 'Απόφαση Δ/ντή',
   `met_did` tinyint(11) NOT NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
-  `comments` longtext CHARACTER SET greek NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
-  `afm` varchar(11) CHARACTER SET greek NOT NULL,
+  `comments` longtext CHARACTER SET utf8 NOT NULL,
+  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
+  `afm` varchar(11) CHARACTER SET utf8 NOT NULL,
   `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης (1 ωρομ, 2 αναπλ, 3 αναπλ ΕΣΠΑ, 4 ΕΕΠ, 5 ΕΒΠ)',
-  `stathero` varchar(30) CHARACTER SET greek NOT NULL,
-  `kinhto` varchar(30) CHARACTER SET greek NOT NULL,
-  `metakinhsh` text CHARACTER SET greek NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
+  `stathero` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `kinhto` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `metakinhsh` text CHARACTER SET utf8 NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `thesi` int(11) NOT NULL,
@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_old` (
 CREATE TABLE IF NOT EXISTS `ektaktoi_types` (
   `id` int(11) NOT NULL,
   `type` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ektaktoi_types`
@@ -401,7 +401,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -425,7 +425,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `katoikon_ews` date NOT NULL,
   `katoikon_comm` text NOT NULL,
   `email` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -464,7 +464,7 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -487,7 +487,7 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `katoikon_apo` date NOT NULL,
   `katoikon_ews` date NOT NULL,
   `katoikon_comm` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `employee_log` (
   `action` int(11) NOT NULL COMMENT '0 add, 1 edit, 2 delete',
   `ip` varchar(30) NOT NULL,
   `query` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -541,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 ?δεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -576,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `klados` (
   `id` int(11) NOT NULL,
   `perigrafh` varchar(30) NOT NULL,
   `onoma` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `klados`
@@ -626,7 +626,7 @@ CREATE TABLE IF NOT EXISTS `logon` (
   `adeia` tinyint(4) NOT NULL COMMENT 'an 1 tote ektypwnei adeies',
   `username` varchar(20) NOT NULL,
   `lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `logon`
@@ -646,18 +646,18 @@ CREATE TABLE IF NOT EXISTS `params` (
   `name` varchar(20) NOT NULL COMMENT 'Όνομα Παραμέτρου',
   `value` varchar(100) NOT NULL COMMENT 'Τιμή Παραμέτρου',
   `descr` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `params`
 --
 
 INSERT INTO `params` (`id`, `name`, `value`, `descr`) VALUES
-(5, 'sxol_etos', '201819', 'Σχολικό έτος (να αλλάζει κάθε 1η Σεπτέμβρη)'),
+(5, 'sxol_etos', '202021', 'Σχολικό έτος (να αλλάζει κάθε 1η Σεπτέμβρη & π.χ. το 2020-21 να εισάγεται ως 202021)'),
 (6, 'head_title', 'Ο Δ/ντής Π.Ε. XXXXXX', 'Τίτλος Δ/ντή (για βεβαιώσεις)'),
 (7, 'head_name', 'XXXXX XXXXX', 'Ονοματεπώνυμο Δ/ντή'),
-(8, 'endofyear', '21-06-2019', 'Ημέρα έκδοσης βεβαιώσεων αναπληρωτών'),
-(9, 'endofyear2', '21-06-2019', 'Τελευταία ημέρα εργασίας αναπληρωτών (για βεβαιώσεις)'),
+(8, 'endofyear', '21-06-2021', 'Ημέρα έκδοσης βεβαιώσεων αναπληρωτών'),
+(9, 'endofyear2', '21-06-2021', 'Τελευταία ημέρα εργασίας αναπληρωτών (για βεβαιώσεις)'),
 (10, 'protapol', '99999', 'Πρωτόκολλο απόλυσης'),
 (11, 'yp_wr', '24', 'Υποχρεωτικό ωράριο βαθμίδας'),
 (12, 'dnsh', 'Π.Ε. XXXXXXX', 'Διεύθυνση εκπαίδευσης');
@@ -677,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `praxi` (
   `ada_apof` varchar(30) NOT NULL,
   `sxolio` varchar(300) NOT NULL,
   `type` varchar(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `praxi`
@@ -702,7 +702,7 @@ CREATE TABLE IF NOT EXISTS `praxi_old` (
   `sxolio` varchar(300) NOT NULL,
   `type` varchar(10) NOT NULL,
   `sxoletos` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=greek;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 
 --
@@ -714,7 +714,7 @@ CREATE TABLE IF NOT EXISTS `school` (
   `code` varchar(10) NOT NULL COMMENT '7-ψήφιος Κωδικός Υπουργείου',
   `category` int(10) NOT NULL COMMENT 'κατηγορία σχολείου: 1 - Α, 2 - Β κλπ.',
   `type` int(4) NOT NULL COMMENT '0 λοιπά, 1 Δημ, 2 Νηπ.',
-  `eaep` int(2) NOT NULL,
+  `eaep` int(2) DEFAULT NULL,
   `name` varchar(40) NOT NULL,
   `address` varchar(40) NOT NULL,
   `tk` int(5) NOT NULL COMMENT 'Ταχυδρομικός κώδικας',
@@ -722,34 +722,34 @@ CREATE TABLE IF NOT EXISTS `school` (
   `fax` varchar(18) NOT NULL,
   `email` varchar(50) NOT NULL,
   `organikothta` int(11) NOT NULL,
-  `organikes` text NOT NULL,
-  `leitoyrg` int(11) NOT NULL COMMENT 'Λειτουργικότητα',
-  `students` text NOT NULL COMMENT 'Οι τάξεις να χωρίζονται με κόμμα',
-  `tmimata` varchar(60) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `ekp_ee` varchar(10) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `entaksis` varchar(30) NOT NULL,
-  `ypodoxis` int(11) NOT NULL,
-  `frontistiriako` int(11) NOT NULL,
-  `ted` smallint(6) NOT NULL,
-  `oloimero` int(11) NOT NULL,
-  `oloimero_stud` int(11) NOT NULL,
-  `oloimero_tea` int(11) NOT NULL COMMENT 'Δάσκαλοι ολοημέρου',
-  `oloimero_nip` varchar(40) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `klasiko` varchar(40) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `nip` varchar(20) NOT NULL COMMENT 'Nα χωρίζονται με κόμμα',
-  `comments` text NOT NULL,
-  `kena_org` varchar(200) NOT NULL,
-  `kena_leit` varchar(200) NOT NULL,
+  `organikes` text DEFAULT NULL,
+  `leitoyrg` int(11) DEFAULT NULL COMMENT 'Λειτουργικότητα',
+  `students` text DEFAULT NULL COMMENT 'Οι τάξεις να χωρίζονται με κόμμα',
+  `tmimata` varchar(60) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `ekp_ee` varchar(10) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `entaksis` varchar(30) DEFAULT NULL,
+  `ypodoxis` int(11) DEFAULT NULL,
+  `frontistiriako` int(11) DEFAULT NULL,
+  `ted` smallint(6) DEFAULT NULL,
+  `oloimero` int(11) DEFAULT NULL,
+  `oloimero_stud` int(11) DEFAULT NULL,
+  `oloimero_tea` int(11) DEFAULT NULL COMMENT 'Δάσκαλοι ολοημέρου',
+  `oloimero_nip` varchar(40) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `klasiko` varchar(40) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `nip` varchar(20) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `comments` text DEFAULT NULL,
+  `kena_org` varchar(200) DEFAULT NULL,
+  `kena_leit` varchar(200) DEFAULT NULL,
   `type2` tinyint(1) NOT NULL COMMENT '0 δημόσιο, 1 ιδιωτικό, 2 ειδικό',
-  `dimos` tinyint(4) NOT NULL COMMENT 'Από τον πίνακα dimos',
-  `titlos` varchar(100) NOT NULL COMMENT 'τίτλος σχολείου (ολογράφως)',
+  `dimos` tinyint(4) DEFAULT NULL COMMENT 'Από τον πίνακα dimos',
+  `titlos` varchar(100) DEFAULT NULL COMMENT 'τίτλος σχολείου (ολογράφως)',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `anenergo` tinyint(4) NOT NULL,
-  `perif` int(11) NOT NULL,
-  `systeg` int(11) NOT NULL,
-  `vivliothiki` int(11) NOT NULL,
-  `archive` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=greek;
+  `anenergo` tinyint(4) DEFAULT NULL,
+  `perif` int(11) DEFAULT NULL,
+  `systeg` int(11) DEFAULT NULL,
+  `vivliothiki` int(11) DEFAULT NULL,
+  `archive` text DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `school`
@@ -757,10 +757,10 @@ CREATE TABLE IF NOT EXISTS `school` (
 
 INSERT INTO `school` (`id`, `code`, `category`, `type`, `eaep`, `name`, `address`, `tk`, `tel`, `fax`, `email`, `organikothta`, `organikes`, `leitoyrg`, `students`, `tmimata`, `ekp_ee`, `entaksis`, `ypodoxis`, `frontistiriako`, `ted`, `oloimero`, `oloimero_stud`, `oloimero_tea`, `oloimero_nip`, `klasiko`, `nip`, `comments`, `kena_org`, `kena_leit`, `type2`, `dimos`, `titlos`, `updated`, `anenergo`, `perif`, `systeg`, `vivliothiki`) VALUES
 (1, '2222222', 0, 0, 0, 'Διάθεση ΠΥΣΠΕ', '', 0, '0', '0', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Διάθεση ΠΥΣΠΕ', '2015-06-16 12:04:27', 0, 0, 0, 0),
-(387, '1234567', 0, 0, 0, '?γνωστο', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?γνωστο', '2015-06-16 12:04:16', 0, 0, 0, 0),
-(388, '', 0, 0, 0, 'Άλλο ΠΥΣΠΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?λλο ΠΥΣΠΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(387, '1234567', 0, 0, 0, 'Άγνωστο', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άγνωστο', '2015-06-16 12:04:16', 0, 0, 0, 0),
+(388, '', 0, 0, 0, 'Άλλο ΠΥΣΠΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άλλο ΠΥΣΠΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
 (389, '', 0, 0, 0, 'Απόσπαση σε φορέα', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση σε φορέα', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(394, '', 0, 0, 0, 'Άλλο ΠΥΣΔΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '?λλο ΠΥΣΔΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(394, '', 0, 0, 0, 'Άλλο ΠΥΣΔΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άλλο ΠΥΣΔΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
 (397, '', 0, 0, 0, 'Σχολικός Σύμβουλος', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Σχολικός Σύμβουλος', '0000-00-00 00:00:00', 0, 0, 0, 0),
 (398, '', 0, 0, 0, 'Δ/νση ΠΕ Ηρακλείου', 'Μεταξοχωρίου 15', 0, '2810529300', '', 'mail@dipe.ira.sch.gr', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', 'Για διοικητικούς', '', '', 0, 4, 'Δ/νση ΠΕ Ηρακλείου', '2018-10-15 10:33:24', 0, 0, 0, 0),
 (399, '', 0, 0, 0, 'Απόσπαση στο εξωτερικό', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση στο εξωτερικό', '0000-00-00 00:00:00', 0, 0, 0, 0);
@@ -778,7 +778,7 @@ CREATE TABLE IF NOT EXISTS `yphrethsh` (
   `hours` varchar(10) NOT NULL,
   `organikh` varchar(10) NOT NULL,
   `sxol_etos` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -792,7 +792,7 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_ekt` (
   `yphrethsh` varchar(10) NOT NULL,
   `hours` varchar(10) NOT NULL,
   `sxol_etos` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=greek;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Indexes for dumped tables
