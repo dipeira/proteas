@@ -228,12 +228,6 @@ function thesicmb($thesi)
     case 2:
         $th = "Διευθυντής/Προϊστάμενος";
         break;
-    case 3:
-        $th = "Τμήμα Ένταξης";
-        break;
-    case 7:
-      $th = "Τάξη Υποδοχής";
-      break;
     case 4:
         $th = "Διοικητικός";
         break;
@@ -251,7 +245,7 @@ function thesiselectcmb($thesi,$hasblank = false)
 {
     echo "<td>";
     echo "<div class='tooltip'>Θέση";
-    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Υποδιευθυντής, Διευθυντής/Προϊστάμενος, Τμήμα ένταξης, Τάξη υποδοχής, Διοικητικός, Ιδιωτικός, Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</span>";
+    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Εκπαιδευτικός, Υποδιευθυντής, Διευθυντής/Προϊστάμενος, Διοικητικός, Ιδιωτικός, Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</span>";
     echo "</div>";
     echo "</td><td>";
     echo $hasblank ? "</td><td>" : '';
@@ -271,16 +265,6 @@ function thesiselectcmb($thesi,$hasblank = false)
     } else {
         echo "<option value='2'>Διευθυντής/Προϊστάμενος</option>";
     }
-    if ($thesi == 3) {
-        echo "<option value='3' selected=\"selected\">Τμήμα Ένταξης</option>";    
-    } else {
-        echo "<option value='3'>Τμήμα Ένταξης</option>";
-    }
-    if ($thesi == 7) {
-      echo "<option value='7' selected=\"selected\">Τάξη Υποδοχής</option>";    
-    } else {
-        echo "<option value='7'>Τάξη Υποδοχής</option>";
-    }
     if ($thesi == 4) {
         echo "<option value='4' selected=\"selected\">Διοικητικός</option>";    
     } else {
@@ -295,6 +279,50 @@ function thesiselectcmb($thesi,$hasblank = false)
         echo "<option value='6' selected=\"selected\">Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";    
     } else {
         echo "<option value='6'>Δ/ντής-Πρ/νος Ιδιωτικού Σχ.</option>";
+    }
+    echo "</td>";
+}
+
+function ent_ty_cmb($entty)
+{
+    switch ($entty)
+    {
+    case 0:
+        $th = "Καμία";
+        break;
+    case 1:
+        $th = "Τμήμα Ένταξης";
+        break;
+    case 2:
+        $th = "Τάξη Υποδοχής";
+        break;
+    }
+    return $th;
+}
+
+function ent_ty_selectcmb($entty,$hasblank = false)
+{
+    echo "<td>";
+    echo "<div class='tooltip'>Υπηρέτηση σε Τμήμα Ένταξης <br>/ Τάξη Υποδοχής";
+    echo "<span class='tooltiptext'>Επιλέξτε ένα από: Καμία, Τμήμα Ένταξης, Τάξη Υποδοχής</span>";
+    echo "</div>";
+    echo "</td><td>";
+    echo $hasblank ? "</td><td>" : '';
+    echo "<select name=\"entty\">";
+    if ($entty == 0) {
+        echo "<option value='0' selected=\"selected\">Καμία</option>";
+    } else {
+        echo "<option value='0'>Καμία</option>";
+    }
+    if ($entty == 1) {
+        echo "<option value='1' selected=\"selected\">Τμήμα Ένταξης</option>";
+    } else {
+        echo "<option value='1'>Τμήμα Ένταξης</option>";
+    }
+    if ($entty == 2) {
+        echo "<option value='2' selected=\"selected\">Τάξη Υποδοχής</option>";    
+    } else {
+        echo "<option value='2'>Τάξη Υποδοχής</option>";
     }
     echo "</td>";
 }
