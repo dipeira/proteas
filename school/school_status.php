@@ -1015,9 +1015,21 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $typos = mysqli_result($result, $i, "etype");
                 $type = get_type($typos, $mysqlconnection);
                 $thesi = mysqli_result($result, $i, "thesi");
+                $entty = mysqli_result($result, $i, "ent_ty");
                 $praxi = mysqli_result($result, $i, "praxiname");
-                $type .= $thesi == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
-                $type .= $thesi == 3 ? '<small> (Παράλληλη στήριξη)</small>' : '';
+                switch ($entty) {
+                    case 1:
+                        $type .= "<small> (Τμήμα ένταξης)</small>";
+                        break;
+                    case 2:
+                        $type .= "<small> (Τάξη υποδοχής)</small>";
+                        break;
+                    case 3:
+                        $type .= "<small> (Παράλληλη στήριξη)</small>";
+                        break;
+                    default:
+                        break;
+                }
 
                 $comments = mysqli_result($result, $i, "comments");
                 $wres = mysqli_result($result, $i, "hours");

@@ -296,14 +296,18 @@ function ent_ty_cmb($entty)
     case 2:
         $th = "Τάξη Υποδοχής";
         break;
+    case 3:
+        $th = "Παράλληλη στήριξη";
+        break;
     }
     return $th;
 }
 
-function ent_ty_selectcmb($entty,$hasblank = false)
+function ent_ty_selectcmb($entty,$hasblank = false, $isanapl = false)
 {
     echo "<td>";
     echo "<div class='tooltip'>Υπηρέτηση σε Τμήμα Ένταξης <br>/ Τάξη Υποδοχής";
+    echo $isanapl ? " / Παράλληλη στήριξη" : '';
     echo "<span class='tooltiptext'>Επιλέξτε ένα από: Καμία, Τμήμα Ένταξης, Τάξη Υποδοχής</span>";
     echo "</div>";
     echo "</td><td>";
@@ -323,6 +327,13 @@ function ent_ty_selectcmb($entty,$hasblank = false)
         echo "<option value='2' selected=\"selected\">Τάξη Υποδοχής</option>";    
     } else {
         echo "<option value='2'>Τάξη Υποδοχής</option>";
+    }
+    if ($isanapl){
+        if ($entty == 3) {
+            echo "<option value='3' selected=\"selected\">Παράλληλη στήριξη</option>";    
+        } else {
+            echo "<option value='3'>Παράλληλη στήριξη</option>";
+        }
     }
     echo "</td>";
 }
@@ -383,6 +394,7 @@ function thesianaplselectcmb($thesi)
     } else {
         echo "<option value='3'>Παράλληλη στήριξη</option>";
     }
+    echo "</td></tr>";
 }
 
 function schoolCombo($schid,$conn)

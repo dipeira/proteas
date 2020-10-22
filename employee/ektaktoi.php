@@ -147,6 +147,7 @@
           $praxi = mysqli_result($result, 0, "praxi");
           $updated= mysqli_result($result, 0, "updated");
           $thesi = mysqli_result($result, 0, "thesi");
+          $entty = mysqli_result($result, 0, "ent_ty");
           $wres = mysqli_result($result, 0, "wres");
           $email = mysqli_result($result, 0, "email");
           
@@ -380,6 +381,7 @@ if ($_GET['op']=="edit")
         echo "</form>";
         echo "</div>";
         thesianaplselectcmb($thesi);
+        echo "<tr>".ent_ty_selectcmb($entty,false,true)."</tr>";
         echo "	</table>";
         
         echo "	<input type='hidden' name = 'id' value='$id'>";
@@ -493,6 +495,7 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Α.Δ.Α. Y.A.</td><td colspan=3><a href='https://diavgeia.gov.gr/decision/view/$ada' target='_blank'>$ada</a></td></tr>";
         echo "<tr><td>Απόφαση Δ/ντή</td><td colspan=3>$apofasi&nbsp;&nbsp;<small>(Α.Δ.Α.:&nbsp;<a href='https://diavgeia.gov.gr/decision/view/$ada_apof' target='_blank'>$ada_apof</a>)</small></td></tr>";
         echo "<tr><td>Θέση</td><td colspan=3>".thesianaplcmb($thesi)."</td></tr>";
+        echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής / Παράλληλη στήριξη</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
         
 
         echo "<tr><td>Βεβαίωση υπηρεσίας έως: </td><td>";
