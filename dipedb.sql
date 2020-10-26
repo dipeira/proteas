@@ -282,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `thesi` int(11) NULL COMMENT '0 Εκπαιδευτικός,1 Διευθυντής/Προϊστάμενος',
-  `ent_ty` tinyint(4) NULL COMMENT '0, Όχι / 1, Υπηρέτηση σε Τμήμα Ένταξης / 2, Τάξη υποδοχής / 3, Παράλληλη στήριξη',
+  `ent_ty` tinyint(4) NULL DEFAULT '0' COMMENT '0, Όχι / 1, Υπηρέτηση σε Τμήμα Ένταξης / 2, Τάξη υποδοχής / 3, Παράλληλη στήριξη',
   `wres` int(11) NULL,
   `email` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -381,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `sx_organikhs` int(11) NULL,
   `sx_yphrethshs` int(11) NULL,
   `thesi` tinyint(4) NULL COMMENT '0 εκπαιδευτικός, 1 υποδιευθυντης, 2 δ/ντής-πρ/νος, 4 Διοικητικός, 5 Ιδιωτικός, 6 Δ/ντής-Πρ/νος Ιδιωτικού Σχ.',
-  `ent_ty` tinyint(4) NULL COMMENT '0, Όχι / 1, Υπηρέτηση σε Τμήμα Ένταξης / 2, Τάξη υποδοχής',
+  `ent_ty` tinyint(4) NULL DEFAULT '0' COMMENT '0, Όχι / 1, Υπηρέτηση σε Τμήμα Ένταξης / 2, Τάξη υποδοχής',
   `org_ent` BOOLEAN NULL COMMENT 'Οργανική σε τμήμα ένταξης',
   `fek_dior` varchar(10) NULL,
   `hm_dior` date NULL,

@@ -767,7 +767,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
         //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
         //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
-        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND (klados=2 OR klados=1)";
+        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND ent_ty=0 AND (klados=2 OR klados=1)";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -836,7 +836,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         
         // Οργανική αλλού και υπηρετούν
-        $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5) AND status=1 ORDER BY klados";
+        $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5)  AND ent_ty=0 AND status=1 ORDER BY klados";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {

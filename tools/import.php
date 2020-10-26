@@ -40,13 +40,14 @@
     echo "<h2> Εισαγωγή δεδομένων στη βάση δεδομένων </h2>";
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
     echo "<b>Βήμα 1.</b> Επιλογή αρχείου προς συμπλήρωση:<br>";
-    echo "<ul><li><a href='employees.csv'>Μόνιμοι</a></li>";
+    echo "<ul>";
     echo "<li><a href='schools.csv'>Σχολεία</a></li>";
+    echo "<li><a href='employees.csv'>Μόνιμοι</a></li>";
     echo "<li><a href='students_ds.csv'>Μαθητές / Τμήματα Δ.Σ.</a></li>";
     echo "<li><a href='students_nip.csv'>Μαθητές / Τμήματα Νηπ.</a></li></ul>";
     echo "<b>Βήμα 2.</b> Επιλογή τύπου δεδομένων:<br>";
-    echo "<input type='radio' name='type' value='1'>α) Μόνιμοι<br>";
-    echo "<input type='radio' name='type' value='2'>β) Σχολεία<br>";
+    echo "<input type='radio' name='type' value='2'>α) Σχολεία<br>";
+    echo "<input type='radio' name='type' value='1'>β) Μόνιμοι<br>";
     echo "<input type='radio' name='type' value='3'>γ) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
     echo "<input type='radio' name='type' value='4'>δ) Μαθητές / Τμήματα Νηπ.<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα γ, δ να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
@@ -110,7 +111,7 @@
         {
           $csvcols = count($data);
           if ($_POST['type'] == 1){
-            $tblcols = 25;
+            $tblcols = 24;
           }
           else if ($_POST['type'] == 2){
             $tblcols = 12;
@@ -137,12 +138,12 @@
           case 1:
             // check school codes
             $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-            $sx_organ = getSchoolFromCode($data[23],$mysqlconn);
-            $sx_yphr = getSchoolFromCode($data[24],$mysqlconn);
+            $sx_organ = getSchoolFromCode($data[22],$mysqlconn);
+            $sx_yphr = getSchoolFromCode($data[23],$mysqlconn);
             if (!$sx_organ || !$sx_yphr){
               $error = true;
               $er_msg = 'Σφάλμα: Δε βρέθηκε ο 7ψήφιος κωδικός σχολείου: ';
-              $er_msg .= !$sx_organ ? $data[24] : $data[23];
+              $er_msg .= !$sx_organ ? $data[22] : $data[23];
               $er_msg .= " (γραμμή ".($num+1).")";
               break;
             }
@@ -161,12 +162,13 @@
             $data[12] = date ("Y-m-d", strtotime($data[12]));
             // proceed to import
             $import="INSERT into employee(name,surname,patrwnymo,mhtrwnymo,klados,am,thesi,fek_dior,hm_dior,
-            vathm, hm_vathm, mk, hm_mk, hm_anal, met_did, proyp, proyp_not, status,
+            vathm, mk, hm_mk, hm_anal, met_did, proyp, proyp_not, status,
             afm, tel, address, idnum, amka, wres, sx_organikhs, sx_yphrethshs)
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]',0,'$data[6]','$data[7]',
             '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$data[15]','$data[16]',
-            '$data[17]','$data[18]','$data[19]','$data[20]','$data[21]','$data[22]', $sx_organ, $sx_yphr)";
-            $ret = mysqli_query($mysqlconnection, $import);
+            '$data[17]','$data[18]','$data[19]','$data[20]','$data[21]', $sx_organ, $sx_yphr)";
+            $imp_8 = iconv('cp1253','utf-8',$import);
+            $ret = mysqli_query($mysqlconnection, $imp_8);
             if (!$ret) {
               $error = true;
             } else {
@@ -178,6 +180,7 @@
               mysqli_query($mysqlconnection,$query);
             }
             break;
+
           // schools
           case 2:
             // check if school code exists
@@ -190,13 +193,15 @@
             }
             $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2) 
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]','$data[6]','$data[7]','$data[8]','$data[9]','$data[10]','$data[11]')";
-            $ret = mysqli_query($mysqlconnection, $import);
+            $imp_8 = iconv('cp1253','utf-8',$import);
+            $ret = mysqli_query($mysqlconnection, $imp_8);
             if (!$ret) {
               $error = true;
             } else {
               $saves++;
             }
             break;
+
           // students ds
           case 3:
             // check if school code exists
@@ -242,6 +247,7 @@
               }
             }
             break;
+
           // students nip
           case 4:
             // check if school code exists
