@@ -1235,8 +1235,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".($i+1)."</td>";
                     echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                     echo "</tr>";
-                    echo "</tbody></table>";
                 }
+                echo "</tbody></table>";
             }
             // ektaktoi
             if ($num_ekt > 0){
@@ -1268,8 +1268,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".($i+1)."</td>";
                     echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                     echo "</tr>";
-                    echo "</tbody></table>";
                 }
+                echo "</tbody></table>";
             }
         }
           echo "</div>"; // of personnel tab
