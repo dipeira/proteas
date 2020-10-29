@@ -358,7 +358,7 @@ function get_orgs($id, $mysqlconnection)
     // organika, not @ entaksis
     $query = "SELECT k.perigrafh as klname, count(*) as plithos 
     FROM employee e join klados k on e.klados = k.id 
-    WHERE e.sx_organikhs='$id' AND status IN (1,3) AND thesi IN (0,1,2) AND org_ent = 0
+    WHERE e.sx_organikhs='$id' AND status IN (1,3,5) AND thesi IN (0,1,2) AND org_ent = 0
     GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
     $ret = array();
@@ -369,7 +369,7 @@ function get_orgs($id, $mysqlconnection)
     }
     // @ entaksis
     $query = "SELECT count(*) as plithos FROM employee e 
-    WHERE e.sx_organikhs='$id' AND status IN (1,3) AND org_ent=1";
+    WHERE e.sx_organikhs='$id' AND status IN (1,3,5) AND org_ent=1";
     $result = mysqli_query($mysqlconnection, $query);
     while ($row = mysqli_fetch_array($result)){
       $plithos = strval($row['plithos']);

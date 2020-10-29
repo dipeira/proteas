@@ -184,7 +184,7 @@ if (isset($_REQUEST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET[
   }
   // include inactive employees
   if (!isset($_REQUEST['inactive'])) {
-    $text = " status IN (1,3)";
+    $text = " status IN (1,3,5)";
     if ($whflag) {
       $query .= " AND $text";
     } else {

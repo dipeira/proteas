@@ -137,7 +137,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         // οργανικά τοποθετηθέντες
         $klados_qry = ($type == 1) ? 2 : 1;
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3) AND thesi IN (0,1,2)";
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3,5) AND thesi IN (0,1,2)";
         $rs = mysqli_query($conn, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
         echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
@@ -1143,8 +1143,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         }
         
         //Aπουσία COVID-19
-        $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
-        $query_ekt = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
+        $query = "SELECT *,e.id as empid FROM employee e join yphrethsh y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
+        $query_ekt = "SELECT *,e.id as empid FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
         //echo $query;
         $result = mysqli_query($mysqlconnection, $query);
         $result_ekt = mysqli_query($mysqlconnection, $query_ekt);
@@ -1167,7 +1167,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</tr></thead>\n<tbody>";
                 while ($row = mysqli_fetch_assoc($result))
                 {
-                    $id = $row['id'];
+                    $id = $row['empid'];
                     $name = $row['name'];
                     $surname = $row['surname'];
                     $klados_id = $row['klados'];
@@ -1200,7 +1200,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</tr></thead>\n<tbody>";
                 while ($row = mysqli_fetch_assoc($result_ekt))
                 {
-                    $id = $row['id'];
+                    $id = $row['empid'];
                     $name = $row['name'];
                     $surname = $row['surname'];
                     $klados_id = $row['klados'];
@@ -1212,7 +1212,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     
                     echo "<tr>";
                     echo "<td>".($i+1)."</td>";
-                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                    echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                     echo "</tr>";
                     echo "</tbody></table>";
                 }

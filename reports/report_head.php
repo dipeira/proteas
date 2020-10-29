@@ -103,9 +103,9 @@
       $thesi = "(1,2)";
     }
     $query = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
-    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi IN $thesi AND status IN (1,3)";
+    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi IN $thesi AND status IN (1,3,5)";
     $query2 = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
-    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi = 1 AND status IN (1,3)";
+    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi = 1 AND status IN (1,3,5)";
 
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);

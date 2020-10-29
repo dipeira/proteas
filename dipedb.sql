@@ -401,7 +401,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `anatr` int(11) NOT NULL COMMENT 'se hmeres',
   `anatr_excel` int(11) NOT NULL COMMENT 'se hmeres',
   `comments` longtext NOT NULL,
-  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
+  `status` int(11) NOT NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα, 5 απουσία COVID-19',
   `afm` varchar(11) NOT NULL,
   `eidikh` tinyint(1) NOT NULL,
   `tel` varchar(40) NOT NULL,

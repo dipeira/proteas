@@ -250,7 +250,7 @@
         
         // οργανικά τοποθετηθέντες
         $klados_qry = ($type == 1) ? 2 : 1;
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3) AND thesi IN (0,1,2)";
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3,5) AND thesi IN (0,1,2)";
         $rs = mysqli_query($conn, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
         echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
