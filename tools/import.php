@@ -33,10 +33,10 @@
     echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτής της ενέργειας. Επικοινωνήστε με το διαχειριστή σας.</h3>";
     die();
   }
-
+  
   if (!isset($_POST['submit']))
   {
-    echo "<IMG src='../images/logo.png' class='applogo'></a>";
+    require '../etc/menu.php';
     echo "<h2> Εισαγωγή δεδομένων στη βάση δεδομένων </h2>";
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
     echo "<b>Βήμα 1.</b> Επιλογή αρχείου προς συμπλήρωση:<br>";
@@ -58,7 +58,7 @@
     echo "</form>";
     echo "<br><a href='ektaktoi_import.php'>Εισαγωγή αναπληρωτών</a>";
     echo "<br><br>";
-    echo "<a href='../index.php'>Επιστροφή</a>";
+    echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     exit;
   }
 		

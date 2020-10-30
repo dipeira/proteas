@@ -303,13 +303,14 @@ function ent_ty_cmb($entty)
     return $th;
 }
 
-function ent_ty_selectcmb($entty,$hasblank = false, $isanapl = false)
+function ent_ty_selectcmb($entty,$hasblank = false, $isanapl = false, $has_space = false)
 {
     echo "<td>";
     echo "<div class='tooltip'>Υπηρέτηση σε Τμήμα Ένταξης <br>/ Τάξη Υποδοχής";
     echo $isanapl ? " / Παράλληλη στήριξη" : '';
     echo "<span class='tooltiptext'>Επιλέξτε ένα από: Καμία, Τμήμα Ένταξης, Τάξη Υποδοχής</span>";
     echo "</div>";
+    echo $has_space ? "<td></td>" : '';
     echo "</td><td>";
     echo $hasblank ? "</td><td>" : '';
     echo "<select name=\"entty\">";
