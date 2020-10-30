@@ -310,10 +310,10 @@ if ($_REQUEST['type']) {
             // τοποθετημένοι εκπ/κοί
             $top60 = $top60m = $top60ana = $top60ent = 0;
             // exclude ekp/koys@tmima entaksis
-            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi != 3";
+            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and ent_ty != 1";
             $res = mysqli_query($mysqlconnection, $qry);
             $top60m = mysqli_result($res, 0, 'pe60');
-            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi not in (2,3)";
+            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and ent_ty not in (1,2,3)";
             $res = mysqli_query($mysqlconnection, $qry);
             $top60ana = mysqli_result($res, 0, 'pe60');
             // only T.E.

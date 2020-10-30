@@ -27,6 +27,7 @@
   $stathero = $_POST['stathero'];
   $kinhto = $_POST['kinhto'];
   $thesi = $_POST['thesi'];
+  $entty = $_POST['entty'];
   $email = $_POST['email'];
   
   $ip = $_SERVER['REMOTE_ADDR'];
@@ -107,8 +108,8 @@
 
       if (!mysqli_num_rows($result))
       {
-            $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did, hm_apox, thesi,wres) ";
-            $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox',$thesi,24)";
+            $query0 = "INSERT INTO ektaktoi (name, surname, patrwnymo, mhtrwnymo, klados, sx_yphrethshs, analipsi, hm_anal, type, comments, afm, status, metakinhsh, praxi, stathero, kinhto, met_did, hm_apox, thesi, ent_tywres) ";
+            $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$yphr_arr[0]','$analipsi','$hm_anal','$type','$comments', '$afm', '$katast', '$metakinhsh', '$praxi', '$stathero', '$kinhto', '$met_did', '$hm_apox',$thesi,$entty,24)";
 
             $query = $query0.$query1;
             //echo $query;
@@ -138,7 +139,7 @@
           $before = mysqli_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
-          $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres,";
+          $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres, ent_ty=$entty";
           $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto',email='$email' WHERE id='$id'";
           $query = $query1.$query2.$query3;
 
@@ -165,7 +166,7 @@
           $before = mysqli_fetch_row($res);
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
-          $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,wres=$wres,";
+          $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,ent_ty=$entty,wres=$wres,";
           $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto', email='$email' WHERE id='$id'";
           $query = $query1.$query2.$query3;
           $qlog .= $query;

@@ -142,6 +142,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $sx_organ_id = mysqli_result($result, 0, "sx_organikhs");
             $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
             $thesi = mysqli_result($result, 0, "thesi");
+            $entty = mysqli_result($result, 0, "ent_ty");
             $patrwnymo = mysqli_result($result, 0, "patrwnymo");
             $mhtrwnymo = mysqli_result($result, 0, "mhtrwnymo");
             $afm = mysqli_result($result, 0, "afm");
@@ -473,9 +474,8 @@ if ($_GET['op']=="edit") {
     echo "<tr><td>Οργανική σε τμήμα ένταξης</td><td>";
     echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
     echo "</td></tr>";
-    echo "<tr>";    
-    thesiselectcmb($thesi); 
-    echo "</tr>";    
+    echo "<tr>".thesiselectcmb($thesi)."</tr>";
+    echo "<tr>".ent_ty_selectcmb($entty)."</tr>";
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
     echo "	<input type='submit' value='Επεξεργασία'>";
@@ -675,6 +675,7 @@ elseif ($_GET['op']=="view") {
     
     $th = thesicmb($thesi);
     echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
+    echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
     // history
     $hist_qry = "SELECT * FROM yphrethsh WHERE emp_id=$id AND sxol_etos<$sxol_etos";
     $hist_res = mysqli_query($mysqlconnection, $hist_qry);
@@ -889,10 +890,9 @@ if ($_GET['op']=="add") {
                echo "</td><td><input type=\"text\" name=\"yphr[]\" class=\"yphrow\" id=\"yphrow\" />";
                echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" size=1 />";
                echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-               echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-               echo "<tr>";     
-               thesiselectcmb(0);
-               echo "</tr>";
+               echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" /><tr>";
+               echo "<tr>".thesiselectcmb(0)."</tr>";
+               echo "<tr>".ent_ty_selectcmb(0)."</tr>";
         
     echo "</div>";
     echo "</tbody>";

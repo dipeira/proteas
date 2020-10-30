@@ -239,9 +239,21 @@ function print_latest_commits($lines = 20) {
     echo "<h3>Πρόσφατες αλλαγές - προσθήκες</h3>";
     echo "<table id='commits' class='imagetable' border='2'>";
     echo "<thead><th>ID</th><th>Μήνυμα Αλλαγής</th><th>Ημερομηνία - ώρα</th></thead><tbody>";
+    
+    // get latest version (commit) & check with installed version (if installed with git)
+    $rev = exec('git rev-parse --short HEAD');
+    if (strlen($rev) > 0){
+        echo "<h4>Εγκατεστημένη έκδοση: ". $rev;
+        $row = $dt[0];
+        $latest = substr($row->sha,0,7);
+        echo $rev == $latest ? " - Έχετε εγκαταστήσει την τελευταία έκδοση!</h4>":
+        " - Δεν έχετε εγκαταστήσει την τελευταία έκδοση. Παρακαλώ ενημερώστε!</h4>";
+    }
+
     foreach ($dt as $row) {
       echo "<tr>";
-      echo "<td><a href='".$url.$row->sha."' target ='_blank'>".substr($row->sha,0,6).'</a></td>';
+      $shortsha = substr($row->sha,0,7);
+      echo "<td><a href='".$url.$row->sha."' target ='_blank'>".$shortsha.'</a></td>';
       echo "<td>".$row->commit->message.'</td>';
       echo "<td>".date('d-m-Y, H:i:s',strtotime($row->commit->author->date)).'</td>';
       echo "</tr>";

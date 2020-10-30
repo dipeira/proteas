@@ -140,7 +140,7 @@
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
 		echo "</select>";
-		echo "Έτη<input type='text' name='pyears' size=1 />Μήνες<input type='text' name='pmonths' size=1 />Ημέρες<input type='text' name='pdays' size=1 /></td></tr>";
+		echo "Έτη&nbsp;<input type='text' name='pyears' size=1 />&nbsp;Μήνες&nbsp;<input type='text' name='pmonths' size=1 />&nbsp;Ημέρες&nbsp;<input type='text' name='pdays' size=1 /></td></tr>";
 		
     echo "<tr><td>Α.Φ.Μ.</td><td><input type='checkbox' name = 'dspafm'></td><td><input type='text' name='afm' /></td>";
     echo "<td>Τηλέφωνο</td><td></td><td><input type='text' name='tel' /></td>";
@@ -179,7 +179,7 @@
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
 		echo "</select>";
-		echo "Έτη<input type='text' name='syears' size=1 />Μήνες<input type='text' name='smonths' size=1 />Ημέρες<input type='text' name='sdays' size=1 /><br>";
+		echo "Έτη&nbsp;<input type='text' name='syears' size=1 />&nbsp;Μήνες&nbsp;<input type='text' name='smonths' size=1 />&nbsp;Ημέρες&nbsp;<input type='text' name='sdays' size=1 /><br>";
     echo "<small>Συνολική Υπηρεσία έως:</small><br>";
     $myCalendar = new tc_calendar("hm_synol", true);
 		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
@@ -193,7 +193,7 @@
     echo "</td></tr>";
     echo "<tr><td>Μον./Αναπλ.</td><td></td><td>";
     echo "<select name=\"emptype\">";
-		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
+		//echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		echo "<option value=\"1\">Μόνιμος</option>";
 		echo "<option value=\"2\">Αναπληρωτής</option>";
 		//echo "<option value=\"3\">Διοικητικός</option>";
@@ -202,6 +202,9 @@
 		echo "</td>";
 		thesiselectcmb(0,true);
 		echo "</tr>";
+		echo "<tr>";
+		ent_ty_selectcmb(0, false, true, true);
+		echo "</td><td colspan=3></td></tr>";
 
 		echo "<tr><td colspan=6><input type='checkbox' name = 'smeae'>&nbsp;Οργανική σε Ειδικό Σχολείο;</td></tr>";	
     

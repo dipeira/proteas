@@ -957,7 +957,7 @@
         echo "<br>";
     }
     //Υπηρετούν σε τμήμα ένταξης
-    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=3";
+    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND ent_ty=1";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
     if ($num) {
@@ -993,7 +993,7 @@
         echo "<br>";
     }
     //Υπηρετούν σε τάξη υποδοχής
-    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=7";
+    $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND ent_ty=2";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
     if ($num) {

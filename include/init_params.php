@@ -58,10 +58,10 @@
   <?php
     // if the executed script is not init.php alert the user and die...
     if (!endsWith($_SERVER['PHP_SELF'],'init.php')){
-      echo "<IMG src='../images/logo.png' class='applogo'></a>";
+      echo "<IMG src='images/logo.png' class='applogo'></a>";
       echo "<h1>Πρωτέας</h1>";
       echo "<h2>Σφάλμα: Η βάση δεδομένων δεν υπάρχει.</h2>";
-      echo "<h3>Δημιουργήστε την με το <a href='../init.php'>init.php</a> ή επικοινωνήστε με το διαχειριστή.</h3>";
+      echo "<h3>Δημιουργήστε την με το <a href='init.php'>init.php</a> ή επικοινωνήστε με το διαχειριστή.</h3>";
       die();
     }
   }

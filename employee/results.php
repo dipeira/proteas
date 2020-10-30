@@ -160,6 +160,13 @@ if (strlen($_POST['vathm'])>0 && !$is_anapl) {
     $query .= " vathm = '".$_POST['vathm']."'";
     $flag=1;
 }
+if (strlen($_POST['entty'])>0) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " ent_ty = '".$_POST['entty']."'";
+    $flag=1;
+}
 if (strlen($_POST['mk'])>0) {
     if ($flag) {
         $query .= $op;

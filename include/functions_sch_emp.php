@@ -175,7 +175,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     // ώρες υπηρετούντων (Μόνιμοι εκπ/κοί - υπ/ντές, εκτός Τ.Ε., T.Y.)
     //$query = "SELECT klados, sum(wres) as wres from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,1) GROUP BY klados";
     if ($oligothesio) {
-        $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
+        $query = "SELECT e.klados, count(*) as plithos FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) AND e.ent_ty NOT IN (1,2) GROUP BY klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
             $plithos = strval($row['plithos']);
@@ -183,7 +183,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             $avhrs[$kl] += $plithos * 30;
         }
     } else {
-        $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) GROUP BY klados";
+        $query = "SELECT e.klados, sum(y.hours) as wres FROM employee e join yphrethsh y on e.id = y.emp_id WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0,1) AND e.ent_ty NOT IN (1,2) GROUP BY klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
             $kl = strval($row['klados']);
@@ -192,7 +192,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
     if ($print) {
         // αναλυτικά...
-        $query = "SELECT e.id,e.name, e.surname,e.klados,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) ORDER BY e.klados";
+        $query = "SELECT e.id,e.name, e.surname,e.klados,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) AND e.ent_ty NOT IN (1,2) ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
             $extra = '';
@@ -213,8 +213,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             
         }
     }
-    // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & thesi 2,3,4 (ένταξης/παράλληλη/ΤΥ) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
-    $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.thesi NOT IN (2,3,4) GROUP BY klados";
+    // αναπληρωτές (εκτός ΖΕΠ / ΕΚΟ (type=6) & ent_ty 1,2,3 (ένταξης/παράλληλη/ΤΥ) & type 4,5,6 (ΕΕΠ,ΕΒΠ,ΖΕΠ/ΕΚΟ))
+    $query = "SELECT klados,sum(y.hours) as wres FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type NOT IN (4,5,6) AND e.ent_ty NOT IN (1,2,3) GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
     while ($row = mysqli_fetch_array($result)){
         $kl = strval($row['klados']);
@@ -236,14 +236,14 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
     // PE70 entaksis
     if ($has_entaxi > 0) {
-        $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 and thesi = 3";
+        $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 and ent_ty = 1";
         $res = mysqli_query($mysqlconnection, $qry);
         $top_ent = mysqli_result($res, 0, 'pe70');
         $avhrs['TE'] = $top_ent;
         $ret['TE'] = $top_ent - $has_entaxi;
         if ($print) {
             // αναλυτικά...
-            $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 3 ORDER BY e.klados";
+            $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.ent_ty = 1 ORDER BY e.klados";
             $result = mysqli_query($mysqlconnection, $query);
             while ($row = mysqli_fetch_array($result)){
                 $ar = Array('fullname' => $row['surname'].' '.substr($row['name'], 0, 6). ' (Τ.Ε.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
@@ -256,7 +256,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     // PE70 @ T.Y.
     if ($print) {
         // αναλυτικά...
-        $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi = 7 ORDER BY e.klados";
+        $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.ent_ty = 2 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
             $ar = Array('fullname' => $row['surname'].' '.substr($row['name'], 0, 6). ' (Τ.Y.)', 'klados' => $row['perigrafh'], 'hours' => $row['hours']);

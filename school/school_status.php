@@ -767,7 +767,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
         //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
         //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
-        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND (klados=2 OR klados=1)";
+        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND ent_ty=0 AND (klados=2 OR klados=1)";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -836,7 +836,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         
         // Οργανική αλλού και υπηρετούν
-        $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5) AND status=1 ORDER BY klados";
+        $query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND sx_yphrethshs='$sch' AND thesi in (0,5)  AND ent_ty=0 AND status=1 ORDER BY klados";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -912,7 +912,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<br>";
         }
         //Υπηρετούν σε τμήμα ένταξης
-        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=3";
+        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND ent_ty=1";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -948,7 +948,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<br>";
         }
         //Υπηρετούν σε τάξη υποδοχής
-        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi=7";
+        $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND ent_ty=2";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -1015,9 +1015,21 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $typos = mysqli_result($result, $i, "etype");
                 $type = get_type($typos, $mysqlconnection);
                 $thesi = mysqli_result($result, $i, "thesi");
+                $entty = mysqli_result($result, $i, "ent_ty");
                 $praxi = mysqli_result($result, $i, "praxiname");
-                $type .= $thesi == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
-                $type .= $thesi == 3 ? '<small> (Παράλληλη στήριξη)</small>' : '';
+                switch ($entty) {
+                    case 1:
+                        $type .= "<small> (Τμήμα ένταξης)</small>";
+                        break;
+                    case 2:
+                        $type .= "<small> (Τάξη υποδοχής)</small>";
+                        break;
+                    case 3:
+                        $type .= "<small> (Παράλληλη στήριξη)</small>";
+                        break;
+                    default:
+                        break;
+                }
 
                 $comments = mysqli_result($result, $i, "comments");
                 $wres = mysqli_result($result, $i, "hours");

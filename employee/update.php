@@ -82,6 +82,7 @@ $proyp_not = $_POST['peyears']*360 + $_POST['pemonths']*30 + $_POST['pedays'];
 $comments = addslashes($_POST['comments']);
 $katast = $_POST['status'];
 $thesi = $_POST['thesi'];
+$entty = $_POST['entty'];
 $email = $_POST['email'];
 $org_ent = $_POST['org_ent'] ? 1 : 0;
 // aney 27-02-2014
@@ -117,8 +118,8 @@ if (isset($_POST['action']))
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result))
     {
-        $query0 = "INSERT INTO employee (name, surname, patrwnymo, mhtrwnymo, klados, am, sx_organikhs, sx_yphrethshs, fek_dior, hm_dior, vathm, mk, hm_anal, met_did, proyp, comments, afm, thesi, status, wres, proyp_not) ";
-        $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$am','$org','$yphr_arr[0]','$fek_dior','$hm_dior','$vathm','$mk','$hm_anal','$met_did','$proyp','$comments', '$afm', '$thesi', '$katast', '$wres', '$proyp_not')";
+        $query0 = "INSERT INTO employee (name, surname, patrwnymo, mhtrwnymo, klados, am, sx_organikhs, sx_yphrethshs, fek_dior, hm_dior, vathm, mk, hm_anal, met_did, proyp, comments, afm, thesi, ent_ty, status, wres, proyp_not) ";
+        $query1 = "VALUES ('$name','$surname','$patrwnymo','$mhtrwnymo','$klados','$am','$org','$yphr_arr[0]','$fek_dior','$hm_dior','$vathm','$mk','$hm_anal','$met_did','$proyp','$comments', '$afm', '$thesi', '$entty', '$katast', '$wres', '$proyp_not')";
         $query = $query0.$query1;
         mysqli_query($mysqlconnection, $query);
         // insert into yphrethsh
@@ -150,7 +151,7 @@ else {
     $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
     $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
     $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
-    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', wres='$wres',email='$email',org_ent=$org_ent WHERE id='$id'";
+    $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', ent_ty='$entty', wres='$wres',email='$email',org_ent=$org_ent WHERE id='$id'";
     $query = $query1.$query2.$query3.$query4;
     //echo $query;
     $res = mysqli_query($mysqlconnection, $query);
