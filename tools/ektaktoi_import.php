@@ -86,6 +86,17 @@ if (isset($_POST['submit'])) {
     echo '</table>';
     echo "<p>κλπ.</p>";
 
+    // prepare connection
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+
+    // get the following variable values from parameters once
+    // prepare hm/nia apoxwrhshs (endofyear)
+    $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
+    // get hours
+    $hours = getParam('yp_wr', $mysqlconnection);
+
     for ($row = 2; $row <= $highestRow; ++ $row) {
       $val=array();
       for ($col = 0; $col < $highestColumnIndex; ++ $col) {
@@ -94,15 +105,10 @@ if (isset($_POST['submit'])) {
       }
       $val[12] = ExcelToPHP($val[12]);
       $val[12] = date ("Y-m-d", $val[12]);
-      // prepare connection
-      $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-      mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
-      mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-      // prepare hm/nia apoxwrhshs (endofyear)
-      $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
+
       // prepare query
-      $sql="insert into ektaktoi(hm_apox, name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto, praxi)
-      values('$hm_apox','".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "')";
+      $sql="insert into ektaktoi(hm_apox, name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto, praxi, wres)
+      values('$hm_apox','".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "',$hours)";
 
       //Run your mysqli_query
       // check if already inserted...

@@ -8,7 +8,7 @@ mysqli_query($conn, "SET CHARACTER SET 'utf8'");
 $q = strtolower($_GET["q"]);
 $type = $_GET['type'];
 $title = $_GET['title'];
-//$q = mb_strtolower($_GET["q"],'utf-8');
+$q = mb_strtolower($_GET["q"],'utf-8');
 if (!$q) return;
 
 if ($type > 0) {

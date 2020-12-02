@@ -137,289 +137,292 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         echo "<tr><td colspan=3>Τίτλος (αναλυτικά): $titlos</td></tr>";
         echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel</td></tr>";
         echo "<tr><td>email: <a href=\"mailto:$email\">$email</a></td><td>Fax: $fax</td></tr>";
-        echo "<tr><td>Οργανικότητα: $organikothta</td><td>Λειτουργικότητα: $leitoyrg</td></tr>";
+        if ($type == 1 || $type == 2) {
+            echo "<tr><td>Οργανικότητα: $organikothta</td><td>Λειτουργικότητα: $leitoyrg</td></tr>";
+            
+            // οργανικά τοποθετηθέντες
+            $klados_qry = ($type == 1) ? 2 : 1;
+            $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3,5) AND thesi IN (0,1,2)";
+            $rs = mysqli_query($conn, $qry);
+            $orgtop = mysqli_result($rs, 0, "cnt");
         
-        // οργανικά τοποθετηθέντες
-        $klados_qry = ($type == 1) ? 2 : 1;
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3,5) AND thesi IN (0,1,2)";
-        $rs = mysqli_query($conn, $qry);
-        $orgtop = mysqli_result($rs, 0, "cnt");
-        echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
-        
-        // 05-10-2012 - organikes
-        for ($i=0; $i<count($organikes); $i++) {
-            if (!$organikes[$i]) {
-                $organikes[$i]=0;
+            echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
+            
+            // 05-10-2012 - organikes
+            for ($i=0; $i<count($organikes); $i++) {
+                if (!$organikes[$i]) {
+                    $organikes[$i]=0;
+                }
             }
-        }
-        
-        // if ds
-        if ($type == 1) {
-          echo "<tr><td colspan=2><a href='#' id='show_hide'>Οργανικές</a><br>";
-          echo "<div id='slidingDiv'>";
-          echo "<table>";
-          echo "<thead><tr>";
-          echo "<th>Κλάδος</th>";
-          echo "<th><span title='Δασκάλων'>70</th>";
-          echo "<th><span title='Φυσικής Αγωγής'>11</th>";
-          echo "<th><span title='Αγγλικών'>06</th>";
-          echo "<th><span title='Μουσικών'>79</th>";
-          echo "<th><span title='Γαλλικών'>05</th>";
-          echo "<th><span title='Γερμανικών'>07</th>";
-          echo "<th><span title='Καλλιτεχνικών'>08</th>";
-          echo "<th><span title='Πληροφορικής'>86</th>";
-          echo "<th><span title='Θεατρικών Σπουδών'>91</th>";
-          echo $org_ent ? "<th>Ένταξης</th>" : '';
-          if ($type2 == 2) {
-            echo "<th><span title='Λογοθεραπευτών'>21</th>";
-            echo "<th><span title='Ψυχολόγων'>23</th>";
-            echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
-            echo "<th><span title='Λογοθεραπευτών'>26</th>";
-            echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
-            echo "<th><span title='Εργοθεραπευτών'>29</th>";
-            echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
-            echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
-          }
-          echo "</tr></thead>";
-          echo "<tbody><tr>";
-          echo "<td>Οργανικές</td>";
-          echo "<td>$organikes[0]</td>";
-          echo "<td>$organikes[1]</td>";
-          echo "<td>$organikes[2]</td>";
-          echo "<td>$organikes[3]</td>";
-          echo "<td>$organikes[4]</td>";
-          echo "<td>$organikes[5]</td>";
-          echo "<td>$organikes[6]</td>";
-          echo "<td>$organikes[7]</td>";
-          echo "<td>$organikes[8]</td>";
-          echo $org_ent ? "<td>$org_ent</td>" : '';
-          if ($type2 == 2) {
-            echo "<td>$organikes[9]</td>";
-            echo "<td>$organikes[10]</td>";
-            echo "<td>$organikes[11]</td>";
-            echo "<td>$organikes[12]</td>";
-            echo "<td>$organikes[13]</td>";
-            echo "<td>$organikes[14]</td>";
-            echo "<td>$organikes[15]</td>";
-            echo "<td>$organikes[16]</td>";
-          }
-          echo "</tr>";
-        }
-          // if nip
-        else {
-          echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
-          if ($type2 == 2) {
+            
+            // if ds
+            if ($type == 1) {
+            echo "<tr><td colspan=2><a href='#' id='show_hide'>Οργανικές</a><br>";
+            echo "<div id='slidingDiv'>";
             echo "<table>";
             echo "<thead><tr>";
-              echo "<th>Κλάδος</th>";
-              echo "<th><span title='Λογοθεραπευτών'>21</th>";
-              echo "<th><span title='Ψυχολόγων'>23</th>";
-              echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
-              echo "<th><span title='Λογοθεραπευτών'>26</th>";
-              echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
-              echo "<th><span title='Εργοθεραπευτών'>29</th>";
-              echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
-              echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
-            echo "</tr></thead><tbody>";
-            echo "<tr>";
-              echo "<td>Οργανικές</td>";
-              echo "<td>$organikes[1]</td>";
-              echo "<td>$organikes[2]</td>";
-              echo "<td>$organikes[3]</td>";
-              echo "<td>$organikes[4]</td>";
-              echo "<td>$organikes[5]</td>";
-              echo "<td>$organikes[6]</td>";
-              echo "<td>$organikes[7]</td>";
-              echo "<td>$organikes[8]</td>";
-            echo "</tr>";
-            echo "<tr>";
-              $orgs = get_orgs($sch,$conn);
-              echo "<td>Οργ.ανήκοντες</td>";
-              echo "<td>".$orgs['ΠΕ21']."</td>";
-              echo "<td>".$orgs['ΠΕ23']."</td>";
-              echo "<td>".$orgs['ΠΕ25']."</td>";
-              echo "<td>".$orgs['ΠΕ26']."</td>";
-              echo "<td>".$orgs['ΠΕ28']."</td>";
-              echo "<td>".$orgs['ΠΕ29']."</td>";
-              echo "<td>".$orgs['ΠΕ30']."</td>";
-              echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
-            echo "</tr>";
-            echo "<tr>";
-              $orgs = get_orgs($sch,$conn);
-              echo "<td>Οργ.Κενά</td>";
-              echo "<td>".($organikes[1] - $orgs['ΠΕ21'])."</td>";
-              echo "<td>".($organikes[2] - $orgs['ΠΕ23'])."</td>";
-              echo "<td>".($organikes[3] - $orgs['ΠΕ25'])."</td>";
-              echo "<td>".($organikes[4] - $orgs['ΠΕ26'])."</td>";
-              echo "<td>".($organikes[5] - $orgs['ΠΕ28'])."</td>";
-              echo "<td>".($organikes[6] - $orgs['ΠΕ29'])."</td>";
-              echo "<td>".($organikes[7] - $orgs['ΠΕ30'])."</td>";
-              echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
-            echo "</tr>";
-            echo "</tbody></table>";
-          }
-        }
-          
-        echo "</td></tr>";
-        // 05-10-2012 - kena_leit, kena_org
-        for ($i=0; $i<count($kena_org); $i++) {
-            if (!$kena_org[$i]) {
-                $kena_org[$i]=0;
+            echo "<th>Κλάδος</th>";
+            echo "<th><span title='Δασκάλων'>70</th>";
+            echo "<th><span title='Φυσικής Αγωγής'>11</th>";
+            echo "<th><span title='Αγγλικών'>06</th>";
+            echo "<th><span title='Μουσικών'>79</th>";
+            echo "<th><span title='Γαλλικών'>05</th>";
+            echo "<th><span title='Γερμανικών'>07</th>";
+            echo "<th><span title='Καλλιτεχνικών'>08</th>";
+            echo "<th><span title='Πληροφορικής'>86</th>";
+            echo "<th><span title='Θεατρικών Σπουδών'>91</th>";
+            echo $org_ent ? "<th>Ένταξης</th>" : '';
+            if ($type2 == 2) {
+                echo "<th><span title='Λογοθεραπευτών'>21</th>";
+                echo "<th><span title='Ψυχολόγων'>23</th>";
+                echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
+                echo "<th><span title='Λογοθεραπευτών'>26</th>";
+                echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
+                echo "<th><span title='Εργοθεραπευτών'>29</th>";
+                echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
+                echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
             }
-        }
-        if ($type == 1) {
-          // echo "<tr>";
-          // echo "<td>Οργανικά κενά</td>";
-          // echo "<td>$kena_org[0]</td>";
-          // echo "<td>$kena_org[1]</td>";
-          // echo "<td>$kena_org[2]</td>";
-          // echo "<td>$kena_org[3]</td>";
-          // echo "<td>$kena_org[4]</td>";
-          // echo "<td>$kena_org[5]</td>";
-          // echo "<td>$kena_org[6]</td>";
-          // echo "<td>$kena_org[7]</td>";
-          // echo "<td>$kena_org[8]</td>";
-          // echo "</tr>";
-          ///////
-          echo "<tr>";
-          $orgs = get_orgs($sch,$conn);
-          echo "<td>Οργανικά ανήκοντες</td>";
-          echo "<td>".$orgs['ΠΕ70']."</td>";
-          echo "<td>".$orgs['ΠΕ11']."</td>";
-          echo "<td>".$orgs['ΠΕ06']."</td>";
-          echo "<td>".$orgs['ΠΕ79']."</td>";
-          echo "<td>".$orgs['ΠΕ05']."</td>";
-          echo "<td>".$orgs['ΠΕ07']."</td>";
-          echo "<td>".$orgs['ΠΕ08']."</td>";
-          echo "<td>".$orgs['ΠΕ86']."</td>";
-          echo "<td>".$orgs['ΠΕ91']."</td>";
-          echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
-          if ($type2 == 2) {
-            echo "<td>".$orgs['ΠΕ21']."</td>";
-            echo "<td>".$orgs['ΠΕ23']."</td>";
-            echo "<td>".$orgs['ΠΕ25']."</td>";
-            echo "<td>".$orgs['ΠΕ26']."</td>";
-            echo "<td>".$orgs['ΠΕ28']."</td>";
-            echo "<td>".$orgs['ΠΕ29']."</td>";
-            echo "<td>".$orgs['ΠΕ30']."</td>";
-            echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
-          }
-          echo "</tr>";
-          ///////
-          echo "</tr>";
-          echo "<tr>";
-          $orgs = get_orgs($sch,$conn);
-          echo "<td>Οργανικά κενά</td>";
-          echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
-          echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
-          echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
-          echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
-          echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
-          echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
-          echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
-          echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
-          echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
-          echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
-          if ($type2 == 2) {
-            echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";
-            echo "<td>".($organikes[10] - $orgs['ΠΕ23'])."</td>";
-            echo "<td>".($organikes[11] - $orgs['ΠΕ25'])."</td>";
-            echo "<td>".($organikes[12] - $orgs['ΠΕ26'])."</td>";
-            echo "<td>".($organikes[13] - $orgs['ΠΕ28'])."</td>";
-            echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
-            echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
-            echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
-          }
-          echo "</tr>";
-          echo "</table>";
-          echo "</div>";
-          // echo "&nbsp;&nbsp;&nbsp;ΠΕ11: ".($organikes[1] - $orgs['ΠΕ11']);
-          // echo "&nbsp;&nbsp;ΠΕ06: ".($organikes[2] - $orgs['ΠΕ06']);
-          // echo "&nbsp;&nbsp;ΠΕ79: ".($organikes[3] - $orgs['ΠΕ79']);
-          // echo "&nbsp;&nbsp;ΠΕ05: ".($organikes[4] - $orgs['ΠΕ05']);
-          // echo "&nbsp;&nbsp;ΠΕ07: ".($organikes[5] - $orgs['ΠΕ07']);
-          // echo "&nbsp;&nbsp;ΠΕ08: ".($organikes[6] - $orgs['ΠΕ08']);
-          // echo "&nbsp;&nbsp;ΠΕ86: ".($organikes[7] - $orgs['ΠΕ86']);
-          // echo "&nbsp;&nbsp;ΠΕ91: ".($organikes[8] - $orgs['ΠΕ91']);
-          // echo "</td></tr>";
-        }
-        else {
-            echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0]";
-        }
-        echo "</td></tr>";
-
-        if ($entaksis[0]) {
-            echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</td>";
-        } else {
-            echo "<td><input type=\"checkbox\" disabled>Τμήμα Ένταξης</td>";
-        }
-        if ($ypodoxis) {
-            echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Υποδοχής</td>";
-        } else {
-            echo "<td><input type=\"checkbox\" disabled>Τμήμα Υποδοχής</td>";
-        }
-        echo "</tr>";
-        if ($entaksis[0] || $ypodoxis) {
-            echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: $ekp_ee_exp[0]</td><td>Εκπ/κοί Τμ.Υποδοχής: $ekp_ee_exp[1]</td></tr>";
-        }
-
-        echo "<tr>";
-        if ($type == 1) {
-            if ($frontistiriako) {
-                echo "<td><input type=\"checkbox\" checked disabled>Φροντιστηριακό Τμήμα</td>";
-            } else {
-                echo "<td><input type=\"checkbox\" disabled>Φροντιστηριακό Τμήμα</td>";
+            echo "</tr></thead>";
+            echo "<tbody><tr>";
+            echo "<td>Οργανικές</td>";
+            echo "<td>$organikes[0]</td>";
+            echo "<td>$organikes[1]</td>";
+            echo "<td>$organikes[2]</td>";
+            echo "<td>$organikes[3]</td>";
+            echo "<td>$organikes[4]</td>";
+            echo "<td>$organikes[5]</td>";
+            echo "<td>$organikes[6]</td>";
+            echo "<td>$organikes[7]</td>";
+            echo "<td>$organikes[8]</td>";
+            echo $org_ent ? "<td>$org_ent</td>" : '';
+            if ($type2 == 2) {
+                echo "<td>$organikes[9]</td>";
+                echo "<td>$organikes[10]</td>";
+                echo "<td>$organikes[11]</td>";
+                echo "<td>$organikes[12]</td>";
+                echo "<td>$organikes[13]</td>";
+                echo "<td>$organikes[14]</td>";
+                echo "<td>$organikes[15]</td>";
+                echo "<td>$organikes[16]</td>";
             }
-        }
-        // if nip print Proini Zoni (klasiko[6])
-        else {
-            if ($klasiko_exp[6]) {
-                echo "<td><input type=\"checkbox\" checked disabled>Πρωινή Ζώνη / Μαθητές: $klasiko_exp[6]</td>";
-            } else {
-                echo "<td><input type=\"checkbox\" disabled>Πρωινή Ζώνη</td>";
+            echo "</tr>";
             }
-        }
-                                            
-        if ($oloimero) {
+            // if nip
+            else if ($type == 2) {
+            echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
+            if ($type2 == 2) {
+                echo "<table>";
+                echo "<thead><tr>";
+                echo "<th>Κλάδος</th>";
+                echo "<th><span title='Λογοθεραπευτών'>21</th>";
+                echo "<th><span title='Ψυχολόγων'>23</th>";
+                echo "<th><span title='Σχ.Νοσηλευτών'>25</th>";
+                echo "<th><span title='Λογοθεραπευτών'>26</th>";
+                echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
+                echo "<th><span title='Εργοθεραπευτών'>29</th>";
+                echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
+                echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
+                echo "</tr></thead><tbody>";
+                echo "<tr>";
+                echo "<td>Οργανικές</td>";
+                echo "<td>$organikes[1]</td>";
+                echo "<td>$organikes[2]</td>";
+                echo "<td>$organikes[3]</td>";
+                echo "<td>$organikes[4]</td>";
+                echo "<td>$organikes[5]</td>";
+                echo "<td>$organikes[6]</td>";
+                echo "<td>$organikes[7]</td>";
+                echo "<td>$organikes[8]</td>";
+                echo "</tr>";
+                echo "<tr>";
+                $orgs = get_orgs($sch,$conn);
+                echo "<td>Οργ.ανήκοντες</td>";
+                echo "<td>".$orgs['ΠΕ21']."</td>";
+                echo "<td>".$orgs['ΠΕ23']."</td>";
+                echo "<td>".$orgs['ΠΕ25']."</td>";
+                echo "<td>".$orgs['ΠΕ26']."</td>";
+                echo "<td>".$orgs['ΠΕ28']."</td>";
+                echo "<td>".$orgs['ΠΕ29']."</td>";
+                echo "<td>".$orgs['ΠΕ30']."</td>";
+                echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                $orgs = get_orgs($sch,$conn);
+                echo "<td>Οργ.Κενά</td>";
+                echo "<td>".($organikes[1] - $orgs['ΠΕ21'])."</td>";
+                echo "<td>".($organikes[2] - $orgs['ΠΕ23'])."</td>";
+                echo "<td>".($organikes[3] - $orgs['ΠΕ25'])."</td>";
+                echo "<td>".($organikes[4] - $orgs['ΠΕ26'])."</td>";
+                echo "<td>".($organikes[5] - $orgs['ΠΕ28'])."</td>";
+                echo "<td>".($organikes[6] - $orgs['ΠΕ29'])."</td>";
+                echo "<td>".($organikes[7] - $orgs['ΠΕ30'])."</td>";
+                echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
+                echo "</tr>";
+                echo "</tbody></table>";
+            }
+            }
+            
+            echo "</td></tr>";
+            // 05-10-2012 - kena_leit, kena_org
+            for ($i=0; $i<count($kena_org); $i++) {
+                if (!$kena_org[$i]) {
+                    $kena_org[$i]=0;
+                }
+            }
             if ($type == 1) {
-                echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
-                //echo "<tr><td>Μαθητές Ολοημέρου: $oloimero_stud</td>";
-                //echo "<td>Εκπ/κοί Ολοημέρου: $oloimero_tea</td></tr>";
+            // echo "<tr>";
+            // echo "<td>Οργανικά κενά</td>";
+            // echo "<td>$kena_org[0]</td>";
+            // echo "<td>$kena_org[1]</td>";
+            // echo "<td>$kena_org[2]</td>";
+            // echo "<td>$kena_org[3]</td>";
+            // echo "<td>$kena_org[4]</td>";
+            // echo "<td>$kena_org[5]</td>";
+            // echo "<td>$kena_org[6]</td>";
+            // echo "<td>$kena_org[7]</td>";
+            // echo "<td>$kena_org[8]</td>";
+            // echo "</tr>";
+            ///////
+            echo "<tr>";
+            $orgs = get_orgs($sch,$conn);
+            echo "<td>Οργανικά ανήκοντες</td>";
+            echo "<td>".$orgs['ΠΕ70']."</td>";
+            echo "<td>".$orgs['ΠΕ11']."</td>";
+            echo "<td>".$orgs['ΠΕ06']."</td>";
+            echo "<td>".$orgs['ΠΕ79']."</td>";
+            echo "<td>".$orgs['ΠΕ05']."</td>";
+            echo "<td>".$orgs['ΠΕ07']."</td>";
+            echo "<td>".$orgs['ΠΕ08']."</td>";
+            echo "<td>".$orgs['ΠΕ86']."</td>";
+            echo "<td>".$orgs['ΠΕ91']."</td>";
+            echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
+            if ($type2 == 2) {
+                echo "<td>".$orgs['ΠΕ21']."</td>";
+                echo "<td>".$orgs['ΠΕ23']."</td>";
+                echo "<td>".$orgs['ΠΕ25']."</td>";
+                echo "<td>".$orgs['ΠΕ26']."</td>";
+                echo "<td>".$orgs['ΠΕ28']."</td>";
+                echo "<td>".$orgs['ΠΕ29']."</td>";
+                echo "<td>".$orgs['ΠΕ30']."</td>";
+                echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
+            }
+            echo "</tr>";
+            ///////
+            echo "</tr>";
+            echo "<tr>";
+            $orgs = get_orgs($sch,$conn);
+            echo "<td>Οργανικά κενά</td>";
+            echo "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>";
+            echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
+            echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
+            echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
+            echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
+            echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
+            echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
+            echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
+            echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+            echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
+            if ($type2 == 2) {
+                echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";
+                echo "<td>".($organikes[10] - $orgs['ΠΕ23'])."</td>";
+                echo "<td>".($organikes[11] - $orgs['ΠΕ25'])."</td>";
+                echo "<td>".($organikes[12] - $orgs['ΠΕ26'])."</td>";
+                echo "<td>".($organikes[13] - $orgs['ΠΕ28'])."</td>";
+                echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
+                echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
+                echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
+            }
+            echo "</tr>";
+            echo "</table>";
+            echo "</div>";
+            // echo "&nbsp;&nbsp;&nbsp;ΠΕ11: ".($organikes[1] - $orgs['ΠΕ11']);
+            // echo "&nbsp;&nbsp;ΠΕ06: ".($organikes[2] - $orgs['ΠΕ06']);
+            // echo "&nbsp;&nbsp;ΠΕ79: ".($organikes[3] - $orgs['ΠΕ79']);
+            // echo "&nbsp;&nbsp;ΠΕ05: ".($organikes[4] - $orgs['ΠΕ05']);
+            // echo "&nbsp;&nbsp;ΠΕ07: ".($organikes[5] - $orgs['ΠΕ07']);
+            // echo "&nbsp;&nbsp;ΠΕ08: ".($organikes[6] - $orgs['ΠΕ08']);
+            // echo "&nbsp;&nbsp;ΠΕ86: ".($organikes[7] - $orgs['ΠΕ86']);
+            // echo "&nbsp;&nbsp;ΠΕ91: ".($organikes[8] - $orgs['ΠΕ91']);
+            // echo "</td></tr>";
+            }
+            else if ($type==2) {
+                echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0]";
+            }
+            echo "</td></tr>";
+        
+            if ($entaksis[0]) {
+                echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</td>";
+            } else {
+                echo "<td><input type=\"checkbox\" disabled>Τμήμα Ένταξης</td>";
+            }
+            if ($ypodoxis) {
+                echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Υποδοχής</td>";
+            } else {
+                echo "<td><input type=\"checkbox\" disabled>Τμήμα Υποδοχής</td>";
+            }
+            echo "</tr>";
+            if ($entaksis[0] || $ypodoxis) {
+                echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: $ekp_ee_exp[0]</td><td>Εκπ/κοί Τμ.Υποδοχής: $ekp_ee_exp[1]</td></tr>";
+            }
+
+            echo "<tr>";
+            if ($type == 1) {
+                if ($frontistiriako) {
+                    echo "<td><input type=\"checkbox\" checked disabled>Φροντιστηριακό Τμήμα</td>";
+                } else {
+                    echo "<td><input type=\"checkbox\" disabled>Φροντιστηριακό Τμήμα</td>";
+                }
+            }
+            // if nip print Proini Zoni (klasiko[6])
+            else {
+                if ($klasiko_exp[6]) {
+                    echo "<td><input type=\"checkbox\" checked disabled>Πρωινή Ζώνη / Μαθητές: $klasiko_exp[6]</td>";
+                } else {
+                    echo "<td><input type=\"checkbox\" disabled>Πρωινή Ζώνη</td>";
+                }
+            }
+                                                
+            if ($oloimero) {
+                if ($type == 1) {
+                    echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
+                    //echo "<tr><td>Μαθητές Ολοημέρου: $oloimero_stud</td>";
+                    //echo "<td>Εκπ/κοί Ολοημέρου: $oloimero_tea</td></tr>";
+                }
+                else {
+                    echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
+                }
             }
             else {
-                echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
+                echo "<td><input type=\"checkbox\" disabled>Όλοήμερο</td></tr>";
             }
-        }
-        else {
-            echo "<td><input type=\"checkbox\" disabled>Όλοήμερο</td></tr>";
-        }
-        
-        if ($type == 1) {
-            echo "<tr>";
-            if ($ted) {
-                echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
-            } else {
-                echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
-            }
-            if ($vivliothiki) {
-                echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη";
-                $qry1 = "SELECT surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE e.id=$vivliothiki";
-                $res1 = mysqli_query($conn, $qry1);
-                if ($row = mysqli_fetch_assoc($res1)){
-                  echo "<i><small> (Υπευθυνος/-η: ".$row['surname'].' '.$row['name'].', '.$row['perigrafh'].')</small></i>';
+            
+            if ($type == 1) {
+                echo "<tr>";
+                if ($ted) {
+                    echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
                 } else {
-                  echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
+                    echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
                 }
-                echo '</td>';
-            } else {
-                echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
+                if ($vivliothiki) {
+                    echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη";
+                    $qry1 = "SELECT surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE e.id=$vivliothiki";
+                    $res1 = mysqli_query($conn, $qry1);
+                    if ($row = mysqli_fetch_assoc($res1)){
+                    echo "<i><small> (Υπευθυνος/-η: ".$row['surname'].' '.$row['name'].', '.$row['perigrafh'].')</small></i>';
+                    } else {
+                    echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
+                    }
+                    echo '</td>';
+                } else {
+                    echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
+                }
+                echo "</tr>";
+                echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td>";
+                echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
+                echo "</tr>";
             }
-            echo "</tr>";
-            echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td>";
-            echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
-            echo "</tr>";
+            echo $anenergo && $type == 2 ? "<tr><td>Κατάσταση: Σε αναστολή</td><td></td>" : "<td>Κατάσταση: Ενεργό</td><td></td></tr>";
         }
-        echo $anenergo && $type == 2 ? "<tr><td>Κατάσταση: Σε αναστολή</td><td></td>" : "<td>Κατάσταση: Ενεργό</td><td></td></tr>";
         echo "<tr><td>Σχόλια: ".nl2br($comments)."</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
         if ($systeg) {
             echo "<tr><td colspan=2>Συστεγαζόμενη σχολική μονάδα: <a href='school_status.php?org=$systeg' target='_blank'>$systegName</td></tr>";    
@@ -719,7 +722,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         echo "<div id='tabs'>";
           echo "<ul>";
           echo "<li><a href='#general'>Γενικά Στοιχεία</a></li>";
-          echo "<li><a href='#leit'>Μαθ.Δυναμικό - Κενά/Πλεονάσματα</a></li>";
+          // show tab only for schools
+          if ($type == 1 || $type == 2){
+            echo "<li><a href='#leit'>Μαθ.Δυναμικό - Κενά/Πλεονάσματα</a></li>";
+          }
           echo "<li><a href='#personnel'>Προσωπικό</a></li>";
           echo $_SESSION['requests'] ? "<li><a href='#requests'>Αιτήματα</a></li>" : '';
           echo "</ul>";

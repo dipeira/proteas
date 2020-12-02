@@ -157,16 +157,15 @@
             }
             // fix dates
             $data[7] = date ("Y-m-d", strtotime($data[7]));
-            $data[9] = date ("Y-m-d", strtotime($data[9]));
+            $data[10] = date ("Y-m-d", strtotime($data[10]));
             $data[11] = date ("Y-m-d", strtotime($data[11]));
-            $data[12] = date ("Y-m-d", strtotime($data[12]));
             // proceed to import
             $import="INSERT into employee(name,surname,patrwnymo,mhtrwnymo,klados,am,thesi,fek_dior,hm_dior,
             vathm, mk, hm_mk, hm_anal, met_did, proyp, proyp_not, status,
             afm, tel, address, idnum, amka, email, wres, sx_organikhs, sx_yphrethshs)
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]',0,'$data[6]','$data[7]',
-            '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$data[15]','$data[16]',
-            '$data[17]','$data[18]','$data[19]','$data[20]','$data[21]','$data[22]', $sx_organ, $sx_yphr)";
+            '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$data[15]',
+            '$data[16]','$data[17]','$data[18]','$data[19]','$data[20]','$data[21]','$data[22]', $sx_organ, $sx_yphr)";
             $imp_8 = iconv('cp1253','utf-8',$import);
             $ret = mysqli_query($mysqlconnection, $imp_8);
             

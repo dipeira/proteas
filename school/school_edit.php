@@ -160,7 +160,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td colspan=3>Τίτλος (αναλυτικά): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
             echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td><td>Τηλ.: <input type='text' name='tel' value='$tel' /></td></tr>";
             echo "<tr><td>email: <input type='text' name='email' value='$email' size='30'/></a></td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
-            echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
+            if ($type == 1 || $type == 2){
+                echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
+            }
             // 05-10-2012 - organikes
             if ($type == 1) {
                 echo "<tr><td colspan=2>Οργανικές:<br>";
@@ -184,7 +186,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                   echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2'/>";
                 }
             }  
-            else {
+            else if ($type == 2) {
                 echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
                 if ($type2 == 2) {
                   echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
@@ -201,7 +203,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // 19-06-2013 - kena_org, kena_leit
             if ($type == 1) {
             }
-            else {
+            else if ($type == 2){
                 echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
             }
             echo "</td></tr>";
@@ -214,20 +216,22 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='kena_leit[]' value='$kena_leit[3]' size='2'/>";
             // echo "</td></tr>";
             //
-            echo "<tr>";
-            if ($entaksis[0]) {
-                echo "<td><input type=\"checkbox\" name='entaksis' checked >Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
-            } else {
-                echo "<td><input type=\"checkbox\" name='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
+            if ($type == 1 || $type == 2){
+                echo "<tr>";
+                if ($entaksis[0]) {
+                    echo "<td><input type=\"checkbox\" name='entaksis' checked >Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
+                } else {
+                    echo "<td><input type=\"checkbox\" name='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
+                }
+                if ($ypodoxis) {
+                    echo "<td><input type=\"checkbox\" name='ypodoxis' checked >Τμήμα Υποδοχής</td>";
+                } else {
+                    echo "<td><input type=\"checkbox\" name='ypodoxis' >Τμήμα Υποδοχής</td>";
+                }
+                echo "</tr>";
+                echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' /></td><td colspan=3>Εκπ/κοί Τμ.Υποδοχής: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' /></td></tr>";
+                echo "<tr>";
             }
-            if ($ypodoxis) {
-                echo "<td><input type=\"checkbox\" name='ypodoxis' checked >Τμήμα Υποδοχής</td>";
-            } else {
-                echo "<td><input type=\"checkbox\" name='ypodoxis' >Τμήμα Υποδοχής</td>";
-            }
-            echo "</tr>";
-            echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' /></td><td colspan=3>Εκπ/κοί Τμ.Υποδοχής: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' /></td></tr>";
-            echo "<tr>";
                     
                     
             if ($type == 1) {
