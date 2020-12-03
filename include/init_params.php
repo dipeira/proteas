@@ -6,8 +6,8 @@
   {
     $query = "SELECT value from params WHERE name='$name'";
     $result = mysqli_query($conn, $query);
-    if (!$result) 
-       die('Could not query:' . mysqli_error($conn));
+    //if (!$result) 
+    //   die('Could not query:' . mysqli_error($conn));
     return mysqli_result($result, 0, "value");
   }
 

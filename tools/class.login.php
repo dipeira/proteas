@@ -83,7 +83,7 @@ class logmein {
       }
       array_unshift($escaped,$query);
       $query = call_user_func_array('sprintf',$escaped);
-      $result = mysqli_query($this->db_conn,$query) or die(mysqli_error($this->db_conn));
+      $result = mysqli_query($this->db_conn,$query); //or die(mysqli_error($this->db_conn));
           if($result){
             return $result;
           }else{
