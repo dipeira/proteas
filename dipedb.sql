@@ -278,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `type` int(11) NOT NULL COMMENT 'τυπος απασχόλησης (1 ωρομ, 2 αναπλ, 3 αναπλ ΕΣΠΑ, 4 ΕΕΠ, 5 ΕΒΠ)',
   `stathero` varchar(30) NULL,
   `kinhto` varchar(30) NULL,
-  `metakinhsh` text NOT NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
+  `metakinhsh` text NULL COMMENT 'Μετακινήσεις κατά τη σχολική χρονιά',
   `praxi` int(11) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `thesi` int(11) NULL COMMENT '0 Εκπαιδευτικός,1 Διευθυντής/Προϊστάμενος',
@@ -633,21 +633,21 @@ CREATE TABLE IF NOT EXISTS `params` (
   `name` varchar(20) NOT NULL COMMENT 'Όνομα Παραμέτρου',
   `value` varchar(100) NOT NULL COMMENT 'Τιμή Παραμέτρου',
   `descr` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `params`
 --
 
-INSERT INTO `params` (`id`, `name`, `value`, `descr`) VALUES
-(5, 'sxol_etos', '202021', 'Σχολικό έτος (να αλλάζει κάθε 1η Σεπτέμβρη & π.χ. το 2020-21 να εισάγεται ως 202021)'),
-(6, 'head_title', 'Ο Δ/ντής Π.Ε. XXXXXX', 'Τίτλος Δ/ντή (για βεβαιώσεις)'),
-(7, 'head_name', 'XXXXX XXXXX', 'Ονοματεπώνυμο Δ/ντή'),
-(8, 'endofyear', '21-06-2021', 'Ημέρα έκδοσης βεβαιώσεων αναπληρωτών'),
-(9, 'endofyear2', '21-06-2021', 'Τελευταία ημέρα εργασίας αναπληρωτών (για βεβαιώσεις)'),
-(10, 'protapol', '99999', 'Πρωτόκολλο απόλυσης'),
-(11, 'yp_wr', '24', 'Υποχρεωτικό ωράριο βαθμίδας'),
-(12, 'dnsh', 'Π.Ε. XXXXXXX', 'Διεύθυνση εκπαίδευσης');
+INSERT INTO `params` (`name`, `value`, `descr`) VALUES
+('sxol_etos', '202021', 'Σχολικό έτος (να αλλάζει κάθε 1η Σεπτέμβρη & π.χ. το 2020-21 να εισάγεται ως 202021)'),
+('head_title', 'Ο Δ/ντής Π.Ε. XXXXXX', 'Τίτλος Δ/ντή (για βεβαιώσεις)'),
+('head_name', 'XXXXX XXXXX', 'Ονοματεπώνυμο Δ/ντή'),
+('endofyear', '21-06-2021', 'Ημέρα έκδοσης βεβαιώσεων αναπληρωτών'),
+('endofyear2', '21-06-2021', 'Τελευταία ημέρα εργασίας αναπληρωτών (για βεβαιώσεις)'),
+('protapol', '99999', 'Πρωτόκολλο απόλυσης'),
+('yp_wr', '24', 'Υποχρεωτικό ωράριο βαθμίδας'),
+('dnsh', 'Π.Ε. XXXXXXX', 'Διεύθυνση εκπαίδευσης');
 
 -- --------------------------------------------------------
 
@@ -657,14 +657,14 @@ INSERT INTO `params` (`id`, `name`, `value`, `descr`) VALUES
 
 CREATE TABLE IF NOT EXISTS `praxi` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `ya` varchar(50) NOT NULL,
-  `ada` varchar(20) NOT NULL,
-  `apofasi` varchar(100) NOT NULL COMMENT 'απόφαση τοποθέτησης',
-  `ada_apof` varchar(30) NOT NULL,
-  `sxolio` varchar(300) NOT NULL,
-  `type` varchar(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  `name` varchar(100) NULL,
+  `ya` varchar(50) NULL,
+  `ada` varchar(20) NULL,
+  `apofasi` varchar(100) NULL COMMENT 'απόφαση τοποθέτησης',
+  `ada_apof` varchar(30) NULL,
+  `sxolio` varchar(300) NULL,
+  `type` varchar(10) NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `praxi`
@@ -681,15 +681,15 @@ INSERT INTO `praxi` (`id`, `name`, `ya`, `ada`, `apofasi`, `sxolio`, `type`) VAL
 
 CREATE TABLE IF NOT EXISTS `praxi_old` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `ya` varchar(50) NOT NULL,
-  `ada` varchar(20) NOT NULL,
-  `apofasi` varchar(100) NOT NULL COMMENT 'απόφαση τοποθέτησης',
-  `ada_apof` varchar(30) NOT NULL,
-  `sxolio` varchar(300) NOT NULL,
-  `type` varchar(10) NOT NULL,
-  `sxoletos` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  `name` varchar(100) NULL,
+  `ya` varchar(50) NULL,
+  `ada` varchar(20) NULL,
+  `apofasi` varchar(100) NULL COMMENT 'απόφαση τοποθέτησης',
+  `ada_apof` varchar(30) NULL,
+  `sxolio` varchar(300) NULL,
+  `type` varchar(10) NULL,
+  `sxoletos` int(11) NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 --
@@ -702,17 +702,17 @@ CREATE TABLE IF NOT EXISTS `school` (
   `category` int(10) NOT NULL COMMENT 'κατηγορία σχολείου: 1 - Α, 2 - Β κλπ.',
   `type` int(4) NOT NULL COMMENT '0 λοιπά, 1 Δημ, 2 Νηπ.',
   `eaep` int(2) DEFAULT NULL,
-  `name` varchar(40) NOT NULL,
-  `address` varchar(40) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
   `tk` int(5) NOT NULL COMMENT 'Ταχυδρομικός κώδικας',
   `tel` varchar(18) NOT NULL,
   `fax` varchar(18) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `email` varchar(60) NOT NULL,
   `organikothta` int(11) NOT NULL,
   `organikes` text DEFAULT NULL,
   `leitoyrg` int(11) DEFAULT NULL COMMENT 'Λειτουργικότητα',
   `students` text DEFAULT NULL COMMENT 'Οι τάξεις να χωρίζονται με κόμμα',
-  `tmimata` varchar(60) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
+  `tmimata` varchar(80) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
   `ekp_ee` varchar(10) DEFAULT NULL COMMENT 'Nα χωρίζονται με κόμμα',
   `entaksis` varchar(30) DEFAULT NULL,
   `ypodoxis` int(11) DEFAULT NULL,
@@ -736,7 +736,7 @@ CREATE TABLE IF NOT EXISTS `school` (
   `systeg` int(11) DEFAULT NULL,
   `vivliothiki` int(11) DEFAULT NULL,
   `archive` text DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `school`
@@ -744,13 +744,13 @@ CREATE TABLE IF NOT EXISTS `school` (
 
 INSERT INTO `school` (`id`, `code`, `category`, `type`, `eaep`, `name`, `address`, `tk`, `tel`, `fax`, `email`, `organikothta`, `organikes`, `leitoyrg`, `students`, `tmimata`, `ekp_ee`, `entaksis`, `ypodoxis`, `frontistiriako`, `ted`, `oloimero`, `oloimero_stud`, `oloimero_tea`, `oloimero_nip`, `klasiko`, `nip`, `comments`, `kena_org`, `kena_leit`, `type2`, `dimos`, `titlos`, `updated`, `anenergo`, `perif`, `systeg`, `vivliothiki`) VALUES
 (1, '2222222', 0, 0, 0, 'Διάθεση ΠΥΣΠΕ', '', 0, '0', '0', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Διάθεση ΠΥΣΠΕ', '2015-06-16 12:04:27', 0, 0, 0, 0),
-(387, '1234567', 0, 0, 0, 'Άγνωστο', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άγνωστο', '2015-06-16 12:04:16', 0, 0, 0, 0),
-(388, '', 0, 0, 0, 'Άλλο ΠΥΣΠΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άλλο ΠΥΣΠΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(389, '', 0, 0, 0, 'Απόσπαση σε φορέα', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση σε φορέα', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(394, '', 0, 0, 0, 'Άλλο ΠΥΣΔΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άλλο ΠΥΣΔΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(397, '', 0, 0, 0, 'Σχολικός Σύμβουλος', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Σχολικός Σύμβουλος', '0000-00-00 00:00:00', 0, 0, 0, 0),
-(398, '', 0, 0, 0, 'Δ/νση ΠΕ Ηρακλείου', 'Μεταξοχωρίου 15', 0, '2810529300', '', 'mail@dipe.ira.sch.gr', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', 'Για διοικητικούς', '', '', 0, 4, 'Δ/νση ΠΕ Ηρακλείου', '2018-10-15 10:33:24', 0, 0, 0, 0),
-(399, '', 0, 0, 0, 'Απόσπαση στο εξωτερικό', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση στο εξωτερικό', '0000-00-00 00:00:00', 0, 0, 0, 0);
+(2, '1234567', 0, 0, 0, 'Άγνωστο', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άγνωστο', '2015-06-16 12:04:16', 0, 0, 0, 0),
+(3, '', 0, 0, 0, 'Άλλο ΠΥΣΠΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άλλο ΠΥΣΠΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(4, '', 0, 0, 0, 'Απόσπαση σε φορέα', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση σε φορέα', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(5, '', 0, 0, 0, 'Άλλο ΠΥΣΔΕ', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Άλλο ΠΥΣΔΕ', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(6, '', 0, 0, 0, 'Σχολικός Σύμβουλος', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Σχολικός Σύμβουλος', '0000-00-00 00:00:00', 0, 0, 0, 0),
+(7, '', 0, 0, 0, 'Δ/νση ΠΕ ΧΧΧ', '', 0, '2810529300', '', 'mail@dipe.ira.sch.gr', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', 'Για διοικητικούς', '', '', 0, 4, 'Δ/νση ΠΕ Ηρακλείου', '2018-10-15 10:33:24', 0, 0, 0, 0),
+(8, '', 0, 0, 0, 'Απόσπαση στο εξωτερικό', '', 0, '', '', '', 0, '', 0, '', '', '', '0', 0, 0, 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, 'Απόσπαση στο εξωτερικό', '0000-00-00 00:00:00', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1025,7 +1025,7 @@ ALTER TABLE `klados`
 -- AUTO_INCREMENT for table `logon`
 --
 ALTER TABLE `logon`
-  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `params`
 --
@@ -1035,7 +1035,7 @@ ALTER TABLE `params`
 -- AUTO_INCREMENT for table `praxi`
 --
 ALTER TABLE `praxi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `school`
 --

@@ -195,7 +195,7 @@ class drasticSrcMySQL {
 		return ($res);
 	}	
 	protected function add(){
-		mysqli_query($this->conn, "INSERT INTO $this->table" . $this->addstr) or die(mysqli_error());
+		mysqli_query($this->conn, "INSERT INTO $this->table" . $this->addstr) or die(mysqli_error($this->conn));
 		if (mysqli_affected_rows($this->conn) == 1) return(true); else return(false);
 	}
 	protected function sums($sumString){

@@ -5,7 +5,7 @@ function kladosCombo($klados,$conn)
        $query = "SELECT * from klados ORDER BY perigrafh";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"klados\" id=\"klados\">";
@@ -29,7 +29,7 @@ function kladosCmb($conn)
     $query = "SELECT * from klados ORDER BY perigrafh";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
@@ -50,7 +50,7 @@ function typeCmb($conn)
     $query = "SELECT * from ektaktoi_types";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"type\" id=\"type\">";
@@ -70,7 +70,7 @@ function typeCmb1($typeinp,$conn)
     $query = "SELECT * from ektaktoi_types";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
             $type1 = get_type($typeinp, $conn);
@@ -349,15 +349,6 @@ function thesianaplcmb($thesi)
     case 1:
         $th = "Διευθυντής/Προϊστάμενος";
         break;
-    case 2:
-        $th = "Τμήμα Ένταξης";
-        break;
-    case 4:
-      $th = "Τάξη Υποδοχής";
-      break;
-    case 3:
-        $th = "Παράλληλη στήριξη";
-        break;
     }
     return $th;
 }
@@ -380,21 +371,6 @@ function thesianaplselectcmb($thesi)
     } else {
         echo "<option value='1'>Διευθυντής/Προϊστάμενος</option>";
     }
-    if ($thesi == 2) {
-        echo "<option value='2' selected=\"selected\">Τμήμα Ένταξης</option>";    
-    } else {
-        echo "<option value='2'>Τμήμα Ένταξης</option>";
-    }
-    if ($thesi == 4) {
-      echo "<option value='4' selected=\"selected\">Τάξη Υποδοχής</option>";    
-    } else {
-        echo "<option value='4'>Τάξη Υποδοχής</option>";
-    }
-    if ($thesi == 3) {
-        echo "<option value='3' selected=\"selected\">Παράλληλη στήριξη</option>";    
-    } else {
-        echo "<option value='3'>Παράλληλη στήριξη</option>";
-    }
     echo "</td></tr>";
 }
 
@@ -403,7 +379,7 @@ function schoolCombo($schid,$conn)
     $query = "SELECT * from school";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"school\">";
@@ -426,7 +402,7 @@ function schCombo($name1,$conn)
     $query = "SELECT * from school";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo "<select name='$name1'>";
@@ -477,7 +453,7 @@ function adeiaCmb($inp,$conn,$ekt = 0)
     $query = $ekt ? "SELECT * from adeia_ekt_type ORDER BY type" : "SELECT * from adeia_type ORDER BY type";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo "<select id='type' name=\"type\" >";
@@ -522,7 +498,7 @@ function tblCmb($conn, $tbl, $inp = 0, $fieldnm = null, $sortby = null, $query =
     $query .= $sortby ? " ORDER BY $sortby ASC" : '';
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $num=mysqli_num_rows($result);
     echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" >" : "<select id=\"$tbl\" name=\"$tbl\" >";

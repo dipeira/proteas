@@ -70,7 +70,7 @@ if (isset($_POST['submit'])) {
       for ($col = 0; $col < $highestColumnIndex; ++ $col) {
         $cell = $worksheet->getCellByColumnAndRow($col, $row);
         $val = $cell->getValue();
-        $row_arr = array(1,2,3,4,5,12,17,18,19,20,21,23);
+        $row_arr = array(0,1,2,3,4,5,6,7,8,9,10,11,12);
         if (!in_array($col, $row_arr))
             continue;
         if($row === 1){
@@ -103,30 +103,37 @@ if (isset($_POST['submit'])) {
         $cell = $worksheet->getCellByColumnAndRow($col, $row);
         $val[] = $cell->getValue();
       }
-      $val[12] = ExcelToPHP($val[12]);
-      $val[12] = date ("Y-m-d", $val[12]);
+      $val[5] = ExcelToPHP($val[5]);
+      $val[5] = date ("Y-m-d", $val[5]);
 
       // prepare query
-      $sql="insert into ektaktoi(hm_apox, name, surname, patrwnymo, mhtrwnymo, klados, hm_anal, ya, apofasi, comments, status, afm, type, stathero, kinhto, praxi, wres)
-      values('$hm_apox','".$val[1] . "','" . $val[2] . "','" . $val[3]. "','" . $val[4]. "','" . $val[5]. "','" . $val[12]. "','" . $val[13]. "','" . $val[14]. "','" . $val[16]. "','" . $val[17]. "','" . $val[18]. "','" . $val[19]. "','" . $val[20]. "','" . $val[21]. "','" . $val[23]. "',$hours)";
+      $sql="insert into ektaktoi(hm_apox, name, surname, patrwnymo, mhtrwnymo, klados, 
+      hm_anal, afm, type, stathero, kinhto, email, praxi, 
+      wres, status, ent_ty)
+      values('$hm_apox','".$val[0] . "','" . $val[1] . "','" . $val[2]. "','" . $val[3]. "','" . $val[4]. 
+      "','" . $val[5]. "','" . $val[6]. "','" . $val[7]. "','" . $val[8]. "','" . $val[9]. "','" . $val[10]. "','" .
+       $val[11]. "', $hours, 1, '".$val[12]."')";
 
-      //Run your mysqli_query
+       //Run your mysqli_query
       // check if already inserted...
-      $sql1 = "select afm from ektaktoi where afm=$val[18]";
+      $sql1 = "select afm from ektaktoi where afm=$val[6]";
       $result1 = mysqli_query($mysqlconnection, $sql1);
       if (mysqli_num_rows($result1)==0)
       {    
           $result = mysqli_query($mysqlconnection, $sql);
           if ($result)
               $count++;
+          else echo "<br>".mysqli_error($mysqlconnection)."<br>";
       }
       else
           $inserted++;
       //echo $sql. "<br>";
     }
     echo "<h2><u>Αποτέλεσμα</u></h2>";
-    if (!$count)
-        echo "<h3>Δεν έγινε εισαγωγή εγγραφών...</h3><i>($inserted εγγραφές έχουν ήδη καταχωρηθεί)</i><br><br>";
+    if (!$count){
+        echo "<h3>Δεν έγινε εισαγωγή εγγραφών...</h3>";
+        echo $inserted ? "<i>($inserted εγγραφές έχουν ήδη καταχωρηθεί)</i><br><br>" : '';
+    }
     else
         echo "<h3>Επιτυχής καταχώρηση $count εγγραφών...<h3><br><br>";
 

@@ -435,7 +435,7 @@ function organikes_per_klados($mysqlconnection)
     $query = "SELECT COUNT( * ) as total, k.perigrafh, k.onoma FROM employee e 
         JOIN klados k 
         ON k.id = e.klados 
-        WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi NOT IN (4,5)
+        WHERE status!=2 AND sx_organikhs NOT IN (3,5) AND thesi NOT IN (4,5)
         GROUP BY klados";
     $result_mon = mysqli_query($mysqlconnection, $query);
     $ret = [];
@@ -475,7 +475,7 @@ function apospasmenoi_ekswteriko($mysqlconnection)
     $query = "SELECT k.perigrafh as eidikothta, count(*) as total
         FROM `employee` e 
         JOIN klados k ON e.klados = k.id 
-        WHERE e.sx_yphrethshs=399 group by klados";
+        WHERE e.sx_yphrethshs=8 group by klados";
         
     $res = mysqli_query($mysqlconnection, $query);
     $ret = [];
@@ -499,7 +499,7 @@ function ypoloipo_adeiwn($id, $sql)
     $sx_yphr = mysqli_result($res2, 0, "sx_yphrethshs");
     $thesi = mysqli_result($res2, 0, "thesi");
     // if apospasmenoi / dioikhtikoi
-    if ($sx_yphr == 389 || $sx_yphr == 398 || $thesi == 4) {
+    if ($sx_yphr == 4 || $sx_yphr == 7 || $thesi == 4) {
         $cur_yr = date("Y");
         $prev_yr = $cur_yr - 1;
         $qry = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $cur_yr AND year(FINISH) = $cur_yr AND emp_id = $id";
@@ -599,7 +599,7 @@ function check_idiwtiko($conn)
     $query = "SELECT id,surname,name,idiwtiko_liksi from employee WHERE idiwtiko=1 AND idiwtiko_liksi <= curdate()";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     if (!mysqli_num_rows($result)) {
         return "";

@@ -174,7 +174,7 @@ if (isset($_REQUEST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET[
 
   // exclude employees that don't belong in d/nsh
   if (!isset($_REQUEST['outsiders'])) {
-    $text = " NOT (sx_yphrethshs IN (388, 394) AND sx_organikhs IN (388,394))";
+    $text = " NOT (sx_yphrethshs IN (3, 5) AND sx_organikhs IN (3,5))";
     if ($whflag) {
       $query .= " AND $text";
     } else {

@@ -78,7 +78,7 @@ if (!isset($_POST['outsiders']) && !$is_anapl) {
   if ($flag) {
     $query .= $op;
   }
-  $query .= " (sx_organikhs NOT IN (388,394)) ";
+  $query .= " (sx_organikhs NOT IN (3,5)) ";
   $flag = 1;
 }
 

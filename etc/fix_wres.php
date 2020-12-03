@@ -57,7 +57,7 @@
         $res = mysqli_query($mysqlconnection, $qry);
         if (!res)
         {
-            die ('Error: '.mysqli_error ());
+            die ('Error: '.mysqli_error ($mysqlconnection));
             $fails++;
         }
         echo "$surname\tYpoxr:$ypoxr_wres,Yphr:$yphr_hours ".$qry."<br>";

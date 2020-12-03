@@ -55,7 +55,7 @@
   else
   {
       if ($_POST['yphr'][0] == "")
-        $yphr = 387;
+        $yphr = 2;
       else
       {
         $yphret = $_POST['yphr'][0];

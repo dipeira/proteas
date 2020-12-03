@@ -32,7 +32,7 @@ require_once"../include/functions.php";
     $result = mysqli_query($mysqlconnection, $query);
     $idiwtikoi = mysqli_result($result, 0);
     
-    $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi!=5";
+    $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN (3,5) AND thesi!=5";
     $result = mysqli_query($mysqlconnection, $query);
     $monimoi_her_total = mysqli_result($result, 0);
     
@@ -44,19 +44,19 @@ require_once"../include/functions.php";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_diath = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=388 AND status!=2 AND sx_yphrethshs NOT IN (388,394)";
+    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=3 AND status!=2 AND sx_yphrethshs NOT IN (3,5)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_apoallopispe = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=394 AND status!=2 AND sx_yphrethshs NOT IN (388,394)";
+    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=5 AND status!=2 AND sx_yphrethshs NOT IN (3,5)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_apoallopisde = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=388 AND status!=2 AND sx_organikhs NOT IN (388,394)";
+    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=3 AND status!=2 AND sx_organikhs NOT IN (3,5)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_seallopispe = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=389 AND status!=2 AND sx_organikhs NOT IN (388,394)";
+    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=4 AND status!=2 AND sx_organikhs NOT IN (3,5)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_seforea = mysqli_result($result, 0);
     
@@ -64,14 +64,14 @@ require_once"../include/functions.php";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_seadeia = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE status!=2 AND (sx_organikhs=388 OR sx_organikhs=394) AND sx_yphrethshs NOT IN (388,394)";
+    $query = "SELECT count(*) FROM employee WHERE status!=2 AND (sx_organikhs=3 OR sx_organikhs=5) AND sx_yphrethshs NOT IN (3,5)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_alloy = mysqli_result($result, 0);
 
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma FROM employee e 
                 JOIN klados k 
                 ON k.id = e.klados 
-                WHERE status!=2 AND sx_organikhs NOT IN (388,394) AND thesi!=5
+                WHERE status!=2 AND sx_organikhs NOT IN (3,5) AND thesi!=5
                 GROUP BY klados";
     $result_mon = mysqli_query($mysqlconnection, $query);
 

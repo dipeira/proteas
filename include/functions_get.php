@@ -5,7 +5,7 @@ function getKlados($id,$conn,$full = false)
     $query = "SELECT perigrafh,onoma from klados where id=".$id;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
-    //    die('Could not query:' . mysqli_error());
+    //    die('Could not query:' . mysqli_error($conn));
     $row = mysqli_fetch_assoc($result);
     return $full ? $row['perigrafh'] . ' (' . $row['onoma'] . ')' :
       $row['perigrafh'];
@@ -19,7 +19,7 @@ function getSchool($id,$conn)
     if (!$result) { 
         return;
     }
-    //    die('Could not query:' . mysqli_error());
+    //    die('Could not query:' . mysqli_error($conn));
                //else
     return mysqli_result($result, 0);    
 }
@@ -41,7 +41,7 @@ function getSchoolFromCode($code, $conn)
     if (!$result) {
         return false;
     }
-    //die('Could not query:' . mysqli_error());
+    //die('Could not query:' . mysqli_error($conn));
     else {
         return mysqli_result($result, 0);
     }    
@@ -53,7 +53,7 @@ function getSchoolNameFromCode($code, $conn)
     if (!$result) {
         return false;
     }
-    //die('Could not query:' . mysqli_error());
+    //die('Could not query:' . mysqli_error($conn));
     else {
         return mysqli_result($result, 0);
     }    
@@ -160,7 +160,7 @@ function get_type($typeid,$conn)
     $result = mysqli_query($conn, $query);
     if (!$result) { 
       return;
-        //die('Could not query:' . mysqli_error());
+        //die('Could not query:' . mysqli_error($conn));
     }
     $typos=mysqli_result($result, $i, "type");
     return $typos;
@@ -170,7 +170,7 @@ function getDimos($id,$conn)
     $query = "SELECT name from dimos where id=".$id;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
-    //    die('Could not query:' . mysqli_error());
+    //    die('Could not query:' . mysqli_error($conn));
     //else
     $dimos = mysqli_result($result, 0);
     if (!$dimos) {
@@ -185,7 +185,7 @@ function getSchDimos($id,$conn)
     //echo $query;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
-    //    die('Could not query:' . mysqli_error());
+    //    die('Could not query:' . mysqli_error($conn));
     //else
     $dimos = mysqli_result($result, 0);
     if (!$dimos) {
@@ -217,7 +217,7 @@ function getNamefromTbl($conn, $tbl, $id)
     $result = mysqli_query($conn, $query);
     if (!$result) { 
     return;
-        //die('Could not query:' . mysqli_error());
+        //die('Could not query:' . mysqli_error($conn));
     }
     $name=mysqli_result($result, 0, "name");
     return $name;
@@ -227,7 +227,7 @@ function getIDfromTbl($conn, $tbl, $name)
     $query = "SELECT * from $tbl WHERE name=$name";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error());
+        die('Could not query:' . mysqli_error($conn));
     }
     $id=mysqli_result($result, 0, "id");
     return $id;

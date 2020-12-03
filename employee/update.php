@@ -26,7 +26,7 @@ $surname = $_POST['surname'];
 $klados =$_POST['klados']; 
 
 if ($_POST['org'] == "")
-  $org = 387;
+  $org = 2;
 else
 {
   $organ = $_POST['org'];
@@ -43,7 +43,7 @@ if (count($_POST['yphr']) != count(array_unique($_POST['yphr']))){
 for ($i=0; $i<$count; $i++)
 {
     if ($_POST['yphr'][$i] == "")
-        $yp_tmp = 387;
+        $yp_tmp = 2;
     else
         $yp_tmp = $_POST['yphr'][$i];
     $yphret[$i] = $yp_tmp;

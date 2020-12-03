@@ -22,15 +22,15 @@
  * ========================================================================================= 
  */
 var dsgrid = {
-"MSGUPDATEFAILED": "Failed to update cell",
-"MSGREALLYDELETE": "Really delete this row?",
-"MSGDELETEFAILED": "Failed to delete row",
-"MSGINSERTFAILED": "Failed to add row",
-"MSGREFRESHFAILED": "Failed to refresh grid",
-"MSGCLICKSORT": "Sort on ",
-"MSGDELETEROW": "Delete row",
-"MSGCLICKEDIT": "Edit cell",
-"MSGADDROW": "Add row"
+"MSGUPDATEFAILED": "Αποτυχία ενημέρωσης κελιού",
+"MSGREALLYDELETE": "Θέλετε πραγματικά να διαγράψετε αυτή τη γραμμή;",
+"MSGDELETEFAILED": "Αποτυχία διαγραφής γραμμής",
+"MSGINSERTFAILED": "Αποτυχία προσθήκης γραμμής",
+"MSGREFRESHFAILED": "Αποτυχία ενημέρωσης πίνακα",
+"MSGCLICKSORT": "Ταξινόμηση κατά ",
+"MSGDELETEROW": "Διαγραφή γραμμής",
+"MSGCLICKEDIT": "Επεξεργασία κελιού",
+"MSGADDROW": "Προσθήκη γραμμής"
 };
 
 var n=0;
