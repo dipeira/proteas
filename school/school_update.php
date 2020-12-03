@@ -16,8 +16,8 @@
   $tel = $_POST['tel']; 
   $email = $_POST['email']; 
   $fax = $_POST['fax'];
-  $organ = $_POST['organ'];
-  $leitoyrg = $_POST['leitoyrg'];
+  $organ = $_POST['organ'] ? $_POST['organ'] : 0;
+  $leitoyrg = $_POST['leitoyrg'] ? $_POST['leitoyrg'] : 0;
   $anenergo = $_POST['anenergo'] == 'on' ? 1 : 0;
   // 05-10-2012
   $organikes = serialize($_POST['organikes']);
@@ -43,8 +43,8 @@
   $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'].",".$_POST['g'].",".$_POST['h'];
    
   //29-6-2012
-  $oloimero_tea = $_POST['oloimero_tea'];
-  $oloimero_stud = $_POST['oloimero_stud'];
+  $oloimero_tea = $_POST['oloimero_tea'] ? $_POST['oloimero_tea'] : 0;
+  $oloimero_stud = $_POST['oloimero_stud'] ? $_POST['oloimero_stud'] : 0;
   $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'].",".$_POST['tg'].",".$_POST['th'].",".$_POST['ti'];
   $ekp_ee = $_POST['ekp_te'].",".$_POST['ekp_ty'];
   
