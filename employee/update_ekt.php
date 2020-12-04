@@ -55,7 +55,7 @@
   else
   {
       if ($_POST['yphr'][0] == "")
-        $yphr = 2;
+        $yphr = getSchoolID('Άγνωστο',$mysqlconnection);
       else
       {
         $yphret = $_POST['yphr'][0];

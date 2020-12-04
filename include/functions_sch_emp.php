@@ -432,10 +432,12 @@ function wres_dnth($tm)
     
 function organikes_per_klados($mysqlconnection)
 {
+    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
+    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
     $query = "SELECT COUNT( * ) as total, k.perigrafh, k.onoma FROM employee e 
         JOIN klados k 
         ON k.id = e.klados 
-        WHERE status!=2 AND sx_organikhs NOT IN (3,5) AND thesi NOT IN (4,5)
+        WHERE status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde) AND thesi NOT IN (4,5)
         GROUP BY klados";
     $result_mon = mysqli_query($mysqlconnection, $query);
     $ret = [];
@@ -472,10 +474,11 @@ function dntes_ana_klado($mysqlconnection, $tetrathesia_k_anw = false)
 }
 function apospasmenoi_ekswteriko($mysqlconnection)
 {
+    $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό',$mysqlconnection);
     $query = "SELECT k.perigrafh as eidikothta, count(*) as total
         FROM `employee` e 
         JOIN klados k ON e.klados = k.id 
-        WHERE e.sx_yphrethshs=8 group by klados";
+        WHERE e.sx_yphrethshs=$ekswteriko group by klados";
         
     $res = mysqli_query($mysqlconnection, $query);
     $ret = [];
@@ -499,7 +502,10 @@ function ypoloipo_adeiwn($id, $sql)
     $sx_yphr = mysqli_result($res2, 0, "sx_yphrethshs");
     $thesi = mysqli_result($res2, 0, "thesi");
     // if apospasmenoi / dioikhtikoi
-    if ($sx_yphr == 4 || $sx_yphr == 7 || $thesi == 4) {
+    $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
+    $dnsi = getParam('dnsh', $mysqlconnection);
+    $se_dnsi = getSchoolID($dnsi,$mysqlconnection);
+    if ($sx_yphr == $se_forea || $sx_yphr == $se_dnsi || $thesi == 4) {
         $cur_yr = date("Y");
         $prev_yr = $cur_yr - 1;
         $qry = "SELECT sum(days) as rem FROM adeia WHERE TYPE = 2 AND year(START) = $cur_yr AND year(FINISH) = $cur_yr AND emp_id = $id";

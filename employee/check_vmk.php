@@ -108,9 +108,11 @@
                 $patrwnymo = mysqli_result($result, $i, "patrwnymo");
                 $aney_xr = mysqli_result($result, $i, "aney_xr");
                 
-                // 29-10-2012 - Skip employees from elsewhere (organikh = 3 (allo pyspe) or 5 (allo pysde)) or vathmos = A.
+                // 29-10-2012 - Skip employees from elsewhere (organikh = allo pyspe or allo pysde) or vathmos = A.
+                $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
+                $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
                 $organ = mysqli_result($result, $i, "sx_organikhs");
-                if ($organ == 3 || $organ == 5 || strcmp($vathm,'Α')==0)
+                if ($organ == $allo_pysde || $organ == $allo_pyspe || strcmp($vathm,'Α')==0)
                 {
                     $i++;
                     continue;

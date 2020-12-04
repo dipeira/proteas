@@ -8,6 +8,13 @@
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+
+    // init variables
+    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
+    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
+    $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
+    $sxol_symv = getSchoolID('Σχολικός Σύμβουλος',$mysqlconnection);
+    $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό',$mysqlconnection);
 ?>    
 <html>
     <head>
@@ -20,9 +27,9 @@
     // end_of_year: Includes end-of-year actions: Deletes ektakto personnel, returns personnel from other pispe etc...
     require "../tools/class.login.php";
     $log = new logmein();
-if($log->logincheck($_SESSION['loggedin']) == false) {
-    header("Location: ../tools/login.php");
-}
+    if($log->logincheck($_SESSION['loggedin']) == false) {
+        header("Location: ../tools/login.php");
+    }
     $usrlvl = $_SESSION['userlevel'];
             
     $sxol_etos = getParam('sxol_etos', $mysqlconnection);
@@ -75,11 +82,11 @@ if (isset($_POST['sxoletos'])) {
     $result = mysqli_query($mysqlconnection, $query);
     $query = "DROP TABLE employee_moved";
     $result = mysqli_query($mysqlconnection, $query);
-    // 3: allo pyspe, 4: apospasi se forea, 6: sxol. symvoulos, 8: Apospash ekswteriko
+    // allo pyspe, apospasi se forea, sxol. symvoulos, Apospash ekswteriko
     // thesi 2: d/nths, 4: dioikhtikos
-    $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN (3,4,6,8) AND thesi NOT IN (2,4)";
+    $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN ($allo_pyspe,$se_forea,$sxol_symv,$ekswteriko) AND thesi NOT IN (2,4)";
     $result = mysqli_query($mysqlconnection, $query);
-    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN (3,4,6,8) AND thesi NOT IN (2,4)";
+    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN ($allo_pyspe,$se_forea,$sxol_symv,$ekswteriko) AND thesi NOT IN (2,4)";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows($mysqlconnection);
     //echo $query;
@@ -90,9 +97,9 @@ if (isset($_POST['sxoletos'])) {
     }
         
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
-    $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 3";
+    $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = $allo_pyspe";
     $result = mysqli_query($mysqlconnection, $query);
-    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 3";
+    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = $allo_pyspe";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows($mysqlconnection);
     //echo $query;
@@ -275,7 +282,7 @@ elseif ($_POST['type'] == 2) {
 elseif ($_POST['type'] == 4) {
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31-08)</h3>";
     // check...
-    $query = "SELECT * FROM employee WHERE sx_yphrethshs = 4";
+    $query = "SELECT * FROM employee WHERE sx_yphrethshs = $se_forea";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result)) {
         exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
@@ -285,9 +292,9 @@ elseif ($_POST['type'] == 4) {
     //$result = mysqli_query($mysqlconnection, $query);
     //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
     //$result = mysqli_query($mysqlconnection, $query);
-    $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 4";
+    $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = $se_forea";
     $result = mysqli_query($mysqlconnection, $query);
-    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 4";
+    $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = $se_forea";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows();
     //echo $query;
@@ -312,89 +319,6 @@ elseif ($_POST['type'] == 12) {
 }
     mysqli_close($mysqlconnection);
 
-    // epistrofh ekp/kwn Hrakleioy sthn organikh toys
-    /*
-    elseif ($_POST['type'] == 6)
-    {
-        echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
-        // check...
-        $query = "SELECT * FROM employee WHERE sx_yphrethshs NOT IN (4,6,8) AND sx_yphrethshs != sx_organikhs AND thesi NOT IN (2,4)";
-        $result = mysqli_query($mysqlconnection, $query);
-        if (!mysqli_num_rows($result))
-            exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
-        //
-        //$query = "DROP TABLE employee_bkp";
-        //$result = mysqli_query($mysqlconnection, $query);
-        $query = "CREATE TABLE $tbl_bkp_mon SELECT * FROM employee";
-        $result = mysqli_query($mysqlconnection, $query);
-        $query = "DROP TABLE employee_moved";
-        $result = mysqli_query($mysqlconnection, $query);
-        // 4: apospasi se forea, 6: sxol. symvoulos, 8: Apospash ekswteriko
-        // thesi 2: d/nths, 4: dioikhtikos
-        $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN (4,6,8) AND thesi NOT IN (2,4)";
-        $result = mysqli_query($mysqlconnection, $query);
-        $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN (4,6,8) AND thesi NOT IN (2,4)";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_affected_rows();
-        //echo $query;
-        if ($result)
-            echo "Επιτυχής μεταβολή $num εγγραφών.";
-        else 
-            echo "Πρόβλημα στη διαγραφή...";
-    }
-    elseif ($_POST['type'] == 3)
-    {
-        echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
-        // check...
-        $query = "SELECT * FROM employee WHERE sx_yphrethshs = 3 AND sx_organikhs != 3";
-        $result = mysqli_query($mysqlconnection, $query);
-        if (!mysqli_num_rows($result))
-            exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
-        //
-        //$query = "DROP TABLE employee_bkp";
-        //$result = mysqli_query($mysqlconnection, $query);
-        //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
-        //$result = mysqli_query($mysqlconnection, $query);
-        $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = 3";
-        $result = mysqli_query($mysqlconnection, $query);
-        $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = 3";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_affected_rows();
-        //echo $query;
-        if ($result)
-            echo "Επιτυχής μεταβολή $num εγγραφών.";
-        else 
-            echo "Πρόβλημα στη διαγραφή...";
-    }
-    // diagrafh ekpkwn apo alla pyspe/pysde
-    elseif ($_POST['type'] == 5)
-    {
-        echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
-        // check...
-        $query = "SELECT * FROM employee WHERE sx_organikhs IN (3,5) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (6)";
-        $result = mysqli_query($mysqlconnection, $query);
-        if (!mysqli_num_rows($result))
-            exit('Δεν υπάρχουν εκπαιδευτικοί γι\' αυτή την ενέργεια...');
-        //
-        //$query = "DROP TABLE employee_bkp";
-        //$result = mysqli_query($mysqlconnection, $query);
-        //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
-        //$result = mysqli_query($mysqlconnection, $query);
-        $query = "DROP TABLE employee_deleted";
-        $result = mysqli_query($mysqlconnection, $query);
-        // 3: Άλλο ΠΥΣΠΕ, 5: Άλλο ΠΥΣΔΕ
-        $query = "CREATE TABLE employee_deleted SELECT * FROM employee WHERE sx_organikhs IN (3,5) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (6)";
-        $result = mysqli_query($mysqlconnection, $query);
-        $query = "DELETE FROM employee WHERE sx_organikhs IN (3,5) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (6)";
-        $result = mysqli_query($mysqlconnection, $query);
-        $num = mysqli_affected_rows();
-        //echo $query;
-        if ($result)
-            echo "Επιτυχής μεταβολή $num εγγραφών.";
-        else 
-            echo "Πρόβλημα στη διαγραφή...";
-    }
-    */
 ?>
 </body>
 </html>

@@ -174,7 +174,9 @@ if (isset($_REQUEST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET[
 
   // exclude employees that don't belong in d/nsh
   if (!isset($_REQUEST['outsiders'])) {
-    $text = " NOT (sx_yphrethshs IN (3, 5) AND sx_organikhs IN (3,5))";
+    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
+    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
+    $text = " NOT (sx_yphrethshs IN ($allo_pyspe, $allo_pysde) AND sx_organikhs IN ($allo_pyspe, $allo_pysde))";
     if ($whflag) {
       $query .= " AND $text";
     } else {

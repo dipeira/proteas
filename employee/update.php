@@ -25,8 +25,9 @@ $name = $_POST["name"];
 $surname = $_POST['surname']; 
 $klados =$_POST['klados']; 
 
-if ($_POST['org'] == "")
-  $org = 2;
+if ($_POST['org'] == ""){
+    $org = getSchoolID('Άγνωστο',$mysqlconnection);
+}
 else
 {
   $organ = $_POST['org'];
@@ -43,7 +44,7 @@ if (count($_POST['yphr']) != count(array_unique($_POST['yphr']))){
 for ($i=0; $i<$count; $i++)
 {
     if ($_POST['yphr'][$i] == "")
-        $yp_tmp = 2;
+        $yp_tmp = getSchoolID('Άγνωστο',$mysqlconnection);
     else
         $yp_tmp = $_POST['yphr'][$i];
     $yphret[$i] = $yp_tmp;

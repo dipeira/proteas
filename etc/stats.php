@@ -28,11 +28,16 @@ require_once"../include/functions.php";
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
+    // init variables
+    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
+    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
+    $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
+
     $query = "SELECT count( * ) FROM employee WHERE status!=2 AND thesi=5";
     $result = mysqli_query($mysqlconnection, $query);
     $idiwtikoi = mysqli_result($result, 0);
     
-    $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN (3,5) AND thesi!=5";
+    $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pyspe) AND thesi!=5";
     $result = mysqli_query($mysqlconnection, $query);
     $monimoi_her_total = mysqli_result($result, 0);
     
@@ -44,19 +49,19 @@ require_once"../include/functions.php";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_diath = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=3 AND status!=2 AND sx_yphrethshs NOT IN (3,5)";
+    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=$allo_pyspe AND status!=2 AND sx_yphrethshs NOT IN ($allo_pyspe, $allo_pysde)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_apoallopispe = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=5 AND status!=2 AND sx_yphrethshs NOT IN (3,5)";
+    $query = "SELECT count(*) FROM employee WHERE sx_organikhs=$allo_pysde AND status!=2 AND sx_yphrethshs NOT IN ($allo_pyspe, $allo_pysde)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_apoallopisde = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=3 AND status!=2 AND sx_organikhs NOT IN (3,5)";
+    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=$allo_pyspe AND status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_seallopispe = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=4 AND status!=2 AND sx_organikhs NOT IN (3,5)";
+    $query = "SELECT count(*) FROM employee WHERE sx_yphrethshs=$se_forea AND status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_seforea = mysqli_result($result, 0);
     
@@ -64,14 +69,14 @@ require_once"../include/functions.php";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_seadeia = mysqli_result($result, 0);
     
-    $query = "SELECT count(*) FROM employee WHERE status!=2 AND (sx_organikhs=3 OR sx_organikhs=5) AND sx_yphrethshs NOT IN (3,5)";
+    $query = "SELECT count(*) FROM employee WHERE status!=2 AND (sx_organikhs=$allo_pyspe OR sx_organikhs=$allo_pysde) AND sx_yphrethshs NOT IN ($allo_pyspe, $allo_pysde)";
     $result = mysqli_query($mysqlconnection, $query);
     $mon_alloy = mysqli_result($result, 0);
 
     $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma FROM employee e 
                 JOIN klados k 
                 ON k.id = e.klados 
-                WHERE status!=2 AND sx_organikhs NOT IN (3,5) AND thesi!=5
+                WHERE status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde) AND thesi!=5
                 GROUP BY klados";
     $result_mon = mysqli_query($mysqlconnection, $query);
 
