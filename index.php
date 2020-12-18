@@ -106,20 +106,21 @@ if (isset($_POST['klados']) && ($_POST['klados']>0) || (isset($_POST['org']) && 
     $posted=1;
     $curpg=1;
 }
-if ((isset($_POST['klados']) && $_POST['klados']>0) || (isset($_GET['klados']) && $_GET['klados']>0)) {
-    if ($_POST['klados']>0) {
+if (isset($_REQUEST['klados']) ) {
+    if (isset($_POST['klados']) && $_POST['klados']>0) {
         $klpost = $_POST['klados'];
-    } else {
+    }  
+    if (isset($_GET['klados']) && $_GET['klados']>0){
         $klpost = $_GET['klados'];
     }
     $query .= "WHERE klados = $klpost ";
     $whflag=1;
 }
-if (isset($_REQUEST['org']) && ((strlen($_POST['org'])>0) || ($_GET['org']>0))) {
-    if (strlen($_POST['org'])>0) {
+if ( isset($_REQUEST['org']) && strlen($_REQUEST['org']) ) {
+    if (isset ($_POST['org']) && strlen($_POST['org'])>0) {
         $orgpost = getSchoolID($_POST['org'], $mysqlconnection);
     }
-    if ($_GET['org']>0) {
+    if (isset($_GET['org']) && $_GET['org']>0) {
         $orgpost = $_GET['org'];
     }
     if ($whflag) {
@@ -130,11 +131,11 @@ if (isset($_REQUEST['org']) && ((strlen($_POST['org'])>0) || ($_GET['org']>0))) 
         $whflag=1;
     }    
 }
-if (isset($_REQUEST['yphr']) && ((strlen($_POST['yphr'])>0) || ($_GET['yphr']>0))) {
-    if (strlen($_POST['yphr'])>0) {
+if ( isset($_REQUEST['yphr']) && strlen($_REQUEST['yphr'])>0) {
+    if (isset($_POST['yphr']) && strlen($_POST['yphr'])>0) {
         $yppost = getSchoolID($_POST['yphr'], $mysqlconnection);
     }
-    if ($_GET['yphr']>0) {
+    if (isset($_GET['yphr']) && $_GET['yphr']>0) {
         $yppost = $_GET['yphr'];
     }
     if ($whflag) {
@@ -150,8 +151,8 @@ if (isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 && $_POST['pin
     $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
     echo "<script>window.location = '$url'</script>";
 }
-if (isset($_REQUEST['surname']) && (strlen($_POST['surname'])>0 || strlen($_GET['surname'])>0)) {
-    if (strlen($_POST['surname'])>0) {
+if ( isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0) {
+    if (isset($_POST['surname']) && strlen($_POST['surname'])>0) {
         $surpost = explode(' ', $_POST['surname'])[0];
     } else {
         $surpost = $_GET['surname'];
@@ -332,17 +333,23 @@ if ($lastpg == 0) {
     echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
 $outsiders = isset($_REQUEST['outsiders']) ? '&outsiders=1' : '';
 $inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
+$getstring = "&rpp=$rpp";
+$getstring .= $klpost ? "&klados=$klpost" : '';
+$getstring .= $yppost ? "&yphr=$yppost" : '';
+$getstring .= $surpost ? "&surname=$surpost" : '';
+$getstring .= strlen($outsiders)>0 ? $outsiders : '';
+$getstring .= strlen($inactive)>0 ? $outsiders : '';
 if ($curpg!=1) {
-    echo "  <a href=index.php?page=1&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Πρώτη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Προηγ/νη</a>";
+    echo "  <a href=index.php?page=1$getstring>Πρώτη</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg$getstring>Προηγ/νη</a>";
 }
 else {
         echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
 }
 if ($curpg != $lastpg) {
     $nextpg = $curpg+1;
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Επόμενη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg&rpp=$rpp&klados=$klpost&org=$orgpost&yphr=$yppost&surname=$surpost$outsiders$inactive>Τελευταία</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg$getstring>Επόμενη</a>";
+    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg$getstring>Τελευταία</a>";
 }
 else { 
         echo "  Επόμενη &nbsp;&nbsp; Τελευταία";

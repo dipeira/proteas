@@ -2,7 +2,7 @@
 // url: http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 
 //start session
-session_start();
+//session_start();
 require_once dirname(__DIR__).'/config.php';
 
 class logmein {

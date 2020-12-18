@@ -367,7 +367,7 @@ function get_leitoyrgikothta($id, $mysqlconnection)
         $klasiko_tm += $klasiko_exp[9]+$klasiko_exp[10]>0 ? 1:0;
         $klasiko_tm += $klasiko_exp[11]+$klasiko_exp[12]>0 ? 1:0;
         return $klasiko_tm;
-    } else {
+    } else if ($type == 1) {
         $tmimata_exp = explode(",", mysqli_result($result, 0, "tmimata"));
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
         return $leit;

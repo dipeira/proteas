@@ -31,6 +31,7 @@ function kladosCmb($conn)
     if (!$result) { 
         die('Could not query:' . mysqli_error($conn));
     }
+    $i = 0;
     $num=mysqli_num_rows($result);
     echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
     echo "<option value='' selected>(Επιλογή:)</option>";

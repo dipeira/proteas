@@ -111,8 +111,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <center>
         <?php
             $usrlvl = $_SESSION['userlevel'];
-            $id = $_GET['id'];
+            
         if ($_GET['op'] != "add") {
+            $id = $_GET['id'];
             //$query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id'];
             $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where e.id = ".$_GET['id']." AND y.sxol_etos = $sxol_etos";
             $result = mysqli_query($mysqlconnection, $query);
@@ -253,7 +254,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             
     $().ready(function() {
         $("#adeia").click(function() {
-            var MyVar = <?php echo $id ? $id : 0; ?>;
+            var MyVar = <?php if (isset($id)) echo $id; else echo 0; ?>;
             $("#adeies").load("adeia_list.php?id="+ MyVar );
         });
     });
@@ -898,7 +899,7 @@ if ($_GET['op']=="add") {
     echo "</tbody>";
     echo "	</table>";
                 
-    echo "	<input type='hidden' name = 'id' value='$id'>";
+    //echo "	<input type='hidden' name = 'id' value='$id'>";
     // action = 1 gia prosthiki
     echo "  <input type='hidden' name = 'action' value='1'>";
                // status = 1 gia ergazetai

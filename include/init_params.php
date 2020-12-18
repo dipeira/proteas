@@ -1,4 +1,5 @@
 <?php
+  session_start();
   //require_once('../config.php');
   require_once("functions.php");
   // getParam1: Διαβάζει παραμέτρους από τη βάση
@@ -46,6 +47,8 @@
     define('MEIWSH_VIVLIOTHIKIS',3);
     // meiwsh ypodieythinth
     define('MEIWSH_YPNTH',2);
+
+    
   }
   // if not exists
   else {
