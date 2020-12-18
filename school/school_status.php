@@ -118,9 +118,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       //if nipiagwgeio
       if ($type == 2) {
           $klasiko = mysqli_result($result, 0, "klasiko");
-          $klasiko_exp = explode(",", $klasiko);
+          $klasiko_exp = strlen($klasiko) > 0 ? explode(",", $klasiko) : '';
           $oloimero_nip = mysqli_result($result, 0, "oloimero_nip");
-          $oloimero_nip_exp = explode(",", $oloimero_nip);
+          $oloimero_nip_exp = strlen($oloimero_nip) > 0 ? explode(",", $oloimero_nip) : '';
           $nip = mysqli_result($result, 0, "nip");
           $nip_exp = explode(",", $nip);
       }
@@ -151,6 +151,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
             
             // 05-10-2012 - organikes
+            $organikes = is_array($organikes) ? $organikes : [];
             for ($i=0; $i<count($organikes); $i++) {
                 if (!$organikes[$i]) {
                     $organikes[$i]=0;
@@ -266,7 +267,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             
             echo "</td></tr>";
             // 05-10-2012 - kena_leit, kena_org
-            for ($i=0; $i<count($kena_org); $i++) {
+            $kena_org = strlen($kena_org) > 0 ? count($kena_org) : 0;
+            for ($i=0; $i<$kena_org; $i++) {
                 if (!$kena_org[$i]) {
                     $kena_org[$i]=0;
                 }
@@ -506,89 +508,90 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // prwinh zvnh @ pos 7 -> klasiko[6]
             // oloimero_nip/pro: oloimero
             // oloimero pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p / 6,7 t4n,p / 8,9 t5n,p / 10,11 t6n,p
-
-            $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
-            $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
-            $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
-            $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
-            // Μαθητές
-            echo "<h3>Μαθητές</h3>";
-            echo "<table class=\"imagetable\" border='1'>";
-            $ola = $klasiko_nip + $klasiko_pro;
-            $olola = $oloimero_syn_nip + $oloimero_syn_pro;
-            echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
-            echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
-            // t1
-            $syn = $klasiko_exp[0]+$klasiko_exp[1];
-            $tmimata_nip = 1;
-            $tmimata_nip_ol = 0;
-            echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td><b>$syn</b></td>";
-            $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
-            if ($syn_ol > 0) {
-                $tmimata_nip_ol += 1;
-            }
-            echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td><b>$syn_ol</b></td></tr>";
-            // print t2 + t3 + t4 + t5 + t6 only if they have students
-            // t2
-            $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
-            $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
-            if (($syn2+$syn_ol2) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol2 > 0) {
+            if (strlen($klasiko_exp) > 0 && strlen($oloimero_nip_exp) > 0){
+                $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
+                $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
+                $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
+                $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
+                // Μαθητές
+                echo "<h3>Μαθητές</h3>";
+                echo "<table class=\"imagetable\" border='1'>";
+                $ola = $klasiko_nip + $klasiko_pro;
+                $olola = $oloimero_syn_nip + $oloimero_syn_pro;
+                echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
+                echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
+                // t1
+                $syn = $klasiko_exp[0]+$klasiko_exp[1];
+                $tmimata_nip = 1;
+                $tmimata_nip_ol = 0;
+                echo "<tr><td>Τμ.1</td><td>$klasiko_exp[0]</td><td>$klasiko_exp[1]</td><td><b>$syn</b></td>";
+                $syn_ol = $oloimero_nip_exp[0]+$oloimero_nip_exp[1];
+                if ($syn_ol > 0) {
                     $tmimata_nip_ol += 1;
                 }
-                echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td><b>$syn2</b></td>";
-                echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td><b>$syn_ol2</b></td></tr>";
-            }
-            // t3
-            $syn3 = $klasiko_exp[4]+$klasiko_exp[5];
-            $syn_ol3 = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
-            if (($syn3+$syn_ol3) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol3 > 0) {
-                    $tmimata_nip_ol += 1;
+                echo "<td>$oloimero_nip_exp[0]</td><td>$oloimero_nip_exp[1]</td><td><b>$syn_ol</b></td></tr>";
+                // print t2 + t3 + t4 + t5 + t6 only if they have students
+                // t2
+                $syn2 = $klasiko_exp[2]+$klasiko_exp[3];
+                $syn_ol2 = $oloimero_nip_exp[2]+$oloimero_nip_exp[3];
+                if (($syn2+$syn_ol2) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol2 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.2</td><td>$klasiko_exp[2]</td><td>$klasiko_exp[3]</td><td><b>$syn2</b></td>";
+                    echo "<td>$oloimero_nip_exp[2]</td><td>$oloimero_nip_exp[3]</td><td><b>$syn_ol2</b></td></tr>";
                 }
-                echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td><b>$syn3</b></td>";
-                echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td><b>$syn_ol3</b></td></tr>";
-            }
-            // t4
-            $syn4 = $klasiko_exp[7]+$klasiko_exp[8];
-            $syn_ol4 = $oloimero_nip_exp[6]+$oloimero_nip_exp[7];
-            if (($syn4+$syn_ol4) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol4 > 0) {
-                    $tmimata_nip_ol += 1;
+                // t3
+                $syn3 = $klasiko_exp[4]+$klasiko_exp[5];
+                $syn_ol3 = $oloimero_nip_exp[4]+$oloimero_nip_exp[5];
+                if (($syn3+$syn_ol3) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol3 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.3</td><td>$klasiko_exp[4]</td><td>$klasiko_exp[5]</td><td><b>$syn3</b></td>";
+                    echo "<td>$oloimero_nip_exp[4]</td><td>$oloimero_nip_exp[5]</td><td><b>$syn_ol3</b></td></tr>";
                 }
-                echo "<tr><td>Τμ.4</td><td>$klasiko_exp[7]</td><td>$klasiko_exp[8]</td><td><b>$syn4</b></td>";
-                echo "<td>$oloimero_nip_exp[6]</td><td>$oloimero_nip_exp[7]</td><td><b>$syn_ol4</b></td></tr>";
-            }
-            // t5
-            $syn5 = $klasiko_exp[9]+$klasiko_exp[10];
-            $syn_ol5 = $oloimero_nip_exp[8]+$oloimero_nip_exp[9];
-            if (($syn5+$syn_ol5) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol5 > 0) {
-                    $tmimata_nip_ol += 1;
+                // t4
+                $syn4 = $klasiko_exp[7]+$klasiko_exp[8];
+                $syn_ol4 = $oloimero_nip_exp[6]+$oloimero_nip_exp[7];
+                if (($syn4+$syn_ol4) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol4 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.4</td><td>$klasiko_exp[7]</td><td>$klasiko_exp[8]</td><td><b>$syn4</b></td>";
+                    echo "<td>$oloimero_nip_exp[6]</td><td>$oloimero_nip_exp[7]</td><td><b>$syn_ol4</b></td></tr>";
                 }
-                echo "<tr><td>Τμ.5</td><td>$klasiko_exp[9]</td><td>$klasiko_exp[10]</td><td><b>$syn5</b></td>";
-                echo "<td>$oloimero_nip_exp[8]</td><td>$oloimero_nip_exp[9]</td><td><b>$syn_ol5</b></td></tr>";
-            }
-            // t6
-            $syn6 = $klasiko_exp[11]+$klasiko_exp[12];
-            $syn_ol6 = $oloimero_nip_exp[10]+$oloimero_nip_exp[11];
-            if (($syn6+$syn_ol6) > 0) {
-                $tmimata_nip += 1;
-                if ($syn_ol6 > 0) {
-                    $tmimata_nip_ol += 1;
+                // t5
+                $syn5 = $klasiko_exp[9]+$klasiko_exp[10];
+                $syn_ol5 = $oloimero_nip_exp[8]+$oloimero_nip_exp[9];
+                if (($syn5+$syn_ol5) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol5 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.5</td><td>$klasiko_exp[9]</td><td>$klasiko_exp[10]</td><td><b>$syn5</b></td>";
+                    echo "<td>$oloimero_nip_exp[8]</td><td>$oloimero_nip_exp[9]</td><td><b>$syn_ol5</b></td></tr>";
                 }
-                echo "<tr><td>Τμ.6</td><td>$klasiko_exp[11]</td><td>$klasiko_exp[12]</td><td><b>$syn6</b></td>";
-                echo "<td>$oloimero_nip_exp[10]</td><td>$oloimero_nip_exp[11]</td><td><b>$syn_ol6</b></td></tr>";
-            }
-            // totals (if more than one tmima)
-            if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
-                echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
-                echo "<td><b>$oloimero_syn_nip</b><td><b>$oloimero_syn_pro</b></td><td><b>$olola</b></td>";
-                echo "</tr>";
+                // t6
+                $syn6 = $klasiko_exp[11]+$klasiko_exp[12];
+                $syn_ol6 = $oloimero_nip_exp[10]+$oloimero_nip_exp[11];
+                if (($syn6+$syn_ol6) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol6 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.6</td><td>$klasiko_exp[11]</td><td>$klasiko_exp[12]</td><td><b>$syn6</b></td>";
+                    echo "<td>$oloimero_nip_exp[10]</td><td>$oloimero_nip_exp[11]</td><td><b>$syn_ol6</b></td></tr>";
+                }
+                // totals (if more than one tmima)
+                if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
+                    echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
+                    echo "<td><b>$oloimero_syn_nip</b><td><b>$oloimero_syn_pro</b></td><td><b>$olola</b></td>";
+                    echo "</tr>";
+                }
             }
             if (strlen($archive) > 0){
             // update school set klasiko='1Π,1Ν,2Π,2Ν,3Π,3Ν,ΠΖ', oloimero_nip='ΟΛ1Π,ΟΛ1Ν,ΟΛ2Π,ΟΛ2Ν',entaksis='0,0' where code=XXX;              
