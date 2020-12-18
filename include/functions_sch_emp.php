@@ -11,6 +11,9 @@
 */
 function anagkes_wrwn($tm)
 {
+    if (!is_array($tm)){
+        return [];
+    }
     $artm = $tm[0]+$tm[1]+$tm[2]+$tm[3]+$tm[4]+$tm[5];
     // oligothesia (<4/thesia)
     if ($artm < 4) {
@@ -105,20 +108,26 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     // get tmimata
     $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
     $result = mysqli_query($mysqlconnection, $query);
-    $tmimata_exp = explode(",", mysqli_result($result, 0, "tmimata"));
+    $tmimata_exp = strlen(mysqli_result($result, 0, "tmimata")) ? explode(",", mysqli_result($result, 0, "tmimata")) : '';
     $vivliothiki = mysqli_result($result, 0, "vivliothiki");
     $eidiko = mysqli_result($result, 0, "type2") == 2 ? true : false;
-    $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
+    $leit = is_array($tmimata_exp) && count($tmimata_exp) > 0 ? 
+        $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5] :
+        0;
     $oligothesio = $leit < 4 ? true : false;
     // entaksis
     $entaksis = explode(',', mysqli_result($result, 0, "entaksis"));
     $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0;
     // synolo mathitwn (gia yp/ntes)
-    $classes = explode(",", mysqli_result($result, 0, "students"));
-    $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
+    if (strlen(mysqli_result($result, 0, "tmimata"))){
+        $classes = explode(",", mysqli_result($result, 0, "students"));
+        $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
+    } else {
+        $synolo_pr = 0;
+    }
         
     // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
-    if ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10) {
+    if ( ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10) && strlen($tmimata_exp) > 0) {
         $tmimata_exp[8] = 0;
     }
     // Απαιτούμενες ώρες
@@ -356,6 +365,11 @@ function get_leitoyrgikothta($id, $mysqlconnection)
     $query = "SELECT tmimata,type,klasiko from school WHERE id='$id'";
     $result = mysqli_query($mysqlconnection, $query);
     $type = mysqli_result($result, 0, 'type');
+    
+    // return 0 if no tmimata are saved
+    if (mysqli_result($result, 0, "tmimata") === NULL || strlen(mysqli_result($result, 0, "tmimata")) == 0 ){
+        return 0;
+    }
     // if nip
     if ($type == 2) {
         $klasiko_exp = explode(",", mysqli_result($result, 0, "klasiko"));
@@ -367,7 +381,7 @@ function get_leitoyrgikothta($id, $mysqlconnection)
         $klasiko_tm += $klasiko_exp[9]+$klasiko_exp[10]>0 ? 1:0;
         $klasiko_tm += $klasiko_exp[11]+$klasiko_exp[12]>0 ? 1:0;
         return $klasiko_tm;
-    } else {
+    } else if ($type == 1) {
         $tmimata_exp = explode(",", mysqli_result($result, 0, "tmimata"));
         $leit = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
         return $leit;
