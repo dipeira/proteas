@@ -1,4 +1,4 @@
-<a href="/"><IMG src="<?=$site_root?>/images/logo.png" class="applogo"></a>
+<a href="<?=$site_root?>"><IMG src="<?=$site_root?>/images/logo.png" class="applogo"></a>
 <div id="main-menu">
 		<ul id="navigation">
 			<li><a href="<?=$site_root?>/index.php">Αρχικη</a></li>
