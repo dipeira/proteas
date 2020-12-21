@@ -361,7 +361,9 @@ function get_orgs($id, $mysqlconnection)
     WHERE e.sx_organikhs='$id' AND status IN (1,3,5) AND thesi IN (0,1,2) AND org_ent = 0
     GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
-    $ret = array();
+    // initialize array
+    $ret = array('ΠΕ70' => 0,'ΠΕ11' => 0, 'ΠΕ06' => 0, 'ΠΕ79' => 0, 'ΠΕ05' => 0, 'ΠΕ07' => 0, 'ΠΕ08' => 0, 'ΠΕ86' => 0, 'ΠΕ91' =>0, 'ent' => 0);
+    
     while ($row = mysqli_fetch_array($result)){
       $plithos = strval($row['plithos']);
       $kl = $row['klname'];

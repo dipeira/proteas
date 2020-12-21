@@ -217,8 +217,8 @@ if ($_REQUEST['type']) {
             $i++;                        
         }
 
-        $synolo_stud = array_sum($sums);
-        $synolo_teach =  array_sum($sumt);
+        $synolo_stud = is_array($sums) ? array_sum($sums) : 0;
+        $synolo_teach =  is_array($sumt) ? array_sum($sumt) : 0;
         echo "<tr><td>Πλήθος: $sumschools</td><td colspan=4>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
@@ -290,8 +290,16 @@ if ($_REQUEST['type']) {
             $entaksis = explode(',', mysqli_result($result, $i, "entaksis"));
             $klasiko = mysqli_result($result, $i, "klasiko");
             $klasiko_exp = explode(",", $klasiko);
+            // fill array blanks with zeroes
+            foreach($klasiko_exp as &$val) {
+                if(empty($val)) { $val = 0; }
+            }
             $oloimero_nip = mysqli_result($result, $i, "oloimero_nip");
             $oloimero_nip_exp = explode(",", $oloimero_nip);
+            // fill array blanks with zeroes
+            foreach($oloimero_nip_exp as &$val) {
+                if(empty($val)) { $val = 0; }
+            }
 
             $klasiko_tm = $oloimero_tm = 0;
             $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1] >0 ? 1:0;

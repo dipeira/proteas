@@ -267,8 +267,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             
             echo "</td></tr>";
             // 05-10-2012 - kena_leit, kena_org
-            $kena_org = strlen($kena_org) > 0 ? count($kena_org) : 0;
-            for ($i=0; $i<$kena_org; $i++) {
+            $kena_org_count = is_array($kena_org) ? count($kena_org) : 0;
+            for ($i=0; $i<$kena_org_count; $i++) {
                 if (!$kena_org[$i]) {
                     $kena_org[$i]=0;
                 }
@@ -508,7 +508,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // prwinh zvnh @ pos 7 -> klasiko[6]
             // oloimero_nip/pro: oloimero
             // oloimero pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p / 6,7 t4n,p / 8,9 t5n,p / 10,11 t6n,p
-            if (strlen($klasiko_exp) > 0 && strlen($oloimero_nip_exp) > 0){
+            if (is_array($klasiko_exp) && is_array($oloimero_nip_exp) ){
+                // fill array blanks with zeroes
+                foreach($klasiko_exp as &$val) {
+                    if(empty($val)) { $val = 0; }
+                }
+                foreach($oloimero_nip_exp as &$val) {
+                    if(empty($val)) { $val = 0; }
+                }
                 $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
                 $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
                 $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
@@ -637,41 +644,40 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</table>";
             echo "</div>";
             }
+            echo "</table>";
+            echo "<br>";
+        
+            $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
+            // τοποθετημένοι εκπ/κοί
+            $top60 = $top60m = $top60ana = 0;
+            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            $res = mysqli_query($conn, $qry);
+            $top60m = mysqli_result($res, 0, 'pe60');
+            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            $res = mysqli_query($conn, $qry);
+            $top60ana = mysqli_result($res, 0, 'pe60');
+            $top60 = $top60m+$top60ana;
+            
+            $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
+
+            echo "<h3>Λειτουργικά κενά</h3>";
+            echo "<table class=\"imagetable stable\" border='1'>";
+            echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
+
+            echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
+            echo "<td>$syn_apait</td>";
+            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
+
+            echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
+            $k_pl = $top60-$syn_apait;
+            $k_pl_class = $k_pl >= 0 ? 
+                "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
+                "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
+
+            echo "</tbody></table>";
+            echo "<br>";
         }
-        echo "</table>";
-        echo "<br>";
-        
-        $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
-        // τοποθετημένοι εκπ/κοί
-        $top60 = $top60m = $top60ana = 0;
-        $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
-        $res = mysqli_query($conn, $qry);
-        $top60m = mysqli_result($res, 0, 'pe60');
-        $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
-        $res = mysqli_query($conn, $qry);
-        $top60ana = mysqli_result($res, 0, 'pe60');
-        $top60 = $top60m+$top60ana;
-        
-        $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
-
-        echo "<h3>Λειτουργικά κενά</h3>";
-        echo "<table class=\"imagetable stable\" border='1'>";
-        echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
-
-        echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
-        echo "<td>$syn_apait</td>";
-        echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
-
-        echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
-        $k_pl = $top60-$syn_apait;
-        $k_pl_class = $k_pl >= 0 ? 
-            "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
-            "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
-        echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
-
-        echo "</tbody></table>";
-        echo "<br>";
-        //}
         echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
         echo "<br><br>";
         // if dimotiko & leitoyrg >= 4

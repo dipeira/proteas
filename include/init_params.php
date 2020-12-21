@@ -36,10 +36,10 @@
     $endofyear2 = getParam1('endofyear2',$myconn);
     $protapol = getParam1('protapol',$myconn);
 
-    // Report all errors except E_NOTICE
+    // Report all errors except E_NOTICE, E_DEPRECATED, E_WARNING
     // This is the default value set in php.ini  
     // to avoid notices on some configurations
-    error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
+    error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_WARNING);
     
     // set calendar language to el_GR
     define("L_LANG", "el_GR");

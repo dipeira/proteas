@@ -129,8 +129,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $ekp_ee = mysqli_result($result, 0, "ekp_ee");
                 $ekp_ee_exp = explode(",", $ekp_ee);
                 $vivliothiki = mysqli_result($result, 0, "vivliothiki");
-                        
+                // fill array blanks with zeroes
+                foreach($classes as &$val) {
+                    if(empty($val)) { $val = 0; }
+                }        
                 $synolo = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
+                foreach($tmimata_exp as &$val) {
+                    if(empty($val)) { $val = 0; }
+                }
                 $synolo_tmim = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
             }
             // if nipiagwgeio

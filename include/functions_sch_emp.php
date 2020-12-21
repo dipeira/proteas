@@ -127,7 +127,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
         
     // for PZ: at least 7 stud for leit < 9, at least 10 for leit >= 9
-    if ( ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10) && strlen($tmimata_exp) > 0) {
+    if ( ($leit < 9 && $classes[7] < 7 || $leit >= 9 && $classes[7] < 10) && is_array($tmimata_exp) > 0) {
         $tmimata_exp[8] = 0;
     }
     // Απαιτούμενες ώρες
@@ -372,7 +372,12 @@ function get_leitoyrgikothta($id, $mysqlconnection)
     }
     // if nip
     if ($type == 2) {
+        
         $klasiko_exp = explode(",", mysqli_result($result, 0, "klasiko"));
+        // fill array blanks with zeroes
+        foreach($klasiko_exp as &$val) {
+            if(empty($val)) { $val = 0; }
+        }
         $klasiko_tm = 0;
         $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
         $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;

@@ -83,13 +83,14 @@ if ($_GET['type'] == 1 || $_GET['type'] == 3) {
         $entaksis = explode(",", mysqli_result($result, $i, "entaksis"));
         $org_ent = $entaksis[0] ? 1 : 0;
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
+        if (!is_array($organikes) || array_sum($organikes) == 0) { $organikes= array(0,0,0,0,0,0,0,0);}
         $orgs = get_orgs($sch,$mysqlconnection);
         // οργανικά τοποθετηθέντες
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=2 AND status IN (1,3,5) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
         $synorgtop += $orgtop;
-
+        
         echo "<tr>";
         echo "<td>$code</td>";
         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
@@ -192,7 +193,9 @@ else if ($_GET['type'] == 2) {
         $students = mysqli_result($result, $i, "students");
         $organikothta = mysqli_result($result, $i, "organikothta");
         $organikes = unserialize(mysqli_result($result, $i, "organikes"));
+        if (!is_array($organikes) || array_sum($organikes) == 0) { $organikes= array(0,0,0,0,0,0,0,0);}
         $kena_org = unserialize(mysqli_result($result, $i, "kena_org"));
+        if (!is_array($kena_org) || array_sum($kena_org) == 0) { $kena_org= array(0,0,0,0,0,0,0,0);}
         // οργανικά τοποθετηθέντες
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3,5) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
