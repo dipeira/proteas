@@ -521,9 +521,9 @@ function ypoloipo_adeiwn($id, $sql)
     $sx_yphr = mysqli_result($res2, 0, "sx_yphrethshs");
     $thesi = mysqli_result($res2, 0, "thesi");
     // if apospasmenoi / dioikhtikoi
-    $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
-    $dnsi = getParam('dnsh', $mysqlconnection);
-    $se_dnsi = getSchoolID($dnsi,$mysqlconnection);
+    $se_forea = getSchoolID('Απόσπαση σε φορέα',$sql);
+    $dnsi = getParam('foreas', $sql);
+    $se_dnsi = getSchoolID($dnsi,$sql);
     if ($sx_yphr == $se_forea || $sx_yphr == $se_dnsi || $thesi == 4) {
         $cur_yr = date("Y");
         $prev_yr = $cur_yr - 1;

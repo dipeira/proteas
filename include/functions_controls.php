@@ -2,14 +2,15 @@
 
 function kladosCombo($klados,$conn)
 {
-       $query = "SELECT * from klados ORDER BY perigrafh";
+    $query = "SELECT * from klados ORDER BY perigrafh";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"klados\" id=\"klados\">";
-       echo "<option value='' selected>(Επιλογή:)</option>";
+    echo "<option value='' selected>(Επιλογή:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
@@ -29,7 +30,8 @@ function kladosCmb($conn)
     $query = "SELECT * from klados ORDER BY perigrafh";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $i = 0;
     $num=mysqli_num_rows($result);
@@ -51,7 +53,8 @@ function typeCmb($conn)
     $query = "SELECT * from ektaktoi_types";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"type\" id=\"type\">";
@@ -71,7 +74,8 @@ function typeCmb1($typeinp,$conn)
     $query = "SELECT * from ektaktoi_types";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
             $type1 = get_type($typeinp, $conn);
@@ -380,7 +384,8 @@ function schoolCombo($schid,$conn)
     $query = "SELECT * from school";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
     echo "<select name=\"school\">";
@@ -403,7 +408,8 @@ function schCombo($name1,$conn)
     $query = "SELECT * from school";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
     echo "<select name='$name1'>";
@@ -454,7 +460,8 @@ function adeiaCmb($inp,$conn,$ekt = 0)
     $query = $ekt ? "SELECT * from adeia_ekt_type ORDER BY type" : "SELECT * from adeia_type ORDER BY type";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
     echo "<select id='type' name=\"type\" >";
@@ -477,7 +484,8 @@ function workersCmb($inp, $sch, $conn)
   $query = "SELECT e.id,surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 ORDER BY surname ASC";
   $result = mysqli_query($conn, $query);
   if (!$result) { 
-      die('Could not query:' . mysqli_connect_error());
+    echo "Δε βρέθηκαν αποτελέσματα...";
+    return;
   }
     echo "<select id='workercmb' name='workercmb' >";
     echo "<option value=0>Παρακαλώ επιλέξτε</option>";
@@ -499,7 +507,8 @@ function tblCmb($conn, $tbl, $inp = 0, $fieldnm = null, $sortby = null, $query =
     $query .= $sortby ? " ORDER BY $sortby ASC" : '';
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
     }
     $num=mysqli_num_rows($result);
     echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" >" : "<select id=\"$tbl\" name=\"$tbl\" >";

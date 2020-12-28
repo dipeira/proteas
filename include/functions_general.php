@@ -161,7 +161,7 @@ function getParam($name,$conn)
     $query = "SELECT value from params WHERE name='$name'";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        return false;
     }
     return mysqli_result($result, 0, "value");
 }
@@ -170,7 +170,7 @@ function setParam($name,$value,$conn)
     $query = "UPDATE params SET value='$value' WHERE name='$name'";
     $result = mysqli_query($conn, $query);
     if (!$result) { 
-        die('Could not query:' . mysqli_error($conn));
+        return false;
     }
 }
 

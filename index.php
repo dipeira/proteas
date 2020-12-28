@@ -106,7 +106,7 @@ if (isset($_POST['klados']) && ($_POST['klados']>0) || (isset($_POST['org']) && 
     $posted=1;
     $curpg=1;
 }
-if (isset($_REQUEST['klados']) ) {
+if (isset($_REQUEST['klados']) && strlen($_REQUEST['klados'])) {
     if (isset($_POST['klados']) && $_POST['klados']>0) {
         $klpost = $_POST['klados'];
     }  
@@ -115,6 +115,7 @@ if (isset($_REQUEST['klados']) ) {
     }
     $query .= "WHERE klados = $klpost ";
     $whflag=1;
+    
 }
 if ( isset($_REQUEST['org']) && strlen($_REQUEST['org']) ) {
     if (isset ($_POST['org']) && strlen($_POST['org'])>0) {
@@ -330,7 +331,7 @@ if ($usrlvl < 2) {
 if ($lastpg == 0) {
     $curpg = 0;
 }
-    echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+    echo "Σελίδα $curpg από $lastpg ($num_record1 <span title='Query: ".str_replace(array('"','\''), '', $q_main)."'>εγγραφές</span>)<br>";
 $outsiders = isset($_REQUEST['outsiders']) ? '&outsiders=1' : '';
 $inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
 $getstring = "&rpp=$rpp";
