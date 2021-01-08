@@ -1,17 +1,46 @@
 <html>
   <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Μαθητές & Εκπαιδευτικοί</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type="text/javascript" src="../js/stickytable.js"></script>
-    <script type="text/javascript">    
-    $(document).ready(function() { 
-        $("#mytbl").tablesorter({widgets: ['zebra']}); 
-        $("#mytbl").stickyTableHeaders();
-    });  
+    <?php
+    // include all datatables related files
+    require_once('../js/datatables/includes.html');
+    ?>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /* Init DataTables */
+            $('#mytbl').DataTable({
+                paging: false,
+                fixedHeader: true,
+                language: {
+                    url: '../js/datatables/greek.json'
+                },
+                pageLength: 20,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Όλες"]],
+                dom: 'Bfrt',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Αντιγραφή',
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Εξαγωγή σε excel',
+                        filename: 'export'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Εκτύπωση',
+                    }
+                ]
+            });
+        } );
     </script>
+
   </head>
   <body>
 <?php
@@ -77,7 +106,6 @@ if ($_REQUEST['type']) {
 
         echo "<center>";
         $i = $sumschools = 0;
-        ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><th>Ονομασία</th>";
         echo "<th>Κωδικός</th>";
@@ -219,25 +247,15 @@ if ($_REQUEST['type']) {
 
         $synolo_stud = is_array($sums) ? array_sum($sums) : 0;
         $synolo_teach =  is_array($sumt) ? array_sum($sumt) : 0;
-        echo "<tr><td>Πλήθος: $sumschools</td><td colspan=4>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
+        echo "<tr><td>Πλήθος: $sumschools</td><td></td><td></td><td></td><td>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
-        echo "<tr><td colspan=5></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
-        echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
-        echo "</tr>";
+        // echo "<tr><td></td><td></td><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
+        // echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
+        // echo "</tr>";
         echo "</tbody></table>";
-
-        $page = ob_get_contents(); 
-        $_SESSION['page'] = $page;
-        ob_end_flush();
-
-        echo "<form action='../tools/2excel_ses.php' method='post'>";
-        //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
+        
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-        echo "</form>";
-        //ob_end_clean();                   
     }
     //else if ($_GET['type'] == 2)
     else if (in_array($_REQUEST['type'], $nip_ar)) {
@@ -256,7 +274,6 @@ if ($_REQUEST['type']) {
     
         echo "<center>";
         $i=0;
-        ob_start();
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr><th>Ονομασία</th>";
             echo "<th>Δήμος</th>";
@@ -395,7 +412,7 @@ if ($_REQUEST['type']) {
         }
         
         echo "<tr>";
-        echo "<td colspan=3>Σύνολα</td>";
+        echo "<td>Σύνολα</td><td></td><td></td>";
         echo "<td>$synolo_tm_klas</td>";
         echo "<td>$synolo_nip</td>";
         echo "<td>$synolo_tm_olo</td>";
@@ -415,16 +432,7 @@ if ($_REQUEST['type']) {
         echo "</tr>";
         echo "</tbody></table>";
 
-        $page = ob_get_contents(); 
-        $_SESSION['page'] = $page;
-        ob_end_flush();
-
-        echo "<form action='../tools/2excel_ses.php' method='post'>";
-        //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-        echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-        echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-        echo "</form>";
     }
 }
 ?>  
