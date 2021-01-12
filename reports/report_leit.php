@@ -4,12 +4,39 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Πίνακας λειτουργικών κενών</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="../js/stickytable.js"></script>
+    <?php
+    // include all datatables related files
+    require_once('../js/datatables/includes.html');
+    ?>
     <script type="text/javascript">    
         $(document).ready(function() { 
-            $("#mytbl").tablesorter({widgets: ['zebra']}); 
-            $("#mytbl").stickyTableHeaders();
+            /* Init DataTables */
+            $('#mytbl').DataTable({
+                paging: false,
+                fixedHeader: true,
+                language: {
+                    url: '../js/datatables/greek.json'
+                },
+                ordering: false,
+                pageLength: 20,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Όλες"]],
+                dom: 'Bfrt',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Αντιγραφή',
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Εξαγωγή σε excel',
+                        filename: 'export'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Εκτύπωση',
+                    }
+                ]
+            });
         });
     </script>
         <style>
@@ -31,7 +58,7 @@
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     
     // only dhmosia (type2 = 0)
-    $query = "SELECT * from school WHERE type2 = 0 AND type = 1 AND anenergo=0";
+    $query = "SELECT * from school WHERE type2 = 0 AND type = 1 AND anenergo=0 ORDER BY name";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
 
@@ -76,7 +103,7 @@ if (!$oligothesia) {
     //echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
     //echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
     echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
-    echo "<th colspan=11>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
+    echo "<th colspan=12>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
     echo "</tr>";
     echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
     echo "<th>70</th>";
@@ -225,22 +252,26 @@ while ($i < $num)
     $df_sum_t = array_map(hours_to_teachers, $df_sum);
     $kena_sum_t = array_map(hours_to_teachers, $kena_sum);
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
+    echo "<tr><td>ΣΥΝΟΛΑ</td><td></td><td></td><td></td><td></td><td></td><td>";
 if (!$oligothesia) {
-    echo "</td><td colspan=3>ΣΥΝΟΛΑ</td>";
+    echo "</td><td></td><td></td><td></td>";
     echo "<td>".$par_sum['05-07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['79']."</td><td>".$par_sum['91']."</td><td>".$par_sum['86']."</td>";
+} else {
+    echo "<td></td><td></td>";
 }
     echo "<td>".$par_sum['70']."</td>\n";
 if (!$oligothesia) {
     echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td>";
-}
+} 
     echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td><td></td>\n";
     echo "</tr>";
     
-    echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>";
+    echo "<tr><td>ΣΥΝΟΛΑ (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td>";
 if (!$oligothesia) {
-    echo "</td><td colspan=3>ΣΥΝΟΛΑ (εκπ)</td>";
+    echo "</td><td></td><td></td><td></td>";
     echo "<td>".$par_sum_t['05-07']."</td><td>".$par_sum_t['06']."</td><td>".$par_sum_t['08']."</td><td>".$par_sum_t['11']."</td><td>".$par_sum_t['79']."</td><td>".$par_sum_t['91']."</td><td>".$par_sum_t['86']."</td>";
+} else {
+    echo "<td></td><td></td>";
 }
     echo "<td>".$par_sum_t['70']."</td>\n";
 if (!$oligothesia) {
@@ -257,26 +288,16 @@ if (!$oligothesia) {
     //echo "<td></td><td></td><td colspan=3>MONO KENA (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
     //echo "<td>".$kena_sum_t['05-07']."</td><td>".$kena_sum_t['06']."</td><td>".$kena_sum_t['08']."</td><td>".$kena_sum_t['11']."</td><td>".$kena_sum_t['79']."</td><td>".$kena_sum_t['91']."</td><td>".$kena_sum_t['86']."</td><td>".$kena_sum_t['70']."</td><td></td><td></td><td></td>\n";
     
-if (!$oligothesia) {
-    echo "<tr><td></td><td></td><td></td><td></td><td></td>";//<td></td>";
-    echo "<td></td><td></td><td></td><td></td><td></td>";
-    echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
-    echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
-    echo "<td></td>";
-}
+// if (!$oligothesia) {
+//     echo "<tr><td></td><td></td><td></td><td></td><td></td>";//<td></td>";
+//     echo "<td></td><td></td><td></td><td></td><td></td>";
+//     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td>";
+//     echo "<td><i>05-07</i></td><td><i>06</i></td><td><i>08</i></td><td><i>11</i></td><td><i>79</i></td><td><i>91</i></td><td><i>86</i></td><td><i>70</i></td><td><i>70-(Ολ+ΠΖ)</i></td><td></td><td></td></i>";
+//     echo "<td></td>";
+// }
     echo "</tr>";
     echo "</tbody></table>";
-
-    $page = ob_get_contents(); 
-    $_SESSION['page'] = $page;
-    ob_end_flush();
-
-    echo "<form action='../tools/2excel_ses.php' method='post'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-    echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-    echo "</form>";
-    //ob_end_clean();
 ?>
         </body>
         </html>
