@@ -1093,3 +1093,11 @@ ALTER TABLE `school_log`
 
 ALTER TABLE `school_log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+--
+-- Δομή για προβολή `index_view`
+--
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`127.0.0.1` SQL SECURITY DEFINER 
+VIEW `index_view`  
+AS  select `e`.`id` AS `id`,`e`.`name` AS `name`,`e`.`surname` AS `surname`,`k`.`perigrafh` AS `eidikothta`,`sorg`.`name` AS `organ`,`syp`.`name` AS `yphr` from (((`employee` `e` join `klados` `k` on(`e`.`klados` = `k`.`id`)) join `school` `sorg` on(`e`.`sx_organikhs` = `sorg`.`id`)) join `school` `syp` on(`e`.`sx_organikhs` = `syp`.`id`)) ;
