@@ -554,7 +554,21 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
-
+--
+-- Table structure for table `idiwtiko`
+--
+CREATE TABLE `idiwtiko` (
+  `id` int(11) NOT NULL,
+  `emp_type` enum('Μόνιμος','Αναπληρωτής') NOT NULL COMMENT 'τύπος υπαλλήλου: μόνιμος / αναπληρωτής',
+  `emp_id` int(11) NOT NULL COMMENT 'id υπαλλήλου',
+  `type` enum('Ιδιωτικό','Δημόσιο') NOT NULL COMMENT 'Τύπος Έργου (Ιδιωτικό, Δημόσιο)',
+  `prot_no` int(11) DEFAULT NULL COMMENT 'Αριθμός πρωτοκόλλου',
+  `prot_date` date DEFAULT NULL COMMENT 'Ημερομηνία πρωτοκόλλου',
+  `praxi` varchar(30) NOT NULL COMMENT 'Αριθμός πράξης',
+  `ada` varchar(40) NOT NULL COMMENT 'ΑΔΑ',
+  `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'ενημέρωση'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `klados`
 --

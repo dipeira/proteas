@@ -663,4 +663,45 @@ function compute_meiwmeno($days, $hours_per_week = 14, $ypoxr = 24)
     return round($days * ($hours_per_week/$ypoxr));
 }
 
+ 
+// display idiwtiko ergo
+function idiwtika_table($emp_type, $emp_id, $mysqlconnection) {
+    ?>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <?php
+    $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id";
+    $result = mysqli_query($mysqlconnection, $query);
+    if (!mysqli_num_rows($result)){
+        echo "<p>Δε βρέθηκαν ιδιωτικά έργα.</p>";
+        return;
+    }
+    echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>Ενέργεια</th>";
+        echo "<th>Τύπος</th>";
+        echo "<th>Αρ.Πρωτ.</th>";
+        echo "<th>Ημ/νία Πρωτ.</th>";
+        echo "<th>Πράξη</th>";
+        echo "<th>ΑΔΑ</th>";
+        echo "<th>Τελ.Ενημέρωση</th>";
+        echo "</tr></thead>\n<tbody>";
+    while ( $row = mysqli_fetch_assoc($result) ) {
+        echo "<tr>";
+        echo "<td>";
+        echo "<span title=\"Επεξεργασία\"><a href=\"idiwtiko_ergo.php?id=".$row['id']."&op=edit&emp_id=".$emp_id."&type=$emp_type\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
+        echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('idiwtiko_ergo.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+        echo "</td>";
+        echo "<td>" . $row['type'] . "</td>";
+        echo "<td>" . $row['prot_no'] . "</td>";
+        echo "<td>" . date('d-m-Y', strtotime($row['prot_date'])) . "</td>";
+        echo "<td>" . $row['praxi'] . "</td>";
+        echo "<td>" . $row['ada'] . "</td>";
+        echo "<td>" . date('d-m-Y, H:i', strtotime($row['updated'])) . "</td>";
+        echo "</tr>";
+    }
+    echo "</tbody></table>";
+    return;
+
+}
+
 ?>
