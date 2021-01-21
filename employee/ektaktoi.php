@@ -423,6 +423,7 @@ elseif ($_GET['op']=="view")
         echo "<td colspan=3><div class=\"slidingDiv\">";
         echo "Τηλ.: $stathero - $kinhto<br>";
         echo "email: <a href='mailto:$email'>$email</a><br>";
+        idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
         echo "</div>";
         echo "</td></tr>";
         

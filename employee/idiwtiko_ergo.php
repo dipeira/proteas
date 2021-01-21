@@ -51,10 +51,6 @@
       
         
         if ($_GET['op']=="edit") {
-            $query = "SELECT * from idiwtiko where id=".$id;
-            $result = mysqli_query($mysqlconnection, $query);
-            $row = mysqli_fetch_assoc($result);
-
             $emp_table = $_GET['type'] == 'Μόνιμος' ? 'employee' : 'ektaktoi';
             $emp_query = "select name, surname from $emp_table where id = ".$_GET['emp_id'];
             $result = mysqli_query($mysqlconnection, $emp_query);
@@ -65,66 +61,45 @@
                 die();
             }
             $row = mysqli_fetch_assoc($result);
+
             echo "<h2>Προσθήκη ιδωτικού έργου</h2>";
             echo "<h4>Ονοματεπώνυμο υπαλλήλου: ".$row['surname']. ' ' . $row['name']."</h4>";
+            // get idiwtiko from table
+            $query = "SELECT * FROM idiwtiko WHERE id = ".$_GET['id'];
+            $result = mysqli_query($mysqlconnection, $query);
+            $row = mysqli_fetch_assoc($result);
+
             echo "<form id='add_idiwtiko' name='add' action='idiwtiko_ergo.php' method='POST'>";
                 echo "<table class=\"imagetable\" border='1'>";
-                    echo "<tr><td>Τύπος έργου</td><td><select name='type'><option value=''>Επιλέξτε τύπο</option><option value='Ιδιωτικό'>Ιδιωτικό</option><option value='Δημόσιο'>Δημόσιο</option></select></td></tr>";
-                    echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot_no' /></td></tr>";
+                    echo "<tr><td>Τύπος έργου</td><td><select name='type'>";
+                    echo "<option value=''>Επιλέξτε τύπο</option>";
+                    echo $row['type'] == 'Ιδιωτικό' ? "<option value='Ιδιωτικό' selected>Ιδιωτικό</option><option value='Δημόσιο'>Δημόσιο</option>" : 
+                    "<option value='Ιδιωτικό'>Ιδιωτικό</option><option value='Δημόσιο' selected>Δημόσιο</option>";
+                    echo "</select></td></tr>";
+                    echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot_no' value='".$row['prot_no']."'/></td></tr>";
                     echo "<tr><td>Ημ/νία πρωτοκόλλου</td><td>";
                     $myCalendar = new tc_calendar("prot_date", true);
                     $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                    $myCalendar->setDate(date("d"), date("m"), date("Y"));
+                    $date = $row['prot_date'];
+                    $myCalendar->setDate(date('d', strtotime($date)), date('m', strtotime($date)), date('Y', strtotime($date)));
                     $myCalendar->setPath("../tools/calendar/");
                     $myCalendar->dateAllow("2019-01-01", "2040-12-31");
                     $myCalendar->setAlignment("left", "bottom");
                     $myCalendar->disabledDay("sun,sat");
                     $myCalendar->writeScript();
                     echo "</td></tr>";
-                    echo "<tr><td>Πράξη</td><td><input type='text' name='praxi' /></td></tr>";
-                    echo "<tr><td>Α.Δ.Α.</td><td><input type='text' name='ada' /></td></tr>";
+                    echo "<tr><td>Πράξη</td><td><input type='text' name='praxi' value='".$row['praxi']."'/></td></tr>";
+                    echo "<tr><td>Α.Δ.Α.</td><td><input type='text' name='ada' value='".$row['ada']."'/></td></tr>";
                     echo "<input type='hidden' name='emp_type' value='".$_GET['type']."' />";
-                    echo "<input type='hidden' name='emp_id' value='".$_GET['id']."' />";
-                    echo "<input type='hidden' name = 'update' value='2'>";
+                    echo "<input type='hidden' name='emp_id' value='".$_GET['emp_id']."' />";
+                    echo "<input type='hidden' name='id' value='".$row['id']."' />";
+                    echo "<input type='hidden' name = 'update' value='1'>";
                 echo "</table>";
-                echo "<input type='submit' value='Προσθήκη'>";
+                echo "<input type='submit' value='Επεξεργασία'>";
             echo "</form>";
             echo "<br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
             echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Σελίδα υπαλλήλου' onClick=\"parent.location='$emp_table.php?id=".$_GET['id']."&op=view'\">";
 
-            //     echo "<form id='update_ekdr' name='update' action='ekdromi.php' method='POST'>";
-            //     echo "<table class=\"imagetable\" border='1'>";
-            //     echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot' value=".$ekdr['prot']."></td></tr>";
-            //     //echo "<tr><td>Σχολείο</td><td><input type='text' name='sch' value=".$ekdr['sch']."></td></tr>";
-            //     $school = getSchool($_GET['sch'], $mysqlconnection);
-            //     echo "<input type='hidden' name='sch' value='".$_GET['sch']."' />";
-            //     echo "<tr><td>Σχολείο</td><td><input type='text' name='tmp' value='$school' disabled size='35' /></td></tr>";
-            //     echo "<tr><td>Τάξη</td><td>";
-            //     taksiCmb1($ekdr['taksi']);
-            //     echo "</td></tr>";
-            //     echo "<tr><td>Τμήμα</td><td><input type='text' name='tmima' value=".$ekdr['tmima']."></td></tr>";
-            //     echo "<tr><td>Προορισμός</td><td><input type='text' name='proorismos' value=".$ekdr['proorismos']." size='35'></td></tr>";
-            //     $date = $ekdr['date'];
-            //     echo "<tr><td>Ημ/νία</td><td>";
-            // $myCalendar = new tc_calendar("date", true);
-            // $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-            // $myCalendar->setDate(date("d"), date("m"), date("Y"));
-            // $myCalendar->setDate(date('d', strtotime($date)), date('m', strtotime($date)), date('Y', strtotime($date)));
-            // $myCalendar->setPath("../tools/calendar/");
-            // $myCalendar->dateAllow("2011-01-01", "2030-12-31");
-            // $myCalendar->setAlignment("left", "bottom");
-            // $myCalendar->disabledDay("sun,sat");
-            // $myCalendar->writeScript();
-            // echo "</td></tr>";
-            //     echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' value=".$ekdr['comments']." size='35'></td></tr>";
-            // echo "</table>";
-            //     // update: update=1
-            //     echo "<input type='hidden' name = 'update' value='1'>";
-            //     echo "<input type='hidden' name = 'id' value=".$_GET['id'].">";
-            //     echo "<input type='submit' value='Επεξεργασία'>";
-            //     echo "</form>";
-            //     echo "<INPUT TYPE='button' VALUE='Εκδρομές Σχολείου' onClick=\"parent.location='ekdromi.php?sch=".$ekdr['sch']."&op=list'\">";
-            //     echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
         }
         elseif ($_GET['op']=="add") {
             $emp_table = $_GET['type'] == 'Μόνιμος' ? 'employee' : 'ektaktoi';
@@ -173,8 +148,8 @@
             } else {
                 echo "<h2>Η διαγραφή απέτυχε...</h2>";
             }
-            echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ekdromi.php?sch=".$_GET['sch']."&op=list'\">";
-            //     echo "<meta http-equiv=\"refresh\" content=\"2; URL=ekdromi.php?sch=".$_GET['sch']."&op=list\">";
+            $emp_table = $_GET['type'] == 'Μόνιμος' ? 'employee' : 'ektaktoi';
+            echo "<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπαιδευτικού' onClick=\"parent.location='$emp_table.php?id=".$_GET['emp_id']."&op=view'\">";
         }
         
         // if POST...
@@ -196,16 +171,18 @@
             // if add
             else
             {
-
                 $query0 = "INSERT INTO idiwtiko (emp_type, emp_id, type, prot_no, prot_date, praxi, ada, sxol_etos)";
                 $query1 = " VALUES ('$emp_type', '$emp_id', '$type', '$prot_no', '$prot_date', '$praxi', '$ada', $sxol_etos)";
                 $query = $query0.$query1;
             }
             // for debugging...
-            echo "<br>".$query;
-            mysqli_query($mysqlconnection, $query);
-            echo "<INPUT TYPE='button' VALUE='Επιστροφή στις εκδρομές' onClick=\"parent.location='ekdromi.php?sch=".$sch."&op=list'\">";
-            echo "<meta http-equiv=\"refresh\" content=\"2; URL=ekdromi.php?sch=".$sch."&op=list\">";
+            //echo "<br>".$query;
+            $result = mysqli_query($mysqlconnection, $query);
+            if ($result) {
+                echo "<h3>Η αποθήκευση ήταν επιτυχής!</h3>";
+            }
+            $emp_table = $_POST['emp_type'] == 'Μόνιμος' ? 'employee' : 'ektaktoi';
+            echo "<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='$emp_table.php?id=".$emp_id."&op=view'\">";
         }
         
         echo "</body>";

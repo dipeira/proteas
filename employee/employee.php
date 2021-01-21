@@ -532,9 +532,9 @@ elseif ($_GET['op']=="view") {
         $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
         $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
         echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
-        echo "<h4>Ιδιωτικά έργα</h4>";
+        
         idiwtika_table("Μόνιμος", $id, $mysqlconnection);
-        echo "<a href='idiwtiko_ergo.php?id=$id&type=Μόνιμος&op=add'><img style='border: 0pt none;' src='../images/user_add.png'>&nbsp;Προσθήκη ιδιωτικού έργου</a>";
+        
         echo "</div>";
         echo "</td></tr>";
     }
