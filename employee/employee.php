@@ -507,24 +507,23 @@ elseif ($_GET['op']=="view") {
         echo "Διεύθυνση: ".$address."<br>";
         echo "ΑΔΤ: ".$idnum."<br>";
         echo "AMKA: ".$amka."<br>";
-        if ($idiwtiko) {
-            echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' checked disabled>";
-        } else {
-            echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' disabled>";
-        }
-        $sdate = strtotime($idiwtiko_enarxi)>0 ? date('d-m-Y', strtotime($idiwtiko_enarxi)) : '';
-        $ldate = strtotime($idiwtiko_liksi)>0 ?date('d-m-Y', strtotime($idiwtiko_liksi)) : '';
-        echo ($idiwtiko > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
-        echo "<br>";
-        if ($idiwtiko_id) {
-            echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' checked disabled>";
-        } else {
-            echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' disabled>";
-        }
-        $sdate = strtotime($idiwtiko_id_enarxi)>0 ? date('d-m-Y', strtotime($idiwtiko_id_enarxi)): '';
-        $ldate = strtotime($idiwtiko_id_liksi)>0 ? date('d-m-Y', strtotime($idiwtiko_id_liksi)): '';
-        echo ($idiwtiko_id > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
-        echo "<br>";
+        // if ($idiwtiko) {
+        //     echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' checked disabled>";
+        // } else {
+        //     echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' disabled>";
+        // }
+        // $sdate = strtotime($idiwtiko_enarxi)>0 ? date('d-m-Y', strtotime($idiwtiko_enarxi)) : '';
+        // $ldate = strtotime($idiwtiko_liksi)>0 ?date('d-m-Y', strtotime($idiwtiko_liksi)) : '';
+        // echo ($idiwtiko > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
+        // echo "<br>";
+        // if ($idiwtiko_id) {
+        //     echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' checked disabled>";
+        // } else {
+        //     echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' disabled>";
+        // }
+        // $sdate = strtotime($idiwtiko_id_enarxi)>0 ? date('d-m-Y', strtotime($idiwtiko_id_enarxi)): '';
+        // $ldate = strtotime($idiwtiko_id_liksi)>0 ? date('d-m-Y', strtotime($idiwtiko_id_liksi)): '';
+        // echo ($idiwtiko_id > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
         if ($katoikon) {
             echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
         } else {
@@ -533,6 +532,9 @@ elseif ($_GET['op']=="view") {
         $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
         $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
         echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
+        
+        idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+        
         echo "</div>";
         echo "</td></tr>";
     }

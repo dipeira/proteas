@@ -663,4 +663,52 @@ function compute_meiwmeno($days, $hours_per_week = 14, $ypoxr = 24)
     return round($days * ($hours_per_week/$ypoxr));
 }
 
+ 
+// display idiwtiko ergo
+function idiwtika_table($emp_type, $emp_id, $mysqlconnection) {
+    ?>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <?php
+    $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id";
+    $result = mysqli_query($mysqlconnection, $query);
+    if (!$result) {
+        echo "<p>Σφάλμα αναζήτησης ιδιωτικών έργων στη Βάση Δεδομένων.<br>Παρακαλώ ελέγξτε αν υπάρχει ο πίνακας 'idiwtiko'.</p>";
+        return;
+    }
+    if (!mysqli_num_rows($result)){
+        echo "<p>Δε βρέθηκαν ιδιωτικά έργα.</p>";
+        echo "<a href='idiwtiko_ergo.php?id=$emp_id&type=$emp_type&op=add'><img style='border: 0pt none;' src='../images/user_add.png'>&nbsp;Προσθήκη ιδιωτικού έργου</a>";
+        return;
+    }
+    echo "<h4>Ιδιωτικά έργα</h4>";
+    echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+        echo "<thead><tr>";
+        echo "<th>Ενέργεια</th>";
+        echo "<th>Τύπος</th>";
+        echo "<th>Αρ.Πρωτ.</th>";
+        echo "<th>Ημ/νία Πρωτ.</th>";
+        echo "<th>Πράξη</th>";
+        echo "<th>ΑΔΑ</th>";
+        echo "<th>Τελ.Ενημέρωση</th>";
+        echo "</tr></thead>\n<tbody>";
+    while ( $row = mysqli_fetch_assoc($result) ) {
+        echo "<tr>";
+        echo "<td>";
+        echo "<span title=\"Επεξεργασία\"><a href=\"idiwtiko_ergo.php?id=".$row['id']."&op=edit&emp_id=".$emp_id."&type=$emp_type\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
+        echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('idiwtiko_ergo.php?id=".$row['id']."&emp_id=$emp_id&type=$emp_type&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+        echo "</td>";
+        echo "<td>" . $row['type'] . "</td>";
+        echo "<td>" . $row['prot_no'] . "</td>";
+        echo "<td>" . date('d-m-Y', strtotime($row['prot_date'])) . "</td>";
+        echo "<td>" . $row['praxi'] . "</td>";
+        echo "<td>" . $row['ada'] . "</td>";
+        echo "<td>" . date('d-m-Y, H:i', strtotime($row['updated'])) . "</td>";
+        echo "</tr>";
+    }
+    echo "</tbody></table>";
+    echo "<a href='idiwtiko_ergo.php?id=$emp_id&type=$emp_type&op=add'><img style='border: 0pt none;' src='../images/user_add.png'>&nbsp;Προσθήκη ιδιωτικού έργου</a>";
+    return;
+
+}
+
 ?>
