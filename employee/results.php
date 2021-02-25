@@ -54,6 +54,10 @@ if ((int)$_POST['thesi']>0 && !$is_anapl) {
     $flag ? $query .= $op : '';
     $query .= " thesi = '".$_POST['thesi']."'";
     $flag=1;
+} else if ((int)$_POST['thesi']>0 && $is_anapl) {
+    $flag ? $query .= $op : '';
+    $query .= " thesi = '1'";
+    $flag=1;
 }
 
 // if (strlen($_POST['emptype'])>0) {
