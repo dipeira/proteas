@@ -157,9 +157,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $comments = mysqli_result($result, 0, "comments");
             // organikes - added 05-10-2012
             $organikes = unserialize(mysqli_result($result, 0, "organikes"));
-            // kena_leit, kena_org - added 19-06-2013
-            $kena_org = unserialize(mysqli_result($result, 0, "kena_org"));
-            $kena_leit = unserialize(mysqli_result($result, 0, "kena_leit"));
 
             echo "<table class=\"imagetable\" border='1'>";
             echo "<form id='updatefrm' name='update' action='school_update.php' method='POST'>";
@@ -206,22 +203,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 }
             }
             echo "</td></tr>";
-            // 19-06-2013 - kena_org, kena_leit
-            if ($type == 1) {
-            }
-            else if ($type == 2){
-                echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: <input type='text' name='kena_org[]' value='$kena_org[0]' size='2'/>";
-            }
-            echo "</td></tr>";
-            // if ($type == 1)
-            //     echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ70: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
-            // else
-            //     echo "<tr><td colspan=2>Λειτ. Κενά: ΠΕ60: <input type='text' name='kena_leit[]' value='$kena_leit[0]' size='2'/>";
-            // echo "&nbsp;&nbsp;Φυσ. Αγωγής: <input type='text' name='kena_leit[]' value='$kena_leit[1]' size='2'/>";
-            // echo "&nbsp;&nbsp;Αγγλικών: <input type='text' name='kena_leit[]' value='$kena_leit[2]' size='2'/>";
-            // echo "&nbsp;&nbsp;Μουσικής: <input type='text' name='kena_leit[]' value='$kena_leit[3]' size='2'/>";
-            // echo "</td></tr>";
-            //
             if ($type == 1 || $type == 2){
                 echo "<tr>";
                 if ($entaksis[0]) {

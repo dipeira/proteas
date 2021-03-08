@@ -262,6 +262,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
                     echo "</tr>";
                     echo "</tbody></table>";
+                } else {
+                    echo "<br>Oργανικά κενά ΠΕ60: ".($organikes[0] - $orgtop);
                 }
             }
             
@@ -275,19 +277,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             if ($type == 1) 
             {
-                // echo "<tr>";
-                // echo "<td>Οργανικά κενά</td>";
-                // echo "<td>$kena_org[0]</td>";
-                // echo "<td>$kena_org[1]</td>";
-                // echo "<td>$kena_org[2]</td>";
-                // echo "<td>$kena_org[3]</td>";
-                // echo "<td>$kena_org[4]</td>";
-                // echo "<td>$kena_org[5]</td>";
-                // echo "<td>$kena_org[6]</td>";
-                // echo "<td>$kena_org[7]</td>";
-                // echo "<td>$kena_org[8]</td>";
-                // echo "</tr>";
-                ///////
                 echo "<tr>";
                 $orgs = get_orgs($sch,$conn);
                 echo "<td>Οργανικά ανήκοντες</td>";
@@ -340,18 +329,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</tr>";
                 echo "</table>";
                 echo "organ</div>"; // of organikes
-                // echo "&nbsp;&nbsp;&nbsp;ΠΕ11: ".($organikes[1] - $orgs['ΠΕ11']);
-                // echo "&nbsp;&nbsp;ΠΕ06: ".($organikes[2] - $orgs['ΠΕ06']);
-                // echo "&nbsp;&nbsp;ΠΕ79: ".($organikes[3] - $orgs['ΠΕ79']);
-                // echo "&nbsp;&nbsp;ΠΕ05: ".($organikes[4] - $orgs['ΠΕ05']);
-                // echo "&nbsp;&nbsp;ΠΕ07: ".($organikes[5] - $orgs['ΠΕ07']);
-                // echo "&nbsp;&nbsp;ΠΕ08: ".($organikes[6] - $orgs['ΠΕ08']);
-                // echo "&nbsp;&nbsp;ΠΕ86: ".($organikes[7] - $orgs['ΠΕ86']);
-                // echo "&nbsp;&nbsp;ΠΕ91: ".($organikes[8] - $orgs['ΠΕ91']);
-                // echo "</td></tr>";
-            }
-            else if ($type==2) {
-                echo "<tr><td colspan=2>Οργ. Κενά: ΠΕ60: $kena_org[0]";
             }
             echo "</td></tr>";
         
