@@ -353,7 +353,7 @@ function get_ypoxrewtiko_wrario($emp_id, $conn)
 
 // get_orgs
 // returns number of teachers who belong organically per expertise
-function get_orgs($id, $mysqlconnection)
+function get_orgs($id, $mysqlconnection, $eidiko = false)
 {
     // organika, not @ entaksis
     $query = "SELECT k.perigrafh as klname, count(*) as plithos 
@@ -362,7 +362,30 @@ function get_orgs($id, $mysqlconnection)
     GROUP BY klados";
     $result = mysqli_query($mysqlconnection, $query);
     // initialize array
-    $ret = array('ΠΕ70' => 0,'ΠΕ11' => 0, 'ΠΕ06' => 0, 'ΠΕ79' => 0, 'ΠΕ05' => 0, 'ΠΕ07' => 0, 'ΠΕ08' => 0, 'ΠΕ86' => 0, 'ΠΕ91' =>0, 'ent' => 0);
+    if ($eidiko) {
+        $ret = array(
+            'ΠΕ70' => 0,
+            'ΠΕ11' => 0, 
+            'ΠΕ06' => 0, 
+            'ΠΕ79' => 0, 
+            'ΠΕ05' => 0, 
+            'ΠΕ07' => 0, 
+            'ΠΕ08' => 0, 
+            'ΠΕ86' => 0, 
+            'ΠΕ91' =>0,
+            'ΠΕ21' =>0,
+            'ΠΕ23' =>0,
+            'ΠΕ25' =>0,
+            'ΠΕ26' =>0,
+            'ΠΕ28' =>0,
+            'ΠΕ29' =>0,
+            'ΠΕ30' =>0,
+            'ΔΕ1ΕΒΠ' =>0,
+            'ent' => 0
+        );
+    } else {
+        $ret = array('ΠΕ70' => 0,'ΠΕ11' => 0, 'ΠΕ06' => 0, 'ΠΕ79' => 0, 'ΠΕ05' => 0, 'ΠΕ07' => 0, 'ΠΕ08' => 0, 'ΠΕ86' => 0, 'ΠΕ91' =>0, 'ent' => 0);
+    }
     
     while ($row = mysqli_fetch_array($result)){
       $plithos = strval($row['plithos']);
