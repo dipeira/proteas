@@ -478,16 +478,16 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Μετακινήσεις</td><td colspan=3>".nl2br($metakinhsh)."</td></tr>";
         echo "<tr><td>Τύπος Απασχόλησης</td><td colspan=3>$typos</td>";
         echo "<tr><td>Πραξη</td><td colspan=3>";
+        $qry = $sxoletos ? 
+        "SELECT * FROM praxi_old WHERE id=$praxi AND sxoletos = $sxoletos" :
+        "SELECT * FROM praxi WHERE id=$praxi";
+        $res = mysqli_query($mysqlconnection, $qry);
+
         echo $sxoletos ? 
-                "<a href='ektaktoi_prev.php?praxi=$praxi'>".getNamefromTbl($mysqlconnection, "praxi_old", $praxi)."</a>" :
+                "<a href='ektaktoi_prev.php?praxi_old=$praxi&sxoletos=$sxoletos'>".mysqli_result($res, 0, 'name')."</a>" :
                 "<a href='ektaktoi_list.php?praxi=$praxi'>".getNamefromTbl($mysqlconnection, "praxi", $praxi)."</a>";
         echo "</td></tr>";
         
-        $qry = $sxoletos ? 
-                "SELECT * FROM praxi_old WHERE id=$praxi AND sxoletos = $sxoletos" :
-                "SELECT * FROM praxi WHERE id=$praxi";
-        
-        $res = mysqli_query($mysqlconnection, $qry);
         $ya = mysqli_result($res, 0, 'ya');
         $apofasi = mysqli_result($res, 0, 'apofasi');
         $ada = mysqli_result($res, 0, 'ada');
