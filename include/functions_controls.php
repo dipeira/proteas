@@ -455,7 +455,7 @@ function katastCmb($v)
     echo "</select>";
 }
     
-function adeiaCmb($inp,$conn,$ekt = 0)
+function adeiaCmb($inp,$conn,$ekt = 0,$all = false)
 {
     $query = $ekt ? "SELECT * from adeia_ekt_type ORDER BY type" : "SELECT * from adeia_type ORDER BY type";
     $result = mysqli_query($conn, $query);
@@ -465,10 +465,13 @@ function adeiaCmb($inp,$conn,$ekt = 0)
     }
     $num=mysqli_num_rows($result);
     echo "<select id='type' name=\"type\" >";
+    if ($all) {
+        echo "<option value='0'>Όλες</option>";
+    }
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
-        $type=mysqli_result($result, $i, "type");
+        $type=mysqli_result($result, $i, "type");   
         if (strcmp($id, $inp)==0) {
             echo "<option value=\"".$id."\" selected=\"selected\">".$type."</option>";
         } else {

@@ -96,7 +96,7 @@
 	  	echo "</td></tr>";	
 		
                 echo "<tr><td>Είδος</td><td>";
-                adeiaCmb($type,$mysqlconnection);
+                adeiaCmb($type,$mysqlconnection,0,true);
                 echo "</td></tr>";
                 
                 echo "<tr><td colspan=2>";

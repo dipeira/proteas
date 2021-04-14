@@ -35,18 +35,19 @@ if (!$_POST['mon_anapl']) {
     $query .= " AND start <= '".$_POST['hm_to']."'";
         
 if (strlen($_POST['type'])>0) {
-    $query .= $op;
-    $query .= " type like '".$_POST['type']."'";
-        
+    if ($_POST['type'] != 0) {
+        $query .= $op;
+        $query .= " type like '".$_POST['type']."'";
+    }
 }
         
         $i=0;
         //    echo $query; // for debugging...
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
-        
+
 if ($num==0) {
-    echo "<BR><p>Κανένα αποτέλεσμα...</p>";
+    echo "<BR><h4>Κανένα αποτέλεσμα...</h4>";
 } else
 {
     //echo "<p>Πλήθος εγγραφών που βρέθηκαν: $num<p>";
