@@ -13,7 +13,7 @@
     $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
     $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
     $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
-    $sxol_symv = getSchoolID('Σχολικός Σύμβουλος',$mysqlconnection);
+    $sxol_symv = getSchoolID('Συντονιστής εκπ/κου έργου',$mysqlconnection);
     $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό',$mysqlconnection);
 ?>    
 <html>
@@ -69,24 +69,28 @@ if ($usrlvl > 0) {
 }
     // Allagh sxolikoy etoys
 if (isset($_POST['sxoletos'])) {
-    //do2yphr($mysqlconnection);
     $curSxoletos = getParam('sxol_etos', $mysqlconnection);
     if ($curSxoletos == $_POST['sxoletos']) {
         echo "<br><br>";
         die('Σφάλμα: Το έτος έχει ήδη αλλάξει...');
     }
+    $debug = '';
     setParam('sxol_etos', $_POST['sxoletos'], $mysqlconnection);
     // more...
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
     $query = "CREATE TABLE $tbl_bkp_mon SELECT * FROM employee";
+    $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $query = "DROP TABLE employee_moved";
+    $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     // allo pyspe, apospasi se forea, sxol. symvoulos, Apospash ekswteriko
     // thesi 2: d/nths, 4: dioikhtikos
     $query = "CREATE TABLE employee_moved SELECT * FROM employee WHERE sx_yphrethshs NOT IN ($allo_pyspe,$se_forea,$sxol_symv,$ekswteriko) AND thesi NOT IN (2,4)";
+    $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs NOT IN ($allo_pyspe,$se_forea,$sxol_symv,$ekswteriko) AND thesi NOT IN (2,4)";
+    $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows($mysqlconnection);
     //echo $query;
@@ -95,11 +99,13 @@ if (isset($_POST['sxoletos'])) {
     } else { 
         echo "Πρόβλημα στη διαγραφή...";
     }
-        
+    
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
     $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = $allo_pyspe";
+    $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = $allo_pyspe";
+    $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows($mysqlconnection);
     //echo $query;
@@ -108,7 +114,7 @@ if (isset($_POST['sxoletos'])) {
     } else { 
         echo "Πρόβλημα στη διαγραφή...";
     }
-        
+    echo "<br><span title='$debug'><small>(i)</small></span>";
     // echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
     // $query = "DROP TABLE employee_deleted";
     // $result = mysqli_query($mysqlconnection, $query);
@@ -240,7 +246,7 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
 elseif ($_POST['type'] == 8) {
     echo "<h3>Αλλαγή Σχολικού έτους</h3>";
     echo "Τρέχον σχολικό έτος: $sxol_etos<br>";
-    echo "Δώστε νέο σχολικό έτος (π.χ. για το σχολ.έτος 2014-15 εισάγετε <strong>201415</strong><br>";
+    echo "Δώστε νέο σχολικό έτος (π.χ. για το σχολ.έτος 2014-15 εισάγετε <strong>201415</strong>)<br>";
     echo "<form action='' method='POST'>";
     echo "<input type='text' name='sxoletos'>";
     echo "<input type='submit' value='Υποβολή'>";
