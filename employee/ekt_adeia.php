@@ -237,8 +237,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "	<input type='hidden' name = 'id' value='$id'>";
                 echo "	<input type='hidden' name = 'emp_id' value='$emp_id'>";
             echo "	<input type='submit' value='Επεξεργασία'>";
-            echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ekt_adeia.php?adeia=$id&op=view'\">";
-            //echo "    <INPUT TYPE='button' VALUE='Επιστροφή' onClick='history.go(-1);return true;'>";
+            //echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='ekt_adeia.php?adeia=$id&op=view'\">";
+            echo "    <INPUT TYPE='button' VALUE='Επιστροφή' onClick='history.go(-1);return true;'>";
             echo "	</form>";
             echo "    </center>";
             echo "</body>";
