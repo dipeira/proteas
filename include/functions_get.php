@@ -364,7 +364,7 @@ function get_orgs($id, $mysqlconnection, $eidiko = false)
     // initialize array
     if ($eidiko) {
         $ret = array(
-            'ΠΕ70' => 0,
+            'ΠΕ70ΕΑΕ' => 0,
             'ΠΕ11' => 0, 
             'ΠΕ06' => 0, 
             'ΠΕ79' => 0, 
@@ -384,7 +384,18 @@ function get_orgs($id, $mysqlconnection, $eidiko = false)
             'ent' => 0
         );
     } else {
-        $ret = array('ΠΕ70' => 0,'ΠΕ11' => 0, 'ΠΕ06' => 0, 'ΠΕ79' => 0, 'ΠΕ05' => 0, 'ΠΕ07' => 0, 'ΠΕ08' => 0, 'ΠΕ86' => 0, 'ΠΕ91' =>0, 'ent' => 0);
+        $ret = array(
+            'ΠΕ70' => 0,
+            'ΠΕ11' => 0, 
+            'ΠΕ06' => 0, 
+            'ΠΕ79' => 0, 
+            'ΠΕ05' => 0, 
+            'ΠΕ07' => 0, 
+            'ΠΕ08' => 0, 
+            'ΠΕ86' => 0, 
+            'ΠΕ91' =>0, 
+            'ent' => 0
+        );
     }
     
     while ($row = mysqli_fetch_array($result)){
