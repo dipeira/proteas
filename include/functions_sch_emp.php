@@ -245,7 +245,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
     // PE70 entaksis
     if ($has_entaxi > 0) {
-        $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados=2 AND status=1 and ent_ty = 1";
+        $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados in (2,18,19) AND status=1 and ent_ty = 1";
         $res = mysqli_query($mysqlconnection, $qry);
         $top_ent = mysqli_result($res, 0, 'pe70');
         $avhrs['TE'] = $top_ent;

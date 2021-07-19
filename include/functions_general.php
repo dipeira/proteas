@@ -116,9 +116,9 @@ function hours_to_teachers_adaptive($hrs)
     if ($hrs > 0) {
         return '+'.floor($hrs/23) .  ' (+' . ($hours % 23) . ')';
     }
-    if (($hours % 23) > 12) {
+    if (($hours % 23) >= 12) {
         return '-'.ceil($hours/23) . ' (+' . (23 - $hours % 23) . ')';
-    } elseif (($hours % 23) <= 12){
+    } elseif (($hours % 23) < 12){
         $ypol = $hours % 23;
         $floor = floor($hours/23);
         $ret = $floor == 0 ? $floor : '-'.$floor;
