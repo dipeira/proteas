@@ -110,6 +110,25 @@ function hours_to_teachers($hours)
     return round($hours/23, 0);
 }
 
+function hours_to_teachers_adaptive($hrs)
+{
+    $hours = abs($hrs);
+    if ($hrs > 0) {
+        return '+'.floor($hrs/23) .  ' (+' . ($hours % 23) . ')';
+    }
+    if (($hours % 23) > 12) {
+        return '-'.ceil($hours/23) . ' (+' . (23 - $hours % 23) . ')';
+    } elseif (($hours % 23) <= 12){
+        $ypol = $hours % 23;
+        $floor = floor($hours/23);
+        $ret = $floor == 0 ? $floor : '-'.$floor;
+        if ($ypol > 0) {
+            $ret .=' (-' . $ypol . ')';
+        }
+        return $ret;
+    }
+}
+
 function tdc($val,$colspan = null,$withspan = true)
 {
     $cols = $colspan ? "colspan=$colspan" : '';

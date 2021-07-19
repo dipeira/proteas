@@ -113,7 +113,7 @@ if (!$oligothesia) {
     
 if (!$oligothesia) {
     echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
-    echo "<th>70</th><th>70+Ολ+ΠΖ <strong>(A)</strong></th>";
+    echo "<th>70</th><th>70+Ολ+ΠΖ <strong>(A)</strong></th><th>70+Ολ+ΠΖ</strong></th>";
 } else {
     echo "<th>Απαιτ.70</th><th>Απαιτ.70<br>+(Ολ+ΠΖ) <strong>(A)</strong></th>";
 }
@@ -201,6 +201,8 @@ while ($i < $num)
         echo tdc($df['05-07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['79']).tdc($df['91']).tdc($df['86']);
     }
     echo tdc($df['70']).tdc($telPE70);
+    echo '<td>'.hours_to_teachers_adaptive($telPE70).'</td>';
+    
     $koines = $df['08']+$df['11']+$df['79']+$df['91'];
     echo tdc((int)$koines); // apait. 08,11,79,91
     echo tdc($telPE70+$koines);
