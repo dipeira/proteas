@@ -103,7 +103,7 @@ if (!$oligothesia) {
     //echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
     //echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
     echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
-    echo "<th colspan=12>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
+    echo "<th colspan=13>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
     echo "</tr>";
     echo "<th>05-07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
     echo "<th>70</th>";
@@ -265,7 +265,7 @@ if (!$oligothesia) {
 if (!$oligothesia) {
     echo "<td>".$df_sum['05-07']."</td><td>".$df_sum['06']."</td><td>".$df_sum['08']."</td><td>".$df_sum['11']."</td><td>".$df_sum['79']."</td><td>".$df_sum['91']."</td><td>".$df_sum['86']."</td>";
 } 
-    echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td><td></td>\n";
+    echo "<td>".$df_sum['70']."</td><td>".$df_sum['OP']."</td><td></td><td></td><td></td><td></td>\n";
     echo "</tr>";
     
     echo "<tr><td>ΣΥΝΟΛΑ (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td>";
@@ -280,7 +280,7 @@ if (!$oligothesia) {
     echo "<td>".$df_sum_t['05-07']."</td><td>".$df_sum_t['06']."</td><td>".$df_sum_t['08']."</td><td>".$df_sum_t['11']."</td><td>".$df_sum_t['79']."</td><td>".$df_sum_t['91']."</td><td>".$df_sum_t['86']."</td>";
 }
     echo "<td>".$df_sum_t['70']."</td><td>".$df_sum_t['OP']."</td><td></td><td></td>\n";
-    echo "<td>".$df_sum['TE']."</td>";
+    echo "<td></td><td>".$df_sum['TE']."</td>";
     
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
     //echo "<td></td><td colspan=3>MONO KENA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
