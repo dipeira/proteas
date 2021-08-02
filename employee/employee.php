@@ -235,9 +235,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     });
             
     $().ready(function() {
+        // fix to allow PE06 bypass school_type
+        let e_params = '<?= $klados; ?>' == 'ΠΕ06' ? {} : {type: <?php echo $klados_type; ?>};
         $(".addRow").btnAddRow(function(row){
             row.find(".yphrow").autocomplete("get_school.php", {
-                extraParams: {type: <?php echo $klados_type; ?>},
+                extraParams: e_params,
                 width: 260,
                 matchContains: true,
                 selectFirst: false
@@ -245,7 +247,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         });
         $(".delRow").btnDelRow();
         $(".yphrow").autocomplete("get_school.php", {
-            extraParams: {type: <?php echo $klados_type; ?>},
+            extraParams: e_params,
             width: 260,
             matchContains: true,
             selectFirst: false

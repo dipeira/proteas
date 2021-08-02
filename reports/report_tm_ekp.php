@@ -291,12 +291,13 @@ if ($_REQUEST['type']) {
             echo "<th>Τ.Ε.</th>";
             echo "<th>Μαθ Τ.Ε.</th>";
             
-            echo "<th>Απαιτ.Εκπ/κοί<br><small>(όχι Τ.Ε.)</small></th>";
-            echo "<th>Τοπ/νοι Εκπ/κοί<br><small>(όχι Τ.Ε. & Παράλ.)</small></th>";
+            echo "<th>Απαιτ.Εκπ<br><small>(όχι Τ.Ε.)</small></th>";
+            echo "<th>Τοπ/νοι Εκπ<br><small>(όχι Τ.Ε. & Παράλ.)</small></th>";
             echo $kenapl ?
                 "<th>Κενά</th><th>Πλεονάσματα</th>" :
                 "<th>+ / -</th>";
             echo "<th>+ / - Τ.Ε.</th>";
+            echo "<th>+ / - ΠΕ06<small><br>(ώρες)</small></th>";
             echo "</tr></thead>\n<tbody>\n";
 
         while ($i < $num)
@@ -356,6 +357,11 @@ if ($_REQUEST['type']) {
                 0;
             // compute kena / pleonasmata
             $k_pl = $top60-$apait;
+            // ΠΕ06
+            // τοποθετημένοι εκπ/κοί ΠΕ06
+            $top06 = top_pe06_nip($sch, $mysqlconnection);
+            $apait06 = $klasiko_tm * WRES_PE06_NIP;
+            $k_pl_06 = $top06 - $apait06;
 
             if ($kenapl && $k_pl == 0 && $k_pl_ent == 0) {
                 $i++;
@@ -395,6 +401,7 @@ if ($_REQUEST['type']) {
                 echo tdc($k_pl, null, false);
             }
             echo tdc($k_pl_ent, null, false);
+            echo tdc($k_pl_06, null, false);
             echo "</tr>\n";
 
             $synolo_tm_klas += $klasiko_tm;
@@ -405,6 +412,7 @@ if ($_REQUEST['type']) {
             $synolo_ol_pro += $oloimero_syn_pro;
             $synolo_apait += $apait;
             $synolo_k_pl += $k_pl;
+            $synolo_k_pl_06 += $k_pl_06;
             $synolo_k_pl_ent += $k_pl_ent;
             $synolo_nipiag_top += $top60;
             
@@ -428,6 +436,7 @@ if ($_REQUEST['type']) {
             echo "<td>$synolo_k_pl</td>";
         }
         echo "<td>$synolo_k_pl_ent</td>";
+        echo "<td>$synolo_k_pl_06</td>";
         
         echo "</tr>";
         echo "</tbody></table>";

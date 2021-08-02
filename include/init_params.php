@@ -47,8 +47,9 @@
     define('MEIWSH_VIVLIOTHIKIS',3);
     // meiwsh ypodieythinth
     define('MEIWSH_YPNTH',2);
+    // wres PE06 @ nip ana tmima
+    define('WRES_PE06_NIP',2);
 
-    
   }
   // if not exists
   else {

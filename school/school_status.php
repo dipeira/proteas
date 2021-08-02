@@ -625,8 +625,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<br>";
         
             $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
-            // τοποθετημένοι εκπ/κοί
-            $top60 = $top60m = $top60ana = 0;
+            // τοποθετημένοι εκπ/κοί ΠΕ60
+            $top60 = $top60m = $top60ana = $top06m = $top06a = 0;
             $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
             $res = mysqli_query($conn, $qry);
             $top60m = mysqli_result($res, 0, 'pe60');
@@ -634,23 +634,33 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $res = mysqli_query($conn, $qry);
             $top60ana = mysqli_result($res, 0, 'pe60');
             $top60 = $top60m+$top60ana;
-            
+
+            // τοποθετημένοι εκπ/κοί ΠΕ06
+            $top06 = top_pe06_nip($sch, $conn);
+
             $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
+            $apait06 = $tmimata_nip * WRES_PE06_NIP;
 
             echo "<h3>Λειτουργικά κενά</h3>";
             echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
+            echo "<thead><th></th><th>ΠΕ60</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th><th>ΠΕ06 <small>(ώρες)</small></th></thead><tbody>";
 
-            echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
+            echo "<tr><td>Απαιτούμενοι</td>";
             echo "<td>$syn_apait</td>";
-            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
+            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td><td>$apait06</td></tr>";
 
-            echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
+            echo "<tr><td>Υπάρχοντες </td><td>$top60</td><td></td><td></td><td></td><td>$top06</td></tr>";
+            //60
             $k_pl = $top60-$syn_apait;
             $k_pl_class = $k_pl >= 0 ? 
                 "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
                 "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
-            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
+            //06
+            $k_pl06 = $top06-$apait06;
+            $k_pl_class06 = $k_pl06 >= 0 ? 
+                "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
+                "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
+            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td><td style=$k_pl_class06>$k_pl06</td></tr>";
 
             echo "</tbody></table>";
             echo "<br>";
