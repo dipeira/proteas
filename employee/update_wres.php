@@ -33,8 +33,12 @@
   echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
   $myCalendar = new tc_calendar("date", true);
   $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-  if((int)$_POST['date'])
-          $myCalendar->setDate(date('d',strtotime($_POST['date'])),date('m',strtotime($_POST['date'])),date('Y',strtotime($_POST['date'])));
+  if((int)$_POST['date']) {
+    $myCalendar->setDate(date('d',strtotime($_POST['date'])),date('m',strtotime($_POST['date'])),date('Y',strtotime($_POST['date'])));
+  } else {
+    $myCalendar->setDate(31,12,date('Y'));
+  }
+  
   $myCalendar->setPath("../tools/calendar/");
   $myCalendar->setYearInterval(1970, 2030);
   $myCalendar->dateAllow("1970-01-01", date("2030-01-01"));

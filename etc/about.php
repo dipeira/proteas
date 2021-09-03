@@ -32,7 +32,7 @@
         <ul>
             <li><a href="https://jquery.com/">jQuery</a></li>
             <li><a href="https://datatables.net/">DataTables</a></li>
-            <li><a href="http://www.triconsole.com/php/calendar_datepicker.php">PHP Calandar Date Picker</a></li>
+            <li><a href="http://www.triconsole.com/php/calendar_datepicker.php">PHP Calendar Date Picker</a></li>
             <li><a href="https://select2.org/">Select2</a></li>
             <li><a href="https://github.com/jmosbech/StickyTableHeaders">StickyTableHeaders</a></li>
             <li><a href="https://www.linux.com/news/quickly-put-data-mysql-web-drasticgrid">DrasticGrid</a></li>
