@@ -58,15 +58,15 @@
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-		$query = "SELECT * from employee";
-                //$query = "SELECT * from employee WHERE status NOT IN (2,4)";
-                // 07-08-2013
-                //$query = "SELECT * from employee WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24)";
-		//$query = "SELECT * from employee WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney";
-                //if ($idiwtikoi)
-                //    $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi=5";
-                //else
-                //    $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi!=5";
+		$query = "SELECT e.*,k.perigrafh as kname from employee e JOIN klados k ON k.id = e.klados WHERE klados <> 1";
+    // $query = "SELECT * from employee WHERE status NOT IN (2,4)";
+    // 07-08-2013
+    // $query = "SELECT * from employee WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24)";
+		// $query = "SELECT * from employee WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney";
+    //if ($idiwtikoi)
+    //    $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi=5";
+    //else
+    //    $query = "SELECT *,k.perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24) AND NOT aney AND thesi!=5";
 		$result = mysqli_query($mysqlconnection, $query);
 		$num=mysqli_num_rows($result);
 		$dt = $_POST['date'];
@@ -75,7 +75,7 @@
 		echo "<br>Ημερομηνία αναζήτησης: $dt<br>";
     ob_start();
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-    echo "<thead><tr><th>id</th><th>ΑΜ</th><th>Ονοματεπώνυμο</th><th>Ώρες</th><th>Ημέρες</th><th>Υ - Μ - D</th></tr></thead><tbody>";
+    echo "<thead><tr><th>ΑΜ</th><th>Ονοματεπώνυμο</th><th>Κλάδος</th><th>Ώρες</th><th>Ημέρες</th><th>Υ - Μ - D</th></tr></thead><tbody>";
     $aa = 1;
     $problems = 0;
     while ($i<$num)	
@@ -94,6 +94,7 @@
       $hm_anal = mysqli_result($result, $i, "hm_anal");
 		  $proyp = mysqli_result($result, $i, "proyp");
       $aney_xr = mysqli_result($result, $i, "aney_xr");
+      $kname = mysqli_result($result, $i, "kname");
                 
       // 29-10-2012 - Skip employees from elsewhere (organikh = 3 (allo pyspe) or 5 (allo pysde)).
       $organ = mysqli_result($result, $i, "sx_organikhs");
@@ -141,7 +142,7 @@
 		  $wres = get_wres($days);
       $ymd = days2ymd($days);
 			if ($wres <> $old_wres){
-				echo "<tr><td>$id</td><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>$wres</td><td>$days</td><td>$ymd[0] y, $ymd[1] m, $ymd[2] d</tr>";
+				echo "<tr><td>$am</td><td><a href=\"employee.php?id=$id&op=view\">$surname $name</a></td><td>$kname</td><td>$wres</td><td>$days</td><td>$ymd[0] y, $ymd[1] m, $ymd[2] d</tr>";
         $need_update++;
 			}
       // allagh wrwn
