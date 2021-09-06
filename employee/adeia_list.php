@@ -82,7 +82,7 @@
             // year table
             echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";	
             echo "<thead><tr>";
-            echo "<th>ID</th><th>Τύπος</th><th>Αρ.Πρωτ.</th><th>Ημ.Αίτησης</th><th>Ημέρες</th><th>Ημ.Έναρξης</th><th>Ημ.Λήξης</th>";
+            echo "<th>Ενέργεια</th><th>Τύπος</th><th>Αρ.Πρωτ.</th><th>Ημ.Αίτησης</th><th>Ημέρες</th><th>Ημ.Έναρξης</th><th>Ημ.Λήξης</th>";
             echo "</tr></thead>";
             echo "<tbody>";
             
@@ -104,10 +104,14 @@
                 $query1 = "select type from adeia_type where id=$type";
                 $result1 = mysqli_query($mysqlconnection, $query1);
                 $typewrd = mysqli_result($result1, 0, "type");
-                if ($usrlvl < 2)
-                    echo "<tr><td>$id<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('adeia.php?adeia=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td><td><a href='adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
+                $viewlink = "<span title='Προβολή'><a href='adeia.php?adeia=$id&op=view'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;";
+                if ($usrlvl < 2) {
+                    echo "<tr><td>$viewlink<span title='Επεξεργασία'><a href='adeia.php?adeia=$id&op=edit'><img style='border: 0pt none;' src='../images/edit_action.png'></a>&nbsp;
+                    <span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('adeia.php?adeia=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td>
+                    <td><a href='adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
+                }
                 else
-                    echo "<tr><td>$id</td><td><a href='adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
+                    echo "<tr><td>$viewlink</td><td><a href='adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
                 $i++;
                 $synolo_days += $days;
             }

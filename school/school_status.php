@@ -893,7 +893,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         // Οργανική αλλού και δευτερεύουσα υπηρέτηση
         //$query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND (sx_yphrethshs='$sch' AND thesi=0";
-        $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos";
+        $query = "SELECT * FROM employee e join yphrethsh y on e.id = y.emp_id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos AND status = 1";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -1110,8 +1110,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today' AND status=3";
         //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3)";
         //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-        $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE (sx_organikhs='$sch' OR sx_yphrethshs='$sch') AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-        //echo $query;
+        $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id JOIN yphrethsh yp ON emp.id = yp.emp_id
+        WHERE yp.yphrethsh = $sch AND yp.sxol_etos=$sxol_etos AND ((start<'$today' AND finish>'$today') OR status=3) 
+        ORDER BY finish DESC";
+        // echo $query;
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
@@ -1145,6 +1147,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               $return = mysqli_result($result, $i, "finish");
               $start = mysqli_result($result, $i, "start");
               $status = mysqli_result($result, $i, "status");
+              $comments = '';
+              $organ = mysqli_result($result, $i, 'sx_organikhs');
+              if ($organ != $sch) {
+                  $comments .= "<i>Σχ. Οργανικής: <a href='../school/school_status.php?org=$organ'>".getSchool($organ, $mysqlconnection)."</a></i><br>";
+              }
               // if return date exists, check if absent and print - else continue.
               if ($return) {
                   if ($start<$today && $return>$today) {
@@ -1158,7 +1165,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                               $flag = 1;
                       }
                           $apontes[] = $id;
-                          $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
+                          $comments .= "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
                   }
                   $ret = date("d-m-Y", strtotime($return));
               }
@@ -1167,14 +1174,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                   $ret="";
                   $id = mysqli_result($result, $i, "emp.id");
                   $flag=1;
-                  $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
+                  $comments .= "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
               }
               if ($flag) {
                   $query1 = "select type from adeia_type where id=$type";
                   $result1 = mysqli_query($mysqlconnection, $query1);
                   $typewrd = mysqli_result($result1, 0, "type");
                   if ($absent && $status<>3) {
-                      $comments = "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε Άδεια\"</blink><br>$comm";
+                      $comments .= "<blink>Παρακαλώ αλλάξτε την κατάσταση του <br>εκπ/κού σε \"Σε Άδεια\"</blink><br>$comm";
                   }
 
                   echo "<tr>";
