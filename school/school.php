@@ -17,7 +17,6 @@
             }
         </style>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-        <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
         <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script>
         <script type="text/javascript">
@@ -28,7 +27,23 @@
                   url: '../js/datatables/greek.json'
                 },
                 pageLength: 20,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Όλες"]]
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Όλες"]],
+                dom: 'Bfrtlp',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Αντιγραφή',
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Εξαγωγή σε excel',
+                        filename: 'export'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Εκτύπωση',
+                    }
+                ]
               });
           } );
         </script>
@@ -42,6 +57,7 @@
         <div id="container">
 <?php
     require_once"../config.php";
+    require_once('../js/datatables/includes.html');
     //require_once"../include/functions.php";
         
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
@@ -63,6 +79,7 @@
         <th>Τηλέφωνο</th>
         <th>e-mail</th>
         <th>Οργανικότητα</th>
+        <th>Λειτουργικότητα</th>
         <th>Δ.Σ./Νηπ.</th>
         <th>Τύπος</th>
         <!-- <th>Τμ.Ένταξης</th>
@@ -88,6 +105,7 @@ while ($row = mysqli_fetch_assoc($result))
     echo "\n<td>".preg_replace('/\s+/', '', $row['tel'])."</td>";
     echo "\n<td><a href='mailto:".$row['email']."'>".$row['email']."</a></td>";
     echo "\n<td>".$row['organikothta']."</td>";
+    echo "\n<td>".get_leitoyrgikothta($row['id'], $mysqlconnection).'</td>';
     echo "<td>";
     switch ($row['type']) {
       case '0':
