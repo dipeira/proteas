@@ -716,14 +716,14 @@ function top_pe06_nip($sch, $conn){
     global $sxol_etos;
     // τοποθετημένοι εκπ/κοί ΠΕ06
     // mon
-    $qry = "SELECT count(*) as pe06 FROM employee e JOIN yphrethsh y ON e.id = y.emp_id WHERE y.yphrethsh = $sch AND e.klados=3 AND e.status=1 AND y.sxol_etos = $sxol_etos";
+    $qry = "SELECT sum(y.hours) as pe06 FROM employee e JOIN yphrethsh y ON e.id = y.emp_id WHERE y.yphrethsh = $sch AND e.klados=3 AND e.status=1 AND y.sxol_etos = $sxol_etos";
     $res = mysqli_query($conn, $qry);
     $top06m = mysqli_result($res, 0, 'pe06');
     // anapl
-    $qry = "SELECT count(*) as pe06 FROM ektaktoi e JOIN yphrethsh_ekt y ON e.id = y.emp_id WHERE y.yphrethsh = $sch AND e.klados=3 AND e.status=1 AND y.sxol_etos = $sxol_etos";
+    $qry = "SELECT sum(y.hours) as pe06 FROM ektaktoi e JOIN yphrethsh_ekt y ON e.id = y.emp_id WHERE y.yphrethsh = $sch AND e.klados=3 AND e.status=1 AND y.sxol_etos = $sxol_etos";
     $res = mysqli_query($conn, $qry);
     $top06ana = mysqli_result($res, 0, 'pe06');
-    $top06 = ($top06m + $top06ana) * WRES_PE06_NIP;
+    $top06 = $top06m + $top06ana;
     return $top06;
 }
 
