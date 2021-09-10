@@ -78,10 +78,11 @@
         <th>Κωδ.Υπουργείου</th>
         <th>Τηλέφωνο</th>
         <th>e-mail</th>
-        <th>Οργανικότητα</th>
-        <th>Λειτουργικότητα</th>
+        <th>Οργαν.</th>
+        <th>Λειτ.</th>
         <th>Δ.Σ./Νηπ.</th>
         <th>Τύπος</th>
+        <th>Ενεργό</th>
         <!-- <th>Τμ.Ένταξης</th>
         <th>Τμ.Υποδοχής</th>
         <th>Φροντιστ.Τμήμα</th>
@@ -131,6 +132,9 @@ while ($row = mysqli_fetch_assoc($result))
         echo "Ειδικό";
         break; 
     }
+    echo "</td>";
+    echo "<td>";
+    echo $row['anenergo'] == 1 ? 'Χ' : '&#10003;';
     echo "</td>";
     //echo "\n<td>".$row['entaksis']."</td>";
     //echo "\n<td>".$row['ypodoxis']."</td>";
