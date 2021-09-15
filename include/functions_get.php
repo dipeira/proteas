@@ -179,6 +179,28 @@ function getDimos($id,$conn)
         return $dimos;
     }
 }
+function getDimosId($name,$conn,$add = false)
+{
+    $query = "SELECT * from dimos where name='".$name."'";
+    $query1 = iconv('cp1253','utf-8',$query);
+    $result = mysqli_query($conn, $query1);
+    $num = mysqli_num_rows($result);
+    // find dimos. If not found, add (if param add = true)
+    if ($num > 0) {
+        $row = mysqli_fetch_row($result);
+        return $row[0];
+    } else {
+        if ( $add ) {
+            $nm = iconv('cp1253','utf-8',$name);
+            $qry = "INSERT INTO dimos (name) VALUES ('$nm')";
+            $res = mysqli_query($conn, $qry);
+            $id = mysqli_insert_id($conn);
+            return $id;
+        } else {
+            return 0;
+        }
+    }
+}
 function getSchDimos($id,$conn)
 {
     $query = "SELECT d.name from school s JOIN dimos d ON s.dimos = d.id where s.id=".$id;

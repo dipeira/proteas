@@ -13,9 +13,19 @@
 - ~~Μισθολογική ωρίμανση εκπ/κών~~
 
 ### Απαιτήσεις:
-Α) Για κανονική εγκατάσταση, υπολογιστής με web server (Apache2 / nginx), PHP (προτιμότερα 7.2 - θα διορθωθεί σύντομα και για μεγαλύτερη έκδοση) & MySQL (προτιμότερα 5.7).
+Α) Για κανονική εγκατάσταση, υπολογιστής με web server (Apache2 / nginx), PHP (προτιμότερα 7.2 - θα διορθωθεί σύντομα και για μεγαλύτερη έκδοση) & MySQL (προτιμότερα 5.7) ή MariaDB (βλ. σημείωση).
 
 Β) Για εγκατάσταση με docker, αρκεί να είναι εγκατεστημένα τα [Docker](https://docs.docker.com/get-docker/) & του [Docker-compose](https://docs.docker.com/compose/install/)
+
+#### ΣΗΜΕΙΩΣΗ: 
+Για εγκατάσταση σε MariaDB, πρέπει να απενεργοποιηθεί το strict mode της βάσης μέσω phpmyadmin.
+Στο πεδίο μεταβλητές (variables) του διακομιστή να αλλάξει το sql_mode ως εξής:
+
+   ```
+    - STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION (>= MariaDB 10.2.4)
+    - NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION (>= MariaDB 10.1.7)
+    - (empty string) (<= MariaDB 10.1.6)
+  ```
 
 ### Οδηγίες εγκατάστασης:
 - Κλωνοποίηση του repository σε φάκελο του web server, για άμεση λήψη ενημερώσεων (με git pull). Εναλλακτικά, αποσυμπίεση αρχείου zip σε φάκελο του web server

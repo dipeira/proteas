@@ -41,13 +41,14 @@
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
     echo "<h4>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού τους προσθέσετε δεδομένα εισάγετε το.</h4>";
     echo "Επιλογή τύπου δεδομένων:<br>";
-    echo "<input type='radio' name='type' value='2'>α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='1'>β) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='3'>γ) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
-    echo "<input type='radio' name='type' value='4'>δ) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='5'>ε) Τοποθετήσεις μονίμων εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='6'>ε) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα γ, δ να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
+    echo "<input type='radio' name='type' value='2'>1α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='7'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
+    echo "<input type='radio' name='type' value='1'>2) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
+    echo "<input type='radio' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='5'>5) Τοποθετήσεις μονίμων εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
     print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
@@ -70,7 +71,7 @@
   }
   //Upload File
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
-      echo "<h3>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</h3>";
+      echo "<p>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</p>";
 
       //Import uploaded file to Database
       $handle = fopen($_FILES['filename']['tmp_name'], "r");
@@ -98,7 +99,7 @@
       // set max execution time (for large files)
       set_time_limit (480);
 
-      while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+      while (($data = fgetcsv($handle, 10000, ";")) !== FALSE) {
         // skip header line
         if ($headers){
             $headers = 0;
@@ -122,6 +123,9 @@
           }
           else if ($_POST['type'] == 5 || $_POST['type'] == 6){
             $tblcols = 3;
+          }
+          else if ($_POST['type'] == 7){
+            $tblcols = 73;
           }
 
           if ($csvcols <> $tblcols)
@@ -179,6 +183,50 @@
               $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
               values ($id, '$sx_yphr', '$data[22]', '$sx_organ', '$sxol_etos')";
               mysqli_query($mysqlconnection,$query);
+            }
+            break;
+
+          // schools - myschool
+          case 7:
+            // check if school already exists
+            $code = trim($data[12],'=\"');
+            $qry = "SELECT * FROM school WHERE code = $code";
+            if (mysqli_num_rows(mysqli_query($mysqlconnection, $qry)) ) {
+              $error = true;
+              $er_msg ="Σφάλμα: Το σχολείο με κωδικό ".$code." υπάρχει ήδη...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            // columns:
+            // Κατηγορία Μοριοδότησης (4),	Δήμος	(6), Είδος	(10) Κωδ. ΥΠΠΘ (12)	Ονομασία (13)	Λειτουργικότητα	(14) 
+            // Οργανικότητα	(15) Τηλέφωνο	(17) ΦΑΞ	(18) e-mail	(19) Ταχ. Διεύθυνση	(21) ΤΚ	(22) Αναστολή	(46) 
+            $eidos = iconv('cp1253','utf-8',$data[10]);
+            $typos = iconv('cp1253','utf-8',$data[11]);
+            if ($eidos == 'Νηπιαγωγεία') {
+              $type2 = 0;
+              $type = 0;
+            } elseif ($eidos == 'Δημοτικά Σχολεία') {
+              $type2 = 0;
+              $type = 1;
+            } elseif ($eidos == 'Ιδιωτικά Σχολεία') {
+              $type2 = 1;
+              $type = $typos == 'Ιδιωτικό Δημοτικό Σχολείο' ? 1 : 2;
+            }
+            if (strstr($typos, 'Ειδικής Αγωγής')) {
+              $type2 = 2;
+            }
+
+            $dimos = getDimosId($data[6], $mysqlconnection, true);
+            
+            $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2,dimos) 
+            values('$code','$data[4]',$type,'$data[13]','$data[21]','$data[22]','$data[17]','$data[18]','$data[19]','$data[15]','$data[14]','$type2',$dimos)";
+            $imp_8 = iconv('cp1253','utf-8',$import);
+
+            $ret = mysqli_query($mysqlconnection, $imp_8);
+            if (!$ret) {
+              $error = true;
+            } else {
+              $saves++;
             }
             break;
 
