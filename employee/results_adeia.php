@@ -60,6 +60,7 @@ if ($num==0) {
     ob_start();
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead><tr>";
+    echo "<th>ΑΦΜ</th>";
     echo "<th>Επώνυμο, Όνομα</th>";
     echo "<th>Είδος</th>";
       echo "<th>Έναρξη</th>";
@@ -77,9 +78,9 @@ if ($num==0) {
                 $emp_id = mysqli_result($result, $i, "emp_id");
                 
         if (!$_POST['mon_anapl']) {
-            $query0 = "select name,surname from employee where id=$emp_id";
+            $query0 = "select name,surname,afm from employee where id=$emp_id";
         } else {
-                    $query0 = "select name,surname from ektaktoi where id=$emp_id";
+                    $query0 = "select name,surname,afm from ektaktoi where id=$emp_id";
         }
                 $result0 = mysqli_query($mysqlconnection, $query0);
                 $test = mysqli_num_rows($result0);
@@ -93,7 +94,7 @@ if ($num==0) {
                 {
             $name = mysqli_result($result0, 0, "name");
             $surname = mysqli_result($result0, 0, "surname");
-                                                                    
+            $afm = mysqli_result($result0, 0, "afm");
             $start = mysqli_result($result, $i, "start");
             $finish = mysqli_result($result, $i, "finish");
             $days = mysqli_result($result, $i, "days");
@@ -129,7 +130,7 @@ if ($num==0) {
                     
             $i++;
                                                                             
-            echo "<tr><td>";
+            echo "<tr><td>$afm</td><td>";
             if (!$_POST['mon_anapl']) {
                 $tmpl = "adeia";
                 $tmpl1 = "employee";

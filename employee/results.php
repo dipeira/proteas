@@ -84,7 +84,7 @@ if (!isset($_POST['outsiders']) && !$is_anapl) {
   }
   $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
   $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
-  $query .= " (sx_organikhs NOT IN ($allo_pyspe, $allo_pyspe)) ";
+  $query .= " (sx_organikhs NOT IN ($allo_pyspe, $allo_pysde)) ";
   $flag = 1;
 }
 
