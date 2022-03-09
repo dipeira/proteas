@@ -256,6 +256,8 @@
                     $document = $PHPWord->loadTemplate('../word/tmpl_apof/tmpl_apof_eid.docx');
                 elseif ($type == 13)
                     $document = $PHPWord->loadTemplate('../word/tmpl_apof/an_tmpl_apof_ekl.docx');
+                elseif ($type == 15 || $type == 16)
+                    $document = $PHPWord->loadTemplate('../word/tmpl_apof/tmpl_apof_anar_eid_sk.docx');
             }
             $document->setValue('prot', $prot_apof);
             $document->setValue('hmprot', $hm_apof);
