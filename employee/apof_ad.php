@@ -128,14 +128,14 @@
                     $error_found = 1;
                 }
                 //if different type of adeia
-                if ($typei <> $type)
-                {
-                    if ($is_anapl)
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
-                    else
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
-                    $error_found = 1;
-                }
+                // if ($typei <> $type)
+                // {
+                //     if ($is_anapl)
+                //         echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                //     else
+                //         echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                //     $error_found = 1;
+                // }
                 
                 // if anarrwtikh, show vevaiwsh klp.
                 if ($type == 1)
