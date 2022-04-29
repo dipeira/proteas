@@ -1064,7 +1064,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         }
         
         //Απουσιάζουν: Ανήκουν οργανικά και υπηρετούν αλλού
-        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs!='$sch' order by klados";
+        $query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs!='$sch' AND status IN (1,3) order by klados";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
