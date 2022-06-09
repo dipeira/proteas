@@ -8,6 +8,8 @@
   // Όνομα χρήστη / κωδικός Gmail για αποστολή emails
   $smtp_username = '';
   $smtp_password = '';
+  $smtp_server = '';
+  $smtp_port = '';
 
   // Κωδικός αρχικοποίησης της βάσης
   $db_init_pass = '';

@@ -311,10 +311,12 @@
             // SMTP username & password
             global $smtp_password;
             global $smtp_username;
+            global $smtp_server;
+            global $smtp_port;
                         
             require_once '../vendor/autoload.php';
-            // set up gmail transport
-            $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+            // set up smtp transport
+            $transport = Swift_SmtpTransport::newInstance($smtp_server, $smtp_port, 'ssl')
             ->setUsername($smtp_username)
             ->setPassword($smtp_password);
 
