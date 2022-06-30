@@ -47,7 +47,8 @@
     echo "<input type='radio' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
     echo "<input type='radio' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='5'>5) Τοποθετήσεις μονίμων εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='8'>7) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
@@ -93,12 +94,16 @@
       $checked = 0;
       $headers = 1;
       $error = false;
+      $warnings = 0;
       $er_msg = '';
       $top_afm = null;
       
       // set max execution time (for large files)
       set_time_limit (480);
 
+      // initialize update_queries table
+      $update_queries = array();
+      // read csv line by line
       while (($data = fgetcsv($handle, 10000, ";")) !== FALSE) {
         // skip header line
         if ($headers){
@@ -172,18 +177,15 @@
             '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$data[15]',
             '$data[16]','$data[17]','$data[18]','$data[19]','$data[20]','$data[21]','$data[22]', $sx_organ, $sx_yphr)";
             $imp_8 = iconv('cp1253','utf-8',$import);
-            $ret = mysqli_query($mysqlconnection, $imp_8);
+            $update_queries[] = $imp_8;
             
-            if (!$ret) {
-              $error = true;
-            } else {
-              $saves++;
-              // insert yphrethsh as well
-              $id = mysqli_insert_id($mysqlconnection);
-              $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
-              values ($id, '$sx_yphr', '$data[22]', '$sx_organ', '$sxol_etos')";
-              mysqli_query($mysqlconnection,$query);
-            }
+            $saves++;
+            // insert yphrethsh as well
+            $id = mysqli_insert_id($mysqlconnection);
+            $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
+            values ($id, '$sx_yphr', '$data[22]', '$sx_organ', '$sxol_etos')";
+            $update_queries[] = $query;
+            
             break;
 
           // schools - myschool
@@ -222,12 +224,9 @@
             values('$code','$data[4]',$type,'$data[13]','$data[21]','$data[22]','$data[17]','$data[18]','$data[19]','$data[15]','$data[14]','$type2',$dimos)";
             $imp_8 = iconv('cp1253','utf-8',$import);
 
-            $ret = mysqli_query($mysqlconnection, $imp_8);
-            if (!$ret) {
-              $error = true;
-            } else {
-              $saves++;
-            }
+            $update_queries[] = $imp_8;
+            $saves++;
+            
             break;
 
           // schools
@@ -243,12 +242,10 @@
             $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2) 
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]','$data[6]','$data[7]','$data[8]','$data[9]','$data[10]','$data[11]')";
             $imp_8 = iconv('cp1253','utf-8',$import);
-            $ret = mysqli_query($mysqlconnection, $imp_8);
-            if (!$ret) {
-              $error = true;
-            } else {
-              $saves++;
-            }
+            
+            $update_queries[] = $imp_8;
+            $saves++;
+            
             break;
 
           // students ds
@@ -284,16 +281,14 @@
               $archive_arr[$sxoletos] = $archive_data;
             }
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
-            $ret = mysqli_query($mysqlconnection, $sql);
+            $update_queries[] = $sql;
+            
             // update school table
             if ($students <> $students_old || $tmimata <> $tmimata_old || $entaksis <> $entaksis_old){
               $sql="UPDATE school SET students='$students', tmimata='$tmimata', entaksis='$entaksis' WHERE code=".$data[0];
-              $ret = mysqli_query($mysqlconnection, $sql);
-              if (!$ret) {
-                $error = true;
-              } else {
-                $saves++;
-              }
+              
+              $update_queries[] = $sql;
+              $saves++;
             }
             break;
 
@@ -329,94 +324,99 @@
               $archive_arr[$sxoletos] = $archive_data;
             }
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
-            $ret = mysqli_query($mysqlconnection, $sql);
+            $update_queries[] = $sql;
+
             // update school table
             if ($klasiko <> $klasiko_old || $oloimero_nip <> $oloimero_nip_old || $entaksis <> $entaksis_old){
               $sql="UPDATE school SET klasiko='$klasiko', oloimero_nip='$oloimero_nip', entaksis='$entaksis' WHERE code=".$data[0];
-              $ret = mysqli_query($mysqlconnection, $sql);
-              if (!$ret) {
-                $error = true;
-              } else {
-                $saves++;
-              }
+              $update_queries[] = $sql;
+              $saves++;
             }
             break;
-            // topothetiseis
-            case 5:
-            case 6:
-              $is_mon = $_POST['type'] == 5 ? true : false;
-              // csv: ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
-              $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-              // check if afm exists @ monimoi & ektaktoi
-              $emp_qry = $is_mon ? "SELECT * FROM employee WHERE afm = $data[0]" : "SELECT * FROM ektaktoi WHERE afm = $data[0]";
-              $emp = mysqli_query($mysqlconnection, $emp_qry);
-              
-              if ( !mysqli_num_rows($emp) ) {
-                $error = true;
-                $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΦΜ ".$data[0]." δεν υπάρχει...";
-                $er_msg .= " (γραμμή ".($num+1).")";
-                break;
-              }
-              
-              // check school codes
-              $sch_id = getSchoolFromCode($data[1],$mysqlconn);
-              if (!$sch_id) {
-                $error = true;
-                $er_msg = 'Σφάλμα: Δε βρέθηκε το σχολείο με 7ψήφιο κωδικό: ' . $data[1];
-                $er_msg .= " (γραμμή ".($num+1).")";
-                break;
-              }
-              // check hours
-              if ($data[2] <= 0 || $data[2] > 30) {
-                $error = true;
-                $er_msg = 'Σφάλμα: Λάθος αριθμός ωρών: ' . $data[1];
-                $er_msg .= " (γραμμή ".($num+1).")";
-                break;
-              }
-              
-              // proceed to import
-              $id = null;
-              $emp_row = mysqli_fetch_assoc($emp);
-              $id = $emp_row['id'];
-              $yp_table = $is_mon ? 'yphrethsh' : 'yphrethsh_ekt';
+          // topothetiseis
+          case 5:
+          case 6:
+          case 8:
+            $is_mon = $_POST['type'] == 5 || $_POST['type'] == 6 ? true : false;
+            $delete_yphr = $_POST['type'] == 6 ? true : false;
+            // csv: ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
+            $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+            // check if afm exists @ monimoi & ektaktoi
+            $emp_qry = $is_mon ? "SELECT * FROM employee WHERE afm = $data[0]" : "SELECT * FROM ektaktoi WHERE afm = $data[0]";
+            $emp = mysqli_query($mysqlconnection, $emp_qry);
+            
+            if ( !mysqli_num_rows($emp) ) {
+              $error = true;
+              $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΦΜ ".$data[0]." δεν υπάρχει...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            
+            // check school codes
+            $sch_id = getSchoolFromCode($data[1],$mysqlconn);
+            if (!$sch_id) {
+              $error = true;
+              $er_msg = 'Σφάλμα: Δε βρέθηκε το σχολείο με 7ψήφιο κωδικό: ' . $data[1];
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            // check hours
+            if ($data[2] <= 0 || $data[2] > 30) {
+              $error = true;
+              $er_msg = 'Σφάλμα: Λάθος αριθμός ωρών: ' . $data[1];
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            
+            // proceed to import
+            $id = null;
+            $emp_row = mysqli_fetch_assoc($emp);
+            $id = $emp_row['id'];
+            $yp_table = $is_mon ? 'yphrethsh' : 'yphrethsh_ekt';
 
-              // check if yphrethsh already inserted
+            if ($delete_yphr) {
+              // delete all yphrethseis of employee @ current school year
+              $yphr_qry = "DELETE from $yp_table WHERE emp_id = $id AND sxol_etos = $sxol_etos";
+              $yphr = mysqli_query($mysqlconnection,$yphr_qry);
+            } else {
+              // check if yphrethsh already inserted. If yes, skip record.
               $yphr_qry = "SELECT id FROM $yp_table WHERE emp_id = $id AND yphrethsh = $sch_id AND sxol_etos = $sxol_etos";
               $yphr = mysqli_query($mysqlconnection,$yphr_qry);
               if (mysqli_num_rows($yphr) > 0){
-                $error = true;
-                $er_msg = 'Σφάλμα: Η τοποθέτηση υπάρχει ήδη: ';
-                $er_msg .= $emp_row['afm'] . ': '.$emp_row['surname'].' '.$emp_row['name'];
-                $er_msg .= " (γραμμή ".($num+1).")";
-                break;
+                $warnings ++;
+                $warn_msg .= '<br>- Η τοποθέτηση υπάρχει ήδη: ';
+                $warn_msg .= $emp_row['afm'] . ': '.$emp_row['surname'].' '.$emp_row['name'];
+                $warn_msg .= " (γραμμή ".($num+1).")";
+                continue 2;
               }
+            }
 
-              // insert yphrethsh @ employee table
-              if (!$top_afm) {
-                $top_afm = $data[0];
-              }
-              if ($top_afm != $data[0]){
-                if ($is_mon) {
-                  $upd_qry = "UPDATE employee SET sx_yphrethshs = $sch_id WHERE id = $id";
-                } else {
-                  $upd_qry = "UPDATE ektaktoi SET sx_yphrethshs = $sch_id WHERE id = $id";
-                }
-                mysqli_query($mysqlconnection,$upd_qry);
-                $top_afm = $data[0];
-              } 
-
+            // insert yphrethsh @ employee table
+            if (!$top_afm) {
+              $top_afm = $data[0];
+            }
+            if ($top_afm != $data[0]){
               if ($is_mon) {
-                $sx_organ = $emp_row['sx_organikhs'];
-                $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
-                  values ($id, '$sch_id', '$data[2]', '$sx_organ', '$sxol_etos')";
+                $upd_qry = "UPDATE employee SET sx_yphrethshs = $sch_id WHERE id = $id";
               } else {
-                $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) 
-                  values ($id, '$sch_id', '$data[2]', '$sxol_etos')";
+                $upd_qry = "UPDATE ektaktoi SET sx_yphrethshs = $sch_id WHERE id = $id";
               }
-              mysqli_query($mysqlconnection,$query);
-              $saves++;
-              
-              break;
+              $update_queries[] = $upd_qry;
+              $top_afm = $data[0];
+            } 
+
+            if ($is_mon) {
+              $sx_organ = $emp_row['sx_organikhs'];
+              $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
+                values ($id, '$sch_id', '$data[2]', '$sx_organ', '$sxol_etos')";
+            } else {
+              $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) 
+                values ($id, '$sch_id', '$data[2]', '$sxol_etos')";
+            }
+            $update_queries[] = $query;
+            $saves++;
+            
+            break;
         }
         if ($error){
           break;
@@ -424,14 +424,28 @@
         
         $num++;
       }
-
+      
       fclose($handle);
+
       if (!$error){
+        // execute all update / insert queries
+        $queries = implode(';', $update_queries);
+        // echo "<br>Queries:<br>".$queries."<br><br>";
+
+        $ret = mysqli_multi_query($mysqlconnection, $queries);
+        if (!$ret) {
+          echo "Προέκυψε σφάλμα κατά την εκτέλεση των ενημερώσεων στη Β.Δ...";
+        }
+        if ($warnings > 0){
+          echo "<br>Παρατηρήσεις - προειδοποιήσεις:<br>";
+          echo $warn_msg;
+          echo "<br>";
+        }
         if ($saves > 0){ 
           print "<h3>Η εισαγωγή πραγματοποιήθηκε με επιτυχία!</h3>";
           echo "Έγινε εισαγωγή $saves εγγραφών στον πίνακα $tbl.<br>";
         } else {
-          echo "Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.<br>";
+          echo "<br><h3>Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.</h3><br>";
         }
       }
       else
