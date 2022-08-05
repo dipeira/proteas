@@ -45,7 +45,7 @@
   //29-6-2012
   $oloimero_tea = $_POST['oloimero_tea'] ? $_POST['oloimero_tea'] : 0;
   $oloimero_stud = $_POST['oloimero_stud'] ? $_POST['oloimero_stud'] : 0;
-  $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'].",".$_POST['tg'].",".$_POST['th'].",".$_POST['ti'];
+  $tmimata = $_POST['ta'].",".$_POST['tb'].",".$_POST['tc'].",".$_POST['td'].",".$_POST['te'].",".$_POST['tf'].",".$_POST['tg'].",".$_POST['th'].",".$_POST['ti'].",".$_POST['tj'];
   $ekp_ee = $_POST['ekp_te'].",".$_POST['ekp_ty'];
   
   $klasiko = $_POST['k1a'].",".$_POST['k1b'].",".$_POST['k2a'].",".$_POST['k2b'].",".$_POST['k3a'].",".$_POST['k3b'];  
@@ -57,8 +57,17 @@
   $klasiko .=",".$_POST['k5a'].",".$_POST['k5b'];
   // tm6
   $klasiko .=",".$_POST['k6a'].",".$_POST['k6b'];
+  // tm7
+  $klasiko .=",".$_POST['k7a'].",".$_POST['k7b'];
+  // tm8
+  $klasiko .=",".$_POST['k8a'].",".$_POST['k8b'];
   // oloimero nip
   $oloimero_nip = $_POST['o1a'].",".$_POST['o1b'].",".$_POST['o2a'].",".$_POST['o2b'].",".$_POST['o3a'].",".$_POST['o3b'].",".$_POST['o4a'].",".$_POST['o4b'].",".$_POST['o5a'].",".$_POST['o5b'].",".$_POST['o6a'].",".$_POST['o6b'];
+  // tm
+  $oloimero_nip .= ",".$_POST['o7a'].",".$_POST['o7b'];
+  $oloimero_nip .= ",".$_POST['o8a'].",".$_POST['o8b'];
+  // dieyrymeno nip
+  $oloimero_nip .= ",".$_POST['o9a'].",".$_POST['o9b'];
   $nip = $_POST['ekp_kl'].",".$_POST['ekp_ol'].",".$_POST['ekp_te'];
   
   $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', fax='$fax', email='$email', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";

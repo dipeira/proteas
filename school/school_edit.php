@@ -270,15 +270,21 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<tr><td colspan=8>Σύνολο Μαθητών Πρ.: $synolo</td></tr>";
                 echo "<tr><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Ολ.<small>(15.00/16.00)</small></td><td>ΠΖ</td></tr>";
                 if ($synolo>0) {
-                    echo "<tr><td><input type='text' name='a' size='1' value=$classes[0] /></td><td><input type='text' name='b' size='1' value=$classes[1] /></td><td><input type='text' name='c' size='1' value=$classes[2] /></td><td><input type='text' name='d' size='1' value=$classes[3] /></td><td><input type='text' name='e' size='1' value=$classes[4] /></td><td><input type='text' name='f' size='1' value=$classes[5] /></td><td><input type='text' name='g' size='1' value=$classes[6] /></td><td><input type='text' name='h' size='1' value=$classes[7] /></td></tr>";
+                    echo "<tr><td><input type='text' name='a' size='1' value=$classes[0] /></td><td><input type='text' name='b' size='1' value=$classes[1] /></td><td><input type='text' name='c' size='1' value=$classes[2] /></td><td><input type='text' name='d' size='1' value=$classes[3] /></td><td><input type='text' name='e' size='1' value=$classes[4] /></td><td><input type='text' name='f' size='1' value=$classes[5] /></td><td><input type='text' name='g' size='3' value=$classes[6] /></td><td><input type='text' name='h' size='1' value=$classes[7] /></td></tr>";
                 } else {
-                    echo "<tr><td><input type='text' name='a' size='1' value='0' /></td><td><input type='text' name='b' size='1' value='0' /></td><td><input type='text' name='c' size='1' value='0' /></td><td><input type='text' name='d' size='1' value='0' /></td><td><input type='text' name='e' size='1' value='0' /></td><td><input type='text' name='f' size='1' value='0' /></td><td><input type='text' name='g' size='1' value='0' /></td><td><input type='text' name='h' size='1' value='0' /></td></tr>";
+                    echo "<tr><td><input type='text' name='a' size='1' value='0' /></td><td><input type='text' name='b' size='1' value='0' /></td><td><input type='text' name='c' size='1' value='0' /></td><td><input type='text' name='d' size='1' value='0' /></td><td><input type='text' name='e' size='1' value='0' /></td><td><input type='text' name='f' size='1' value='0' /></td><td><input type='text' name='g' size='3' value='0' /></td><td><input type='text' name='h' size='1' value='0' /></td></tr>";
                 }
                 echo "<tr><td colspan=8>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο Τμημάτων Πρωινού: $synolo_tmim</td></tr>";
                 if ($synolo>0) {
-                    echo "<tr><td><input type='text' name='ta' size='1' value=$tmimata_exp[0] /></td><td><input type='text' name='tb' size='1' value=$tmimata_exp[1] /></td><td><input type='text' name='tc' size='1' value=$tmimata_exp[2] /></td><td><input type='text' name='td' size='1' value=$tmimata_exp[3] /></td><td><input type='text' name='te' size='1' value=$tmimata_exp[4] /></td><td><input type='text' name='tf' size='1' value=$tmimata_exp[5] /></td><td><input type='text' name='tg' size='1' value=$tmimata_exp[6] /><input type='text' name='th' size='1' value=$tmimata_exp[7] /></td><td><input type='text' name='ti' size='1' value=$tmimata_exp[8] /></td></tr>";
+                    echo "<tr><td><input type='text' name='ta' size='1' value=$tmimata_exp[0] /></td><td><input type='text' name='tb' size='1' value=$tmimata_exp[1] /></td>";
+                    echo "<td><input type='text' name='tc' size='1' value=$tmimata_exp[2] /></td><td><input type='text' name='td' size='1' value=$tmimata_exp[3] /></td>";
+                    echo "<td><input type='text' name='te' size='1' value=$tmimata_exp[4] /></td><td><input type='text' name='tf' size='1' value=$tmimata_exp[5] /></td>";
+                    echo "<td>15.00&nbsp;<input type='text' name='tg' size='1' value=$tmimata_exp[6] />16.00&nbsp;<input type='text' name='th' size='1' value=$tmimata_exp[7] />17.30&nbsp;<input type='text' name='tj' size='1' value=$tmimata_exp[9] /></td><td><input type='text' name='ti' size='1' value=$tmimata_exp[8] /></td></tr>";
                 } else {
-                    echo "<tr><td><input type='text' name='ta' size='1' value='0' /></td><td><input type='text' name='tb' size='1' value='0' /></td><td><input type='text' name='tc' size='1' value='0' /></td><td><input type='text' name='td' size='1' value='0' /></td><td><input type='text' name='te' size='1' value='0' /></td><td><input type='text' name='tf' size='1' value='0' /></td><td><input type='text' name='tg' size='1' value='0' /></td><td><input type='text' name='th' size='1' value='0' /></td></tr>";
+                    echo "<tr><td><input type='text' name='ta' size='1' value='0' /></td><td><input type='text' name='tb' size='1' value='0' /></td>";
+                    echo "<td><input type='text' name='tc' size='1' value='0' /></td><td><input type='text' name='td' size='1' value='0' /></td>";
+                    echo "<td><input type='text' name='te' size='1' value='0' /></td><td><input type='text' name='tf' size='1' value='0' /></td>";
+                    echo "<td><input type='text' name='tg' size='1' value='0' /></td><td><input type='text' name='th' size='1' value='0' /></td></tr>";
                 }
                 echo '<tr><td colspan=8><small>ΣΗΜ. Για 4/θέσια συμπληρώνουμε τμήματα στις τάξεις Α,Β,Γ,Ε & για 5/θέσια Α,Β,Γ,Ε,ΣΤ</small></td></tr>';
             }
@@ -320,8 +326,23 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 // t6
                 echo "<tr><td>Τμ.6</td><td><input type='text' name='k6a' size='1' value=$klasiko_exp[11]></td><td><input type='text' name='k6b' size='1' value=$klasiko_exp[12]>";
                 echo "<td><input type='text' name='o6a' size='1' value=$oloimero_nip_exp[10]></td><td><input type='text' name='o6b' size='1' value=$oloimero_nip_exp[11]></td></tr>";
+                // t7
+                echo "<tr><td>Τμ.7</td><td><input type='text' name='k7a' size='1' value=$klasiko_exp[13]></td><td><input type='text' name='k7b' size='1' value=$klasiko_exp[14]>";
+                echo "<td><input type='text' name='o7a' size='1' value=$oloimero_nip_exp[12]></td><td><input type='text' name='o7b' size='1' value=$oloimero_nip_exp[13]></td></tr>";
+                // t8
+                echo "<tr><td>Τμ.8</td><td><input type='text' name='k8a' size='1' value=$klasiko_exp[15]></td><td><input type='text' name='k8b' size='1' value=$klasiko_exp[16]>";
+                echo "<td><input type='text' name='o8a' size='1' value=$oloimero_nip_exp[14]></td><td><input type='text' name='o8b' size='1' value=$oloimero_nip_exp[15]></td></tr>";
+                echo "</table>";
+                
+                // Oloimero dieyrymenoy (16-17.30)
+                // Tmimata: oloimero_nip_exp[16] / Mathites: oloimero_nip_exp[17]
+                echo "<h4>Ολοήμερο διευρυμένου προγράμματος (16.00-17.30)</h4>";
+                echo "<table class=\"imagetable\" border='1' style='width:20%;'>";
+                echo "<thead><th>Τμήματα</th><th>Μαθητές</th></thead>";
+                echo "<tr><td><input type='text' name='o9a' size='3' value=$oloimero_nip_exp[16]></td><td><input type='text' name='o9b' size='3' value=$oloimero_nip_exp[17]>";
                 echo "</table>";
                 echo "<br>";
+
                 echo "<table class=\"imagetable\" border='1'>";
                 echo "<tr><td colspan=3>Νηπιαγωγοί</td></tr>";
                 echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";

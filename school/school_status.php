@@ -428,9 +428,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<table class=\"imagetable\" border='1'>";
             echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
             $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
-            echo "<tr><td>Μαθ.Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
+            echo "<tr><td>Μαθ.Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td>";
+            echo "<td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
             $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
-            echo "<tr><td>Τμ./τάξη Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td><td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small> (14-15)</small><br>$tmimata_exp[7]<small> (15-16)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
+            echo "<tr><td>Τμ./τάξη Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td>";
+            echo "<td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small>&nbsp;&nbsp;&nbsp;(14-15)</small>";
+            echo "<br>$tmimata_exp[7]<small>&nbsp;&nbsp;&nbsp;(15-16)</small><br>$tmimata_exp[9]<small>&nbsp;&nbsp;&nbsp;(16-17.30)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
             if (strlen($archive) > 0){
                 // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',
                 // tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';
@@ -570,6 +573,35 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<tr><td>Τμ.6</td><td>$klasiko_exp[11]</td><td>$klasiko_exp[12]</td><td><b>$syn6</b></td>";
                     echo "<td>$oloimero_nip_exp[10]</td><td>$oloimero_nip_exp[11]</td><td><b>$syn_ol6</b></td></tr>";
                 }
+                // t7
+                $syn7 = $klasiko_exp[13]+$klasiko_exp[14];
+                $syn_ol7 = $oloimero_nip_exp[12]+$oloimero_nip_exp[13];
+                if (($syn7+$syn_ol7) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol7 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.7</td><td>$klasiko_exp[13]</td><td>$klasiko_exp[14]</td><td><b>$syn7</b></td>";
+                    echo "<td>$oloimero_nip_exp[12]</td><td>$oloimero_nip_exp[13]</td><td><b>$syn_ol7</b></td></tr>";
+                }
+                // t8
+                $syn8 = $klasiko_exp[15]+$klasiko_exp[16];
+                $syn_ol8 = $oloimero_nip_exp[14]+$oloimero_nip_exp[15];
+                if (($syn8+$syn_ol8) > 0) {
+                    $tmimata_nip += 1;
+                    if ($syn_ol8 > 0) {
+                        $tmimata_nip_ol += 1;
+                    }
+                    echo "<tr><td>Τμ.8</td><td>$klasiko_exp[15]</td><td>$klasiko_exp[16]</td><td><b>$syn8</b></td>";
+                    echo "<td>$oloimero_nip_exp[14]</td><td>$oloimero_nip_exp[15]</td><td><b>$syn_ol8</b></td></tr>";
+                }
+                // totals (if more than one tmima)
+                if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
+                    echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
+                    echo "<td><b>$oloimero_syn_nip</b><td><b>$oloimero_syn_pro</b></td><td><b>$olola</b></td>";
+                    echo "</tr>";
+                }
+                
                 // totals (if more than one tmima)
                 if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
                     echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
@@ -623,6 +655,15 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             echo "</table>";
             echo "<br>";
+
+            // dieyrymeno
+            if (($oloimero_nip_exp[16]) > 0) {
+                echo "<h5 style='margin-top:-10px'>Ολοήμερο διευρυμένου προγράμματος</h5>";
+                echo "<table class='imagetable stable' style='margin-top:-10px'>";
+                echo "<tr><td>Τμήματα</td><td>Μαθητές</td>";
+                echo "<tr><td>$oloimero_nip_exp[16]</td><td>$oloimero_nip_exp[17]</td></tr>";
+                echo "</table>";
+            }
         
             $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
             // τοποθετημένοι εκπ/κοί ΠΕ60
@@ -713,7 +754,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       
       echo "<h1>$str1</h1>";
       echo "<div align='right'>";
-      echo "<p style='margin-block-end: 1px; margin-block-start: -10px;'><small><a href='./school_status_old.php?org=".$sch."'>Μετάβαση στην παλιά προβολή</a></small></p>";
+    //   echo "<p style='margin-block-end: 1px; margin-block-start: -10px;'><small><a href='./school_status_old.php?org=".$sch."'>Μετάβαση στην παλιά προβολή</a></small></p>";
       echo "</div>";
       if (!$sch && !$str) {
           die('Το σχολείο δε βρέθηκε...');
