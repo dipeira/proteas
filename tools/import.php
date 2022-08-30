@@ -103,6 +103,7 @@
 
       // initialize update_queries table
       $update_queries = array();
+      $update_yphrethseis = array();
       // read csv line by line
       while (($data = fgetcsv($handle, 10000, ";")) !== FALSE) {
         // skip header line
@@ -181,10 +182,11 @@
             
             $saves++;
             // insert yphrethsh as well
-            $id = mysqli_insert_id($mysqlconnection);
+            //$id = mysqli_insert_id($mysqlconnection);
+            // use am instead of inserted id
             $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
-            values ($id, '$sx_yphr', '$data[22]', '$sx_organ', '$sxol_etos')";
-            $update_queries[] = $query;
+            values ('$data[5]', '$sx_yphr', '$data[22]', '$sx_organ', '$sxol_etos')";
+            $update_yphrethseis[$data[5]] = $query;
             
             break;
 
@@ -433,6 +435,15 @@
         // echo "<br>Queries:<br>".$queries."<br><br>";
 
         $ret = mysqli_multi_query($mysqlconnection, $queries);
+        // if new employees, add their yphrethseis
+        foreach( $update_yphrethseis as $key => $value ) {
+          $query = "select * from employee where am = ".$key;
+          $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+          $res = mysqli_query($mysqlconn,$query);
+          $row = mysqli_fetch_assoc($res);
+          $qry = str_replace($key, $row['id'], $value);
+          $res = mysqli_query($mysqlconn, $qry);
+        }
         if (!$ret) {
           echo "Προέκυψε σφάλμα κατά την εκτέλεση των ενημερώσεων στη Β.Δ...";
         }
