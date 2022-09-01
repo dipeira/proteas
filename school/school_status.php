@@ -433,7 +433,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $synolo_pr = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
             echo "<tr><td>Τμ./τάξη Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$tmimata_exp[0]</td><td>$tmimata_exp[1]</td><td>$tmimata_exp[2]</td>";
             echo "<td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small>&nbsp;&nbsp;&nbsp;(14-15)</small>";
-            echo "<br>$tmimata_exp[7]<small>&nbsp;&nbsp;&nbsp;(15-16)</small><br>$tmimata_exp[9]<small>&nbsp;&nbsp;&nbsp;(16-17.30)</small></i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
+            echo "<br>$tmimata_exp[7]<small>&nbsp;&nbsp;&nbsp;(15-16)</small>";
+            echo $tmimata_exp[9] > 0 ? "<br>$tmimata_exp[9]<small>&nbsp;&nbsp;&nbsp;(16-17.30)</small>":"";
+            echo "</i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
             if (strlen($archive) > 0){
                 // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',
                 // tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';

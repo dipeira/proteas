@@ -5,9 +5,10 @@
 ////////////////////
 /*
 * anagkes_wrwn: Compute required hours based on oloimero schedule 2016-17
-* Returns required hours depending on number of classes
+* Returns required weekly hours depending on number of classes
 * tmimata: 0: A, 1: B, 2: Γ, 3: Δ, 4: E, 5: ΣΤ
 * 6: Ολ. 15.00, 7: Ολ. 16:00, 8: ΠΖ
+* 1/9/2022: added 10 weekly hours for tm[9]: 16.00-17.30
 */
 function anagkes_wrwn($tm)
 {
@@ -20,7 +21,7 @@ function anagkes_wrwn($tm)
         $hours = [];
         $hours['70'] = $artm * 30;
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10: 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
@@ -37,7 +38,7 @@ function anagkes_wrwn($tm)
         $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
         $hours['70'] = $tm[0]*20 + $tm[1]*20 + $tm[2]*20 + $tm[4]*22;
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10 : 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
@@ -67,7 +68,7 @@ function anagkes_wrwn($tm)
             $hours['70'] = $tm[0]*20 + $tm[1]*20 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
         }
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10 : 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
@@ -84,7 +85,7 @@ function anagkes_wrwn($tm)
         $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
         $hours['70'] = $tm[0]*20 + $tm[1]*20 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10 : 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
