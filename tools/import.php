@@ -127,7 +127,7 @@
           else if ($_POST['type'] == 4){
             $tblcols = 13;
           }
-          else if ($_POST['type'] == 5 || $_POST['type'] == 6){
+          else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 8){
             $tblcols = 3;
           }
           else if ($_POST['type'] == 7){
