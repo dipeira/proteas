@@ -551,6 +551,7 @@ elseif ($_GET['op']=="view")
           echo "<input type='hidden' name='ada_apof' value='$ada_apof'>";
           echo "<input type='hidden' name='yphrethsh' value='$schools'>";
           echo "<input type='hidden' name='id' value=$id>";
+          echo "<input type='hidden' name='praxi' value=$praxi>";
           echo "<INPUT TYPE='submit' value='Μετακίνηση'>"; 
           echo "</form>";
         }
