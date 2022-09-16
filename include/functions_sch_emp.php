@@ -134,16 +134,23 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     // Απαιτούμενες ώρες
     $reqhrs = anagkes_wrwn($tmimata_exp);
     // ώρες Δ/ντή
-    $query = "SELECT * from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
+    $query = "SELECT *,e.id emp_id from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result)) {
         $dnthrs = wres_dnth($leit);
         $klados = mysqli_result($result, 0, "klados");
         $klper = mysqli_result($result, 0, "perigrafh");
+        $emp_id = mysqli_result($result, 0, "emp_id");
+        $extra = '';
+        // check if ypeythinos vivliothikis
+        if ($emp_id == $vivliothiki) {
+            $dnthrs -= MEIWSH_VIVLIOTHIKIS;
+            $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
+        }
         $avhrs[$klados] = $dnthrs;
         // ώρες Δ/ντή στην ανάλυση
         $ar = Array(
-            'fullname' => mysqli_result($result, 0, 2).' '.mysqli_result($result, 0, 1)." <small>(Δ/ντής/-ντρια)</small> ",
+            'fullname' => mysqli_result($result, 0, 2).' '.mysqli_result($result, 0, 1)." <small>(Δ/ντής/-ντρια)</small> ".$extra,
                 'klados' =>  mysqli_result($result, 0, "perigrafh"), 
                 'hours' => $dnthrs
             );
