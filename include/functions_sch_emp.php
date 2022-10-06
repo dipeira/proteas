@@ -677,7 +677,8 @@ function idiwtika_table($emp_type, $emp_id, $mysqlconnection) {
     ?>
     <script type="text/javascript" src="../js/common.js"></script>
     <?php
-    $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id";
+    global $sxol_etos;
+    $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id and sxol_etos = $sxol_etos";
     $result = mysqli_query($mysqlconnection, $query);
     if (!$result) {
         echo "<p>Σφάλμα αναζήτησης ιδιωτικών έργων στη Βάση Δεδομένων.<br>Παρακαλώ ελέγξτε αν υπάρχει ο πίνακας 'idiwtiko'.</p>";
