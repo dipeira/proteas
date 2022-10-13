@@ -482,7 +482,7 @@ if ($_GET['op']=="edit") {
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
     echo "	<input type='submit' value='Επεξεργασία'>";
-                echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='employee.php?id=$id&op=view'\">";
+                echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='employee.php?id=$id&op=view'\">";
     echo "	</form>";
     echo "    </center>";
     echo "</body>";
@@ -832,7 +832,7 @@ if ($_GET['op']=="delete") {
     } else {
       echo "Η διαγραφή απέτυχε...";
     }
-    echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='../index.php'\">";
     echo "  <meta http-equiv=\"refresh\" content=\"2; URL=../index.php\">";
 }
 if ($_GET['op']=="add") {
@@ -910,7 +910,7 @@ if ($_GET['op']=="add") {
     echo "  <input type='hidden' name = 'status' value='1'>";
     echo "	<input type='submit' value='Αποθήκευση'>";
                echo "&nbsp;&nbsp;&nbsp;&nbsp;	<input type='submit' value='Αποθήκευση & εισαγωγή νέου' onClick=\"parent.location='employee.php?id=100&op=add'\">";
-    echo "&nbsp;&nbsp;&nbsp;&nbsp;	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='../index.php'\">";
     echo "	</form>";
     ?>
 <div id='results'></div>

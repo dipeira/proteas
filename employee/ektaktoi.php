@@ -387,7 +387,7 @@ if ($_GET['op']=="edit")
         echo "	</table>";
         
         echo "	<input type='hidden' name = 'id' value='$id'>";
-        echo "	<input type='submit' value='Επεξεργασία'>";
+        echo "	<input type='submit' value='Αποθήκευση'>";
         echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='ektaktoi.php?id=$id&op=view'\">";
         echo "	</form>";
         echo "    </center>";
@@ -567,7 +567,7 @@ elseif ($_GET['op']=="view")
         // echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>"; future use?
         if ($usrlvl < 3){
                 $can_edit = $_GET['sxoletos'] ? 'disabled' : '';
-                echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
+                echo "	<INPUT TYPE='button' VALUE='Αποθήκευση' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
         }
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
         echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
