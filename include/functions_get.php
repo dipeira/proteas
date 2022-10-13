@@ -59,6 +59,16 @@ function getSchoolNameFromCode($code, $conn)
     }    
 }
 
+function getEmail($id, $conn) {
+    $query = "SELECT email from school WHERE id = $id";
+    $result = mysqli_query($conn, $query);
+    if (!mysqli_num_rows($result)) {
+        return;
+    }
+    $row = mysqli_fetch_array($result);
+    return $row['email'];
+}
+
 function get_school_type($id, $conn) {
   $query = "SELECT type,type2 from school where id = $id";
   $result = mysqli_query($conn, $query);

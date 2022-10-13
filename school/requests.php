@@ -104,7 +104,7 @@ if (count($results->data)){
   for( $i = 0; $i < count( $results->data ); $i++ ){
         echo "<tr>";
         echo "<td>".$results->data[$i]['id']."</a></td>";
-        echo "<td><a href='school_status.php?org=".$results->data[$i]['school']."' target='_blank'>".$results->data[$i]['school_name']."</td>";
+        echo "<td><a href='school_status.php?org=".$results->data[$i]['school']."#requests' target='_blank'>".$results->data[$i]['school_name']."</td>";
         echo "<td>".nl2br($results->data[$i]['request'])."</td>";
         echo "<td>".nl2br($results->data[$i]['comment'])."</td>";
         echo "<td>";

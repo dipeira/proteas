@@ -23,9 +23,10 @@ function show_tooltip($text, $tooltip) {
     echo "</div>";
 }
 
-function sendEmail($email, $subject, $body){
+function sendEmail($email, $subject, $body, $debug = false){
     require_once '../vendor/autoload.php';
     require_once '../config.php';
+    global $db_user, $db_host, $db_name, $db_password, $db_user;
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
 
     // SMTP username & password
@@ -54,15 +55,19 @@ function sendEmail($email, $subject, $body){
     // get & validate email address
     $email = filter_var( $email, FILTER_VALIDATE_EMAIL );
     $from = getParam('foreas',$mysqlconnection);
-    $headers = "From:".$from;
+    $headers = "From:" . $from;
     $mymail = getParam('email',$mysqlconnection);
     
-    //echo "<br>$subject<br>$mail_body<br>$email<br>$myemail";
+    if ($debug) {
+        echo "<br>$subject<br>$body<br>$email<br>$mymail";
+        return;
+    }
 
     $message = Swift_Message::newInstance($subject)
+    ->setContentType("text/html")
     ->setFrom($mymail)
     // *** SOS *** uncomment '$testemail', comment '$email' to test
-    //->setTo("it@dipe.ira.sch.gr")
+    // ->setTo("it@dipe.ira.sch.gr")
     ->setTo($email)
     ->setBody($body);
     $result = $mailer->send($message);
@@ -409,6 +414,7 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
                     id: id,
                     comment: comment,
                     done: done,
+                    school: <?=$sch; ?>,
                     type: 'update'
                 };
               }
@@ -440,8 +446,12 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "<tr>";
             echo "<td>".$row['id']."</td>";
             echo "<td>".nl2br($row['request'])."</td>";
-            echo $auth ? "<td><textarea id='comment".$row['id']."' name='comment' rows='10' cols='60'>".$row['comment']."</textarea></td>" :
+            if ($auth) {
+                echo $row['done'] ? "<td>".$row['comment']."</td>" : 
+                "<td><textarea id='comment".$row['id']."' name='comment' rows='5' cols='30'>".$row['comment']."</textarea></td>";
+            } else {
                 "<td>".nl2br($row['comment'])."</td>";
+            }
             echo "<td>";
             if ($auth) {
                 echo "<select id='done".$row['id']."'>";
@@ -460,6 +470,8 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
             echo "</td>";
             echo $auth ? "<td><input id='".$row['id']."' class='submit-btn' type='submit' value='Υποβολή'><br><input name='del' id='".$row['id']."' class='submit-btn btn-red' type='submit' value='Διαγραφή'></td>" : '';
             echo $auth ? "<input type='hidden' name = 'id' value='".$row['id']."'>" : '';
+            $req = str_replace(['\'', '"'], "", $row['request']);
+            echo $auth ? "<input type='hidden' name = 'sch_request' value='$req'>" : '';
             echo $auth ? "<input type='hidden' name = 'type' value='update'>" : '';
             echo "</tr>";
         }
