@@ -678,7 +678,11 @@ function idiwtika_table($emp_type, $emp_id, $mysqlconnection) {
     <script type="text/javascript" src="../js/common.js"></script>
     <?php
     global $sxol_etos;
-    $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id and sxol_etos = $sxol_etos";
+    if ($emp_type == 'Μόνιμος'){
+        $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id";
+    } else {
+        $query = "SELECT * from idiwtiko where emp_type = '$emp_type' AND emp_id = $emp_id and sxol_etos = $sxol_etos";
+    }
     $result = mysqli_query($mysqlconnection, $query);
     if (!$result) {
         echo "<p>Σφάλμα αναζήτησης ιδιωτικών έργων στη Βάση Δεδομένων.<br>Παρακαλώ ελέγξτε αν υπάρχει ο πίνακας 'idiwtiko'.</p>";
@@ -710,7 +714,9 @@ function idiwtika_table($emp_type, $emp_id, $mysqlconnection) {
         echo "<td>" . $row['prot_no'] . "</td>";
         echo "<td>" . date('d-m-Y', strtotime($row['prot_date'])) . "</td>";
         echo "<td>" . $row['praxi'] . "</td>";
-        echo "<td>" . $row['ada'] . "</td>";
+        $ada = $row['ada'];
+        echo "<td><a href='https://diavgeia.gov.gr/decision/view/$ada' target='_blank'>$ada</a></td>";
+        // echo "<td>" . $row['ada'] . "</td>";
         echo "<td>" . date('d-m-Y, H:i', strtotime($row['updated'])) . "</td>";
         echo "</tr>";
     }
