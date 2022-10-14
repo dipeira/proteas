@@ -567,7 +567,7 @@ elseif ($_GET['op']=="view")
         // echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>"; future use?
         if ($usrlvl < 3){
                 $can_edit = $_GET['sxoletos'] ? 'disabled' : '';
-                echo "	<INPUT TYPE='button' VALUE='Αποθήκευση' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
+                echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
         }
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
         echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
