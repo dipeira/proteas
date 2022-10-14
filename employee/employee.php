@@ -481,7 +481,7 @@ if ($_GET['op']=="edit") {
     echo "<tr>".ent_ty_selectcmb($entty)."</tr>";
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
-    echo "	<input type='submit' value='Επεξεργασία'>";
+    echo "	<input type='submit' value='Αποθήκευση'>";
                 echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='employee.php?id=$id&op=view'\">";
     echo "	</form>";
     echo "    </center>";
