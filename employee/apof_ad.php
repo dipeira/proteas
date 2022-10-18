@@ -36,7 +36,7 @@
         mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
         mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
-        function getEmail($id,$conn)
+        function getTheEmail($id,$conn)
         {
             $query = "SELECT email FROM school WHERE id=$id";
             $result = mysqli_query($conn, $query);
@@ -368,7 +368,7 @@
                 $mail_body = str_replace('NAME', $dat[1], $mail_body);
                 
                 // get & validate email address
-                $email = getEmail($dat[6], $mysqlconnection);
+                $email = getTheEmail($dat[6], $mysqlconnection);
                 $email = filter_var( $email, FILTER_VALIDATE_EMAIL );
                 if (!$email)
                 {
