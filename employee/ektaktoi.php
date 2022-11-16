@@ -105,7 +105,11 @@
           }
           else
           {
-              $query = "SELECT * from ektaktoi where id=".$_GET['id'];
+              if ($_GET['sxoletos']) {
+                $query = "SELECT * FROM ektaktoi_old where id=".$_GET['id']." AND sxoletos=".$_GET['sxoletos'];
+              } else {
+                $query = "SELECT * from ektaktoi where id=".$_GET['id'];
+              }
               $result = mysqli_query($mysqlconnection, $query);
               $num=mysqli_num_rows($result);
               $sx_yphrethshs_id = mysqli_result($result, 0, "sx_yphrethshs");
