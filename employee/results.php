@@ -425,6 +425,9 @@ if ($flag) {
                 case 2:
                     echo "<td>Διδακτορικό</td>\n";
                     break;
+                case 3:
+                    echo "<td>Μεταπτυχιακό & Διδακτορικό</td>\n";
+                    break;
                 }
             }
             if (isset($_POST['dspam'])) {
