@@ -204,7 +204,7 @@
 		thesiselectcmb(0,true);
 		echo "</tr>";
 		echo "<tr>";
-		ent_ty_selectcmb(0, false, true, true);
+		ent_ty_selectcmb(0, false, true, true, true);
 		echo "</td><td colspan=3></td></tr>";
 
 		echo "<tr><td colspan=6><input type='checkbox' name = 'smeae'>&nbsp;Οργανική σε Ειδικό Σχολείο;</td></tr>";	

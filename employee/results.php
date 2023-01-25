@@ -167,11 +167,16 @@ if (strlen($_POST['vathm'])>0 && !$is_anapl) {
     $flag=1;
 }
 if (strlen($_POST['entty'])>0) {
-    if ($flag) {
-        $query .= $op;
+    if ($_POST['entty'] == '-1'){
+        // do nothing...
+    } else {
+        if ($flag) {
+            $query .= $op;
+        }
+        
+        $query .= " ent_ty = '".$_POST['entty']."'";
+        $flag=1;
     }
-    $query .= " ent_ty = '".$_POST['entty']."'";
-    $flag=1;
 }
 if (strlen($_POST['mk'])>0) {
     if ($flag) {

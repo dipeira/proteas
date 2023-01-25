@@ -308,7 +308,7 @@ function ent_ty_cmb($entty)
     return $th;
 }
 
-function ent_ty_selectcmb($entty,$hasblank = false, $isanapl = false, $has_space = false)
+function ent_ty_selectcmb($entty,$hasblank = false, $isanapl = false, $has_space = false, $has_all = false)
 {
     echo "<td>";
     echo "<div class='tooltip'>Υπηρέτηση σε Τμήμα Ένταξης <br>/ Τάξη Υποδοχής";
@@ -319,10 +319,12 @@ function ent_ty_selectcmb($entty,$hasblank = false, $isanapl = false, $has_space
     echo "</td><td>";
     echo $hasblank ? "</td><td>" : '';
     echo "<select name=\"entty\">";
-    if ($entty == 0) {
-        echo "<option value='0' selected=\"selected\">Καμία</option>";
+    echo $has_all ? "<option value='-1' selected=\"selected\">Όλοι</option>" : '';
+        
+    if ($entty == 0 && !$has_all) {
+        echo "<option value='0' selected=\"selected\">Γενική αγωγή</option>";
     } else {
-        echo "<option value='0'>Καμία</option>";
+        echo "<option value='0'>Γενική αγωγή</option>";
     }
     if ($entty == 1) {
         echo "<option value='1' selected=\"selected\">Τμήμα Ένταξης</option>";
