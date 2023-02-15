@@ -67,6 +67,11 @@
     echo "<body>";
     require '../etc/menu.php';
     echo "<h3>Πίνακας λειτουργικών κενών</h3>";
+    if ($_SESSION['userlevel'] == 3){
+        echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+        echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+        die();
+      }
     echo $oligothesia ? 
         "<p><a href='report_leit.php'>4/θέσια & άνω</a>&nbsp;&nbsp;Ολιγοθέσια</p>" :
         "<p>4/θέσια & άνω&nbsp;&nbsp;<a href='report_leit.php?oligothesia=1'>Ολιγοθέσια</a></p>";

@@ -209,6 +209,11 @@
         <?php
 if ($_GET['op']=="add")
 {
+        if ($usrlvl == 3){
+                echo "Δεν επιτρέπεται η πρόσβαση...";
+                echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                die();
+        }
         echo "<h3>Προσθήκη αναπληρωτή εκπαιδευτικού</h3>";
         echo "<form id='updatefrm' action='update_ekt.php' method='POST'>";
         echo "<table class=\"imagetable\" border='1'>";
@@ -284,6 +289,11 @@ if ($_GET['op']=="add")
 
 if ($_GET['op']=="edit")
 {
+        if ($usrlvl == 3){
+                echo "Δεν επιτρέπεται η πρόσβαση...";
+                echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                die();
+        }
         echo "<h3>Επεξεργασία αναπληρωτή εκπαιδευτικού</h3>";
         echo "<form id='updatefrm' name='update' action='update_ekt.php' method='POST'>";
         echo "<table class=\"imagetable\" border='1'>";
@@ -422,16 +432,19 @@ elseif ($_GET['op']=="view")
         echo "</tr>";
         echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
         echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
-
-        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
+        if ($usrlvl < 3){
+                echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
+        }
         echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id,$mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
-        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-        echo "<td colspan=3><div class=\"slidingDiv\">";
-        echo "Τηλ.: $stathero - $kinhto<br>";
-        echo "email: <a href='mailto:$email'>$email</a><br>";
-        idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
-        echo "</div>";
-        echo "</td></tr>";
+        if ($usrlvl < 3){
+                echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+                echo "<td colspan=3><div class=\"slidingDiv\">";
+                echo "Τηλ.: $stathero - $kinhto<br>";
+                echo "email: <a href='mailto:$email'>$email</a><br>";
+                idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
+                echo "</div>";
+                echo "</td></tr>";
+        }
         
         //$hm_mk = date ('d-m-Y', strtotime($hm_mk));
         //echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td></tr>";
@@ -538,7 +551,9 @@ elseif ($_GET['op']=="view")
         echo "<input type='hidden' name='apofasi' value=$apofasi>";
         echo "<input type='hidden' name='sxoletos' value=$sxol_etos>";
         echo "<input type='hidden' name='schools' value='$schools'>";
-        echo "<INPUT TYPE='submit' value='Βεβαίωση υπηρεσίας'>"; 
+        if ($usrlvl < 3){
+                echo "<INPUT TYPE='submit' value='Βεβαίωση υπηρεσίας'>"; 
+        }
         echo "</form>";
         //Form gia metakinhsh (only for user pispe)
         if ($_SESSION['user'] === 'pispe'){
@@ -574,7 +589,9 @@ elseif ($_GET['op']=="view")
                 echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' $can_edit onClick=\"parent.location='ektaktoi.php?id=$id&op=edit'\">";
         }
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
-        echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+        if ($usrlvl < 3){
+                echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+        }
         echo $sxoletos ?
                 "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
                 "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
@@ -590,6 +607,11 @@ elseif ($_GET['op']=="view")
 }
 if ($_GET['op']=="delete")
 {
+        if ($usrlvl == 3){
+                echo "Δεν επιτρέπεται η πρόσβαση...";
+                echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                die();
+        }
         // Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
         //$query1 = "INSERT INTO ektaktoi_deleted SELECT e.* FROM ektaktoi e WHERE id =".$_GET['id'];
         //$result1 = mysqli_query($mysqlconnection, $query1)

@@ -19,6 +19,13 @@
         echo "</head><body>";
         include('../etc/menu.php');
         echo "<h2>Αποφάσεις αδειών</h2>";
+
+        if ($_SESSION['userlevel'] == 3){
+            echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+            echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+            die();
+          }
+
         echo "<table class='imagetable stable' border='1'>";
         echo "<form action='' method='POST'>";
         echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot'></td></tr>";

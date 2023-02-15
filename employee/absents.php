@@ -35,6 +35,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <center>
         <h2>Εκπ/κοί που βρίσκονται σε άδεια</h2>
         <?php
+            if ($_SESSION['userlevel'] == 3){
+                echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+                echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+                die();
+            }
 
             // set timeout to 90 secs
             set_time_limit(90);

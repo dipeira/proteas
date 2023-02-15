@@ -31,12 +31,18 @@
         header("Location: ../tools/login.php");
     }
     $usrlvl = $_SESSION['userlevel'];
+    echo "<h2>Συμπλήρωση ωραρίου εκπαιδευτικών</h2>";
+    if ($_SESSION['userlevel'] == 3){
+      echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+      echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+      die();
+    }
 
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
         
-    echo "<h2>Συμπλήρωση ωραρίου εκπαιδευτικών</h2>";
+    
     echo "<table class=\"imagetable\" border='1'>";
     echo "<form action='' method='POST' autocomplete='off'>";
     

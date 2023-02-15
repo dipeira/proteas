@@ -525,7 +525,7 @@
                 echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
             }
             echo "</tr>";
-            echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td>";
+            echo "<tr><td>Ενότητα Σχολικών Συμβούλων: ".$perif."η</td>";
             echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
             echo "</tr>";
         }

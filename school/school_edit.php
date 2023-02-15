@@ -72,6 +72,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <center>
         <h2>Επεξεργασία σχολείου</h2>
         <?php     
+        if ($_SESSION['userlevel'] == 3){
+            die('Σφάλμα: Δεν επιτρέπεται η πρόσβαση...');
+        }
       
         echo "<div id=\"content\">";
         echo "<form id='searchfrm' name='searchfrm' action='' method='POST' autocomplete='off'>";

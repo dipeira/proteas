@@ -266,6 +266,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 <?php
             
 if ($_GET['op']=="edit") {
+    if ($usrlvl == 3){
+        echo "Δεν επιτρέπεται η πρόσβαση...";
+        echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+        die();
+    }
     echo "<form id='updatefrm' name='update' action='update.php' method='POST'>";
     echo "<table class=\"imagetable\" border='1'>";
         
@@ -502,57 +507,45 @@ elseif ($_GET['op']=="view") {
     echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
                 
     // 16-05-2013 tel,address,amka,idnum moved to employee table
-    if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
-        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-        echo "<td colspan=3><div class=\"slidingDiv\">";
-        echo "Τηλέφωνο: ".$tel."<br>";
-        echo "Διεύθυνση: ".$address."<br>";
-        echo "ΑΔΤ: ".$idnum."<br>";
-        echo "AMKA: ".$amka."<br>";
-        // if ($idiwtiko) {
-        //     echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' checked disabled>";
-        // } else {
-        //     echo "Ιδ.έργο σε δημ.φορέα<input type='checkbox' name='idiwtiko' disabled>";
-        // }
-        // $sdate = strtotime($idiwtiko_enarxi)>0 ? date('d-m-Y', strtotime($idiwtiko_enarxi)) : '';
-        // $ldate = strtotime($idiwtiko_liksi)>0 ?date('d-m-Y', strtotime($idiwtiko_liksi)) : '';
-        // echo ($idiwtiko > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
-        // echo "<br>";
-        // if ($idiwtiko_id) {
-        //     echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' checked disabled>";
-        // } else {
-        //     echo "Ιδ.έργο σε ιδιωτ.φορέα<input type='checkbox' name='idiwtiko_id' disabled>";
-        // }
-        // $sdate = strtotime($idiwtiko_id_enarxi)>0 ? date('d-m-Y', strtotime($idiwtiko_id_enarxi)): '';
-        // $ldate = strtotime($idiwtiko_id_liksi)>0 ? date('d-m-Y', strtotime($idiwtiko_id_liksi)): '';
-        // echo ($idiwtiko_id > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate" : "");
-        if ($katoikon) {
-            echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
-        } else {
-            echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
+    if ($usrlvl < 3){
+        if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
+            echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+            echo "<td colspan=3><div class=\"slidingDiv\">";
+            echo "Τηλέφωνο: ".$tel."<br>";
+            echo "Διεύθυνση: ".$address."<br>";
+            echo "ΑΔΤ: ".$idnum."<br>";
+            echo "AMKA: ".$amka."<br>";
+            if ($katoikon) {
+                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
+            } else {
+                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
+            }
+            $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
+            $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
+            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
+            
+            idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+            
+            echo "</div>";
+            echo "</td></tr>";
         }
-        $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
-        $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
-        echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
-        
-        idiwtika_table("Μόνιμος", $id, $mysqlconnection);
-        
-        echo "</div>";
-        echo "</td></tr>";
-    }
-    else
-    {
-        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-        echo "<td colspan=3><div class=\"slidingDiv\">";
-        echo "Δε βρέθηκαν περισσότερα στοιχεία για τον/-ην υπάλληλο.<br>";
-        echo "O/H υπάλληλος δε μισθοδοτείται από τη Δ/νση Ηρακλείου<br>";
-        echo "ή δεν έχουν καταχωρηθεί στοιχεία.";
-        echo "</div>";
-        echo "</td></tr>";   
+        else
+        {
+            echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+            echo "<td colspan=3><div class=\"slidingDiv\">";
+            echo "Δε βρέθηκαν περισσότερα στοιχεία για τον/-ην υπάλληλο.<br>";
+            echo "O/H υπάλληλος δε μισθοδοτείται από τη Δ/νση Ηρακλείου<br>";
+            echo "ή δεν έχουν καταχωρηθεί στοιχεία.";
+            echo "</div>";
+            echo "</td></tr>";   
+        }
     }
     // more data ends
-
-    echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
+    if ($usrlvl < 3){
+        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
+    } else {
+        echo "<tr><td></td><td></td><td>Α.Μ.</td><td>$am</td></tr>";
+    }
     echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
     $hm_mk = date('d-m-Y', strtotime($hm_mk));
     if ($hm_mk > "01-01-1970") {
@@ -752,7 +745,9 @@ elseif ($_GET['op']=="view") {
     $ymd = ypol_yphr(date("Y/m/d"), $anatr);
     echo "<input type='hidden' name='ymd' value='$ymd'>";
     //echo "<input type='hidden' name='afm' value=$afm>";
-    echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
+    if ($usrlvl < 3) {
+        echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
+    }
     //echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
     echo "</form>";
     //Form gia metakinhsh
@@ -792,7 +787,9 @@ elseif ($_GET['op']=="view") {
     if ($previd) {
         echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='employee.php?id=$previd&op=view'\">";
     }
-     echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+    if ($usrlvl < 3){
+        echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+    }
     if ($usrlvl < 3) {
         echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='employee.php?id=$id&op=edit'\">";
     }
@@ -817,6 +814,11 @@ elseif ($_GET['op']=="view") {
     echo "</html>";    
 }
 if ($_GET['op']=="delete") {
+    if ($usrlvl == 3){
+        echo "Δεν επιτρέπεται η πρόσβαση...";
+        echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+        die();
+    }
     $ip = $_SERVER['REMOTE_ADDR'];
     // Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
     $query1 = "INSERT INTO employee_deleted SELECT e.* FROM employee e WHERE id =".$_GET['id'];
@@ -836,7 +838,12 @@ if ($_GET['op']=="delete") {
     echo "  <meta http-equiv=\"refresh\" content=\"2; URL=../index.php\">";
 }
 if ($_GET['op']=="add") {
-       echo "<h3>Προσοχή: Παρακαλώ δώστε έγκυρα στοιχεία από τον προσωπικό φάκελο του εργαζομένου</h3><br>";
+    if ($usrlvl == 3){
+        echo "Δεν επιτρέπεται η πρόσβαση...";
+        echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+        die();
+    }
+    echo "<h3>Προσοχή: Παρακαλώ δώστε έγκυρα στοιχεία από τον προσωπικό φάκελο του εργαζομένου</h3><br>";
     echo "<form id='updatefrm' action='update.php' method='POST'>";
     echo "<table class=\"imagetable\" border='1'>";
                 

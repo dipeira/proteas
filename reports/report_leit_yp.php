@@ -33,14 +33,15 @@
     
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
+    $i = 0;
 while ($row = mysqli_fetch_array($result))
 {        
+    $i++;
     $sch = $row['id'];
     $leit = get_leitoyrgikothta($sch, $mysqlconnection);
-    // call ektimhseis_wrwn function
-    $results = ektimhseis_wrwn($sch, $mysqlconnection, $sxol_etos);
     // required hours
-    $req = $results['required'];
+    $tmimata_exp = strlen($row["tmimata"]) ? explode(",", $row['tmimata']) : '';
+    $req = anagkes_wrwn($tmimata_exp);
     $req_sum['ΠΕ05'] += floor($req['05-07']/2);
     $req_sum['ΠΕ07'] += floor($req['05-07']/2);
     $req_sum['ΠΕ06'] += $req['06'];
@@ -50,6 +51,9 @@ while ($row = mysqli_fetch_array($result))
     $req_sum['ΠΕ91'] += $req['91'];
     $req_sum['ΠΕ86'] += $req['86'];
     $req_sum['ΠΕ70'] += $req['70'];
+    // προσθήκη τμημάτων Ολοημέρου & Πρ.Ζώνης
+    $req_sum['ΠΕ70'] += $req['O'];
+    $req_sum['ΠΕ70'] += $req['P'];
     // add oloimero teacher if leitoyrg < 4
     if ($leit < 4) {
         $req_sum['ΠΕ70'] += 24;

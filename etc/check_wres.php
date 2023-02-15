@@ -29,6 +29,13 @@
       $usrlvl = $_SESSION['userlevel'];
       //if ($usrlvl)
       //    die('Insufficient privileges');
+
+      echo "<h2>Μη συμπλήρωση υποχρεωτικού ωραρίου</h2>";
+      if ($_SESSION['userlevel'] == 3){
+         echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+         echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+         die();
+      }
       
       // set max execution time 
       set_time_limit (180);
@@ -38,7 +45,7 @@
       mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
       //$query = "select e.surname,e.name,e.wres, y.hours, y.id from employee e join yphrethsh y on e.id = y.emp_id where sxol_etos = $sxol_etos";
-      echo "<h2>Μη συμπλήρωση υποχρεωτικού ωραρίου</h2>";
+      
       // init vars
       $mon_diffs = Array();
       $ekt_diffs = Array();

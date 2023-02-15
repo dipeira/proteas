@@ -33,7 +33,11 @@
         header("Location: ../tools/login.php");
     }
     $usrlvl = $_SESSION['userlevel'];
-
+    if ($_SESSION['userlevel'] == 3){
+      echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+      echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+      die();
+    }
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");

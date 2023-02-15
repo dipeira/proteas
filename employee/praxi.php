@@ -28,6 +28,12 @@ array_walk_recursive(
 );
 $pr_values = implode($pr_values, ',');
 $pr_labels = implode($pr_labels, ',');
+
+if ($_SESSION['userlevel'] == 3){
+  echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";
+  echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+  die();
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

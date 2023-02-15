@@ -82,7 +82,7 @@
           echo "<td><a href=$link target='_blank'>$surname</td>";
           echo "<td>$name</td>";
           echo "<td>$klados</td>";
-          echo "<td>$tel</td>";
+          echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
           echo "<td><a href='mailto:$email'>$email</a></td>";
           echo "</tr>\n";
           $i++;                        

@@ -399,7 +399,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
                 }
                 echo "</tr>";
-                echo "<tr><td>Περιφέρεια Σχολικών Συμβούλων: ".$perif."η</td>";
+                echo "<tr><td>Ενότητα Σχολικών Συμβούλων: ".$perif."η</td>";
                 echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
                 echo "</tr>";
             }
@@ -414,9 +414,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td colspan=2 align=right><small>Τελ.ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."<small></td></tr>";
         }
         echo "</table>";
-        echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
-        if ($type == 1 || $type == 2){
-            echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
+        if ( $_SESSION['userlevel'] < 3){
+            echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
+            if ($type == 1 || $type == 2){
+                echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
+            }
         }
       echo "</div>"; // of general
       if ($type == 1 || $type == 2){
@@ -708,7 +710,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tbody></table>";
             echo "<br>";
         }
-        echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
+        if ( $_SESSION['userlevel'] < 3) {
+            echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
+        }
         echo "<br><br>";
         // if dimotiko & leitoyrg >= 4
         if ($type == 1 ) {//&& array_sum($tmimata_exp)>3){
