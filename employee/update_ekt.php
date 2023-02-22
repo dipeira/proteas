@@ -29,6 +29,7 @@
   $thesi = $_POST['thesi'];
   $entty = $_POST['entty'];
   $email = $_POST['email'];
+  $email_psd = $_POST['email_psd'];
   
   $ip = $_SERVER['REMOTE_ADDR'];
   
@@ -140,7 +141,7 @@
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
           $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres, ent_ty=$entty, ";
-          $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto',email='$email' WHERE id='$id'";
+          $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto',email='$email',email_psd='$email_psd' WHERE id='$id'";
           $query = $query1.$query2.$query3;
 
           $qlog .= $query;
@@ -167,7 +168,7 @@
           
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
           $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,ent_ty=$entty,wres=$wres,";
-          $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto', email='$email' WHERE id='$id'";
+          $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto', email='$email', email_psd='$email_psd' WHERE id='$id'";
           $query = $query1.$query2.$query3;
           $qlog .= $query;
           //echo $query;

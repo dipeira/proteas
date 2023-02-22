@@ -227,7 +227,8 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
   `thesi` int(11) NULL COMMENT '0 Εκπαιδευτικός,1 Διευθυντής/Προϊστάμενος',
   `ent_ty` tinyint(4) NULL DEFAULT '0' COMMENT '0, Όχι / 1, Υπηρέτηση σε Τμήμα Ένταξης / 2, Τάξη υποδοχής / 3, Παράλληλη στήριξη',
   `wres` int(11) NULL,
-  `email` text NULL
+  `email` text NULL,
+  `email_psd` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -350,7 +351,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `katoikon_apo` date NULL,
   `katoikon_ews` date NULL,
   `katoikon_comm` text NULL,
-  `email` text NULL
+  `email` text NULL,
+  `email_psd` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

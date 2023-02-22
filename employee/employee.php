@@ -211,6 +211,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $katoikon_comm = mysqli_result($result, 0, "katoikon_comm");
             $katoikon_comm = str_replace(" ", "&nbsp;", $katoikon_comm);
             $email = mysqli_result($result, 0, "email");
+            $email_psd = mysqli_result($result, 0, "email_psd");
             $org_ent = mysqli_result($result, 0, 'org_ent');
                     
         } // of if not add
@@ -283,7 +284,7 @@ if ($_GET['op']=="edit") {
     echo "<tr><td>Διεύθυνση</td><td><input size='50' type='text' name='address' value='$address' /></td></tr>";
     echo "<tr><td>Α.Δ.Τ.</td><td><input type='text' name='idnum' value='$idnum' /></td></tr>";
     echo "<tr><td>Α.Μ.K.A.</td><td><input type='text' name='amka' value='$amka' /></td></tr>";
-    echo "<tr><td>email</td><td><input type='text' name='email' value='$email' /></td></tr>";
+    echo "<tr><td>email<br>email (ΠΣΔ)</td><td><input type='text' name='email' value='$email' /><br><input type='text' name='email_psd' value='$email_psd' /></td></tr>";
     echo "<tr><td>Α.Μ.</td><td><input type='text' name='am' value=$am /></td></tr>";
     echo "<tr><td>Κλάδος</td><td>";
     kladosCombo($klados_id, $mysqlconnection);
@@ -643,7 +644,7 @@ elseif ($_GET['op']=="view") {
     $aney_ymd = days2ymd($aney_xr);
     echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
     //
-    echo "<tr><td>Ώρες υποχρ. ωραρίου:</td><td>$wres</td><td>e-mail:</td><td><a href=\"mailto:$email\">$email</a></td></tr>";
+    echo "<tr><td>Ώρες υποχρ. ωραρίου:</td><td>$wres</td><td>e-mail:<br>e-mail (ΠΣΔ):</td><td><a href=\"mailto:$email\">$email</a><br><a href=\"mailto:$email_psd\">$email_psd</a></td></tr>";
     echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br(stripslashes($comments))."</td></tr>"; 
     echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
     echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';

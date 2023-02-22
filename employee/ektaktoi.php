@@ -154,6 +154,7 @@
           $entty = mysqli_result($result, 0, "ent_ty");
           $wres = mysqli_result($result, 0, "wres");
           $email = mysqli_result($result, 0, "email");
+          $email_psd = mysqli_result($result, 0, "email_psd");
           
           $kat = mysqli_result($result, 0, "status");
           switch ($kat)
@@ -304,7 +305,7 @@ if ($_GET['op']=="edit")
         echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
         echo "<tr><td>Σταθερό</td><td><input type='text' name='stathero' value=$stathero /></td></tr>";
         echo "<tr><td>Κινητό</td><td><input type='text' name='kinhto' value=$kinhto /></td></tr>";
-        echo "<tr><td>email</td><td><input type='text' name='email' value=$email /></td></tr>";
+        echo "<tr><td>email<br>email (ΠΣΔ)</td><td><input type='text' name='email' value=$email /><br><input type='text' name='email_psd' value=$email_psd /></td></tr>";
         echo "<tr><td>Κλάδος</td><td>";
         kladosCombo($klados_id,$mysqlconnection);
         echo "</td></tr>";
@@ -441,6 +442,7 @@ elseif ($_GET['op']=="view")
                 echo "<td colspan=3><div class=\"slidingDiv\">";
                 echo "Τηλ.: $stathero - $kinhto<br>";
                 echo "email: <a href='mailto:$email'>$email</a><br>";
+                echo "email (ΠΣΔ): <a href='mailto:$email_psd'>$email_psd</a><br>";
                 idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
                 echo "</div>";
                 echo "</td></tr>";
