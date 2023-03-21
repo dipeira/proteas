@@ -45,6 +45,9 @@
         
         function getTheEmail($id,$conn)
         {
+            // if foreas return false
+            if ( isForeas($id,$conn) )
+                return false;
             $query = "SELECT email FROM school WHERE id=$id";
             $result = mysqli_query($conn, $query);
             return mysqli_result($result, 0);
@@ -63,12 +66,12 @@
             $has_errors = 0;
             // if monimoi
             if ($_POST['type'] == 1)
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos FROM adeia a
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email FROM adeia a
                     JOIN employee e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             else
             {
                 $is_anapl = 1;
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos FROM adeia_ekt a
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email FROM adeia_ekt a
                     JOIN ektaktoi e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             }
             
@@ -125,6 +128,7 @@
                 $typei = mysqli_result($result, $i, "type");
                 $hm_apof_1 = mysqli_result($result, $i, "hm_apof");
                 $logos = mysqli_result($result, $i, "logos");
+                $emp_email = mysqli_result($result, $i, "email");
                 // if different date of apofasi
                 if ($hm_apof_org <> $hm_apof_1)
                 {
@@ -183,7 +187,7 @@
                     else
                         echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><tr>";
                 }
-                $row = array($surname,$name,$days,$start,$prot,$dik,$sch_code);
+                $row = array($surname,$name,$days,$start,$prot,$dik,$sch_code,$emp_email);
                 $emp[] = $row;
                 $i++;
                 if ($error_found)
@@ -215,8 +219,8 @@
             if (mysqli_num_rows($res) > 0)
                 echo "<br>Τα email γι' αυτήν την απόφαση έχουν ήδη σταλεί.</h3>";
             else {
-                $email_msg = "Είστε σίγουροι ότι θέλετε να αποστείλετε $num email σε ισάριθμα σχολεία;";
-                echo "<INPUT name='btnEmail' TYPE='submit' VALUE='Αποστολή email στα σχολεία' onclick=\"javascript:return confirm('$email_msg');\">";
+                $email_msg = "Είστε σίγουροι ότι θέλετε να αποστείλετε $num email σε ισάριθμους εκπαιδευτικούς;";
+                echo "<INPUT name='btnEmail' TYPE='submit' VALUE='Αποστολή email σε εκπ/κούς' onclick=\"javascript:return confirm('$email_msg');\">";
             }
             echo "</form>";
             echo "<small>ΣΗΜ.: Οι παραπάνω ενέργειες ίσως χρειαστούν αρκετό χρόνο (ειδικά τα email).<br>Μην επιχειρείτε να τις επαναλάβετε αν δεν εκτελεστούν αμέσως και δε λάβετε σχετικό μήνυμα.</small>";
@@ -373,15 +377,25 @@
                 $mail_body = str_replace('START', $mydate, $mail_body);
                 $mail_body = str_replace('SURNME', $dat[0], $mail_body);
                 $mail_body = str_replace('NAME', $dat[1], $mail_body);
-                
-                // get & validate email address
-                $email = getTheEmail($dat[6], $mysqlconnection);
-                $email = filter_var( $email, FILTER_VALIDATE_EMAIL );
-                if (!$email)
-                {
-                    $summary[] = array('name' => $dat[0], 'res' => -1);
-                    continue;
+
+                // get & validate email addresses
+                // send to employee email
+                $emails_to = array($dat[7]);
+                // also send to school if type=3 or 4
+                if ( $type1 == 3 || $type1 == 4 ) {
+                    $sch_email = getTheEmail($dat[6], $mysqlconnection);
+                    if ($sch_email) {
+                        array_push($emails_to, $sch_email);
+                    }
                 }
+                // validate emails
+                foreach ($emails_to as $email) {
+                    if (!filter_var( $email, FILTER_VALIDATE_EMAIL )) {
+                        $summary[] = array('name' => $dat[0], 'res' => -1);
+                        continue;
+                    }
+                }
+
                 $subject = "Ενημέρωση για ".$type;
                 $from = "Δ/νση ΠΕ Ηρακλείου";
                 //$headers = "From:".$from;
@@ -402,7 +416,7 @@
                 $log = $logger->dump();
                 $logger->clear();
                 file_put_contents('../tools/mail.log', $log, FILE_APPEND);
-            }                     
+            }
             // insert 2 db
             $qry = "INSERT INTO apofaseis (prwt, sent, result, year) VALUES 
             (".$_POST['arr'][1].",1,'".serialize($summary)."',".$_POST['arr'][5].")";

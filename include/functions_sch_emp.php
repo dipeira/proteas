@@ -742,4 +742,14 @@ function top_pe06_nip($sch, $conn){
     return $top06;
 }
 
+function isForeas($id, $conn) {
+    $query = "SELECT type from school WHERE id = $id";
+    $result = mysqli_query($conn, $query);
+    if (!mysqli_num_rows($result)) {
+        return;
+    }
+    $row = mysqli_fetch_array($result);
+    return $row['type'] == 0 ? true : false;
+}
+
 ?>
