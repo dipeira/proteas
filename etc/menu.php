@@ -67,7 +67,7 @@
 		  <a href="#">Διαχειριση</a>
 		  <ul>
 			  <li><a href="<?=$site_root?>/etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
-			  <!--<li><a href="<?=$site_root?>/employee/check_vmk.php">Αλλαγές Βαθμών - ΜΚ</a></li>-->
+			  <li><a href="<?=$site_root?>/employee/check_vmk.php">Αλλαγές ΜΚ</a></li>
         <li><a href='<?=$site_root?>/tools/import.php'>Εισαγωγή δεδομένων</a></li>
 			  <li><a href='<?=$site_root?>/etc/params.php'>Παράμετροι</a></li>
 			  <li><a href="<?=$site_root?>/employee/klados.php">Ειδικότητες</a></li>

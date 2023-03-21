@@ -308,7 +308,7 @@ function mk16_plus($days)
     $ret[0] = $mk > 19 ? 19 : $mk;
     $ret[1] = $days - (($mk * 2) - 2);
     //print_r($ret);
-    return ret;
+    return $ret;
 }
 
 // get_mk: Function for ΜΚ computation
@@ -363,9 +363,12 @@ function get_mk($id, $mysqlconnection, $date = null) {
     $vdate = date ( 'd-m-Y' , $vdate );
     echo "<br>MK: $mk <small>(από $vdate)</small>";
     */
+    $mk_date = days2date($anatr + $subtract + $mk*720);
+    $formatted_time = $mk_date[2].'/'.$mk_date[1].'/'.$mk_date[0];
     return array(
       'mk' => $mk,
-      'ymd' => days2ymd($result)
+      'ymd' => days2ymd($result),
+      'hm_mk' => $formatted_time
     );
 }
 

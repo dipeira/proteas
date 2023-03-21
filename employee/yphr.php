@@ -21,7 +21,8 @@
   $ymd = $mk['ymd'];
   echo "<br><b>Χρόνος για Μ.Κ.:</b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]";
   echo "&nbsp;(M.K.: ".$mk['mk'].")<br>";
-
+  echo "Ημ/νία επόμενου Μ.Κ.: ".$mk['hm_mk'].'<br>';
+  
   // compute days of educational service for teaching hour reduction
   // find last day of year
   $year = date('Y', strtotime($_POST['yphr']));
