@@ -402,14 +402,23 @@
                 
                 //echo "<br>$subject<br>".$mail_body."<br>".$email;
                 $mymail = "mail@dipe.ira.sch.gr";
+
+                // trim emails
+                $emails_to_trimmed = array_map('trim', $emails_to);
                 
-                $message = Swift_Message::newInstance($subject)
-                ->setFrom($mymail)
-                // *** SOS *** uncomment '$testemail', comment '$email' to test
-                //->setTo("it@dipe.ira.sch.gr")
-                ->setTo($email)
-                ->setBody($mail_body);
-                $result = $mailer->send($message);
+                try {
+                    $message = Swift_Message::newInstance($subject)
+                    ->setFrom($mymail)
+                    // *** SOS *** uncomment '$testemail', comment '$email' to test
+                    //->setTo("it@dipe.ira.sch.gr")
+                    ->setTo($emails_to_trimmed)
+                    ->setBody($mail_body);
+                    $result = $mailer->send($message);
+                } catch (Exception $e) {
+                    echo "Σφάλμα: ",  $e->getMessage(), "\n";
+                    echo "<br><br>";
+                    print_r($e);
+                }
                 
                 $summary[] = array('name' => $dat[0], 'email' => $email, 'res' => $result);
                 // Log email activity
