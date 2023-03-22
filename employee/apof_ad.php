@@ -388,12 +388,18 @@
                         array_push($emails_to, $sch_email);
                     }
                 }
+                $wrong_email = False;
                 // validate emails
                 foreach ($emails_to as $email) {
                     if (!filter_var( $email, FILTER_VALIDATE_EMAIL )) {
                         $summary[] = array('name' => $dat[0], 'res' => -1);
+                        $wrong_email = True;
                         continue;
                     }
+                }
+                if ($wrong_email){
+                    echo "Λανθασμένo email για τον/ην: ".$dat[0]. ' Δεν έγινε αποστολή...';
+                    continue;
                 }
 
                 $subject = "Ενημέρωση για ".$type;
