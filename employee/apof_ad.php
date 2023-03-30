@@ -426,7 +426,8 @@
                     print_r($e);
                 }
                 
-                $summary[] = array('name' => $dat[0], 'email' => $email, 'res' => $result);
+                $summary[] = array('name' => $dat[0], 'email' => implode(',',$emails_to_trimmed), 'res' => $result);
+
                 // Log email activity
                 $log = $logger->dump();
                 $logger->clear();
