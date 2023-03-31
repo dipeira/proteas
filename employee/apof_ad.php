@@ -415,18 +415,16 @@
                 try {
                     $message = Swift_Message::newInstance($subject)
                     ->setFrom($mymail)
-                    // *** SOS *** uncomment '$testemail', comment '$email' to test
-                    //->setTo("it@dipe.ira.sch.gr")
                     ->setTo($emails_to_trimmed)
                     ->setBody($mail_body);
-                    $result = $mailer->send($message);
+                    $result = $mailer->send($message, $failures);
                 } catch (Exception $e) {
                     echo "Σφάλμα: ",  $e->getMessage(), "\n";
                     echo "<br><br>";
                     print_r($e);
                 }
                 
-                $summary[] = array('name' => $dat[0], 'email' => implode(',',$emails_to_trimmed), 'res' => $result);
+                $summary[] = array('name' => $dat[0], 'email' => implode(', ',$emails_to_trimmed), 'res' => $result);
 
                 // Log email activity
                 $log = $logger->dump();
@@ -444,19 +442,32 @@
             echo "<h3>Αποτελέσματα</h3>";
             echo "<table border='1'>";
             foreach ($summary as $sum) {
-                if ($sum['res'] == 1)
+                if ($sum['res'] > 0)
                 {
                     echo "<tr><td>".$sum['name']."</td><td>".$sum['email']."</td><td>OK</td></tr>";
-                    $oks++;
+                    $oks += $sum['res'];
                 }
                 else
                 {
-                    echo "<tr><td>".$sum['name']."</td><td>".$sum['email']."</td><td>Πρόβλημα (err.:".$sum['res'].")</td></tr>";
+                    echo "<tr><td>".$sum['name']."</td><td>".$sum['email']."</td><td>Πρόβλημα</td></tr>";
                     $errs++;
                 }
             }
             echo "</table>";
-            echo "$oks επιτυχημένες αποστολές.<br>$errs λάθη.";
+            // print summary
+            $failed_count = count($failures);
+            echo "$oks επιτυχημένες αποστολές.<br>$failed_count λάθη.";
+            echo '<br>';
+            // print failed emails
+            if ($failed_count > 0){
+                echo "<h3>Αποτυχημένες αποστολές</h3>";
+                echo "<ul>";
+                foreach ($failures as $addr) {
+                    echo "<li>$addr</li>";
+                }
+                echo "</ul>";
+            }
+            
         }
         mysqli_close($mysqlconnection);
 ?>
