@@ -328,7 +328,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 }
                 echo "</tr>";
                 echo "</table>";
-                echo "organ</div>"; // of organikes
+                echo "</div>"; // of organikes
             }
             echo "</td></tr>";
         

@@ -364,7 +364,7 @@ else if ($_GET['type'] == 2) {
         $kena_org = $organikes[0] - $orgtop;
         $synorgtop += $orgtop;
         // οργανικά τοποθετηθέντες @ T.E.
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3,5) AND ent_ty = 1 AND org_ent=1";
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND status IN (1,3,5) AND org_ent=1";
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgte = mysqli_result($rs, 0, "cnt");
         $synorgte += $orgte;
