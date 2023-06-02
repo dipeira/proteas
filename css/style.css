@@ -224,3 +224,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 /* .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
   color: #ea150b;
 } */
+
+.synola {
+	font-weight: 600;
+}

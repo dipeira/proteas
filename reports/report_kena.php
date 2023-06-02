@@ -136,7 +136,7 @@ if ($_GET['type'] == 1) {
         $i++;                        
     }
 
-    echo "<tr><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
+    echo "<tr class='synola'><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
     echo "<td>$synorgan</td><td>$synorgtop</td>";
     for ($j=0; $j<10; $j++){
         echo "<td>".$organikes_sum[$j]."</td>";
@@ -178,12 +178,13 @@ else if ($_GET['type'] == 3) {
     echo "<th rowspan=2>Κατ.</th>";
     echo "<th rowspan=2>Οργ.</th>";
     echo "<th rowspan=2>ΠΕ70 ΕΑΕ<br>Οργ.<br>Τοποθ.</th>";
+    echo "<th rowspan=2>ΠΕ71<br>Οργ.<br>Τοποθ.</th>";
     echo "<th colspan=15>Οργανικές</th>";
     echo "<th colspan=15>Οργανικά Κενά</th>";
     echo "</tr>";
     echo "<tr>";
     // organikes
-    echo "<th>70 ΕΑΕ</th><th>11</th><th>79</th>";
+    echo "<th>11</th><th>79</th>";
     echo "<th>08</th><th>86</th><th>91</th>";
     echo "<th><span title='Λογοθεραπευτών'>21</th>";
     echo "<th><span title='Ψυχολόγων'>23</th>";
@@ -192,9 +193,9 @@ else if ($_GET['type'] == 3) {
     echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
     echo "<th><span title='Εργοθεραπευτών'>29</th>";
     echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
-    echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th><th>Τ.Ε.</th>";
+    echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1<br>ΕΒΠ</th><th>70 ΕΑΕ</th><th>71</th>";
     // kena
-    echo "<th>70 ΕΑΕ</th><th>11</th><th>79</th>";
+    echo "<th>11</th><th>79</th>";
     echo "<th>08</th><th>86</th><th>91</th>";
     echo "<th><span title='Λογοθεραπευτών'>21</th>";
     echo "<th><span title='Ψυχολόγων'>23</th>";
@@ -203,7 +204,7 @@ else if ($_GET['type'] == 3) {
     echo "<th><span title='Φυσικοθεραπευτών'>28</th>";
     echo "<th><span title='Εργοθεραπευτών'>29</th>";
     echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
-    echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th><th>Τ.Ε.</th>";
+    echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1<br>ΕΒΠ</th><th>70 ΕΑΕ</th><th>71</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 
@@ -223,16 +224,22 @@ else if ($_GET['type'] == 3) {
         // οργανικά τοποθετηθέντες ΠΕ70ΕΑΕ
         $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=18 AND status IN (1,3,5) AND ent_ty = 0 AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
-        $orgtop = mysqli_result($rs, 0, "cnt");
-        $synorgtop += $orgtop;
+        $orgtop7050 = mysqli_result($rs, 0, "cnt");
+        $synorgtop7050 += $orgtop7050;
+        // οργανικά τοποθετηθέντες ΠΕ71
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=19 AND status IN (1,3,5) AND ent_ty = 0 AND thesi IN (0,1,2)";
+        $rs = mysqli_query($mysqlconnection, $qry);
+        $orgtop71 = mysqli_result($rs, 0, "cnt");
+        $synorgtop71 += $orgtop71;
         
         echo "<tr>";
         echo "<td>$code</td>";
         echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
         echo "<td>$organikothta</td>";
-        echo "<td>$orgtop</td>";
-        for ($j=0; $j<17; $j++){
+        echo "<td>$orgtop7050</td>";
+        echo "<td>$orgtop71</td>";
+        for ($j=1; $j<19; $j++){
             if ($j == 2 || $j == 4 || $j == 5){
                 continue;
             }
@@ -240,8 +247,7 @@ else if ($_GET['type'] == 3) {
             echo $organikes[$j] > 0 ? $organikes[$j] : 0;
             echo "</td>";
         }
-        echo "<td>$org_ent</td>";
-        echo "<td>".($organikes[0] - $orgs['ΠΕ70ΕΑΕ'])."</td>";
+        // echo "<td>$org_ent</td>";
         echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
         echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
         echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
@@ -255,11 +261,13 @@ else if ($_GET['type'] == 3) {
         echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
         echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
         echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
+        echo "<td>".($organikes[17] - $orgs['ΠΕ70ΕΑΕ'])."</td>";
+        echo "<td>".($organikes[18] - $orgs['ΠΕ71'])."</td>";
 
-        echo "<td>".($org_ent - $orgs['ent'])."</td>";
+        // echo "<td>".($org_ent - $orgs['ent'])."</td>";
         echo "</tr>\n";
 
-        for ($j=0; $j<17; $j++){
+        for ($j=1; $j<19; $j++){
             if ($j == 2 || $j == 4 || $j == 5){
                 continue;
             }
@@ -267,7 +275,7 @@ else if ($_GET['type'] == 3) {
         }
         $organikes_sum[17] += $org_ent;
         
-        $kena_org_sum[0] += $organikes[0] - $orgs['ΠΕ70ΕΑΕ'];
+        $kena_org_sum[0] += $organikes[0] - $orgs['ΠΕ70'];
         $kena_org_sum[1] += $organikes[1] - $orgs['ΠΕ11'];
         $kena_org_sum[3] += $organikes[3] - $orgs['ΠΕ79'];
         $kena_org_sum[6] += $organikes[6] - $orgs['ΠΕ08'];
@@ -281,20 +289,22 @@ else if ($_GET['type'] == 3) {
         $kena_org_sum[14] += $organikes[14] - $orgs['ΠΕ29'];
         $kena_org_sum[15] += $organikes[15] - $orgs['ΠΕ30'];
         $kena_org_sum[16] += $organikes[16] - $orgs['ΔΕ1ΕΒΠ'];
-        $kena_org_sum[17] += $org_ent - $orgs['ent'];
+        $kena_org_sum[17] += $organikes[17] - $orgs['ΠΕ70ΕΑΕ'];
+        $kena_org_sum[18] += $organikes[18] - $orgs['ΠΕ71'];
+        // $kena_org_sum[17] += $org_ent - $orgs['ent'];
 
         $i++;                        
     }
 
-    echo "<tr><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
-    echo "<td>$synorgan</td><td>$synorgtop</td>";
-    for ($j=0; $j<18; $j++){
+    echo "<tr class='synola'><td></td><td></td><td>ΣΥΝΟΛΑ</td>";
+    echo "<td>$synorgan</td><td>$synorgtop7050</td><td>$synorgtop71</td>";
+    for ($j=1; $j<19; $j++){
         if ($j == 2 || $j == 4 || $j == 5){
             continue;
         }
         echo "<td>".$organikes_sum[$j]."</td>";
     }
-    for ($j=0; $j<18; $j++){
+    for ($j=1; $j<19; $j++){
         if ($j == 2 || $j == 4 || $j == 5){
             continue;
         }
@@ -397,7 +407,7 @@ else if ($_GET['type'] == 2) {
 
         $i++;                        
     }
-    echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td><td></td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td>";
+    echo "<tr class='synola'><td></td><td>ΣΥΝΟΛΑ</td><td><td></td></td><td>$organikes_sum[0]</td><td>$synorgtop</td><td>$kena_org_sum[0]</td>";
     echo "<td>$org_te_sum</td><td>$kena_org_te</td></tr>";
     echo "</tbody></table>";
     echo "<small><i>Σύνολο εγγραφών: ".$i."</i></small>";
@@ -414,13 +424,14 @@ else if ($_GET['type'] == 2) {
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
 }
+// eidika nip
 else if ($_GET['type'] == 4) {
     function nb($value) {
         return !$value ? 0 : $value;
     }
     //nipiagogeia
     $type = 2;
-    $synorgtop = 0;
+    $synorgtop = [];
     // dhmosia or eidika (type2 = 0 or 2)
     $query = "SELECT * from school WHERE type2 = 2 AND type = $type and anenergo = 0";
     $result = mysqli_query($mysqlconnection, $query);
@@ -437,7 +448,7 @@ else if ($_GET['type'] == 4) {
     echo "<tr><th rowspan=2>Κωδ.</th>";
     echo "<th rowspan=2>Ονομασία</th>";
     echo "<th rowspan=2>Κατ.</th>";
-    echo "<th>Οργανικότητα</th>";
+    echo "<th><span title='Οργανικότητα'>Οργαν.</th>";
     echo "<th><span title='Νηπιαγωγών'>60</th>";
     echo "<th><span title='Λογοθεραπευτών'>21</th>";
     echo "<th><span title='Ψυχολόγων'>23</th>";
@@ -447,10 +458,14 @@ else if ($_GET['type'] == 4) {
     echo "<th><span title='Εργοθεραπευτών'>29</th>";
     echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
     echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
-    echo "<th>Οργ.Τοπ. ΠΕ60</th>";
-    echo "<th>Οργανικά Κενά ΠΕ60</th>";
-    echo "<th>T.E.</th>";
-    echo "<th>Οργανικά Κενά T.E.</th>";
+    echo "<th>Οργ.Τοπ.<br>ΠΕ60</th>";
+    echo "<th>Κενά<br>ΠΕ60</th>";
+    echo "<th>Οργ.Τοπ.<br>ΠΕ60.50</th>";
+    echo "<th>Κενά<br>ΠΕ60.50</th>";
+    echo "<th>Οργ.Τοπ.<br>ΠΕ61</th>";
+    echo "<th>Κενά<br>ΠΕ61</th>";
+    // echo "<th>T.E.</th>";
+    // echo "<th>Οργανικά Κενά T.E.</th>";
     echo "</tr>";
     echo "</thead>\n<tbody>\n";
 
@@ -470,12 +485,22 @@ else if ($_GET['type'] == 4) {
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgtop = mysqli_result($rs, 0, "cnt");
         $kena_org = $organikes[0] - $orgtop;
-        $synorgtop += $orgtop;
-        // οργανικά τοποθετηθέντες @ T.E.
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3,5) AND ent_ty = 1 AND org_ent=1";
+        // οργανικά τοποθετηθέντες 60.50
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=16 AND status IN (1,3,5) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
-        $orgte = mysqli_result($rs, 0, "cnt");
-        $synorgte += $orgte;
+        $orgtop6050 = mysqli_result($rs, 0, "cnt");
+        $kena_org6050 = $organikes[9] - $orgtop6050;
+        // οργανικά τοποθετηθέντες 61
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=17 AND status IN (1,3,5) AND thesi IN (0,1,2)";
+        $rs = mysqli_query($mysqlconnection, $qry);
+        $orgtop61 = mysqli_result($rs, 0, "cnt");
+        $kena_org61 = $organikes[10] - $orgtop61;
+        
+        // οργανικά τοποθετηθέντες @ T.E.
+        // $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados=1 AND status IN (1,3,5) AND ent_ty = 1 AND org_ent=1";
+        // $rs = mysqli_query($mysqlconnection, $qry);
+        // $orgte = mysqli_result($rs, 0, "cnt");
+        // $synorgte += $orgte;
         $entaksis = explode(",", mysqli_result($result, $i, "entaksis"));
         $org_entaksis = $entaksis[0] ? 1 : 0;
         $kena_te = $org_entaksis - $orgte;
@@ -502,27 +527,39 @@ else if ($_GET['type'] == 4) {
             "<td>$orgtop</td>" ;
         //echo "<td>$kena_org</td>";
         echo tdc($kena_org);
-        echo "<td>$org_entaksis</td>";
-        echo "<td>$kena_te</td>";
+        echo "<td>$orgtop6050</td>";
+        echo "<td>$kena_org6050</td>";
+        echo "<td>$orgtop61</td>";
+        echo "<td>$kena_org61</td>";
+        //echo "<td>$org_entaksis</td>";
+        //echo "<td>$kena_te</td>";
         echo "</tr>\n";
 
         for ($j=0; $j<9; $j++){
             $organikes_sum[$j] += $organikes[$j];
         }
         //$organikes_sum[0] += $organikes[0];
+        $synorgtop[0] += $orgtop;
+        $synorgtop[1] += $orgtop6050;
+        $synorgtop[2] += $orgtop61;
 
         $kena_org_sum[0] += $kena_org;
-        $org_te_sum += $org_entaksis;
-        $kena_org_te += $kena_te;
+        $kena_org_sum[1] += $kena_org6050;
+        $kena_org_sum[2] += $kena_org61;
+        // $org_te_sum += $org_entaksis;
+        // $kena_org_te += $kena_te;
 
         $i++;                        
     }
-    echo "<tr><td></td><td>ΣΥΝΟΛΑ</td><td><td></td></td>";
+    echo "<tr class='synola'><td></td><td>ΣΥΝΟΛΑ</td><td><td></td></td>";
     for ($k=0; $k<9; $k++){
         echo "<td>$organikes_sum[$k]</td>";
     }
-    echo "<td>$synorgtop</td><td>$kena_org_sum[0]</td>";
-    echo "<td>$org_te_sum</td><td>$kena_org_te</td></tr>";
+    echo "<td>$synorgtop[0]</td><td>$kena_org_sum[0]</td>";
+    echo "<td>$synorgtop[1]</td><td>$kena_org_sum[1]</td>";
+    echo "<td>$synorgtop[2]</td><td>$kena_org_sum[2]</td>";
+    
+    // echo "<td>$org_te_sum</td><td>$kena_org_te</td></tr>";
     echo "</tbody></table>";
     echo "<small><i>Σύνολο εγγραφών: ".$i."</i></small>";
     echo "<br>";
