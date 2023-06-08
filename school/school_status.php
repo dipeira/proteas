@@ -209,7 +209,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>$organikes[14]</td>";
                     echo "<td>$organikes[15]</td>";
                     echo "<td>$organikes[16]</td>";
-                    echo "<td>$organikes[17]</td>";
                 }
                 echo "</tr>";
             }
