@@ -186,7 +186,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
                     echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
                     echo "<th><span title='Δασκάλων 70 ΕΑΕ'>70 ΕΑΕ</th>";
-                    echo "<th><span title='Δασκάλων ΠΕ71'>71</th>";
                 }
                 echo "</tr></thead>";
                 echo "<tbody><tr>";
@@ -212,7 +211,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>$organikes[15]</td>";
                     echo "<td>$organikes[16]</td>";
                     echo "<td>$organikes[17]</td>";
-                    echo "<td>$organikes[18]</td>";
                 }
                 echo "</tr>";
             }
@@ -233,7 +231,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<th><span title='Κοιν.Λειτουργών'>30</th>";
                     echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
                     echo "<th><span title='ΠΕ60.50'>60 ΕΑΕ</th>";
-                    echo "<th><span title='ΠΕ61'>61</th>";
                     echo "</tr></thead><tbody>";
                     echo "<tr>";
                     echo "<td>Οργανικές</td>";
@@ -246,7 +243,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>$organikes[7]</td>";
                     echo "<td>$organikes[8]</td>";
                     echo "<td>$organikes[9]</td>";
-                    echo "<td>$organikes[10]</td>";
                     echo "</tr>";
                     echo "<tr>";
                     $orgs = get_orgs($sch,$conn);
@@ -259,8 +255,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".$orgs['ΠΕ29']."</td>";
                     echo "<td>".$orgs['ΠΕ30']."</td>";
                     echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
-                    echo "<td>".$orgs['ΠΕ60ΕΑΕ']."</td>";
-                    echo "<td>".$orgs['ΠΕ61']."</td>";
+                    echo "<td>".($orgs['ΠΕ60ΕΑΕ']+$orgs['ΠΕ61'])."</td>";
                     echo "</tr>";
                     echo "<tr>";
                     $orgs = get_orgs($sch,$conn);
@@ -273,8 +268,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".($organikes[6] - $orgs['ΠΕ29'])."</td>";
                     echo "<td>".($organikes[7] - $orgs['ΠΕ30'])."</td>";
                     echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
-                    echo "<td>".($organikes[9] - $orgs['ΠΕ60ΕΑΕ'])."</td>";
-                    echo "<td>".($organikes[10] - $orgs['ΠΕ61'])."</td>";
+                    echo "<td>".($organikes[9] - $orgs['ΠΕ60ΕΑΕ'] - $orgs['ΠΕ61'])."</td>";
                     echo "</tr>";
                     echo "</tbody></table>";
                 } else {
@@ -316,8 +310,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".$orgs['ΠΕ29']."</td>";
                     echo "<td>".$orgs['ΠΕ30']."</td>";
                     echo "<td>".$orgs['ΔΕ1ΕΒΠ']."</td>";
-                    echo "<td>".$orgs['ΠΕ70ΕΑΕ']."</td>";
-                    echo "<td>".$orgs['ΠΕ71']."</td>";
+                    echo "<td>".($orgs['ΠΕ70ΕΑΕ'] + $orgs['ΠΕ71'])."</td>";
                 }
                 echo "</tr>";
                 ///////
@@ -344,8 +337,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".($organikes[14] - $orgs['ΠΕ29'])."</td>";
                     echo "<td>".($organikes[15] - $orgs['ΠΕ30'])."</td>";
                     echo "<td>".($organikes[16] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
-                    echo "<td>".($organikes[17] - $orgs['ΠΕ70ΕΑΕ'])."</td>";
-                    echo "<td>".($organikes[18] - $orgs['ΠΕ71'])."</td>";
+                    echo "<td>".($organikes[17] - $orgs['ΠΕ70ΕΑΕ'] - $orgs['ΠΕ71'])."</td>";
                 }
                 echo "</tr>";
                 echo "</table>";
