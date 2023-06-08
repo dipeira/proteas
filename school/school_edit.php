@@ -185,7 +185,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 if ($type2 != 2) {
                     echo "ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
                 } else {
-                    echo "<input type='text' name='organikes[]' value='0' hidden size='2'/>";
+                    echo "ΠΕ70 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
                 }
                 echo "ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
                 echo "ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
@@ -204,12 +204,15 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                   echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[14]' size='2'/><br>";
                   echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[15]' size='2'/><br>";
                   echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2'/><br>";
-                  echo "ΠΕ70 EAE: <input type='text' name='organikes[]' value='$organikes[17]' size='2'/><br>";
                 }
             }
             // if Nip
             else if ($type == 2) {
-                echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                if ($type2 != 2){
+                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                } else {
+                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                }
                 if ($type2 == 2) {
                   echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
                   echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
@@ -219,7 +222,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                   echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
                   echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
                   echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/><br>";
-                  echo "ΠΕ60 EAE: <input type='text' name='organikes[]' value='$organikes[9]' size='2'/><br>";
                 }
             }
             echo "</td></tr>";
