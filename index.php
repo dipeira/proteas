@@ -321,7 +321,7 @@ if ($num == 0) {
 } 
     echo "</tbody>\n";
     //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
-if ($usrlvl == 0) {
+if ($usrlvl < 2) {
     echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
 } else {
     echo "<tr><td colspan=7><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
