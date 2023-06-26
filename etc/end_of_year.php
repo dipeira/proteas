@@ -13,7 +13,7 @@
     $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
     $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
     $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
-    $sxol_symv = getSchoolID('Συντονιστής εκπ/κου έργου',$mysqlconnection);
+    $sxol_symv = getSchoolID('Σύμβουλος Εκπαίδευσης',$mysqlconnection);
     $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό',$mysqlconnection);
 ?>    
 <html>

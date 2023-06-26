@@ -170,12 +170,13 @@
             $data[7] = date ("Y-m-d", strtotime($data[7]));
             $data[10] = date ("Y-m-d", strtotime($data[10]));
             $data[11] = date ("Y-m-d", strtotime($data[11]));
+            $status = 1;
             // proceed to import
             $import="INSERT into employee(name,surname,patrwnymo,mhtrwnymo,klados,am,thesi,fek_dior,hm_dior,
             vathm, mk, hm_mk, hm_anal, met_did, proyp, proyp_not, status,
             afm, tel, address, idnum, amka, email, wres, sx_organikhs, sx_yphrethshs)
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]',0,'$data[6]','$data[7]',
-            '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$data[15]',
+            '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$status',
             '$data[16]','$data[17]','$data[18]','$data[19]','$data[20]','$data[21]','$data[22]', $sx_organ, $sx_yphr)";
             $imp_8 = iconv('cp1253','utf-8',$import);
             $update_queries[] = $imp_8;
@@ -434,7 +435,26 @@
         $queries = implode(';', $update_queries);
         // echo "<br>Queries:<br>".$queries."<br><br>";
 
-        $ret = mysqli_multi_query($mysqlconnection, $queries);
+        //$ret = mysqli_multi_query($mysqlconnection, $queries);
+
+        mysqli_autocommit($mysqlconnection,FALSE);
+        $errors = array();
+        foreach ( $update_queries as $qry) {
+          $res = mysqli_query($mysqlconnection, $qry);
+          if (!$res) {
+            $errors[$qry] = mysqli_error();
+          }
+        }
+        if (!mysqli_commit($mysqlconnection)){
+          echo "<h3>Σφάλμα κατά την εκτέλεση των ενημερώσεων στη βάση</h3>";
+          foreach($errors as $k=>$v){
+            echo "<br>".$k.": ".$err;
+          }
+          echo "<h4>Ελέγξτε το αρχείο ή επικοινωνήστε με το διαχειριστή.</h4>";
+          die();
+        }
+
+
         // if new employees, add their yphrethseis
         foreach( $update_yphrethseis as $key => $value ) {
           $query = "select * from employee where am = ".$key;
@@ -444,9 +464,9 @@
           $qry = str_replace($key, $row['id'], $value);
           $res = mysqli_query($mysqlconn, $qry);
         }
-        if (!$ret) {
-          echo "Προέκυψε σφάλμα κατά την εκτέλεση των ενημερώσεων στη Β.Δ...";
-        }
+        // if (!$ret) {
+        //   echo "Προέκυψε σφάλμα κατά την εκτέλεση των ενημερώσεων στη Β.Δ...";
+        // }
         if ($warnings > 0){
           echo "<br>Παρατηρήσεις - προειδοποιήσεις:<br>";
           echo $warn_msg;
