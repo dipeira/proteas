@@ -282,6 +282,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi_old` (
   `thesi` int(11) NOT NULL,
   `wres` int(11) NOT NULL,
   `email` text NOT NULL,
+  `email_psd` text NULL,
   `sxoletos` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -410,7 +411,8 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
   `katoikon_apo` date NULL,
   `katoikon_ews` date NULL,
   `katoikon_comm` text NULL,
-  `email` text NULL
+  `email` text NULL,
+  `email_psd` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -483,7 +485,8 @@ CREATE TABLE IF NOT EXISTS `employee_moved` (
   `katoikon_apo` date NULL,
   `katoikon_ews` date NULL,
   `katoikon_comm` text NULL,
-  `email` text NULL
+  `email` text NULL,
+  `email_psd` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
