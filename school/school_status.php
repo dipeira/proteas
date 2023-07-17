@@ -1166,7 +1166,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         //$query = "SELECT * FROM adeia ad JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND start<'$today' AND finish>'$today' AND status=3";
         //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3)";
         //$query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id WHERE sx_organikhs='$sch' AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-        $query = "SELECT * FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id JOIN yphrethsh yp ON emp.id = yp.emp_id
+        $query = "SELECT *,ad.id as adeia_id FROM adeia ad RIGHT JOIN employee emp ON ad.emp_id = emp.id JOIN yphrethsh yp ON emp.id = yp.emp_id
         WHERE yp.yphrethsh = $sch AND yp.sxol_etos=$sxol_etos AND ((start<'$today' AND finish>'$today') OR status=3) 
         ORDER BY finish DESC";
         // echo $query;
@@ -1191,7 +1191,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             {
               $flag = $absent = 0;        
               $id = mysqli_result($result, $i, "emp_id");
-              $adeia_id = mysqli_result($result, $i, "id");
+              $adeia_id = mysqli_result($result, $i, "adeia_id");
               $type = mysqli_result($result, $i, "type");
               $name = mysqli_result($result, $i, "name");
               $surname = mysqli_result($result, $i, "surname");
@@ -1228,7 +1228,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               else
               {
                   $ret="";
-                  $id = mysqli_result($result, $i, "emp.id");
+                  $id = mysqli_result($result, $i, "emp_id");
                   $flag=1;
                   $comments .= "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
               }
