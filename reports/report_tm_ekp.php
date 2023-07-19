@@ -346,8 +346,8 @@ if ($_REQUEST['type']) {
             $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and ent_ty not in (1,2,3)";
             $res = mysqli_query($mysqlconnection, $qry);
             $top60ana = mysqli_result($res, 0, 'pe60');
-            // only T.E.
-            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1 and thesi = 3";
+            // only T.E. - klados is PE60,60.50,61
+            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados in (1,16,17) AND status=1 and ent_ty = 1";
             $res = mysqli_query($mysqlconnection, $qry);
             $top60ent = mysqli_result($res, 0, 'pe60');
             
