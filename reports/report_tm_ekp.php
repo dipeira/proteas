@@ -336,6 +336,8 @@ if ($_REQUEST['type']) {
             $oloimero_tm += $oloimero_nip_exp[10]+$oloimero_nip_exp[11]>0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[12]+$oloimero_nip_exp[13]>0 ? 1:0;
             $oloimero_tm += $oloimero_nip_exp[14]+$oloimero_nip_exp[15]>0 ? 1:0;
+            // add tmimata of dieyrymeno
+            $oloimero_tm += $oloimero_nip_exp[16]>0 ? 1:0;
 
             // τοποθετημένοι εκπ/κοί
             $top60 = $top60m = $top60ana = $top60ent = 0;
@@ -354,6 +356,8 @@ if ($_REQUEST['type']) {
             $top60 = $top60m+$top60ana;
             // apaitoymenoi
             $apait = $klasiko_tm + $oloimero_tm;
+            // add tmimata of dieyrymeno
+            $apait += $oloimero_nip_exp[16] > 0 ? 1 : 0;
             // apaitoymenoi @ entaksi
             $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
             $k_pl_ent = $has_entaxi > 0 ?

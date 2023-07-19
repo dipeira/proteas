@@ -501,6 +501,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // prwinh zvnh @ pos 7 -> klasiko[6]
             // oloimero_nip/pro: oloimero
             // oloimero pos: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p / 6,7 t4n,p / 8,9 t5n,p / 10,11 t6n,p
+            // 12,13 t7n,p / 14,15 t8n,p / 16,17 dieyrymeno tmimata, dieyr stud
             if (is_array($klasiko_exp) && is_array($oloimero_nip_exp) ){
                 // fill array blanks with zeroes
                 foreach($klasiko_exp as &$val) {
@@ -513,6 +514,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
                 $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
                 $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
+                $has_dieyrymeno = $oloimero_nip_exp[16] > 0 ? true : false;
+
                 // Μαθητές
                 echo "<h3>Μαθητές</h3>";
                 echo "<table class=\"imagetable\" border='1'>";
@@ -670,7 +673,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<br>";
 
             // dieyrymeno
-            if (($oloimero_nip_exp[16]) > 0) {
+            if ($has_dieyrymeno) {
                 echo "<h5 style='margin-top:-10px'>Ολοήμερο διευρυμένου προγράμματος</h5>";
                 echo "<table class='imagetable stable' style='margin-top:-10px'>";
                 echo "<tr><td>Τμήματα</td><td>Μαθητές</td>";
@@ -693,17 +696,24 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $top06 = top_pe06_nip($sch, $conn);
 
             $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
+            $syn_apait += $has_dieyrymeno ? $oloimero_nip_exp[16] : 0;
             $apait06 = $tmimata_nip * WRES_PE06_NIP;
 
             echo "<h3>Λειτουργικά κενά</h3>";
             echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<thead><th></th><th>ΠΕ60</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th><th>ΠΕ06 <small>(ώρες)</small></th></thead><tbody>";
+            echo "<thead><th></th><th>ΠΕ60</th><th>Κλασικό</th><th>Ολοήμερο</th>";
+            echo $has_dieyrymeno ? "<th>Διευρυμένο</th>" : '';
+            echo "<th>Τμ.Ένταξης</th><th>ΠΕ06 <small>(ώρες)</small></th></thead><tbody>";
 
             echo "<tr><td>Απαιτούμενοι</td>";
             echo "<td>$syn_apait</td>";
-            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td><td>$apait06</td></tr>";
+            echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td>";
+            echo $has_dieyrymeno ? "<td>$oloimero_nip_exp[16]</td>" : '';
+            echo "<td>$has_entaxi</td><td>$apait06</td></tr>";
 
-            echo "<tr><td>Υπάρχοντες </td><td>$top60</td><td></td><td></td><td></td><td>$top06</td></tr>";
+            echo "<tr><td>Υπάρχοντες </td><td>$top60</td><td></td><td></td><td></td>";
+            echo $has_dieyrymeno ? "<td></td>" : '';
+            echo "<td>$top06</td></tr>";
             //60
             $k_pl = $top60-$syn_apait;
             $k_pl_class = $k_pl >= 0 ? 
@@ -714,7 +724,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $k_pl_class06 = $k_pl06 >= 0 ? 
                 "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
                 "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
-            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td><td style=$k_pl_class06>$k_pl06</td></tr>";
+            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td>";
+            echo $has_dieyrymeno ? "<td></td>" : '';
+            echo "<td style=$k_pl_class06>$k_pl06</td></tr>";
 
             echo "</tbody></table>";
             echo "<br>";

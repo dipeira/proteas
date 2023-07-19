@@ -38,7 +38,7 @@ function anagkes_wrwn($tm)
         $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[4]*1;
         $hours['70'] = $tm[0]*20 + $tm[1]*20 + $tm[2]*20 + $tm[4]*22;
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*15 : 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
@@ -68,7 +68,7 @@ function anagkes_wrwn($tm)
             $hours['70'] = $tm[0]*20 + $tm[1]*20 + $tm[2]*20 + $tm[3]*20 + $tm[4]*22;
         }
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*15 : 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
@@ -85,7 +85,7 @@ function anagkes_wrwn($tm)
         $hours['86'] = $tm[0]*1 + $tm[1]*1 + $tm[2]*1 + $tm[3]*1 + $tm[4]*1 + $tm[5]*1;
         $hours['70'] = $tm[0]*20 + $tm[1]*20 + $tm[2]*20 + $tm[3]*20 + $tm[4]*20 + $tm[5]*20;
         // oloimero
-        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*10 : 0;
+        $hours['O'] = $tm[6]>0 ? $tm[6]*10 + $tm[7]*5 + $tm[9]*15 : 0;
         // PZ
         $hours['P'] = $tm[8]*5;
         return $hours;
