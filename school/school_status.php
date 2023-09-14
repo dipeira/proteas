@@ -411,8 +411,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<tr><td>Ενότητα Σχολικών Συμβούλων: ".$perif."η</td>";
                 echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
                 echo "</tr>";
+            } else if ($type == 2){
+                echo $anenergo ? "<tr><td>Κατάσταση: Σε αναστολή</td><td></td>" : "<td>Κατάσταση: Ενεργό</td><td></td></tr>";
             }
-            echo $anenergo && $type == 2 ? "<tr><td>Κατάσταση: Σε αναστολή</td><td></td>" : "<td>Κατάσταση: Ενεργό</td><td></td></tr>";
+            
         //}
         echo "<tr><td>Σχόλια: ".nl2br($comments)."</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
         if ($systeg) {
