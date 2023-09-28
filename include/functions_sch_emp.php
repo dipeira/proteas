@@ -401,9 +401,14 @@ function get_leitoyrgikothta($id, $mysqlconnection)
     }   
 }
 
-function tmimata_nipiagwgeiwn($mysqlconnection)
+function tmimata_nipiagwgeiwn($mysqlconnection, $sch = null)
 {
-    $query = "SELECT * from school WHERE type = 2 AND type2=0 AND anenergo=0";
+    if ($sch){
+        $query = "SELECT * from school WHERE id = $sch AND type = 2 AND type2=0 AND anenergo=0";
+    } else {
+        $query = "SELECT * from school WHERE type = 2 AND type2=0 AND anenergo=0";
+    }
+    
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
     $i=0;
@@ -422,10 +427,16 @@ function tmimata_nipiagwgeiwn($mysqlconnection)
         $klasiko_tm += $klasiko_exp[0]+$klasiko_exp[1]>0 ? 1:0;
         $klasiko_tm += $klasiko_exp[2]+$klasiko_exp[3] >0 ? 1:0;
         $klasiko_tm += $klasiko_exp[4]+$klasiko_exp[5]>0 ? 1:0;
+        $klasiko_tm += $klasiko_exp[6]+$klasiko_exp[7]>0 ? 1:0;
+        $klasiko_tm += $klasiko_exp[8]+$klasiko_exp[9]>0 ? 1:0;
+        $klasiko_tm += $klasiko_exp[10]+$klasiko_exp[11]>0 ? 1:0;
 
         $oloimero_tm += $oloimero_nip_exp[0]+$oloimero_nip_exp[1]>0 ? 1:0;
         $oloimero_tm += $oloimero_nip_exp[2]+$oloimero_nip_exp[3]>0 ? 1:0;
         $oloimero_tm += $oloimero_nip_exp[4]+$oloimero_nip_exp[5]>0 ? 1:0;
+        $oloimero_tm += $oloimero_nip_exp[6]+$oloimero_nip_exp[7]>0 ? 1:0;
+        $oloimero_tm += $oloimero_nip_exp[8]+$oloimero_nip_exp[9]>0 ? 1:0;
+        $oloimero_tm += $oloimero_nip_exp[10]+$oloimero_nip_exp[11]>0 ? 1:0;
 
         $synolo_tm_klas += $klasiko_tm;
         $synolo_tm_olo += $oloimero_tm;
