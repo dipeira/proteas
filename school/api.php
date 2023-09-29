@@ -41,7 +41,6 @@
   $response = [];
 
 
-
   // school data  
   $query = "SELECT * from school where id=$sch";
   $result = mysqli_query($conn, $query);
@@ -121,7 +120,6 @@
     'comments' => $comments
   );
         
-        
   // οργανικά τοποθετηθέντες
   $klados_qry = ($type == 1) ? 2 : 1;
   $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3,5) AND thesi IN (0,1,2)";
@@ -160,8 +158,6 @@
   //   } else {
   //     echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
   //   }
-
-        
         
   if ($type == 1) {
       if ($synolo>0) {
@@ -181,15 +177,13 @@
       // klasiko pos 0-5: 0,1 t1n,p / 2,3 t2n,p / 4,5 t3n,p
       // prwinh zvnh @ pos 7 -> klasiko[6]
       // oloimero_syn_nip/pro: oloimero
-      $school_arr['classes'] = $klasiko_exp;
-      $school_arr['oloimero'] = $oloimero_nip_exp;
+      $school_arr['classes'] = array_map(function($value) { return $value === '' ? 0 : $value; }, $klasiko_exp);
+      $school_arr['oloimero'] = array_map(function($value) { return $value === '' ? 0 : $value; }, $oloimero_nip_exp);
       
-      $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4];
-      $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5];
-      $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6];
-      $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7];
-      //$meikto_nip = $klasiko_exp[6] + $klasiko_exp[8];
-      //$meikto_pro = $klasiko_exp[7] + $klasiko_exp[9];
+      $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
+      $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
+      $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
+      $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
       
       // Μαθητές
       $school_arr['synolo_mathiton'] = $klasiko_nip + $klasiko_pro;
@@ -241,7 +235,7 @@
     
 
   //Υπηρετούν με θητεία
-  $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
+  $query = "SELECT e.surname,e.name,k.perigrafh as klados,e.thesi from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
   $result = mysqli_query($conn, $query);
   $thiteia = array();
   while ($r = mysqli_fetch_assoc($result)){
@@ -250,8 +244,6 @@
   $response['thiteia'] = $thiteia;
     
   //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
-  //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
-  //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
   $query = "SELECT e.surname,e.name,k.perigrafh as klados from employee e JOIN klados k ON e.klados = k.id ";
   $query .= "WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND (klados=2 OR klados=1)";
   $result = mysqli_query($conn, $query);
@@ -262,8 +254,6 @@
   $response['organika'] = $organika;
 
   //Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)
-  //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
-  //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0 ORDER BY klados";
   $query = "SELECT e.surname,e.name,k.perigrafh as klados from employee e JOIN klados k ON e.klados = k.id ";
   $query .= "WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi in (0,5) AND klados!=2 AND klados!=1";
   $result = mysqli_query($conn, $query);
@@ -284,7 +274,6 @@
   $response['organikh_allou'] = $organikh_allou;
 
   // Οργανική αλλού και δευτερεύουσα υπηρέτηση
-  //$query = "SELECT * from employee WHERE sx_organikhs!='$sch' AND (sx_yphrethshs='$sch' AND thesi=0";
   $query = "SELECT e.surname,e.name,k.perigrafh as klados,s.name as organikh,y.wres FROM employee e JOIN klados k ON k.id = e.klados ";
   $query .= "JOIN yphrethsh y on e.id = y.emp_id JOIN school s on e.sx_organikhs = s.id where y.yphrethsh=$sch and e.sx_yphrethshs!=$sch AND y.sxol_etos = $sxol_etos";
 
@@ -319,7 +308,6 @@
 
 
   //Αναπληρωτές
-  //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
   $query = "SELECT e.surname,e.name,k.perigrafh as klados,e.thesi,tp.type as etype, e.name as ename, p.name as praxi, thesi as praxiname, hours FROM ektaktoi e ";
   $query .= "join yphrethsh_ekt y on e.id = y.emp_id JOIN ektaktoi_types tp ON e.type = tp.id ";
   $query .= "JOIN klados k ON e.klados = k.id join praxi p on e.praxi = p.id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1)";
@@ -348,7 +336,6 @@
   $query = "SELECT e.surname,e.name,k.perigrafh as klados,tp.type,ad.finish,e.comments FROM adeia ad RIGHT JOIN employee e ON ad.emp_id = e.id ";
   $query .= "JOIN adeia_type tp ON ad.type = tp.id JOIN klados k ON e.klados = k.id WHERE (sx_organikhs='$sch' OR sx_yphrethshs='$sch') ";
   $query .= "AND ((start<'$today' AND finish>'$today') OR status=3) ORDER BY finish DESC";
-  // echo $query;
   $result = mysqli_query($conn, $query);
   $adeia = array();
   while ($r = mysqli_fetch_assoc($result)){
@@ -358,11 +345,9 @@
   
 
   //Αναπληρωτές σε άδεια
-  // $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
   $query = "SELECT e.surname,e.name,k.perigrafh as klados,e.thesi,tp.type as etype, e.name as ename, p.name as praxi, thesi as praxiname, hours FROM ektaktoi e ";
   $query .= "join yphrethsh_ekt y on e.id = y.emp_id JOIN ektaktoi_types tp ON e.type = tp.id ";
   $query .= "JOIN klados k ON e.klados = k.id join praxi p on e.praxi = p.id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
-  //echo $query;
   $result = mysqli_query($conn, $query);
   $anapladeia = array();
   while ($r = mysqli_fetch_assoc($result)){
@@ -371,10 +356,7 @@
   $response['anapladeia'] = $anapladeia;
 
 
+  $json_response = json_encode($response);
+  echo $json_response;
 
-    $json_response = json_encode($response);
-    echo $json_response;
-    die();
-
-
-    ?>
+?>
