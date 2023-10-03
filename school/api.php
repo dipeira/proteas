@@ -219,7 +219,7 @@
   }
   // if dimotiko & leitoyrg >= 4
   if ($type == 1 ) { //&& array_sum($tmimata_exp)>3){
-      $school_arr['kena_pleonasmata'] = ektimhseis_wrwn($sch, $conn, $sxol_etos, false);
+      $school_arr['kena_pleonasmata'] = ektimhseis_wrwn($sch, $conn, $sxol_etos, false, true);
   }
   // if systegazomeno
   // if ($systeg) {

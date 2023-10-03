@@ -80,6 +80,7 @@
       echo "<br>";
 
       $sdt = $schData['school_data'];
+      echo "<hr class='bg-danger border-3 border-top border-primary' />";
       echo "<h2 style='text-align:left;'>Α. Στοιχεία σχολικής μονάδας</h2>";
       echo "<table class='table table-striped'>";
       echo "<tr><td colspan=3>Τίτλος: ".$sdt['title']."</td></tr>";
@@ -339,11 +340,11 @@
         
     // students - classes
     // if dim
+    echo "<hr class='bg-danger border-3 border-top border-primary' />";
     if ($sdt['type'] == 'dim') {
       $classes = $sdt['classes'];
       $tmimata_exp = $sdt['tmimata'];
-          // if ($synolo>0) {
-      echo "<h2 style='text-align:left;'>Β. Μαθητές - Τμήματα / Λειτουργικά κενά - πλεονάσματα</h2>";
+      echo "<h2 style='text-align:left;'>Β. Μαθητές - Τμήματα</h2>";
       echo "<table class='table table-striped'>";  
       echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
       echo "<tr><td>Μαθ.Πρωινού<br>Σύνολο: ".$sdt['synolo_mathiton']."</td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td><td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
@@ -357,7 +358,7 @@
     // oloimero_syn_nip/pro: oloimero
     // Μαθητές
     else {
-      echo "<h2 style='text-align:left;'>Β. Μαθητές - Τμήματα / Λειτουργικά κενά - πλεονάσματα</h2>";
+      echo "<h2 style='text-align:left;'>Β. Μαθητές - Τμήματα</h2>";
       echo "<table class='table table-striped'>";  
       $classes = $sdt['classes'];
       $oloimero = $sdt['oloimero'];
@@ -381,16 +382,42 @@
       $df = $sdt['kena_pleonasmata']['diff'];
       echo "<h4>Λειτουργικά κενά - πλεονάσματα (ώρες)</h4>";
       echo "<table class='table table-striped'>";
-        echo "<thead><th>Κλάδος</th><th>ΠΕ05-07</th><th>ΠΕ06</th><th>ΠΕ08</th><th>ΠΕ11</th><th>ΠΕ79</th><th>ΠΕ91</th><th>ΠΕ86</th><th>ΠΕ70</th><th>Ολοήμερο</th><th>Πρωινή Ζώνη</th></thead>";
+        echo "<thead><th>Κλάδος</th><th>ΠΕ05-07</th><th>ΠΕ06</th><th>ΠΕ08</th><th>ΠΕ11</th><th>ΠΕ79</th><th>ΠΕ91</th><th>ΠΕ86</th><th>ΠΕ70</th><th>Ολοήμερο</th><th>Πρωινή Ζώνη</th></thead><tbody>";
         echo "<tr><td>Απαιτούμενες</td><td>".$req['05-07']."</td><td>".$req['06']."</td><td>".$req['08']."</td><td>".$req['11']."</td><td>".$req['79']."</td><td>".$req['91']."</td>";
         echo "<td>".$req['86']."</td><td>".$req['70']."</td><td>".$req['O']."</td><td>".$req['P']."</td>";
         echo "<tr><td>Διαθέσιμες</td><td>".$avl['05-07']."</td><td>".$avl['06']."</td><td>".$avl['08']."</td><td>".$avl['11']."</td><td>".$avl['79']."</td><td>".$avl['91']."</td>";
         echo "<td>".$avl['86']."</td><td>".$avl['70']."</td><td></td><td></td>";
         echo "<tr><td>+ / -</td><td>".$df['05-07']."</td><td>".$df['06']."</td><td>".$df['08']."</td><td>".$df['11']."</td><td>".$df['79']."</td><td>".$df['91']."</td>";
         echo "<td>".$df['86']."</td><td>".$df['70']."</td><td>".$df['OP']."</td><td></td>";
-        echo "<tbody>";
+        echo "</tbody>";
       echo "</table>"; 
-            
+      
+      echo "<a class='btn btn-primary' data-bs-toggle='collapse' href='#collapseExample' role='button' aria-expanded='false' aria-controls='collapseExample'>";
+      echo "Αναλυτικά</a>";
+      echo "<div class='collapse' id='collapseExample'>";
+        echo "<p>";
+        foreach ($sdt['kena_pleonasmata']['analytika_cnt'] as $key=>$value){
+          echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
+        }
+        echo "</p>";
+        echo "<table class='table table-sm table-striped'>";
+        echo "<tr><th>Ον/μο</th><th>Κλάδος</th><th>Ώρες</th></tr>";
+        foreach ($sdt['kena_pleonasmata']['analytika'] as $row) {
+          echo "<tr><td>".$row['fullname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
+        }
+        echo "</table>"; 
+      echo "</div>";
+    }
+    else {
+      $req = $sdt['kena_pleonasmata']['apaitoymenoi'];
+      echo "<h4>Λειτουργικά κενά - πλεονάσματα</h4>";
+      echo "<table class='table table-striped'>";
+      echo "<thead><th></th><th>Σύνολο</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Ένταξης</th></thead>";
+      echo "<tr><td>Απαιτούμενοι</td><td>".$req['synolo']."</td><td>".$req['klasiko']."</td><td>".$req['oloimero']."</td><td>".$req['entaksis']."</td></tr>";
+      echo "<tr><td>Υπάρχοντες</td><td>".$sdt['kena_pleonasmata']['yparxontes']."</td><td></td><td></td><td></td>";
+      echo "<tr><td>+ / -</td><td>".$sdt['kena_pleonasmata']['kena_pleon']."</td><td></td><td></td><td></td>";
+      echo "</table>";
+    }
     //         $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
     //         // τοποθετημένοι εκπ/κοί
     //         $top60 = $top60m = $top60ana = 0;
@@ -402,33 +429,7 @@
     //         $top60ana = mysqli_result($res, 0, 'pe60');
     //         $top60 = $top60m+$top60ana;
             
-    //         $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
-
-    //         echo "<h3>Λειτουργικά κενά</h3>";
-    //         echo "<table class=\"imagetable stable\" border='1'>";
-    //         echo "<thead><th></th><th>Αριθμός</th><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></thead><tbody>";
-
-    //         echo "<tr><td>Απαιτούμενοι Νηπιαγωγοί</td>";
-    //         echo "<td>$syn_apait</td>";
-    //         echo "<td>$tmimata_nip</td><td>$tmimata_nip_ol</td><td>$has_entaxi</td></tr>";
-
-    //         echo "<tr><td>Υπάρχοντες Νηπιαγωγοί</td><td>$top60</td><td></td><td></td><td></td></tr>";
-    //         $k_pl = $top60-$syn_apait;
-    //         $k_pl_class = $k_pl >= 0 ? 
-    //             "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
-    //             "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
-    //         echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td></tr>";
-
-    //         echo "</tbody></table>";
-    //         echo "<br>";
-    //     }
-    //     //echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
-    //     //echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
-    //     echo "<br>";
-    //     // if dimotiko & leitoyrg >= 4
-    //     if ($type == 1 ) {//&& array_sum($tmimata_exp)>3){
-    //         ektimhseis_wrwn($sch, $conn, $sxol_etos, true);
-    //     }
+    //         $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;    
     //     // if systegazomeno
     //     if ($systeg) {
     //         echo "<a id='toggleSystegBtn' href='#'>Συστεγαζόμενο: $systegName</a>";
@@ -437,20 +438,16 @@
     //         echo "</div>";
     //         echo "<br><br>";
     //     }
-    
-    }
-    
-    
-    
+
     if (!$sch && !$str) {
         die('Το σχολείο δε βρέθηκε...');
     }
     if (isset($_GET['sxoletos'])) {
         $sxol_etos = $_GET['sxoletos'];
     }
-    // disp_school($sch, $sxol_etos, $mysqlconnection);
     
     //Υπηρετούν με θητεία
+    echo "<hr class='bg-danger border-3 border-top border-primary' />";
     echo "<h2 style='text-align:left;'>Γ. Προσωπικό</h2>";
     ?>
     <ul class="nav nav-tabs" id="myTabs" role="tablist">

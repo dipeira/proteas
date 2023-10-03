@@ -98,7 +98,7 @@ function anagkes_wrwn($tm)
 * uses anagkes_wrwn
 * sch: school code, $print: TRUE to print, false to return 3 arrays(required, available, diff)
 */
-function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
+function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $analytika = false)
 {
     set_time_limit(1200);
     $avhrs = [];
@@ -207,7 +207,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             $avhrs[$kl] += $row['wres'];
         }
     }
-    if ($print) {
+    if ($print || $analytika) {
         // αναλυτικά...
         $query = "SELECT e.id,e.name, e.surname,e.klados,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) AND e.ent_ty NOT IN (1,2) ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
@@ -237,7 +237,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         $kl = strval($row['klados']);
         $avhrs[$kl] += $row['wres'];
     }
-    if ($print) {
+    if ($print || $analytika) {
         // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
         $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
@@ -271,7 +271,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
     }
     
     // PE70 @ T.Y.
-    if ($print) {
+    if ($print || $analytika) {
         // αναλυτικά...
         $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.ent_ty = 2 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
@@ -354,6 +354,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
         }
             echo "</td></tr>";
             echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
+        
         foreach ($all as $row) {
             echo "<tr><td>".$row['fullname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
         }
@@ -361,6 +362,9 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false)
             echo "* Αναπληρωτής";
             echo "</div>";
             echo "<br><br>";
+    }
+    else if ($analytika) {
+        return ['required' => $reqhrs, 'available' => $avar, 'diff' => $ret, 'leit' => $leit, 'analytika' => $all, 'analytika_cnt' => $allcnt];
     }
     else {
         return ['required' => $reqhrs, 'available' => $avar, 'diff' => $ret, 'leit' => $leit];
