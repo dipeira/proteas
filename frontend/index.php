@@ -1,29 +1,12 @@
 <?php
-  $apiEndpoint = 'http://localhost/proteas/school/api.php'; // Replace with your API endpoint
-  $sch = $_GET['code'];
+  // Parameters
+  $apiEndpoint = ''; // Replace with your API endpoint
+  $apiToken = ''; // Replace with your API Token (as defined in config.php)
+  $extraText = "";
 
-  // Function to fetch data from API
-  function fetchDataFromAPI($apiEndpoint, $params = []) {
-      $ch = curl_init($apiEndpoint . '?' . http_build_query($params));
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $response = curl_exec($ch);
-      curl_close($ch);
-      return json_decode($response, true);
-  }
-
-  // Function to get school name from API
-  function getSchoolNameFromAPI($sch) {
-    $params = ['code' => $sch];
-    $data = fetchDataFromAPI($apiEndpoint, $params);
-    return $data['school_name'];
-  }
-
-  $schData = fetchDataFromAPI($apiEndpoint, ['code' => $sch]);
-      
-  
-  // If in production, login using sch.gr's CAS server
+  // Authenticate using sch.gr's CAS server
   // (To be able to login via sch.gr's CAS, the app must be whitelisted from their admins)
-  $prDebug = 1;
+  $prDebug = 0;
   if (!$prDebug)
   {
     // phpCAS simple client, import phpCAS lib (downloaded with composer)
@@ -49,17 +32,37 @@
     // at this step, the user has been authenticated by the CAS server and the user's login name can be read with phpCAS::getUser().
     $_SESSION['loggedin'] = 1;
     $sch_code = phpCAS::getAttribute('edupersonorgunitdn:gsnunitcode');
-    $sch = getSchoolFromCode($sch_code, $mysqlconnection);
-    
-    if (!isset($_POST['type'])){
-      $schname = getSchoolNameFromCode($sch_code, $mysqlconnection);
-      log2db($mysqlconnection, $sch_code, $schname);
-    }
   }
   else {
     if (!$_GET['code']){
       die('Σφάλμα: Δεν έχει επιλεγεί σχολείο...');
     }
+    else {
+      $sch_code = $_GET['code'];
+    }
+  }
+
+  // Function to fetch data from API
+  function fetchDataFromAPI($apiEndpoint, $params = [], $bearerToken) {
+      $ch = curl_init($apiEndpoint . '?' . http_build_query($params));
+
+      // Set cURL options
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, [
+          'Authorization: Bearer ' . $bearerToken,
+          'Content-Type: application/json',
+      ]);
+
+      $response = curl_exec($ch);
+      curl_close($ch);
+
+      return json_decode($response, true);
+  }
+  
+  $schData = fetchDataFromAPI($apiEndpoint, ['code' => $sch_code],  $apiToken);
+  if (!$schData) {
+    echo "<p>Σφάλμα. Δεν ήταν δυνατή η ανάκτηση δεδομένων...</p>";
+    die();
   }
   
 ?>
@@ -78,6 +81,7 @@
     <?php
       echo "<h2>Καρτέλα Σχολείου: ".$schData['school_data']['title']."</h2>";
       echo "<br>";
+      echo strlen($extraText) > 0 ? "<p>$extraText</p>" : '';
 
       $sdt = $schData['school_data'];
       echo "<hr class='bg-danger border-3 border-top border-primary' />";

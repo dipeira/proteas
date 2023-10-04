@@ -3,6 +3,40 @@
   require_once "../config.php";
   require_once "../include/functions.php";
 
+  $headers = getallheaders();
+  // Check if the Bearer Token is present in the request headers
+  if (!array_key_exists('Authorization', $headers)) {
+    // Bearer Token is missing or empty
+    http_response_code(401); // Unauthorized
+    echo json_encode(array('message' => 'Authentication Error: Bearer Token is missing.'));
+    exit;
+  }
+
+  // Extract the Bearer Token
+  $authorizationHeader = $headers['Authorization'];
+  $token = null;
+
+  // Check if the Authorization header starts with "Bearer "
+  if (strpos($authorizationHeader, 'Bearer ') === 0) {
+    // Extract the token (remove "Bearer " prefix)
+    $token = substr($authorizationHeader, 7);
+  } else {
+    // Invalid Authorization header format
+    http_response_code(401); // Unauthorized
+    echo json_encode(array('message' => 'Authentication Error: Invalid Authorization header format.'));
+    exit;
+  }
+
+  // Now, you have the Bearer Token in the $token variable
+  // You can use it for authentication or authorization as needed
+
+  // Check if the token is valid
+  if ($token !== $api_token) {
+    http_response_code(401); // Unauthorized
+    echo json_encode(array('message' => 'Authentication Error: Invalid Bearer Token.'));
+    exit;
+  }
+
   // logs school logins or requests to database
   // function log2db($conn, $schid, $sch, $action = 1) {
   //   $actiontext = $action == 1 ? "Πραγματοποιήθηκε είσοδος" : "Καταχωρήθηκε αίτημα";
