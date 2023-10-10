@@ -1,4 +1,7 @@
 <?php
+  // phpCAS simple client, import phpCAS lib (downloaded with composer)
+  require __DIR__ . '/vendor/autoload.php';
+
   // Parameters
   $apiEndpoint = ''; // Replace with your API endpoint
   $apiToken = ''; // Replace with your API Token (as defined in config.php)
@@ -8,11 +11,9 @@
   // (To be able to login via sch.gr's CAS, the app must be whitelisted from their admins)
   $prDebug = 0;
   if (!$prDebug)
-  {
-    // phpCAS simple client, import phpCAS lib (downloaded with composer)
-    require_once('../vendor/jasig/phpcas/CAS.php');
+  {  
     //initialize phpCAS using SAML
-    phpCAS::client(SAML_VERSION_1_1,'sso-test.sch.gr',443,'');
+    phpCAS::client(SAML_VERSION_1_1,'sso-test.sch.gr',443,'','https://srv1-dipe.ira.sch.gr');
     // if logout
     if (isset($_POST['logout']))
     {
@@ -30,7 +31,6 @@
     if (!phpCAS::checkAuthentication())
       phpCAS::forceAuthentication();
     // at this step, the user has been authenticated by the CAS server and the user's login name can be read with phpCAS::getUser().
-    $_SESSION['loggedin'] = 1;
     $sch_code = phpCAS::getAttribute('edupersonorgunitdn:gsnunitcode');
   }
   else {
@@ -74,7 +74,7 @@
   </head>
   <body> 
     <center>
-      <IMG src="../images/logo.png" class="applogo">
+      <IMG src="logo.png" class="applogo">
       <h1>Πληροφοριακό σύστημα "Πρωτέας"</h1>
     </center>
     <div class="container">
@@ -442,13 +442,6 @@
     //         echo "</div>";
     //         echo "<br><br>";
     //     }
-
-    if (!$sch && !$str) {
-        die('Το σχολείο δε βρέθηκε...');
-    }
-    if (isset($_GET['sxoletos'])) {
-        $sxol_etos = $_GET['sxoletos'];
-    }
     
     //Υπηρετούν με θητεία
     echo "<hr class='bg-danger border-3 border-top border-primary' />";
@@ -486,7 +479,7 @@
     </ul>
     <div class="tab-content" id="myTabsContent">
         <div class="tab-pane fade show active" id="thiteia" role="tabpanel" aria-labelledby="thiteia-tab">
-    <?
+    <?php
         echo "<h3>Υπηρετούν με θητεία</h3>";
         
         $i=0;
