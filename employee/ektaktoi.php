@@ -446,6 +446,13 @@ elseif ($_GET['op']=="view")
                 idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
                 echo "</div>";
                 echo "</td></tr>";
+        } else {
+                echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+                echo "<td colspan=3><div class=\"slidingDiv\">";
+                echo "email: <a href='mailto:$email'>$email</a><br>";
+                echo "email (ΠΣΔ): <a href='mailto:$email_psd'>$email_psd</a><br>";
+                echo "</div>";
+                echo "</td></tr>";
         }
         
         //$hm_mk = date ('d-m-Y', strtotime($hm_mk));
