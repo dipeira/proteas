@@ -1,9 +1,12 @@
 <?php
   // phpCAS simple client, import phpCAS lib (downloaded with composer)
   require __DIR__ . '/vendor/autoload.php';
+  require_once 'requests.php';
 
   // Parameters
-  $apiEndpoint = ''; // Replace with your API endpoint
+  $apiEndpointRoot = ''; // Replace with your API endpoint. Must end with / (slash)
+  $apiEndpoint = $apiEndpointRoot.'api.php'; 
+  $apiRequestEndpoint = $apiEndpointRoot.'request.php';
   $apiToken = ''; // Replace with your API Token (as defined in config.php)
   $extraText = "";
 
@@ -92,6 +95,11 @@
       echo "<tr><td>email: <a href='mailto:".$sdt['email']."'>".$sdt['email']."</a></td><td></td></tr>";
       echo "<tr><td>Οργανικότητα: ".$sdt['organikothta']."</td><td>Λειτουργικότητα: ".$sdt['leitoyrg']."</td></tr>";
       echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): ".$sdt['orgtop']."</td><td colspan=3>Κατηγορία: ".$sdt['cat']."</td></tr>";
+      $has_te = $sdt['te'] ? 'Ναι' : 'Όχι';
+      echo "<tr><td>Τμήμα Ένταξης: ".$has_te."</td><td>Μαθητές Τμ.Ένταξης: ".$sdt['te_stud']."</td></tr>";
+      $has_yp = $sdt['ypodoxis'] ? 'Ναι' : 'Όχι';
+      $has_oloimero = $sdt['has_oloimero'] ? 'Ναι' : 'Όχι';
+      echo "<tr><td>Τάξη Υποδοχής: ".$has_yp."</td><td>Όλοήμερο: ".$has_oloimero."</td></tr>";
       echo "<tr><td colspan=3>Σχόλια: ".$sdt['comments']."</td></tr>";
       echo "</table>";   
       
@@ -259,21 +267,6 @@
         echo "</tr>";
         echo "</tbody></table>";
       }
-
-    //     if ($entaksis[0]) {
-    //         echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</td>";
-    //     } else {
-    //         echo "<td><input type=\"checkbox\" disabled>Τμήμα Ένταξης</td>";
-    //     }
-    //     if ($ypodoxis) {
-    //         echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Υποδοχής</td>";
-    //     } else {
-    //         echo "<td><input type=\"checkbox\" disabled>Τμήμα Υποδοχής</td>";
-    //     }
-    //     echo "</tr>";
-    //     if ($entaksis[0] || $ypodoxis) {
-    //         echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: $ekp_ee_exp[0]</td><td>Εκπ/κοί Τμ.Υποδοχής: $ekp_ee_exp[1]</td></tr>";
-    //     }
 
     //     echo "<tr>";
     //     if ($type == 1) {
@@ -763,31 +756,59 @@
     </div>
   </div>
   <?php
-    // requests
-    // display_school_requests($sch, $sxol_etos, $mysqlconnection);
+    // display requests
+    requests_table($apiRequestEndpoint, $apiToken, $sch_code);
     
-    // echo "<h4>Υποβολή αιτήματος</h4>";
-    // echo "<p><i>ΣΗΜ: Σε περίπτωση που δεν εντοπίζετε κάποιο λάθος, δε χρειάζεται κάποια ενέργεια.</i></p>";
-    // echo "<form id='requestfrm' action='' method='POST' autocomplete='off'>";
-    // echo "<table class=\"imagetable stable\" border='1'>";
-    // echo "<td>Αίτημα</td><td></td>";
-    // echo "<td><textarea id='request' name='request' rows='10' cols='80'></textarea></td></tr>";
-    // echo "</table>";
-    // echo "<input type='hidden' name = 'school' value='$sch'>";
-    // echo "<input type='hidden' name = 'type' value='insert'>";
-    // echo "<br>";
-    // echo "<input id='submit' type='submit' value='Υποβολή'>";
-    // echo "</form>";
+    displayAddModal($sch_code);
+    echo "<input type='submit' class='btn btn-success add-button' name='logout' value='Υποβολή αιτήματος'>";
+    echo "<hr class='bg-danger border-3 border-top border-primary' />";
 
     //logout button
     echo "<form action='' method='POST'>";
     echo "<input type='submit' class='btn btn-danger' name='logout' value='Έξοδος'>";
     echo "</form>";
 
-    ?>
+  ?>
 
-  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
 </body>
 </html>
+<script>
+  $('.add-button').click(function () {
+    $('#editModal').modal('show');
+  });
+  
+  $('#addRecordForm').submit(function (e) {
+      e.preventDefault();
+
+      // Retrieve the edited record details from the form fields
+      var editedRequest = $('#editRequest').val();
+      var editedRecordData = {
+          sch_request: editedRequest
+      };
+
+      // Make an API call to update the record with the new details
+      var theUrl = '<?php echo $apiRequestEndpoint; ?>' + '?school_code='+'<?php echo $sch_code; ?>';
+      $.ajax({
+          url: theUrl,
+          type: 'POST',
+          headers: {
+              'Authorization': 'Bearer ' + '<?php echo $apiToken; ?>',
+              'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(editedRecordData),
+          success: function (data) {
+              alert('Επιτυχής υποβολή αιτήματος!');
+          },
+          error: function (data) {
+              console.log(data);
+              alert('Αποτυχία υποβολής αιτήματος...');
+          }
+      });
+      // Close the modal after updating the record
+      $('#editModal').modal('hide');
+  });
+</script>

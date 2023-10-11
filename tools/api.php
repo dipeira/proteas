@@ -36,14 +36,7 @@
     echo json_encode(array('message' => 'Authentication Error: Invalid Bearer Token.'));
     exit;
   }
-
-  // logs school logins or requests to database
-  // function log2db($conn, $schid, $sch, $action = 1) {
-  //   $actiontext = $action == 1 ? "Πραγματοποιήθηκε είσοδος" : "Καταχωρήθηκε αίτημα";
-  //   $query = "INSERT INTO school_log (school_id, school, action) VALUES ($schid, '$sch', '$actiontext')";
-  //   $res = mysqli_query($conn, $query);
-  // }
-  
+ 
   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($conn, "SET NAMES 'utf8'");
   mysqli_query($conn, "SET CHARACTER SET 'utf8'");
@@ -55,12 +48,6 @@
       die('Σφάλμα: Δεν έχει επιλεγεί σχολείο...');
     }
   $sch = getSchoolFromCode($_GET['code'], $conn);
-    
-  //if (!isset($_POST['type'])){
-  //    $schname = getSchoolNameFromCode($_GET['code'], $conn);
-      //log2db($conn, $_GET['code'], $schname);
-  //  }
-  //}
 
   // collecting data...  
   $str1 = getSchool($sch, $conn);
@@ -151,7 +138,11 @@
     'email' => $email,
     'organikothta' => $organikothta,
     'leitoyrg' => $leitoyrg,
-    'comments' => $comments
+    'comments' => $comments,
+    'te' => $org_ent,
+    'te_stud' => $entaksis[1],
+    'ypodoxis' => $ypodoxis,
+    'has_oloimero' => $oloimero
   );
         
   // οργανικά τοποθετηθέντες
@@ -183,23 +174,10 @@
   }
   $school_arr['kena_org'] = $kena_org;
         
-  // if ($vivliothiki) {
-  //   echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη";
-  //   $qry1 = "SELECT surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE e.id=$vivliothiki";
-  //   $res1 = mysqli_query($conn, $qry1);
-  //   if ($row = mysqli_fetch_assoc($res1)) {
-  //     echo "<i><small> (Υπευθυνος/-η: ".$row['surname'].' '.$row['name'].', '.$row['perigrafh'].')</small></i>';
-  //   } else {
-  //     echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
-  //   }
-        
   if ($type == 1) {
       if ($synolo>0) {
           $synolo_pr_math = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
           $synolo_pr_tm = $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5];
-          // if (strlen($archive) > 0){
-          //   $archive_arr = unserialize($archive);
-          // }  
           $school_arr['classes'] = $classes;
           $school_arr['tmimata'] = $tmimata_exp;
           $school_arr['synolo_mathiton'] = $synolo_pr_math;
@@ -255,14 +233,6 @@
   if ($type == 1 ) { //&& array_sum($tmimata_exp)>3){
       $school_arr['kena_pleonasmata'] = ektimhseis_wrwn($sch, $conn, $sxol_etos, false, true);
   }
-  // if systegazomeno
-  // if ($systeg) {
-  //     echo "<a id='toggleSystegBtn' href='#'>Συστεγαζόμενο: $systegName</a>";
-  //     echo "<div id='systeg' style='display: none;'>";
-  //     ektimhseis_wrwn($systeg, $conn, $sxol_etos, true);
-  //     echo "</div>";
-  //     echo "<br><br>";
-  // }
 
   $response['school_data'] = $school_arr;
   // end of school data
