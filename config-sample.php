@@ -13,6 +13,7 @@
 
   // Κωδικός αρχικοποίησης της βάσης
   $db_init_pass = '';
+  $api_token = '';
  
   // Ο φάκελος του web server στον οποίο βρίσκεται η εφαρμογή (default: /proteas)
   $site_root = '/proteas';
