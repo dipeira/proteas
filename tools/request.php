@@ -88,6 +88,7 @@ function submitRequest($conn, $schId) {
     if (isset($requestData['sch_request'])) {
         $schName = getSchool($schId, $conn);
         $request = $requestData['sch_request'];
+        $request = str_replace(['"', "'"], '', $request);
         // Insert the new request into the 'school_requests' table
         $sql = "INSERT INTO school_requests (request, school, sxol_etos, submitted, school_name, hidden) VALUES ('$request', $schId, $sxol_etos, NOW(), '$schName', 0)";
 

@@ -11,8 +11,16 @@ function requests_table($endpoint, $token, $sch) {
       echo "<tr>";
       echo "<td>".$row['request']."</td>"."<td>".date("d/m/Y, H:i:s", strtotime($row['submitted']))."</td>";
       echo $row['done'] ? "<td>Ναι</td>" : "<td>Όχι</td>";
-      echo "<td>".$row['comment']."</td>"."<td>";
-      echo strtotime($row['handled']) ? date("d/m/Y, H:i:s", strtotime($row['handled']))."</td>" : '</td>';
+      echo "<td>".$row['comment']."</td>";
+      if ($row['handled'] == '0000-00-00 00:00:00') {
+        // Handle the case when the date is '0000-00-00 00:00:00'
+        echo '<td></td>'; // Display nothing
+      } else {
+        // format date and display
+        $handledTimestamp = strtotime($row['handled']);
+        $handledDate = date("d/m/Y, H:i:s", $handledTimestamp);
+        echo '<td>' . $handledDate . '</td>';
+      }
       echo "</tr>";
     }
     echo "</tbody>";
