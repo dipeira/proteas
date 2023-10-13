@@ -9,9 +9,9 @@ function requests_table($endpoint, $token, $sch) {
     echo "</thead><tbody>";
     foreach ($data as $row) {
       echo "<tr>";
-      echo "<td>".$row['request']."</td>"."<td>".date("d/m/Y, H:i:s", strtotime($row['submitted']))."</td>";
+      echo "<td>".nl2br($row['request'])."</td>"."<td>".date("d/m/Y, H:i:s", strtotime($row['submitted']))."</td>";
       echo $row['done'] ? "<td>Ναι</td>" : "<td>Όχι</td>";
-      echo "<td>".$row['comment']."</td>";
+      echo "<td>".nl2br($row['comment'])."</td>";
       if ($row['handled'] == '0000-00-00 00:00:00') {
         // Handle the case when the date is '0000-00-00 00:00:00'
         echo '<td></td>'; // Display nothing

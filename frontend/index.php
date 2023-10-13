@@ -2,17 +2,16 @@
   // phpCAS simple client, import phpCAS lib (downloaded with composer)
   require __DIR__ . '/vendor/autoload.php';
   require_once 'requests.php';
+  require_once 'params.php';
 
   // Parameters
-  $apiEndpointRoot = ''; // Replace with your API endpoint. Must end with / (slash)
-  $apiEndpoint = $apiEndpointRoot.'api.php'; 
-  $apiRequestEndpoint = $apiEndpointRoot.'request.php';
-  $apiToken = ''; // Replace with your API Token (as defined in config.php)
-  $extraText = "";
-
+  
+  $apiEndpoint = $apiEndpointRoot.'tools/api.php'; 
+  $apiRequestEndpoint = $apiEndpointRoot.'tools/request.php';
+  
   // Authenticate using sch.gr's CAS server
   // (To be able to login via sch.gr's CAS, the app must be whitelisted from their admins)
-  $prDebug = 0;
+  
   if (!$prDebug)
   {  
     //initialize phpCAS using SAML
@@ -791,7 +790,9 @@
       };
 
       // Make an API call to update the record with the new details
-      var theUrl = '<?php echo $apiRequestEndpoint; ?>' + '?school_code='+'<?php echo $sch_code; ?>';
+      const urlArr = window.location.href.split('index.php');
+      const proxyURL = urlArr[0] + 'proxy.php';
+      var theUrl = proxyURL + '?school_code='+'<?php echo $sch_code; ?>';
       $.ajax({
           url: theUrl,
           type: 'POST',
