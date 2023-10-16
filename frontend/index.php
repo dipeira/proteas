@@ -797,7 +797,6 @@
           url: theUrl,
           type: 'POST',
           headers: {
-              'Authorization': 'Bearer ' + '<?php echo $apiToken; ?>',
               'Content-Type': 'application/json'
           },
           data: JSON.stringify(editedRecordData),
