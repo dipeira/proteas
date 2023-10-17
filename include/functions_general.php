@@ -99,7 +99,8 @@ function get_diavgeia_subject($ada) {
     curl_close($ch);
     $dt = json_decode($data);
   
-    return $dt->subject;
+    $ret = str_replace('&', '+', $dt->subject);
+    return $ret;
 }
 
 function endsWith($haystack, $needle)
