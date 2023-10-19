@@ -89,7 +89,7 @@
   $systeg = mysqli_result($result, 0, "systeg");
   $anenergo = mysqli_result($result, 0, "anenergo");
   if ($systeg) {
-      $systegName = getSchool($systeg, $conn);
+      $systegCode = getSchoolCode($systeg, $conn);
   }
   $archive = mysqli_result($result, 0, "archive");
                         
@@ -142,7 +142,8 @@
     'te' => $org_ent,
     'te_stud' => $entaksis[1],
     'ypodoxis' => $ypodoxis,
-    'has_oloimero' => $oloimero
+    'has_oloimero' => $oloimero,
+    'systeg' => $systegCode
   );
         
   // οργανικά τοποθετηθέντες

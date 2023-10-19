@@ -33,7 +33,11 @@
     if (!phpCAS::checkAuthentication())
       phpCAS::forceAuthentication();
     // at this step, the user has been authenticated by the CAS server and the user's login name can be read with phpCAS::getUser().
-    $sch_code = phpCAS::getAttribute('edupersonorgunitdn:gsnunitcode');
+    if ($_GET['systeg'] == 1){
+      $sch_code = $_GET['code'];
+    } else {
+      $sch_code = phpCAS::getAttribute('edupersonorgunitdn:gsnunitcode');
+    }
   }
   else {
     if (!$_GET['code']){
@@ -100,6 +104,7 @@
       $has_oloimero = $sdt['has_oloimero'] ? 'Ναι' : 'Όχι';
       echo "<tr><td>Τάξη Υποδοχής: ".$has_yp."</td><td>Όλοήμερο: ".$has_oloimero."</td></tr>";
       echo "<tr><td colspan=3>Σχόλια: ".$sdt['comments']."</td></tr>";
+      echo $sdt['systeg'] ? '<tr><td><a href="index.php?systeg=1&code='.$sdt['systeg'].'" target="_blank">Συστεγαζόμενο</a></td><td></td></tr>' : '';
       echo "</table>";   
       
       $organikes = $sdt['organikes'];
