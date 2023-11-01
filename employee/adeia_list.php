@@ -50,7 +50,7 @@
         {
             echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
             $emp_id = $_GET['id'];
-            if ($usrlvl < 2)
+            if ($usrlvl < 2 || $_SESSION['adeia'])
                 echo "<br><span title=\"Προσθήκη Άδειας\"><a href=\"adeia.php?emp=$emp_id&op=add\"><big>Προσθήκη Άδειας</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
             exit;
         }
@@ -105,7 +105,7 @@
                 $result1 = mysqli_query($mysqlconnection, $query1);
                 $typewrd = mysqli_result($result1, 0, "type");
                 $viewlink = "<span title='Προβολή'><a href='adeia.php?adeia=$id&op=view'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;";
-                if ($usrlvl < 2) {
+                if ($usrlvl < 2 || $_SESSION['adeia']) {
                     echo "<tr><td>$viewlink<span title='Επεξεργασία'><a href='adeia.php?adeia=$id&op=edit'><img style='border: 0pt none;' src='../images/edit_action.png'></a>&nbsp;
                     <span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('adeia.php?adeia=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span></td>
                     <td><a href='adeia.php?adeia=$id&op=view'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
@@ -117,7 +117,7 @@
             }
 
             echo "</tbody>";
-            if ($usrlvl < 2)
+            if ($usrlvl < 2 || $_SESSION['adeia'])
                 echo "<tr><td colspan=4><span title=\"Προσθήκη Άδειας\"><a href=\"adeia.php?emp=$emp_id&op=add\">Προσθήκη Άδειας<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span></td>";
             else
                 echo "<tr><td colspan=4></td>";

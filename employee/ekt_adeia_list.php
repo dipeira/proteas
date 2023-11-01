@@ -42,7 +42,7 @@
         {
           echo "<br><br><big>Δε βρέθηκαν άδειες</big>";
           $emp_id = $_GET['id'];
-          if ($usrlvl < 2)
+          if ($usrlvl < 2 || $_SESSION['adeia'])
               echo "<br><span title=\"Προσθήκη Άδειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\"><big>Προσθήκη Άδειας</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
           exit;
         }
@@ -73,7 +73,7 @@
           echo "<tr><td>";
           echo "<span title='Προβολή'><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;&nbsp;";
           echo "<span title='Επεξεργασία'><a href='ekt_adeia.php?adeia=$id&op=edit&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/edit_action.png'></a></span>&nbsp;&nbsp;";
-          if ($usrlvl < 2){
+          if ($usrlvl < 2 || $_SESSION['adeia']) {
             echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
           }
           echo "</td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
