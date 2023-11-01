@@ -82,7 +82,7 @@
 
         echo "</tbody>";
         // add absense only on current year
-        if ($usrlvl < 2 && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
+        if (($usrlvl < 2 || $_SESSION['adeia']) && $_GET['sxol_etos'] == getParam('sxol_etos',$mysqlconnection))
             echo "<tr><td colspan=8><span title=\"Προσθήκη Άδειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">Προσθήκη Άδειας<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";		
         echo "</table>";
         
