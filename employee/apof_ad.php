@@ -66,13 +66,13 @@
             $has_errors = 0;
             // if monimoi
             if ($_POST['type'] == 1)
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email FROM adeia a
-                    JOIN employee e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type as adtype FROM adeia a
+                    JOIN employee e ON a.emp_id = e.id JOIN adeia_type t ON a.type = t.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             else
             {
                 $is_anapl = 1;
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email FROM adeia_ekt a
-                    JOIN ektaktoi e ON a.emp_id = e.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type FROM adeia_ekt a
+                    JOIN ektaktoi e ON a.emp_id = e.id JOIN adeia_ekt_type t ON a.type = t.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             }
             
             //echo $query;
@@ -100,11 +100,11 @@
             echo "<h3>Απόφαση $typewrd αδειών με αρ.πρωτ. $prot_apof/$hm_apof</h3>";
             echo "<table class='imagetable' border='1'>";
             if ($type == 1)
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Δικ/κό</td>";
+                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Δικ/κό</td><td>Τύπος</td>";
             elseif ($type == 2)
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Υπολ.</td>";
+                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Υπολ.</td><td>Τύπος</td>";
             else
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Λόγος</td>";
+                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Λόγος</td><td>Τύπος</td>";
             $i=0;
             while ($i < $num)
             {
@@ -126,6 +126,7 @@
                 $emp_id = mysqli_result($result, $i, "emp_id");
                 $ad_id = mysqli_result($result, $i, "id");
                 $typei = mysqli_result($result, $i, "type");
+                $adtype = mysqli_result($result, $i, "adtype");
                 $hm_apof_1 = mysqli_result($result, $i, "hm_apof");
                 $logos = mysqli_result($result, $i, "logos");
                 $emp_email = mysqli_result($result, $i, "email");
@@ -139,14 +140,14 @@
                     $error_found = 1;
                 }
                 //if different type of adeia
-                // if ($typei <> $type)
-                // {
-                //     if ($is_anapl)
-                //         echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
-                //     else
-                //         echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
-                //     $error_found = 1;
-                // }
+                if ($typei <> $type)
+                {
+                    if ($is_anapl)
+                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας ($adtype). Εκπ/κός: $surname $name, Άδεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                    else
+                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στον τύπο άδειας ($adtype). Εκπ/κός: $surname $name, Άδεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                    // $error_found = 1;
+                }
                 
                 // if anarrwtikh, show vevaiwsh klp.
                 if ($type == 1)
@@ -177,15 +178,15 @@
 
                 if ($is_anapl){
                     if ($error_found)
-                    echo "<tr><td><a href='ektaktoi.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td bgcolor='#FF0000'><a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><tr>";
+                    echo "<tr><td><a href='ektaktoi.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td bgcolor='#FF0000'><a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
                 else
-                    echo "<tr><td><a href='ektaktoi.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td><a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><tr>";
+                    echo "<tr><td><a href='ektaktoi.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td><a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
                 }
                 else{
                     if ($error_found)
-                        echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td bgcolor='#FF0000'><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><tr>";
+                        echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td bgcolor='#FF0000'><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
                     else
-                        echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><tr>";
+                        echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
                 }
                 $row = array($surname,$name,$days,$start,$prot,$dik,$sch_code,$emp_email);
                 $emp[] = $row;
