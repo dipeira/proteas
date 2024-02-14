@@ -310,6 +310,18 @@ function getCategory($cat)
     case 9:
         return "Θ' ($cat)";
             exit;
+    case 10:
+        return "Ι' ($cat)";
+            exit;
+    case 11:
+        return "ΙΑ' ($cat)";
+            exit;
+    case 12:
+        return "ΙΒ' ($cat)";
+            exit;
+    case 13:
+        return "ΙΓ' ($cat)";
+            exit;
     }
 }
 
