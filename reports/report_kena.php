@@ -325,8 +325,8 @@ else if ($_GET['type'] == 2) {
     $synorgtop = 0;
     // dhmosia or eidika (type2 = 0 or 2)
     $query = $_GET['type'] == 2 ? 
-        "SELECT * from school WHERE type2 = 0 AND type = $type and anenergo = 0" :
-        "SELECT * from school WHERE type2 = 2 AND type = $type and anenergo = 0";
+        "SELECT * from school WHERE type2 = 0 AND type = $type" :
+        "SELECT * from school WHERE type2 = 2 AND type = $type";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
 
@@ -427,7 +427,7 @@ else if ($_GET['type'] == 4) {
     $type = 2;
     $synorgtop = [];
     // dhmosia or eidika (type2 = 0 or 2)
-    $query = "SELECT * from school WHERE type2 = 2 AND type = $type and anenergo = 0";
+    $query = "SELECT * from school WHERE type2 = 2 AND type = $type";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
 
