@@ -221,7 +221,7 @@ else if ($_GET['type'] == 3) {
         if (!is_array($organikes) || array_sum($organikes) == 0) { $organikes= array(0,0,0,0,0,0,0,0);}
         $orgs = get_orgs($sch,$mysqlconnection,true);
         // οργανικά τοποθετηθέντες ΠΕ70ΕΑΕ & ΠΕ71
-        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados in (18,19) AND status IN (1,3,5) AND ent_ty = 0 AND thesi IN (0,1,2)";
+        $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados in (18,19) AND status IN (1,3,5) AND thesi IN (0,1,2)";
         $rs = mysqli_query($mysqlconnection, $qry);
         $orgtop70eae = mysqli_result($rs, 0, "cnt");
         $synorgtop70eae += $orgtop70eae;
