@@ -166,8 +166,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td colspan=3>Τίτλος (αναλυτικά): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
             echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td><td>Τηλ.: <input type='text' name='tel' value='$tel' /></td></tr>";
             echo "<tr><td>email: <input type='text' name='email' value='$email' size='30'/></a></td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
+            
+            // Disable organikothta & organikes when not admin
+            $disabled = $_SESSION['userlevel'] > 1 ? 'disabled' : '';
+            
             if ($type == 1 || $type == 2){
-                echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2'/><td></td></td></tr>";
+                echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2' $disabled/><td></td></td></tr>";
             }
             // 05-10-2012 - organikes
             /*
@@ -183,45 +187,45 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             if ($type == 1) {
                 echo "<tr><td colspan=2>Οργανικές:<br>";
                 if ($type2 != 2) {
-                    echo "ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
+                    echo "ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2' $disabled/><br>";
                 } else {
-                    echo "ΠΕ70 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/><br>";
+                    echo "ΠΕ70 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2' $disabled/><br>";
                 }
-                echo "ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
-                echo "ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
-                echo "ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
-                echo "ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
-                echo "ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
-                echo "ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
-                echo "ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
-                echo "ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/><br>";
+                echo "ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2' $disabled/><br>";
+                echo "ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2' $disabled/><br>";
+                echo "ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2' $disabled/><br>";
+                echo "ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2' $disabled/><br>";
+                echo "ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2' $disabled/><br>";
+                echo "ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2' $disabled/><br>";
+                echo "ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2' $disabled/><br>";
+                echo "ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2' $disabled/><br>";
                 if ($type2 == 2) {
-                  echo "ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[9]' size='2'/><br>";
-                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[10]' size='2'/><br>";
-                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[11]' size='2'/><br>";
-                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[12]' size='2'/><br>";
-                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[13]' size='2'/><br>";
-                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[14]' size='2'/><br>";
-                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[15]' size='2'/><br>";
-                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2'/><br>";
+                  echo "ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[9]' size='2' $disabled/><br>";
+                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[10]' size='2' $disabled/><br>";
+                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[11]' size='2' $disabled/><br>";
+                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[12]' size='2' $disabled/><br>";
+                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[13]' size='2' $disabled/><br>";
+                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[14]' size='2' $disabled/><br>";
+                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[15]' size='2' $disabled/><br>";
+                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2' $disabled/><br>";
                 }
             }
             // if Nip
             else if ($type == 2) {
                 if ($type2 != 2){
-                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2' $disabled/>";
                 } else {
-                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2'/>";
+                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2' $disabled/>";
                 }
                 if ($type2 == 2) {
-                  echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2'/><br>";
-                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[2]' size='2'/><br>";
-                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[3]' size='2'/><br>";
-                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[4]' size='2'/><br>";
-                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[5]' size='2'/><br>";
-                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[6]' size='2'/><br>";
-                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[7]' size='2'/><br>";
-                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[8]' size='2'/><br>";
+                  echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2' $disabled/><br>";
+                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[2]' size='2' $disabled/><br>";
+                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[3]' size='2' $disabled/><br>";
+                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[4]' size='2' $disabled/><br>";
+                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[5]' size='2' $disabled/><br>";
+                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[6]' size='2' $disabled/><br>";
+                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[7]' size='2' $disabled/><br>";
+                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[8]' size='2' $disabled/><br>";
                 }
             }
             echo "</td></tr>";
@@ -238,7 +242,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td><input type=\"checkbox\" name='ypodoxis' >Τμήμα Υποδοχής</td>";
                 }
                 echo "</tr>";
-                echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' /></td><td colspan=3>Εκπ/κοί Τμ.Υποδοχής: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' /></td></tr>";
+                echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' $disabled/></td><td colspan=3>Εκπ/κοί Τμ.Υποδοχής: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' $disabled/></td></tr>";
                 echo "<tr>";
             }
                     
@@ -274,6 +278,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</td>";
                         
                 echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
+                echo $disabled ? "<tr><td colspan=2><small>ΣΗΜ.: Μόνο ο διαχειριστής μπορεί να αλλάξει τα απενεργοποιημένα πεδία.</small></td></tr>" : '';
                 echo "</table>";
                 echo "<br>";
                         
@@ -323,6 +328,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
                     "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
                 echo "</tr>";
+                echo $disabled ? "<tr><td colspan=2><small>ΣΗΜ.: Μόνο ο διαχειριστής μπορεί να αλλάξει τα απενεργοποιημένα πεδία.</small></td></tr>" : '';
                 echo "</table>";
                 echo "<br>";
                 /////////    
