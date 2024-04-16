@@ -1264,7 +1264,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</tbody></table>";
         }
         //Αναπληρωτές σε άδεια
-        $query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
+        $query = "SELECT *,e.type as emptype, e.name as empname, p.name as praxiname FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id join praxi p on p.id=e.praxi where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
         //echo $query;
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
@@ -1279,24 +1279,26 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
             echo "<th>Τύπος Απασχόλησης</th>";
+            echo "<th>Πράξη</th>";
             echo "<th>Ώρες</th>";
             echo "<th>Σχόλια</th>";
             echo "</tr></thead>\n<tbody>";
             while ($i < $num)
             {
                 $id = mysqli_result($result, $i, 0);
-                $name = mysqli_result($result, $i, "name");
+                $name = mysqli_result($result, $i, "empname");
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $typos = mysqli_result($result, $i, "type");
+                $typos = mysqli_result($result, $i, "emptype");
+                $praxiname = mysqli_result($result, $i, "praxiname");
                 $type = get_type($typos, $mysqlconnection);
                 $comments = mysqli_result($result, $i, "comments");
                 $wres = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxiname</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
