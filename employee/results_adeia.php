@@ -68,30 +68,30 @@ if ($num==0) {
       echo "<th>Ημ.αδ<br><small>Ημ.έως</small></th>";
       echo "<th>Αρ.Πρωτοκόλλου</th>";
       echo "<th>Αρ.Απόφασης</th>";
+      echo !$_POST['mon_anapl'] ? '<th>Σχ.Οργανικής</th>' : '';
     echo "</th>\n";
                     
     echo "</tr></thead>\n<tbody>";
     while ($i < $num)
-    {
-                                
+    {                      
         $id = mysqli_result($result, $i, "id");
-                $emp_id = mysqli_result($result, $i, "emp_id");
+        $emp_id = mysqli_result($result, $i, "emp_id");
                 
         if (!$_POST['mon_anapl']) {
-            $query0 = "select name,surname,afm from employee where id=$emp_id";
+            $query0 = "select e.name,surname,afm,s.name as schname from employee e JOIN school s ON e.sx_organikhs = s.id where e.id=$emp_id";
         } else {
-                    $query0 = "select name,surname,afm from ektaktoi where id=$emp_id";
+            $query0 = "select name,surname,afm from ektaktoi where id=$emp_id";
         }
-                $result0 = mysqli_query($mysqlconnection, $query0);
-                $test = mysqli_num_rows($result0);
-                //Skip deleted employees
+        $result0 = mysqli_query($mysqlconnection, $query0);
+        $test = mysqli_num_rows($result0);
+        //Skip deleted employees
         if ($test == 0) {
             $del++;
             $i++;
             continue;
         }
         else
-                {
+        {
             $name = mysqli_result($result0, 0, "name");
             $surname = mysqli_result($result0, 0, "surname");
             $afm = mysqli_result($result0, 0, "afm");
@@ -100,6 +100,7 @@ if ($num==0) {
             $days = mysqli_result($result, $i, "days");
             $start = date("d-m-Y", strtotime($start));
             $finish = date("d-m-Y", strtotime($finish));
+            $organ = !$_POST['mon_anapl'] ? mysqli_result($result0, 0, 'schname') : '';
             // add days
             $synolo_ola += $days;
             $days_to_end = 0;
@@ -141,6 +142,7 @@ if ($num==0) {
             }
             echo "<a href=\"".$tmpl1.".php?id=$emp_id&op=view\">$surname, $name</a></td><td><a href=\"".$tmpl.".php?adeia=$id&op=view\">$typewrd</a></td>
                     <td>$start</td><td>$finish</td><td>$days <small><i>($days_to_end)</i></small></td><td>$ar_prot/".date("d-m-Y",  strtotime($hm_prot))."</td><td>$apof_all\n";
+            echo !$_POST['mon_anapl'] ? "<td>$organ</td>" : '';
             echo "</tr>";
         }
     }
