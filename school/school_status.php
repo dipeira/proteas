@@ -512,10 +512,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 foreach($oloimero_nip_exp as &$val) {
                     if(empty($val)) { $val = 0; }
                 }
-                $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11];
-                $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12];
-                $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10];
-                $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11];
+                $klasiko_nip = $klasiko_exp[0] + $klasiko_exp[2] + $klasiko_exp[4] + $klasiko_exp[7] + $klasiko_exp[9] + $klasiko_exp[11] + $klasiko_exp[13] + $klasiko_exp[15];
+                $klasiko_pro = $klasiko_exp[1] + $klasiko_exp[3] + $klasiko_exp[5] + $klasiko_exp[8] + $klasiko_exp[10] + $klasiko_exp[12] + $klasiko_exp[14] + $klasiko_exp[16];
+                $oloimero_syn_nip = $oloimero_nip_exp[0] + $oloimero_nip_exp[2] + $oloimero_nip_exp[4] + $oloimero_nip_exp[6] + $oloimero_nip_exp[8] + $oloimero_nip_exp[10] + $oloimero_nip_exp[12] + $oloimero_nip_exp[14];
+                $oloimero_syn_pro = $oloimero_nip_exp[1] + $oloimero_nip_exp[3] + $oloimero_nip_exp[5] + $oloimero_nip_exp[7] + $oloimero_nip_exp[9] + $oloimero_nip_exp[11] + $oloimero_nip_exp[13] + $oloimero_nip_exp[15];
                 $has_dieyrymeno = $oloimero_nip_exp[16] > 0 ? true : false;
 
                 // Μαθητές
@@ -613,13 +613,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<tr><td>Τμ.8</td><td>$klasiko_exp[15]</td><td>$klasiko_exp[16]</td><td><b>$syn8</b></td>";
                     echo "<td>$oloimero_nip_exp[14]</td><td>$oloimero_nip_exp[15]</td><td><b>$syn_ol8</b></td></tr>";
                 }
-                // totals (if more than one tmima)
-                if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
-                    echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
-                    echo "<td><b>$oloimero_syn_nip</b><td><b>$oloimero_syn_pro</b></td><td><b>$olola</b></td>";
-                    echo "</tr>";
-                }
-                
                 // totals (if more than one tmima)
                 if (($syn2 + $syn_ol2 + $syn3 + $syn_ol3) > 0) {
                     echo "<tr><td><strong>Σύνολα</strong></td><td><b>$klasiko_nip</b><td><b>$klasiko_pro</b></td><td><b>$ola</b></td>";
