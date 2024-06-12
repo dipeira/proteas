@@ -62,21 +62,34 @@
   echo "<h3>Μαθητές & Εκπαιδευτικοί</h3>";
   echo "<h4>".$subtitle_array[$_REQUEST['type']]."</h4>";
   echo "<table class=\"imagetable\" border='1'>";
+
+  $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+
   echo "<form action='' method='POST' autocomplete='off'>";
-  echo "<tr><td colspan>";
-  echo "<input type='radio' name='type' value='1' checked >Δημόσια Δημοτικά (όχι ειδικά)<br>";
-  echo "<input type='radio' name='type' value='8' >Δημόσια Δημοτικά (προηγούμενου σχολικού έτους)<br>";
-  echo "<input type='radio' name='type' value='2' >Ιδιωτικά Δημοτικά<br>";
-  echo "<input type='radio' name='type' value='3' >Ειδικά Δημοτικά<br>";
-  echo "<input type='radio' name='type' value='7' >Ολιγοθέσια Δημοτικά<br>";
-  echo "<input type='radio' name='type' value='4' >Δημόσια Νηπιαγωγεία (όχι ειδικά) (και λειτουργικά κενά)<br>";
-  echo "<input type='radio' name='type' value='5' >Ιδιωτικά Νηπιαγωγεία<br>";
-  echo "<input type='radio' name='type' value='6' >Ειδικά Νηπιαγωγεία<br>";
+  // echo "<table>";
+  echo "<tr><td colspan='2'>";
+
+  $options = [
+      1 => "Δημόσια Δημοτικά (όχι ειδικά)",
+      8 => "Δημόσια Δημοτικά (προηγούμενου σχολικού έτους)",
+      2 => "Ιδιωτικά Δημοτικά",
+      3 => "Ειδικά Δημοτικά",
+      7 => "Ολιγοθέσια Δημοτικά",
+      4 => "Δημόσια Νηπιαγωγεία (όχι ειδικά) (και λειτουργικά κενά)",
+      5 => "Ιδιωτικά Νηπιαγωγεία",
+      6 => "Ειδικά Νηπιαγωγεία"
+  ];
+
+  foreach ($options as $value => $label) {
+      $checked = ($value == $type) ? 'checked' : '';
+      echo "<input type='radio' name='type' value='$value' $checked >$label<br>";
+  }
+
   echo "</td></tr>";
-  echo "<tr><td colspan><input type='submit' value='Προβολή'>";
-  echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-  echo "</td></tr>";
+  echo "<tr><td colspan='2'><input type='submit' value='Προβολή'>";
+  echo "<input type='button' class='btn-red' value='Επιστροφή' onClick=\"parent.location='../index.php'\"></td></tr>";
   echo "</table></form>";
+
   echo "<br>";
                 
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
@@ -134,7 +147,10 @@ if ($_REQUEST['type']) {
         echo "<th>ΠΕ79</th>";
         echo "<th>Συν.προσ.</th>";
         echo "<th>Τμ. Ολ.</th>";
+        echo "<th>Ολ.<br>15-16</th>";
+        echo "<th>Ολ.<br>16-17</th>";
         echo "<th>Μαθ. Ολ.</th>";
+        echo "<th>Τμ.<br>Π.Ζ.</th>";
         //echo "<th>Εκπ. T.E.</th>";
         //echo "<th>Εκπ. T.Y.</th>";
         echo "</tr></thead>\n<tbody>\n";
@@ -169,6 +185,9 @@ if ($_REQUEST['type']) {
             
             $oloimero_stud = $classes[6];
             $oloimero_tea = $tmimata_exp[6];
+            $ol1516 = $tmimata_exp[7] > 0 ? $tmimata_exp[7] : 0;
+            $pz = $tmimata_exp[8] > 0 ? $tmimata_exp[8] : 0;
+            $ol1617 = $tmimata_exp[9] > 0 ? $tmimata_exp[9] : 0;
             //$ekp_ee = mysqli_result($result, $i, "ekp_ee");
             //$ekp_ee_exp = explode(",",$ekp_ee);
             
@@ -215,7 +234,7 @@ if ($_REQUEST['type']) {
                 echo "<td>".$ekp_ar['ΠΕ70']."</td><td>".$ekp_ar['ΠΕ06']."</td><td>".$ekp_ar['ΠΕ11']."</td><td>".$ekp_ar['ΠΕ79']."</td>";
             }
             echo "<td>$ekp_count</td>";
-            echo "<td>$oloimero_tea</td><td>$oloimero_stud</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
+            echo "<td>$oloimero_tea</td><td>$ol1516</td><td>$ol1617</td><td>$oloimero_stud</td><td>$pz</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
             echo "</tr>\n";
 
             $sums[0] += $classes[0];
@@ -232,6 +251,9 @@ if ($_REQUEST['type']) {
             $sumt[5] += $tmimata_exp[5];
             $sumte += $has_entaxi ? $entaksis[1] : 0;
             $sumol += $oloimero_tea;
+            $sumol15 += $ol1516;
+            $sumol16 += $ol1617;
+            $sumpz += $pz;
             $sumolstud += $oloimero_stud;
             //$sumee[0] += $ekp_ee_exp[0];
             //$sumee[1] += $ekp_ee_exp[1];
@@ -249,7 +271,8 @@ if ($_REQUEST['type']) {
         $synolo_teach =  is_array($sumt) ? array_sum($sumt) : 0;
         echo "<tr><td>Πλήθος: $sumschools</td><td></td><td></td><td></td><td>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
-        echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumolstud</td></tr>";//<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
+        echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumol15</td><td>$sumol16</td><td>$sumolstud</td><td>$sumpz</td></tr>";
+        //<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
         // echo "<tr><td></td><td></td><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
         // echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         // echo "</tr>";
