@@ -151,6 +151,7 @@ if ($_REQUEST['type']) {
         echo "<th>Ολ.<br>16-17</th>";
         echo "<th>Μαθ. Ολ.</th>";
         echo "<th>Τμ.<br>Π.Ζ.</th>";
+        echo "<th>Μαθ.<br>Π.Ζ.</th>";
         //echo "<th>Εκπ. T.E.</th>";
         //echo "<th>Εκπ. T.Y.</th>";
         echo "</tr></thead>\n<tbody>\n";
@@ -187,6 +188,7 @@ if ($_REQUEST['type']) {
             $oloimero_tea = $tmimata_exp[6];
             $ol1516 = $tmimata_exp[7] > 0 ? $tmimata_exp[7] : 0;
             $pz = $tmimata_exp[8] > 0 ? $tmimata_exp[8] : 0;
+            $mpz = $classes[7];
             $ol1617 = $tmimata_exp[9] > 0 ? $tmimata_exp[9] : 0;
             //$ekp_ee = mysqli_result($result, $i, "ekp_ee");
             //$ekp_ee_exp = explode(",",$ekp_ee);
@@ -234,7 +236,7 @@ if ($_REQUEST['type']) {
                 echo "<td>".$ekp_ar['ΠΕ70']."</td><td>".$ekp_ar['ΠΕ06']."</td><td>".$ekp_ar['ΠΕ11']."</td><td>".$ekp_ar['ΠΕ79']."</td>";
             }
             echo "<td>$ekp_count</td>";
-            echo "<td>$oloimero_tea</td><td>$ol1516</td><td>$ol1617</td><td>$oloimero_stud</td><td>$pz</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
+            echo "<td>$oloimero_tea</td><td>$ol1516</td><td>$ol1617</td><td>$oloimero_stud</td><td>$pz</td><td>$mpz</td>";//<td>$ekp_ee_exp[0]</td><td>$ekp_ee_exp[1]</td>";
             echo "</tr>\n";
 
             $sums[0] += $classes[0];
@@ -254,6 +256,7 @@ if ($_REQUEST['type']) {
             $sumol15 += $ol1516;
             $sumol16 += $ol1617;
             $sumpz += $pz;
+            $summpz += $mpz;
             $sumolstud += $oloimero_stud;
             //$sumee[0] += $ekp_ee_exp[0];
             //$sumee[1] += $ekp_ee_exp[1];
@@ -271,7 +274,7 @@ if ($_REQUEST['type']) {
         $synolo_teach =  is_array($sumt) ? array_sum($sumt) : 0;
         echo "<tr><td>Πλήθος: $sumschools</td><td></td><td></td><td></td><td>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
-        echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumol15</td><td>$sumol16</td><td>$sumolstud</td><td>$sumpz</td></tr>";
+        echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumol15</td><td>$sumol16</td><td>$sumolstud</td><td>$sumpz</td><td>$summpz</td></tr>";
         //<td>$sumee[0]</td><td>$sumee[1]</td></tr>";
         // echo "<tr><td></td><td></td><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
         // echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
