@@ -657,6 +657,36 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_ekt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `postgrad`
+--
+CREATE TABLE `postgrad` (
+  `id` int(11) NOT NULL,
+  `afm` int(10) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `title` text NOT NULL,
+  `idryma` text NOT NULL,
+  `anagnwrish` varchar(100) NOT NULL,
+  `anagnwrish_date` date NOT NULL,
+  `gnhsiothta` tinyint(1) NOT NULL,
+  `prot_gnhsiothta` varchar(100) NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for table `postgrad`
+--
+ALTER TABLE `postgrad`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for table `postgrad`
+--
+ALTER TABLE `postgrad`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+--
 -- Indexes for dumped tables
 --
 
