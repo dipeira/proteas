@@ -37,9 +37,9 @@
     <center>
         <?php
       
-        function read_postgrad($afm, $mysqlconnection)
+        function read_postgrad($id, $mysqlconnection)
         {
-            $query = "SELECT * from postgrad where afm=".$afm;
+            $query = "SELECT * from postgrad where id=".$id;
             //echo $query;
             $result = mysqli_query($mysqlconnection, $query);
             $rec['afm'] = mysqli_result($result, 0, "afm");
@@ -97,19 +97,20 @@
               $num=mysqli_num_rows($result);
               if (!$num) {
                   echo "<br><br><big>Δε βρέθηκαν εγγραφές</big>";
-                  echo "<br><span title=\"Προσθήκη εγγραφής\"><a href=\"postgrad.php?op=add\"><big>Προσθήκη εγγραφής</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
+                  echo "<br><span title=\"Προσθήκη εγγραφής\"><a href=\"postgrad.php?op=add&afm=".$_GET['afm']."\"><big>Προσθήκη εγγραφής</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
               }
               else
               {
               echo "<h2>Μεταπτυχιακοί τίτλοι εκπ/κού</h2>";
               echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";    
               echo "<thead><tr>";
-              echo "<th>Κατηγορία</th><th>Τίτλος</th><th>Ίδρυμα</th><th>Αναγνωριστικό</th><th>Ημερομηνία Ενημέρωσης</th>";
+              echo "<th>ID</th><th>Κατηγορία</th><th>Τίτλος</th><th>Ίδρυμα</th><th>Αναγνωριστικό</th><th>Ημερομηνία Ενημέρωσης</th>";
               echo "<th>Ημερομηνία Αναγνώρισης</th><th>Γνήσιοτητα</th><th>Πρωτ. Γνησιότητας</th>";
               echo "</tr></thead>";
               echo "<tbody>";
               while ($i<$num)
               {
+                  $id = mysqli_result($result, $i, "id");
                   $category = mysqli_result($result, $i, "category");
                   $title = mysqli_result($result, $i, "title");
                   $idryma = mysqli_result($result, $i, "idryma");
@@ -121,7 +122,7 @@
                   
                   // Display data in table rows
                   echo "<tr>";
-                  // echo "<td>".$afm."</td>";
+                  echo "<td><a href='postgrad.php?op=edit&id=$id'>$id</a></td>";
                   echo "<td>".$category."</td>";
                   echo "<td>".$title."</td>";
                   echo "<td>".$idryma."</td>";
@@ -158,11 +159,8 @@
               echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
       }
       elseif ($_GET['op']=="edit") {
-              $postgrad = read_postgrad($_GET['afm'], $mysqlconnection);
-              echo "<form id='update_ekdr' name='update' action='postgrad.php' method='POST'>";
-              echo "<table class=\"imagetable\" border='1'>";
-              echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value=".$postgrad['afm'].
-              $postgrad = read_postgrad($_GET['afm'], $mysqlconnection);
+              echo "<h3>Επεξεργασία εγγραφής</h3>";
+              $postgrad = read_postgrad($_GET['id'], $mysqlconnection);
               echo "<form id='update_ekdr' name='update' action='postgrad.php' method='POST'>";
               echo "<table class=\"imagetable\" border='1'>";
               echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value=".$postgrad['afm']." required></td></tr>";
@@ -170,24 +168,27 @@
               echo "<tr><td>Τίτλος</td><td><input type='text' name='title' value=".$postgrad['title']." required></td></tr>";
               echo "<tr><td>Ίδρυμα</td><td><input type='text' name='idryma' value=".$postgrad['idryma']." required></td></tr>";
               echo "<tr><td>Αναγνωριστικό</td><td><input type='text' name='anagnwrish' value=".$postgrad['anagnwrish']." required></td></tr>";
-              // Assuming 'updated' is a system generated field, not editable by user
-              // echo "<tr><td>Ημερομηνία Ενημέρωσης</td><td><input type='text' name='updated' value=".$postgrad['updated']." required></td></tr>";
               echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td><input type='date' name='anagnwrish_date' value=".$postgrad['anagnwrish_date']."></td></tr>"; // Assuming 'date' input type is appropriate
               echo "<tr><td>Γνήσιοτητα</td><td><select name='gnhsiothta'><option value='0'>Όχι</option><option value='1' ".($postgrad['gnhsiothta'] == 1 ? 'selected' : '').">Ναι</option></select></td></tr>";
               echo "<tr><td>Πρωτ. Γνησιότητας</td><td><input type='text' name='prot_gnhsiothta' value=".$postgrad['prot_gnhsiothta']." required></td></tr>";
-          echo "	</table>";
+              echo "</table>";
               // update: update=2
               echo "<input type='hidden' name = 'update' value='1'>";
-              echo "<input type='hidden' name = 'afm' value=".$_GET['afm'].">";
+              echo "<input type='hidden' name = 'afm' value=".$postgrad['afm'].">";
               echo "<input type='submit' value='Επεξεργασία'>";
               echo "</form>";
-              echo "<INPUT TYPE='button' VALUE='Λίστα εγγραφών' onClick=\"parent.location='postgrad.php?op=list'\">";
+              echo "<a href='postgrad.php?op=list&afm=".$postgrad['afm']."'>Λίστα μεταπτυχιακών τίτλων</a>";
               echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
       }
       elseif ($_GET['op']=="add") {
+              if (!$_GET['afm']){
+                echo "<h3>Σφάλμα. Δεν έχει εισαχθεί ΑΦΜ υπαλλήλου.</h3>";
+              } else {
+              echo "<h3>Εισαγωγή μεταπτυχιακού τίτλου για υπάλληλο με ΑΦΜ: ".$_GET['afm']."</h3>";
               echo "<form id='add_ekdr' name='add' action='postgrad.php' method='POST'>";
               echo "<table class=\"imagetable\" border='1'>";
-              echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' required></td></tr>";
+              // echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value='".$_GET['afm']."' disabled></td></tr>";
+              echo "<input type='hidden' value='".$_GET['afm']."' name='afm'/>";
               echo "<tr><td>Κατηγορία</td><td><input type='text' name='category' required></td></tr>";
               echo "<tr><td>Τίτλος</td><td><input type='text' name='title' required></td></tr>";
               echo "<tr><td>Ίδρυμα</td><td><input type='text' name='idryma' required></td></tr>";
@@ -200,18 +201,19 @@
               echo "<input type='hidden' name = 'update' value='0'>"; 
               echo "<input type='submit' value='Προσθήκη'>";
               echo "</form>";
-              echo "<INPUT TYPE='button' VALUE='Λίστα εγγραφών' onClick=\"parent.location='postgrad.php?op=list'\">";
+              echo "<a href='postgrad.php?op=list&afm=".$_GET['afm']."'>Λίστα μεταπτυχιακών τίτλων</a>";
+              //echo "<a href='employee.php?id="1945&op=view'\">Καρτέλα εκπ/κού</a>";
+              }
               echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
       }
       else { // Implicitly handles cases where 'op' is not set or invalid
-              echo "<h3>Μη διαθέσιμη επιλογή...</h3>";
+              // echo "<h3>Μη διαθέσιμη επιλογή...</h3>";
               echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
       }
+  
         
-        
-        
-        mysqli_close($mysqlconnection);
-        ?>
+      mysqli_close($mysqlconnection);
+      ?>
     </center>
   </body>
 </html>
