@@ -73,6 +73,7 @@
               // echo $query;
               mysqli_query($mysqlconnection, $query);
               echo "<br><br>Η εγγραφή ενημερώθηκε επιτυχώς!";
+              echo "<br><a href='postgrad.php?op=list&afm=$afm'>Λίστα τίτλων</a>";
           } elseif ($update == 0) { // Add new record
               $afm = $_POST['afm'];
               $category = $_POST['category'];
@@ -86,6 +87,7 @@
               $query = "INSERT INTO postgrad (afm, category, title, idryma, anagnwrish, anagnwrish_date, gnhsiothta, prot_gnhsiothta) VALUES ('$afm','$category','$title','$idryma','$anagnwrish','$anagnwrish_date','$gnhsiothta','$prot_gnhsiothta')";
               mysqli_query($mysqlconnection, $query);
               echo "<br><br>Η εγγραφή προστέθηκε επιτυχώς!";
+              echo "<br><a href='postgrad.php?op=list&afm=$afm'>Λίστα τίτλων</a>";
           }
       }
       
@@ -104,8 +106,8 @@
               echo "<h2>Μεταπτυχιακοί τίτλοι εκπ/κού</h2>";
               echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";    
               echo "<thead><tr>";
-              echo "<th>ID</th><th>Κατηγορία</th><th>Τίτλος</th><th>Ίδρυμα</th><th>Αναγνωριστικό</th><th>Ημερομηνία Ενημέρωσης</th>";
-              echo "<th>Ημερομηνία Αναγνώρισης</th><th>Γνήσιοτητα</th><th>Πρωτ. Γνησιότητας</th>";
+              echo "<th>Ενέργεια</th><th>Κατηγορία</th><th>Τίτλος</th><th>Ίδρυμα</th><th>Αναγνωριστικό</th>";
+              echo "<th>Ημερομηνία Αναγνώρισης</th><th>Γνήσιοτητα</th><th>Πρωτ. Γνησιότητας</th><th>Ημερομηνία Ενημέρωσης</th>";
               echo "</tr></thead>";
               echo "<tbody>";
               while ($i<$num)
@@ -122,15 +124,18 @@
                   
                   // Display data in table rows
                   echo "<tr>";
-                  echo "<td><a href='postgrad.php?op=edit&id=$id'>$id</a></td>";
+                  echo "<td>";
+                  echo "<a href='postgrad.php?op=view&id=$id'><img style='border: 0pt none;' src='../images/view_action.png'></a>&nbsp;";
+                  echo "<a href='postgrad.php?op=edit&id=$id'><img style='border: 0pt none;' src='../images/edit_action.png'></a>";
+                  echo "</td>";
                   echo "<td>".$category."</td>";
                   echo "<td>".$title."</td>";
                   echo "<td>".$idryma."</td>";
                   echo "<td>".$anagnwrish."</td>";
-                  echo "<td>".$updated."</td>";
-                  echo "<td>".$anagnwrish_date."</td>";
+                  echo "<td>".date("d/m/Y",strtotime($anagnwrish_date))."</td>";
                   echo "<td>".($gnhsiothta == 1 ? 'Ναι' : 'Όχι')."</td>"; // Convert boolean value to text
                   echo "<td>".$prot_gnhsiothta."</td>";
+                  echo "<td>".date("d/m/Y, H:i:s",strtotime($updated))."</td>";
                   echo "</tr>";
                   
                   $i++;
@@ -142,39 +147,43 @@
           }
               echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
       }
-      elseif ($_GET['op']=="view") {
-              $postgrad = read_postgrad($_GET['id'], $mysqlconnection);    
+      elseif ($_GET['op']=="view" && isset($_GET['id'])) {
+              $postgrad = read_postgrad($_GET['id'], $mysqlconnection);
+              echo "<h3>Προβολή μεταπτυχιακού τίτλου</h3>";
               echo "<table class=\"imagetable\" border='1'>";
-              echo "<tr><td>ΑΦΜ</td><td>".$postgrad['afm']."</td></tr>";
+              // echo "<tr><td>ΑΦΜ</td><td>".$postgrad['afm']."</td></tr>";
               echo "<tr><td>Κατηγορία</td><td>".$postgrad['category']."</td></tr>";
               echo "<tr><td>Τίτλος</td><td>".$postgrad['title']."</td></tr>";
               echo "<tr><td>Ίδρυμα</td><td>".$postgrad['idryma']."</td></tr>";
               echo "<tr><td>Αναγνωριστικό</td><td>".$postgrad['anagnwrish']."</td></tr>";
-              echo "<tr><td>Ημερομηνία Ενημέρωσης</td><td>".$postgrad['updated']."</td></tr>";
-              echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td>".$postgrad['anagnwrish_date']."</td></tr>";
+              echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td>".date("d-m-Y", strtotime($postgrad['anagnwrish_date']))."</td></tr>";
               echo "<tr><td>Γνήσιοτητα</td><td>".($postgrad['gnhsiothta'] == 1 ? 'Ναι' : 'Όχι')."</td></tr>";
               echo "<tr><td>Πρωτ. Γνησιότητας</td><td>".$postgrad['prot_gnhsiothta']."</td></tr>";
+              echo "<tr><td>Ημερομηνία Ενημέρωσης</td><td>".date("d-m-Y H:m:s", strtotime($postgrad['updated']))."</td></tr>";
           echo "	</table>";
-              echo "<br><br><INPUT TYPE='button' VALUE='Λίστα εγγραφών' onClick=\"parent.location='postgrad.php?op=list'\">";
+              echo "<br><br><INPUT TYPE='button' VALUE='Λίστα εγγραφών' onClick=\"parent.location='postgrad.php?op=list&afm=".$postgrad['afm']."'\">";
               echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
       }
-      elseif ($_GET['op']=="edit") {
-              echo "<h3>Επεξεργασία εγγραφής</h3>";
+      elseif ($_GET['op']=="edit" && isset($_GET['id'])) {
+              echo "<h3>Επεξεργασία μεταπτυχιακού τίτλου</h3>";
               $postgrad = read_postgrad($_GET['id'], $mysqlconnection);
               echo "<form id='update_ekdr' name='update' action='postgrad.php' method='POST'>";
               echo "<table class=\"imagetable\" border='1'>";
-              echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value=".$postgrad['afm']." required></td></tr>";
-              echo "<tr><td>Κατηγορία</td><td><input type='text' name='category' value=".$postgrad['category']." required></td></tr>";
+              // echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value=".$postgrad['afm']." required></td></tr>";
+              echo "<tr><td>Κατηγορία</td><td>";
+              postgradCmb($postgrad['category']);
+              echo "</td></tr>";
               echo "<tr><td>Τίτλος</td><td><input type='text' name='title' value=".$postgrad['title']." required></td></tr>";
               echo "<tr><td>Ίδρυμα</td><td><input type='text' name='idryma' value=".$postgrad['idryma']." required></td></tr>";
               echo "<tr><td>Αναγνωριστικό</td><td><input type='text' name='anagnwrish' value=".$postgrad['anagnwrish']." required></td></tr>";
               echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td><input type='date' name='anagnwrish_date' value=".$postgrad['anagnwrish_date']."></td></tr>"; // Assuming 'date' input type is appropriate
               echo "<tr><td>Γνήσιοτητα</td><td><select name='gnhsiothta'><option value='0'>Όχι</option><option value='1' ".($postgrad['gnhsiothta'] == 1 ? 'selected' : '').">Ναι</option></select></td></tr>";
-              echo "<tr><td>Πρωτ. Γνησιότητας</td><td><input type='text' name='prot_gnhsiothta' value=".$postgrad['prot_gnhsiothta']." required></td></tr>";
+              echo "<tr><td>Πρωτ. Γνησιότητας</td><td><input type='text' name='prot_gnhsiothta' value=".$postgrad['prot_gnhsiothta']."></td></tr>";
               echo "</table>";
               // update: update=2
               echo "<input type='hidden' name = 'update' value='1'>";
               echo "<input type='hidden' name = 'afm' value=".$postgrad['afm'].">";
+              echo "<input type='hidden' name = 'id' value=".$_GET['id'].">";
               echo "<input type='submit' value='Επεξεργασία'>";
               echo "</form>";
               echo "<a href='postgrad.php?op=list&afm=".$postgrad['afm']."'>Λίστα μεταπτυχιακών τίτλων</a>";
@@ -189,7 +198,9 @@
               echo "<table class=\"imagetable\" border='1'>";
               // echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value='".$_GET['afm']."' disabled></td></tr>";
               echo "<input type='hidden' value='".$_GET['afm']."' name='afm'/>";
-              echo "<tr><td>Κατηγορία</td><td><input type='text' name='category' required></td></tr>";
+              echo "<tr><td>Κατηγορία</td><td>";
+              postgradCmb();
+              echo "</td></tr>";
               echo "<tr><td>Τίτλος</td><td><input type='text' name='title' required></td></tr>";
               echo "<tr><td>Ίδρυμα</td><td><input type='text' name='idryma' required></td></tr>";
               echo "<tr><td>Αναγνώριση</td><td><input type='text' name='anagnwrish' required></td></tr>";

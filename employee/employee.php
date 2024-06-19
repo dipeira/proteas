@@ -571,7 +571,9 @@ elseif ($_GET['op']=="view") {
         break;
     }
 
-    echo "<tr><td>Ημ/νία Ανάληψης</td><td>".date('d-m-Y', strtotime($hm_anal))."</td><td>Μεταπτυχιακό/Διδακτορικό</td><td>$met</td></tr>";
+    echo "<tr><td>Ημ/νία Ανάληψης</td><td>".date('d-m-Y', strtotime($hm_anal))."</td>";
+    //echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm' onclick=\"window.open('postgrad.php?op=list&afm=$afm','newwindow','width=800,height=450');return false;\">(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
+    echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm'>(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
 
     $ymd=days2ymd($proyp);
     $temp = "<tr><td>Μισθολογική Προϋπηρεσία</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td>";
