@@ -665,10 +665,21 @@ CREATE TABLE `postgrad` (
   `category` varchar(100) NOT NULL,
   `title` text NOT NULL,
   `idryma` text NOT NULL,
+  `aitisi_protocol` int(10) NOT NULL,
+  `aitisi_date` date NOT NULL,
+  `dikaiologhtiko` text NOT NULL,
+  `elegxos_gnhsiothtas` text NOT NULL,
+  `protocol_incoming` text NOT NULL,
+  `protocol_confirm` text NOT NULL,
+  `opsyd` text NOT NULL,
+  `praxi` text NOT NULL,
   `anagnwrish` varchar(100) NOT NULL,
   `anagnwrish_date` date NOT NULL,
   `gnhsiothta` tinyint(1) NOT NULL,
   `prot_gnhsiothta` varchar(100) NOT NULL,
+  `synafeia` tinyint(1) NOT NULL,
+  `synafeia_praxi` varchar(100) NOT NULL,
+  `synafeia_aitisi_date` date NOT NULL,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
