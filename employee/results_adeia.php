@@ -31,8 +31,13 @@ if (!$_POST['mon_anapl']) {
 } else {
     $query = "SELECT * from adeia_ekt WHERE";
 }
+if (!$_POST['date_from']){
     $query .= " start >= '".$_POST['hm_from']."'";
     $query .= " AND start <= '".$_POST['hm_to']."'";
+} else {
+    $query .= " finish >= '".$_POST['hm_from']."'";
+    $query .= " AND finish <= '".$_POST['hm_to']."'";
+}
         
 if (strlen($_POST['type'])>0) {
     if ($_POST['type'] != 0) {
@@ -51,9 +56,9 @@ if ($num==0) {
 } else
 {
     //echo "<p>Πλήθος εγγραφών που βρέθηκαν: $num<p>";
-              $num1=$num;
-              $num2=$num;
-              $synolo_ola = $synolo_ews = 0;
+    $num1=$num;
+    $num2=$num;
+    $synolo_ola = $synolo_ews = 0;
     echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";
     echo "<body>";
     echo "<center>";
@@ -62,6 +67,7 @@ if ($num==0) {
     echo "<thead><tr>";
     echo "<th>ΑΦΜ</th>";
     echo "<th>Επώνυμο, Όνομα</th>";
+    echo "<th>Ειδικότητα</th>";    
     echo "<th>Είδος</th>";
       echo "<th>Έναρξη</th>";
       echo "<th>Λήξη</th>";
@@ -69,6 +75,7 @@ if ($num==0) {
       echo "<th>Αρ.Πρωτοκόλλου</th>";
       echo "<th>Αρ.Απόφασης</th>";
       echo !$_POST['mon_anapl'] ? '<th>Σχ.Οργανικής</th>' : '';
+      echo "<th>Σχ.Υπηρέτησης</th>";
     echo "</th>\n";
                     
     echo "</tr></thead>\n<tbody>";
@@ -78,9 +85,11 @@ if ($num==0) {
         $emp_id = mysqli_result($result, $i, "emp_id");
                 
         if (!$_POST['mon_anapl']) {
-            $query0 = "select e.name,surname,afm,s.name as schname from employee e JOIN school s ON e.sx_organikhs = s.id where e.id=$emp_id";
+            $query0 = "select e.name,surname,afm,s.name as schname,klados,sx_yphrethshs from employee e JOIN school s ON e.sx_organikhs = s.id where e.id=$emp_id";
         } else {
-            $query0 = "select name,surname,afm from ektaktoi where id=$emp_id";
+            $query0 = $_POST['mon_anapl'] == 1 ? 
+                "select name,surname,afm,klados,sx_yphrethshs from ektaktoi where id=$emp_id" :
+                "select name,surname,afm,klados,sx_yphrethshs from ektaktoi_old where id=$emp_id" ;
         }
         $result0 = mysqli_query($mysqlconnection, $query0);
         $test = mysqli_num_rows($result0);
@@ -100,6 +109,12 @@ if ($num==0) {
             $days = mysqli_result($result, $i, "days");
             $start = date("d-m-Y", strtotime($start));
             $finish = date("d-m-Y", strtotime($finish));
+            
+            $klados_id = mysqli_result($result0, 0, "klados");
+            $klados = getKlados($klados_id, $mysqlconnection);
+            $sch_id = mysqli_result($result0, 0, "sx_yphrethshs");
+            $school = getSchool($sch_id, $mysqlconnection);
+
             $organ = !$_POST['mon_anapl'] ? mysqli_result($result0, 0, 'schname') : '';
             // add days
             $synolo_ola += $days;
@@ -140,9 +155,10 @@ if ($num==0) {
                 $tmpl = "ekt_adeia";
                 $tmpl1 = "ektaktoi";
             }
-            echo "<a href=\"".$tmpl1.".php?id=$emp_id&op=view\">$surname, $name</a></td><td><a href=\"".$tmpl.".php?adeia=$id&op=view\">$typewrd</a></td>
+            echo "<a href=\"".$tmpl1.".php?id=$emp_id&op=view\">$surname, $name</a></td><td>$klados</td><td><a href=\"".$tmpl.".php?adeia=$id&op=view\">$typewrd</a></td>
                     <td>$start</td><td>$finish</td><td>$days <small><i>($days_to_end)</i></small></td><td>$ar_prot/".date("d-m-Y",  strtotime($hm_prot))."</td><td>$apof_all\n";
             echo !$_POST['mon_anapl'] ? "<td>$organ</td>" : '';
+            echo "<td>$school</td>";
             echo "</tr>";
         }
     }
@@ -152,7 +168,8 @@ if ($num==0) {
     ob_end_flush();
             
     $num -= $del;
-    echo "<p>Πλήθος εγγραφών που βρέθηκαν: <strong>$num</strong><p>";
+    $qry = str_replace("'", "", $query);
+    echo "<span title='$qry'><p>Πλήθος εγγραφών που βρέθηκαν: <strong>$num</strong><p></span>";
     echo "<p>Σύνολο ημερών αδειών: <strong>$synolo_ola</strong><p>";
     echo "<p>Σύνολο ημερών απουσίας έως ".date("d-m-Y", strtotime($_POST['hm_to'])).": <strong>$synolo_ews</strong><p>";
     echo "<form action='../tools/2excel.php' method='post'>";

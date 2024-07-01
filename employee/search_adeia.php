@@ -76,7 +76,7 @@
 		//$myCalendar->setDate(date('d',strtotime($hm_dior)),date('m',strtotime($hm_dior)),date('Y',strtotime($hm_dior)));
 		$myCalendar->setPath("../tools/calendar/");
 		$myCalendar->setYearInterval(2011, date("Y"));
-		$myCalendar->dateAllow("2011-01-01", date("Y-m-d"));
+		// $myCalendar->dateAllow("2011-01-01", date("Y-m-d"));
 		$myCalendar->setAlignment("left", "bottom");
 		//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
 		$myCalendar->disabledDay("sun,sat");
@@ -93,16 +93,22 @@
 		$myCalendar->setAlignment("left", "bottom");
 		$myCalendar->disabledDay("sun,sat");
 		$myCalendar->writeScript();
-	  	echo "</td></tr>";	
+		echo "</td></tr>";	
+
+		echo "<tr><td>Ημ/νία</td><td>";
+		echo "<input type='radio' name='date_from' value='0' checked >Ημ/νία έναρξης<br>";
+		echo "<input type='radio' name='date_from' value='1'>Ημ/νία λήξης<br>";
+		echo "</td></tr>";
 		
-                echo "<tr><td>Είδος</td><td>";
-                adeiaCmb($type,$mysqlconnection,0,true);
-                echo "</td></tr>";
-                
-                echo "<tr><td colspan=2>";
-                echo "<input type='radio' name='mon_anapl' value='0' checked >Μόνιμοι<br>";
-                echo "<input type='radio' name='mon_anapl' value='1'>Αναπληρωτές<br>";
-                echo "</td></tr>";
+		echo "<tr><td>Είδος</td><td>";
+		adeiaCmb($type,$mysqlconnection,0,true);
+		echo "</td></tr>";
+		
+		echo "<tr><td colspan=2>";
+		echo "<input type='radio' name='mon_anapl' value='0' checked >Μόνιμοι<br>";
+		echo "<input type='radio' name='mon_anapl' value='1'>Αναπληρωτές<br>";
+		echo "<input type='radio' name='mon_anapl' value='2'>Αναπληρωτές προηγ.ετών<br>";
+		echo "</td></tr>";
                 		
 		echo "	</table>";
 		echo "	<input type='submit' value='Αναζήτηση'>";
