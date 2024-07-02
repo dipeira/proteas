@@ -660,27 +660,27 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_ekt` (
 -- Table structure for table `postgrad`
 --
 CREATE TABLE `postgrad` (
-  `id` int(11) NOT NULL,
-  `afm` int(10) NOT NULL,
-  `category` varchar(100) NOT NULL,
-  `title` text NOT NULL,
-  `idryma` text NOT NULL,
-  `aitisi_protocol` int(10) NOT NULL,
-  `aitisi_date` date NOT NULL,
-  `dikaiologhtiko` text NOT NULL,
-  `elegxos_gnhsiothtas` text NOT NULL,
-  `protocol_incoming` text NOT NULL,
-  `protocol_confirm` text NOT NULL,
-  `opsyd` text NOT NULL,
-  `praxi` text NOT NULL,
-  `anagnwrish` varchar(100) NOT NULL,
-  `anagnwrish_date` date NOT NULL,
-  `gnhsiothta` tinyint(1) NOT NULL,
-  `prot_gnhsiothta` varchar(100) NOT NULL,
-  `synafeia` tinyint(1) NOT NULL,
-  `synafeia_praxi` varchar(100) NOT NULL,
-  `synafeia_aitisi_date` date NOT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` int(11) NOT NULL COMMENT 'A/A',
+  `afm` int(10) NOT NULL COMMENT 'ΑΦΜ',
+  `category` enum('Μεταπτυχιακό','Διδακτορικό','Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)') NOT NULL COMMENT 'Κατηγορία',
+  `title` text NOT NULL COMMENT 'Τίτλος',
+  `idryma` text NOT NULL COMMENT 'Ίδρυμα',
+  `aitisi_protocol` int(10) NOT NULL COMMENT 'Αρ.Πρωτ.Αίτησης',
+  `aitisi_date` date NOT NULL COMMENT 'Ημ/νία Αίτησης',
+  `dikaiologhtiko` text NOT NULL COMMENT 'Δικαιολογητικό',
+  `elegxos_gnhsiothtas` text NOT NULL COMMENT 'Έλεγχος Γνησιότητας',
+  `protocol_incoming` text NOT NULL COMMENT 'Εισερχόμενο Πρωτόκολλο',
+  `protocol_confirm` text NOT NULL COMMENT 'Πρωτόκολλο Επιβεβαίωσης',
+  `opsyd` text NOT NULL COMMENT 'ΟΠΣΥΔ',
+  `praxi` text NOT NULL COMMENT 'Πράξη',
+  `anagnwrish` varchar(100) NOT NULL COMMENT 'Αναγνώριση',
+  `anagnwrish_date` date NOT NULL COMMENT 'Ημ/νία Αναγνώρισης',
+  `gnhsiothta` tinyint(1) NOT NULL COMMENT 'Γνησιότητα',
+  `prot_gnhsiothta` varchar(100) NOT NULL COMMENT 'Πρωτόκολλο Γνησιότητας',
+  `synafeia` tinyint(1) NOT NULL COMMENT 'Συνάφεια',
+  `synafeia_praxi` varchar(100) NOT NULL COMMENT 'Πράξη Συνάφειας',
+  `synafeia_aitisi_date` date NOT NULL COMMENT 'Ημ/νία Αίτησης Συνάφειας',
+  `updated` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
