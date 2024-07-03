@@ -1,231 +1,292 @@
 <?php
-  // Demand authorization                
-  require "../tools/class.login.php";
-  $log = new logmein();
-  if($log->logincheck($_SESSION['loggedin']) == false) {
-    header("Location: ../tools/login.php");
-  }
-  header('Content-type: text/html; charset=utf-8');
-  require_once "../config.php";
-  require_once "../include/functions.php";
-  // Removed unnecessary library tc_calendar.php
+// Generic CRUD page created for Proteas
+////////////////////////////////////////
+// CRUD OPTIONS
+// Columns to be displayed on list view
+$table_list_columns = array('afm','category','title','idryma');
+// Columns to be hidden on edit view
+$hide_edit_columns = array('id', 'afm');
+// Columns to be skipped on add view
+$skip_add_columns  = array('id', 'updated');
+// Table name to generate CRUD for
+$table = 'postgrad';
+// Page name
+$page_name = "Μεταπτυχιακοί Τίτλοι";
+// Search column (WHERE column = $_GET['column'])
+$search_column = 'afm';
+////////////////////////////////////////
 
-  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-  
-  session_start();
-  $usrlvl = $_SESSION['userlevel'];
-    
-?>
-<html>
-  <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Μεταπτυχιακοί τίτλοι</title>
-    <script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="../js/common.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() { 
-            $("#mytbl").tablesorter({widgets: ['zebra']}); 
-        });         
-    </script>
-  </head>
-  <body> 
-    <?php require '../etc/menu.php'; ?>
-    <center>
-        <?php
-      
-        function read_postgrad($id, $mysqlconnection)
-        {
-            $query = "SELECT * from postgrad where id=".$id;
-            //echo $query;
-            $result = mysqli_query($mysqlconnection, $query);
-            $rec['afm'] = mysqli_result($result, 0, "afm");
-            $rec['category'] = mysqli_result($result, 0, "category");
-            $rec['title'] = mysqli_result($result, 0, "title");
-            $rec['idryma'] = mysqli_result($result, 0, "idryma");
-            $rec['anagnwrish'] = mysqli_result($result, 0, "anagnwrish");
-            $rec['updated'] = mysqli_result($result, 0, "updated");
-            $rec['anagnwrish_date'] = mysqli_result($result, 0, "anagnwrish_date");
-            $rec['gnhsiothta'] = mysqli_result($result, 0, "gnhsiothta");
-            $rec['prot_gnhsiothta'] = mysqli_result($result, 0, "prot_gnhsiothta");
-            return $rec;
-        }
 
-        // Assuming the following logic is for processing form submissions
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-          $update = $_POST['update'];
-          
-          if ($update == 1) { // Edit existing record
-              $id = $_POST['id'];
-              $afm = $_POST['afm'];
-              $category = $_POST['category'];
-              $title = $_POST['title'];
-              $idryma = $_POST['idryma'];
-              $anagnwrish = $_POST['anagnwrish'];
-              $anagnwrish_date = $_POST['anagnwrish_date'];
-              $gnhsiothta = $_POST['gnhsiothta'];
-              $prot_gnhsiothta = $_POST['prot_gnhsiothta'];
-              
-              $query = "UPDATE postgrad SET afm='$afm', category='$category', title='$title', idryma='$idryma', anagnwrish='$anagnwrish', anagnwrish_date='$anagnwrish_date', gnhsiothta='$gnhsiothta', prot_gnhsiothta='$prot_gnhsiothta' WHERE id='$id'";
-              // echo $query;
-              mysqli_query($mysqlconnection, $query);
-              echo "<br><br>Η εγγραφή ενημερώθηκε επιτυχώς!";
-              echo "<br><a href='postgrad.php?op=list&afm=$afm'>Λίστα τίτλων</a>";
-          } elseif ($update == 0) { // Add new record
-              $afm = $_POST['afm'];
-              $category = $_POST['category'];
-              $title = $_POST['title'];
-              $idryma = $_POST['idryma'];
-              $anagnwrish = $_POST['anagnwrish'];
-              $anagnwrish_date = $_POST['anagnwrish_date'];
-              $gnhsiothta = $_POST['gnhsiothta'];
-              $prot_gnhsiothta = $_POST['prot_gnhsiothta'];
-              
-              $query = "INSERT INTO postgrad (afm, category, title, idryma, anagnwrish, anagnwrish_date, gnhsiothta, prot_gnhsiothta) VALUES ('$afm','$category','$title','$idryma','$anagnwrish','$anagnwrish_date','$gnhsiothta','$prot_gnhsiothta')";
-              mysqli_query($mysqlconnection, $query);
-              echo "<br><br>Η εγγραφή προστέθηκε επιτυχώς!";
-              echo "<br><a href='postgrad.php?op=list&afm=$afm'>Λίστα τίτλων</a>";
-          }
-      }
-      
-      if ($_GET['op']=="list" && isset($_GET['afm'])) {
-              $i = 0;
-              $query = "SELECT * from postgrad where afm = " . $_GET['afm'];
-              //echo $query;
-              $result = mysqli_query($mysqlconnection, $query);
-              $num=mysqli_num_rows($result);
-              if (!$num) {
-                  echo "<br><br><big>Δε βρέθηκαν εγγραφές</big>";
-                  echo "<br><span title=\"Προσθήκη εγγραφής\"><a href=\"postgrad.php?op=add&afm=".$_GET['afm']."\"><big>Προσθήκη εγγραφής</big><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";
-              }
-              else
-              {
-              echo "<h2>Μεταπτυχιακοί τίτλοι εκπ/κού</h2>";
-              echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";    
-              echo "<thead><tr>";
-              echo "<th>Ενέργεια</th><th>Κατηγορία</th><th>Τίτλος</th><th>Ίδρυμα</th><th>Αναγνωριστικό</th>";
-              echo "<th>Ημερομηνία Αναγνώρισης</th><th>Γνήσιοτητα</th><th>Πρωτ. Γνησιότητας</th><th>Ημερομηνία Ενημέρωσης</th>";
-              echo "</tr></thead>";
-              echo "<tbody>";
-              while ($i<$num)
-              {
-                  $id = mysqli_result($result, $i, "id");
-                  $category = mysqli_result($result, $i, "category");
-                  $title = mysqli_result($result, $i, "title");
-                  $idryma = mysqli_result($result, $i, "idryma");
-                  $anagnwrish = mysqli_result($result, $i, "anagnwrish");
-                  $updated = mysqli_result($result, $i, "updated");
-                  $anagnwrish_date = mysqli_result($result, $i, "anagnwrish_date");
-                  $gnhsiothta = mysqli_result($result, $i, "gnhsiothta");
-                  $prot_gnhsiothta = mysqli_result($result, $i, "prot_gnhsiothta");
-                  
-                  // Display data in table rows
-                  echo "<tr>";
-                  echo "<td>";
-                  echo "<a href='postgrad.php?op=view&id=$id'><img style='border: 0pt none;' src='../images/view_action.png'></a>&nbsp;";
-                  echo "<a href='postgrad.php?op=edit&id=$id'><img style='border: 0pt none;' src='../images/edit_action.png'></a>";
-                  echo "</td>";
-                  echo "<td>".$category."</td>";
-                  echo "<td>".$title."</td>";
-                  echo "<td>".$idryma."</td>";
-                  echo "<td>".$anagnwrish."</td>";
-                  echo "<td>".date("d/m/Y",strtotime($anagnwrish_date))."</td>";
-                  echo "<td>".($gnhsiothta == 1 ? 'Ναι' : 'Όχι')."</td>"; // Convert boolean value to text
-                  echo "<td>".$prot_gnhsiothta."</td>";
-                  echo "<td>".date("d/m/Y, H:i:s",strtotime($updated))."</td>";
-                  echo "</tr>";
-                  
-                  $i++;
-              }
+// Demand authorization                
+require "../tools/class.login.php";
+$log = new logmein();
+if($log->logincheck($_SESSION['loggedin']) == false) {
+  header("Location: ../tools/login.php");
+}
+header('Content-type: text/html; charset=utf-8');
+require_once "../config.php";
+require_once "../include/functions.php";
 
-              echo "</tbody>";
-              echo "<tr><td colspan=10><span title=\"Προσθήκη εγγραφής\"><a href='postgrad.php?op=add&afm=".$_GET['afm']."'>Προσθήκη εγγραφής<img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/></a></span>";        
-              echo "</table>";
-          }
-              echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-      }
-      elseif ($_GET['op']=="view" && isset($_GET['id'])) {
-              $postgrad = read_postgrad($_GET['id'], $mysqlconnection);
-              echo "<h3>Προβολή μεταπτυχιακού τίτλου</h3>";
-              echo "<table class=\"imagetable\" border='1'>";
-              // echo "<tr><td>ΑΦΜ</td><td>".$postgrad['afm']."</td></tr>";
-              echo "<tr><td>Κατηγορία</td><td>".$postgrad['category']."</td></tr>";
-              echo "<tr><td>Τίτλος</td><td>".$postgrad['title']."</td></tr>";
-              echo "<tr><td>Ίδρυμα</td><td>".$postgrad['idryma']."</td></tr>";
-              echo "<tr><td>Αναγνωριστικό</td><td>".$postgrad['anagnwrish']."</td></tr>";
-              echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td>".date("d-m-Y", strtotime($postgrad['anagnwrish_date']))."</td></tr>";
-              echo "<tr><td>Γνήσιοτητα</td><td>".($postgrad['gnhsiothta'] == 1 ? 'Ναι' : 'Όχι')."</td></tr>";
-              echo "<tr><td>Πρωτ. Γνησιότητας</td><td>".$postgrad['prot_gnhsiothta']."</td></tr>";
-              echo "<tr><td>Ημερομηνία Ενημέρωσης</td><td>".date("d-m-Y H:m:s", strtotime($postgrad['updated']))."</td></tr>";
-          echo "	</table>";
-              echo "<br><br><INPUT TYPE='button' VALUE='Λίστα εγγραφών' onClick=\"parent.location='postgrad.php?op=list&afm=".$postgrad['afm']."'\">";
-              echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-      }
-      elseif ($_GET['op']=="edit" && isset($_GET['id'])) {
-              echo "<h3>Επεξεργασία μεταπτυχιακού τίτλου</h3>";
-              $postgrad = read_postgrad($_GET['id'], $mysqlconnection);
-              echo "<form id='update_ekdr' name='update' action='postgrad.php' method='POST'>";
-              echo "<table class=\"imagetable\" border='1'>";
-              // echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value=".$postgrad['afm']." required></td></tr>";
-              echo "<tr><td>Κατηγορία</td><td>";
-              postgradCmb($postgrad['category']);
-              echo "</td></tr>";
-              echo "<tr><td>Τίτλος</td><td><input type='text' name='title' value=".$postgrad['title']." required></td></tr>";
-              echo "<tr><td>Ίδρυμα</td><td><input type='text' name='idryma' value=".$postgrad['idryma']." required></td></tr>";
-              echo "<tr><td>Αναγνωριστικό</td><td><input type='text' name='anagnwrish' value=".$postgrad['anagnwrish']." required></td></tr>";
-              echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td><input type='date' name='anagnwrish_date' value=".$postgrad['anagnwrish_date']."></td></tr>"; // Assuming 'date' input type is appropriate
-              echo "<tr><td>Γνήσιοτητα</td><td><select name='gnhsiothta'><option value='0'>Όχι</option><option value='1' ".($postgrad['gnhsiothta'] == 1 ? 'selected' : '').">Ναι</option></select></td></tr>";
-              echo "<tr><td>Πρωτ. Γνησιότητας</td><td><input type='text' name='prot_gnhsiothta' value=".$postgrad['prot_gnhsiothta']."></td></tr>";
-              echo "</table>";
-              // update: update=2
-              echo "<input type='hidden' name = 'update' value='1'>";
-              echo "<input type='hidden' name = 'afm' value=".$postgrad['afm'].">";
-              echo "<input type='hidden' name = 'id' value=".$_GET['id'].">";
-              echo "<input type='submit' value='Επεξεργασία'>";
-              echo "</form>";
-              echo "<a href='postgrad.php?op=list&afm=".$postgrad['afm']."'>Λίστα μεταπτυχιακών τίτλων</a>";
-              echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-      }
-      elseif ($_GET['op']=="add") {
-              if (!$_GET['afm']){
-                echo "<h3>Σφάλμα. Δεν έχει εισαχθεί ΑΦΜ υπαλλήλου.</h3>";
-              } else {
-              echo "<h3>Εισαγωγή μεταπτυχιακού τίτλου για υπάλληλο με ΑΦΜ: ".$_GET['afm']."</h3>";
-              echo "<form id='add_ekdr' name='add' action='postgrad.php' method='POST'>";
-              echo "<table class=\"imagetable\" border='1'>";
-              // echo "<tr><td>ΑΦΜ</td><td><input type='text' name='afm' value='".$_GET['afm']."' disabled></td></tr>";
-              echo "<input type='hidden' value='".$_GET['afm']."' name='afm'/>";
-              echo "<tr><td>Κατηγορία</td><td>";
-              postgradCmb();
-              echo "</td></tr>";
-              echo "<tr><td>Τίτλος</td><td><input type='text' name='title' required></td></tr>";
-              echo "<tr><td>Ίδρυμα</td><td><input type='text' name='idryma' required></td></tr>";
-              echo "<tr><td>Αναγνώριση</td><td><input type='text' name='anagnwrish' required></td></tr>";
-              echo "<tr><td>Ημερομηνία Αναγνώρισης</td><td><input type='date' name='anagnwrish_date'></td></tr>"; // Assuming 'date' input type is appropriate
-              echo "<tr><td>Γνήσιοτητα</td><td><select name='gnhsiothta'><option value='0'>Όχι</option><option value='1'>Ναι</option></select></td></tr>";
-              echo "<tr><td>Πρωτ. Γνησιότητας</td><td><input type='text' name='prot'></td></tr>";
-              echo "</table>";
-              // Add: update=1
-              echo "<input type='hidden' name = 'update' value='0'>"; 
-              echo "<input type='submit' value='Προσθήκη'>";
-              echo "</form>";
-              echo "<a href='postgrad.php?op=list&afm=".$_GET['afm']."'>Λίστα μεταπτυχιακών τίτλων</a>";
-              //echo "<a href='employee.php?id="1945&op=view'\">Καρτέλα εκπ/κού</a>";
-              }
-              echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-      }
-      else { // Implicitly handles cases where 'op' is not set or invalid
-              // echo "<h3>Μη διαθέσιμη επιλογή...</h3>";
-              echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-      }
-  
+// Connect to the database
+$mysqli = new mysqli($db_host, $db_user, $db_password, $db_name);
+if ($mysqli->connect_error) {
+    die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
+}
+
+// Get table columns with comments
+$query = "
+    SELECT COLUMN_NAME, COLUMN_COMMENT, DATA_TYPE, COLUMN_TYPE 
+    FROM information_schema.COLUMNS 
+    WHERE TABLE_SCHEMA = '$db_name' AND TABLE_NAME = '$table'
+";
+$result = $mysqli->query($query);
+$columns = [];
+while ($row = $result->fetch_assoc()) {
+    $columns[] = $row;
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['create'])) {
+        $skip_add_columns = array('id', 'updated');
         
-      mysqli_close($mysqlconnection);
-      ?>
-    </center>
-  </body>
+        // Filter the columns to exclude those in $skip_add_columns
+        $filtered_columns = array_filter($columns, function($column) use ($skip_add_columns) {
+            return !in_array($column['COLUMN_NAME'], $skip_add_columns);
+        });
+        
+        // Get column names and values from the filtered columns
+        $fields = implode(", ", array_column($filtered_columns, 'COLUMN_NAME'));
+        $values = [];
+        foreach ($filtered_columns as $column) {
+            $column_name = $column['COLUMN_NAME'];
+            $values[] = $mysqli->real_escape_string($_POST[$column_name]);
+        }
+        
+        $values_str = implode("', '", $values);
+        $query = "INSERT INTO $table ($fields) VALUES ('$values_str')";
+        // echo $query;
+        $mysqli->query($query);
+    } elseif (isset($_POST['update'])) {
+        $id = $_POST['id'];
+        $updates = [];
+        foreach ($columns as $column) {
+            if ($column['COLUMN_NAME'] != 'id') {
+                $columnName = $column['COLUMN_NAME'];
+                $value = $_POST[$columnName];
+                
+                // Check if the column is a checkbox (assuming 'tinyint' is used for checkboxes)
+                if ($column['DATA_TYPE'] === 'tinyint') {
+                    $value = isset($_POST[$columnName]) ? 1 : 0;
+                } else {
+                    $value = $mysqli->real_escape_string($value);
+                }
+                
+                $updates[] = "$columnName = '$value'";
+            }
+        }
+        $query = "UPDATE $table SET " . implode(", ", $updates) . " WHERE id = $id";
+        echo "<h3>Η εγγραφή ενημερώθηκε επιτυχώς!</h3>";
+        $mysqli->query($query);
+    } elseif (isset($_POST['delete'])) {
+        $id = $_POST['id'];
+        $query = "DELETE FROM $table WHERE id = $id";
+        $mysqli->query($query);
+    }
+}
+
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <title><?php echo $page_name; ?></title>
+</head>
+<body>
+<h1><?php echo $page_name; ?></h1>
+
+<?php
+// Fetch single record for editing
+$edit_record = null;
+if (isset($_GET['edit'])):
+    $edit_id = $_GET['edit'];
+    $result = $mysqli->query("SELECT * FROM $table WHERE id = $edit_id");
+    $edit_record = $result->fetch_assoc();
+
+?>
+<!-- Edit Form -->
+    <h2>Επεξεργασία εγγραφής με ID: <?php echo $edit_record['id']; ?></h2>
+    <table border="1" class="imagetable tablesorter">
+        <form method="POST">
+            <?php foreach ($columns as $column):
+                $is_disabled = in_array($column['COLUMN_NAME'], $hide_edit_columns) ? 'disabled' : '';
+                
+                $input = '';
+                switch ($column['DATA_TYPE']) {
+                    case 'varchar':
+                    case 'int':
+                        $input = "<input type='text' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;' $is_disabled>";
+                        break;
+                    case 'date':
+                        $input = "<input type='date' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;'>";
+                        break;
+                    case 'tinyint':
+                        $is_checked = $edit_record[$column['COLUMN_NAME']] == 1 ? 'checked' : '';
+                        $input = "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ."/>";
+                        break;
+                    case 'text':
+                        $input = "<textarea name='". $column['COLUMN_NAME'] ."' rows='1' cols='80'>".$edit_record[$column['COLUMN_NAME']]."</textarea>";
+                        break;
+                    case 'enum':
+                        // Extracting the enum values from COLUMN_TYPE
+                        preg_match("/^enum\((.*)\)$/", $column['COLUMN_TYPE'], $matches);
+                        $enum_values = str_getcsv($matches[1], ',', "'");
+                        $input = "<select name='". $column['COLUMN_NAME'] ."' style='width:90%;'>";
+                        foreach ($enum_values as $value) {
+                            $is_selected = $edit_record[$column['COLUMN_NAME']] == $value ? 'selected' : '';
+                            $input .= "<option value='$value' $is_selected>$value</option>";
+                        }
+                        $input .= "</select>";
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+                ?>
+                <tr>
+                <td style="width:25%;"><label><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?>:</label></td>
+                <td><?php echo $input; ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <tr><td>
+            <button type="submit" name="update">Ενημέρωση</button>
+            &nbsp;
+            <button class="btn-link btn-yellow"><a href="?<?php echo $search_column; ?>=<?php echo $edit_record[$search_column]; ?>">Λίστα</a></button>
+            </td><td></td></tr>
+            <input type="hidden" name="<?php echo $search_column ?>" value="<?php echo $edit_record[$search_column]; ?>">
+            <input type="hidden" name="id" value="<?php echo $edit_record['id']; ?>">
+        </form>
+    </table>
+
+
+<?php elseif (isset($_GET['add']) && isset($_GET[$search_column])): ?>
+
+
+<!-- Create Form -->
+<h2>Νέα εγγραφή</h2>
+<table border="1" class="imagetable tablesorter">
+<form method="POST">
+    <input type="hidden" name="<?php echo $search_column; ?>" value="<?php echo $_GET[$search_column]; ?>">
+    <?php foreach ($columns as $column): 
+        $input = '';
+        $is_disabled = in_array($column['COLUMN_NAME'], $hide_edit_columns) ? 'disabled' : '';
+        $edit_record[$search_column] = isset($_GET[$search_column]) ? $_GET[$search_column] : '';
+        switch ($column['DATA_TYPE']) {
+            case 'varchar':
+            case 'int':
+                $input = "<input type='text' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;' $is_disabled>";
+                break;
+            case 'date':
+                $input = "<input type='date' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;'>";
+                break;
+            case 'tinyint':
+                $is_checked = $edit_record[$column['COLUMN_NAME']] == 1 ? 'checked' : '';
+                $input = "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ."/>";
+                break;
+            case 'text':
+                $input = "<textarea name='". $column['COLUMN_NAME'] ."' rows='1' cols='80'>".$edit_record[$column['COLUMN_NAME']]."</textarea>";
+                break;
+            case 'enum':
+                // Extracting the enum values from COLUMN_TYPE
+                preg_match("/^enum\((.*)\)$/", $column['COLUMN_TYPE'], $matches);
+                $enum_values = str_getcsv($matches[1], ',', "'");
+                $input = "<select name='". $column['COLUMN_NAME'] ."' style='width:90%;'>";
+                foreach ($enum_values as $value) {
+                    $is_selected = $edit_record[$column['COLUMN_NAME']] == $value ? 'selected' : '';
+                    $input .= "<option value='$value' $is_selected>$value</option>";
+                }
+                $input .= "</select>";
+                break;
+            default:
+                # code...
+                break;
+        }
+        
+        
+        ?>
+        <tr>
+        <td style="width:25%;"><label><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?>:</label></td>
+        <td><?php echo $input; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    <tr><td>
+    <button type="submit" name="create">Δημιουργία</button> &nbsp;
+    <button class="btn-link btn-yellow"><a href="?<?php echo $search_column; ?>=<?php echo $edit_record[$search_column]; ?>">Λίστα</a></button>
+    </td><td></td></tr>
+    
+
+</table>
+</form>
+
+<?php elseif (isset($_GET[$search_column])):
+    // Fetch all records
+    $query = "SELECT * FROM $table WHERE $search_column = '".$_GET[$search_column]."'";
+    // echo $query;
+    $result = $mysqli->query($query);
+    $records = [];
+    if (mysqli_num_rows($result) == 0){
+        echo "<h2>Δε βρέθηκαν εγγραφές</h2>";
+        echo "<br><button class='btn-link'><a href='?add=1&$search_column=".$_GET[$search_column]."'>Προσθήκη</a></button>";
+        die();
+    }
+    while ($row = $result->fetch_assoc()) {
+        $records[] = $row;
+    }
+?>
+    <!-- Records List -->
+    <h2>Λίστα εγγραφών</h2>
+    <table border="1" class="imagetable tablesorter">
+        <tr>
+            <?php foreach ($columns as $column): 
+                if (!in_array($column['COLUMN_NAME'],$table_list_columns)) continue;
+                ?>
+                <th><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?></th>
+            <?php endforeach; ?>
+            <th>Ενέργειες</th>
+        </tr>
+        <?php foreach ($records as $record): ?>
+            <tr>
+                <?php foreach ($columns as $column): 
+                    if (!in_array($column['COLUMN_NAME'],$table_list_columns)) continue;
+                    ?>
+                    <td><?php echo $record[$column['COLUMN_NAME']]; ?></td>
+                <?php endforeach; ?>
+                <td>
+                    <button class="btn-link"><a href="?edit=<?php echo $record['id']; ?>">Επεξεργασία</a></button>
+                    <form method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="id" value="<?php echo $record['id']; ?>">
+                        <button class="btn-red" type="submit" name="delete">Διαγραφή</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        <tr><td>
+        <button class="btn-link"><a href="?add=1&<?php echo $search_column; ?>=<?php echo $record[$search_column]; ?>">Προσθήκη</a></button>
+        </td><td colspan=4></td></tr>
+    </table>
+<?php else: ?>
+    <h1>Δεν υπάρχουν εγγραφές για εμφάνιση</h1>
+<?php endif; ?>
+</body>
 </html>
-                    
+
+<script>
+function confirmDelete() {
+    return confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή την εγγραφή;');
+}
+</script>
+
+<?php
+$mysqli->close();
+?>

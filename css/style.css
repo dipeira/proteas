@@ -132,6 +132,15 @@ button, input[type=submit], input[type=button] {
 	background-color: #ea150b !important;
 }
 
+.btn-link a {
+	color: white;
+	text-decoration: none;
+}
+
+.btn-yellow {
+	background-color: #e4a118;
+}
+
 /* Add a hover effect for buttons */
 button:hover {
   opacity: 0.8;
