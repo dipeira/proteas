@@ -472,7 +472,8 @@ elseif ($_GET['op']=="view")
                         $met="Μετ. + Διδ.";
                         break;
         }
-        echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
+        // echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
+        echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm' onclick=\"window.open('postgrad.php?op=list&afm=$afm','newwindow','width=1000,height=500');return false;\">(Λεπτομέρειες)</a></small></td><td colspan=3>$met</td></tr>";
                         
         echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br($comments)."</td></tr>"; 
         echo "<tr><td>Υποχρεωτικό ωράριο</td><td colspan='3'>$wres</td></tr>";

@@ -2,15 +2,16 @@
 // Generic CRUD page created for Proteas
 ////////////////////////////////////////
 // CRUD OPTIONS
+////////////////////////////////////////
+// Table name to generate CRUD for
+$table = 'postgrad';
 // Columns to be displayed on list view
-$table_list_columns = array('afm','category','title','idryma');
+$table_list_columns = array('category','title','idryma','gnhsiothta','synafeia');
 // Columns to be hidden on edit view
 $hide_edit_columns = array('id', 'afm');
 // Columns to be skipped on add view
 $skip_add_columns  = array('id', 'updated');
-// Table name to generate CRUD for
-$table = 'postgrad';
-// Page name
+// Page display name
 $page_name = "Μεταπτυχιακοί Τίτλοι";
 // Search column (WHERE column = $_GET['column'])
 $search_column = 'afm';
@@ -48,7 +49,6 @@ while ($row = $result->fetch_assoc()) {
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['create'])) {
-        $skip_add_columns = array('id', 'updated');
         
         // Filter the columns to exclude those in $skip_add_columns
         $filtered_columns = array_filter($columns, function($column) use ($skip_add_columns) {
@@ -149,6 +149,8 @@ if (isset($_GET['edit'])):
                         }
                         $input .= "</select>";
                         break;
+                    case 'timestamp':
+                        $input = "<p style='width:90%;' >" . date("d-m-Y, H:i:s",strtotime($edit_record[$column['COLUMN_NAME']])). "</p>";
                     default:
                         # code...
                         break;
@@ -179,6 +181,7 @@ if (isset($_GET['edit'])):
 <form method="POST">
     <input type="hidden" name="<?php echo $search_column; ?>" value="<?php echo $_GET[$search_column]; ?>">
     <?php foreach ($columns as $column): 
+        if (in_array($column['COLUMN_NAME'],$skip_add_columns)) continue;
         $input = '';
         $is_disabled = in_array($column['COLUMN_NAME'], $hide_edit_columns) ? 'disabled' : '';
         $edit_record[$search_column] = isset($_GET[$search_column]) ? $_GET[$search_column] : '';
@@ -230,8 +233,13 @@ if (isset($_GET['edit'])):
 </form>
 
 <?php elseif (isset($_GET[$search_column])):
-    // Fetch all records
-    $query = "SELECT * FROM $table WHERE $search_column = '".$_GET[$search_column]."'";
+    // Fetch all records (if search_column == 'all')
+    if ($_GET[$search_column] == 'all'){
+        $query = "SELECT * FROM $table ";    
+    } else {
+    // Fetch records filtered by search_column
+        $query = "SELECT * FROM $table WHERE $search_column = '".$_GET[$search_column]."'";
+    }
     // echo $query;
     $result = $mysqli->query($query);
     $records = [];
@@ -246,7 +254,7 @@ if (isset($_GET['edit'])):
 ?>
     <!-- Records List -->
     <h2>Λίστα εγγραφών</h2>
-    <table border="1" class="imagetable tablesorter">
+    <table border="1" class="imagetable tablesorter" style="width:100%;">
         <tr>
             <?php foreach ($columns as $column): 
                 if (!in_array($column['COLUMN_NAME'],$table_list_columns)) continue;
@@ -260,7 +268,13 @@ if (isset($_GET['edit'])):
                 <?php foreach ($columns as $column): 
                     if (!in_array($column['COLUMN_NAME'],$table_list_columns)) continue;
                     ?>
-                    <td><?php echo $record[$column['COLUMN_NAME']]; ?></td>
+                    <td><?php if ($column['DATA_TYPE'] == 'tinyint') { 
+                            $is_checked = $record[$column['COLUMN_NAME']] == 1 ? 'checked' : '';
+                            echo "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ."/>";
+                        } else {
+                            echo $record[$column['COLUMN_NAME']] ;
+                        }
+                    ?></td>
                 <?php endforeach; ?>
                 <td>
                     <button class="btn-link"><a href="?edit=<?php echo $record['id']; ?>">Επεξεργασία</a></button>
@@ -273,7 +287,7 @@ if (isset($_GET['edit'])):
         <?php endforeach; ?>
         <tr><td>
         <button class="btn-link"><a href="?add=1&<?php echo $search_column; ?>=<?php echo $record[$search_column]; ?>">Προσθήκη</a></button>
-        </td><td colspan=4></td></tr>
+        </td><td colspan=<?php echo count($table_list_columns); ?>></td></tr>
     </table>
 <?php else: ?>
     <h1>Δεν υπάρχουν εγγραφές για εμφάνιση</h1>
