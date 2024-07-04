@@ -680,7 +680,7 @@ CREATE TABLE `postgrad` (
   `synafeia` tinyint(1) NOT NULL COMMENT 'Συνάφεια',
   `synafeia_praxi` varchar(100) NOT NULL COMMENT 'Πράξη Συνάφειας',
   `synafeia_aitisi_date` date NOT NULL COMMENT 'Ημ/νία Αίτησης Συνάφειας',
-  `updated` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Ενημερώθηκε'
+  `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
