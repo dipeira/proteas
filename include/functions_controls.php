@@ -533,4 +533,25 @@ function tblCmb($conn, $tbl, $inp = 0, $fieldnm = null, $sortby = null, $query =
     echo "</select>";
 }
 
+function postgradCmb($v = null)
+{
+    echo "<select name=\"category\">";
+    if ($v==1) {
+        echo "<option value='Μεταπτυχιακό' selected>Μεταπτυχιακό</option>";
+    } else {
+        echo "<option value='Μεταπτυχιακό'>Μεταπτυχιακό</option>";
+    }
+    if ($v==2) {
+        echo "<option value='Διδακτορικό' selected>Διδακτορικό</option>";
+    } else {
+        echo "<option value='Διδακτορικό'>Διδακτορικό</option>";
+    }
+    if ($v==3) {
+        echo "<option value='Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)' selected>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
+    } else {
+        echo "<option value='Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
+    }
+    echo "</select>";
+}
+
 ?>
