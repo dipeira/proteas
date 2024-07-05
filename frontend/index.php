@@ -49,7 +49,7 @@
   if (!$prDebug)
   {  
     //initialize phpCAS using SAML
-    phpCAS::client(SAML_VERSION_1_1,'sso-test.sch.gr',443,'','https://srv1-dipe.ira.sch.gr');
+    phpCAS::client(SAML_VERSION_1_1,'sso.sch.gr',443,'','https://srv1-dipe.ira.sch.gr');
     // if logout
     if (isset($_POST['logout']))
     {
