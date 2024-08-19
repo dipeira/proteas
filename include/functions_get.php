@@ -484,4 +484,20 @@ function get_wres($days)
     }
 }
 
+function get_pz_names($pz, $conn){
+    $proini = unserialize($pz);
+    $names = 'Εκπ/κοί Π.Ζ.: ';
+    $prids = implode(',',$proini);
+    $query = "SELECT e.surname, e.name, k.perigrafh FROM employee e join klados k on e.klados = k.id WHERE e.id in ($prids)";
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) == 0){
+        return 'Δεν έχουν οριστεί εκπ/κοί Π.Ζ.';
+    }
+    while ($row = mysqli_fetch_assoc($result))  
+    {
+        $names .= $row["name"]. " " . $row["surname"]. " (" . $row['perigrafh'] . '), ';
+    }
+    return $names;    
+}
+
 ?>

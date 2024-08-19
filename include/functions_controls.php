@@ -505,6 +505,26 @@ function workersCmb($inp, $sch, $conn)
     echo "</select>";
 }
 
+function workersMultiCmb($inp, $sch, $conn, $cmbid = 'workercmb')
+{
+  $query = "SELECT e.id,surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 ORDER BY surname ASC";
+  $result = mysqli_query($conn, $query);
+  if (!$result) { 
+    echo "Δε βρέθηκαν αποτελέσματα...";
+    return;
+  }
+    echo "<select id='$cmbid' name='".$cmbid."[]' multiple='multiple'>";
+    while ($row = mysqli_fetch_assoc($result)) 
+    {
+        if (in_array($row['id'], $inp)) {
+            echo "<option value='".$row['id']."' selected='selected'>".$row['surname'].' '.$row['name']."</option>";
+        } else {
+          echo "<option value='".$row['id']."'>".$row['surname'].' '.$row['name'].' ('.$row['perigrafh'].')'."</option>";
+        }
+    }
+    echo "</select>";
+}
+
 // generic combo function
 function tblCmb($conn, $tbl, $inp = 0, $fieldnm = null, $sortby = null, $query = null)
 {

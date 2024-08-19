@@ -29,6 +29,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
     <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+    <link href="../css/select2.min.css" rel="stylesheet" />
+    <script src="../js/select2.min.js"></script>
     <script type="text/javascript">    
         $().ready(function() {
             $("#org").autocomplete("../employee/get_school.php", {
@@ -50,6 +52,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $("#mytbl4").tablesorter({widgets: ['zebra']});
             $("#mytbl5").tablesorter({widgets: ['zebra']});
             $("#mytbl6").tablesorter({widgets: ['zebra']});
+            $("#proinizoni").select2();
         });
         $(document).ready(function(){
           $('#updatefrm').on('submit', function(e){
@@ -275,6 +278,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "Υπεύθυνος/-η: ";
                 workersCmb($vivliothiki, $sch, $mysqlconnection);
                 echo "</div>";
+                echo "<tr>";
+                echo "<td>Πρωινή Ζώνη:&nbsp;";
+                $proinizoni = unserialize(mysqli_result($result, 0, "proinizoni"));
+                workersMultiCmb($proinizoni, $sch, $mysqlconnection,'proinizoni');
+                echo "</td><td>";
+                echo "</td></tr>";
                 echo "</td>";
                         
                 echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";

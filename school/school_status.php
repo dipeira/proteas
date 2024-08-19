@@ -439,7 +439,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             if ($synolo>0) {
             echo "<h3>Μαθητικό Δυναμικό</h3>";
             echo "<table class=\"imagetable\" border='1'>";
-            echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολ</i></td><td class='tdnone'><i>ΠΖ</i></td></tr>";
+            echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολοήμερο</i></td><td class='tdnone'><i>Πρωινή Ζώνη</i></td></tr>";
             $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
             echo "<tr><td>Μαθ.Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td>";
             echo "<td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
@@ -448,7 +448,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<td>$tmimata_exp[3]</td><td>$tmimata_exp[4]</td><td>$tmimata_exp[5]</td><td class='tdnone'><i>$tmimata_exp[6]<small>&nbsp;&nbsp;&nbsp;(14-15)</small>";
             echo "<br>$tmimata_exp[7]<small>&nbsp;&nbsp;&nbsp;(15-16)</small>";
             echo $tmimata_exp[9] > 0 ? "<br>$tmimata_exp[9]<small>&nbsp;&nbsp;&nbsp;(16-17.30)</small>":"";
-            echo "</i></td><td class='tdnone'><i>$tmimata_exp[8]</i></td></tr>";
+            // Get PZ teacher names
+            $pznames = get_pz_names(mysqli_result($result, 0, "proinizoni"), $conn);
+            echo "</i></td><td class='tdnone'><i>$tmimata_exp[8]</i>&nbsp;&nbsp;&nbsp;<span title='$pznames'><img style='border: 0pt none;' src='../images/info.png'</span></td></tr>";
             if (strlen($archive) > 0){
                 // update school set students='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΠΡ-Ζ',
                 // tmimata='Α,Β,Γ,Δ,Ε,ΣΤ,ΟΛ,ΟΛ16,ΠΡ-Ζ' WHERE code='9170117';

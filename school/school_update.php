@@ -36,9 +36,25 @@
   $ted = $_POST['ted'] == 'on' ? 1 : 0;
   
   $oloimero = $_POST['oloimero'] == 'on' ? 1 : 0;
-  
+
   $vivliothiki = $_POST['vivliothiki'] == 'on' ? $_POST['workercmb'] : 0;
-  
+
+  // Proini Zoni
+  if (isset($_POST['proinizoni'])){
+    foreach ($_POST['proinizoni'] as $pr){
+        $proinizoni[] = $pr;
+    }
+    $prser = serialize($proinizoni);
+    // check if number of pz teachers is bigger than pz classes
+    if (count($proinizoni) > $_POST['ti']){
+      notify('Σφάλμα: Ο αριθμός υπευθύνων Πρ.Ζώνης δεν πρέπει να είναι μεγαλύτερος των τμημάτων ΠΖ!',1);
+      mysqli_close($mysqlconnection);
+      die();
+    }
+  } else {
+    $prser = '';
+  }
+   
   $comments = $_POST['comments'];
   $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'].",".$_POST['g'].",".$_POST['h'];
    
@@ -73,7 +89,7 @@
   $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', fax='$fax', email='$email', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";
   $query1 = ", oloimero_tea = '$oloimero_tea', oloimero_stud = '$oloimero_stud', tmimata = '$tmimata', ekp_ee='$ekp_ee'";
   $query2 = ", klasiko = '$klasiko', oloimero_nip = '$oloimero_nip', nip = '$nip', kena_org = '$kena_org', kena_leit = '$kena_leit', titlos = '$titlos', tk = '$tk'";
-  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki' WHERE id=$sch";
+  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki', proinizoni = '$prser' WHERE id=$sch";
   $query = $query0.$query1.$query2.$query3;
   //echo $query;
   mysqli_query($mysqlconnection, $query);
