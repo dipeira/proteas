@@ -97,8 +97,9 @@ function anagkes_wrwn($tm)
 * Function to compute required and available hours for oloimero schedule (since 2016-17)
 * uses anagkes_wrwn
 * sch: school code, $print: TRUE to print, false to return 3 arrays(required, available, diff)
+* analytika: true by default, to compute all hour subtractions
 */
-function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $analytika = false)
+function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $analytika = true)
 {
     set_time_limit(1200);
     $avhrs = [];
@@ -107,10 +108,14 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     // get tmimata
-    $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2 from school WHERE id='$sch'";
+    $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2,proinizoni from school WHERE id='$sch'";
     $result = mysqli_query($mysqlconnection, $query);
     $tmimata_exp = strlen(mysqli_result($result, 0, "tmimata")) ? explode(",", mysqli_result($result, 0, "tmimata")) : '';
     $vivliothiki = mysqli_result($result, 0, "vivliothiki");
+    
+    // get PZ ids
+    $proinizoni_ids = unserialize(mysqli_result($result, 0, "proinizoni"));
+
     $eidiko = mysqli_result($result, 0, "type2") == 2 ? true : false;
     $leit = is_array($tmimata_exp) && count($tmimata_exp) > 0 ? 
         $tmimata_exp[0]+$tmimata_exp[1]+$tmimata_exp[2]+$tmimata_exp[3]+$tmimata_exp[4]+$tmimata_exp[5] :
@@ -207,6 +212,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             $avhrs[$kl] += $row['wres'];
         }
     }
+
     if ($print || $analytika) {
         // αναλυτικά...
         $query = "SELECT e.id,e.name, e.surname,e.klados,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.thesi in (0) AND e.ent_ty NOT IN (1,2) ORDER BY e.klados";
@@ -216,9 +222,18 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             $hours = $row['hours'];
             // check if ypeythinos vivliothikis
             if ($row['id'] == $vivliothiki) {
-            $avhrs[$row['klados']] -= MEIWSH_VIVLIOTHIKIS;
-            $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
-            $hours -= MEIWSH_VIVLIOTHIKIS;
+                $avhrs[$row['klados']] -= MEIWSH_VIVLIOTHIKIS;
+                $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
+                $hours -= MEIWSH_VIVLIOTHIKIS;
+            }
+            // check if ypeythinos PZ
+            if (in_array($row['id'], $proinizoni_ids)) {
+                // if not PE70, subtract PZ hours
+                if ($row['klados'] != 2){
+                    $avhrs[$row['klados']] -= MEIWSH_PZ;
+                    $hours -= MEIWSH_PZ;
+                }
+                $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)<small></i>';
             }
             $ar = Array(
             'fullname' => $row['surname'].' '.substr($row['name'], 0, 6).$extra,

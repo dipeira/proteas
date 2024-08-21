@@ -484,6 +484,7 @@ function get_wres($days)
     }
 }
 
+// Returns a string with names, surnames, klados of Proini Zoni teachers
 function get_pz_names($pz, $conn){
     $proini = unserialize($pz);
     $names = 'Εκπ/κοί Π.Ζ.: ';

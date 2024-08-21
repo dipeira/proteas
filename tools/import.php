@@ -47,7 +47,7 @@
     echo "<input type='radio' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
     echo "<input type='radio' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='5'>5) Τοποθετήσεις μονίμων εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='8'>7) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";

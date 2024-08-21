@@ -45,6 +45,8 @@
     define("L_LANG", "el_GR");
     // meiwsh ypeythinoy vivliothikis
     define('MEIWSH_VIVLIOTHIKIS',3);
+    // meiwsh Proinis Zonis
+    define('MEIWSH_PZ',5);
     // meiwsh ypodieythinth
     define('MEIWSH_YPNTH',2);
     // wres PE06 @ nip ana tmima
