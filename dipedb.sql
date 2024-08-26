@@ -626,6 +626,7 @@ CREATE TABLE IF NOT EXISTS `school` (
   `vivliothiki` int(11) DEFAULT NULL,
   `archive` text DEFAULT NULL
   `proinizoni` varchar(100) DEFAULT NULL COMMENT 'Υπεύθυνοι Πρωινής Ζώνης',
+  `pe0507` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

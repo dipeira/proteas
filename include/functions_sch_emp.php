@@ -108,10 +108,11 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
     // get tmimata
-    $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2,proinizoni from school WHERE id='$sch'";
+    $query = "SELECT students,tmimata,entaksis,leitoyrg,vivliothiki,type2,proinizoni,pe0507 from school WHERE id='$sch'";
     $result = mysqli_query($mysqlconnection, $query);
     $tmimata_exp = strlen(mysqli_result($result, 0, "tmimata")) ? explode(",", mysqli_result($result, 0, "tmimata")) : '';
     $vivliothiki = mysqli_result($result, 0, "vivliothiki");
+    $pe0507 = strlen(mysqli_result($result, 0, "pe0507")) > 0 ? explode("|", mysqli_result($result, 0, "pe0507")) : '';
     
     // get PZ ids
     $proinizoni_ids = unserialize(mysqli_result($result, 0, "proinizoni"));
@@ -138,6 +139,12 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     }
     // Απαιτούμενες ώρες
     $reqhrs = anagkes_wrwn($tmimata_exp);
+    
+    // add PE05 & PE07 to reqhrs
+    if ( ($pe0507[0] + $pe0507[2]) > 0) {
+        $reqhrs['05'] = $pe0507[0];
+        $reqhrs['07'] = $pe0507[2];
+    }
     // ώρες Δ/ντή
     $query = "SELECT *,e.id emp_id from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
     $result = mysqli_query($mysqlconnection, $query);
@@ -312,7 +319,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     unset($avar['6']);
     $avar['86'] = $avar['15'];
     unset($avar['15']);
-    $avar['05-07'] = $avar['13'] + $avar['14'];
+    $avar['05'] = $avar['13'];
+    $avar['07'] = $avar['14'];
     unset($avar['13']);
     unset($avar['14']);
     $avar['91'] = $avar['20'] + $avar['28'];
@@ -332,7 +340,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         echo "<table class=\"imagetable\" border='1'>";
         echo "<thead>";
         echo "<th>Κλάδος</th>";
-        echo "<th><span title='Γαλλικών-Γερμανικών'>05-07</span></th>";
+        echo "<th><span title='Γαλλικών'>05</span></th>";
+        echo "<th><span title='Γερμανικών'>07</span></th>";
         echo "<th><span title='Αγγλικών'>06</span></th>";
         echo "<th><span title='Καλλιτεχνικών'>08</span></th>";
         echo "<th><span title='Φυσικής αγωγής'>11</span></th>";
@@ -343,13 +352,13 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         echo "<th>Ολοήμερο</th><th>Πρωινή Ζώνη</th>";
         echo $has_entaxi ? '<th>T.E.<small> (αρ.εκπ)</small></th>' : '';
         echo "</thead>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05-07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
+        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05']."</td><td>".$reqhrs['07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
         echo $has_entaxi ? '<td>1</td>' : '';
         echo "</tr>";
-        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05-07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td colspan=2></td>";
+        echo "<tr><td>Διαθέσιμες</td><td>".$avar['05']."</td><td>".$avar['07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td colspan=2></td>";
         echo $has_entaxi ? '<td>'.$avhrs['TE'].'</td>' : '';
         echo "</tr>";
-        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05-07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'], 2);
+        echo "<tr><td>Διαφορά (+/-)</td>".tdc($ret['05']).tdc($ret['07']).tdc($ret['06']).tdc($ret['08']).tdc($ret['11']).tdc($ret['79']).tdc($ret['91']).tdc($ret['86']).tdc($ret['70']).tdc($ret['OP'], 2);
         echo $has_entaxi ? tdc($ret['TE']) : '';
         echo "</tr>";
         echo "</table>";

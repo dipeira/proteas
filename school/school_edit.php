@@ -161,6 +161,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $entaksis = explode(",", mysqli_result($result, 0, "entaksis"));
             $ypodoxis = mysqli_result($result, 0, "ypodoxis");                    
             $comments = mysqli_result($result, 0, "comments");
+            $pe0507 = explode('|', mysqli_result($result, 0, "pe0507"));
             // organikes - added 05-10-2012
             $organikes = unserialize(mysqli_result($result, 0, "organikes"));
 
@@ -174,7 +175,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // $disabled = $_SESSION['userlevel'] > 1 ? 'disabled' : '';
             
             if ($type == 1 || $type == 2){
-                echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2' /><td></td></td></tr>";
+                echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2' /></td>";
+                echo "<td>Λειτουργικότητα: $leitoyrg</td></tr>";
             }
             // 05-10-2012 - organikes
             /*
@@ -232,6 +234,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 }
             }
             echo "</td></tr>";
+            // pe05 - pe07
+            if ($type == 1 ){
+                echo "<tr><td colspan=2>";
+                echo "Ώρες ΠΕ05: <input type='text' name='tmpe05' size='2' value='$pe0507[0]' />&nbsp;Σχόλιο ΠΕ05: <input type='text' name='tmpe05b' size='6' value='$pe0507[1]' <br><br>";
+                echo "Ώρες ΠΕ07: <input type='text' name='tmpe07' size='2' value='$pe0507[2]' />&nbsp;Σχόλιο ΠΕ07: <input type='text' name='tmpe07b' size='6' value='$pe0507[3]'";
+                echo "</tr>";
+            }
             if ($type == 1 || $type == 2){
                 echo "<tr>";
                 if ($entaksis[0]) {

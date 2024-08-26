@@ -54,6 +54,13 @@
   } else {
     $prser = '';
   }
+  // PE0507
+  // saved to db (pe0507 field) as: PE05 hours | PE05 comment | PE07 hours | PE07 comment 
+  if ( isset($_POST['tmpe05']) || isset($_POST['tmpe07']) ) {
+    $pe0507 = implode('|', array($_POST['tmpe05'], $_POST['tmpe05b'], $_POST['tmpe07'], $_POST['tmpe07b']) );
+  } else {
+    $pe0507 = '';
+  }
    
   $comments = $_POST['comments'];
   $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'].",".$_POST['g'].",".$_POST['h'];
@@ -89,7 +96,7 @@
   $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', fax='$fax', email='$email', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";
   $query1 = ", oloimero_tea = '$oloimero_tea', oloimero_stud = '$oloimero_stud', tmimata = '$tmimata', ekp_ee='$ekp_ee'";
   $query2 = ", klasiko = '$klasiko', oloimero_nip = '$oloimero_nip', nip = '$nip', kena_org = '$kena_org', kena_leit = '$kena_leit', titlos = '$titlos', tk = '$tk'";
-  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki', proinizoni = '$prser' WHERE id=$sch";
+  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki', proinizoni = '$prser', pe0507= '$pe0507' WHERE id=$sch";
   $query = $query0.$query1.$query2.$query3;
   //echo $query;
   mysqli_query($mysqlconnection, $query);
