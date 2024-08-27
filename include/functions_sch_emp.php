@@ -352,7 +352,9 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         echo "<th>Ολοήμερο</th><th>Πρωινή Ζώνη</th>";
         echo $has_entaxi ? '<th>T.E.<small> (αρ.εκπ)</small></th>' : '';
         echo "</thead>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05']."</td><td>".$reqhrs['07']."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
+        $pe05analisi = strlen($pe0507[1]) > 0 ? ' ('.$pe0507[1].')' : '';
+        $pe07analisi = strlen($pe0507[3]) > 0 ? ' ('.$pe0507[3].')' : '';
+        echo "<tr><td>Απαιτούμενες</td><td>".$reqhrs['05'].$pe05analisi."</td><td>".$reqhrs['07'].$pe07analisi."</td><td>".$reqhrs['06']."</td><td>".$reqhrs['08']."</td><td>".$reqhrs['11']."</td><td>".$reqhrs['79']."</td><td>".$reqhrs['91']."</td><td>".$reqhrs['86']."</td><td>".$reqhrs['70']." ($leit)</td><td>".$reqhrs['O']."</td><td>".$reqhrs['P']."</td>";
         echo $has_entaxi ? '<td>1</td>' : '';
         echo "</tr>";
         echo "<tr><td>Διαθέσιμες</td><td>".$avar['05']."</td><td>".$avar['07']."</td><td>".$avar['06']."</td><td>".$avar['08']."</td><td>".$avar['11']."</td><td>".$avar['79']."</td><td>".$avar['91']."</td><td>".$avar['86']."</td><td>".$avar['70']." (".$allcnt['ΠΕ70'].")</td><td colspan=2></td>";

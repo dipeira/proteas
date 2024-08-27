@@ -237,8 +237,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // pe05 - pe07
             if ($type == 1 ){
                 echo "<tr><td colspan=2>";
-                echo "Ώρες ΠΕ05: <input type='text' name='tmpe05' size='2' value='$pe0507[0]' />&nbsp;Σχόλιο ΠΕ05: <input type='text' name='tmpe05b' size='6' value='$pe0507[1]' <br><br>";
-                echo "Ώρες ΠΕ07: <input type='text' name='tmpe07' size='2' value='$pe0507[2]' />&nbsp;Σχόλιο ΠΕ07: <input type='text' name='tmpe07b' size='6' value='$pe0507[3]'";
+                echo "Ώρες ΠΕ05: <input type='text' name='tmpe05' size='2' value='$pe0507[0]' />&nbsp;Ανάλυση ΠΕ05: ";
+                echo "<span title='Αναλυτικά οι ώρες, π.χ.10 ώρες -> 4-4-2 στην ανάλυση'><img style='border: 0pt none;' src='../images/info.png'></span>&nbsp;";
+                echo "<input type='text' name='tmpe05b' size='6' value='$pe0507[1]' <br><br>";
+                echo "Ώρες ΠΕ07: <input type='text' name='tmpe07' size='2' value='$pe0507[2]' />&nbsp;Ανάλυση ΠΕ07: ";
+                echo "<span title='Αναλυτικά οι ώρες, π.χ.10 ώρες -> 4-4-2 στην ανάλυση'><img style='border: 0pt none;' src='../images/info.png'></span>&nbsp;";
+                echo "<input type='text' name='tmpe07b' size='6' value='$pe0507[3]'";
                 echo "</tr>";
             }
             if ($type == 1 || $type == 2){
