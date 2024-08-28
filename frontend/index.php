@@ -412,12 +412,12 @@
       $df = $sdt['kena_pleonasmata']['diff'];
       echo "<h4>Λειτουργικά κενά - πλεονάσματα (ώρες)</h4>";
       echo "<table class='table table-striped'>";
-        echo "<thead><th>Κλάδος</th><th>ΠΕ05-07</th><th>ΠΕ06</th><th>ΠΕ08</th><th>ΠΕ11</th><th>ΠΕ79</th><th>ΠΕ91</th><th>ΠΕ86</th><th>ΠΕ70</th><th>Ολοήμερο</th><th>Πρωινή Ζώνη</th></thead><tbody>";
-        echo "<tr><td>Απαιτούμενες</td><td>".$req['05-07']."</td><td>".$req['06']."</td><td>".$req['08']."</td><td>".$req['11']."</td><td>".$req['79']."</td><td>".$req['91']."</td>";
+        echo "<thead><th>Κλάδος</th><th>ΠΕ05</th><th>ΠΕ07</th><th>ΠΕ06</th><th>ΠΕ08</th><th>ΠΕ11</th><th>ΠΕ79</th><th>ΠΕ91</th><th>ΠΕ86</th><th>ΠΕ70</th><th>Ολοήμερο</th><th>Πρωινή Ζώνη</th></thead><tbody>";
+        echo "<tr><td>Απαιτούμενες</td><td>".$req['05']."</td><td>".$req['07']."</td><td>".$req['06']."</td><td>".$req['08']."</td><td>".$req['11']."</td><td>".$req['79']."</td><td>".$req['91']."</td>";
         echo "<td>".$req['86']."</td><td>".$req['70']."</td><td>".$req['O']."</td><td>".$req['P']."</td>";
-        echo "<tr><td>Διαθέσιμες</td><td>".$avl['05-07']."</td><td>".$avl['06']."</td><td>".$avl['08']."</td><td>".$avl['11']."</td><td>".$avl['79']."</td><td>".$avl['91']."</td>";
+        echo "<tr><td>Διαθέσιμες</td><td>".$avl['05']."</td><td>".$avl['07']."</td><td>".$avl['06']."</td><td>".$avl['08']."</td><td>".$avl['11']."</td><td>".$avl['79']."</td><td>".$avl['91']."</td>";
         echo "<td>".$avl['86']."</td><td>".$avl['70']."</td><td></td><td></td>";
-        echo "<tr><td>+ / -</td><td>".$df['05-07']."</td><td>".$df['06']."</td><td>".$df['08']."</td><td>".$df['11']."</td><td>".$df['79']."</td><td>".$df['91']."</td>";
+        echo "<tr><td>+ / -</td><td>".$df['05']."</td><td>".$df['07']."</td><td>".$df['06']."</td><td>".$df['08']."</td><td>".$df['11']."</td><td>".$df['79']."</td><td>".$df['91']."</td>";
         echo "<td>".$df['86']."</td><td>".$df['70']."</td><td>".$df['OP']."</td><td></td>";
         echo "</tbody>";
       echo "</table>"; 

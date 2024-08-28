@@ -144,6 +144,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     if ( ($pe0507[0] + $pe0507[2]) > 0) {
         $reqhrs['05'] = $pe0507[0];
         $reqhrs['07'] = $pe0507[2];
+    } else {
+        $reqhrs['05'] = $reqhrs['07'] = 0;
     }
     // ώρες Δ/ντή
     $query = "SELECT *,e.id emp_id from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
@@ -240,7 +242,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
                     $avhrs[$row['klados']] -= MEIWSH_PZ;
                     $hours -= MEIWSH_PZ;
                 }
-                $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)<small></i>';
+                $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)</small></i>';
             }
             $ar = Array(
             'fullname' => $row['surname'].' '.substr($row['name'], 0, 6).$extra,
