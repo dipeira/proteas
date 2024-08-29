@@ -137,6 +137,8 @@ function hours_to_teachers_adaptive($hrs)
     }
 }
 
+// tdc
+// prints a <td> with the hours_to_teachers result as a mouseover span
 function tdc($val,$colspan = null,$withspan = true)
 {
     $cols = $colspan ? "colspan=$colspan" : '';
@@ -149,6 +151,22 @@ function tdc($val,$colspan = null,$withspan = true)
         return "<td $cols style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$colval</td>";
     } else {
         return "<td $cols style='background:none;background-color:rgba(255,255,0,0.3)'>$colval</td>";
+    }
+}
+
+// tdc2
+// prints a <td> with a custom value as a mouseover span
+function tdc2($val,$span = null)
+{
+    $colval = $span ? 
+        "<span title='".$span."'>$val</span>" :
+        $val;
+    if ($val == 0) {
+        return "<td style='background:none;background-color:rgba(0, 255, 0, 0.37)'>$colval</td>";
+    } elseif ($val < 0 ) {
+        return "<td style='background:none;background-color:rgba(255, 0, 0, 0.45)'>$colval</td>";
+    } else {
+        return "<td style='background:none;background-color:rgba(255,255,0,0.3)'>$colval</td>";
     }
 }
 

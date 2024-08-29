@@ -134,6 +134,7 @@ while ($i < $num)
     $name = getSchool($sch, $mysqlconnection);
     $code = mysqli_result($result, $i, "code");
     $organikothta = mysqli_result($result, $i, "organikothta");
+    $pe0507 = explode('|', mysqli_result($result, $i, "pe0507"));
         
     //// Oloimera
     $classes = explode(",", mysqli_result($result, $i, "students"));
@@ -203,7 +204,7 @@ while ($i < $num)
     $telPE70 = $df['70']-$OP;
     echo "<td>".(int)$av['70']."</td>";
     if (!$oligothesia) {
-        echo tdc($df['05']).tdc($df['07']).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['79']).tdc($df['91']).tdc($df['86']);
+        echo tdc2($df['05'],$pe0507[1]).tdc2($df['07'],$pe0507[3]).tdc($df['06']).tdc($df['08']).tdc($df['11']).tdc($df['79']).tdc($df['91']).tdc($df['86']);
     }
     echo tdc($df['70']).tdc($telPE70);
     echo '<td>'.hours_to_teachers_adaptive($telPE70).'</td>';
