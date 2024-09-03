@@ -161,6 +161,15 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             $dnthrs -= MEIWSH_VIVLIOTHIKIS;
             $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
         }
+        // check if ypeythinos PZ
+        if (in_array($emp_id, $proinizoni_ids)) {
+            // if not PE70, subtract PZ hours
+            if ($klados != 2){
+                $avhrs[$klados] -= MEIWSH_PZ;
+                $dnthrs -= MEIWSH_PZ;
+            }
+            $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)</small></i>';
+        }
         $avhrs[$klados] = $dnthrs;
         // ώρες Δ/ντή στην ανάλυση
         $ar = Array(
@@ -191,6 +200,15 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             $avhrs[$row['klados']] -= MEIWSH_VIVLIOTHIKIS;
             $extra = ' <i><small>(Υπεύθυνος/-η Βιβλιοθήκης)<small></i>';
             $hours -= MEIWSH_VIVLIOTHIKIS;
+        }
+        // check if ypeythinos PZ
+        if (in_array($row['id'], $proinizoni_ids)) {
+            // if not PE70, subtract PZ hours
+            if ($row['klados'] != 2){
+                $avhrs[$row['klados']] -= MEIWSH_PZ;
+                $hours -= MEIWSH_PZ;
+            }
+            $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)</small></i>';
         }
 
         // ώρες Υπ/ντή στην ανάλυση
