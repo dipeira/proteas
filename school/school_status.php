@@ -679,20 +679,28 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
         
             $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
-            // τοποθετημένοι εκπ/κοί ΠΕ60
-            $top60 = $top60m = $top60ana = $top06m = $top06a = 0;
-            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            // τοποθετημένοι εκπ/κοί ΠΕ60 (όχι Τ.Ε.)
+            $top60 = $top60m = $top60ana = $top06m = $top06a = $topent = 0;
+            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados IN (1,16) AND status=1 AND ent_ty = 0";
             $res = mysqli_query($conn, $qry);
             $top60m = mysqli_result($res, 0, 'pe60');
-            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados=1 AND status=1";
+            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados IN (1,16) AND status=1 AND ent_ty = 0";
             $res = mysqli_query($conn, $qry);
             $top60ana = mysqli_result($res, 0, 'pe60');
             $top60 = $top60m+$top60ana;
+            // entaksis
+            $qry = "SELECT count(*) as pe60 FROM employee WHERE sx_yphrethshs = $sch AND klados IN (1,16) AND status=1 AND ent_ty = 1";
+            $res = mysqli_query($conn, $qry);
+            $topent = mysqli_result($res, 0, 'pe60');
+            $qry = "SELECT count(*) as pe60 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados IN (1,16) AND status=1 AND ent_ty = 1";
+            $res = mysqli_query($conn, $qry);
+            $topentana = mysqli_result($res, 0, 'pe60');
+            $topent = $topent + $topentana;
 
             // τοποθετημένοι εκπ/κοί ΠΕ06
             $top06 = top_pe06_nip($sch, $conn);
 
-            $syn_apait = $tmimata_nip+$tmimata_nip_ol+$has_entaxi;
+            $syn_apait = $tmimata_nip+$tmimata_nip_ol;
             $syn_apait += $has_dieyrymeno ? $oloimero_nip_exp[16] : 0;
             $apait06 = $tmimata_nip * WRES_PE06_NIP;
 
@@ -708,7 +716,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo $has_dieyrymeno ? "<td>$oloimero_nip_exp[16]</td>" : '';
             echo "<td>$has_entaxi</td><td>$apait06</td></tr>";
 
-            echo "<tr><td>Υπάρχοντες </td><td>$top60</td><td></td><td></td><td></td>";
+            echo "<tr><td>Υπάρχοντες </td><td>$top60</td><td></td><td></td><td>$topent</td>";
             echo $has_dieyrymeno ? "<td></td>" : '';
             echo "<td>$top06</td></tr>";
             //60
@@ -718,10 +726,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
             //06
             $k_pl06 = $top06-$apait06;
+            $k_plent = $topent - $has_entaxi;
             $k_pl_class06 = $k_pl06 >= 0 ? 
                 "'background:none;background-color:rgba(0, 255, 0, 0.37)'" : 
                 "'background:none;background-color:rgba(255, 0, 0, 0.45)'";
-            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td></td>";
+            echo "<tr><td>+ / -</td><td style=$k_pl_class>$k_pl</td><td></td><td></td><td>$k_plent</td>";
             echo $has_dieyrymeno ? "<td></td>" : '';
             echo "<td style=$k_pl_class06>$k_pl06</td></tr>";
 
