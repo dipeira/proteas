@@ -187,9 +187,9 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     while ($row = mysqli_fetch_assoc($result_yp)){
         $extra = '';
         // reduce hours if students > 120 or eidiko with >30 students
-        if ($synolo_pr > 120 || ($eidiko && $synolo_pr > 30)) {
-            $meiwsh_ypnth = MEIWSH_YPNTH;
-        }
+        // if ($synolo_pr > 120 || ($eidiko && $synolo_pr > 30)) {
+        $meiwsh_ypnth = MEIWSH_YPNTH;
+        // }
         
         $klados = $row['klados'];
         $meiwsh_ypnth_klados = $row['perigrafh'];
