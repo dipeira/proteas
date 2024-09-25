@@ -163,10 +163,12 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         }
         // check if ypeythinos PZ
         if (in_array($emp_id, $proinizoni_ids)) {
-            // if not PE70, subtract PZ hours
+            // if not PE70, subtract PZ hours from available hours
             if ($klados != 2){
                 $avhrs[$klados] -= MEIWSH_PZ;
                 $dnthrs -= MEIWSH_PZ;
+                // finally, add the hours to PE70
+                $avhrs[2] += MEIWSH_PZ;
             }
             $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)</small></i>';
         }
@@ -203,10 +205,12 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         }
         // check if ypeythinos PZ
         if (in_array($row['id'], $proinizoni_ids)) {
-            // if not PE70, subtract PZ hours
+            // if not PE70, subtract PZ hours from available hours
             if ($row['klados'] != 2){
                 $avhrs[$row['klados']] -= MEIWSH_PZ;
                 $hours -= MEIWSH_PZ;
+                // finally, add the hours to PE70
+                $avhrs[2] += MEIWSH_PZ;
             }
             $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)</small></i>';
         }
@@ -255,10 +259,12 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             }
             // check if ypeythinos PZ
             if (in_array($row['id'], $proinizoni_ids)) {
-                // if not PE70, subtract PZ hours
+                // if not PE70, subtract PZ hours from available hours
                 if ($row['klados'] != 2){
                     $avhrs[$row['klados']] -= MEIWSH_PZ;
                     $hours -= MEIWSH_PZ;
+                    // finally, add the hours to PE70
+                    $avhrs[2] += MEIWSH_PZ;
                 }
                 $extra .= ' <i><small>(Υπεύθυνος/-η ΠΖ)</small></i>';
             }
