@@ -387,8 +387,6 @@ if ($_REQUEST['type']) {
             $top60 = $top60m+$top60ana;
             // apaitoymenoi
             $apait = $klasiko_tm + $oloimero_tm;
-            // add tmimata of dieyrymeno
-            $apait += $oloimero_nip_exp[16] > 0 ? 1 : 0;
             // apaitoymenoi @ entaksi
             $has_entaxi = strlen($entaksis[0])>1 ? 1 : 0; 
             $k_pl_ent = $has_entaxi > 0 ?
