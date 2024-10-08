@@ -131,7 +131,8 @@
 		echo "<option value='0'>Όχι</option>";
 		echo "<option value='1'>Μεταπτυχιακό</option>";
 		echo "<option value='2'>Διδακτορικό</option>";		
-		echo "<option value='3'>Μετ. & Διδ.</option>";
+		echo "<option value='3'>Μεταπτυχιακό & Διδακτορικό</option>";
+		echo "<option value='3'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
 		echo "</select></td></tr>";
 		
 		echo "<tr><td>Α.Μ.</td><td><input type='checkbox' name = 'dspam'></td><td><input type='text' name='am' /></td>";

@@ -188,25 +188,36 @@ function metdidCombo($met_did = 0)
         echo "<option value='0' selected=\"selected\">Όχι</option>";
         echo "<option value='1'>Μεταπτυχιακό</option>";
         echo "<option value='2'>Διδακτορικό</option>";            
-        echo "<option value='3'>Μετ. & Διδ.</option>";
+        echo "<option value='3'>Μεταπτυχιακό & Διδακτορικό</option>";
+        echo "<option value='4'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
     }
     elseif ($met_did == 1) {
         echo "<option value='0'></option>";
         echo "<option value='1' selected=\"selected\">Μεταπτυχιακό</option>";
         echo "<option value='2'>Διδακτορικό</option>";
-        echo "<option value='3'>Μετ. & Διδ.</option>";
+        echo "<option value='3'>Μεταπτυχιακό & Διδακτορικό</option>";
+        echo "<option value='4'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
     }
     elseif ($met_did == 2) {
         echo "<option value='0'></option>";
         echo "<option value='1'>Μεταπτυχιακό</option>";
         echo "<option value='2' selected=\"selected\">Διδακτορικό</option>";            
-        echo "<option value='3'>Μετ. & Διδ.</option>";
+        echo "<option value='3'>Μεταπτυχιακό & Διδακτορικό</option>";
+        echo "<option value='4'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
     }
     elseif ($met_did == 3) {
         echo "<option value='0'></option>";
         echo "<option value='1'>Μεταπτυχιακό</option>";
         echo "<option value='2'>Διδακτορικό</option>";            
-        echo "<option value='3' selected=\"selected\">Μετ. & Διδ.</option>";
+        echo "<option value='3' selected=\"selected\">Μεταπτυχιακό & Διδακτορικό</option>";
+        echo "<option value='4'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
+    }
+    elseif ($met_did == 4) {
+        echo "<option value='0'></option>";
+        echo "<option value='1'>Μεταπτυχιακό</option>";
+        echo "<option value='2'>Διδακτορικό</option>";            
+        echo "<option value='3'>Μεταπτυχιακό & Διδακτορικό</option>";
+        echo "<option value='4' selected=\"selected\">Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
     }
     echo "</select>";
 }

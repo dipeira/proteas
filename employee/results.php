@@ -433,6 +433,9 @@ if ($flag) {
                 case 3:
                     echo "<td>Μεταπτυχιακό & Διδακτορικό</td>\n";
                     break;
+                case 4:
+                    echo "Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)";
+                    break;
                 }
             }
             if (isset($_POST['dspam'])) {

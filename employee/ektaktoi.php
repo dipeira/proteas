@@ -469,7 +469,10 @@ elseif ($_GET['op']=="view")
                         $met="Διδακτορικό";
                         break;
                 case 3:
-                        $met="Μετ. + Διδ.";
+                        $met="Μεταπτυχιακό & Διδακτορικό";
+                        break;
+                case 4:
+                        $met="Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)";
                         break;
         }
         // echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
