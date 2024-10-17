@@ -33,7 +33,6 @@
         });
         $(".delRow").btnDelRow();
         $(".yphrow").autocomplete("get_school.php", {
-          extraParams: {title: true},
           width: 260,
           matchContains: true,
           selectFirst: false
@@ -146,7 +145,7 @@
       $thema_apof = get_diavgeia_subject($emp_data['ada_apof']);
       $data['thema_apof'] = $thema_apof;
     }
-    $data['yphrethsh'] = $emp_data['yphrethsh'];
+    $data['yphrethsh'] = str_replace("&", "και", $emp_data['yphrethsh']);
     // metakinhsh
     $metakinhsh = array();
     $i = 0;
@@ -155,6 +154,7 @@
       $metakinhsh[] = $tmp;
       $i++;
     }
+    $metakinhsh = str_replace("&", "και", $metakinhsh);
     $data['metakinhsh'] = implode(', ',$metakinhsh);
 
     // replace in document
