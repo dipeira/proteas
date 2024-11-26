@@ -91,7 +91,7 @@
   //$ya = $_POST['ya'];
   $type = $_POST['type'];
   //$apofasi = $_POST['apofasi'];
-  $comments = $_POST['comments'];
+  $comments = addslashes($_POST['comments']);
   $katast = $_POST['status'];
   $metakinhsh = addslashes($_POST['metakinhsh']);
   $praxi = $_POST['praxi'];
