@@ -66,12 +66,12 @@
             $has_errors = 0;
             // if monimoi
             if ($_POST['type'] == 1)
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type as adtype FROM adeia a
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,hm_prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type as adtype FROM adeia a
                     JOIN employee e ON a.emp_id = e.id JOIN adeia_type t ON a.type = t.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             else
             {
                 $is_anapl = 1;
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type FROM adeia_ekt a
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,hm_prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type FROM adeia_ekt a
                     JOIN ektaktoi e ON a.emp_id = e.id JOIN adeia_ekt_type t ON a.type = t.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             }
             
@@ -113,7 +113,7 @@
                 $days = mysqli_result($result, $i, "days");
                 $start = mysqli_result($result, $i, "start");
                 $start = date("d-m-Y", strtotime($start));
-                $prot = mysqli_result($result, $i, "prot");
+                $prot = mysqli_result($result, $i, "prot") . '/'. date("d-m-Y", strtotime(mysqli_result($result, $i, "hm_prot")));
                 $vev_dil = mysqli_result($result, $i, "vev_dil");
                 if ($is_anapl)
                 {
