@@ -685,6 +685,25 @@ CREATE TABLE `postgrad` (
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `symvouloi` (
+  `id` int(11) NOT NULL,
+  `perif` int(11) NOT NULL COMMENT 'Ενότητα συμβούλου',
+  `emp_id` int(11) NOT NULL COMMENT 'Α/Α εκπ/κού'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Ευρετήρια για πίνακα `symvouloi`
+--
+ALTER TABLE `symvouloi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT για πίνακα `symvouloi`
+--
+ALTER TABLE `symvouloi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
 --
 -- Indexes for table `postgrad`
 --

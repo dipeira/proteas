@@ -46,6 +46,7 @@
 					<!--<li><a href="report_leit.php">Λειτουργικά Κενά (από υπολογισμό)</a></li>-->
 					<!--<li><a href="report_kena_eid.php?klados=3">Λειτουργ.Κενά ΠΕ06 & ΠΕ11</a></li>-->
 					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
+					<li><a href="<?=$site_root?>/reports/report_symv.php">Στατιστικά συμβούλων εκπαίδευσης</a></li>
 					<li><a href="<?=$site_root?>/employee/absents.php">Εκπ/κοί σε άδεια</a></li>
 					<li><a href="<?=$site_root?>/etc/check_wres.php">Συμπλήρωση υποχρ.ωραρίου</a></li>
 					<li><a href="<?=$site_root?>/employee/simplirosi.php">Συμπλήρωση υποχρ.ωραρίου ανά κλάδο & σχολεία</a></li>
@@ -72,6 +73,7 @@
 			  <li><a href='<?=$site_root?>/etc/params.php'>Παράμετροι</a></li>
 			  <li><a href="<?=$site_root?>/employee/klados.php">Ειδικότητες</a></li>
 			  <li><a href='<?=$site_root?>/etc/users.php'>Διαχείριση Χρηστών</a></li>
+				<li><a href='<?=$site_root?>/employee/symvouloi.php'>Ενότητες συμβούλων</a></li>
 			  <li><a href='<?=$site_root?>/etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
         <li><a href='<?=$site_root?>/school/school_log.php'>Αρχείο καταγραφής πρόσβασης σχολείων</a></li>
 				<li><a href='<?=$site_root?>/school/requests.php'>Αιτήματα Σχολείων</a></li>

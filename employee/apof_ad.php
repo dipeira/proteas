@@ -5,7 +5,7 @@
 ?>	
         
 <?php        
-	// apofaseis_adeiwn
+	    // apofaseis_adeiwn
         // Displays & exports apofaseis adeiwn to doc files. It also emails schools (using swift mailer).
 
         include("../tools/class.login.php");
@@ -28,7 +28,8 @@
 
         echo "<table class='imagetable stable' border='1'>";
         echo "<form action='' method='POST'>";
-        echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot'></td></tr>";
+        $prot_form = isset($_POST['prot']) ? ' value = "'.$_POST['prot'].'"' : '';
+        echo "<tr><td>Αριθμός Πρωτοκόλου:</td><td><input type='text' name='prot' $prot_form></td></tr>";
         echo "<tr><td>Ημερολογιακό Έτος</td><td><input type='text' name='year' value='".date('Y')."'></td></tr>";
         echo "<tr>";
         echo "<td colspan=2><input type='radio' name='type' value='1' checked >Μόνιμοι";
@@ -66,13 +67,19 @@
             $has_errors = 0;
             // if monimoi
             if ($_POST['type'] == 1)
-                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,hm_prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type as adtype FROM adeia a
-                    JOIN employee e ON a.emp_id = e.id JOIN adeia_type t ON a.type = t.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
+                $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,hm_prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type as adtype, 
+                    e.patrwnymo, k.perigrafh, e.am 
+                    FROM adeia a
+                    JOIN employee e ON a.emp_id = e.id JOIN adeia_type t ON a.type = t.id 
+                    JOIN klados k ON e.klados = k.id
+                    WHERE a.prot_apof = ".$_POST['prot']." 
+                    AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             else
             {
                 $is_anapl = 1;
                 $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,hm_prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type FROM adeia_ekt a
-                    JOIN ektaktoi e ON a.emp_id = e.id JOIN adeia_ekt_type t ON a.type = t.id WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
+                    JOIN ektaktoi e ON a.emp_id = e.id JOIN adeia_ekt_type t ON a.type = t.id 
+                    WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
             }
             
             //echo $query;
@@ -99,30 +106,40 @@
             $prot_apof = $_POST['prot'];
             echo "<h3>Απόφαση $typewrd αδειών με αρ.πρωτ. $prot_apof/$hm_apof</h3>";
             echo "<table class='imagetable' border='1'>";
-            if ($type == 1)
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Δικ/κό</td><td>Τύπος</td>";
+            $column_names = $is_anapl ? 
+                "<thead><th>Επώνυμο</th><th>Όνομα</th><th>Πατρώνυμο</th><th>Ειδικότητα</th><th>Ημέρες</th><th>Έναρξη</th><th>Αρ.Πρωτ.</th>" :
+                "<thead><th>AM</th><th>Επώνυμο</th><th>Όνομα</th><th>Πατρώνυμο</th><th>Ειδικότητα</th><th>Ημέρες</th><th>Έναρξη</th><th>Αρ.Πρωτ.</th>" ;
+            if ($type == 1) {
+                $column_names .= "<th>Δικ/κό</th><th>Τύπος</th></th>";
+            }
             elseif ($type == 2)
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Υπολ.</td><td>Τύπος</td>";
-            else
-                echo "<tr><td>Επώνυμο</td><td>Όνομα</td><td>Ημέρες</td><td>Έναρξη</td><td>Αρ.Πρωτ.</td><td>Λόγος</td><td>Τύπος</td>";
+                $column_names .= "<th>Υπολ.</th><th>Τύπος</th></thead>";
+            else {
+                $column_names .= "<th>Λόγος</th><th>Τύπος</th></thead>";
+            }
+            echo $column_names;
             $i=0;
             while ($i < $num)
             {
                 $name = mysqli_result($result, $i, "name");
                 $surname = mysqli_result($result, $i, "surname");
+                $patrwnymo = mysqli_result($result, $i, "patrwnymo");
                 $days = mysqli_result($result, $i, "days");
                 $start = mysqli_result($result, $i, "start");
                 $start = date("d-m-Y", strtotime($start));
                 $prot = mysqli_result($result, $i, "prot") . '/'. date("d-m-Y", strtotime(mysqli_result($result, $i, "hm_prot")));
                 $vev_dil = mysqli_result($result, $i, "vev_dil");
+                $klados = mysqli_result($result, $i, "perigrafh");
                 if ($is_anapl)
                 {
                     $sx_yphrethshs_id_str = mysqli_result($result, $i, "sx_yphrethshs");
                     $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
                     $sch_code = $sx_yphrethshs_id_arr[0];
                 }
-                else
+                else {
                     $sch_code = mysqli_result($result, $i, "sx_yphrethshs");
+                    $am = mysqli_result($result, $i, "am");
+                }
                 $emp_id = mysqli_result($result, $i, "emp_id");
                 $ad_id = mysqli_result($result, $i, "id");
                 $typei = mysqli_result($result, $i, "type");
@@ -184,11 +201,13 @@
                 }
                 else{
                     if ($error_found)
-                        echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td bgcolor='#FF0000'><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
+                        echo "<tr><td>$am</td><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$patrwnymo</td><td>$klados</td><td>$days</td>
+                        <td bgcolor='#FF0000'><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
                     else
-                        echo "<tr><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$days</td><td><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
+                        echo "<tr><td>$am</td><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td><td>$name</td><td>$patrwnymo</td><td>$klados</td><td>$days</td>
+                        <td><a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$start</a></td><td>$prot</td><td>$dik</td><td>$adtype</td><tr>";
                 }
-                $row = array($surname,$name,$days,$start,$prot,$dik,$sch_code,$emp_email);
+                $row = array($surname,$name,$days,$start,$prot,$dik,$sch_code,$emp_email,$am);
                 $emp[] = $row;
                 $i++;
                 if ($error_found)
@@ -205,6 +224,7 @@
                 exit;
             }
             echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
+            echo "<input type='hidden' name=prot value=$prot_apof>";
             echo "<input type='hidden' name=arr[] value=$type>";
             echo "<input type='hidden' name=arr[] value=$prot_apof>";
             echo "<input type='hidden' name=arr[] value=$hm_apof>";
@@ -285,6 +305,9 @@
               $document->setValue("start#$i", $ar[3]);
               $document->setValue("protait#$i", $ar[4]);
               $document->setValue("ypol#$i", $ar[5]);
+              if (!$is_anapl){
+                $document->setValue("am#$i", $ar[8]);
+              }
                 
               $schwrd = getSchool($ar[6], $mysqlconnection);
               $document->setValue("sch#$i", $schwrd);
