@@ -17,6 +17,7 @@
 				<ul>
 					<li><a href="<?=$site_root?>/employee/ektaktoi_list.php">Λίστα</a></li>
           <li><a href="<?=$site_root?>/employee/praxi.php">Διαχείριση πράξεων</a></li>
+		  		<li><a href="<?=$site_root?>/tools/assign_praxi.php">Ανάθεση πράξεων</a></li>
           <li><a href="<?=$site_root?>/employee/praxi_sch.php">Εκπαιδευτικοί & Σχολεία ανά Πράξη</a></li>
 					<li><a href="<?=$site_root?>/employee/ektaktoi_prev.php">Προηγούμενου έτους</a></li>
           <li>&nbsp;&nbsp;- - - - - - - - - - - - -</li>
