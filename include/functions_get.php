@@ -11,6 +11,13 @@ function getKlados($id,$conn,$full = false)
       $row['perigrafh'];
       //"<span title='".$row['onoma']."'>".$row['perigrafh']."</span>";
 }
+
+function getKladosFromDescription($desc, $conn)
+{
+    $query = "SELECT id from klados where perigrafh like '%".$desc."%'";
+    $result = mysqli_query($conn, $query);
+    return mysqli_result($result, 0);
+}
     
 function getSchool($id,$conn)
 {
