@@ -73,13 +73,13 @@
                     JOIN employee e ON a.emp_id = e.id JOIN adeia_type t ON a.type = t.id 
                     JOIN klados k ON e.klados = k.id
                     WHERE a.prot_apof = ".$_POST['prot']." 
-                    AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
+                    AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name,start ASC";
             else
             {
                 $is_anapl = 1;
                 $query = "SELECT a.id,emp_id,surname,e.name,start,days,prot,hm_prot,vev_dil,hm_apof,a.type,sx_yphrethshs,a.logos,e.email,t.type FROM adeia_ekt a
                     JOIN ektaktoi e ON a.emp_id = e.id JOIN adeia_ekt_type t ON a.type = t.id 
-                    WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name ASC";
+                    WHERE a.prot_apof = ".$_POST['prot']." AND YEAR(hm_apof) = ".$_POST['year']." ORDER BY surname,name,start ASC";
             }
             
             //echo $query;
@@ -151,9 +151,9 @@
                 if ($hm_apof_org <> $hm_apof_1)
                 {
                     if ($is_anapl)
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στην ημ/νία ΑΠΟΦΑΣΗΣ άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στην ημ/νία ΑΠΟΦΑΣΗΣ άδειας. Εκπ/κός: $surname $name, Άδεια: <a href='ekt_adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
                     else
-                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στην ημ/νία ΑΠΟΦΑΣΗΣ άδειας. Εκπ/κός: $surname $name, ?δεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
+                        echo "<strong>ΠΡΟΣΟΧΗ:</strong> Πρόβλημα στην ημ/νία ΑΠΟΦΑΣΗΣ άδειας. Εκπ/κός: $surname $name, Άδεια: <a href='adeia.php?adeia=$ad_id&op=view' target='_blank'>$ad_id</a>.<br><br>";
                     $error_found = 1;
                 }
                 //if different type of adeia
