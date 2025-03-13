@@ -287,13 +287,13 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     }
     if ($print || $analytika) {
         // αναλυτικά...(εκτός ΖΕΠ / ΕΚΟ (type=6))
-        $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
+        $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours, e.ent_ty FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
             $fname = $row['surname'] . ' '. substr($row['name'], 0, 6).' *';
-            $fname .= $row['thesi'] == 2 ? '<small> (Τμ.Ένταξης)</small>' : '';
-            $fname .= $row['thesi'] == 3 ? '<small> (Παράλληλη)</small>' : '';
-            $fname .= $row['thesi'] == 4 ? '<small> (Τάξη Υποδοχής)</small>' : '';
+            $fname .= $row['ent_ty'] == 1 ? '<small> (Τμ.Ένταξης)</small>' : '';
+            $fname .= $row['ent_ty'] == 2 ? '<small> (Τάξη Υποδοχής)</small>' : '';
+            $fname .= $row['ent_ty'] == 3 ? '<small> (Παράλληλη)</small>' : '';
             $ar = Array('fullname' => $fname, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
             $all[] = $ar;
             $allcnt[$row['perigrafh']]++;
@@ -301,13 +301,20 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     }
     // PE70 entaksis
     if ($has_entaxi > 0) {
+        // monimoi
         $qry = "SELECT count(*) as pe70 FROM employee WHERE sx_yphrethshs = $sch AND klados in (2,18,19) AND status=1 and ent_ty = 1";
         $res = mysqli_query($mysqlconnection, $qry);
         $top_ent = mysqli_result($res, 0, 'pe70');
-        $avhrs['TE'] = $top_ent;
-        $ret['TE'] = $top_ent - $has_entaxi;
+        // ektaktoi
+        $qry = "SELECT count(*) as pe70 FROM ektaktoi WHERE sx_yphrethshs = $sch AND klados in (2,18,19) AND status=1 and ent_ty = 1";
+        $res = mysqli_query($mysqlconnection, $qry);
+        $top_ent_ekt = mysqli_result($res, 0, 'pe70');
+
+        $avhrs['TE'] = $top_ent + $top_ent_ekt;
+        $ret['TE'] = ($top_ent + $top_ent_ekt) - $has_entaxi;
         if ($print) {
             // αναλυτικά...
+            // Print only monimoi in T.E. Ektaktoi are already printed
             $query = "SELECT e.name,e.surname,k.perigrafh, y.hours FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh='$sch' AND y.sxol_etos = $sxoletos AND e.status=1 AND e.ent_ty = 1 ORDER BY e.klados";
             $result = mysqli_query($mysqlconnection, $query);
             while ($row = mysqli_fetch_array($result)){
