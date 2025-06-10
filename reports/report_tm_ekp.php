@@ -301,7 +301,7 @@ if ($_REQUEST['type']) {
         echo "<center>";
         $i=0;
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-            echo "<thead><tr><th>Ονομασία</th>";
+            echo "<thead><tr><th>Κωδικός</th><th>Ονομασία</th>";
             echo "<th>Δήμος</th>";
             echo "<th>Οργ.</th>";
             echo "<th>Λειτ.</th>";
@@ -328,6 +328,7 @@ if ($_REQUEST['type']) {
 
         while ($i < $num)
         {         
+            $code = mysqli_result($result, $i, "code");
             $sch = mysqli_result($result, $i, "id");
             $organikothta = mysqli_result($result, $i, "organikothta");
             $name = getSchool($sch, $mysqlconnection);
@@ -405,6 +406,7 @@ if ($_REQUEST['type']) {
                 continue;
             }
             echo "<tr>";
+            echo "<td>$code</td>";
             echo "<td><a href='../school/school_status.php?org=$sch'>$name</a></td>";
             echo "<td>".substr(getSchDimos($sch, $mysqlconnection),0,10).".</td>";
             echo "<td>$organikothta</td>";
@@ -458,7 +460,7 @@ if ($_REQUEST['type']) {
         }
         
         echo "<tr>";
-        echo "<td>Σύνολα</td><td></td><td></td>";
+        echo "<td>Σύνολα</td><td></td><td></td><td></td>";
         echo "<td>$synolo_tm_klas</td>";
         echo "<td>$synolo_nip</td>";
         echo "<td>$synolo_tm_olo</td>";
