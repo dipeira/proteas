@@ -63,6 +63,7 @@
     $num = mysqli_num_rows($result);
 
     $oligothesia = isset($_GET['oligothesia']) ? true : false;
+    $show_required = isset($_GET['required']) ? true : false;
 
     echo "<body>";
     require '../etc/menu.php';
@@ -104,9 +105,15 @@ if (!$oligothesia) {
     echo "<th rowspan=2>Ωρ. Ολ.</th>";
     echo "<th rowspan=2>Συν. Ωρ.</th>";
     echo "<th rowspan=2>Συν. Παρ.</th>";
-    //echo "<th rowspan=2>Yπαρ. Ωρ.06,<br>11,79</th>";
-    //echo "<th rowspan=2>+/- 05-07,<br>06,86</th>";
-    //echo "<th rowspan=2>+/- 08,11,<br>79,91</th>";
+    if ($show_required){
+        echo "<th rowspan=2>Απ.05-07</th>";
+        echo "<th rowspan=2>Απ.06</th>";
+        echo "<th rowspan=2>Απ.08</th>";
+        echo "<th rowspan=2>Απ.11</th>";
+        echo "<th rowspan=2>Απ.79</th>";
+        echo "<th rowspan=2>Απ.86</th>";
+        echo "<th rowspan=2>Απ.91</th>";
+    }
     echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
     echo "<th colspan=13>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
     echo "</tr>";
@@ -194,11 +201,17 @@ while ($i < $num)
     echo "<td>".($results['leit']*30+$OP)."</td>";
 
     if (!$oligothesia) {
-        //echo "<td>".($av['06']+$av['11']+$av['79'])."</td>"; // yparx. 08,11,79
-        //echo "<td>".($df['05-07']+$df['06']+$df['86'])."</td>"; // apait. 05-07,06,86
-        //echo "<td>".($df['08']+$df['11']+$df['79']+$df['91'])."</td>"; // apait. 08,11,79,91
         $all_av = array_sum($av);
         echo "<td>$all_av</td>";
+        if ($show_required) {
+            echo "<td>".($req['05']+$req['07'])."</td>"; 
+            echo "<td>".$req['06']."</td>";
+            echo "<td>".$req['08']."</td>";
+            echo "<td>".$req['11']."</td>";
+            echo "<td>".$req['79']."</td>";
+            echo "<td>".$req['86']."</td>";
+            echo "<td>".$req['91']."</td>";
+        }
         echo "<td>".(int)$av['05']."</td><td>".(int)$av['07']."</td><td>".(int)$av['06']."</td><td>".(int)$av['08']."</td><td>".(int)$av['11']."</td><td>".(int)$av['79']."</td><td>".(int)$av['91']."</td><td>".(int)$av['86']."</td>";
     }
     $telPE70 = $df['70']-$OP;
@@ -264,6 +277,9 @@ while ($i < $num)
     $kena_sum_t = array_map(hours_to_teachers, $kena_sum);
     
     echo "<tr><td>ΣΥΝΟΛΑ</td><td></td><td></td><td></td><td></td><td></td><td>";
+    if ($show_required){
+        echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+    }
 if (!$oligothesia) {
     echo "</td><td></td><td></td><td></td>";
     echo "<td>".$par_sum['05']."</td><td>".$par_sum['07']."</td><td>".$par_sum['06']."</td><td>".$par_sum['08']."</td><td>".$par_sum['11']."</td><td>".$par_sum['79']."</td><td>".$par_sum['91']."</td><td>".$par_sum['86']."</td>";
@@ -279,6 +295,9 @@ if (!$oligothesia) {
     
     echo "<tr><td>ΣΥΝΟΛΑ (εκπ)</td><td></td><td></td><td></td><td></td><td></td><td>";
 if (!$oligothesia) {
+    if ($show_required){
+        echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+    }
     echo "</td><td></td><td></td><td></td>";
     echo "<td>".$par_sum_t['05']."</td><td>".$par_sum_t['07']."</td><td>".$par_sum_t['06']."</td><td>".$par_sum_t['08']."</td><td>".$par_sum_t['11']."</td><td>".$par_sum_t['79']."</td><td>".$par_sum_t['91']."</td><td>".$par_sum_t['86']."</td>";
 } else {
