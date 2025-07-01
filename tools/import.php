@@ -42,13 +42,14 @@
     echo "<h4>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού τους προσθέσετε δεδομένα εισάγετε το.</h4>";
     echo "Επιλογή τύπου δεδομένων:<br>";
     echo "<input type='radio' name='type' value='2'>1α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='7'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
+    echo "<input type='radio' name='type' value='22'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
     echo "<input type='radio' name='type' value='1'>2) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
     echo "<input type='radio' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='5'>5) Τοποθετήσεις μονίμων εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='8'>7) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='7'>7) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='8'>8) Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
@@ -127,10 +128,13 @@
           else if ($_POST['type'] == 4){
             $tblcols = 13;
           }
-          else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 8){
+          else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 7){
             $tblcols = 3;
           }
-          else if ($_POST['type'] == 7){
+          else if ($_POST['type'] == 8){
+            $tblcols = 2;
+          }
+          else if ($_POST['type'] == 22){
             $tblcols = 73;
           }
 
@@ -192,7 +196,7 @@
             break;
 
           // schools - myschool
-          case 7:
+          case 22:
             // check if school already exists
             $code = trim($data[12],'=\"');
             $qry = "SELECT * FROM school WHERE code = $code";
@@ -337,9 +341,12 @@
             }
             break;
           // topothetiseis
+          // 5: 5) Τοποθετήσεις μονίμων εκπ/κών
+          // 6: 6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων  (για αποσπάσεις)
+          // 7: 7) Τοποθετήσεις αναπληρωτών εκπ/κών
           case 5:
           case 6:
-          case 8:
+          case 7:
             $is_mon = $_POST['type'] == 5 || $_POST['type'] == 6 ? true : false;
             $delete_yphr = $_POST['type'] == 6 ? true : false;
             // csv: ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
@@ -419,6 +426,32 @@
             $update_queries[] = $query;
             $saves++;
             
+            break;
+          case 8:
+            // csv: ΑΜ εκπ/κού;Σχόλιο
+            $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+            // check if afm exists @ monimoi
+            $emp_qry = "SELECT * FROM employee WHERE am = $data[0]";
+
+            $emp = mysqli_query($mysqlconnection, $emp_qry);
+            
+            if ( !mysqli_num_rows($emp) ) {
+              $error = true;
+              $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΜ ".$data[0]." δεν υπάρχει...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            
+            // proceed to import
+            $id = null;
+            $emp_row = mysqli_fetch_assoc($emp);
+            $id = $emp_row['id'];
+            
+            // update employee table
+            $upd_qry = "UPDATE employee set comments=concat(comments,'\n".$data[1]."') where am=".$data[0];
+            $update_queries[] = $upd_qry;
+            $top_afm = $data[0];
+             
             break;
         }
         if ($error){
