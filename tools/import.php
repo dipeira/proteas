@@ -42,13 +42,14 @@
     echo "<h4>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού τους προσθέσετε δεδομένα εισάγετε το.</h4>";
     echo "Επιλογή τύπου δεδομένων:<br>";
     echo "<input type='radio' name='type' value='2'>1α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='7'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
+    echo "<input type='radio' name='type' value='22'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
     echo "<input type='radio' name='type' value='1'>2) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
     echo "<input type='radio' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='5'>5) Τοποθετήσεις μονίμων εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='6'>6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='8'>7) Τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='5'>5) Μαζικές τοποθετήσεις μονίμων εκπ/κών &nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='6'>6) Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='7'>7) Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='8'>8) Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
@@ -127,10 +128,13 @@
           else if ($_POST['type'] == 4){
             $tblcols = 13;
           }
-          else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 8){
+          else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 7){
             $tblcols = 3;
           }
-          else if ($_POST['type'] == 7){
+          else if ($_POST['type'] == 8){
+            $tblcols = 2;
+          }
+          else if ($_POST['type'] == 22){
             $tblcols = 73;
           }
 
@@ -192,7 +196,7 @@
             break;
 
           // schools - myschool
-          case 7:
+          case 22:
             // check if school already exists
             $code = trim($data[12],'=\"');
             $qry = "SELECT * FROM school WHERE code = $code";
@@ -337,20 +341,35 @@
             }
             break;
           // topothetiseis
+          // 5: 5) Τοποθετήσεις μονίμων εκπ/κών
+          // 6: 6) Τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων  (για αποσπάσεις)
+          // 7: 7) Τοποθετήσεις αναπληρωτών εκπ/κών
           case 5:
           case 6:
-          case 8:
+          case 7:
+            // Decide if AM of AFM on 1st column
+            $searchcol = strlen($data[0]) > 8 ? 'afm' : 'am';
+            $searchcolname = strlen($data[0]) > 8 ? 'ΑΦΜ' : 'ΑΜ';
+            // check if $data[0] has a length of 8 characters. If yes, add a leading zero:
+            if (strlen($data[0]) == 8) $data[0] = '0'.$data[0];
             $is_mon = $_POST['type'] == 5 || $_POST['type'] == 6 ? true : false;
+
+            // If anaplirotes & am in csv, abort with a message
+            if (!$is_mon && $searchcol == 'am'){
+              echo 'ΣΦΑΛΜΑ: Δεν είναι δυνατή η εισαγωγή τοποθετήσεων αναπληρωτών με ΑΜ!<br>';
+              echo "<a href='import.php'>Επιστροφή</a>";
+              die();
+            }
             $delete_yphr = $_POST['type'] == 6 ? true : false;
-            // csv: ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
+            // csv: AM/ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
             $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-            // check if afm exists @ monimoi & ektaktoi
-            $emp_qry = $is_mon ? "SELECT * FROM employee WHERE afm = $data[0]" : "SELECT * FROM ektaktoi WHERE afm = $data[0]";
+            // check if am/afm exists @ monimoi & ektaktoi
+            $emp_qry = $is_mon ? "SELECT * FROM employee WHERE $searchcol = '$data[0]'" : "SELECT * FROM ektaktoi WHERE $searchcol = '$data[0]'";
             $emp = mysqli_query($mysqlconnection, $emp_qry);
             
             if ( !mysqli_num_rows($emp) ) {
               $error = true;
-              $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΦΜ ".$data[0]." δεν υπάρχει...";
+              $er_msg ="Σφάλμα: Ο υπάλληλος με $searchcolname ".$data[0]." δεν υπάρχει...";
               $er_msg .= " (γραμμή ".($num+1).")";
               break;
             }
@@ -420,6 +439,41 @@
             $saves++;
             
             break;
+          // Import comments 
+          // 8) Μαζική προσθήκη σχολίων
+          case 8:
+            // csv: ΑΜ/ΑΦΜ εκπ/κού;Σχόλιο
+            // Decide if AM of AFM on 1st column
+            // > 8 cause it may be 8 characters long
+            $searchcol = strlen($data[0]) > 8 ? 'afm' : 'am';
+            $searchcolname = strlen($data[0]) > 8 ? 'ΑΦΜ' : 'ΑΜ';
+            // check if $data[0] has a length of 8 characters. If yes, add a leading zero:
+            if (strlen($data[0]) == 8) $data[0] = '0'.$data[0];
+            
+            $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+            // check if afm exists @ monimoi
+            $emp_qry = "SELECT * FROM employee WHERE $searchcol = '$data[0]'";
+
+            $emp = mysqli_query($mysqlconnection, $emp_qry);
+            
+            if ( !mysqli_num_rows($emp) ) {
+              $error = true;
+              $er_msg ="Σφάλμα: Ο υπάλληλος με $searchcolname ".$data[0]." δεν υπάρχει...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            
+            // proceed to import
+            $id = null;
+            $emp_row = mysqli_fetch_assoc($emp);
+            $id = $emp_row['id'];
+            
+            // update employee table
+            $upd_qry = "UPDATE employee set comments=concat(comments,'\n".$data[1]."') where $searchcol='".$data[0]."'";
+            $saves++;
+            $update_queries[] = $upd_qry;
+             
+            break;
         }
         if ($error){
           break;
@@ -436,6 +490,10 @@
         // echo "<br>Queries:<br>".$queries."<br><br>";
 
         //$ret = mysqli_multi_query($mysqlconnection, $queries);
+
+        // display an image with the queries for debugging
+        $qries = htmlspecialchars($queries, ENT_QUOTES, 'UTF-8');
+        $infolink = "&nbsp;<img src='../images/info.png' width='20' height='20' title='Queries: $qries' />";
 
         mysqli_autocommit($mysqlconnection,FALSE);
         $errors = array();
@@ -474,9 +532,9 @@
         }
         if ($saves > 0){ 
           print "<h3>Η εισαγωγή πραγματοποιήθηκε με επιτυχία!</h3>";
-          echo "Έγινε εισαγωγή $saves εγγραφών στον πίνακα $tbl.<br>";
+          echo "Έγινε εισαγωγή $saves εγγραφών στον πίνακα $tbl.$infolink<br>";
         } else {
-          echo "<br><h3>Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.</h3><br>";
+          echo "<br><h3>Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.$infolink</h3><br>";
         }
       }
       else
