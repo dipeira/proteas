@@ -22,6 +22,7 @@
 					<li><a href="<?=$site_root?>/employee/ektaktoi_prev.php">Προηγούμενου έτους</a></li>
           <li>&nbsp;&nbsp;- - - - - - - - - - - - -</li>
           <li><a href="<?=$site_root?>/tools/ektaktoi_import.php">Μαζική εισαγωγή</a></li>
+					<li><a href="<?=$site_root?>/tools/ektaktoi_import_minedu.php">Μαζική εισαγωγή από αρχεία Υπουργείου (beta)</a></li>
           <li><a href="<?=$site_root?>/employee/ektaktoi_top.php">Μαζική τοποθέτηση</a></li>
 				</ul>
 			</li>

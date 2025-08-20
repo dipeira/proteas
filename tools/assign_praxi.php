@@ -28,7 +28,7 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ανάθεση Πράξεων</title>
+    <title>Ανάθεση εκπαιδευτικών σε πράξεις</title>
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/select2.min.css" rel="stylesheet" />
     <script src="../js/jquery.js"></script>
@@ -39,7 +39,7 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
     ?>
 </head>
 <body>
-    <h2>Ανάθεση Πράξεων σε Εκπαιδευτικούς</h2>
+    <h2>Ανάθεση εκπαιδευτικών σε πράξεις</h2>
     <div style="margin-bottom: 10px;">
         <button id="selectAll" class="btn-blue">Επιλογή Όλων</button>
         <button id="deselectAll" class="btn-red">Αποεπιλογή Όλων</button>
@@ -75,7 +75,7 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
         <?php endforeach; ?>
     </select>
 
-    <button id="assignPraxi">Ανάθεση Πράξης</button>
+    <button id="assignPraxi" type="button">Ανάθεση σε πράξη</button>
 
     <script>
         $(document).ready(function() {
@@ -143,20 +143,21 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
                 $('.select-row').prop('checked', checked);
             });
 
-            $('#assignPraxi').click(function() {
+            $('#assignPraxi').click(function(e) {
+                e.preventDefault();
                 var selectedIds = [];
                 $('.select-row:checked').each(function() {
                     selectedIds.push($(this).val());
                 });
 
                 var praxiId = $('#praxiSelect').val();
-                console.log(selectedIds);
-                console.log(praxiId);
+                // console.log(selectedIds);
+                // console.log(praxiId);
 
                 if (selectedIds.length > 0 && praxiId) {
                     $.ajax({
                         url: 'assign_praxi_action.php',
-                        method: 'POST',
+                        type: 'POST',
                         data: { ids: selectedIds, praxi_id: praxiId },
                         success: function(response) {
                             if (!response) {

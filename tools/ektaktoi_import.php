@@ -36,155 +36,124 @@ if ($usrlvl > 1) {
 
 
 if (isset($_POST['submit'])) {
-    $count = $inserted = 0;
+  if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
+    echo "<h3>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</h3>";
+
+    //Import uploaded file to Database
+    $path = $_FILES['filename']['tmp_name'];
+
+    $objPHPExcel = PHPExcel_IOFactory::load($path);
+
+    // get only 1st worksheet
+    $worksheet = $objPHPExcel->getSheet(0);
+    $worksheetTitle = $worksheet->getTitle();
+    // if (!strcmp($worksheetTitle,'Κλάδοι'))
+    //     continue;
+    $highestRow = $worksheet->getHighestRow(); // e.g. 10
+    if ($highestRow > $showRows)
+        $highestRowprint = $showRows;
+    else
+        $highestRowprint = $highestRow;
+    $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
+    $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+
+    $nrColumns = ord($highestColumn) - 64;
     
-    // Check if all 3 files are uploaded
-    if (!empty($_FILES['proslipsi']['tmp_name']) && 
-        !empty($_FILES['analipsi']['tmp_name']))  {
-        
-        // Load the files
-        $proslipsi_path = $_FILES['proslipsi']['tmp_name'];
-        $analipsi_path = $_FILES['analipsi']['tmp_name'];
-        
-        // Validate files by checking headers
-        $proslipsi_excel = PHPExcel_IOFactory::load($proslipsi_path);
-        $analipsi_excel = PHPExcel_IOFactory::load($analipsi_path);
-        
-        // Get first worksheets
-        $proslipsi_sheet = $proslipsi_excel->getSheet(0);
-        $analipsi_sheet = $analipsi_excel->getSheet(0);
-        
-        // Validate headers
-        if ($proslipsi_sheet->getCellByColumnAndRow(1, 1)->getValue() != 'Α/Α ΡΟΗΣ' ||
-            $analipsi_sheet->getCellByColumnAndRow(9, 1)->getValue() != 'ΗΜ. ΑΝΑΛΗΨΗΣ') {
-            die("Σφάλμα: Λάθος μορφή αρχείων. Ελέγξτε τις επικεφαλίδες.");
+    echo "<p>Το φύλλο '".$worksheetTitle."' έχει: ";
+    echo $nrColumns . ' στήλες';
+    echo ' και ' . $highestRow . ' γραμμές (<strong>' . ($highestRow-1) . ' εγγραφές</strong>).</p>';
+    // if ($highestRow == 1)
+    //     continue;
+    echo '<h4>Δείγμα Δεδομένων (πρώτες '. $showRows . ' γραμμές):</h4> <table width="100%" cellpadding="1" cellspacing="0" border="1">';
+    for ($row = 1; $row <= $highestRowprint; ++ $row) {
+      echo '<tr>';
+      for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+        $cell = $worksheet->getCellByColumnAndRow($col, $row);
+        $val = $cell->getValue();
+        $row_arr = array(0,1,2,3,4,5,6,7,8,9,10,11,12);
+        if (!in_array($col, $row_arr))
+            continue;
+        if($row === 1){
+            echo '<td style="background:#000; color:#fff;">' . $val . '</td>';
         }
-
-        // Process files and create arrays
-        $new_anaplirotes = array();
-        $analipseis = array();
-
-        // Prepare connection
-        $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-        mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
-        mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-
-        $perioxh = getParam('perioxh',$mysqlconnection);
-        // Process proslipsi file
-        $highestRow = $proslipsi_sheet->getHighestRow();
-        for ($row = 2; $row <= $highestRow; $row++) {
-            if (trim($proslipsi_sheet->getCellByColumnAndRow(15, $row)->getValue()) != $perioxh) {
-              continue;
-            }
-            $afm = $proslipsi_sheet->getCellByColumnAndRow(3, $row)->getValue();
-            $new_anaplirotes[$afm] = array(
-                'name' => $proslipsi_sheet->getCellByColumnAndRow(5, $row)->getValue(),
-                'surname' => $proslipsi_sheet->getCellByColumnAndRow(4, $row)->getValue(),
-                'patrwnymo' => $proslipsi_sheet->getCellByColumnAndRow(6, $row)->getValue(),
-                'mhtrwnymo' => $proslipsi_sheet->getCellByColumnAndRow(7, $row)->getValue(),
-                'klados' => $proslipsi_sheet->getCellByColumnAndRow(8, $row)->getValue(),
-                'stathero' => $proslipsi_sheet->getCellByColumnAndRow(20, $row)->getValue(),
-                'kinhto' => $proslipsi_sheet->getCellByColumnAndRow(21, $row)->getValue(),
-                'email' => $proslipsi_sheet->getCellByColumnAndRow(22, $row)->getValue(),
-                'hours' => $proslipsi_sheet->getCellByColumnAndRow(14, $row)->getValue() =='ΑΠΩ' ?  24 : 15
-            );
+        else
+        {
+            echo '<td>' . $val . '</td>';
         }
-        
-        // Process analipsi file
-        $highestRow = $analipsi_sheet->getHighestRow();
-        for ($row = 2; $row <= $highestRow; $row++) {
-            $afm = $analipsi_sheet->getCellByColumnAndRow(4, $row)->getValue();
-            $hm_anal = $analipsi_sheet->getCellByColumnAndRow(9, $row)->getValue();
-            $analipseis[$afm] = PHPExcel_Style_NumberFormat::toFormattedString($hm_anal, 'YYYY-MM-DD');
-        }
-        
-        // Get parameters
-        $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
-
-        // Process and insert data
-        foreach ($new_anaplirotes as $afm => $data) {
-            if (isset($analipseis[$afm])) {
-                // Check if already exists
-                $sql1 = "SELECT afm FROM ektaktoi WHERE afm='$afm'";
-                $result1 = mysqli_query($mysqlconnection, $sql1);
-                
-                if (mysqli_num_rows($result1) == 0) {
-                    $sql = "INSERT INTO ektaktoi(
-                        hm_apox, name, surname, patrwnymo, mhtrwnymo, 
-                        klados, hm_anal, afm, type, stathero, 
-                        kinhto, email, praxi, wres, status, ent_ty, sx_yphrethshs
-                    ) VALUES (
-                        '$hm_apox',
-                        '{$data['name']}',
-                        '{$data['surname']}',
-                        '{$data['patrwnymo']}',
-                        '{$data['mhtrwnymo']}',
-                        '".getKladosFromDescription($data['klados'], $mysqlconnection)."',
-                        '{$analipseis[$afm]}',
-                        '$afm',
-                        '3',
-                        '{$data['stathero']}',
-                        '{$data['kinhto']}',
-                        '{$data['email']}',
-                        '1',
-                        '{$data['hours']}',
-                        1,
-                        0,
-                        ".getSchoolID('Διάθεση ΠΥΣΠΕ', $mysqlconnection)."
-                    )";
-                    // echo $sql;
-                    // $count++;
-                    if (mysqli_query($mysqlconnection, $sql)) {
-                       $count++;
-                    } else {
-                       echo "<br>Σφάλμα για ΑΦΜ $afm: " . mysqli_error($mysqlconnection) . "<br>";
-                    }
-                } else {
-                    $inserted++;
-                }
-            }
-        }
-        
-        echo "<h2><u>Αποτέλεσμα</u></h2>";
-        if (!$count) {
-            echo "<h3>Δεν έγινε εισαγωγή εγγραφών...</h3>";
-            echo $inserted ? "<i>($inserted εγγραφές έχουν ήδη καταχωρηθεί)</i><br><br>" : '';
-        } else {
-            echo "<h3>Επιτυχής καταχώρηση $count εγγραφών...</h3><br><br>";
-        }
-    } else {
-        echo "<h3>Σφάλμα: Πρέπει να ανεβάσετε και τα 3 αρχεία.</h3>";
+      }
+      echo '</tr>';
     }
-    
-    echo "<INPUT TYPE='button' VALUE='Εισαγωγή περισσότερων' onClick=\"parent.location='ektaktoi_import.php'\">";
-    echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
-} else {
-    // Display upload form
-?>
-    <h2>Εισαγωγή αναπληρωτών εκπαιδευτικών από αρχεία excel</h2>
-    <p>Πραγματοποιήστε μαζική εισαγωγή αναπληρωτών εκπ/κών στο σύστημα.</p>
-    <p>Απαιτούνται 3 αρχεία excel:</p>
-    <ul>
-        <li>Αρχείο προσλήψεων (με στήλη "Α/Α ΡΟΗΣ")</li>
-        <li>Αρχείο αναλήψεων (με στήλη "ΗΜ. ΑΝΑΛΗΨΗΣ")</li>
-    </ul>
-    
-    <form enctype='multipart/form-data' action='' method='post'>
-        <p>Αρχείο προσλήψεων:<br>
-        <input size='50' type='file' name='proslipsi'></p>
-        
-        <p>Αρχείο αναλήψεων:<br>
-        <input size='50' type='file' name='analipsi'></p>
-        
-        <input type='submit' name='submit' value='Μεταφόρτωση'>
-    </form>
-    
-    <small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά.<br>
-    Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small><br><br>
-    
-    <a href='import.php'>Εισαγωγή μονίμων και σχολείων</a><br>
-    <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../employee/ektaktoi_list.php'">
-<?php
+    echo '</table>';
+    echo "<p>κλπ.</p>";
+
+    // prepare connection
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+
+    // get the following variable values from parameters once
+    // prepare hm/nia apoxwrhshs (endofyear)
+    $hm_apox = date('Y-m-d',strtotime(getParam('endofyear2',$mysqlconnection)));
+    // get hours
+    $hours = getParam('yp_wr', $mysqlconnection);
+
+    for ($row = 2; $row <= $highestRow; ++ $row) {
+      $val=array();
+      for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+        $cell = $worksheet->getCellByColumnAndRow($col, $row);
+        $val[] = $cell->getValue();
+      }
+      $val[5] = ExcelToPHP($val[5]);
+      $val[5] = date ("Y-m-d", $val[5]);
+
+      // prepare query
+      $sql="insert into ektaktoi(hm_apox, name, surname, patrwnymo, mhtrwnymo, klados, 
+      hm_anal, afm, type, stathero, kinhto, email, praxi, 
+      wres, status, ent_ty)
+      values('$hm_apox','".$val[0] . "','" . $val[1] . "','" . $val[2]. "','" . $val[3]. "','" . $val[4]. 
+      "','" . $val[5]. "','" . $val[6]. "','" . $val[7]. "','" . $val[8]. "','" . $val[9]. "','" . $val[10]. "','" .
+       $val[11]. "', $hours, 1, '".$val[12]."')";
+
+       //Run your mysqli_query
+      // check if already inserted...
+      $sql1 = "select afm from ektaktoi where afm=$val[6]";
+      $result1 = mysqli_query($mysqlconnection, $sql1);
+      if (mysqli_num_rows($result1)==0)
+      {    
+          $result = mysqli_query($mysqlconnection, $sql);
+          if ($result)
+              $count++;
+          else echo "<br>".mysqli_error($mysqlconnection)."<br>";
+      }
+      else
+          $inserted++;
+      //echo $sql. "<br>";
+    }
+    echo "<h2><u>Αποτέλεσμα</u></h2>";
+    if (!$count){
+        echo "<h3>Δεν έγινε εισαγωγή εγγραφών...</h3>";
+        echo $inserted ? "<i>($inserted εγγραφές έχουν ήδη καταχωρηθεί)</i><br><br>" : '';
+    }
+    else
+        echo "<h3>Επιτυχής καταχώρηση $count εγγραφών...<h3><br><br>";
+
+    echo "	<INPUT TYPE='button' VALUE='Εισαγωγή περισσότερων' onClick=\"parent.location='ektaktoi_import.php'\">";
+    echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
+  }
+}
+else {
+  echo "<h2>Εισαγωγή αναπληρωτών εκπαιδευτικών από αρχείο excel</h2>";
+  print "<p>Πραγματοποιήστε μαζική εισαγωγή αναπληρωτών εκπ/κών στο σύστημα.</p>\n";
+  print '<p>Χρησιμοποιήστε το <a href="import_sample.xls">πρότυπο βιβλίο excel</a>, ακολουθώντας τις οδηγίες που βρίσκονται σε αυτό <small>(ως σχόλια στα κελιά των κεφαλίδων)</small>.</p>';
+  print "<form enctype='multipart/form-data' action='' method='post'>";
+  print "Aρχείο προς εισαγωγή:<br />\n";
+  print "<input size='50' type='file' name='filename'><br />\n";
+  print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
+  echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small><br><br>";
+  echo "<a href='import.php'>Εισαγωγή μονίμων και σχολείων</a><br>";
+
+  echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../employee/ektaktoi_list.php'\">";
+  exit;
 }
 ?>
 </body>
