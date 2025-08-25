@@ -14,7 +14,12 @@ function getKlados($id,$conn,$full = false)
 
 function getKladosFromDescription($desc, $conn)
 {
-    $query = "SELECT id from klados where perigrafh like '%".$desc."%'";
+    $query = "
+        SELECT id 
+        FROM klados 
+        WHERE '".$desc."' LIKE CONCAT(perigrafh, '%')
+        LIMIT 1
+    ";
     $result = mysqli_query($conn, $query);
     return mysqli_result($result, 0);
 }

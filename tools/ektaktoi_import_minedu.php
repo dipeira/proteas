@@ -38,7 +38,7 @@ if ($usrlvl > 1) {
 if (isset($_POST['submit'])) {
     $count = $inserted = 0;
     
-    // Check if all 3 files are uploaded
+    // Check if all 2 files are uploaded
     if (!empty($_FILES['proslipsi']['tmp_name']) && 
         !empty($_FILES['analipsi']['tmp_name']))  {
         
@@ -70,11 +70,15 @@ if (isset($_POST['submit'])) {
         mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
         $perioxh = getParam('perioxh',$mysqlconnection);
+        if (!$perioxh) {
+            die("Σφάλμα: Πρέπει να οριστεί το όνομα περιοχής στις παραμέτρους");
+        }
         // Process proslipsi file
         $highestRow = $proslipsi_sheet->getHighestRow();
         for ($row = 2; $row <= $highestRow; $row++) {
-            if (trim($proslipsi_sheet->getCellByColumnAndRow(15, $row)->getValue()) != $perioxh) {
-              continue;
+            $cellValue = trim($proslipsi_sheet->getCellByColumnAndRow(15, $row)->getValue());
+            if (strpos($cellValue, $perioxh) !== 0) {
+                continue;
             }
             $afm = $proslipsi_sheet->getCellByColumnAndRow(3, $row)->getValue();
             $new_anaplirotes[$afm] = array(
@@ -153,7 +157,7 @@ if (isset($_POST['submit'])) {
             echo "<h3>Επιτυχής καταχώρηση $count εγγραφών...</h3><br><br>";
         }
     } else {
-        echo "<h3>Σφάλμα: Πρέπει να ανεβάσετε και τα 3 αρχεία.</h3>";
+        echo "<h3>Σφάλμα: Πρέπει να ανεβάσετε και τα 2 αρχεία.</h3>";
     }
     
     echo "<INPUT TYPE='button' VALUE='Εισαγωγή περισσότερων' onClick=\"parent.location='ektaktoi_import_minedu.php'\">";
@@ -163,7 +167,7 @@ if (isset($_POST['submit'])) {
 ?>
     <h2>Εισαγωγή αναπληρωτών εκπαιδευτικών από αρχεία excel</h2>
     <p>Πραγματοποιήστε μαζική εισαγωγή αναπληρωτών εκπ/κών στο σύστημα.</p>
-    <p>Απαιτούνται 3 αρχεία excel:</p>
+    <p>Απαιτούνται 2 αρχεία excel:</p>
     <ul>
         <li>Αρχείο προσλήψεων (με στήλη "Α/Α ΡΟΗΣ")</li>
         <li>Αρχείο αναλήψεων (με στήλη "ΗΜ. ΑΝΑΛΗΨΗΣ")</li>

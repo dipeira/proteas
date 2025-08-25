@@ -50,6 +50,7 @@
     echo "<input type='radio' name='type' value='6'>6) Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='7'>7) Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
     echo "<input type='radio' name='type' value='8'>8) Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' name='type' value='9'>9) Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv'>Δείγμα</a>)<br>";
     echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
@@ -131,7 +132,7 @@
           else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 7){
             $tblcols = 3;
           }
-          else if ($_POST['type'] == 8){
+          else if ($_POST['type'] == 8 || $_POST['type'] == 9){
             $tblcols = 2;
           }
           else if ($_POST['type'] == 22){
@@ -470,6 +471,34 @@
             
             // update employee table
             $upd_qry = "UPDATE employee set comments=concat(comments,'\n".$data[1]."') where $searchcol='".$data[0]."'";
+            $saves++;
+            $update_queries[] = $upd_qry;
+             
+            break;
+          // Assign praxi to ektaktoi
+          // 9) Μαζική ανάθεση αναπληρωτών σε πράξεις
+          case 9:
+            // csv: ΑΦΜ εκπ/κού;ID πράξης
+            $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+            // check if afm exists @ ektaktoi
+            $emp_qry = "SELECT * FROM ektaktoi WHERE afm = '$data[0]'";
+
+            $emp = mysqli_query($mysqlconnection, $emp_qry);
+            
+            if ( !mysqli_num_rows($emp) ) {
+              $error = true;
+              $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΦΜ ".$data[0]." δεν υπάρχει...";
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            
+            // proceed to import
+            $id = null;
+            $emp_row = mysqli_fetch_assoc($emp);
+            $id = $emp_row['id'];
+            
+            // update employee table
+            $upd_qry = "UPDATE ektaktoi set praxi=$data[1] where afm='".$data[0]."'";
             $saves++;
             $update_queries[] = $upd_qry;
              
