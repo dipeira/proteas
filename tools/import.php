@@ -41,17 +41,17 @@
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
     echo "<h4>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού τους προσθέσετε δεδομένα εισάγετε το.</h4>";
     echo "Επιλογή τύπου δεδομένων:<br>";
-    echo "<input type='radio' name='type' value='2'>1α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='22'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
-    echo "<input type='radio' name='type' value='1'>2) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
-    echo "<input type='radio' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='5'>5) Μαζικές τοποθετήσεις μονίμων εκπ/κών &nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='6'>6) Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='7'>7) Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='8'>8) Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)<br>";
-    echo "<input type='radio' name='type' value='9'>9) Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv'>Δείγμα</a>)<br>";
-    echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται αφού αλλάξει το σχ. έτος.<br />\n";
+    echo "<input type='radio' class='import-choice' name='type' value='2'>1α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='22'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='1'>2) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='5'>5) Μαζικές τοποθετήσεις μονίμων εκπ/κών &nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='6'>6) Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='7'>7) Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='8'>8) Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)<br>";
+    echo "<input type='radio' class='import-choice' name='type' value='9'>9) Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv'>Δείγμα</a>)<br>";
+    echo "<br><b>ΠΡΟΣΟΧΗ: </b> Τα 3, 4 να εισάγονται ΜΟΝΟ αφού αλλάξει το σχ. έτος.<br />\n";
     echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
     echo "<input size='50' type='file' name='filename'><br />\n";
     print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
@@ -81,14 +81,20 @@
       switch ($_POST['type'])
       {
           case 1:
+          case 5:
+          case 6:
+          case 8:
             $tbl = 'employee';
             break;
           case 2:
-            $tbl = 'school';
-            break;
+          case 22:
           case 3:
           case 4:
             $tbl = 'school';
+            break;
+          case 7:
+          case 9:
+            $tbl = 'ektaktoi';
             break;
       }
       $num = 0;
