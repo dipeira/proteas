@@ -122,6 +122,11 @@
       WHERE status IN (1,3,5) AND s.perif=$perif";
       $stat_query2 = "SELECT count(*) from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
       WHERE status IN (1,3,5) AND s.perif=$perif";
+      // Teachers per specialty queries
+      $stat_query_klados_mon = "SELECT k.perigrafh, count(*) from employee e JOIN school s ON s.id = e.sx_yphrethshs JOIN klados k ON e.klados = k.id
+      WHERE e.status IN (1,3,5) AND s.perif=$perif GROUP BY klados";
+      $stat_query_klados_anapl = "SELECT k.perigrafh, count(*) from ektaktoi e JOIN school s ON s.id = e.sx_yphrethshs JOIN klados k ON e.klados = k.id
+      WHERE e.status IN (1,3,5) AND s.perif=$perif GROUP BY klados";
       
       $result0 = mysqli_query($mysqlconnection, $stat_query0);
       $row0 = mysqli_fetch_row($result0);
@@ -130,11 +135,31 @@
       $result2 = mysqli_query($mysqlconnection, $stat_query2);
       $row2 = mysqli_fetch_row($result2);
       
+      // Teachers per specialty
+      $klados_mon = $klados_anapl = array();
+      $result_klados_mon = mysqli_query($mysqlconnection, $stat_query_klados_mon);
+      while ($row = mysqli_fetch_row($result_klados_mon)) { $klados_mon[$row[0]] = $row[1]; }
+      $result_klados_anapl = mysqli_query($mysqlconnection, $stat_query_klados_anapl);
+      while ($row = mysqli_fetch_row($result_klados_anapl)) { $klados_anapl[$row[0]] = $row[1]; }
       
       echo "<table class='imagetable' style='width:50%'><thead><th>Κατηγορία</th><th>Πλήθος</th>";
       echo "<tr><td>Σχολεία</td><td>" . $row0[0] . '</td></tr>';
       echo "<tr><td>Μόνιμοι</td><td>" . $row1[0] . '</td></tr>';
       echo "<tr><td>Αναπληρωτές</td><td>" . $row2[0] . '</td></tr>';
+      echo "<tr><td>Εκπ/κοί ανά κλάδο&nbsp;";
+      echo "<a href='#' class='show_hide'><small>Εμφάνιση/Απόκρυψη</small></a>";
+      echo "</td><td><div id='analysis' style='display:none;'>";
+      echo "<p><b>Μόνιμοι</b></p>";
+      foreach ($klados_mon as $key => $value) { 
+        echo $key . ": ".$value."<br>";
+      }
+      if (!empty($klados_anapl)) { 
+        echo "<p><b>Αναπληρωτές</b></p>";
+        foreach ($klados_anapl as $key => $value) { 
+          echo $key . ": ".$value."<br>";
+        }
+      }
+      echo "</div></td></tr>";
       echo "</table>";
 
       // Gather table data
@@ -190,6 +215,11 @@
             columnDefs: [
                 { type: 'date-dd-mm-yyyy', targets: [7] } // Set to your date column index if 7 is correct
             ]
+        });
+        $("#analysis").hide();
+
+        $('.show_hide').click(function(){
+            $("#analysis").slideToggle();
         });
     });
 </script>
