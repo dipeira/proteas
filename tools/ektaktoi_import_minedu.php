@@ -76,21 +76,22 @@ if (isset($_POST['submit'])) {
         // Process proslipsi file
         $highestRow = $proslipsi_sheet->getHighestRow();
         for ($row = 2; $row <= $highestRow; $row++) {
-            $cellValue = trim($proslipsi_sheet->getCellByColumnAndRow(15, $row)->getValue());
+            $cellValue = trim($proslipsi_sheet->getCellByColumnAndRow(14, $row)->getValue());
             if (strpos($cellValue, $perioxh) !== 0) {
                 continue;
             }
-            $afm = $proslipsi_sheet->getCellByColumnAndRow(3, $row)->getValue();
+            $afm = $proslipsi_sheet->getCellByColumnAndRow(4, $row)->getValue();
             $new_anaplirotes[$afm] = array(
-                'name' => $proslipsi_sheet->getCellByColumnAndRow(5, $row)->getValue(),
-                'surname' => $proslipsi_sheet->getCellByColumnAndRow(4, $row)->getValue(),
-                'patrwnymo' => $proslipsi_sheet->getCellByColumnAndRow(6, $row)->getValue(),
-                'mhtrwnymo' => $proslipsi_sheet->getCellByColumnAndRow(7, $row)->getValue(),
-                'klados' => $proslipsi_sheet->getCellByColumnAndRow(8, $row)->getValue(),
-                'stathero' => $proslipsi_sheet->getCellByColumnAndRow(20, $row)->getValue(),
-                'kinhto' => $proslipsi_sheet->getCellByColumnAndRow(21, $row)->getValue(),
-                'email' => $proslipsi_sheet->getCellByColumnAndRow(22, $row)->getValue(),
-                'hours' => $proslipsi_sheet->getCellByColumnAndRow(14, $row)->getValue() =='ΑΠΩ' ?  24 : 15
+                'name' => $proslipsi_sheet->getCellByColumnAndRow(6, $row)->getValue(),
+                'surname' => $proslipsi_sheet->getCellByColumnAndRow(5, $row)->getValue(),
+                'patrwnymo' => $proslipsi_sheet->getCellByColumnAndRow(7, $row)->getValue(),
+                'mhtrwnymo' => $proslipsi_sheet->getCellByColumnAndRow(8, $row)->getValue(),
+                'klados' => $proslipsi_sheet->getCellByColumnAndRow(9, $row)->getValue(),
+                'stathero' => $proslipsi_sheet->getCellByColumnAndRow(21, $row)->getValue(),
+                'kinhto' => $proslipsi_sheet->getCellByColumnAndRow(22, $row)->getValue(),
+                'email' => $proslipsi_sheet->getCellByColumnAndRow(23, $row)->getValue(),
+                'hours' => $proslipsi_sheet->getCellByColumnAndRow(15, $row)->getValue() =='ΑΠΩ' ?  24 : 15,
+                'xrhmatodothsh' => $proslipsi_sheet->getCellByColumnAndRow(3, $row)->getValue() == 'ΕΣΠΑ' ? 3 : 2
             );
         }
         
@@ -126,7 +127,7 @@ if (isset($_POST['submit'])) {
                         '".getKladosFromDescription($data['klados'], $mysqlconnection)."',
                         '{$analipseis[$afm]}',
                         '$afm',
-                        '3',
+                        '{$data['xrhmatodothsh']}',
                         '{$data['stathero']}',
                         '{$data['kinhto']}',
                         '{$data['email']}',
