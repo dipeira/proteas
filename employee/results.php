@@ -271,6 +271,13 @@ if (strlen($_POST['comments'])>0) {
     $query .= " comments like '".$_POST['comments']."'";
     $flag=1;
 }
+if (strlen($_POST['email'])>0) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " email like '%".$_POST['email']."%'";
+    $flag=1;
+}
         
         
 if (!$flag) {
@@ -340,6 +347,9 @@ if ($flag) {
         if (isset($_POST['dspsynol'])) {
             echo "<th>Συνολική Υπηρεσία</th>\n";
         }
+        if (isset($_POST['dspemail'])) {
+            echo "<th>Email</th>\n";
+        }
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {
@@ -376,6 +386,11 @@ if ($flag) {
             $met_did = mysqli_result($result, $i, "met_did");
             $proyp = mysqli_result($result, $i, "proyp");
             $katast = mysqli_result($result, $i, "status");
+            $email = mysqli_result($result,$i,'email');
+            $_psd = mysqli_result($result,$i,'email_psd');
+            if (strlen($_psd) > 0){
+                $email = $email . ' // '. $_psd;
+            }
             $i++;
             if (isset($_POST['dspsynol'])) {
                 $hm_dior1 = strtotime($hm_dior);
@@ -477,6 +492,9 @@ if ($flag) {
             if (isset($_POST['dspsynol'])) {
                 $ymd=days2ymd($res1);    
                 echo "<td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td>";
+            }
+            if (isset($_POST['dspemail'])) {
+                echo "<td>$email</td>\n";
             }
             echo "</tr>";
 

@@ -206,7 +206,9 @@
 		echo "</tr>";
 		echo "<tr>";
 		ent_ty_selectcmb(0, false, true, true, true);
-		echo "</td><td colspan=3></td></tr>";
+		echo "</td>";
+		echo "<td>Email</td><td><input type='checkbox' name = 'dspemail'></td><td><input type='text' name='email' /></td>";
+		echo "</tr>";
 
 		echo "<tr><td colspan=6><input type='checkbox' name = 'smeae'>&nbsp;Οργανική σε Ειδικό Σχολείο;</td></tr>";	
     
