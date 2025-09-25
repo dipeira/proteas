@@ -78,8 +78,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       $dimos = getDimos($dimos, $conn);
       $cat = getCategory(mysqli_result($result, 0, "category"));
       $tel = mysqli_result($result, 0, "tel");
+      $tel2 = mysqli_result($result, 0, "tel2");
       $fax = mysqli_result($result, 0, "fax");
       $email = mysqli_result($result, 0, "email");
+      $email2 = mysqli_result($result, 0, "email2");
       $type = mysqli_result($result, 0, "type");
       $type2 = mysqli_result($result, 0, "type2");
       $organikothta = mysqli_result($result, 0, "organikothta");
@@ -137,8 +139,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         echo "<table class=\"imagetable\" border='1'>";
         echo "<tr><td colspan=2>Τύπος: ".get_school_type($sch, $conn)."</td></tr>";
         echo "<tr><td colspan=3>Τίτλος (αναλυτικά): $titlos</td></tr>";
-        echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel</td></tr>";
-        echo "<tr><td>email: <a href=\"mailto:$email\">$email</a></td><td>Fax: $fax</td></tr>";
+        echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel<br>Τηλ.2: $tel2</td></tr>";
+        echo "<tr><td>email: <a href=\"mailto:$email\">$email</a><br>email2: <a href=\"mailto:$email2\">$email2</a></td>";
+        echo "<td>Fax: $fax</td></tr>";
         if ($type == 1 || $type == 2) {
             echo "<tr><td>Οργανικότητα: $organikothta</td><td>Λειτουργικότητα: $leitoyrg</td></tr>";
             

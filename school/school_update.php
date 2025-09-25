@@ -14,7 +14,9 @@
   $address = $_POST['address'];
   $tk = $_POST['tk'];
   $tel = $_POST['tel']; 
+  $tel2 = $_POST['tel2'];
   $email = $_POST['email']; 
+  $email2 = $_POST['email2'];
   $fax = $_POST['fax'];
   $organ = $_POST['organ'] ? $_POST['organ'] : 0;
   $leitoyrg = $_POST['leitoyrg'] ? $_POST['leitoyrg'] : 0;
@@ -93,7 +95,7 @@
   $oloimero_nip .= ",".$_POST['o9a'].",".$_POST['o9b'];
   $nip = $_POST['ekp_kl'].",".$_POST['ekp_ol'].",".$_POST['ekp_te'];
   
-  $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', fax='$fax', email='$email', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";
+  $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', tel2='$tel2', fax='$fax', email='$email', email2='$email2', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";
   $query1 = ", oloimero_tea = '$oloimero_tea', oloimero_stud = '$oloimero_stud', tmimata = '$tmimata', ekp_ee='$ekp_ee'";
   $query2 = ", klasiko = '$klasiko', oloimero_nip = '$oloimero_nip', nip = '$nip', kena_org = '$kena_org', kena_leit = '$kena_leit', titlos = '$titlos', tk = '$tk'";
   $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki', proinizoni = '$prser', pe0507= '$pe0507' WHERE id=$sch";

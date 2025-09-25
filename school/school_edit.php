@@ -114,8 +114,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $address = mysqli_result($result, 0, "address");
             $tk = mysqli_result($result, 0, "tk");
             $tel = mysqli_result($result, 0, "tel");
+            $tel2 = mysqli_result($result, 0, "tel2");
             $fax = mysqli_result($result, 0, "fax");
             $email = mysqli_result($result, 0, "email");
+            $email2 = mysqli_result($result, 0, "email2");
             $type = mysqli_result($result, 0, "type");
             $type2 = mysqli_result($result, 0, "type2");
             $organikothta = mysqli_result($result, 0, "organikothta");
@@ -168,8 +170,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<table class=\"imagetable\" border='1'>";
             echo "<form id='updatefrm' name='update' action='school_update.php' method='POST'>";
             echo "<tr><td colspan=3>Τίτλος (αναλυτικά): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
-            echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td><td>Τηλ.: <input type='text' name='tel' value='$tel' /></td></tr>";
-            echo "<tr><td>email: <input type='text' name='email' value='$email' size='30'/></a></td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
+            echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td>";
+            echo "<td>Τηλ.: &nbsp;&nbsp;<input type='text' name='tel' value='$tel' /><br>Τηλ.2: <input type='text' name='tel2' value='$tel2' /></td></tr>";
+            echo "<tr><td>email: &nbsp;&nbsp;<input type='text' name='email' value='$email' size='30'/><br>email2: <input type='text' name='email2' value='$email2' size='30'/>";
+            echo "</td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
             
             // Disable organikothta & organikes when not admin
             // $disabled = $_SESSION['userlevel'] > 1 ? 'disabled' : '';
