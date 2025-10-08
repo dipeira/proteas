@@ -48,7 +48,7 @@
     
     $sql = "select * from klados";
     $result = mysqli_query($mysqlconnection, $sql);
-
+ 
     echo "<tr><td>Σχέση υπηρέτησης:</td>";
     echo "<td><select name='sxesi' class='sxesi_select'>";
     if (isset($_POST['sxesi']) && $_POST['sxesi'] == 'mon') {
@@ -75,6 +75,8 @@
     echo $cmb;
     
     echo "</td></tr>";
+    $is_checked = isset($_POST['showchange']) ? 'checked' : '';
+    echo "<tr><td>Προβολή τελ. αλλαγής υπηρέτησης (για μόνιμους)</td><td><input type='checkbox' name='showchange' $is_checked /><br /></td></tr>";
     
     
     echo "<tr><td colspan=2><input type='submit' value='Αναζήτηση'>";
@@ -84,6 +86,7 @@
 
 	if(isset($_POST['klados']) && isset($_POST['sxesi']))
 	{
+    $has_changes = $_POST['showchange'] && $_POST['sxesi'] == 'mon';
     $i = 0;
     $topo = 0;
     if ($_POST['sxesi'] == 'mon'){
@@ -108,7 +111,9 @@
     echo "<br>";
     // echo "<h2>Συμπλήρωση ωραρίου εκπ/κών κλάδου: ". implode(', ', $praxinm)."</h2>";
 		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Υποχρ.ωράριο</th><th>Σύνολο ωρών<br> ανάθεσης</th><th>Πλήθος υπηρετήσεων</th><th>Σχολεία</th></tr></thead><tbody>";
+    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Υποχρ.ωράριο</th><th>Σύνολο ωρών<br> ανάθεσης</th><th>Πλήθος υπηρετήσεων</th><th>Σχολεία</th>";
+    echo $has_changes ? '<th>Τελ.αλλαγή σχ.υπηρέτησης</th>' : '';
+    echo "</tr></thead><tbody>";
     
     $previd = $employees = 0;
     while ($row = mysqli_fetch_array($result))	
@@ -135,7 +140,20 @@
         $topo++;
       }
       $schools .= '</ul>';
-      echo "<tr><td><a href=\"$emp_tbl.php?id=$id&op=view\">$surname $name</a></td><td>$wrario</td><td>$anathesi</td><td>$plithos</td><td>$schools</td></tr>";
+      
+      // if monimos, examine employee_log for latest change in sx_yphreshsh
+      if ($has_changes){
+        $yphr_latest = '';
+        $log_qry = "SELECT max(timestamp),timestamp,query FROM employee_log WHERE emp_id = $id AND query LIKE '%sx_yphrethshs%' ";
+        $res_log = mysqli_query($mysqlconnection, $log_qry);
+        while ($row = mysqli_fetch_array($res_log)) {
+          $yphr_latest = $row[0];
+        }
+      }
+
+      echo "<tr><td><a href=\"$emp_tbl.php?id=$id&op=view\">$surname $name</a></td><td>$wrario</td><td>$anathesi</td><td>$plithos</td><td>$schools</td>";
+      echo $has_changes ? "<td>$yphr_latest</td>" : '';
+      echo "</tr>";
       $i++;
     }
 		echo "</tbody></table>";

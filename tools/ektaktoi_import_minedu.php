@@ -55,8 +55,11 @@ if (isset($_POST['submit'])) {
         $analipsi_sheet = $analipsi_excel->getSheet(0);
         
         // Validate headers
-        if ($proslipsi_sheet->getCellByColumnAndRow(1, 1)->getValue() != 'Α/Α ΡΟΗΣ' ||
-            $analipsi_sheet->getCellByColumnAndRow(9, 1)->getValue() != 'ΗΜ. ΑΝΑΛΗΨΗΣ') {
+        $prosl_wrong_columns = $proslipsi_sheet->getCellByColumnAndRow(1, 1)->getValue() != 'Α/Α ΡΟΗΣ';
+        $anal_wrong_columns = $analipsi_sheet->getCellByColumnAndRow(9, 1)->getValue() != 'ΗΜ. ΑΝΑΛΗΨΗΣ';
+        if ( $prosl_wrong_columns || $anal_wrong_columns ) {
+            echo $prosl_wrong_columns ? 'Εσφαλμένο αρχείο προσλήψεων<br>' : '';
+            echo $anal_wrong_columns ? 'Εσφαλμένο αρχείο αναλήψεων<br>' : '';
             die("Σφάλμα: Λάθος μορφή αρχείων. Ελέγξτε τις επικεφαλίδες.");
         }
 
