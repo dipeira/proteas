@@ -265,7 +265,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
      
         
 <?php
-            
+/////////////////////////////////
+// ************ EDIT ************
+/////////////////////////////////
 if ($_GET['op']=="edit") {
     if ($usrlvl == 3){
         echo "Δεν επιτρέπεται η πρόσβαση...";
@@ -497,6 +499,9 @@ if ($_GET['op']=="edit") {
     <?php
     echo "</html>";
 }
+/////////////////////////////////
+// ************ VIEW ************
+/////////////////////////////////
 elseif ($_GET['op']=="view") {    
        echo "<br>";
     echo "<table class=\"imagetable\" border='1'>";    
@@ -508,24 +513,26 @@ elseif ($_GET['op']=="view") {
     echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
                 
     // 16-05-2013 tel,address,amka,idnum moved to employee table
-    if ($usrlvl < 3){
         if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
             echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
             echo "<td colspan=3><div class=\"slidingDiv\">";
             echo "Τηλέφωνο: ".$tel."<br>";
-            echo "Διεύθυνση: ".$address."<br>";
-            echo "ΑΔΤ: ".$idnum."<br>";
-            echo "AMKA: ".$amka."<br>";
-            if ($katoikon) {
-                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
-            } else {
-                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
-            }
-            $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
-            $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
-            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
+            // only for user_level < 3
+            if ($usrlvl < 3){
+                echo "Διεύθυνση: ".$address."<br>";
+                echo "ΑΔΤ: ".$idnum."<br>";
+                echo "AMKA: ".$amka."<br>";
+                if ($katoikon) {
+                    echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
+                } else {
+                    echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
+                }
+                $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
+                $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
+                echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
             
-            idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+                idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+            }
             
             echo "</div>";
             echo "</td></tr>";
@@ -540,7 +547,6 @@ elseif ($_GET['op']=="view") {
             echo "</div>";
             echo "</td></tr>";   
         }
-    }
     // more data ends
     if ($usrlvl < 3){
         echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
@@ -819,6 +825,9 @@ elseif ($_GET['op']=="view") {
     echo "</body>";
     echo "</html>";    
 }
+///////////////////////////////////
+// ************ DELETE ************
+///////////////////////////////////
 if ($_GET['op']=="delete") {
     if ($usrlvl == 3){
         echo "Δεν επιτρέπεται η πρόσβαση...";
@@ -843,6 +852,9 @@ if ($_GET['op']=="delete") {
     echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn-red' onClick=\"parent.location='../index.php'\">";
     echo "  <meta http-equiv=\"refresh\" content=\"2; URL=../index.php\">";
 }
+/////////////////////////////////
+// ************ ADD  ************
+/////////////////////////////////
 if ($_GET['op']=="add") {
     if ($usrlvl == 3){
         echo "Δεν επιτρέπεται η πρόσβαση...";
