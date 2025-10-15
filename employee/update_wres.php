@@ -62,7 +62,7 @@
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-		$query = "SELECT e.*,k.perigrafh as kname from employee e JOIN klados k ON k.id = e.klados WHERE klados <> 1";
+		$query = "SELECT e.*,k.perigrafh as kname from employee e JOIN klados k ON k.id = e.klados WHERE klados <> 1 ORDER BY e.surname";
     // $query = "SELECT * from employee WHERE status NOT IN (2,4)";
     // 07-08-2013
     // $query = "SELECT * from employee WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24)";
@@ -97,6 +97,8 @@
 		  $hm_dior = mysqli_result($result, $i, "hm_dior");
       $hm_anal = mysqli_result($result, $i, "hm_anal");
 		  $proyp = mysqli_result($result, $i, "proyp");
+      $proyp_not = mysqli_result($result, $i, "proyp_not");
+      $proyp_wrario = mysqli_result($result, $i, "proyp_wrario");
       $aney_xr = mysqli_result($result, $i, "aney_xr");
       $kname = mysqli_result($result, $i, "kname");
                 
@@ -129,7 +131,7 @@
       // met 2 yrs (720), did 6 yrs (2160), both 7 yrs (2520)
                   // - aney 27-02-2013
       //$days1 = $cur_day - $dior + $proyp;
-      $days1 = $cur_day - $dior + $proyp - $aney_xr;
+      $days1 = $cur_day - $dior + $proyp - $aney_xr - $proyp_not + $proyp_wrario;
 
 		// Metdid not used to compute hours!
 		/*
