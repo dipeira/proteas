@@ -327,6 +327,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `met_did` tinyint(11) NULL COMMENT '0 οχι, 1 μεταπτ, 2 διδ, 3 μετ+διδ',
   `proyp` int(11) NULL COMMENT 'se hmeres (apo excel)',
   `proyp_not` int(11) NULL COMMENT 'proyp poy de lambanetai gia ypologismo wrarioy, se hmeres',
+  `proyp_wrario` int(11) NULL COMMENT 'proyp poy lambanetai gia ypologismo wrarioy, se hmeres',
   `anatr` int(11) NULL COMMENT 'se hmeres',
   `comments` longtext NULL,
   `status` int(11) NULL COMMENT '1 εργάζεται, 2 Λύση Σχέσης-Παραίτηση, 3 Άδεια, 4 Διαθεσιμότητα',
