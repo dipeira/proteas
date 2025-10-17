@@ -54,6 +54,8 @@
       echo "<th>Κλάδος</th>";
       echo "<th>Τηλέφωνο</th>";
       echo "<th>email</th>";
+      echo "<th>ΑΦΜ</th>";
+      echo $mon ? "<th>ΑΜ</th>" : '';
       echo "</tr>";
       echo "</thead>\n<tbody>\n";
 
@@ -72,6 +74,8 @@
             'Πρ/νος/-η';
           $klados = getKlados(mysqli_result($result, $i, "klados"),$mysqlconnection);
           $tel = $mon ? mysqli_result($result, $i, "tel") : mysqli_result($result, $i, "stathero") . ' / ' . mysqli_result($result, $i, "kinhto");
+          $afm = mysqli_result($result, $i, "afm");
+          $am = $mon ? mysqli_result($result, $i, "am") : 0;
 
           echo "<tr>";
           echo "<td>$code</td>";
@@ -84,6 +88,8 @@
           echo "<td>$klados</td>";
           echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
           echo "<td><a href='mailto:$email'>$email</a></td>";
+          echo "<td>$afm</td>";
+          echo $mon ? "<td>$am</td>" : '';
           echo "</tr>\n";
           $i++;                        
       }
