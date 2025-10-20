@@ -826,4 +826,62 @@ function isForeas($id, $conn) {
     return $row['type'] == 0 ? true : false;
 }
 
+// Archive current and new yphrethseis and save new to yphrethsh_archive
+function archive_yphrethseis($conn, $emp_id, $sxol_etos, $yphr_arr, $hours_arr, $mon = true) {
+    $yphr_tbl = $mon ? 'yphrethsh' : 'yphrethsh_ekt';
+    
+    // get old records
+    $query = "SELECT * from $yphr_tbl where emp_id = $emp_id AND sxol_etos = $sxol_etos";
+    $result = mysqli_query($conn, $query);
+    $old_yphr = array();
+    while ($row = mysqli_fetch_array($result)){
+        $sch = getSchool($row['yphrethsh'], $conn);
+        $old_yphr[] = $sch . ' (' . $row['hours'] . ')';
+    }
+    $old_value = implode('<br>', $old_yphr);
+    
+    // get new records
+    $new_yphr = array();
+    for ($i=0; $i<count($yphr_arr); $i++) 
+    {
+        $sch = getSchool($yphr_arr[$i], $conn);
+        $new_yphr[] = $sch . ' (' . $hours_arr[$i] . ')';
+    }
+    $new_value = implode('<br>', $new_yphr);
+
+    // if changes exist, save to table
+    if ($old_value <> $new_value){
+        $is_mon = $mon ? 1 : 0;
+        $query = "INSERT INTO `yphrethsh_archive`(`mon`, `emp_id`, `old_values`, `new_values`, `sxol_etos`) VALUES ($is_mon, $emp_id, '$old_value', '$new_value', $sxol_etos)";
+        $result = mysqli_query($conn, $query);
+    }
+    return;
+}
+
+
+function display_yphrethsh_archive($conn, $emp_id, $sxol_etos, $mon = true) {
+    $is_mon = $mon ? 1 : 0;
+    $query = "SELECT * FROM yphrethsh_archive WHERE emp_id = $emp_id AND mon = $is_mon AND sxol_etos = $sxol_etos ORDER BY updated DESC";
+    $result = mysqli_query($conn, $query);
+    if (!mysqli_num_rows($result)){
+        return;
+    }
+    echo "<div id='yphrethsh-archive' style='display:none;'>";
+    echo "<table id=\"mytbl5\" class=\"imagetable tablesorter\" border=\"2\">\n";
+    echo "<thead><tr>";
+    echo "<th>Παλιά τιμή</th>";
+    echo "<th>Νέα τιμή</th>";
+    echo "<th>Ημ/νία - Ώρα μεταβολής</th>";
+    echo "</tr></thead>\n<tbody>";
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<tr>";
+        echo "<td>" . $row['old_values'] . "</td>";
+        echo "<td>" . $row['new_values'] . "</td>";
+        echo "<td>" . date("d-m-Y H:i", strtotime($row['updated'])) . "</td>";
+        echo "</tr>";
+    }
+    echo "</tbody></table></div>";
+    return;
+}
+
 ?>

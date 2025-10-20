@@ -661,6 +661,24 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_ekt` (
   `sxol_etos` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `yphrethsh_archive`
+--
+
+CREATE TABLE IF NOT EXISTS `yphrethsh_archive` (
+  `id` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `mon` int(2) NOT NULL,
+  `emp_id` int(10) NOT NULL,
+  `old_values` varchar(300) NOT NULL,
+  `new_values` varchar(300) NOT NULL,
+  `sxol_etos` varchar(10) NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--------------------------------------------------------
+
 --
 -- Table structure for table `postgrad`
 --

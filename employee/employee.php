@@ -83,7 +83,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $(".slidingDiv").hide();
             $(".show_hide").show();
 
-            $('.show_hide').click(function(){
+            $('.show_hide').click(function(e){
+                e.preventDefault();
                 $(".slidingDiv").slideToggle();
             });
         });
@@ -91,7 +92,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $(".slidingDiv2").hide();
             $(".show_hide2").show();
 
-            $('.show_hide2').click(function(){
+            $('.show_hide2').click(function(e){
+                e.preventDefault();
                 $(".slidingDiv2").slideToggle();
             });
         });
@@ -99,8 +101,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $(".slidingDiv3").hide();
             $(".show_hide3").show();
 
-            $('.show_hide3').click(function(){
+            $('.show_hide3').click(function(e){
+                e.preventDefault();
                 $(".slidingDiv3").slideToggle();
+            });
+            $("#archive-toggle").click(function(e) {
+                e.preventDefault();
+                $("#yphrethsh-archive").slideToggle();
             });
         });
 </script>
@@ -693,6 +700,9 @@ elseif ($_GET['op']=="view") {
     
     $th = thesicmb($thesi);
     echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
+    echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
+    display_yphrethsh_archive($mysqlconnection, $id, $sxol_etos, true);
+    echo "</td></tr>";
     echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
     // history
     $hist_qry = "SELECT * FROM yphrethsh WHERE emp_id=$id AND sxol_etos<$sxol_etos";
