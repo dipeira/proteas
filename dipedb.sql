@@ -674,6 +674,7 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_archive` (
   `old_values` varchar(300) NOT NULL,
   `new_values` varchar(300) NOT NULL,
   `sxol_etos` varchar(10) NOT NULL,
+  `user` varchar(20) NOT NULL,
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
