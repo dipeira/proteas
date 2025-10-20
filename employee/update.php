@@ -179,6 +179,8 @@ else {
     }
     // Archive current yphrethseis before saving new
     archive_yphrethseis($mysqlconnection, $id, $sxol_etos, $yphr_arr, $hours_arr, true);
+    
+    // Remove current yphrethseis and save new
     $query = "DELETE FROM yphrethsh WHERE emp_id = $id AND sxol_etos=$sxol_etos";
     mysqli_query($mysqlconnection, $query);
     for ($i=0; $i<count($yphr_arr); $i++) 

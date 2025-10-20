@@ -1,4 +1,15 @@
 <?php
+// Returns username from a given userid
+function getUser($id, $conn){
+    $query = "SELECT username from logon where userid=".$id;
+    
+    $result = mysqli_query($conn, $query);
+    if (!$result) { 
+        return;
+    }
+    $row = mysqli_fetch_assoc($result);
+    return $row['username'];
+}
 
 function getKlados($id,$conn,$full = false)
 {

@@ -852,7 +852,8 @@ function archive_yphrethseis($conn, $emp_id, $sxol_etos, $yphr_arr, $hours_arr, 
     // if changes exist, save to table
     if ($old_value <> $new_value){
         $is_mon = $mon ? 1 : 0;
-        $query = "INSERT INTO `yphrethsh_archive`(`mon`, `emp_id`, `old_values`, `new_values`, `sxol_etos`) VALUES ($is_mon, $emp_id, '$old_value', '$new_value', $sxol_etos)";
+        $user = getUser($_SESSION['userid'], $conn);
+        $query = "INSERT INTO `yphrethsh_archive`(`mon`, `emp_id`, `old_values`, `new_values`, `user`, `sxol_etos`) VALUES ($is_mon, $emp_id, '$old_value', '$new_value', '$user', $sxol_etos)";
         $result = mysqli_query($conn, $query);
     }
     return;
@@ -877,7 +878,7 @@ function display_yphrethsh_archive($conn, $emp_id, $sxol_etos, $mon = true) {
         echo "<tr>";
         echo "<td>" . $row['old_values'] . "</td>";
         echo "<td>" . $row['new_values'] . "</td>";
-        echo "<td>" . date("d-m-Y H:i", strtotime($row['updated'])) . "</td>";
+        echo "<td><span title='" . $row['user'] . "'>". date("d-m-Y H:i", strtotime($row['updated'])) . "</span></td>";
         echo "</tr>";
     }
     echo "</tbody></table></div>";

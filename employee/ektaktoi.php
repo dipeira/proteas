@@ -67,8 +67,13 @@
       $(".slidingDiv").hide();
       $(".show_hide").show();
 
-      $('.show_hide').click(function(){
-          $(".slidingDiv").slideToggle();
+      $('.show_hide').click(function(e){
+        e.preventDefault();
+        $(".slidingDiv").slideToggle();
+      });
+      $("#archive-toggle").click(function(e) {
+        e.preventDefault();
+        $("#yphrethsh-archive").slideToggle();
       });
     });
   </script>
@@ -499,6 +504,11 @@ elseif ($_GET['op']=="view")
         {
                 echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3><a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a></td></tr>";
         }
+        
+        echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
+        display_yphrethsh_archive($mysqlconnection, $id, $sxol_etos, false);
+        echo "</td></tr>";
+
         $typos = get_type($type,$mysqlconnection);
         echo "<tr><td>Ανάληψη υπηρεσίας</td><td colspan=3>$analipsi</td>";
         $date_anal = date ("d-m-Y",  strtotime($hm_anal));

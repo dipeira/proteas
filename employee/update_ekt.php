@@ -1,6 +1,6 @@
 <?php
 	header('Content-type: text/html; charset=utf-8'); 
-        session_start();
+  session_start();
 ?>
 <html>
   <head>
@@ -146,6 +146,10 @@
 
           $qlog .= $query;
           mysqli_query($mysqlconnection, $query);
+          // Archive current yphrethseis before saving new
+          archive_yphrethseis($mysqlconnection, $id, $sxol_etos, $yphr_arr, $hours_arr, false);
+
+          // Remove current yphrethseis and save new
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos=$sxol_etos";
           mysqli_query($mysqlconnection, $query);
           for ($i=0; $i<count($yphr_arr); $i++) 
@@ -173,6 +177,10 @@
           $qlog .= $query;
           //echo $query;
           mysqli_query($mysqlconnection, $query);
+          // Archive current yphrethseis before saving new
+          archive_yphrethseis($mysqlconnection, $id, $sxol_etos, $yphr_arr, $hours_arr, false);
+          
+          // Remove current yphrethseis and save new
           // svhse tyxon >1 yphrethseis 
           $query = "DELETE FROM yphrethsh_ekt WHERE emp_id = $id AND sxol_etos = $sxol_etos";
           mysqli_query($mysqlconnection, $query);
