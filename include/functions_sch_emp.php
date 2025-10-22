@@ -865,6 +865,9 @@ function display_yphrethsh_archive($conn, $emp_id, $sxol_etos, $mon = true) {
     $query = "SELECT * FROM yphrethsh_archive WHERE emp_id = $emp_id AND mon = $is_mon AND sxol_etos = $sxol_etos ORDER BY updated DESC";
     $result = mysqli_query($conn, $query);
     if (!mysqli_num_rows($result)){
+        echo "<div id='yphrethsh-archive' style='display:none;'>";
+        echo 'Δεν υπάρχουν μεταβολές τοποθετήσεων για το τρέχον σχολικό έτος';
+        echo '</div>';
         return;
     }
     echo "<div id='yphrethsh-archive' style='display:none;'>";
