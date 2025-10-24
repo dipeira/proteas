@@ -69,7 +69,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             {
                 $flag = $absent = 0;
 
-                $id = $row['emap_id'];
+                $id = $row['emp_id'];
                 $adeia_id = $row['id'];
                 $type = $row['type'];
                 $name = $row['name'];
@@ -79,7 +79,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $comments = $row['comments'];
                 $comm = $comments;
                 $today = date("Y-m-d");
-                $return = $row['fininsh'];
+                $return = $row['finish'];
                 $start = $row['start'];
                 $status = $row['status'];
                 // if return date exists, check if absent and print - else continue.
@@ -89,19 +89,19 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     $apontes[] = $id;
                 }
                 else
-                        {
-                        //$flag=1;
-                        $ret="";
+                {
+                    //$flag=1;
+                    $ret="";
                     if (!in_array($id, $apontes)) {
                             $flag = 1;
                     }
-                        $apontes[] = $id;
-                        $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
+                    $apontes[] = $id;
+                    $comments = "Δεν απουσιάζει.<br>Έχει δηλωθεί κατάσταση \"Σε άδεια\"<br>";
                 }
-                            $ret = date("d-m-Y", strtotime($return));
+                $ret = date("d-m-Y", strtotime($return));
 
 
-                        //echo "OK: $i - $start>$today>$return - fl:$flag<br>";
+                // echo "OK: $i - $start>$today>$return - fl:$flag<br>";
                 if ($flag) {
                     $query1 = "select type from adeia_type where id=$type";
                     $result1 = mysqli_query($mysqlconnection, $query1);
