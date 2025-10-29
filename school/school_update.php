@@ -66,6 +66,10 @@
    
   $comments = $_POST['comments'];
   $students = $_POST['a'].",".$_POST['b'].",".$_POST['c'].",".$_POST['d'].",".$_POST['e'].",".$_POST['f'].",".$_POST['g'].",".$_POST['h'];
+
+  $thiteia = $_POST['thiteia'] == 'on' ? 1 : 0;
+  $thiteia_apo = date('Y-m-d',strtotime($_POST['thiteia_apo']));
+  $thiteia_ews = date('Y-m-d',strtotime($_POST['thiteia_ews']));
    
   //29-6-2012
   $oloimero_tea = $_POST['oloimero_tea'] ? $_POST['oloimero_tea'] : 0;
@@ -98,7 +102,7 @@
   $query0 = "UPDATE school SET name = '$name', address = '$address', tel='$tel', tel2='$tel2', fax='$fax', email='$email', email2='$email2', organikothta='$organ', leitoyrg='$leitoyrg', organikes='$organikes', students='$students', entaksis='$entaksis', ypodoxis='$ypodoxis', frontistiriako='$frontistiriako', ted='$ted', oloimero='$oloimero', comments='$comments'";
   $query1 = ", oloimero_tea = '$oloimero_tea', oloimero_stud = '$oloimero_stud', tmimata = '$tmimata', ekp_ee='$ekp_ee'";
   $query2 = ", klasiko = '$klasiko', oloimero_nip = '$oloimero_nip', nip = '$nip', kena_org = '$kena_org', kena_leit = '$kena_leit', titlos = '$titlos', tk = '$tk'";
-  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki', proinizoni = '$prser', pe0507= '$pe0507' WHERE id=$sch";
+  $query3 = ", anenergo = '$anenergo', vivliothiki = '$vivliothiki', proinizoni = '$prser', pe0507= '$pe0507', thiteia='$thiteia', thiteia_apo='$thiteia_apo', thiteia_ews='$thiteia_ews' WHERE id=$sch";
   $query = $query0.$query1.$query2.$query3;
   //echo $query;
   mysqli_query($mysqlconnection, $query);

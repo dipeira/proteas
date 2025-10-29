@@ -99,6 +99,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
           $systegName = getSchool($systeg, $conn);
       }
       $archive = mysqli_result($result, 0, "archive");
+      $thiteia = mysqli_result($result, 0, "thiteia");
+      $thiteia_apo = mysqli_result($result, 0, "thiteia_apo");
+      $thiteia_ews = mysqli_result($result, 0, "thiteia_ews");    
                       
       // if dimotiko
       if ($type == 1) {
@@ -419,6 +422,15 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             
         //}
+        if ($thiteia) {
+            if ($thiteia_apo){
+                echo "<tr><td>Διευθυντής με θητεία: ΝΑΙ (Από ".date("d-m-Y", strtotime($thiteia_apo)). ' έως '.date("d-m-Y", strtotime($thiteia_ews)). ')</td><td></td></tr>';                
+            } else {
+                echo "<tr><td>Διευθυντής με θητεία: ΝΑΙ (Έως ".date("d-m-Y", strtotime($thiteia_ews)). ")</td><td></td></tr>";
+            }
+        } else {
+            echo "<tr><td>Διευθυντής με θητεία: ΟΧΙ</td><td></td></tr>";
+        }
         echo "<tr><td>Σχόλια: ".nl2br($comments)."</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
         if ($systeg) {
             echo "<tr><td colspan=2>Συστεγαζόμενη σχολική μονάδα: <a href='school_status.php?org=$systeg' target='_blank'>$systegName</td></tr>";    

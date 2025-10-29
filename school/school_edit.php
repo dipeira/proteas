@@ -123,6 +123,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $organikothta = mysqli_result($result, 0, "organikothta");
             $leitoyrg = get_leitoyrgikothta($sch, $mysqlconnection);
             $anenergo = mysqli_result($result, 0, "anenergo");
+            $thiteia = mysqli_result($result, 0, "thiteia");
+            $thiteia_apo = mysqli_result($result, 0, "thiteia_apo");
+            $thiteia_ews = mysqli_result($result, 0, "thiteia_ews");
                     
             // if dimotiko
             if ($type == 1) {
@@ -304,6 +307,19 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</td>";
                         
                 echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
+
+                // Θητεία Δ/ντή
+                echo "<tr>";
+                echo $thiteia ? 
+                        "<td><input type=\"checkbox\" name='thiteia' checked >Δ/ντής σε θητεία</td>" :
+                        "<td><input type=\"checkbox\" name='thiteia' >Δ/ντής σε θητεία</td>";
+                echo "<td>&nbsp;θητεία δ/ντή από - έως:&nbsp;";
+                my_calendar('thiteia_apo', $thiteia_apo);
+                echo "<br>";
+                my_calendar('thiteia_ews', $thiteia_ews);
+                echo "</td>";
+                echo "</tr>";
+
                 //echo $disabled ? "<tr><td colspan=2><small>ΣΗΜ.: Μόνο ο διαχειριστής μπορεί να αλλάξει τα απενεργοποιημένα πεδία.</small></td></tr>" : '';
                 echo "</table>";
                 echo "<br>";
@@ -354,6 +370,19 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
                     "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
                 echo "</tr>";
+
+                // Θητεία Δ/ντή
+                echo "<tr>";
+                echo $thiteia ? 
+                        "<td><input type=\"checkbox\" name='thiteia' checked >Δ/ντής σε θητεία</td>" :
+                        "<td><input type=\"checkbox\" name='thiteia' >Δ/ντής σε θητεία</td>";
+                echo "<td>&nbsp;θητεία δ/ντή από - έως:&nbsp;";
+                my_calendar('thiteia_apo', $thiteia_apo);
+                echo "<br>";
+                my_calendar('thiteia_ews', $thiteia_ews);
+                echo "</td>";
+                echo "</tr>";
+                
                 echo  $disabled ? "<tr><td colspan=2><small>ΣΗΜ.: Μόνο ο διαχειριστής μπορεί να αλλάξει τα απενεργοποιημένα πεδία.</small></td></tr>" : '';
                 echo "</table>";
                 echo "<br>";
