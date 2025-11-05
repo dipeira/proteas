@@ -209,6 +209,10 @@
 		echo "</td>";
 		echo "<td>Email</td><td><input type='checkbox' name = 'dspemail'></td><td><input type='text' name='email' /></td>";
 		echo "</tr>";
+		echo "<tr>";
+		echo "<td>Μονιμοποίηση</td><td><input type='checkbox' name = 'dspmon'></td><td><input type='checkbox' name='monimopoihsh' /></td>";
+		echo "<td>Ολοκληρωμένη Αξιολόγηση</td><td><input type='checkbox' name = 'dspaks'></td><td><input type='checkbox' name='aksiologhsh' /></td>";
+		echo "</tr>";
 
 		echo "<tr><td colspan=6><input type='checkbox' name = 'smeae'>&nbsp;Οργανική σε Ειδικό Σχολείο;</td></tr>";	
     

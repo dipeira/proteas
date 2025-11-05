@@ -74,7 +74,7 @@
       echo "<th>Θέση</th>";
       echo "<th>Κλάδος</th>";
       echo "<th>Κατάσταση</th>";
-      echo $mon ? "<th>Ημ.Διορισμού</th>" : '<th>Ημ.Ανάληψης</th>';
+      echo $mon ? "<th>Ημ.Διορισμού</th><th>Μονιμοποίηση</th><th>Αξιολόγηση</th>" : '<th>Ημ.Ανάληψης</th>';
       echo "</tr>";
       echo "</thead>\n<tbody>\n";
 
@@ -87,11 +87,13 @@
           $name = mysqli_result($result, $i, "name");
           $surname = mysqli_result($result, $i, "surname");
           $klados = getKlados(mysqli_result($result, $i, "klados"),$mysqlconnection);
-          $thesi = mysqli_result($result, $i, "thesi") == 1 ? 'Δ/ντής/ντρια' : 'Εκπ/κός';
+          $thesi = mysqli_result($result, $i, "thesi") == 2 ? 'Δ/ντής/ντρια' : 'Εκπ/κός';
           $status = mysqli_result($result, $i, "status") == 1 ? 'Εργάζεται' : 'Αδεια';
           if ($mon) {
             $hm_dior_dt = mysqli_result($result, $i, "hm_dior");
             $hm_dior = date('d-m-Y',strtotime($hm_dior_dt));
+            $monimopoihsh = mysqli_result($result,$i,'monimopoihsh') == 1 ? 'Ναι' : 'Όχι';
+            $aksiologhsh = mysqli_result($result,$i,'aksiologhsh') == 1 ? 'Ναι' : 'Όχι';
           } else {
             $hm_anal_dt = mysqli_result($result, $i, "hm_anal");
             $hm_anal = date('d-m-Y',strtotime($hm_anal_dt));
@@ -107,7 +109,7 @@
           echo "<td>$thesi</td>";
           echo "<td>$klados</td>";
           echo "<td>$status</td>";
-          echo $mon ? "<td>$hm_dior</td>" : "<td>$hm_anal</td>";
+          echo $mon ? "<td>$hm_dior</td><td>$monimopoihsh</td><td>$aksiologhsh</td>" : "<td>$hm_anal</td>";
           echo "</tr>\n";
           $i++;                        
       }

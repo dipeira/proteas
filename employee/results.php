@@ -278,6 +278,22 @@ if (strlen($_POST['email'])>0) {
     $query .= " email like '%".$_POST['email']."%'";
     $flag=1;
 }
+
+if ($_POST['monimopoihsh'] == 'on' && !$is_anapl) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " monimopoihsh=1";
+    $flag=1;
+}
+
+if ($_POST['aksiologhsh'] == 'on' && !$is_anapl) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " aksiologhsh=1";
+    $flag=1;
+}
         
         
 if (!$flag) {
@@ -350,6 +366,12 @@ if ($flag) {
         if (isset($_POST['dspemail'])) {
             echo "<th>Email</th>\n";
         }
+        if (isset($_POST['dspmon'])) {
+            echo "<th>Μονιμοποίηση</th>\n";
+        }
+        if (isset($_POST['dspaks'])) {
+            echo "<th>Αξιολόγηση</th>\n";
+        }
         echo "</tr></thead>\n<tbody>";
         while ($i < $num)
         {
@@ -388,6 +410,10 @@ if ($flag) {
             $katast = mysqli_result($result, $i, "status");
             $email = mysqli_result($result,$i,'email');
             $_psd = mysqli_result($result,$i,'email_psd');
+            if (!$is_anapl) {
+                $monimopoihsh = mysqli_result($result,$i,'monimopoihsh') == 1 ? 'Ναι' : 'Όχι';
+                $aksiologhsh = mysqli_result($result,$i,'aksiologhsh') == 1 ? 'Ναι' : 'Όχι';
+            }
             if (strlen($_psd) > 0){
                 $email = $email . ' // '. $_psd;
             }
@@ -495,6 +521,12 @@ if ($flag) {
             }
             if (isset($_POST['dspemail'])) {
                 echo "<td>$email</td>\n";
+            }
+            if (isset($_POST['dspmon'])) {
+                echo "<td>$monimopoihsh</td>\n";
+            }
+            if (isset($_POST['dspaks'])) {
+                echo "<td>$aksiologhsh</td>\n";
             }
             echo "</tr>";
 
