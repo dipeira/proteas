@@ -88,6 +88,10 @@ $entty = $_POST['entty'];
 $email = $_POST['email'];
 $email_psd = $_POST['email_psd'];
 $org_ent = $_POST['org_ent'] ? 1 : 0;
+$monimopoihsh = $_POST['monimopoihsh'] == 'on' ? 1 : 0;
+$monimopoihsh_apof = $_POST['monimopoihsh_apof'];
+$aksiologhsh =  $_POST['aksiologhsh'] == 'on' ? 1 : 0;
+$aksiologhsh_date = date('Y-m-d',strtotime($_POST['aksiologhsh_date']));
 // aney 27-02-2014
 if ($_POST['aney'])
     $aney = 1;
@@ -151,7 +155,7 @@ else {
     $res = mysqli_query($mysqlconnection, $qry);
     $before = mysqli_fetch_assoc($res);
         
-    $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]',";
+    $query1 = "UPDATE employee SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_organikhs='".$org."', sx_yphrethshs='$yphr_arr[0]', monimopoihsh=$monimopoihsh, monimopoihsh_apof='$monimopoihsh_apof', aksiologhsh=$aksiologhsh, aksiologhsh_date='$aksiologhsh_date',";
     $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', am='$am', tel='$tel', address='$address', idnum='$idnum', amka='$amka', vathm='$vathm', mk='$mk', hm_mk='$hm_mk', fek_dior='$fek_dior', hm_dior='$hm_dior', analipsi='$analipsi',";
     $query3 = " aney='$aney', aney_xr='$aney_xr', aney_apo='$aney_apo', aney_ews='$aney_ews',idiwtiko='$idiwtiko',idiwtiko_liksi='$idiwtiko_liksi',idiwtiko_enarxi='$idiwtiko_enarxi',idiwtiko_id='$idiwtiko_id',idiwtiko_id_liksi='$idiwtiko_id_liksi',idiwtiko_id_enarxi='$idiwtiko_id_enarxi',katoikon='$katoikon',katoikon_apo='$katoikon_apo',katoikon_ews='$katoikon_ews',katoikon_comm='$katoikon_comm',";
     $query4 = " hm_anal='$hm_anal', met_did='$met_did', proyp='$proyp', proyp_not='$proyp_not', proyp_wrario='$proyp_wrario', comments='$comments',afm='$afm', status='$katast', thesi='$thesi', ent_ty='$entty', wres='$wres',email='$email',email_psd='$email_psd',org_ent=$org_ent WHERE id='$id'";

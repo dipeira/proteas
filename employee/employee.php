@@ -221,6 +221,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $email = mysqli_result($result, 0, "email");
             $email_psd = mysqli_result($result, 0, "email_psd");
             $org_ent = mysqli_result($result, 0, 'org_ent');
+            // monimopoihsh - aksiologhsh
+            $monimopoihsh = mysqli_result($result, 0, 'monimopoihsh');
+            $monimopoihsh_apof = mysqli_result($result, 0, 'monimopoihsh_apof');
+            $aksiologhsh = mysqli_result($result, 0, 'aksiologhsh');
+            $aksiologhsh_date = mysqli_result($result, 0, 'aksiologhsh_date');
                     
         } // of if not add
         ?>
@@ -308,6 +313,24 @@ if ($_GET['op']=="edit") {
     echo "<tr><td>Βαθμός</td><td>";
     vathmosCmb1($vathm, $mysqlconnection);
     echo "</td><tr>";
+    
+    // monimopoihsh - aksiologhsh
+    echo "<tr><td>Μονιμοποίηση/<br>Απόφαση μονιμοποίησης</td>";
+    echo $monimopoihsh ? 
+        "<td><input type=\"checkbox\" name='monimopoihsh' checked >Μονιμοποίηση" :
+        "<td><input type=\"checkbox\" name='monimopoihsh' >Μονιμοποίηση";
+    echo "<br><input type=\"input\" name='monimopoihsh_apof' value=$monimopoihsh_apof></td>"; 
+    echo "</tr>";
+
+    echo "<tr><td>Αξιολόγηση/<br>Ημ/νία τελ.αξιολόγησης</td></td>";
+    echo $aksiologhsh ? 
+        "<td><input type=\"checkbox\" name='aksiologhsh' checked >Αξιολογήθηκε" :
+        "<td><input type=\"checkbox\" name='aksiologhsh' >Αξιολογήθηκε";
+    echo "<br>";
+    my_calendar('aksiologhsh_date', $aksiologhsh_date);
+    echo "</td>";
+    echo "</tr>";
+
     //<input type='text' name='vathm' value=$vathm /></td></tr>";
     echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
         echo "<tr><td>Ημ/νία M.K.</td><td>";
@@ -570,6 +593,22 @@ elseif ($_GET['op']=="view") {
     } else {
         echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk</td></tr>";
     }
+
+    // monimopoihsh - aksiologhsh
+    echo "<tr><td>Μονιμοποίηση /<br>Απόφαση μονιμοποίησης</td>";
+    echo $monimopoihsh ? 
+        "<td>NAI<br>$monimopoihsh_apof</td>" :
+        "<td>ΟΧΙ</td>";
+
+    echo "<td>Αξιολόγηση /<br>Ημ/νία τελ.αξιολόγησης</td></td>";
+    if ($aksiologhsh) {
+        echo "<td>ΝΑΙ<br>";
+        echo $aksiologhsh_date>'2000-11-30'? date("d-m-Y", strtotime($aksiologhsh_date))."</td>" : "</td>";
+    } else {
+        echo "<td>ΟΧΙ</td>"; 
+    }
+    echo "</tr>";
+
     echo "<tr><td>ΦΕΚ Διορισμού</td><td>$fek_dior</td><td>Ημ/νία Διορισμού</td><td>".date('d-m-Y', strtotime($hm_dior))."</td></tr>";
     switch ($met_did)
     {
