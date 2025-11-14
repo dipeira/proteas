@@ -11,11 +11,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <?php 
+    $root_path = '../';
+    $page_title = 'Σχετικά';
+    require '../etc/head.php'; 
+    ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Σχετικά</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../css/style.css" />
 </head>
 <body>
     <?php require '../etc/menu.php'; ?>

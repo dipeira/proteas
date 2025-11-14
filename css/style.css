@@ -1,135 +1,332 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&subset=greek');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 body, body * {
-	font-family : "Open Sans",Verdana,Helvetica,Arial,sans-serif;
+	font-family: "Inter", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
-.imagetable {
-	/* font-size : 90%; */
-	/* font-family : Verdana,Helvetica,Arial,sans-serif; */
-	font-size:15px;
-	color:#333333;
-	border-width: 1px;
-	border-color: #999999;
-	border-collapse: collapse;
+
+body {
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
+/* Table container to prevent overflow */
+table {
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* Center container for tables */
+center {
+	max-width: 100%;
+	overflow-x: auto;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Wrapper for table containers */
+center > table {
 	width: 90%;
+	max-width: 100%;
+	margin: 0 auto;
 }
+
+/* Ensure tables inside center don't overflow */
+center {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* Additional constraint for imagetable to prevent overflow */
+.imagetable {
+	font-size: 15px;
+	color: #1f2937;
+	border-collapse: separate;
+	border-spacing: 0;
+	width: 90%;
+	max-width: 100%;
+	background: #ffffff;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-sizing: border-box;
+	table-layout: auto;
+}
+
+/* Allow table cells to be flexible but constrained */
+.imagetable td,
 .imagetable th {
-	/* font-family : Verdana,Helvetica,Arial,sans-serif; */
-	background:#b5cfd2;
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #999999;
+	min-width: 0;
 }
-.imagetable td {
-	/* font-size : 80%; */
-	/* font-family : Verdana,Helvetica,Arial,sans-serif; */
-	background:#dddebc;
-	border-width: 1px;
-	padding: 6px;
-	border-style: solid;
-	border-color: #999999;
-}
-
-.imagetable tr:nth-child(even){background-color: #f2f2f2;}
-
-.imagetable tr:hover {background-color: #ddd;}
 
 .imagetable th {
-	padding-top: 10px;
-	padding-bottom: 10px;
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	border: none;
+	padding: 14px 16px;
 	text-align: left;
-	background-color: #2a672ddb;
 	color: white;
+	font-weight: 600;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+	font-size: 13px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
 }
+
+.imagetable th:first-child {
+	border-top-left-radius: 12px;
+}
+
+.imagetable th:last-child {
+	border-top-right-radius: 12px;
+}
+
+.imagetable td {
+	background: #ffffff;
+	border: none;
+	border-bottom: 1px solid #e5e7eb;
+	padding: 9px 10px;
+	transition: background-color 0.2s ease;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
+	overflow: visible;
+}
+
+/* Ensure action buttons stay on one line */
+.imagetable td span {
+	display: inline;
+	white-space: nowrap;
+}
+
+.imagetable td span a {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.imagetable tr:last-child td:first-child {
+	border-bottom-left-radius: 12px;
+}
+
+.imagetable tr:last-child td:last-child {
+	border-bottom-right-radius: 12px;
+}
+
+.imagetable tr:nth-child(even) td {
+	background-color: #f9fafb;
+}
+
+.imagetable tr:hover td {
+	background-color: #f0fdf4;
+	transform: scale(1.01);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 .stable {
 	width: auto;
 }
 
 #navigation {
- margin: 0;
- padding: 8px 29px;
- background: #49ad4f;
- height: 20px;
- list-style: none;
- font-size : 110%;
- font-family : "Open Sans",Helvetica,Arial,sans-serif;
+	margin: 0;
+	padding: 12px 32px;
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	height: auto;
+	min-height: 48px;
+	list-style: none;
+	font-size: 14px;
+	font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	position: relative;
+	z-index: 9999;
 }
 
 #navigation > li {
- float: left;
- height: 100%;
- margin-right: 0.5em;
- padding: 0 1em;
- font-size : 80%;
- font-family : "Open Sans",Helvetica,Arial,sans-serif;
+	float: none;
+	height: auto;
+	margin-right: 0;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+	cursor: pointer;
+	position: relative;
+}
+
+#navigation > li:hover {
+	background-color: rgba(255, 255, 255, 0.25);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#navigation > li:active {
+	transform: translateY(0);
+	background-color: rgba(255, 255, 255, 0.3);
 }
 
 #navigation > li > a {
- float: left;
- height: 100%;
- color: #fff;
- text-decoration: none;
- font-weight: bold;
- text-transform: uppercase;
+	float: none;
+	height: auto;
+	color: #fff;
+	text-decoration: none;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	display: block;
+	transition: all 0.2s ease;
+	white-space: nowrap;
 }
 
 #navigation > li > a:hover {
- color: orange;
- text-decoration: underline;
+	color: #ffffff;
+	text-decoration: none;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+
 #navigation > li.sub {
- position: relative;
+	position: relative;
 }
+
+#navigation > li.sub > a::after {
+	content: " ▼";
+	font-size: 10px;
+	margin-left: 6px;
+	opacity: 0.8;
+	transition: transform 0.2s ease;
+}
+
+#navigation > li.sub:hover > a::after {
+	transform: rotate(180deg);
+}
+
 #navigation > li.sub ul {
- width: 12em;
- margin: 0;
- padding: 0.5em 0;
- list-style: none;
- background: #49ad4f;
- position: absolute;
- top: -1000em;
+	width: 240px;
+	margin: 0;
+	padding: 6px 0;
+	list-style: none;
+	background: #ffffff;
+	position: absolute;
+	top: -1000em;
+	left: 0;
+	border-radius: 10px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+	z-index: 10000;
+	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	opacity: 0;
+	transform: translateY(-10px);
+	pointer-events: none;
 }
 
 #navigation > li.sub ul li {
- width: 90%;
- margin: 0 auto 0.3em auto;
+	width: 100%;
+	margin: 0;
+	position: relative;
+}
+
+#navigation > li.sub ul li:first-child a {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#navigation > li.sub ul li:last-child a {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
 #navigation > li.sub ul li a {
- height: 100%;
- display: block;
- padding: 0.4em;
- color: #fff;
- font-weight: bold;
- text-decoration: none;
+	height: auto;
+	display: block;
+	padding: 12px 18px;
+	color: #1f2937;
+	font-weight: 500;
+	text-decoration: none;
+	text-transform: none;
+	transition: all 0.15s ease;
+	position: relative;
+	border-left: 3px solid transparent;
 }
 
 #navigation > li.sub ul li a:hover {
- background: #255226;
- text-decoration: underline;
+	background: linear-gradient(90deg, #f0fdf4 0%, #ecfdf5 100%);
+	color: #059669;
+	text-decoration: none;
+	padding-left: 22px;
+	border-left-color: #10b981;
+	font-weight: 600;
 }
+
+#navigation > li.sub ul li a:active {
+	background: linear-gradient(90deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+/* Style separator items in dropdown menus (items without links) */
+#navigation > li.sub ul li:not(:has(a)) {
+	padding: 8px 18px;
+	color: #9ca3af;
+	font-size: 11px;
+	text-align: center;
+	border-top: 1px solid #e5e7eb;
+	margin-top: 4px;
+	pointer-events: none;
+	user-select: none;
+}
+
 #navigation > li.sub:hover ul {
- top: 1.3em;
+	top: calc(100% + 4px);
+	margin-top: 0;
+	opacity: 1;
+	transform: translateY(0);
+	pointer-events: all;
+}
+
+/* Ensure menu stays on top */
+#main-menu {
+	position: relative;
+	z-index: 9999;
 }
 
 .applogo {
 	height: 85px;
-	padding-bottom: 8px;
+	padding-bottom: 12px;
 	padding-left: 30px;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-button, input[type=submit], input[type=button] {
-	background-color: #4CAF50;
+button, input[type=submit], input[type=button], .button {
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 	color: white;
-	padding: 7px 13px;
-	margin: 8px 3px;
+	padding: 10px 20px;
+	margin: 8px 4px;
 	border: none;
 	cursor: pointer;
-	border-radius: 5%;
+	border-radius: 8px;
+	font-weight: 500;
+	font-size: 14px;
+	letter-spacing: 0.025em;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+button:hover, input[type=submit]:hover, input[type=button]:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active, input[type=submit]:active, input[type=button]:active {
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
 .btn-red {
-	background-color: #ea150b !important;
+	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
 }
 
 .btn-link a {
@@ -138,106 +335,197 @@ button, input[type=submit], input[type=button] {
 }
 
 .btn-yellow {
-	background-color: #e4a118;
-}
-
-/* Add a hover effect for buttons */
-button:hover {
-  opacity: 0.8;
+	background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
 .userdata {
-	font-size : 70%;
-	font-size:11px;
+	font-size: 12px;
+	color: #6b7280;
+	font-weight: 400;
+	letter-spacing: 0.025em;
 }
 
+table.tablesorter {
+	max-width: 95%;
+	width: 100%;
+	box-sizing: border-box;
+}
 
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	border: 1px solid #FFF;
-	padding: 4px;
+	border: none;
+	padding: 14px 16px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
+
 table.tablesorter thead tr .header {
-	background-image: url(../images/bg.gif);
+	/* background-image: url(../images/bg.gif); */
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
-/* table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
-} */
+
+table.tablesorter thead tr .header:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
 table.tablesorter thead tr .headerSortUp {
 	background-image: url(../images/asc.gif);
+	background-color: rgba(255, 255, 255, 0.15);
 }
+
 table.tablesorter thead tr .headerSortDown {
 	background-image: url(../images/desc.gif);
+	background-color: rgba(255, 255, 255, 0.15);
 }
+
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-	background-color: #49ad4f;
+	background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Tooltip container */
 .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted #6b7280;
+	cursor: help;
 }
 
 /* Tooltip text */
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: 180px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 5px;
-  border-radius: 6px;
-
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
+	visibility: hidden;
+	width: 200px;
+	background-color: #1f2937;
+	color: #fff;
+	text-align: center;
+	padding: 10px 12px;
+	border-radius: 8px;
+	position: absolute;
+	z-index: 1000;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -100px;
+	opacity: 0;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	transform: translateY(-5px);
+	font-size: 13px;
+	line-height: 1.5;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Tooltip arrow */
 .tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 6px;
+	border-style: solid;
+	border-color: #1f2937 transparent transparent transparent;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
+	visibility: visible;
+	opacity: 1;
+	transform: translateY(0);
 }
 
-.ui-tabs .ui-tabs-nav
-{
-  background: #49ad4f;
-  border-width: 0px 0px 1px 0px; 
-  -moz-border-radius: 0px; 
-  -webkit-border-radius: 0px; 
-  border-radius: 0px; 
+.ui-tabs .ui-tabs-nav {
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	border-width: 0px 0px 1px 0px;
+	border-radius: 0px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-/* .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
-  color: #ea150b;
-} */
 
 .synola {
 	font-weight: 600;
+	color: #059669;
 }
 
 .import-choice {
-	margin: 8px;
+	margin: 12px;
+	padding: 12px;
+	background: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	transition: all 0.2s ease;
 }
+
+.import-choice:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+}
+
+/* Responsive table styles for smaller screens */
+@media screen and (max-width: 768px) {
+	.imagetable {
+		width: 100%;
+		font-size: 13px;
+	}
+	
+	.imagetable th,
+	.imagetable td {
+		padding: 8px 6px;
+		font-size: 12px;
+	}
+	
+	center > table {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.imagetable {
+		font-size: 11px;
+	}
+	
+	.imagetable th,
+	.imagetable td {
+		padding: 6px 4px;
+		font-size: 11px;
+	}
+}
+
+/* Additional modern enhancements */
+input[type="text"], input[type="number"], select, textarea {
+	padding: 10px 14px;
+	border: 2px solid #e5e7eb;
+	border-radius: 8px;
+	font-size: 14px;
+	transition: all 0.2s ease;
+	background: #ffffff;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+	outline: none;
+	border-color: #10b981;
+	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	accent-color: #10b981;
+}
+
+a {
+	color: #059669;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+a:hover {
+	color: #047857;
+	text-decoration: underline;
+}
+
+.underline {
+	text-decoration: underline;
+}
+/* table.dataTable thead .sorting_asc {
+	background-image: none !important;
+} */

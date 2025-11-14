@@ -404,7 +404,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             echo $vivliothiki > 0 ? 'Υπευθύνου Βιβλιοθήκης: '.MEIWSH_VIVLIOTHIKIS.' ώρες<br>' : '';
             echo "</p>";
         }
-        echo "<a id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
+        echo "<a class='underline' id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";
             echo "<table class=\"imagetable stable\" border='1'>";
             echo "<tr><td colspan=3><u>Σύνολα εκπ/κών:</u> ";

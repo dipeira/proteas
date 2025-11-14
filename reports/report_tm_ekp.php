@@ -1,6 +1,10 @@
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+  <?php 
+        $root_path = '../';
+        $page_title = 'Μαθητές & Εκπαιδευτικοί';
+        require '../etc/head.php'; 
+        ?>
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Μαθητές & Εκπαιδευτικοί</title>

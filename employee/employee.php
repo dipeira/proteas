@@ -19,9 +19,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Μόνιμο Προσωπικό</title>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Μόνιμο Προσωπικό';
+    require '../etc/head.php'; 
+    ?>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>

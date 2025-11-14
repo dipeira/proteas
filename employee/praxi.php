@@ -83,6 +83,7 @@ var thegrid = new drasticGrid('grid1', {
 });
 </script>
 </center>
+<br>
 <table class="imagetable stable" border="1">
     <tr><th colspan="2">Επεξήγηση</th></tr>
     <tr><td><strong>Πεδίο</strong></td><td><strong>Περιγραφή</strong></td></tr>

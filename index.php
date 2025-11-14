@@ -19,11 +19,11 @@ else {
 ?>
 <html>
   <head>
-    <LINK href="css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Πρωτέας</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <?php 
+    $root_path = '';
+    $page_title = 'Πρωτέας';
+    require 'etc/head.php'; 
+    ?>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery.validate.js"></script>
     <script type='text/javascript' src='js/jquery.autocomplete.js'></script>
@@ -228,7 +228,7 @@ if ($num_record == 1 && $num_record1 > 1) {
     $url = "employee/employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
 }
-echo "<center><h2>Μόνιμοι Εκπαιδευτικοί</h2></center>";
+echo "<center><h1>Μόνιμοι Εκπαιδευτικοί</h1></center>";
 if ($logged) {
   $se = getParam('sxol_etos', $mysqlconnection);
   $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
@@ -237,12 +237,12 @@ if ($logged) {
     echo "<center>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
-    echo "<tr><th>Ενέργεια</th>\n";
-    echo "<th>Επώνυμο</th>\n";
-    echo "<th>Όνομα</th>\n";
-    echo "<th>Ειδικότητα</th>\n";
-    echo "<th>Σχ.Οργανικής</th>\n";
-    echo "<th>Σχ.Υπηρέτησης</th>\n";
+    echo "<tr><th>Ενεργεια</th>\n";
+    echo "<th>Επωνυμο</th>\n";
+    echo "<th>Ονομα</th>\n";
+    echo "<th>Ειδικοτητα</th>\n";
+    echo "<th>Σχ.Οργανικης</th>\n";
+    echo "<th>Σχ.Υπηρετησης</th>\n";
     echo "</tr>\n\n";
    echo "<tr class='tablesorter-ignoreRow'><form id='src' name='src' action='index.php' method='POST'>\n";
 if ($posted || 
@@ -293,8 +293,8 @@ if ($num == 0) {
         $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
         $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
         $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-        $sx_organikhs_url = "<a href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-        $sx_yphrethshs_url = "<a href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+        $sx_organikhs_url = "<a class='underline' href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+        $sx_yphrethshs_url = "<a class='underline' href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
         // check if multiple schools
         $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
         $res = mysqli_query($mysqlconnection, $qry);
@@ -313,7 +313,7 @@ if ($num == 0) {
             echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></span>";
         }
         echo "</td>";
-        echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
+        echo "<td><a class='underline' href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
         echo "</tr>";
 
         $i++;
