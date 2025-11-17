@@ -194,6 +194,11 @@ center {
 	position: relative;
 }
 
+/* Add padding to parent link to create hover area */
+#navigation > li.sub > a {
+	padding-right: 8px;
+}
+
 #navigation > li.sub > a::after {
 	content: " ▼";
 	font-size: 10px;
@@ -218,10 +223,23 @@ center {
 	border-radius: 10px;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
 	z-index: 10000;
-	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	transition-delay: 0.1s;
 	opacity: 0;
 	transform: translateY(-10px);
 	pointer-events: none;
+}
+
+/* Add invisible bridge area to make it easier to move mouse to submenu */
+#navigation > li.sub ul::before {
+	content: '';
+	position: absolute;
+	top: -8px;
+	left: 0;
+	right: 0;
+	height: 8px;
+	background: transparent;
+	pointer-events: all;
 }
 
 #navigation > li.sub ul li {
@@ -278,12 +296,14 @@ center {
 	user-select: none;
 }
 
-#navigation > li.sub:hover ul {
-	top: calc(100% + 4px);
+#navigation > li.sub:hover ul,
+#navigation > li.sub ul:hover {
+	top: 100%;
 	margin-top: 0;
 	opacity: 1;
 	transform: translateY(0);
 	pointer-events: all;
+	transition-delay: 0s;
 }
 
 /* Ensure menu stays on top */
@@ -359,7 +379,6 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 }
 
 table.tablesorter thead tr .header {
-	/* background-image: url(../images/bg.gif); */
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
