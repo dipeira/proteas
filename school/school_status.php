@@ -22,7 +22,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     $page_title = 'Καρτέλα σχολείου';
     require '../etc/head.php'; 
     ?>
-    <!-- <LINK href="../css/style.css" rel="stylesheet" type="text/css"> -->
     <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Καρτέλα σχολείου</title>
@@ -848,7 +847,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<h3>Υπηρετούν με θητεία</h3><br>";
             
             $i=0;
-            echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -866,11 +865,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $thesi = mysqli_result($result, $i, "thesi");
                 $th = thesicmb($thesi);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -886,7 +885,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Ανήκουν οργανικά και υπηρετούν (ΠΕ60/ΠΕ70)</h3>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -901,10 +900,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -920,7 +919,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)</h3>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -935,11 +934,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -955,7 +954,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Με οργανική σε άλλο σχολείο και υπηρετούν</h3>";
             $i=0;
-            echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl3\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -973,11 +972,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -993,7 +992,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Με οργανική και κύρια υπηρέτηση σε άλλο σχολείο, που υπηρετούν με διάθεση</h3>";
             $i=0;
-            echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl3\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1012,12 +1011,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 $hours = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1031,7 +1030,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Υπηρετούν σε τμήμα ένταξης</h3>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1049,11 +1048,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1067,7 +1066,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Υπηρετούν σε τάξη υποδοχής</h3>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1085,11 +1084,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1107,7 +1106,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Αναπληρωτές</h3>";
             $i=0;
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1144,12 +1143,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                         break;
                 }
 
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 $wres = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxi</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxi</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1165,7 +1164,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<h2>Απουσιάζουν</h2>";
             echo "<h3>Ανήκουν οργανικά και υπηρετούν αλλού</h3>";
             $i=0;
-            echo "<table id=\"mytbl5\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl5\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1183,11 +1182,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
                 $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1214,7 +1213,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<h2>Σε Άδεια</h2>";
             echo "<h3>Μόνιμοι</h3>";
             $i=0;
-            echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl6\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1235,7 +1234,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               $surname = mysqli_result($result, $i, "surname");
               $klados_id = mysqli_result($result, $i, "klados");
               $klados = getKlados($klados_id, $mysqlconnection);
-              $comments = mysqli_result($result, $i, "comments");
+              $comments = shorten_text(mysqli_result($result, $i, "comments"));
               $comm = $comments;
               $today = date("Y-m-d");
               $return = mysqli_result($result, $i, "finish");
@@ -1280,7 +1279,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
                   echo "<tr>";
                   echo "<td>".($i+1)."</td>";
-                  echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='../employee/adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
+                  echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='../employee/adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
                   echo "</tr>";
               }
               $i++;
@@ -1296,7 +1295,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Αναπληρωτές</h3>";
             $i=0;
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1317,12 +1316,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $typos = mysqli_result($result, $i, "emptype");
                 $praxiname = mysqli_result($result, $i, "praxiname");
                 $type = get_type($typos, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 $wres = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxiname</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxiname</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1343,7 +1342,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<h2>Απουσία COVID-19</h2>";
             if ($num > 0){
                 echo "<h3>Μόνιμοι</h3>";
-                echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
                 echo "<thead><tr>";
                 echo "<th>A/A</th>";
                 echo "<th>Επώνυμο</th>";
@@ -1362,12 +1361,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     $klados = getKlados($klados_id, $mysqlconnection);
                     $typos = $row['type'];
                     $type = get_type($typos, $mysqlconnection);
-                    $comments = $row['comments'];
+                    $comments = shorten_text($row['comments']);
                     $wres = $row['hours'];
                     
                     echo "<tr>";
                     echo "<td>".($i+1)."</td>";
-                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                    echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                     echo "</tr>";
                 }
                 echo "</tbody></table>";
@@ -1376,7 +1375,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             if ($num_ekt > 0){
                 echo "<h3>Αναπληρωτές</h3>";
                 // $i=0;
-                echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+                echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
                 echo "<thead><tr>";
                 echo "<th>A/A</th>";
                 echo "<th>Επώνυμο</th>";
@@ -1395,12 +1394,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     $klados = getKlados($klados_id, $mysqlconnection);
                     $typos = $row['type'];
                     $type = get_type($typos, $mysqlconnection);
-                    $comments = $row['comments'];
+                    $comments = shorten_text($row['comments']);
                     $wres = $row['hours'];
                     
                     echo "<tr>";
                     echo "<td>".($i+1)."</td>";
-                    echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+                    echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
                     echo "</tr>";
                 }
                 echo "</tbody></table>";

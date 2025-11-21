@@ -516,4 +516,9 @@ function my_calendar($name, $value = null) {
     return $myCalendar;
 }
 
+function shorten_text($text, $length = 200)
+{
+    return strlen($text) > $length ? substr($text, 0, $length) . '...' : $text;
+}
+
 ?>

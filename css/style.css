@@ -225,6 +225,80 @@ center {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Column width adjustments for imagetable */
+/* Method 1: Adjust specific columns by position using nth-child */
+/* Example: Make first column narrower, second column wider */
+.schooltable th:nth-child(1),
+.schooltable td:nth-child(1) {
+	width: 50px; /* Adjust as needed */
+	min-width: 50px;
+	max-width: 50px;
+}
+
+.schooltable th:nth-child(2),
+.schooltable td:nth-child(2) {
+	width: 200px; /* Adjust as needed */
+	min-width: 150px;
+}
+
+/* Method 2: Adjust columns by adding classes to specific tables */
+/* Use this when you want different widths for different tables */
+.schooltable.col-widths-1 th:nth-child(1),
+.schooltable.col-widths-1 td:nth-child(1) {
+	width: 60px;
+	min-width: 60px;
+	max-width: 60px;
+}
+
+.schooltable.col-widths-1 th:nth-child(2),
+.schooltable.col-widths-1 td:nth-child(2) {
+	width: 180px;
+	min-width: 150px;
+}
+
+.schooltable.col-widths-1 th:nth-child(3),
+.schooltable.col-widths-1 td:nth-child(3) {
+	width: 150px;
+	min-width: 120px;
+}
+
+/* Method 3: Adjust specific table by ID */
+#mytbl th:nth-child(1),
+#mytbl td:nth-child(1) {
+	width: 50px;
+	min-width: 50px;
+	max-width: 50px;
+}
+
+#mytbl th:nth-child(2),
+#mytbl td:nth-child(2) {
+	width: 200px;
+	min-width: 150px;
+}
+
+/* Method 4: Use fixed table layout for precise control */
+/* Uncomment and adjust if you want fixed column widths */
+/*
+.imagetable.fixed-layout {
+	table-layout: fixed;
+}
+
+.imagetable.fixed-layout th:nth-child(1),
+.imagetable.fixed-layout td:nth-child(1) {
+	width: 10%;
+}
+
+.imagetable.fixed-layout th:nth-child(2),
+.imagetable.fixed-layout td:nth-child(2) {
+	width: 25%;
+}
+
+.imagetable.fixed-layout th:nth-child(3),
+.imagetable.fixed-layout td:nth-child(3) {
+	width: 20%;
+}
+*/
+
 .stable {
 	width: auto;
 }

@@ -21,8 +21,6 @@
         <script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
         <!-- <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script> -->
         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.tailwindcss.css">
-        <script src="https://cdn.datatables.net/2.3.5/js/dataTables.tailwindcss.js"></script>
         <script type="text/javascript">
           $(document).ready(function() {
               /* Init DataTables */
