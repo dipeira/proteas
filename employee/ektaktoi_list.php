@@ -32,6 +32,328 @@
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript" src="../js/common.js"></script>
+    <style>
+        /* Ektaktoi List Page Styling */
+        body {
+            padding: 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin: 20px 0 30px 0;
+        }
+        
+        .page-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        /* Search form row styling */
+        .tablesorter-ignoreRow {
+            background: #f0f9ff !important;
+        }
+        
+        .tablesorter-ignoreRow td {
+            background: #f0f9ff !important;
+            padding: 12px !important;
+            border: 1px solid #bae6fd !important;
+        }
+        
+        .tablesorter-ignoreRow input[type="text"],
+        .tablesorter-ignoreRow select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .tablesorter-ignoreRow input[type="text"]:focus,
+        .tablesorter-ignoreRow select:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        .tablesorter-ignoreRow input[type="submit"],
+        .tablesorter-ignoreRow button {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+            width: 100%;
+            margin-top: 8px;
+            font-size: 0.875rem;
+        }
+        
+        .tablesorter-ignoreRow input[type="submit"]:hover,
+        .tablesorter-ignoreRow button:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        .tablesorter-ignoreRow button.btn-yellow {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+        
+        .tablesorter-ignoreRow button.btn-yellow:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.4);
+        }
+        
+        /* Table header styling */
+        .imagetable thead th {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+            color: white !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Table rows */
+        .imagetable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .imagetable tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .imagetable tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .imagetable tbody tr:nth-child(even):hover {
+            background-color: #f3f4f6;
+        }
+        
+        /* Action column styling */
+        .imagetable tbody td:first-child {
+            text-align: center;
+            padding: 12px 8px;
+        }
+        
+        .imagetable tbody td:first-child a {
+            display: inline-block;
+            margin: 0 4px;
+            transition: transform 0.2s;
+        }
+        
+        .imagetable tbody td:first-child a:hover {
+            transform: scale(1.15);
+        }
+        
+        .imagetable tbody td:first-child img {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+        
+        /* Data cells */
+        .imagetable tbody td {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+        
+        .imagetable tbody td a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .imagetable tbody td a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        /* "No results" message */
+        .imagetable tbody td[colspan] h3 {
+            color: #6b7280;
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        /* Add employee row */
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) {
+            background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%);
+            border-top: 2px solid #22c55e;
+        }
+        
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) td {
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) a {
+            color: #16a34a;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) a:hover {
+            color: #15803d;
+        }
+        
+        /* Pagination row */
+        .pagination-row {
+            background: #f9fafb;
+            padding: 16px;
+            text-align: center;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .pagination-info {
+            margin-bottom: 12px;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .pagination-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 12px 0;
+        }
+        
+        .pagination-links a {
+            color: #4FC5D6;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #bae6fd;
+            transition: all 0.2s;
+        }
+        
+        .pagination-links a:hover {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border-color: #4FC5D6;
+            transform: translateY(-1px);
+        }
+        
+        .pagination-links span {
+            color: #9ca3af;
+            padding: 8px 16px;
+        }
+        
+        .pagination-form {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .pagination-form input[type="text"] {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .pagination-form input[type="submit"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pagination-form input[type="submit"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+        }
+        
+        /* Action buttons row */
+        .action-buttons-row {
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+            padding: 16px;
+            text-align: center;
+            border-top: 2px solid #f59e0b;
+        }
+        
+        .action-buttons-row input[type="button"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+            margin: 4px 8px;
+            font-size: 0.875rem;
+        }
+        
+        .action-buttons-row input[type="button"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        .action-buttons-row input[type="button"].btn-red {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+        }
+        
+        .action-buttons-row input[type="button"].btn-red:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .pagination-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .pagination-form {
+                flex-direction: column;
+            }
+            
+            .action-buttons-row input[type="button"] {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+        }
+    </style>
     <script type="text/javascript">        
         $().ready(function() {
             $("#yphr").autocomplete("get_school.php", {
@@ -83,7 +405,9 @@
 
     $query = "SELECT * FROM ektaktoi ";
       
-    $klpost = $yppost = $praxipost = 0;
+    $klpost = $yppost = $praxipost = $typepost = 0;
+    $surpost = '';
+    $whflag = 0;
     if (($_POST['klados']>0) || (strlen($_POST['yphr'])>0) || (strlen($_POST['surname'])>0) || (strlen($_POST['type'])>0)) {
         $posted=1;
         $curpg=1;
@@ -184,8 +508,11 @@
         $url = "ektaktoi.php?id=$id&op=view";
         echo "<script>window.location = '$url'</script>";
     }
-    echo "<center>";
+    echo "<div style='margin: 0 auto; padding: 0 20px;'>";
+    echo "<div class='page-header'>";
     echo "<h2>Αναπληρωτές</h2>";
+    echo "</div>";
+    echo "<div style='display: flex; justify-content: center;'>";
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
     echo "<tr><th>Ενεργεια</th>\n";
@@ -211,8 +538,8 @@
         });
     </script>
         <?php
-        echo "<td><INPUT TYPE='submit' VALUE='Αναζήτηση' />"
-            . "<br><center><button type='button' class='btn btn-yellow' id='resetBtn' style='margin: 3px'><small>Επαναφορά</small></button></center>"
+        echo "<td style='text-align: center;'><INPUT TYPE='submit' VALUE='🔍 Αναζήτηση' />"
+            . "<br><button type='button' class='btn btn-yellow' id='resetBtn'><small>🔄 Επαναφορά</small></button>"
             . "</td><td>\n";
                 
         echo "<input type='text' name='surname' id='surname' value='$surpost' />\n";
@@ -236,8 +563,9 @@
     
         echo "<tbody>\n";
         if ($num == 0) {
-            echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
+            echo "<tr><td colspan=7><h3>Δε βρέθηκαν αποτελέσματα...</h3></td></tr>";
         } else {
+            $i = 0;
             while ($i < $num)
             {
     
@@ -273,56 +601,70 @@
         }
         echo "</tbody>\n";
         if ($usrlvl < 2) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"ektaktoi.php?id=0&op=add\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</a></span></td></tr>";
+            echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%); border-top: 2px solid #22c55e;'><a href=\"ektaktoi.php?id=0&op=add\" style='color: #16a34a; font-weight: 600; font-size: 0.9375rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;'><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>➕ Προσθήκη αναπληρωτή εκπαιδευτικού</a></td></tr>";
         } else {
-            echo "<tr><td colspan=7><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</span></td></tr>";
+            echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: #f9fafb; color: #9ca3af;'><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη αναπληρωτή εκπαιδευτικού</span></td></tr>";
         }
-        if ($usrlvl == 0) {
-            echo "<tr><td colspan=7><span title=\"Προσθήκη\"></span>";
-        }
-        echo "<tr><td colspan=7 align=center>";
+        echo "<tr><td colspan=7 class='pagination-row'>";
         $prevpg = $curpg-1;
         if ($lastpg == 0) {
             $curpg = 0;
         }
-        echo "Σελίδα $curpg από $lastpg ($num_record1 εγγραφές)<br>";
+        echo "<div class='pagination-info'>Σελίδα <strong>$curpg</strong> από <strong>$lastpg</strong> (<strong>$num_record1</strong> εγγραφές)</div>";
+        
+        // Build query string for pagination links
+        $getstring = "&rpp=$rpp";
+        $getstring .= $klpost ? "&klados=$klpost" : '';
+        $getstring .= $yppost ? "&yphr=$yppost" : '';
+        $getstring .= $surpost ? "&surname=".urlencode($surpost) : '';
+        $getstring .= $typepost ? "&type=$typepost" : '';
+        $getstring .= $praxipost ? "&praxi=$praxipost" : '';
+        
+        echo "<div class='pagination-links'>";
         if ($curpg!=1) {
-            echo "  <a class='underline'href=ektaktoi_list.php?page=1&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Πρώτη</a>";
-            echo "&nbsp;&nbsp;  <a class='underline'href=ektaktoi_list.php?page=$prevpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Προηγ/νη</a>";
+            echo "<a href='ektaktoi_list.php?page=1$getstring'>⏮️ Πρώτη</a>";
+            echo "<a href='ektaktoi_list.php?page=$prevpg$getstring'>◀️ Προηγούμενη</a>";
         }
         else {
-            echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
+            echo "<span>⏮️ Πρώτη</span>";
+            echo "<span>◀️ Προηγούμενη</span>";
         }
         if ($curpg != $lastpg) {
             $nextpg = $curpg+1;
-            echo "&nbsp;&nbsp;  <a class='underline'href=ektaktoi_list.php?page=$nextpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Επόμενη</a>";
-            echo "&nbsp;&nbsp;  <a class='underline'href=ektaktoi_list.php?page=$lastpg&rpp=$rpp&klados=$klpost&praxi=$praxipost&yphr=$yppost&klados=$klpost&type=$typepost&surname=$surpost>Τελευταία</a>";
+            echo "<a href='ektaktoi_list.php?page=$nextpg$getstring'>Επόμενη ▶️</a>";
+            echo "<a href='ektaktoi_list.php?page=$lastpg$getstring'>Τελευταία ⏭️</a>";
         }
         else { 
-            echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
+            echo "<span>Επόμενη ▶️</span>";
+            echo "<span>Τελευταία ⏭️</span>";
         }
-        echo "<FORM METHOD='POST' ACTION='ektaktoi_list.php?".$_SERVER['QUERY_STRING']."'>";
-        echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
-        echo "<input type=\"submit\" value=\"Μετάβαση\">";
-        echo "<br>";
-        echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
-        echo "<input type=\"submit\" value=\"Ορισμός\">";
+        echo "</div>";
+        echo "<div class='pagination-form'>";
+        echo "<FORM METHOD='POST' ACTION='ektaktoi_list.php?".$_SERVER['QUERY_STRING']."' style='display: flex; gap: 8px; align-items: center;'>";
+        echo "<label style='font-weight: 500; color: #374151;'>Μετάβαση στη σελ.:</label>";
+        echo "<input type=\"text\" name=\"page\" size=3 />";
+        echo "<input type=\"submit\" value=\"➡️ Μετάβαση\" />";
         echo "</FORM>";
+        echo "<FORM METHOD='POST' ACTION='ektaktoi_list.php?".$_SERVER['QUERY_STRING']."' style='display: flex; gap: 8px; align-items: center;'>";
+        echo "<label style='font-weight: 500; color: #374151;'>Εγγρ./σελ.:</label>";
+        echo "<input type=\"text\" name=\"rpp\" value=\"$rpp\" size=3 />";
+        echo "<input type=\"submit\" value=\"✅ Ορισμός\" />";
+        echo "</FORM>";
+        echo "</div>";
         echo "</td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
-        echo "&nbsp;&nbsp;&nbsp;";
-        echo "<INPUT TYPE='button' VALUE='Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\">";
-        //echo "&nbsp;&nbsp;&nbsp;";
-        //echo "<INPUT TYPE='button' VALUE='Πράξεις ανά Σχολείο' onClick=\"parent.location='praxi_sch2.php'\">";
+        echo "<tr><td colspan=7 class='action-buttons-row'>";
+        echo "<INPUT TYPE='button' VALUE='📝 Επεξεργασία Πράξεων' onClick=\"parent.location='praxi.php'\">";
+        echo "<INPUT TYPE='button' VALUE='📊 Εκπαιδευτικοί & Σχολεία ανά Πράξη' onClick=\"parent.location='praxi_sch.php'\">";
         echo "</td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' VALUE='Αναπληρωτές προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\"></td></tr>";
-        echo "<tr><td colspan=7><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\"></td></tr>";
+        echo "<tr><td colspan=7 class='action-buttons-row'>";
+        echo "<INPUT TYPE='button' VALUE='📅 Αναπληρωτές προηγούμενου έτους' onClick=\"parent.location='ektaktoi_prev.php'\">";
+        echo "</td></tr>";
+        echo "<tr><td colspan=7 class='action-buttons-row'>";
+        echo "<INPUT TYPE='button' class='btn-red' VALUE='🏠 Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+        echo "</td></tr>";
         echo "</table>\n";
         ?>
-      
-      <br><br>
-     
-    </center>
+      </div>
 </div>
   </body>
 </html>

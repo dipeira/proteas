@@ -31,7 +31,297 @@ else {
     <script type="text/javascript" src="js/jquery_notification_v.1.js"></script>
     <link rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css" />
     <script type="text/javascript" src="js/common.js"></script>
-    <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
+    <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/>
+    <style>
+        /* Index Page Styling */
+        body {
+            padding: 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin: 20px 0 30px 0;
+        }
+        
+        .page-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 10px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 12px 0;
+            font-size: 0.875rem;
+            color: #1e40af;
+            font-weight: 500;
+            border: 1px solid #4FC5D6;
+        }
+        
+        /* Search form row styling */
+        .tablesorter-ignoreRow {
+            background: #f0f9ff !important;
+        }
+        
+        .tablesorter-ignoreRow td {
+            background: #f0f9ff !important;
+            padding: 12px !important;
+            border: 1px solid #bae6fd !important;
+        }
+        
+        .tablesorter-ignoreRow input[type="text"],
+        .tablesorter-ignoreRow select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .tablesorter-ignoreRow input[type="text"]:focus,
+        .tablesorter-ignoreRow select:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        .tablesorter-ignoreRow input[type="submit"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+            width: 100%;
+        }
+        
+        .tablesorter-ignoreRow input[type="submit"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        .tablesorter-ignoreRow input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4FC5D6;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        
+        .tablesorter-ignoreRow small {
+            color: #6b7280;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+        
+        /* Table header styling */
+        .imagetable thead th {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+            color: white !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Table rows */
+        .imagetable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .imagetable tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .imagetable tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .imagetable tbody tr:nth-child(even):hover {
+            background-color: #f3f4f6;
+        }
+        
+        /* Action column styling */
+        .imagetable tbody td:first-child {
+            text-align: center;
+            padding: 12px 8px;
+        }
+        
+        .imagetable tbody td:first-child a {
+            display: inline-block;
+            margin: 0 4px;
+            transition: transform 0.2s;
+        }
+        
+        .imagetable tbody td:first-child a:hover {
+            transform: scale(1.15);
+        }
+        
+        .imagetable tbody td:first-child img {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+        
+        /* Data cells */
+        .imagetable tbody td {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: middle;
+        }
+        
+        .imagetable tbody td a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .imagetable tbody td a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        /* "No results" message */
+        .imagetable tbody td[colspan] h3 {
+            color: #6b7280;
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        /* Add employee row */
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) {
+            background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%);
+            border-top: 2px solid #22c55e;
+        }
+        
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) td {
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) a {
+            color: #16a34a;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        
+        .imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) a:hover {
+            color: #15803d;
+        }
+        
+        /* Pagination row */
+        .pagination-row {
+            background: #f9fafb;
+            padding: 16px;
+            text-align: center;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .pagination-info {
+            margin-bottom: 12px;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .pagination-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 12px 0;
+        }
+        
+        .pagination-links a {
+            color: #4FC5D6;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #bae6fd;
+            transition: all 0.2s;
+        }
+        
+        .pagination-links a:hover {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border-color: #4FC5D6;
+            transform: translateY(-1px);
+        }
+        
+        .pagination-links span {
+            color: #9ca3af;
+            padding: 8px 16px;
+        }
+        
+        .pagination-form {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .pagination-form input[type="text"] {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .pagination-form input[type="submit"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pagination-form input[type="submit"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .page-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .pagination-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .pagination-form {
+                flex-direction: column;
+            }
+        }
+    </style>
     <script type="text/javascript">        
       $().ready(function() {
           $("#org").autocomplete("employee/get_school.php", {
@@ -228,13 +518,16 @@ if ($num_record == 1 && $num_record1 > 1) {
     $url = "employee/employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
 }
-echo "<center><h2>Μόνιμοι Εκπαιδευτικοί</h2></center>";
+echo "<div style='margin: 0 auto; padding: 0 20px;'>";
+echo "<div class='page-header'>";
+echo "<h2>Μόνιμοι Εκπαιδευτικοί</h2>";
 if ($logged) {
   $se = getParam('sxol_etos', $mysqlconnection);
   $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
-  echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;$sx_etos</p>";
+  echo "<div class='user-info'>👤 Ενεργός Χρήστης: <strong>".$_SESSION['user']."</strong> &nbsp;&nbsp; 📅 Σχολ.Έτος: <strong>$sx_etos</strong></div>";
 }
-    echo "<center>";        
+echo "</div>";
+echo "<div style='display: flex; justify-content: center;'>";        
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
     echo "<tr><th>Ενεργεια</th>\n";
@@ -272,14 +565,14 @@ if ($posted ||
     echo "</td>";
     echo "<tr>";
     $has_outsiders = isset($_REQUEST['outsiders']) ? 'checked' : '';
-    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>Εμφάνιση και όσων δεν υπηρετούν και δεν ανήκουν στη Δ/νση</small></td>";	
+    echo "<td colspan=3 style='padding: 10px 16px;'><label style='display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem;'><input type='checkbox' name='outsiders' $has_outsiders style='width: 18px; height: 18px; accent-color: #4FC5D6; cursor: pointer;'><span>Εμφάνιση και όσων δεν υπηρετούν και δεν ανήκουν στη Δ/νση</span></label></td>";	
     $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
-    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive><small>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης, διαθεσιμότητα)</small></small></td>";
+    echo "<td colspan=2 style='padding: 10px 16px;'><label style='display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem;'><input type='checkbox' name='inactive' $has_inactive style='width: 18px; height: 18px; accent-color: #4FC5D6; cursor: pointer;'><span>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης, διαθεσιμότητα)</span></label></td>";
     echo "</form></tr></thead>\n";
     
     echo "<tbody>\n";
 if ($num == 0) {
-    echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
+    echo "<tr><td colspan=7><h3>Δε βρέθηκαν αποτελέσματα...</h3></td></tr>";
 } else {
     $i = 0;
     while ($i < $num)
@@ -322,16 +615,16 @@ if ($num == 0) {
     echo "</tbody>\n";
     //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
 if ($usrlvl < 2) {
-    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
+    echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%); border-top: 2px solid #22c55e;'><a href=\"employee/employee.php?op=add\" style='color: #16a34a; font-weight: 600; font-size: 0.9375rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;'><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>➕ Προσθήκη εκπαιδευτικού</a></td></tr>";
 } else {
-    echo "<tr><td colspan=7><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
+    echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: #f9fafb; color: #9ca3af;'><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
 }        
-    echo "<tr><td colspan=7 align=center>";
+    echo "<tr><td colspan=7 class='pagination-row'>";
     $prevpg = $curpg-1;
 if ($lastpg == 0) {
     $curpg = 0;
 }
-    echo "Σελίδα $curpg από $lastpg ($num_record1 <span title='Query: ".str_replace(array('"','\''), '', $q_main)."'>εγγραφές</span>)<br>";
+    echo "<div class='pagination-info'>Σελίδα <strong>$curpg</strong> από <strong>$lastpg</strong> (<strong>$num_record1</strong> εγγραφές)</div>";
 $outsiders = isset($_REQUEST['outsiders']) ? '&outsiders=1' : '';
 $inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
 $getstring = "&rpp=$rpp";
@@ -340,35 +633,41 @@ $getstring .= $yppost ? "&yphr=$yppost" : '';
 $getstring .= $surpost ? "&surname=$surpost" : '';
 $getstring .= strlen($outsiders)>0 ? $outsiders : '';
 $getstring .= strlen($inactive)>0 ? $outsiders : '';
+echo "<div class='pagination-links'>";
 if ($curpg!=1) {
-    echo "  <a href=index.php?page=1$getstring>Πρώτη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg$getstring>Προηγ/νη</a>";
+    echo "<a href='index.php?page=1$getstring'>⏮️ Πρώτη</a>";
+    echo "<a href='index.php?page=$prevpg$getstring'>◀️ Προηγούμενη</a>";
 }
 else {
-        echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
+        echo "<span>⏮️ Πρώτη</span>";
+        echo "<span>◀️ Προηγούμενη</span>";
 }
 if ($curpg != $lastpg) {
     $nextpg = $curpg+1;
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg$getstring>Επόμενη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg$getstring>Τελευταία</a>";
+    echo "<a href='index.php?page=$nextpg$getstring'>Επόμενη ▶️</a>";
+    echo "<a href='index.php?page=$lastpg$getstring'>Τελευταία ⏭️</a>";
 }
 else { 
-        echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
+        echo "<span>Επόμενη ▶️</span>";
+        echo "<span>Τελευταία ⏭️</span>";
 }
-    echo "<FORM METHOD='POST' ACTION='index.php?".$_SERVER['QUERY_STRING']."'>";
-    echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
-    echo "<input type=\"submit\" value=\"Μετάβαση\">";
-    echo "<br>";
-    echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
-    echo "<input type=\"submit\" value=\"Ορισμός\">";
+echo "</div>";
+    echo "<div class='pagination-form'>";
+    echo "<FORM METHOD='POST' ACTION='index.php?".$_SERVER['QUERY_STRING']."' style='display: flex; gap: 8px; align-items: center;'>";
+    echo "<label style='font-weight: 500; color: #374151;'>Μετάβαση στη σελ.:</label>";
+    echo "<input type=\"text\" name=\"page\" size=3 />";
+    echo "<input type=\"submit\" value=\"➡️ Μετάβαση\" />";
     echo "</FORM>";
+    echo "<FORM METHOD='POST' ACTION='index.php?".$_SERVER['QUERY_STRING']."' style='display: flex; gap: 8px; align-items: center;'>";
+    echo "<label style='font-weight: 500; color: #374151;'>Εγγρ./σελ.:</label>";
+    echo "<input type=\"text\" name=\"rpp\" value=\"$rpp\" size=3 />";
+    echo "<input type=\"submit\" value=\"✅ Ορισμός\" />";
+    echo "</FORM>";
+    echo "</div>";
     echo "</td></tr>";
     echo "</table>\n";
 ?>
-      
-<br><br>
-     
-</center>
+      </div>
 </div>
 </body>
 </html>
