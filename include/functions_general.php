@@ -281,29 +281,123 @@ function print_latest_commits($lines = 20) {
   
     $decoded = json_decode($data);
     $dt = array_slice($decoded, 0, $lines);
-    echo "<h3>Πρόσφατες αλλαγές - προσθήκες</h3>";
-    echo "<table id='commits' class='imagetable' border='2'>";
-    echo "<thead><th>ID</th><th>Μήνυμα Αλλαγής</th><th>Ημερομηνία - ώρα</th></thead><tbody>";
+    
+    echo "<div class='info-section' style='margin-top: 16px;'>";
+    echo "<h3>🔄 Πρόσφατες αλλαγές - προσθήκες</h3>";
     
     // get latest version (commit) & check with installed version (if installed with git)
     $rev = exec('git rev-parse --short HEAD');
     if (strlen($rev) > 0){
-        echo "<h4>Εγκατεστημένη έκδοση: ". $rev;
         $row = $dt[0];
         $latest = substr($row->sha,0,7);
-        echo $rev == $latest ? " - Έχετε εγκαταστήσει την τελευταία έκδοση!</h4>":
-        " - Δεν έχετε εγκαταστήσει την τελευταία έκδοση. Παρακαλώ ενημερώστε!</h4>";
+        $is_latest = $rev == $latest;
+        echo "<div style='padding: 10px 12px; margin-bottom: 12px; border-radius: 6px; background: " . ($is_latest ? "#d1fae5" : "#fef3c7") . "; border-left: 4px solid " . ($is_latest ? "#10b981" : "#f59e0b") . ";'>";
+        echo "<strong style='color: " . ($is_latest ? "#065f46" : "#92400e") . ";'>";
+        echo $is_latest ? "✓ Εγκατεστημένη έκδοση: $rev - Έχετε εγκαταστήσει την τελευταία έκδοση!" : "⚠️ Εγκατεστημένη έκδοση: $rev - Δεν έχετε εγκαταστήσει την τελευταία έκδοση. Παρακαλώ ενημερώστε!";
+        echo "</strong>";
+        echo "</div>";
     }
-
+    
+    echo "<style>
+        .commits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .commit-item {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            transition: all 0.2s;
+            border-left: 3px solid #3b82f6;
+        }
+        .commit-item:hover {
+            background: #f3f4f6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .commit-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .commit-sha {
+            background: #1f2937;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .commit-sha:hover {
+            background: #111827;
+        }
+        .commit-date {
+            color: #6b7280;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .commit-message {
+            color: #374151;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .commit-author {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 6px;
+        }
+        @media (max-width: 768px) {
+            .commit-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>";
+    
+    echo "<div class='commits-list'>";
     foreach ($dt as $row) {
-      echo "<tr>";
-      $shortsha = substr($row->sha,0,7);
-      echo "<td><a href='".$url.$row->sha."' target ='_blank'>".$shortsha.'</a></td>';
-      echo "<td>".$row->commit->message.'</td>';
-      echo "<td>".date('d-m-Y, H:i:s',strtotime($row->commit->author->date)).'</td>';
-      echo "</tr>";
+        $shortsha = substr($row->sha,0,7);
+        $message = htmlspecialchars($row->commit->message);
+        $date = date('d-m-Y, H:i:s',strtotime($row->commit->author->date));
+        $author = htmlspecialchars($row->commit->author->name);
+        $author_date = strtotime($row->commit->author->date);
+        $time_ago = '';
+        $diff = time() - $author_date;
+        if ($diff < 3600) {
+            $time_ago = floor($diff / 60) . ' λεπτά πριν';
+        } elseif ($diff < 86400) {
+            $time_ago = floor($diff / 3600) . ' ώρες πριν';
+        } elseif ($diff < 604800) {
+            $time_ago = floor($diff / 86400) . ' ημέρες πριν';
+        } elseif ($diff < 2592000) {
+            $time_ago = floor($diff / 604800) . ' εβδομάδες πριν';
+        } elseif ($diff < 31536000) {
+            $time_ago = floor($diff / 2592000) . ' μήνες πριν';
+        } else {
+            $time_ago = floor($diff / 31536000) . ' έτη πριν';
+        }
+        
+        echo "<div class='commit-item'>";
+        echo "<div class='commit-header'>";
+        echo "<a href='".$url.$row->sha."' target='_blank' class='commit-sha'>".$shortsha.'</a>';
+        echo "<span class='commit-date'>🕒 $date ($time_ago)</span>";
+        echo "</div>";
+        echo "<div class='commit-message'>".nl2br($message).'</div>';
+        echo "<div class='commit-author'>👤 $author</div>";
+        echo "</div>";
     }
-    echo '</tbody></table>';
+    echo '</div>';
+    echo '</div>';
     return;
 }
 

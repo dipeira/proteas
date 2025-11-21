@@ -24,9 +24,165 @@
         require '../etc/head.php'; 
         ?>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+        <style>
+            .form-section {
+                background: white;
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 12px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            }
+            .form-section h3 {
+                margin-top: 0;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #e5e7eb;
+                color: #1f2937;
+                font-size: 1rem;
+                font-weight: 600;
+            }
+            .warning-box {
+                background: #fef3c7;
+                border-left: 4px solid #f59e0b;
+                padding: 12px 16px;
+                margin-bottom: 16px;
+                border-radius: 4px;
+            }
+            .warning-box strong {
+                color: #92400e;
+                display: block;
+                margin-bottom: 4px;
+            }
+            .warning-box p {
+                margin: 4px 0;
+                color: #78350f;
+                font-size: 0.875rem;
+            }
+            .info-box {
+                background: #eff6ff;
+                border-left: 4px solid #3b82f6;
+                padding: 12px 16px;
+                margin-bottom: 12px;
+                border-radius: 4px;
+                font-size: 0.875rem;
+                color: #1e40af;
+            }
+            .radio-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 0;
+            }
+            .radio-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 8px;
+                border-radius: 4px;
+                transition: background-color 0.2s;
+            }
+            .radio-item:hover {
+                background-color: #f9fafb;
+            }
+            .radio-item input[type="radio"] {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+                margin-top: 2px;
+                flex-shrink: 0;
+            }
+            .radio-item label {
+                font-size: 0.8125rem;
+                color: #374151;
+                cursor: pointer;
+                line-height: 1.5;
+                flex: 1;
+            }
+            .radio-number {
+                font-weight: 600;
+                color: #3b82f6;
+                margin-right: 4px;
+            }
+            .btn-primary {
+                background: #3b82f6;
+                color: white;
+                padding: 8px 20px;
+                border: none;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 0.875rem;
+                cursor: pointer;
+                transition: background 0.2s, transform 0.1s;
+            }
+            .btn-primary:hover:not(:disabled) {
+                background: #2563eb;
+                transform: translateY(-1px);
+            }
+            .btn-primary:disabled {
+                background: #9ca3af;
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+            .btn-red {
+                background: #ef4444;
+                color: white;
+                padding: 8px 20px;
+                border: none;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 0.875rem;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-red:hover {
+                background: #dc2626;
+            }
+            .button-group {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-top: 12px;
+            }
+            .alert-message {
+                background: #fef2f2;
+                border: 1px solid #fecaca;
+                color: #991b1b;
+                padding: 12px 16px;
+                border-radius: 6px;
+                margin-bottom: 16px;
+            }
+            .success-message {
+                background: #d1fae5;
+                border: 1px solid #86efac;
+                color: #065f46;
+                padding: 12px 16px;
+                border-radius: 6px;
+                margin-bottom: 16px;
+            }
+            .form-input {
+                width: 100%;
+                max-width: 300px;
+                padding: 6px 10px;
+                border: 1px solid #d1d5db;
+                border-radius: 4px;
+                font-size: 0.8125rem;
+                margin-top: 8px;
+            }
+            .form-input:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+            }
+            @media (max-width: 768px) {
+                .form-section {
+                    padding: 10px;
+                }
+            }
+        </style>
     </head>
-    <body>
+    <body class="p-4 md:p-6 lg:p-8">
     <?php require '../etc/menu.php'; ?>
+    <div class="max-w-4xl mx-auto">
 <?php       
     // end_of_year: Includes end-of-year actions: Deletes ektakto personnel, returns personnel from other pispe etc...
     require "../tools/class.login.php";
@@ -38,49 +194,93 @@
             
     $sxol_etos = getParam('sxol_etos', $mysqlconnection);
     $tbl_bkp_mon = "employee_bkp_$sxol_etos";
-    echo "<html><head><h2>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</h2></head><body>";
-    echo "<h3><blink>Προσοχή: Μη αναστρέψιμες ενέργειες</blink></h3>";
-    echo "<tr><td><p>Επιβάλλεται η εκτέλεση με τη σειρά του αριθμού που αναγράφεται.</p>";
-    echo "<table class=\"imagetable\" border='1'>";
+    
+    echo "<h2 class='text-3xl font-bold text-gray-800 mb-4'>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</h2>";
+    echo "<div class='warning-box'>";
+    echo "<strong>⚠️ Προσοχή: Μη αναστρέψιμες ενέργειες</strong>";
+    echo "<p>Επιβάλλεται η εκτέλεση με τη σειρά του αριθμού που αναγράφεται.</p>";
+    echo "</div>";
+    
+    echo "<div class='form-section'>";
+    echo "<h3>Επιλογή Ενέργειας</h3>";
     echo "<form action='' method='POST' autocomplete='off'>";
-    echo "<tr><td>Ενέργεια</td><td>";
-    echo "<input type='radio' name='type' value='2'>1. Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων (να γίνει πριν την αλλαγή Σχ.έτους)<br>";
-    echo "<input type='radio' name='type' value='8'>2. Αλλαγή σχολικού έτους (τρέχον σχολικό έτος: $sxol_etos)<br>";
-    echo "<input type='radio' name='type' value='10'>3. Αλλαγή ωραριου εκπ/κων<br>";
-    echo "<input type='radio' name='type' value='11'>4. Πλήρωση πίνακα υπηρετήσεων<br>";
-    echo "<input type='radio' name='type' value='12'>5. Εισαγωγή μαθητών / τμημάτων<br>";
-    //echo "<input type='radio' name='type' value='6' disabled>3. Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους<br>";
-    //echo "<input type='radio' name='type' value='3' disabled>4. Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ<br>";
-    //echo "<input type='radio' name='type' value='5' disabled>5. Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων<br>";
-    echo "<br>";
-    echo "<input type='radio' name='type' value='4'>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31/08)<br>";
-    echo "<br>";
-    echo "<input type='radio' name='type' value='1'>Εκτύπωση βεβαιώσεων Αναπληρωτών Κρατικού Προυπολογισμού<br>";
-    echo "<input type='radio' name='type' value='7'>Εκτύπωση βεβαιώσεων Αναπληρωτών ΕΣΠΑ<br>";
-    echo "</td></tr>";
-if ($usrlvl > 0) {
-    echo "<tr><td colspan=2><input type='submit' value='Πραγματοποίηση' disabled>";
-} else {
-    echo "<tr><td colspan=2><input type='submit' value='Πραγματοποίηση'>";
-}
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-    echo "</td></tr>";
-    echo "</form></table>";
-if ($usrlvl > 0) {
-    echo "<br><br><h3>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών. Επικοινωνήστε με το διαχειριστή σας.</h3>";
-    mysqli_close($mysqlconnection);
-    exit;
-}
+    echo "<div class='radio-group'>";
+    
+    echo "<div class='radio-item'>";
+    echo "<input type='radio' name='type' value='2' id='type_2' />";
+    echo "<label for='type_2'><span class='radio-number'>1.</span> Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων (να γίνει πριν την αλλαγή Σχ.έτους)</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item'>";
+    echo "<input type='radio' name='type' value='8' id='type_8' />";
+    echo "<label for='type_8'><span class='radio-number'>2.</span> Αλλαγή σχολικού έτους (τρέχον σχολικό έτος: <strong>$sxol_etos</strong>)</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item'>";
+    echo "<input type='radio' name='type' value='10' id='type_10' />";
+    echo "<label for='type_10'><span class='radio-number'>3.</span> Αλλαγή ωραριου εκπ/κων</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item'>";
+    echo "<input type='radio' name='type' value='11' id='type_11' />";
+    echo "<label for='type_11'><span class='radio-number'>4.</span> Πλήρωση πίνακα υπηρετήσεων</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item'>";
+    echo "<input type='radio' name='type' value='12' id='type_12' />";
+    echo "<label for='type_12'><span class='radio-number'>5.</span> Εισαγωγή μαθητών / τμημάτων</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item' style='margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb;'>";
+    echo "<input type='radio' name='type' value='4' id='type_4' />";
+    echo "<label for='type_4'>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31/08)</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item' style='margin-top: 8px; padding-top: 12px; border-top: 1px solid #e5e7eb;'>";
+    echo "<input type='radio' name='type' value='1' id='type_1' />";
+    echo "<label for='type_1'>Εκτύπωση βεβαιώσεων Αναπληρωτών Κρατικού Προυπολογισμού</label>";
+    echo "</div>";
+    
+    echo "<div class='radio-item'>";
+    echo "<input type='radio' name='type' value='7' id='type_7' />";
+    echo "<label for='type_7'>Εκτύπωση βεβαιώσεων Αναπληρωτών ΕΣΠΑ</label>";
+    echo "</div>";
+    
+    echo "</div>"; // radio-group
+    
+    echo "<div class='button-group'>";
+    if ($usrlvl > 0) {
+        echo "<button type='submit' class='btn-primary' disabled>Πραγματοποίηση</button>";
+    } else {
+        echo "<button type='submit' class='btn-primary'>⚙️ Πραγματοποίηση</button>";
+    }
+    echo "<button type='button' class='btn-red' onClick=\"parent.location='../index.php'\">← Επιστροφή</button>";
+    echo "</div>";
+    
+    echo "</form>";
+    echo "</div>"; // form-section
+    
+    if ($usrlvl > 0) {
+        echo "<div class='alert-message'>";
+        echo "<strong>Δεν έχετε δικαίωμα για την πραγματοποίηση αυτών των ενεργειών.</strong><br>";
+        echo "Επικοινωνήστε με το διαχειριστή σας.";
+        echo "</div>";
+        mysqli_close($mysqlconnection);
+        exit;
+    }
     // Allagh sxolikoy etoys
 if (isset($_POST['sxoletos'])) {
     $curSxoletos = getParam('sxol_etos', $mysqlconnection);
     if ($curSxoletos == $_POST['sxoletos']) {
-        echo "<br><br>";
-        die('Σφάλμα: Το έτος έχει ήδη αλλάξει...');
+        echo "<div class='alert-message'>Σφάλμα: Το έτος έχει ήδη αλλάξει...</div>";
+        mysqli_close($mysqlconnection);
+        echo "</div></body></html>";
+        exit;
     }
     $debug = '';
     setParam('sxol_etos', $_POST['sxoletos'], $mysqlconnection);
     // more...
+    echo "<div class='form-section'>";
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών του ΠΥΣΠΕ Ηρακλείου στην οργανική τους</h3>";
     $query = "CREATE TABLE $tbl_bkp_mon SELECT * FROM employee";
     $debug .= $query . ' / ';
@@ -97,13 +297,14 @@ if (isset($_POST['sxoletos'])) {
     $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows($mysqlconnection);
-    //echo $query;
     if ($result) {
-        echo "Επιτυχής μεταβολή $num εγγραφών.";
+        echo "<div class='success-message'>✓ Επιτυχής μεταβολή $num εγγραφών.</div>";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "<div class='alert-message'>✗ Πρόβλημα στη διαγραφή...</div>";
     }
+    echo "</div>";
     
+    echo "<div class='form-section'>";
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από άλλα ΠΥΣΠΕ</h3>";
     $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = $allo_pyspe";
     $debug .= $query . ' / ';
@@ -112,30 +313,15 @@ if (isset($_POST['sxoletos'])) {
     $debug .= $query . ' / ';
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows($mysqlconnection);
-    //echo $query;
     if ($result) {
-        echo "Επιτυχής μεταβολή $num εγγραφών.";
+        echo "<div class='success-message'>✓ Επιτυχής μεταβολή $num εγγραφών.</div>";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "<div class='alert-message'>✗ Πρόβλημα στη διαγραφή...</div>";
     }
-    echo "<br><span title='$debug'><small>(i)</small></span>";
-    // echo "<h3>Διαγραφή αποσπασμένων από άλλα ΠΥΣΠΕ / ΠΥΣΔΕ από βάση δεδομένων</h3>";
-    // $query = "DROP TABLE employee_deleted";
-    // $result = mysqli_query($mysqlconnection, $query);
-    // // 3: Άλλο ΠΥΣΠΕ, 5: Άλλο ΠΥΣΔΕ
-    // $query = "CREATE TABLE employee_deleted SELECT * FROM employee WHERE sx_organikhs IN (3,5) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (6,4)";
-    // $result = mysqli_query($mysqlconnection, $query);
-    // $query = "DELETE FROM employee WHERE sx_organikhs IN (3,5) AND thesi NOT IN (2,4) AND sx_yphrethshs NOT IN (6,4)";
-    // $result = mysqli_query($mysqlconnection, $query);
-    // $num = mysqli_affected_rows();
-    // //echo $query;
-    // if ($result)
-    //     echo "Επιτυχής μεταβολή $num εγγραφών.";
-    // else 
-    //     echo "Πρόβλημα στη διαγραφή...";
-    //
-    //do2yphr($mysqlconnection);
-    echo "<br><br>H διαδικασία ολοκληρώθηκε...";
+    echo "<div class='info-box' style='margin-top: 8px;'><small title='$debug'>ℹ️ Λεπτομέρειες διαθέσιμες</small></div>";
+    echo "</div>";
+    
+    echo "<div class='success-message'>Η διαδικασία ολοκληρώθηκε επιτυχώς!</div>";
 }
     ////////////////////////////////////////
     // vevaiwseis proyphresias anaplhrwtwn
@@ -157,6 +343,7 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
     $result = mysqli_query($mysqlconnection, $query);
     $num=mysqli_num_rows($result);
 
+    echo "<div class='form-section'>";
     echo "<h3>Εκτύπωση βεβαιώσεων Αναπληρωτών ";
     if ($kratikoy) {
         echo "κρατικού προύπολογισμού";
@@ -165,9 +352,13 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
     }
     echo "</h3>";
     if ($num == 0) {
-        echo "<p>Δε βρέθηκαν εγγραφές!</p>";
-        die();
+        echo "<div class='alert-message'>Δε βρέθηκαν εγγραφές!</div>";
+        echo "</div>";
+        mysqli_close($mysqlconnection);
+        echo "</div></body></html>";
+        exit;
     }
+    echo "<div class='info-box'>Βρέθηκαν <strong>$num</strong> αναπληρωτές.</div>";
     echo "<form name='anaplfrm' action=\"../employee/vev_yphr_anapl.php\" method='POST'>";
         
 
@@ -244,32 +435,46 @@ if($_POST['type'] == 1 || $_POST['type'] == 7) {
     echo "<input type='hidden' name='emp_arr' value='". serialize($submit_array) ."'>";
     echo "<input type='hidden' name='kratikoy' value=$kratikoy>";
     echo "<input type='hidden' name='plithos' value=$num>";
-    echo "<input type='submit' VALUE='Υποβολή αιτήματος'>"; 
+    echo "<button type='submit' class='btn-primary'>📄 Υποβολή αιτήματος</button>"; 
     echo "</form>";
+    echo "</div>";
 }
 elseif ($_POST['type'] == 8) {
+    echo "<div class='form-section'>";
     echo "<h3>Αλλαγή Σχολικού έτους</h3>";
-    echo "Τρέχον σχολικό έτος: $sxol_etos<br>";
-    echo "Δώστε νέο σχολικό έτος (π.χ. για το σχολ.έτος 2014-15 εισάγετε <strong>201415</strong>)<br>";
+    echo "<div class='info-box'>Τρέχον σχολικό έτος: <strong>$sxol_etos</strong></div>";
+    echo "<p style='margin-bottom: 8px; font-size: 0.875rem;'>Δώστε νέο σχολικό έτος (π.χ. για το σχολ.έτος 2014-15 εισάγετε <strong>201415</strong>)</p>";
     echo "<form action='' method='POST'>";
-    echo "<input type='text' name='sxoletos'>";
-    echo "<input type='submit' value='Υποβολή'>";
+    echo "<input type='text' name='sxoletos' class='form-input' placeholder='π.χ. 201415'>";
+    echo "<div class='button-group'>";
+    echo "<button type='submit' class='btn-primary'>⚙️ Υποβολή</button>";
+    echo "</div>";
     echo "</form>";
-    echo "<small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
+    echo "<div class='info-box' style='margin-top: 8px;'>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</div>";
+    echo "</div>";
 }
 elseif ($_POST['type'] == 2) {
+    echo "<div class='form-section'>";
     echo "<h3>Διαγραφή Αναπληρωτών / Ωρομισθίων από βάση δεδομένων</h3>";
     // check if not empty
     $query = "select id from ektaktoi";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result)) {
-        exit('Σφάλμα: O πίνακας αναπληρωτών είναι κενός...');
+        echo "<div class='alert-message'>Σφάλμα: O πίνακας αναπληρωτών είναι κενός...</div>";
+        echo "</div>";
+        mysqli_close($mysqlconnection);
+        echo "</div></body></html>";
+        exit;
     }
     // check if already inserted        
     $query = "select id from ektaktoi_old where sxoletos = $sxol_etos";
     $result = mysqli_query($mysqlconnection, $query);
     if (mysqli_num_rows($result) > 0) {
-        exit('Σφάλμα: H διαγραφή έχει ήδη γίνει...');
+        echo "<div class='alert-message'>Σφάλμα: H διαγραφή έχει ήδη γίνει...</div>";
+        echo "</div>";
+        mysqli_close($mysqlconnection);
+        echo "</div></body></html>";
+        exit;
     }
     // archive into ektaktoi_old
     $query = "insert into ektaktoi_old select *, '$sxol_etos' as sxoletos from ektaktoi where 1";
@@ -284,51 +489,61 @@ elseif ($_POST['type'] == 2) {
     $query = "TRUNCATE table praxi";
     $result = mysqli_query($mysqlconnection, $query);
     if ($result) {
-        echo "Επιτυχής Διαγραφή. <br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα 'ektaktoi_old'</small>";
+        echo "<div class='success-message'>✓ Επιτυχής Διαγραφή.<br><small>Οι εκπ/κοί μεταφέρθηκαν στον πίνακα 'ektaktoi_old'</small></div>";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "<div class='alert-message'>✗ Πρόβλημα στη διαγραφή...</div>";
     }
+    echo "</div>";
 }
 elseif ($_POST['type'] == 4) {
+    echo "<div class='form-section'>";
     echo "<h3>Επιστροφή αποσπασμένων εκπαιδευτικών από φορείς (για 31-08)</h3>";
     // check...
     $query = "SELECT * FROM employee WHERE sx_yphrethshs = $se_forea";
     $result = mysqli_query($mysqlconnection, $query);
     if (!mysqli_num_rows($result)) {
-        exit('Δεν υπάρχουν εκπαιδευτικοί γι\'αυτή την ενέργεια...');
+        echo "<div class='alert-message'>Δεν υπάρχουν εκπαιδευτικοί γι'αυτή την ενέργεια...</div>";
+        echo "</div>";
+        mysqli_close($mysqlconnection);
+        echo "</div></body></html>";
+        exit;
     }
-    //
-    //$query = "DROP TABLE employee_bkp";
-    //$result = mysqli_query($mysqlconnection, $query);
-    //$query = "CREATE TABLE employee_bkp SELECT * FROM employee";
-    //$result = mysqli_query($mysqlconnection, $query);
     $query = "INSERT INTO employee_moved SELECT * FROM employee WHERE sx_yphrethshs = $se_forea";
     $result = mysqli_query($mysqlconnection, $query);
     $query = "UPDATE employee SET sx_yphrethshs = sx_organikhs WHERE sx_yphrethshs = $se_forea";
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_affected_rows();
-    //echo $query;
     if ($result) {
-        echo "Επιτυχής μεταβολή $num εγγραφών.";
+        echo "<div class='success-message'>✓ Επιτυχής μεταβολή $num εγγραφών.</div>";
     } else { 
-        echo "Πρόβλημα στη διαγραφή...";
+        echo "<div class='alert-message'>✗ Πρόβλημα στη διαγραφή...</div>";
     }
+    echo "</div>";
 }
     // Αλλαγή ωραριου εκπ/κων
 elseif ($_POST['type'] == 10) {
-    echo "<br><br><a href='../employee/update_wres.php'>Αλλαγή ωραριου εκπ/κων</a><br>";
-    echo "(Παρακαλώ βεβαιωθείτε ότι επιλέγετε 31/12 του τρέχοντος έτους και έχετε επιλέξει Τροποποίηση ωρών στη ΒΔ)";
+    echo "<div class='form-section'>";
+    echo "<h3>Αλλαγή ωραριου εκπ/κων</h3>";
+    echo "<p style='margin-bottom: 12px;'>Παρακαλώ βεβαιωθείτε ότι επιλέγετε 31/12 του τρέχοντος έτους και έχετε επιλέξει Τροποποίηση ωρών στη ΒΔ</p>";
+    echo "<a href='../employee/update_wres.php' class='btn-primary' style='text-decoration: none; display: inline-block;'>🔧 Αλλαγή ωραριου</a>";
+    echo "</div>";
 }
 elseif ($_POST['type'] == 11) {
-    echo "<br><br><small>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</small>";
+    echo "<div class='form-section'>";
+    echo "<h3>Πλήρωση πίνακα υπηρετήσεων</h3>";
+    echo "<div class='info-box'>ΣΗΜ: Η διαδικασία διαρκεί αρκετή ώρα. Υπομονή...</div>";
     do2yphr($mysqlconnection);
+    echo "</div>";
 }
 elseif ($_POST['type'] == 12) {
-  echo "<br><br><a href='../tools/import.php'>Εισαγωγή μαθητών / τμημάτων</a><br>";
-  echo "<p>(Χρησιμοποιήστε τα πρότυπα αρχεία <b>Μαθητές / Τμήματα Δ.Σ./Νηπ.</b> & τις αντίστοιχες επιλογές)</p>";
+    echo "<div class='form-section'>";
+    echo "<h3>Εισαγωγή μαθητών / τμημάτων</h3>";
+    echo "<p style='margin-bottom: 12px;'>(Χρησιμοποιήστε τα πρότυπα αρχεία <strong>Μαθητές / Τμήματα Δ.Σ./Νηπ.</strong> & τις αντίστοιχες επιλογές)</p>";
+    echo "<a href='../tools/import.php' class='btn-primary' style='text-decoration: none; display: inline-block;'>📥 Εισαγωγή</a>";
+    echo "</div>";
 }
     mysqli_close($mysqlconnection);
-
 ?>
+    </div>
 </body>
 </html>
