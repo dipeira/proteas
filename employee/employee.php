@@ -33,6 +33,279 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
     <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+    <style>
+        /* Employee View Page Styling */
+        body {
+            padding: 20px;
+        }
+        
+        /* Main header styling */
+        .imagetable th[colspan] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 18px 20px;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Table row styling with section grouping */
+        .imagetable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .imagetable tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Label cells styling - first and third columns */
+        .imagetable td:first-child,
+        .imagetable td:nth-child(3) {
+            background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+            font-weight: 600;
+            color: #1e40af;
+            padding: 12px 16px;
+            border-right: 2px solid #bae6fd;
+            width: 25%;
+            vertical-align: top;
+        }
+        
+        /* Data cells styling - second and fourth columns */
+        .imagetable td:nth-child(2),
+        .imagetable td:nth-child(4) {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: top;
+            background: #ffffff;
+        }
+        
+        /* Alternate row styling for visual separation */
+        .imagetable tbody tr:nth-child(even) td:first-child,
+        .imagetable tbody tr:nth-child(even) td:nth-child(3) {
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+        }
+        
+        /* Hover effect for rows */
+        .imagetable tbody tr:hover td:nth-child(2),
+        .imagetable tbody tr:hover td:nth-child(4) {
+            background-color: #f8fafc;
+        }
+        
+        /* Section separator - visual grouping */
+        .imagetable tbody tr td[colspan] {
+            background: #f0f9ff !important;
+            border-top: 2px solid #4FC5D6;
+            border-bottom: 1px solid #bae6fd;
+            padding: 10px 16px !important;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        /* Expandable sections styling */
+        .show_hide, .show_hide2, .show_hide3, #archive-toggle {
+            color: #4FC5D6;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            transition: all 0.2s;
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+            border: 1px solid #4FC5D6;
+        }
+        
+        .show_hide:hover, .show_hide2:hover, .show_hide3:hover, #archive-toggle:hover {
+            background: linear-gradient(90deg, #b2ebf2 0%, #80deea 100%);
+            color: #2A8B9A;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        /* Expandable content styling */
+        .slidingDiv, .slidingDiv2, .slidingDiv3 {
+            background: #f9fafb;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #4FC5D6;
+            margin-top: 8px;
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        /* Important data highlighting */
+        .imagetable td strong {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        
+        /* Link styling */
+        .imagetable a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .imagetable a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        /* Email links */
+        .imagetable a[href^="mailto:"] {
+            color: #4FC5D6;
+        }
+        
+        .imagetable a[href^="mailto:"]:hover {
+            color: #3BA8B8;
+        }
+        
+        /* Small text styling */
+        .imagetable small {
+            color: #6b7280;
+            font-size: 0.8125rem;
+        }
+        
+        /* Status information highlighting */
+        .imagetable td {
+            word-wrap: break-word;
+        }
+        
+        /* Form inputs in view mode */
+        .imagetable input[type="text"],
+        .imagetable input[type="submit"],
+        .imagetable textarea,
+        .imagetable select {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .imagetable input[type="text"]:focus,
+        .imagetable textarea:focus,
+        .imagetable select:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        /* Buttons styling */
+        .imagetable input[type="submit"],
+        .imagetable input[type="button"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        .imagetable input[type="submit"]:hover,
+        .imagetable input[type="button"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        /* Button navigation */
+        INPUT[type="button"][value="<<"],
+        INPUT[type="button"][value=">>"] {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+            font-size: 1.25rem;
+            padding: 8px 16px;
+        }
+        
+        /* Print button */
+        input[value="Εκτύπωση"] {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        }
+        
+        /* Archive toggle */
+        #archive-toggle {
+            margin: 8px 0;
+        }
+        
+        /* Lists in expandable sections */
+        .slidingDiv ul, .slidingDiv2 ul, .slidingDiv3 ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 8px 0;
+        }
+        
+        .slidingDiv li, .slidingDiv2 li, .slidingDiv3 li {
+            padding: 8px 12px;
+            margin: 4px 0;
+            background: white;
+            border-left: 3px solid #4FC5D6;
+            border-radius: 4px;
+        }
+        
+        /* Checkbox styling */
+        .imagetable input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4FC5D6;
+            cursor: pointer;
+        }
+        
+        /* Service time form styling */
+        #yphrfrm {
+            background: #f0f9ff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #bae6fd;
+            margin: 12px 0;
+        }
+        
+        #wordfrm {
+            background: #f0fdf4;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #86efac;
+            margin: 12px 0;
+        }
+        
+        /* Error highlighting - will be applied via inline styles if needed */
+        .error-highlight {
+            background-color: #fee2e2 !important;
+            color: #dc2626 !important;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .imagetable td:first-child {
+                width: 30%;
+            }
+            
+            .imagetable th[colspan] {
+                font-size: 1rem;
+                padding: 14px 16px;
+            }
+        }
+        
+        /* Last update info */
+        .imagetable tr:last-child td {
+            background: #f9fafb;
+            color: #6b7280;
+            font-size: 0.8125rem;
+            padding: 8px 16px;
+            border-top: 2px solid #e5e7eb;
+        }
+    </style>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#yphrfrm").validate({
@@ -729,7 +1002,7 @@ elseif ($_GET['op']=="view") {
     }
     if ($count>1) {
         if ($counthrs > $wres) {
-            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
+            echo "<tr class='error-highlight'><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
         }
         else {
             echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";

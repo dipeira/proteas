@@ -488,9 +488,10 @@ center {
 }
 
 .applogo {
-	height: 100px;
+	height: 105px;
 	padding-bottom: 12px;
 	padding-left: 30px;
+	border-radius: 10px;
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
