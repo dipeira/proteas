@@ -14,7 +14,7 @@
                     <!-- Logo and Title -->
                     <div class="text-center">
                         <div class="flex justify-center mb-6">
-                            <img src="../images/logo.png" alt="Πρωτέας" class="h-20 w-auto">
+                            <img src="../images/pr_logo.png" alt="Πρωτέας" class="h-80 w-auto border rounded-lg shadow-lg">
                         </div>
                         <h2 class="text-3xl font-bold text-gray-900">Πρωτέας</h2>
                         <p class="mt-2 text-sm text-gray-600">Πληροφοριακό σύστημα προσωπικού</p>

@@ -162,7 +162,7 @@ center {
 }
 
 .imagetable th {
-	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
 	border: none !important;
 	padding: 14px 16px;
 	text-align: left;
@@ -175,6 +175,8 @@ center {
 	overflow-wrap: break-word;
 	word-break: break-word;
 	hyphens: auto;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .imagetable th:first-child {
@@ -306,13 +308,13 @@ center {
 #navigation {
 	margin: 0;
 	padding: 12px 32px;
-	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
 	height: auto;
 	min-height: 48px;
 	list-style: none;
 	font-size: 14px;
 	font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(79, 197, 214, 0.2);
 	display: flex;
 	align-items: center;
 	gap: 4px;
@@ -445,16 +447,16 @@ center {
 }
 
 #navigation > li.sub ul li a:hover {
-	background: linear-gradient(90deg, #f0fdf4 0%, #ecfdf5 100%);
-	color: #059669;
+	background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+	color: #2A8B9A;
 	text-decoration: none;
 	padding-left: 22px;
-	border-left-color: #10b981;
+	border-left-color: #4FC5D6;
 	font-weight: 600;
 }
 
 #navigation > li.sub ul li a:active {
-	background: linear-gradient(90deg, #d1fae5 0%, #a7f3d0 100%);
+	background: linear-gradient(90deg, #b2ebf2 0%, #80deea 100%);
 }
 
 /* Style separator items in dropdown menus (items without links) */
@@ -486,7 +488,7 @@ center {
 }
 
 .applogo {
-	height: 85px;
+	height: 100px;
 	padding-bottom: 12px;
 	padding-left: 30px;
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
@@ -648,21 +650,23 @@ table.tablesorter thead tr .header {
 }
 
 table.tablesorter thead tr .header:hover {
-	background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+	background: linear-gradient(135deg, #6BD9E8 0%, #4FC5D6 100%);
 }
 
 table.tablesorter thead tr .headerSortUp {
-	background-image: url(../images/asc.gif), linear-gradient(135deg, #34d399 0%, #10b981 100%);
+	background-image: url(../images/asc.gif), linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
 	background-position: center right, center;
 	background-repeat: no-repeat, no-repeat;
 	color: white;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 table.tablesorter thead tr .headerSortDown {
-	background-image: url(../images/desc.gif), linear-gradient(135deg, #34d399 0%, #10b981 100%);
+	background-image: url(../images/desc.gif), linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
 	background-position: center right, center;
 	background-repeat: no-repeat, no-repeat;
 	color: white;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
