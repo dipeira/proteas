@@ -724,7 +724,7 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 }
 
 .ui-tabs .ui-tabs-nav {
-	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	background: linear-gradient(135deg, #4dc3d4 0%, #2c8e9d 100%);
 	border-width: 0px 0px 1px 0px;
 	border-radius: 0px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
