@@ -6,7 +6,12 @@
          
 ?>	
   <html>
-  <head>      
+  <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Αλλαγές Μ.Κ.';
+    require '../etc/head.php'; 
+    ?>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../js/jquery.js"></script>
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
@@ -16,7 +21,6 @@
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
 		});
         </script>
-        <title>Αλλαγές Μ.Κ.</title>
    </head>
    <body>
    <?php include('../etc/menu.php'); ?>

@@ -29,11 +29,11 @@ else
 ?>
 <html>
   <head>
-    
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Αναπληρωτές</title>
-    
+    <?php 
+    $root_path = '../';
+    $page_title = 'Αναπληρωτές';
+    require '../etc/head.php'; 
+    ?>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
@@ -237,7 +237,7 @@ else
             $sx_yphrethshs_id_arr = explode(",", $sx_yphrethshs_id_str);
             $sx_yphrethshs_id = trim($sx_yphrethshs_id_arr[0]);
             $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-            $sx_yphrethshs_url = "<a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
+            $sx_yphrethshs_url = "<a class='underline' href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
 
             $type = mysqli_result($result, $i, "type");
             $praxi = mysqli_result($result, $i, "praxi");
@@ -247,7 +247,7 @@ else
                                 
             echo "<tr>";
              $typos = get_type($type, $mysqlconnection);
-            echo "<td><a href='ektaktoi.php?op=view&sxoletos=".$sxoletos."&id=$id'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+            echo "<td><a class='underline' href='ektaktoi.php?op=view&sxoletos=".$sxoletos."&id=$id'>".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
             echo "</tr>";
 
             $i++;

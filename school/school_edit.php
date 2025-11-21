@@ -17,10 +17,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 ?>
 <html>
   <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Επεξεργασία σχολείου';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Επεξεργασία σχολείου</title>
-    
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 

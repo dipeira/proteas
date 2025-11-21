@@ -6,10 +6,13 @@
     session_start();
 ?>    
   <html>
-  <head>    
-  <?php require '../etc/menu.php'; ?>  
+  <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Τοποθέτηση αναπληρωτών εκπαιδευτικών';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <title>Τοποθέτηση αναπληρωτών εκπαιδευτικών</title>
     <link href="../css/select2.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script src="../js/select2.min.js"></script>

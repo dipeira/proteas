@@ -6,9 +6,13 @@
   session_start();
 ?>	
   <html>
-  <head>      
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <title>Εκπαιδευτικοί και Σχολεία ανά Πράξη</title>
+  <head>
+  <?php 
+    $root_path = '../';
+    $page_title = 'Εκπαιδευτικοί και Σχολεία ανά Πράξη';
+    require '../etc/head.php'; 
+    ?>      
+    
     <link href="../css/select2.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script src="../js/select2.min.js"></script>
@@ -131,12 +135,16 @@
     $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);
 		ob_end_flush();
 			
-		echo "<form action='../tools/2excel.php' method='post'>";
+		echo "<div class='mt-6 flex items-center gap-4'>";
+		echo "<form action='../tools/2excel.php' method='post' class='inline-block'>";
 		echo "<input type='hidden' name = 'data' value='".  $page."'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
-    echo "&nbsp;&nbsp;&nbsp;";
+    echo "<button type='submit' class='btn btn-excel'>";
+    echo "<img src='../images/excel.png' alt='Excel' class='w-5 h-5 mr-2' style='filter: brightness(0) invert(1);'>";
+    echo "Εξαγωγή στο Excel";
+    echo "</button>";
+		echo "</form>";
     echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
-    echo "</form>";
+    echo "</div>";
 	}
 ?>
 <br><br>

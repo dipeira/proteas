@@ -4,7 +4,12 @@ require_once"../config.php";
 require_once"../include/functions.php";
 ?>    
 <html>
-    <head>      
+    <head>
+        <?php 
+        $root_path = '../';
+        $page_title = 'Στατιστικά Μονίμων / Αναπληρωτών';
+        require '../etc/head.php'; 
+        ?>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../js/jquery.js"></script>
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
@@ -13,7 +18,6 @@ require_once"../include/functions.php";
                 $(".tablesorter").tablesorter({widgets: ['zebra']}); 
             });
         </script>
-        <title>Στατιστικά Μονίμων / Αναπληρωτών</title>
     </head>
 
     <?php

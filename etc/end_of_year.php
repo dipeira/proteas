@@ -18,7 +18,11 @@
 ?>    
 <html>
     <head>
-        <title>Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες</title>
+        <?php 
+        $root_path = '../';
+        $page_title = 'Τέλος Διδακτικού/Σχολικού έτους - Ενέργειες';
+        require '../etc/head.php'; 
+        ?>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>

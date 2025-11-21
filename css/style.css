@@ -12,6 +12,104 @@ body {
 	overflow-x: hidden;
 }
 
+/* Tailwind-style Typography - Headers */
+/* High specificity to override Tailwind defaults */
+body h1, body h2, body h3, body h4, body h5, body h6 {
+	font-family: "Inter", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+	color: #111827 !important;
+	font-weight: 700 !important;
+	line-height: 1.25 !important;
+	letter-spacing: -0.025em !important;
+	margin-top: 0 !important;
+	margin-bottom: 0.5em !important;
+}
+
+body h1 {
+	font-size: 3rem !important;
+	font-weight: 800 !important;
+	line-height: 1.1 !important;
+	letter-spacing: -0.04em !important;
+	margin-bottom: 0.75em !important;
+}
+
+body h2 {
+	font-size: 1.875rem !important;
+	font-weight: 700 !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.03em !important;
+	margin-bottom: 0.75em !important;
+}
+
+body h3 {
+	font-size: 1.5rem !important;
+	font-weight: 600 !important;
+	line-height: 1.3 !important;
+	letter-spacing: -0.02em !important;
+	margin-bottom: 0.625em !important;
+}
+
+body h4 {
+	font-size: 1.25rem !important;
+	font-weight: 600 !important;
+	line-height: 1.4 !important;
+	letter-spacing: -0.01em !important;
+	margin-bottom: 0.5em !important;
+}
+
+body h5 {
+	font-size: 1.125rem !important;
+	font-weight: 600 !important;
+	line-height: 1.5 !important;
+	margin-bottom: 0.5em !important;
+}
+
+body h6 {
+	font-size: 1rem !important;
+	font-weight: 600 !important;
+	line-height: 1.5 !important;
+	margin-bottom: 0.5em !important;
+}
+
+/* Center-aligned headers (common in project) */
+center h1, center h2, center h3, center h4, center h5, center h6 {
+	text-align: center !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Responsive header sizes */
+@media screen and (max-width: 768px) {
+	body h1 {
+		font-size: 2.25rem !important;
+	}
+	
+	body h2 {
+		font-size: 1.5rem !important;
+	}
+	
+	body h3 {
+		font-size: 1.25rem !important;
+	}
+	
+	body h4 {
+		font-size: 1.125rem !important;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	body h1 {
+		font-size: 1.875rem !important;
+	}
+	
+	body h2 {
+		font-size: 1.25rem !important;
+	}
+	
+	body h3 {
+		font-size: 1.125rem !important;
+	}
+}
+
 /* Table container to prevent overflow */
 table {
 	max-width: 100%;
@@ -44,7 +142,7 @@ center {
 .imagetable {
 	font-size: 15px;
 	color: #1f2937;
-	border-collapse: separate;
+	border-collapse: collapse;
 	border-spacing: 0;
 	width: 90%;
 	max-width: 100%;
@@ -54,6 +152,7 @@ center {
 	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	box-sizing: border-box;
 	table-layout: auto;
+	border: none !important;
 }
 
 /* Allow table cells to be flexible but constrained */
@@ -64,7 +163,7 @@ center {
 
 .imagetable th {
 	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-	border: none;
+	border: none !important;
 	padding: 14px 16px;
 	text-align: left;
 	color: white;
@@ -74,6 +173,7 @@ center {
 	font-size: 13px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+	word-break: break-word;
 	hyphens: auto;
 }
 
@@ -87,14 +187,14 @@ center {
 
 .imagetable td {
 	background: #ffffff;
-	border: none;
+	border: none !important;
 	border-bottom: 1px solid #e5e7eb;
 	padding: 9px 10px;
 	transition: background-color 0.2s ease;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+	word-break: break-word;
 	hyphens: auto;
-	overflow: visible;
 }
 
 /* Ensure action buttons stay on one line */
@@ -122,7 +222,6 @@ center {
 
 .imagetable tr:hover td {
 	background-color: #f0fdf4;
-	transform: scale(1.01);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -319,43 +418,132 @@ center {
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-button, input[type=submit], input[type=button], .button {
-	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-	color: white;
-	padding: 10px 20px;
-	margin: 8px 4px;
+/* Base button class with Tailwind-style utilities */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.625rem 1.25rem; /* 10px 20px */
+	margin: 0.5rem 0.25rem; /* 8px 4px */
 	border: none;
-	cursor: pointer;
-	border-radius: 8px;
+	border-radius: 0.5rem; /* 8px */
 	font-weight: 500;
-	font-size: 14px;
+	font-size: 0.875rem; /* 14px */
 	letter-spacing: 0.025em;
+	color: white;
+	cursor: pointer;
 	transition: all 0.2s ease;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	text-decoration: none;
 }
 
-button:hover, input[type=submit]:hover, input[type=button]:hover {
+.btn:hover {
 	opacity: 0.9;
 	transform: translateY(-1px);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-button:active, input[type=submit]:active, input[type=button]:active {
+.btn:active {
 	transform: translateY(0);
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+/* Button variants - single class each */
+.btn-primary {
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.btn-primary:hover {
+	background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
 }
 
 .btn-red {
 	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
 }
 
-.btn-link a {
-	color: white;
-	text-decoration: none;
+.btn-red:hover {
+	background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
 }
 
 .btn-yellow {
-	background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+	background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+}
+
+.btn-yellow:hover {
+	background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+}
+
+.btn-green {
+	background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+}
+
+.btn-green:hover {
+	background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+}
+
+.btn-excel {
+	background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+}
+
+.btn-excel:hover {
+	background: linear-gradient(135deg, #15803d 0%, #166534 100%) !important;
+}
+
+/* Size variants */
+.btn-sm {
+	padding: 0.5rem 1rem; /* 8px 16px */
+	font-size: 0.8125rem; /* 13px */
+}
+
+.btn-lg {
+	padding: 0.75rem 1.5rem; /* 12px 24px */
+	font-size: 1rem; /* 16px */
+}
+
+/* Legacy support - auto-apply button styles */
+button, input[type=submit], input[type=button], .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.625rem 1.25rem;
+	margin: 0.5rem 0.25rem;
+	border: none;
+	border-radius: 0.5rem;
+	font-weight: 500;
+	font-size: 0.875rem;
+	letter-spacing: 0.025em;
+	color: white;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+button:hover, input[type=submit]:hover, input[type=button]:hover, .button:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active, input[type=submit]:active, input[type=button]:active, .button:active {
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+button:focus, input[type=submit]:focus, input[type=button]:focus, .button:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+.btn-link a {
+	color: white;
+	text-decoration: none;
 }
 
 .userdata {
@@ -366,7 +554,7 @@ button:active, input[type=submit]:active, input[type=button]:active {
 }
 
 table.tablesorter {
-	max-width: 95%;
+	max-width: 98%;
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -382,25 +570,29 @@ table.tablesorter thead tr .header {
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
-	transition: background-color 0.2s ease;
+	transition: all 0.2s ease;
 }
 
 table.tablesorter thead tr .header:hover {
-	background-color: rgba(255, 255, 255, 0.1);
+	background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
 }
 
 table.tablesorter thead tr .headerSortUp {
-	background-image: url(../images/asc.gif);
-	background-color: rgba(255, 255, 255, 0.15);
+	background-image: url(../images/asc.gif), linear-gradient(135deg, #34d399 0%, #10b981 100%);
+	background-position: center right, center;
+	background-repeat: no-repeat, no-repeat;
+	color: white;
 }
 
 table.tablesorter thead tr .headerSortDown {
-	background-image: url(../images/desc.gif);
-	background-color: rgba(255, 255, 255, 0.15);
+	background-image: url(../images/desc.gif), linear-gradient(135deg, #34d399 0%, #10b981 100%);
+	background-position: center right, center;
+	background-repeat: no-repeat, no-repeat;
+	color: white;
 }
 
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-	background-color: rgba(255, 255, 255, 0.15);
+	color: white;
 }
 
 /* Tooltip container */

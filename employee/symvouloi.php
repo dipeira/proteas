@@ -22,10 +22,14 @@ $src = new drasticSrcMySQL($server, $user, $pw, $db, 'symvouloi');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Σύμβουλοι - Ενότητες';
+    require '../etc/head.php'; 
+    ?>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
 <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-<title>Σύμβουλοι - Ενότητες</title>
 </head><body>
 <?php require '../etc/menu.php'; ?>
     <h2>Σύμβουλοι - Ενότητες</h2>

@@ -228,7 +228,7 @@ if ($num_record == 1 && $num_record1 > 1) {
     $url = "employee/employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
 }
-echo "<center><h1>Μόνιμοι Εκπαιδευτικοί</h1></center>";
+echo "<center><h2>Μόνιμοι Εκπαιδευτικοί</h2></center>";
 if ($logged) {
   $se = getParam('sxol_etos', $mysqlconnection);
   $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);

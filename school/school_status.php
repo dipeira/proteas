@@ -17,7 +17,12 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <?php 
+    $root_path = '../';
+    $page_title = 'Καρτέλα σχολείου';
+    require '../etc/head.php'; 
+    ?>
+    <!-- <LINK href="../css/style.css" rel="stylesheet" type="text/css"> -->
     <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Καρτέλα σχολείου</title>

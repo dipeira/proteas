@@ -50,6 +50,11 @@ $results    = $Paginator->getData( $limit, $page );
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Διαχείριση Αιτημάτων';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
@@ -58,8 +63,6 @@ $results    = $Paginator->getData( $limit, $page );
       $("#mytbl").tablesorter();
     });
     </script>
-
-  <title>Διαχείριση Αιτημάτων</title>
   <style>
     ul.pagination {
         display: inline-block;

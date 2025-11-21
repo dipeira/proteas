@@ -6,9 +6,13 @@
   session_start();
 ?>	
   <html>
-  <head>      
+  <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Συμπλήρωση υποχρεωτικού ωραρίου';
+    require '../etc/head.php'; 
+    ?>
       <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-      <title>Συμπλήρωση υποχρεωτικού ωραρίου</title>
       <script type="text/javascript" src="../js/jquery.js"></script>
       <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
       <script type="text/javascript">   

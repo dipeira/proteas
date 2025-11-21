@@ -1,8 +1,11 @@
 <html>
   <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Πίνακας λειτουργικών κενών';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Πίνακας λειτουργικών κενών</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <?php
     // include all datatables related files

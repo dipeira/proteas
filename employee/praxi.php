@@ -39,10 +39,13 @@ if ($_SESSION['userlevel'] == 3){
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <?php 
+    $root_path = '../';
+    $page_title = 'Διαχείριση Πράξεων';
+    require '../etc/head.php'; 
+    ?>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />   
 <link rel="stylesheet" type="text/css" href="../tools/grid/css/grid_default.css"/>
-<title>Διαχείριση Πράξεων</title>
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
@@ -59,14 +62,14 @@ var thegrid = new drasticGrid('grid1', {
     //colwidth: "300",
     pagelength:25,
     columns: [
-      {name: 'id', displayname:'Α/Α', width: 30},
-      {name: 'name', displayname:'Όνομα', width: 300},
-      {name: 'ya', displayname:'Υπουργική Απόφαση', width: 150},
+      {name: 'id', displayname:'Α/Α', width: 50},
+      {name: 'name', displayname:'Ονομα', width: 300},
+      {name: 'ya', displayname:'Υπουργικη Αποφαση', width: 150},
       {name: 'ada', displayname:'Α.Δ.Α. Υ.Α.', width: 150},
-      {name: 'apofasi', displayname:'Απόφαση Δ/ντή', width: 150},
-      {name: 'ada_apof', displayname:'Α.Δ.Α. Απόφασης', width: 150},
-      {name: 'sxolio', displayname:'Σχόλια', width: 150},
-      {name: 'type', displayname:'Τύπος',
+      {name: 'apofasi', displayname:'Αποφαση Δ/ντη', width: 150},
+      {name: 'ada_apof', displayname:'Α.Δ.Α. Αποφασης', width: 150},
+      {name: 'sxolio', displayname:'Σχολια', width: 150},
+      {name: 'type', displayname:'Τυπος',
         type: DDTYPEKEY, 
         values: [<?php echo $pr_values; ?>],
         labels:  [<?php echo $pr_labels; ?>],

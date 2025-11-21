@@ -19,7 +19,10 @@
             }
         </style>
         <script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
-        <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script>
+        <!-- <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script> -->
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.tailwindcss.css">
+        <script src="https://cdn.datatables.net/2.3.5/js/dataTables.tailwindcss.js"></script>
         <script type="text/javascript">
           $(document).ready(function() {
               /* Init DataTables */
@@ -71,7 +74,7 @@
     //$i=0;
 ?>
 <div id="sch-table">
-<table cellpadding="0" cellspacing="0" border="1" id="school-table" class='imagetable' style='width:90%'>
+<table cellpadding="0" cellspacing="0" border="1" id="school-table" class='display' style='width:90%'>
     <thead>
       <tr>
         <th style="max-width:50px">Ενέργεια</th>

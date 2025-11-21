@@ -3,11 +3,14 @@
 ?>
 <html>
   <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Αναφορά Εκπαιδευτικών ανά περιφέρεια συμβούλου εκπαίδευσης';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-    <title>Αναφορά Εκπαιδευτικών ανά περιφέρεια συμβούλου εκπαίδευσης</title>
-    
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
 	  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>

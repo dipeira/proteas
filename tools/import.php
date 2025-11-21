@@ -3,9 +3,12 @@
 ?>
 <html>
   <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Εισαγωγή δεδομένων από αρχείο';
+    require '../etc/head.php'; 
+    ?>
 	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Εισαγωγή δεδομένων από αρχείο</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
   </head>
   <body>
