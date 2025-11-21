@@ -77,7 +77,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $surname = $row['surname'];
                 $klados_id = $row['klados'];
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = $row['comments'];
+                $comments = shorten_text($row['comments']);
                 $comm = $comments;
                 $today = date("Y-m-d");
                 $return = $row['finish'];

@@ -1,6 +1,9 @@
 <html>
   <head>
   <?php 
+        require_once"../config.php";
+        require_once"../include/functions.php";
+        session_start();
         $root_path = '../';
         $page_title = 'Μαθητές & Εκπαιδευτικοί';
         require '../etc/head.php'; 
@@ -13,19 +16,189 @@
     // include all datatables related files
     require_once('../js/datatables/includes.html');
     ?>
+    
+    <style>
+        /* Table readability improvements */
+        #mytbl {
+            font-size: 0.85em;
+            width: 100% !important;
+            table-layout: auto;
+            margin: 0;
+        }
+        
+        #mytbl tbody td, thead th {
+            padding: 6px 4px !important;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            white-space: nowrap;
+        }
+        
+        #mytbl tbody td:first-child {
+            text-align: left;
+            white-space: normal;
+            max-width: 200px;
+        }
+        
+        /* Scrollable container */
+        .table-container {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
+            margin: 20px 0;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background: white;
+            position: relative;
+        }
+        
+        /* Prevent body and main container overflow */
+        body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+        
+        /* Ensure main content area doesn't overflow */
+        body > * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* DataTables scroll container */
+        .dataTables_scroll {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+        }
+        
+        .dataTables_scrollHead {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            overflow-y: hidden !important;
+        }
+        
+        .dataTables_scrollHeadInner {
+            width: 100% !important;
+        }
+        
+        .dataTables_scrollHeadInner table {
+            width: 100% !important;
+            margin: 0 !important;
+        }
+        
+        .dataTables_scrollBody {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+        }
+        
+        /* Ensure header and body tables have same column widths */
+        .dataTables_scrollHeadInner table,
+        .dataTables_scrollBody table {
+            table-layout: fixed !important;
+        }
+        
+        .dataTables_scrollHeadInner table th,
+        .dataTables_scrollBody table td {
+            box-sizing: border-box !important;
+        }
+        
+        /* Ensure table doesn't overflow container */
+        .table-container .dataTables_wrapper {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        
+        /* Column visibility toggle panel */
+        .colvis-panel {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        
+        .colvis-panel h5 {
+            margin: 0 0 10px 0;
+            font-size: 1em;
+            color: #495057;
+        }
+        
+        .colvis-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .colvis-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        
+        .colvis-btn:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        
+        .colvis-btn.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .colvis-btn.hidden {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+        
+        /* DataTables wrapper improvements */
+        .dataTables_wrapper {
+            padding: 10px;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .dt-buttons {
+            margin-bottom: 10px;
+        }
+        
+        .dt-buttons .btn {
+            margin-right: 5px;
+            padding: 6px 12px;
+            font-size: 0.9em;
+        }
+    </style>
 
     <script type="text/javascript">
         $(document).ready(function() {
             /* Init DataTables */
-            $('#mytbl').DataTable({
+            var table = $('#mytbl').DataTable({
                 paging: false,
                 fixedHeader: true,
+                scrollX: true,
+                scrollCollapse: true,
+                autoWidth: false,
+                deferRender: true,
                 language: {
                     url: '../js/datatables/greek.json'
                 },
                 pageLength: 20,
                 lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Όλες"]],
                 dom: 'Bfrt',
+                initComplete: function() {
+                    // Ensure columns are properly aligned after initialization
+                    var api = this.api();
+                    setTimeout(function() {
+                        api.columns.adjust();
+                    }, 100);
+                },
                 buttons: [
                     {
                         extend: 'copy',
@@ -34,13 +207,160 @@
                     {
                         extend: 'excel',
                         text: 'Εξαγωγή σε excel',
-                        filename: 'export'
+                        filename: function() {
+                            var typeName = $('h4').text() || 'export';
+                            return typeName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                        },
+                        exportOptions: {
+                            columns: ':visible',
+                            rows: function(idx, data, node) {
+                                // Exclude the first row (index 0)
+                                return idx !== 0;
+                            },
+                            format: {
+                                body: function (data, row, column, node) {
+                                    // Remove HTML tags and get text content
+                                    if (node) {
+                                        var $cell = $(node);
+                                        return $cell.text().trim() || data;
+                                    }
+                                    return data;
+                                }
+                            }
+                        }
                     },
                     {
                         extend: 'print',
                         text: 'Εκτύπωση',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        text: 'Εμφάνιση/Απόκρυψη Στηλών',
+                        action: function ( e, dt, node, config ) {
+                            $('#colvis-panel').slideToggle();
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: '_all',
+                        className: 'text-center'
+                    },
+                    {
+                        targets: 0, // First column (Ονομασία)
+                        className: 'text-left'
                     }
                 ]
+            });
+            
+            // Wait for table to be fully initialized before creating column visibility panel
+            table.on('init.dt', function() {
+                // Create column visibility panel
+                var colvisHtml = '<div id="colvis-panel" class="colvis-panel" style="display:none;">';
+                colvisHtml += '<h5>Επιλέξτε τις στήλες που θέλετε να εμφανίζονται:</h5>';
+                colvisHtml += '<div class="colvis-buttons">';
+                
+                var columnCount = table.columns().count();
+                for (var i = 0; i < columnCount; i++) {
+                    try {
+                        var column = table.column(i);
+                        var headerNode = column.header();
+                        if (headerNode) {
+                            var headerText = $(headerNode).text().trim();
+                            if (headerText !== '') {
+                                colvisHtml += '<button class="colvis-btn active" data-column="' + i + '">' + headerText + '</button>';
+                            }
+                        }
+                    } catch(e) {
+                        console.warn('Error accessing column ' + i + ':', e);
+                    }
+                }
+                
+                colvisHtml += '</div></div>';
+                
+                // Insert panel after buttons
+                $('.dt-buttons').after(colvisHtml);
+            });
+            
+            // Handle column visibility toggle
+            $(document).on('click', '.colvis-btn', function() {
+                var columnIndex = parseInt($(this).data('column'));
+                if (isNaN(columnIndex)) return;
+                
+                try {
+                    var column = table.column(columnIndex);
+                    if (!column) return;
+                    
+                    var isVisible = column.visible();
+                    column.visible(!isVisible);
+                    
+                    $(this).toggleClass('active');
+                    $(this).toggleClass('hidden');
+                    
+                    // Recalculate column widths after visibility change
+                    setTimeout(function() {
+                        try {
+                            table.columns.adjust();
+                        } catch(e) {
+                            console.warn('Error adjusting columns:', e);
+                        }
+                    }, 100);
+                } catch(e) {
+                    console.error('Error toggling column visibility:', e);
+                }
+            });
+            
+            // Update button states on column visibility change
+            table.on('column-visibility.dt', function(e, settings, columnIndex, vis) {
+                try {
+                    $('.colvis-btn[data-column="' + columnIndex + '"]').toggleClass('active', vis);
+                    $('.colvis-btn[data-column="' + columnIndex + '"]').toggleClass('hidden', !vis);
+                    // Recalculate column widths after visibility change
+                    setTimeout(function() {
+                        try {
+                            table.columns.adjust();
+                        } catch(e) {
+                            console.warn('Error adjusting columns:', e);
+                        }
+                    }, 100);
+                } catch(e) {
+                    console.warn('Error updating column visibility button:', e);
+                }
+            });
+            
+            // Fix column alignment after table is drawn
+            table.on('draw.dt', function() {
+                try {
+                    table.columns.adjust();
+                } catch(e) {
+                    console.warn('Error adjusting columns on draw:', e);
+                }
+            });
+            
+            // Fix column alignment on window resize
+            var resizeTimer;
+            $(window).on('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    try {
+                        table.columns.adjust();
+                    } catch(e) {
+                        console.warn('Error adjusting columns on resize:', e);
+                    }
+                }, 250);
+            });
+            
+            // Initial column adjustment after table is fully rendered
+            table.one('draw', function() {
+                setTimeout(function() {
+                    try {
+                        table.columns.adjust();
+                    } catch(e) {
+                        console.warn('Error in initial column adjustment:', e);
+                    }
+                }, 300);
             });
         } );
     </script>
@@ -48,9 +368,7 @@
   </head>
   <body>
 <?php
-  require_once"../config.php";
-  require_once"../include/functions.php";
-  session_start();
+  
   
   $subtitle_array = Array(
     '1' => 'Δημόσια Δημοτικά (όχι ειδικά)',
@@ -122,6 +440,7 @@ if ($_REQUEST['type']) {
         $previous_year = find_prev_year($sxol_etos);
 
         echo "<center>";
+        echo "<div class=\"table-container\">";
         $i = $sumschools = 0;
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
         echo "<thead><tr><th>Ονομασία</th>";
@@ -158,7 +477,8 @@ if ($_REQUEST['type']) {
         echo "<th>Μαθ.<br>Π.Ζ.</th>";
         //echo "<th>Εκπ. T.E.</th>";
         //echo "<th>Εκπ. T.Y.</th>";
-        echo "</tr></thead>\n<tbody>\n";
+        echo "</tr></thead>";
+        echo "<tbody>";
 
         while ($i < $num)
         {        
@@ -284,6 +604,7 @@ if ($_REQUEST['type']) {
         // echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         // echo "</tr>";
         echo "</tbody></table>";
+        echo "</div>";
         
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     }
@@ -303,6 +624,7 @@ if ($_REQUEST['type']) {
         $num = mysqli_num_rows($result);
     
         echo "<center>";
+        echo "<div class=\"table-container\">";
         $i=0;
         echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
             echo "<thead><tr><th>Κωδικός</th><th>Ονομασία</th>";
@@ -484,6 +806,7 @@ if ($_REQUEST['type']) {
         
         echo "</tr>";
         echo "</tbody></table>";
+        echo "</div>";
 
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     }

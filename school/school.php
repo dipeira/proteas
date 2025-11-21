@@ -2,6 +2,7 @@
     header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require_once"../include/functions.php";
+    require_once('../js/datatables/includes.html');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -20,7 +21,7 @@
         </style>
         <script type="text/javascript" language="javascript" src="../js/jquery.js"></script>
         <!-- <script type="text/javascript" language="javascript" src="../js/datatables/jquery.dataTables.js"></script> -->
-        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
+        
         <script type="text/javascript">
           $(document).ready(function() {
               /* Init DataTables */
@@ -59,7 +60,7 @@
         <div id="container">
 <?php
     require_once"../config.php";
-    require_once('../js/datatables/includes.html');
+    
     //require_once"../include/functions.php";
         
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  

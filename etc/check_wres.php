@@ -15,9 +15,11 @@
       <LINK href="../css/style.css" rel="stylesheet" type="text/css">
       <script type="text/javascript" src="../js/jquery.js"></script>
       <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+      <script type="text/javascript" src="../js/stickytable.js"></script>
       <script type="text/javascript">   
          $(document).ready(function() { 
             $(".tablesorter").tablesorter({widgets: ['zebra']}); 
+            $(".tablesorter").stickyTableHeaders();
          });
       </script>
    </head>
@@ -87,7 +89,7 @@
             echo "<tbody>";
             foreach ($mon_diffs as $row) {
                echo "<tr>";
-               echo "<td><a href='../employee/employee.php?id=".$row['empid']."&op=view'>".$row['surname']."</td>";
+               echo "<td><a class='underline' href='../employee/employee.php?id=".$row['empid']."&op=view'>".$row['surname']."</td>";
                $df = $row['wres'] - $row['hours'];
                echo "<td>".$row['name']."</td><td>".$row['wres']."</td><td>".$row['hours']."</td><td>$df</td>";
                echo "</tr>";
@@ -102,7 +104,7 @@
             echo "<tbody>";
             foreach ($ekt_diffs as $row) {
                echo "<tr>";
-               echo "<td><a href='../employee/ektaktoi.php?id=".$row['empid']."&op=view'>".$row['surname']."</td>";
+               echo "<td><a class='underline' href='../employee/ektaktoi.php?id=".$row['empid']."&op=view'>".$row['surname']."</td>";
                $df = $row['wres'] - $row['hours'];
                echo "<td>".$row['name']."</td><td>".$row['wres']."</td><td>".$row['hours']."</td><td>$df</td>";
                echo "</tr>";

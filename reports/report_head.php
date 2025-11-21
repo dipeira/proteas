@@ -83,15 +83,15 @@
 
           echo "<tr>";
           echo "<td>$code</td>";
-          echo "<td><a href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
+          echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
           echo "<td>$leitoyrg</td>";
           echo "<td>$thesi</td>";
           $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
-          echo "<td><a href=$link target='_blank'>$surname</td>";
+          echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
           echo "<td>$name</td>";
           echo "<td>$klados</td>";
           echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
-          echo "<td><a href='mailto:$email'>$email</a></td>";
+          echo "<td><a class='underline' href='mailto:$email'>$email</a></td>";
           echo "<td>$afm</td>";
           echo $mon ? "<td>$am</td>" : '';
           echo "</tr>\n";

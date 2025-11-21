@@ -263,7 +263,7 @@ center {
 }
 
 /* Method 3: Adjust specific table by ID */
-#mytbl th:nth-child(1),
+/* #mytbl th:nth-child(1),
 #mytbl td:nth-child(1) {
 	width: 50px;
 	min-width: 50px;
@@ -274,7 +274,7 @@ center {
 #mytbl td:nth-child(2) {
 	width: 200px;
 	min-width: 150px;
-}
+} */
 
 /* Method 4: Use fixed table layout for precise control */
 /* Uncomment and adjust if you want fixed column widths */
