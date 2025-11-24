@@ -24,7 +24,9 @@
     $page_title = 'Καρτέλα Αναπληρωτή';
     require '../etc/head.php'; 
   ?>
+	<LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
         <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
@@ -296,6 +298,51 @@
             font-size: 0.8125rem;
             padding: 8px 16px;
             border-top: 2px solid #e5e7eb;
+        }
+        
+        /* Modal dialog styling */
+        .ui-dialog {
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .ui-dialog-titlebar {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+            color: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            font-weight: 600;
+        }
+        
+        .ui-dialog-titlebar-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: background 0.2s;
+        }
+        
+        .ui-dialog-titlebar-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon {
+            background-image: none;
+            text-indent: 0;
+            overflow: visible;
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon:before {
+            content: "×";
+            font-size: 20px;
+            line-height: 1;
+        }
+        
+        .ui-widget-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 1;
         }
     </style>
 	<script type="text/javascript">
@@ -689,12 +736,136 @@ elseif ($_GET['op']=="view")
 {
         ?>
         <script type="text/javascript">
-        $().ready(function() {
-                $("#adeia").click(function() {
-                        var MyVar = <?php echo $id; ?>;
-                        var sxEtos = <?php echo $sxol_etos; ?>;
-                        $("#adeies").load("ekt_adeia_list.php?id="+ MyVar+"&sxol_etos="+sxEtos);
+        $(document).ready(function() {
+            // Check if jQuery UI Dialog is available
+            if (typeof $.ui === 'undefined' || typeof $.ui.dialog === 'undefined') {
+                console.error('jQuery UI Dialog is not loaded');
+                return;
+            }
+            
+            $("#adeia").click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var MyVar = <?php echo $id; ?>;
+                var sxEtos = <?php echo $sxol_etos; ?>;
+                
+                console.log('Opening modal for temporary employee ID:', MyVar, 'School year:', sxEtos);
+                
+                // Clean up any existing modal and overlay
+                if ($("#ekt-adeia-modal").length > 0) {
+                    if ($("#ekt-adeia-modal").hasClass('ui-dialog-content') || $("#ekt-adeia-modal").parent().hasClass('ui-dialog')) {
+                        $("#ekt-adeia-modal").dialog('destroy');
+                    }
+                    $("#ekt-adeia-modal").remove();
+                }
+                $(".ui-widget-overlay").remove();
+                $(".ui-dialog").filter(function() {
+                    return $(this).find('#ekt-adeia-modal').length > 0;
+                }).remove();
+                
+                // Create new modal div (must be hidden to prevent flash of content)
+                var $modalDiv = $('<div id="ekt-adeia-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Λίστα Αδειών Αναπληρωτή"></div>');
+                $("body").append($modalDiv);
+                
+                // Show loading state
+                $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+                
+                // Initialize dialog
+                $modalDiv.dialog({
+                    modal: true,
+                    width: 950,
+                    height: 600,
+                    maxHeight: $(window).height() - 50,
+                    resizable: true,
+                    autoOpen: true,
+                    position: {
+                        my: "center",
+                        at: "center",
+                        of: window
+                    },
+                    show: {
+                        effect: "fade",
+                        duration: 300
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 200
+                    },
+                    close: function() {
+                        var $this = $(this);
+                        $this.dialog('destroy');
+                        $this.remove();
+                        $(".ui-widget-overlay").remove();
+                    },
+                    create: function(event, ui) {
+                        $(this).css('display', 'block');
+                    },
+                    open: function(event, ui) {
+                        console.log('Dialog opened');
+                        var $dialog = $(this);
+                        var $dialogParent = $dialog.parent();
+                        
+                        $dialogParent.css({
+                            'position': 'fixed',
+                            'top': '50%',
+                            'left': '50%',
+                            'transform': 'translate(-50%, -50%)',
+                            'z-index': 1000
+                        });
+                        
+                        $dialog.css({
+                            'display': 'block',
+                            'visibility': 'visible',
+                            'position': 'relative',
+                            'top': 'auto',
+                            'left': 'auto'
+                        });
+                        
+                        // Load content after dialog is fully visible
+                        var $dialogContent = $(this);
+                        console.log('Loading content from ekt_adeia_list.php');
+                        $dialogContent.load("ekt_adeia_list.php?id=" + MyVar + "&sxol_etos=" + sxEtos + "&ajax=1", function(response, status, xhr) {
+                            console.log('Content loaded, status:', status);
+                            if (status == "error") {
+                                console.error('Error loading content:', xhr.status, xhr.statusText);
+                                $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                            } else {
+                                console.log('Content loaded successfully');
+                                $dialogContent.css({
+                                    'display': 'block',
+                                    'visibility': 'visible',
+                                    'position': 'relative',
+                                    'top': 'auto',
+                                    'left': 'auto'
+                                });
+                                
+                                $dialogParent.css({
+                                    'position': 'fixed',
+                                    'top': '50%',
+                                    'left': '50%',
+                                    'transform': 'translate(-50%, -50%)',
+                                    'z-index': 1000
+                                });
+                                
+                                // Initialize tablesorter after content is loaded
+                                setTimeout(function() {
+                                    $dialogContent.find('table.tablesorter').each(function() {
+                                        var $tbl = $(this);
+                                        if (!$tbl.data('tablesorter-initialized')) {
+                                            try {
+                                                $tbl.tablesorter({widgets: ['zebra']});
+                                                $tbl.data('tablesorter-initialized', true);
+                                            } catch(e) {
+                                                console.error('Tablesorter error for table:', e);
+                                            }
+                                        }
+                                    });
+                                }, 200);
+                            }
+                        });
+                    }
                 });
+            });
         });
         </script>
 <?php
@@ -881,17 +1052,13 @@ elseif ($_GET['op']=="view")
         }
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
         if ($usrlvl < 3){
-                echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+                echo "  <INPUT TYPE='button' id='adeia' VALUE='Άδειες'>";
         }
         echo $sxoletos ?
                 "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
                 "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
 
         echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-        ?>
-        <div id="adeies"></div>
-        <?php
-        
         echo "    </center>";
         echo "</body>";
         echo "</html>";	
@@ -916,7 +1083,7 @@ if ($_GET['op']=="delete")
                 echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
         else
                 echo "Η διαγραφή απέτυχε...";
-        echo "	<INPUT TYPE='button' class=btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+        echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
 }
 
 mysqli_close($mysqlconnection);

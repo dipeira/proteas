@@ -24,7 +24,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     $page_title = 'Μόνιμο Προσωπικό';
     require '../etc/head.php'; 
     ?>
+    <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
     <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
@@ -305,6 +307,52 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             padding: 8px 16px;
             border-top: 2px solid #e5e7eb;
         }
+        
+        /* Modal dialog styling */
+        .ui-dialog {
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .ui-dialog-titlebar {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+            color: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            font-weight: 600;
+        }
+        
+        .ui-dialog-titlebar-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: background 0.2s;
+        }
+        
+        .ui-dialog-titlebar-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon {
+            background-image: none;
+            text-indent: 0;
+            overflow: visible;
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon:before {
+            content: "×";
+            /* color: white; */
+            font-size: 20px;
+            line-height: 1;
+        }
+        
+        .ui-widget-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 1;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -543,10 +591,169 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         });
     });
             
-    $().ready(function() {
-        $("#adeia").click(function() {
+    $(document).ready(function() {
+        // Check if jQuery UI Dialog is available
+        if (typeof $.ui === 'undefined' || typeof $.ui.dialog === 'undefined') {
+            console.error('jQuery UI Dialog is not loaded');
+            return;
+        }
+        
+        $("#adeia").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var MyVar = <?php if (isset($id)) echo $id; else echo 0; ?>;
-            $("#adeies").load("adeia_list.php?id="+ MyVar );
+            
+            console.log('Opening modal for employee ID:', MyVar);
+            
+            // Clean up any existing modal and overlay
+            if ($("#adeia-modal").length > 0) {
+                if ($("#adeia-modal").hasClass('ui-dialog-content') || $("#adeia-modal").parent().hasClass('ui-dialog')) {
+                    $("#adeia-modal").dialog('destroy');
+                }
+                $("#adeia-modal").remove();
+            }
+            $(".ui-widget-overlay").remove();
+            $(".ui-dialog").filter(function() {
+                return $(this).find('#adeia-modal').length > 0;
+            }).remove();
+            
+            // Create new modal div (must be hidden to prevent flash of content)
+            var $modalDiv = $('<div id="adeia-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Λίστα Αδειών"></div>');
+            $("body").append($modalDiv);
+            
+            // Show loading state
+            $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+            
+            // Initialize dialog
+            $modalDiv.dialog({
+                modal: true,
+                width: 950,
+                height: 600,
+                maxHeight: $(window).height() - 50,
+                resizable: true,
+                autoOpen: true,
+                position: {
+                    my: "center",
+                    at: "center",
+                    of: window
+                },
+                show: {
+                    effect: "fade",
+                    duration: 300
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 200
+                },
+                close: function() {
+                    var $this = $(this);
+                    $this.dialog('destroy');
+                    $this.remove();
+                    $(".ui-widget-overlay").remove();
+                },
+                create: function(event, ui) {
+                    // Ensure dialog is properly positioned and visible
+                    $(this).css('display', 'block');
+                },
+                open: function(event, ui) {
+                    console.log('Dialog opened');
+                    // Ensure dialog is visible and positioned correctly
+                    var $dialog = $(this);
+                    var $dialogParent = $dialog.parent();
+                    
+                    // Ensure dialog wrapper is properly positioned
+                    $dialogParent.css({
+                        'position': 'fixed',
+                        'top': '50%',
+                        'left': '50%',
+                        'transform': 'translate(-50%, -50%)',
+                        'z-index': 1000
+                    });
+                    
+                    $dialog.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'position': 'relative',
+                        'top': 'auto',
+                        'left': 'auto'
+                    });
+                    
+                    // Load content after dialog is fully visible
+                    var $dialogContent = $(this);
+                    console.log('Loading content from adeia_list.php');
+                    $dialogContent.load("adeia_list.php?id=" + MyVar + "&ajax=1", function(response, status, xhr) {
+                        console.log('Content loaded, status:', status);
+                        if (status == "error") {
+                            console.error('Error loading content:', xhr.status, xhr.statusText);
+                            $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                        } else {
+                            console.log('Content loaded successfully');
+                            // Ensure content is within dialog and not elsewhere
+                            $dialogContent.css({
+                                'display': 'block',
+                                'visibility': 'visible',
+                                'position': 'relative',
+                                'top': 'auto',
+                                'left': 'auto'
+                            });
+                            
+                            // Make sure dialog is still visible and positioned
+                            $dialogParent.css({
+                                'position': 'fixed',
+                                'top': '50%',
+                                'left': '50%',
+                                'transform': 'translate(-50%, -50%)',
+                                'z-index': 1000
+                            });
+                            
+                            // Reinitialize tabs and tablesorter after content is loaded
+                            setTimeout(function() {
+                                var $tabs = $dialogContent.find("#tabs");
+                                
+                                // Initialize tabs
+                                if ($tabs.length && typeof $.ui !== 'undefined' && $.ui.tabs) {
+                                    try {
+                                        // Destroy existing tabs if any
+                                        if ($tabs.hasClass('ui-tabs')) {
+                                            $tabs.tabs('destroy');
+                                        }
+                                        // Initialize tabs
+                                        $tabs.tabs({
+                                            active: 0,
+                                            collapsible: false,
+                                            heightStyle: "content"
+                                        });
+                                        console.log('Tabs initialized successfully');
+                                    } catch(e) {
+                                        console.error('Tabs initialization error:', e);
+                                        // Fallback: try simple initialization
+                                        try {
+                                            $tabs.tabs();
+                                        } catch(e2) {
+                                            console.error('Tabs fallback failed:', e2);
+                                        }
+                                    }
+                                } else {
+                                    console.warn('Tabs element or jQuery UI Tabs not available');
+                                }
+                                
+                                // Initialize tablesorter for all tables in tab panels (each tab has its own table)
+                                $dialogContent.find('.ui-tabs-panel table.tablesorter, table.tablesorter').each(function() {
+                                    var $tbl = $(this);
+                                    if (!$tbl.data('tablesorter-initialized')) {
+                                        try {
+                                            $tbl.tablesorter({widgets: ['zebra']});
+                                            $tbl.data('tablesorter-initialized', true);
+                                        } catch(e) {
+                                            console.error('Tablesorter error for table:', e);
+                                        }
+                                    }
+                                });
+                            }, 200);
+                        }
+                    });
+                }
+            });
         });
     });
 </script>
@@ -1133,7 +1340,7 @@ elseif ($_GET['op']=="view") {
         echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='employee.php?id=$previd&op=view'\">";
     }
     if ($usrlvl < 3){
-        echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+        echo "  <INPUT TYPE='button' id='adeia' VALUE='Άδειες'>";
     }
     if ($usrlvl < 3) {
         echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='employee.php?id=$id&op=edit'\">";
@@ -1150,13 +1357,12 @@ elseif ($_GET['op']=="view") {
         echo "<br><br><INPUT TYPE='button' VALUE='Σελίδα ιδιωτικών' onClick=\"parent.location='idiwtikoi.php'\">";
     }
      echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-    ?>
-    <div id="adeies"></div>
-    <?php
+    
     
     echo "    </center>";
     echo "</body>";
     echo "</html>";    
+    // echo "</div>";
 }
 ///////////////////////////////////
 // ************ DELETE ************

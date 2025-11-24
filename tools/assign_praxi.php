@@ -25,9 +25,10 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Ανάθεση εκπαιδευτικών σε πράξεις</title>
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/select2.min.css" rel="stylesheet" />
@@ -37,14 +38,162 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
     // include all datatables related files
     require_once('../js/datatables/includes.html');
     ?>
+    <style>
+        /* Page layout */
+        .assign-praxi-container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 1400px;
+        }
+        
+        /* Action buttons area */
+        .action-buttons-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(90deg, #f0f9ff 0%, #e0f7fa 100%);
+            border-radius: 8px;
+            border: 1px solid #bae6fd;
+            flex-wrap: wrap;
+        }
+        
+        .action-buttons-area label {
+            font-weight: 600;
+            color: #1f2937;
+            margin-right: 8px;
+        }
+        
+        /* Button styling */
+        button.btn-blue,
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: white !important;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        }
+        
+        button.btn-blue:hover,
+        .btn-blue:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.4);
+        }
+        
+        button#assignPraxi {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+            color: white !important;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        button#assignPraxi:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        /* Select2 styling */
+        .select2-container {
+            min-width: 250px;
+        }
+        
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #d1d5db !important;
+            border-radius: 6px !important;
+            height: 42px !important;
+            padding: 4px 8px;
+        }
+        
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 34px;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px;
+            right: 8px;
+        }
+        
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #4FC5D6 !important;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.2) !important;
+        }
+        
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #4FC5D6;
+        }
+        
+        .imagetable th input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        /* DataTables styling adjustments */
+        .dataTables_wrapper {
+            margin-top: 20px;
+        }
+        
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+        }
+        
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 6px 12px;
+        }
+        
+        /* Table header checkbox alignment */
+        .imagetable th:first-child {
+            text-align: center;
+            width: 50px;
+        }
+        
+        .imagetable td:first-child {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h2>Ανάθεση εκπαιδευτικών σε πράξεις</h2>
-    <div style="margin-bottom: 10px;">
-        <button id="selectAll" class="btn-blue">Επιλογή Όλων</button>
-        <button id="deselectAll" class="btn-red">Αποεπιλογή Όλων</button>
-    </div>
-    <table id="ektaktoiTable" id='mytbl' class='imagetable tablesorter' border='2'>
+    <div class="assign-praxi-container">
+        <div class="page-header">
+            <h2>Ανάθεση εκπαιδευτικών σε πράξεις</h2>
+        </div>
+        
+        <div class="action-buttons-area">
+            <button id="selectAll" class="btn-blue">✅ Επιλογή Όλων</button>
+            <button id="deselectAll" class="btn-red">❌ Αποεπιλογή Όλων</button>
+            <div style="flex: 1;"></div>
+            <label for="praxiSelect">Πράξη:</label>
+            <select id="praxiSelect" style="width: 250px;">
+                <?php foreach ($praxi_options as $option): ?>
+                    <option value="<?= $option['id'] ?>"><?= $option['name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button id="assignPraxi" type="button">📝 Ανάθεση σε πράξη</button>
+        </div>
+        
+        <div style="display: flex; justify-content: center;">
+            <table id="ektaktoiTable" class='imagetable' border='2'>
         <thead>
             <tr>
                 <th><input type="checkbox" id="selectAllCheckbox"></th>
@@ -68,14 +217,12 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
             <?php endwhile; ?>
         </tbody>
     </table>
-
-    <select id="praxiSelect" style="width: 200px;">
-        <?php foreach ($praxi_options as $option): ?>
-            <option value="<?= $option['id'] ?>"><?= $option['name'] ?></option>
-        <?php endforeach; ?>
-    </select>
-
-    <button id="assignPraxi" type="button">Ανάθεση σε πράξη</button>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <INPUT TYPE='button' class='btn-red' VALUE='← Επιστροφή' onClick="parent.location='../employee/ektaktoi_list.php'">
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -188,6 +335,5 @@ while ($row = mysqli_fetch_assoc($praxi_result)) {
             });
         });
     </script>
-    <br><INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='../employee/ektaktoi_list.php'">
 </body>
 </html> 

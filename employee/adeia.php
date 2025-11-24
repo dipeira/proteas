@@ -18,14 +18,131 @@
 ?>
 <html>
   <head>
-	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
+  <?php 
+    $root_path = '../';
+    $page_title = 'Άδεια';
+    require '../etc/head.php'; 
+    ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Άδεια</title>
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
 	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+	<style>
+		/* Button container styling */
+		.button-group {
+			margin-top: 20px;
+			margin-bottom: 20px;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+		
+		/* Form table styling improvements */
+		.imagetable.stable {
+			margin: 20px auto;
+		}
+		
+		.imagetable.stable td:first-child {
+			font-weight: 600;
+			color: #1e40af;
+			background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+			border-right: 2px solid #bae6fd;
+			width: 30%;
+		}
+		
+		.imagetable.stable td:nth-child(2) {
+			background: #ffffff;
+		}
+		
+		/* Input field styling */
+		.imagetable.stable input[type="text"],
+		.imagetable.stable input[type="number"] {
+			width: 100%;
+			max-width: 400px;
+		}
+		
+		/* Select element styling - comprehensive */
+		.imagetable.stable select,
+		.imagetable select {
+			width: 100%;
+			max-width: 400px;
+			padding: 10px 14px;
+			padding-right: 40px;
+			border: 2px solid #e5e7eb;
+			border-radius: 8px;
+			font-size: 14px;
+			font-family: "Inter", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			background: #ffffff;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 14px center;
+			background-size: 12px;
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			color: #374151;
+			font-weight: 500;
+		}
+		
+		.imagetable.stable select:hover,
+		.imagetable select:hover {
+			border-color: #4FC5D6;
+			background-color: #f8fafc;
+		}
+		
+		.imagetable.stable select:focus,
+		.imagetable select:focus {
+			outline: none;
+			border-color: #10b981;
+			box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+			background-color: #ffffff;
+		}
+		
+		.imagetable.stable select:active,
+		.imagetable select:active {
+			border-color: #059669;
+		}
+		
+		/* Select option styling */
+		.imagetable.stable select option,
+		.imagetable select option {
+			padding: 10px 14px;
+			background: #ffffff;
+			color: #374151;
+			font-size: 14px;
+		}
+		
+		.imagetable.stable select option:hover,
+		.imagetable select option:hover {
+			background: #f0f9ff;
+		}
+		
+		.imagetable.stable select option:checked,
+		.imagetable select option:checked {
+			background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+			color: #ffffff;
+			font-weight: 600;
+		}
+		
+		/* Results div styling */
+		#results {
+			margin-top: 20px;
+			padding: 15px;
+			background: #f0f9ff;
+			border-radius: 8px;
+			text-align: center;
+		}
+		
+		#word {
+			margin-top: 15px;
+		}
+	</style>
 	<script type="text/javascript">
       $(document).ready(function(){
 				$("#wordfrm").validate({
@@ -126,7 +243,7 @@
 			adeiaCmb($type,$mysqlconnection);
 			echo "</td></tr>";
 
-			echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' value=$prot_apof /></td></tr>";
+			echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' value=\"$prot_apof\" /></td></tr>";
 			echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
 			$myCalendar = new tc_calendar("hm_apof", true);
 			$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
@@ -140,7 +257,7 @@
 			$myCalendar->writeScript();
 			echo "</td></tr>";
 									
-			echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' value=$prot /></td></tr>";
+			echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' value=\"$prot\" /></td></tr>";
 									
 			echo "<tr><td>Ημ/νία Πρωτοκόλου</td><td>";
 			$myCalendar = new tc_calendar("hm_prot", true);
@@ -184,7 +301,7 @@
 			echo "</select>";
 			echo "</td></tr>";
 
-			echo "<tr><td>Ημέρες</td><td><input type='text' name='days' value=$days /></td></tr>";
+			echo "<tr><td>Ημέρες</td><td><input type='text' name='days' value=\"$days\" /></td></tr>";
 
 			echo "<tr><td>Ημ/νία έναρξης</td><td>";
 			$myCalendar = new tc_calendar("start", true);
@@ -212,17 +329,20 @@
 			$myCalendar->writeScript();
 			echo "</td></tr>";
 
-			echo "<tr><td><div id='logos'>Λόγος</div></td><td><input type='text' name='logos' value=$logos /></td></tr>";
+			echo "<tr><td><div id='logos'>Λόγος</div></td><td><input type='text' name='logos' value=\"$logos\" /></td></tr>";
 
-			echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' value=$comments /></td></tr>";
+			echo "<tr><td>Σχόλια</td><td><input type='text' name='comments' value=\"$comments\" /></td></tr>";
 
 			echo "	</table>";
 			echo "	<input type='hidden' name = 'id' value='$id'>";
 			echo "	<input type='hidden' name = 'emp_id' value='$emp_id'>";
-			echo "	<input type='submit' value='Επεξεργασία'>";
-			echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='adeia.php?adeia=$id&op=view'\">";
+			echo "	<div class='button-group'>";
+			echo "	<input type='submit' value='Επεξεργασία' class='btn btn-primary'>";
+			echo "	<INPUT TYPE='button' VALUE='Επιστροφή' class='btn' onClick=\"parent.location='adeia.php?adeia=$id&op=view'\">";
+			echo "	</div>";
 			//echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick='history.go(-1);return true;'>";
 			echo "	</form>";
+			echo "</div>";
 			echo "    </center>";
 			echo "</body>";
 ?>
@@ -232,6 +352,7 @@
     }
 	elseif ($_GET['op']=="view")
 	{
+		echo "<div style='margin: 20px 0;'>";
 		echo "<table class=\"imagetable stable\" border='1'>";
 		$query1 = "select * from employee where id=$emp_id";
 		$result1 = mysqli_query($mysqlconnection, $query1);
@@ -241,8 +362,8 @@
 		$q2 = "select * from klados where id=$kl1";
 		$res2 = mysqli_query($mysqlconnection, $q2);
 		$klados = mysqli_result($res2, 0, "perigrafh");
+		echo "<tr><td>Επώνυμο</td><td><a href='employee.php?id=$emp_id&op=view'>$surname</a></td></tr>";
 		echo "<tr><td>Όνομα</td><td>$name</td></tr>";
-		echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
 		echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
 
 		$query1 = "select type from adeia_type where id=$type";
@@ -293,8 +414,6 @@
 				$created= date('d-m-Y, g:i a',strtotime($created));
 				echo "<tr><td colspan=2 align='right'><small>Τελευταία τροποποίηση:<br> $created</small></td></tr>";
 		}
-
-		echo "</td></tr>";
 		if ($_SESSION['adeia'])
 		{
 				echo "<tr><td colspan=2 align='center'>";
@@ -311,7 +430,7 @@
 				echo "<input type='hidden' name=arr[] value=$finish>";
 				echo "<input type='hidden' name=arr[] value=$logos>";
 
-				echo "<INPUT TYPE='submit' VALUE='Εκτύπωση άδειας'>";
+				echo "<INPUT TYPE='submit' VALUE='Εκτύπωση άδειας' class='btn btn-primary'>";
 				echo "</form>";
 				?>
 				<div id="word"></div>
@@ -319,6 +438,7 @@
 				echo "</td></tr>";
 		}
 		echo "	</table>";
+		echo "</div>";
 
 		// Find prev - next row id
 		$qprev = "SELECT id FROM adeia WHERE id < $id AND emp_id = $emp_id ORDER BY id DESC LIMIT 1";
@@ -330,14 +450,18 @@
 		if (mysqli_num_rows($res1))
 			$nextid = mysqli_result($res1, 0, "id");
 
+		echo "<div class='button-group'>";
 		if ($previd)
-			echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$previd&op=view'\">";
+			echo "	<INPUT TYPE='button' VALUE='<<' class='btn' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$previd&op=view'\">";
 		if ($usrlvl < 3)
-			echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$id&op=edit'\">";
-		echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='employee.php?id=$emp_id&op=view'\">";
+			echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' class='btn btn-primary' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$id&op=edit'\">";
+		echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' class='btn' onClick=\"parent.location='employee.php?id=$emp_id&op=view'\">";
 		if ($nextid)
-			echo "	<INPUT TYPE='button' VALUE='>>' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$nextid&op=view'\">";
-		echo "<br><br><INPUT TYPE='button' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
+			echo "	<INPUT TYPE='button' VALUE='>>' class='btn' onClick=\"parent.location='adeia.php?id=$emp_id&adeia=$nextid&op=view'\">";
+		echo "</div>";
+		echo "<div class='button-group'>";
+		echo "<INPUT TYPE='button' VALUE='Αρχική σελίδα' class='btn btn-red' onClick=\"parent.location='../index.php'\">";
+		echo "</div>";
 		echo "    </center>";
 
 		echo "</body>";
@@ -354,16 +478,19 @@
 		$result = mysqli_query($mysqlconnection, $query);
 		// Copies the deleted row to employee)deleted
 
+		echo "<div style='margin: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px; text-align: center;'>";
 		if ($result)
-			echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
+			echo "<p style='color: #059669; font-weight: 600;'>Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.</p>";
 		else
-			echo "Η διαγραφή απέτυχε...";
-		echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='employee.php?id=$emp_id&op=view'\">";
+			echo "<p style='color: #dc2626; font-weight: 600;'>Η διαγραφή απέτυχε...</p>";
+		echo "<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' class='btn' onClick=\"parent.location='employee.php?id=$emp_id&op=view'\">";
+		echo "</div>";
 	}
 	if ($_GET['op']=="add")
 	{
+		echo "<div style='margin: 20px 0;'>";
 		echo "<form id='updatefrm' name='updatefrm' action='update_adeia.php' method='POST'>";
-		echo "<table class=\"imagetable\" border='1'>";
+		echo "<table class=\"imagetable stable\" border='1'>";
 		$emp_id = $_GET['emp'];
 		$query1 = "select * from employee where id=$emp_id";
 		$result1 = mysqli_query($mysqlconnection, $query1);
@@ -418,7 +545,7 @@
 
 		//echo "<tr><td>Βεβαίωση / Δήλωση</td><td><input type='text' name='vev_dil' /></td></tr>";
 		// Need to check - hide-unhide depending on adeia type...
-		echo "<div id='vevdil' style='display:none'><tr><td>Βεβαίωση / Δήλωση<br>(για αναρρωτικές)</td><td>";
+		echo "<tr id='vevdil' style='display:none'><td>Βεβαίωση / Δήλωση<br>(για αναρρωτικές)</td><td>";
 		
 		//<input type='text' name='vev_dil' value=$vev_dil /></td></tr>";
 		echo "<select name='vev_dil'>";
@@ -426,7 +553,7 @@
 		echo "<option value=\"1\">Βεβαίωση</option>";
 		echo "<option value=\"2\">Υπεύθυνη Δήλωση</option>";
 		echo "</select>";
-		echo "</td></tr></div>";
+		echo "</td></tr>";
 
 		echo "<tr><td>Ημέρες</td><td><input type='text' name='days' /></td></tr>";
 		echo "<tr><td>Ημ/νία έναρξης</td><td>";
@@ -476,10 +603,13 @@
 		echo "	<input type='hidden' name = 'emp_id' value='$emp_id'>";
 		// action = 1 gia prosthiki
 		echo "  <input type='hidden' name = 'action' value='1'>";
-		echo "	<input type='submit' value='Προσθήκη'>";
+		echo "	<div class='button-group'>";
+		echo "	<input type='submit' value='Προσθήκη' class='btn btn-primary'>";
+		echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' class='btn' onClick=\"parent.location='employee.php?id=$emp_id&op=view'\">";
+		echo "	</div>";
 		//echo "	<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-		echo "	<INPUT TYPE='button' VALUE='Επιστροφή στην καρτέλα εκπ/κού' onClick=\"parent.location='employee.php?id=$emp_id&op=view'\">";
 		echo "	</form>";
+		echo "</div>";
         ?>
         <div id='results'></div>
 <?php

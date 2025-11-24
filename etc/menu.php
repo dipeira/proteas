@@ -4,9 +4,9 @@
 			<li><a href="<?=$site_root?>/index.php">Αρχικη</a></li>
 			
       <li class="sub">
-        <a href="<?=$site_root?>/index.php">Μονιμοι</a>
+        <a href="<?=$site_root?>/employee/monimoi_list.php">Μονιμοι</a>
 				<ul>
-          <li><a href="<?=$site_root?>/index.php">Λίστα</a></li>
+          <li><a href="<?=$site_root?>/employee/monimoi_list.php">Λίστα</a></li>
 					<li><a href="<?=$site_root?>/employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
 					<li><a href="<?=$site_root?>/employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
 				</ul>
