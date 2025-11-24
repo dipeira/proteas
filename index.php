@@ -83,7 +83,7 @@ else {
           exit;
       } else {
           $surn = explode(' ', $_POST['surname'])[0];
-          $url = "monimoi_list.php?surname=".urlencode($surn);
+          $url = "employee/monimoi_list.php?surname=".urlencode($surn);
           echo "<script>window.location = '$url'</script>";
           exit;
       }

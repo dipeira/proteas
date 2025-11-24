@@ -136,7 +136,7 @@ textarea.ddtypetextedit {
 	background: white;
 	color: #1f2937;
 	font: 14px "Inter", "Open Sans", Arial, sans-serif;
-	border: 2px solid #10b981;
+	border: 2px solid #6BD9E8;
 	border-radius: 6px;
 	padding: 6px 10px;
 	width: 100%;
@@ -256,23 +256,23 @@ div.slider {
 
 div.knob, div.up, div.down {
 	width: 12px;
-	background: #10b981;
-	border: 1px solid #059669;
+	background: #6BD9E8;
+	border: 1px solid #36aab9;
 	border-radius: 3px;
 	transition: all 0.2s ease;
 	cursor: pointer;
 }
 
 div.knob:hover, div.up:hover, div.down:hover {
-	background: #059669;
+	background: #6BD9E8;
 	transform: scale(1.1);
 }
 
 div.knobmouseover, 
 div.upmouseover, 
 div.downmouseover {
-	background: #059669;
-	border-color: #047857;
+	background: #6BD9E8;
+	border-color: #2a9baa;
 	box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
@@ -294,8 +294,8 @@ div.tick {
 /* Sums styling */
 div.divtdsum {
 	padding-top: 2px;
-	color: #059669;
-	border-top: 2px solid #10b981;
+	color: #6BD9E8;
+	border-top: 2px solid #36aab9;
 	font-weight: 600;
 	background: #f0fdf4;
 }
