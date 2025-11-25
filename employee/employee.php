@@ -778,6 +778,135 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 }
             });
         });
+        
+        // Postgrad modal handler
+        $("#postgrad-link").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var afmValue = $(this).data('afm');
+            
+            //console.log('Opening modal for postgrad with AFM:', afmValue);
+            
+            // Clean up any existing modal and overlay
+            if ($("#postgrad-modal").length > 0) {
+                if ($("#postgrad-modal").hasClass('ui-dialog-content') || $("#postgrad-modal").parent().hasClass('ui-dialog')) {
+                    $("#postgrad-modal").dialog('destroy');
+                }
+                $("#postgrad-modal").remove();
+            }
+            $(".ui-widget-overlay").remove();
+            $(".ui-dialog").filter(function() {
+                return $(this).find('#postgrad-modal').length > 0;
+            }).remove();
+            
+            // Create new modal div (must be hidden to prevent flash of content)
+            var $modalDiv = $('<div id="postgrad-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Μεταπτυχιακοί Τίτλοι"></div>');
+            $("body").append($modalDiv);
+            
+            // Show loading state
+            $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+            
+            // Initialize dialog
+            $modalDiv.dialog({
+                modal: true,
+                width: 1100,
+                height: 600,
+                maxHeight: $(window).height() - 50,
+                resizable: true,
+                autoOpen: true,
+                position: {
+                    my: "center",
+                    at: "center",
+                    of: window
+                },
+                show: {
+                    effect: "fade",
+                    duration: 300
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 200
+                },
+                close: function() {
+                    var $this = $(this);
+                    $this.dialog('destroy');
+                    $this.remove();
+                    $(".ui-widget-overlay").remove();
+                },
+                create: function(event, ui) {
+                    // Ensure dialog is properly positioned and visible
+                    $(this).css('display', 'block');
+                },
+                open: function(event, ui) {
+                    console.log('Postgrad dialog opened');
+                    // Ensure dialog is visible and positioned correctly
+                    var $dialog = $(this);
+                    var $dialogParent = $dialog.parent();
+                    
+                    // Ensure dialog wrapper is properly positioned
+                    $dialogParent.css({
+                        'position': 'fixed',
+                        'top': '50%',
+                        'left': '50%',
+                        'transform': 'translate(-50%, -50%)',
+                        'z-index': 1000
+                    });
+                    
+                    $dialog.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'position': 'relative',
+                        'top': 'auto',
+                        'left': 'auto'
+                    });
+                    
+                    // Load content after dialog is fully visible
+                    var $dialogContent = $(this);
+                    console.log('Loading content from postgrad.php');
+                    $dialogContent.load("postgrad.php?afm=" + afmValue + "&ajax=1", function(response, status, xhr) {
+                        console.log('Content loaded, status:', status);
+                        if (status == "error") {
+                            console.error('Error loading content:', xhr.status, xhr.statusText);
+                            $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                        } else {
+                            console.log('Content loaded successfully');
+                            // Ensure content is within dialog and not elsewhere
+                            $dialogContent.css({
+                                'display': 'block',
+                                'visibility': 'visible',
+                                'position': 'relative',
+                                'top': 'auto',
+                                'left': 'auto'
+                            });
+                            
+                            // Make sure dialog is still visible and positioned
+                            $dialogParent.css({
+                                'position': 'fixed',
+                                'top': '50%',
+                                'left': '50%',
+                                'transform': 'translate(-50%, -50%)',
+                                'z-index': 1000
+                            });
+                            
+                            // Initialize tablesorter after content is loaded
+                            setTimeout(function() {
+                                $dialogContent.find('table.tablesorter').each(function() {
+                                    var $tbl = $(this);
+                                    if (!$tbl.data('tablesorter-initialized')) {
+                                        try {
+                                            $tbl.tablesorter({widgets: ['zebra']});
+                                            $tbl.data('tablesorter-initialized', true);
+                                        } catch(e) {
+                                            console.error('Tablesorter error for table:', e);
+                                        }
+                                    }
+                                });
+                            }, 200);
+                        }
+                    });
+                }
+            });
+        });
     });
 </script>
      
@@ -1148,7 +1277,7 @@ elseif ($_GET['op']=="view") {
     }
 
     echo "<tr><td>Ημ/νία Ανάληψης</td><td>".date('d-m-Y', strtotime($hm_anal))."</td>";
-    echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm' onclick=\"window.open('postgrad.php?op=list&afm=$afm','newwindow','width=1000,height=500');return false;\">(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
+    echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='#' id='postgrad-link' data-afm='$afm'>(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
     
     echo "<tr><td>Ώρες υποχρ. ωραρίου</td><td>$wres</td><td></td><td></td></tr>";
     
