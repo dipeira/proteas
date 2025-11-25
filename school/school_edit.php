@@ -23,6 +23,295 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     require '../etc/head.php'; 
     ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      /* School Edit Form Styling */
+      .edit-section {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 24px;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+        max-width: 1000px;
+      }
+      
+      .edit-section:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      }
+      
+      .edit-section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #ffffff;
+        padding: 16px 24px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .edit-section-content {
+        padding: 24px;
+      }
+      
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      
+      .form-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .form-label {
+        font-size: 0.875rem;
+        color: #374151;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      
+      .form-label small {
+        color: #6b7280;
+        font-weight: 400;
+      }
+      
+      .form-input {
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.9375rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        font-family: inherit;
+      }
+      
+      .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+      
+      .form-input[type="text"] {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .form-input[size] {
+        width: auto;
+        min-width: 60px;
+      }
+      
+      .form-textarea {
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.9375rem;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 100px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      
+      .form-textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+      
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 8px;
+      }
+      
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        transition: background 0.2s ease;
+      }
+      
+      .checkbox-item:hover {
+        background: #f3f4f6;
+      }
+      
+      .checkbox-item input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+      }
+      
+      .checkbox-item label {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: #374151;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .organikes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+      }
+      
+      .organikes-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .organikes-item label {
+        font-size: 0.875rem;
+        color: #374151;
+        min-width: 100px;
+        font-weight: 500;
+      }
+      
+      .organikes-item input {
+        padding: 6px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        width: 60px;
+        text-align: center;
+      }
+      
+      .action-buttons {
+        margin-top: 32px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 24px;
+        border-top: 2px solid #e5e7eb;
+      }
+      
+      .action-buttons input[type="submit"],
+      .action-buttons input[type="button"] {
+        padding: 12px 28px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+      
+      .action-buttons input[type="submit"] {
+        background: #667eea;
+        color: #ffffff;
+      }
+      
+      .action-buttons input[type="submit"]:hover {
+        background: #764ba2;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+      
+      .action-buttons input[type="button"] {
+        background: #6b7280;
+        color: #ffffff;
+      }
+      
+      .action-buttons input[type="button"]:hover {
+        background: #4b5563;
+        transform: translateY(-1px);
+      }
+      
+      .form-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+      }
+      
+      .form-row .form-item {
+        flex: 1;
+      }
+      
+      .info-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-left: 8px;
+      }
+      
+      .info-hint img {
+        width: 16px;
+        height: 16px;
+        opacity: 0.6;
+      }
+      
+      .edit-section table.imagetable {
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+      
+      .edit-section table.imagetable th {
+        background: #f9fafb;
+        padding: 12px;
+        text-align: center;
+        font-weight: 600;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+      }
+      
+      .edit-section table.imagetable td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+      }
+      
+      .edit-section table.imagetable input[type="text"] {
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 6px 8px;
+        text-align: center;
+        transition: border-color 0.2s ease;
+      }
+      
+      .edit-section table.imagetable input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+      }
+      
+      .edit-section h4 {
+        color: #374151;
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-top: 24px;
+        margin-bottom: 12px;
+      }
+      
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .edit-section-content {
+          padding: 16px;
+        }
+        
+        .organikes-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
@@ -172,158 +461,401 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // organikes - added 05-10-2012
             $organikes = unserialize(mysqli_result($result, 0, "organikes"));
 
-            echo "<table class=\"imagetable\" border='1'>";
             echo "<form id='updatefrm' name='update' action='school_update.php' method='POST'>";
-            echo "<tr><td colspan=3>Τίτλος (αναλυτικά): <input type='text' name='titlos' value='$titlos' size='80'/></td></tr>";
-            echo "<tr><td>Δ/νση: <input type='text' name='address' value='$address' /> T.K.: <input size='5' type='text' name='tk' value='$tk' /></td>";
-            echo "<td>Τηλ.: &nbsp;&nbsp;<input type='text' name='tel' value='$tel' /><br>Τηλ.2: <input type='text' name='tel2' value='$tel2' /></td></tr>";
-            echo "<tr><td>email: &nbsp;&nbsp;<input type='text' name='email' value='$email' size='30'/><br>email2: <input type='text' name='email2' value='$email2' size='30'/>";
-            echo "</td><td>Fax: <input type='text' name='fax' value='$fax' /></td></tr>";
+            
+            // Basic Information Section
+            echo "<div class='edit-section'>";
+            echo "<div class='edit-section-header'>Βασικές Πληροφορίες</div>";
+            echo "<div class='edit-section-content'>";
+            echo "<div class='form-grid'>";
+            echo "<div class='form-item' style='grid-column: 1 / -1;'>";
+            echo "<label class='form-label'>Τίτλος (αναλυτικά)</label>";
+            echo "<input type='text' name='titlos' value='$titlos' class='form-input' style='width: 100%;'/>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
+            
+            // Address Information Section
+            echo "<div class='edit-section'>";
+            echo "<div class='edit-section-header'>Διεύθυνση</div>";
+            echo "<div class='edit-section-content'>";
+            echo "<div class='form-grid'>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Διεύθυνση</label>";
+            echo "<input type='text' name='address' value='$address' class='form-input'/>";
+            echo "</div>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Ταχυδρομικός Κώδικας</label>";
+            echo "<input type='text' name='tk' value='$tk' size='5' class='form-input'/>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
+            
+            // Contact Information Section
+            echo "<div class='edit-section'>";
+            echo "<div class='edit-section-header'>Στοιχεία Επικοινωνίας</div>";
+            echo "<div class='edit-section-content'>";
+            echo "<div class='form-grid'>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Τηλέφωνο</label>";
+            echo "<input type='text' name='tel' value='$tel' class='form-input'/>";
+            echo "</div>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Τηλέφωνο 2</label>";
+            echo "<input type='text' name='tel2' value='$tel2' class='form-input'/>";
+            echo "</div>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Fax</label>";
+            echo "<input type='text' name='fax' value='$fax' class='form-input'/>";
+            echo "</div>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Email</label>";
+            echo "<input type='text' name='email' value='$email' class='form-input'/>";
+            echo "</div>";
+            echo "<div class='form-item'>";
+            echo "<label class='form-label'>Email 2</label>";
+            echo "<input type='text' name='email2' value='$email2' class='form-input'/>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
             
             // Disable organikothta & organikes when not admin
             // $disabled = $_SESSION['userlevel'] > 1 ? 'disabled' : '';
             
             if ($type == 1 || $type == 2){
-                echo "<tr><td>Οργανικότητα: <input type='text' name='organ' value='$organikothta' size='2' /></td>";
-                echo "<td>Λειτουργικότητα: $leitoyrg</td></tr>";
-            }
-            // 05-10-2012 - organikes
-            /*
-            **** DS ****
-            ΠΕ70: $organikes[0], ΠΕ11: $organikes[1], ΠΕ06: $organikes[2], ΠΕ79: $organikes[3], ΠΕ05: $organikes[4]
-            ΠΕ07: $organikes[5], ΠΕ08: $organikes[6], ΠΕ86: $organikes[7], ΠΕ91: $organikes[8], ΠΕ21: $organikes[9]
-            ΠΕ23: $organikes[10], ΠΕ25: $organikes[11], ΠΕ26: $organikes[12], ΠΕ28: $organikes[13], ΠΕ29: $organikes[14]
-            ΠΕ30: $organikes[15],  ΔΕ1ΕΒΠ: $organikes[16], ΠΕ70ΕΑΕ: $organikes[17], ΠΕ71: $organikes[18]
-            **** Nip ****
-            ΠΕ60 => 0, ΠΕ21 => 1, ΠΕ23 => 2, ΠΕ25 => 3, ΠΕ26 => 4, ΠΕ28 => 5, ΠΕ29 => 6, ΠΕ30 => 7, ΔΕ1ΕΒΠ => 8, ΠΕ60ΕΑΕ => 9, ΠΕ61 => 10
-            */
-            // if Dimotiko
-            if ($type == 1) {
-                echo "<tr><td colspan=2>Οργανικές:<br>";
-                if ($type2 != 2) {
-                    echo "ΠΕ70: <input type='text' name='organikes[]' value='$organikes[0]' size='2' /><br>";
-                } else {
-                    echo "ΠΕ70 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2' /><br>";
-                }
-                echo "ΠΕ11: <input type='text' name='organikes[]' value='$organikes[1]' size='2' /><br>";
-                echo "ΠΕ06: <input type='text' name='organikes[]' value='$organikes[2]' size='2' /><br>";
-                echo "ΠΕ79: <input type='text' name='organikes[]' value='$organikes[3]' size='2' /><br>";
-                echo "ΠΕ05: <input type='text' name='organikes[]' value='$organikes[4]' size='2' /><br>";
-                echo "ΠΕ07: <input type='text' name='organikes[]' value='$organikes[5]' size='2' /><br>";
-                echo "ΠΕ08: <input type='text' name='organikes[]' value='$organikes[6]' size='2' /><br>";
-                echo "ΠΕ86: <input type='text' name='organikes[]' value='$organikes[7]' size='2' /><br>";
-                echo "ΠΕ91: <input type='text' name='organikes[]' value='$organikes[8]' size='2' /><br>";
-                if ($type2 == 2) {
-                  echo "ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[9]' size='2' /><br>";
-                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[10]' size='2' /><br>";
-                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[11]' size='2' /><br>";
-                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[12]' size='2' /><br>";
-                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[13]' size='2' /><br>";
-                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[14]' size='2' /><br>";
-                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[15]' size='2' /><br>";
-                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[16]' size='2' /><br>";
-                }
-            }
-            // if Nip
-            else if ($type == 2) {
-                if ($type2 != 2){
-                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60: <input type='text' name='organikes[]' value='$organikes[0]' size='2' />";
-                } else {
-                    echo "<tr><td colspan=2>Οργανικές: ΠΕ60 EAE: <input type='text' name='organikes[]' value='$organikes[0]' size='2' />";
-                }
-                if ($type2 == 2) {
-                  echo "<br>ΠΕ21 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[1]' size='2' /><br>";
-                  echo "ΠΕ23 (Ψυχολόγων): <input type='text' name='organikes[]' value='$organikes[2]' size='2' /><br>";
-                  echo "ΠΕ25 (Σχ.Νοσηλευτών): <input type='text' name='organikes[]' value='$organikes[3]' size='2' /><br>";
-                  echo "ΠΕ26 (Λογοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[4]' size='2' /><br>";
-                  echo "ΠΕ28 (Φυσικοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[5]' size='2' /><br>";
-                  echo "ΠΕ29 (Εργοθεραπευτών): <input type='text' name='organikes[]' value='$organikes[6]' size='2' /><br>";
-                  echo "ΠΕ30 (Κοιν.Λειτουργών): <input type='text' name='organikes[]' value='$organikes[7]' size='2' /><br>";
-                  echo "ΔΕ1ΕΒΠ: <input type='text' name='organikes[]' value='$organikes[8]' size='2' /><br>";
-                }
-            }
-            echo "</td></tr>";
-            // pe05 - pe07
-            if ($type == 1 ){
-                echo "<tr><td colspan=2>";
-                echo "Ώρες ΠΕ05: <input type='text' name='tmpe05' size='2' value='$pe0507[0]' />&nbsp;Ανάλυση ΠΕ05: ";
-                echo "<span title='Αναλυτικά οι ώρες, π.χ.10 ώρες -> 4-4-2 στην ανάλυση'><img style='border: 0pt none;' src='../images/info.png'></span>&nbsp;";
-                echo "<input type='text' name='tmpe05b' size='6' value='$pe0507[1]' <br><br>";
-                echo "Ώρες ΠΕ07: <input type='text' name='tmpe07' size='2' value='$pe0507[2]' />&nbsp;Ανάλυση ΠΕ07: ";
-                echo "<span title='Αναλυτικά οι ώρες, π.χ.10 ώρες -> 4-4-2 στην ανάλυση'><img style='border: 0pt none;' src='../images/info.png'></span>&nbsp;";
-                echo "<input type='text' name='tmpe07b' size='6' value='$pe0507[3]'";
-                echo "</tr>";
-            }
-            if ($type == 1 || $type == 2){
-                echo "<tr>";
-                if ($entaksis[0]) {
-                    echo "<td><input type=\"checkbox\" name='entaksis' checked >Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
-                } else {
-                    echo "<td><input type=\"checkbox\" name='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2'/></td>";
-                }
-                if ($ypodoxis) {
-                    echo "<td><input type=\"checkbox\" name='ypodoxis' checked >Τμήμα Υποδοχής</td>";
-                } else {
-                    echo "<td><input type=\"checkbox\" name='ypodoxis' >Τμήμα Υποδοχής</td>";
-                }
-                echo "</tr>";
-                echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: <input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' /></td><td colspan=3>Εκπ/κοί Τμ.Υποδοχής: <input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' /></td></tr>";
-                echo "<tr>";
-            }
-                    
-                    
-            if ($type == 1) {
-                echo $frontistiriako ? 
-                    "<td><input type=\"checkbox\" name='frontistiriako' checked >Φροντιστηριακό Τμήμα</td>" :
-                    "<td><input type=\"checkbox\" name='frontistiriako' >Φροντιστηριακό Τμήμα</td>";
-                echo $oloimero ? 
-                    "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>" : 
-                    "<td><input type=\"checkbox\" name='oloimero' >Όλοήμερο</td>";
-                echo "</tr>";
-                        
-                echo "<tr>";
-                echo $ted ? 
-                    "<td><input type=\"checkbox\" name='ted' checked >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>" :
-                    "<td><input type=\"checkbox\" name='ted' >Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
-                //echo "<td></td>";
-                echo $anenergo ? 
-                    "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
-                    "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
-                echo "</tr>";
+                // Organizational Information Section
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Οργανωτικά Στοιχεία</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='form-grid'>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Οργανικότητα</label>";
+                echo "<input type='text' name='organ' value='$organikothta' size='2' class='form-input'/>";
+                echo "</div>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Λειτουργικότητα</label>";
+                echo "<div style='padding: 10px 12px; background: #f9fafb; border-radius: 8px; color: #374151;'>$leitoyrg</div>";
+                echo "</div>";
+                echo "</div>";
                 
-                echo "<td colspan=2><input type=\"checkbox\" name='vivliothiki' id='vivliothiki'";
+                // Organikes
+                echo "<div style='margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb;'>";
+                echo "<label class='form-label' style='margin-bottom: 12px; font-size: 1rem;'>Οργανικές Θέσεις</label>";
+                echo "<div class='organikes-grid'>";
+                
+                // if Dimotiko
+                if ($type == 1) {
+                    if ($type2 != 2) {
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ70:</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[0]' size='2' />";
+                        echo "</div>";
+                    } else {
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ70 EAE:</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[0]' size='2' />";
+                        echo "</div>";
+                    }
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ11:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[1]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ06:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[2]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ79:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[3]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ05:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[4]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ07:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[5]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ08:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[6]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ86:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[7]' size='2' />";
+                    echo "</div>";
+                    echo "<div class='organikes-item'>";
+                    echo "<label>ΠΕ91:</label>";
+                    echo "<input type='text' name='organikes[]' value='$organikes[8]' size='2' />";
+                    echo "</div>";
+                    if ($type2 == 2) {
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ21 (Λογοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[9]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ23 (Ψυχολόγων):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[10]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ25 (Σχ.Νοσηλευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[11]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ26 (Λογοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[12]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ28 (Φυσικοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[13]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ29 (Εργοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[14]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ30 (Κοιν.Λειτουργών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[15]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΔΕ1ΕΒΠ:</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[16]' size='2' />";
+                        echo "</div>";
+                    }
+                }
+                // if Nip
+                else if ($type == 2) {
+                    if ($type2 != 2){
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ60:</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[0]' size='2' />";
+                        echo "</div>";
+                    } else {
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ60 EAE:</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[0]' size='2' />";
+                        echo "</div>";
+                    }
+                    if ($type2 == 2) {
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ21 (Λογοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[1]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ23 (Ψυχολόγων):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[2]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ25 (Σχ.Νοσηλευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[3]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ26 (Λογοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[4]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ28 (Φυσικοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[5]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ29 (Εργοθεραπευτών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[6]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΠΕ30 (Κοιν.Λειτουργών):</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[7]' size='2' />";
+                        echo "</div>";
+                        echo "<div class='organikes-item'>";
+                        echo "<label>ΔΕ1ΕΒΠ:</label>";
+                        echo "<input type='text' name='organikes[]' value='$organikes[8]' size='2' />";
+                        echo "</div>";
+                    }
+                }
+                echo "</div>"; // organikes-grid
+                echo "</div>"; // organikes wrapper
+                echo "</div>"; // edit-section-content
+                echo "</div>"; // edit-section
+            }
+            // PE05/PE07 Hours Section (only for Dimotiko)
+            if ($type == 1 ){
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Ώρες Ειδικών Μαθημάτων</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='form-grid'>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Ώρες ΠΕ05<span class='info-hint'><img src='../images/info.png' title='Αναλυτικά οι ώρες, π.χ.10 ώρες -> 4-4-2 στην ανάλυση'></span></label>";
+                echo "<input type='text' name='tmpe05' size='2' value='$pe0507[0]' class='form-input'/>";
+                echo "</div>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Ανάλυση ΠΕ05</label>";
+                echo "<input type='text' name='tmpe05b' size='6' value='$pe0507[1]' class='form-input'/>";
+                echo "</div>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Ώρες ΠΕ07<span class='info-hint'><img src='../images/info.png' title='Αναλυτικά οι ώρες, π.χ.10 ώρες -> 4-4-2 στην ανάλυση'></span></label>";
+                echo "<input type='text' name='tmpe07' size='2' value='$pe0507[2]' class='form-input'/>";
+                echo "</div>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Ανάλυση ΠΕ07</label>";
+                echo "<input type='text' name='tmpe07b' size='6' value='$pe0507[3]' class='form-input'/>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+            }
+            
+            // Special Programs/Features Section
+            if ($type == 1 || $type == 2){
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Ειδικά Προγράμματα & Χαρακτηριστικά</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='checkbox-group'>";
+                
+                if ($entaksis[0]) {
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" name='entaksis' checked id='entaksis'/>";
+                    echo "<label for='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2' style='margin-left: 8px; padding: 4px; border: 1px solid #d1d5db; border-radius: 4px; width: 40px;'/></label>";
+                    echo "</div>";
+                } else {
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" name='entaksis' id='entaksis'/>";
+                    echo "<label for='entaksis'>Τμήμα Ένταξης / Μαθητές: <input type='text' name='entaksis_math' value='$entaksis[1]' size='2' style='margin-left: 8px; padding: 4px; border: 1px solid #d1d5db; border-radius: 4px; width: 40px;'/></label>";
+                    echo "</div>";
+                }
+                
+                if ($ypodoxis) {
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" name='ypodoxis' checked id='ypodoxis'/>";
+                    echo "<label for='ypodoxis'>Τμήμα Υποδοχής</label>";
+                    echo "</div>";
+                } else {
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" name='ypodoxis' id='ypodoxis'/>";
+                    echo "<label for='ypodoxis'>Τμήμα Υποδοχής</label>";
+                    echo "</div>";
+                }
+                
+                echo "</div>"; // checkbox-group
+                
+                if ($entaksis[0] || $ypodoxis) {
+                    echo "<div class='form-grid' style='margin-top: 16px;'>";
+                    if ($entaksis[0]) {
+                        echo "<div class='form-item'>";
+                        echo "<label class='form-label'>Εκπ/κοί Τμ.Ένταξης</label>";
+                        echo "<input type='text' name='ekp_te' size='1' value='$ekp_ee_exp[0]' class='form-input'/>";
+                        echo "</div>";
+                    }
+                    if ($ypodoxis) {
+                        echo "<div class='form-item'>";
+                        echo "<label class='form-label'>Εκπ/κοί Τμ.Υποδοχής</label>";
+                        echo "<input type='text' name='ekp_ty' size='1' value='$ekp_ee_exp[1]' class='form-input'/>";
+                        echo "</div>";
+                    }
+                    echo "</div>";
+                }
+                echo "</div>";
+                echo "</div>";
+            }
+                    
+            // Additional Features for Dimotiko
+            if ($type == 1) {
+                // Wrap in a section
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Επιπλέον Χαρακτηριστικά</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='checkbox-group'>";
+                echo $frontistiriako ? 
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='frontistiriako' checked id='frontistiriako'/><label for='frontistiriako'>Φροντιστηριακό Τμήμα</label></div>" :
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='frontistiriako' id='frontistiriako'/><label for='frontistiriako'>Φροντιστηριακό Τμήμα</label></div>";
+                echo $oloimero ? 
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='oloimero' checked id='oloimero'/><label for='oloimero'>Όλοήμερο</label></div>" : 
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='oloimero' id='oloimero'/><label for='oloimero'>Όλοήμερο</label></div>";
+                echo $ted ? 
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='ted' checked id='ted'/><label for='ted'>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</label></div>" :
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='ted' id='ted'/><label for='ted'>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</label></div>";
+                echo $anenergo ? 
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='anenergo' checked id='anenergo'/><label for='anenergo'>Ανενεργό</label></div>" :
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='anenergo' id='anenergo'/><label for='anenergo'>Ανενεργό</label></div>";
+                echo "</div>";
+                
+                // Library section
+                echo "<div class='form-item' style='margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;'>";
+                echo "<div class='checkbox-item' style='margin-bottom: 12px;'>";
+                echo "<input type=\"checkbox\" name='vivliothiki' id='vivliothiki'";
                 echo $vivliothiki ? 'checked' : '';
-                echo " onchange='valueChanged()'>Σχολική βιβλιοθήκη&nbsp;&nbsp;";
+                echo " onchange='valueChanged()'/>";
+                echo "<label for='vivliothiki'>Σχολική βιβλιοθήκη</label>";
+                echo "</div>";
                 echo "<div id='workerdiv'";
                 echo $vivliothiki ? '' : " style='display:none;'";
                 echo ">";
-                echo "Υπεύθυνος/-η: ";
+                echo "<label class='form-label'>Υπεύθυνος/-η:</label>";
                 workersCmb($vivliothiki, $sch, $mysqlconnection);
                 echo "</div>";
-                echo "<tr>";
-                echo "<td>Πρωινή Ζώνη:&nbsp;";
+                echo "</div>";
+                
+                // Proini Zoni
+                echo "<div class='form-item' style='margin-top: 16px;'>";
+                echo "<label class='form-label'>Πρωινή Ζώνη:</label>";
                 $proinizoni = unserialize(mysqli_result($result, 0, "proinizoni"));
                 workersMultiCmb($proinizoni, $sch, $mysqlconnection,'proinizoni');
-                echo "</td><td>";
-                echo "</td></tr>";
-                echo "</td>";
-                        
-                echo "<tr><td colspan=2>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td></tr>";
-
+                echo "</div>";
+                
+                echo "</div>"; // edit-section-content
+                echo "</div>"; // edit-section
+                
+                // Additional Information Section
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Επιπλέον Πληροφορίες</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='form-grid'>";
+                
+                echo "<div class='form-item' style='grid-column: 1 / -1;'>";
+                echo "<label class='form-label'>Σχόλια</label>";
+                echo "<textarea rows='4' cols='80' name='comments' class='form-textarea'>$comments</textarea>";
+                echo "</div>";
+                
                 // Θητεία Δ/ντή
-                echo "<tr>";
+                echo "<div class='checkbox-item' style='grid-column: 1 / -1; margin-top: 8px;'>";
                 echo $thiteia ? 
-                        "<td><input type=\"checkbox\" name='thiteia' checked >Δ/ντής σε θητεία</td>" :
-                        "<td><input type=\"checkbox\" name='thiteia' >Δ/ντής σε θητεία</td>";
-                echo "<td>&nbsp;θητεία δ/ντή από - έως:&nbsp;";
-                my_calendar('thiteia_apo', $thiteia_apo);
-                echo "<br>";
-                my_calendar('thiteia_ews', $thiteia_ews);
-                echo "</td>";
-                echo "</tr>";
-
-                //echo $disabled ? "<tr><td colspan=2><small>ΣΗΜ.: Μόνο ο διαχειριστής μπορεί να αλλάξει τα απενεργοποιημένα πεδία.</small></td></tr>" : '';
-                echo "</table>";
+                        "<input type=\"checkbox\" name='thiteia' checked id='thiteia'/>" :
+                        "<input type=\"checkbox\" name='thiteia' id='thiteia'/>";
+                echo "<label for='thiteia'>Δ/ντής σε θητεία</label>";
+                echo "</div>";
+                
+                if ($thiteia) {
+                    echo "<div class='form-item'>";
+                    echo "<label class='form-label'>Από</label>";
+                    echo "<div>";
+                    my_calendar('thiteia_apo', $thiteia_apo);
+                    echo "</div>";
+                    echo "</div>";
+                    echo "<div class='form-item'>";
+                    echo "<label class='form-label'>Έως</label>";
+                    echo "<div>";
+                    my_calendar('thiteia_ews', $thiteia_ews);
+                    echo "</div>";
+                    echo "</div>";
+                } else {
+                    echo "<div class='form-item'>";
+                    echo "<label class='form-label'>Από</label>";
+                    echo "<div>";
+                    my_calendar('thiteia_apo', $thiteia_apo);
+                    echo "</div>";
+                    echo "</div>";
+                    echo "<div class='form-item'>";
+                    echo "<label class='form-label'>Έως</label>";
+                    echo "<div>";
+                    my_calendar('thiteia_ews', $thiteia_ews);
+                    echo "</div>";
+                    echo "</div>";
+                }
+                
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
                 echo "<br>";
                         
                 //if ($oloimero) - Afairethike gia taxythterh kataxwrhsh...
@@ -335,116 +867,157 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "</table>";
                 */
                 //}
-                echo "<br>";
-
-                echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td colspan=8>Σύνολο Μαθητών Πρ.: $synolo</td></tr>";
+                // Students/Classes Section for Dimotiko
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Μαθητικό Δυναμικό</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<table class=\"imagetable\" border='1' style='width: auto; max-width: 900px; margin: 0 auto;'>";
+                echo "<tr><td colspan=8><strong>Σύνολο Μαθητών Πρωινού: $synolo</strong></td></tr>";
                 echo "<tr><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Ολ.<small>(15.00/16.00)</small></td><td>ΠΖ</td></tr>";
                 if ($synolo>0) {
-                    echo "<tr><td><input type='text' name='a' size='1' value=$classes[0] /></td><td><input type='text' name='b' size='1' value=$classes[1] /></td><td><input type='text' name='c' size='1' value=$classes[2] /></td><td><input type='text' name='d' size='1' value=$classes[3] /></td><td><input type='text' name='e' size='1' value=$classes[4] /></td><td><input type='text' name='f' size='1' value=$classes[5] /></td><td><input type='text' name='g' size='3' value=$classes[6] /></td><td><input type='text' name='h' size='1' value=$classes[7] /></td></tr>";
+                    echo "<tr><td><input type='text' name='a' size='1' value=$classes[0] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='b' size='1' value=$classes[1] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='c' size='1' value=$classes[2] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='d' size='1' value=$classes[3] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='e' size='1' value=$classes[4] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='f' size='1' value=$classes[5] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='g' size='3' value=$classes[6] class='form-input' style='width: 80px; text-align: center;'/></td><td><input type='text' name='h' size='1' value=$classes[7] class='form-input' style='width: 50px; text-align: center;'/></td></tr>";
                 } else {
-                    echo "<tr><td><input type='text' name='a' size='1' value='0' /></td><td><input type='text' name='b' size='1' value='0' /></td><td><input type='text' name='c' size='1' value='0' /></td><td><input type='text' name='d' size='1' value='0' /></td><td><input type='text' name='e' size='1' value='0' /></td><td><input type='text' name='f' size='1' value='0' /></td><td><input type='text' name='g' size='3' value='0' /></td><td><input type='text' name='h' size='1' value='0' /></td></tr>";
+                    echo "<tr><td><input type='text' name='a' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='b' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='c' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='d' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='e' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='f' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='g' size='3' value='0' class='form-input' style='width: 80px; text-align: center;'/></td><td><input type='text' name='h' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td></tr>";
                 }
-                echo "<tr><td colspan=8>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο Τμημάτων Πρωινού: $synolo_tmim</td></tr>";
+                echo "<tr><td colspan=8><strong>Τμήματα (Εκπαιδευτικοί) ανά τάξη<br>Σύνολο Τμημάτων Πρωινού: $synolo_tmim</strong></td></tr>";
                 if ($synolo>0) {
-                    echo "<tr><td><input type='text' name='ta' size='1' value=$tmimata_exp[0] /></td><td><input type='text' name='tb' size='1' value=$tmimata_exp[1] /></td>";
-                    echo "<td><input type='text' name='tc' size='1' value=$tmimata_exp[2] /></td><td><input type='text' name='td' size='1' value=$tmimata_exp[3] /></td>";
-                    echo "<td><input type='text' name='te' size='1' value=$tmimata_exp[4] /></td><td><input type='text' name='tf' size='1' value=$tmimata_exp[5] /></td>";
-                    echo "<td>15.00&nbsp;<input type='text' name='tg' size='1' value=$tmimata_exp[6] />16.00&nbsp;<input type='text' name='th' size='1' value=$tmimata_exp[7] />17.30&nbsp;<input type='text' name='tj' size='1' value=$tmimata_exp[9] /></td><td><input type='text' name='ti' size='1' value=$tmimata_exp[8] /></td></tr>";
+                    echo "<tr><td><input type='text' name='ta' size='1' value=$tmimata_exp[0] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='tb' size='1' value=$tmimata_exp[1] class='form-input' style='width: 50px; text-align: center;'/></td>";
+                    echo "<td><input type='text' name='tc' size='1' value=$tmimata_exp[2] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='td' size='1' value=$tmimata_exp[3] class='form-input' style='width: 50px; text-align: center;'/></td>";
+                    echo "<td><input type='text' name='te' size='1' value=$tmimata_exp[4] class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='tf' size='1' value=$tmimata_exp[5] class='form-input' style='width: 50px; text-align: center;'/></td>";
+                    echo "<td>15.00&nbsp;<input type='text' name='tg' size='1' value=$tmimata_exp[6] class='form-input' style='width: 40px; text-align: center;'/>16.00&nbsp;<input type='text' name='th' size='1' value=$tmimata_exp[7] class='form-input' style='width: 40px; text-align: center;'/>17.30&nbsp;<input type='text' name='tj' size='1' value=$tmimata_exp[9] class='form-input' style='width: 40px; text-align: center;'/></td><td><input type='text' name='ti' size='1' value=$tmimata_exp[8] class='form-input' style='width: 50px; text-align: center;'/></td></tr>";
                 } else {
-                    echo "<tr><td><input type='text' name='ta' size='1' value='0' /></td><td><input type='text' name='tb' size='1' value='0' /></td>";
-                    echo "<td><input type='text' name='tc' size='1' value='0' /></td><td><input type='text' name='td' size='1' value='0' /></td>";
-                    echo "<td><input type='text' name='te' size='1' value='0' /></td><td><input type='text' name='tf' size='1' value='0' /></td>";
-                    echo "<td><input type='text' name='tg' size='1' value='0' /></td><td><input type='text' name='th' size='1' value='0' /></td></tr>";
+                    echo "<tr><td><input type='text' name='ta' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='tb' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td>";
+                    echo "<td><input type='text' name='tc' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='td' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td>";
+                    echo "<td><input type='text' name='te' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='tf' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td>";
+                    echo "<td><input type='text' name='tg' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td><td><input type='text' name='th' size='1' value='0' class='form-input' style='width: 50px; text-align: center;'/></td></tr>";
                 }
                 echo '<tr><td colspan=8><small>ΣΗΜ. Για 4/θέσια συμπληρώνουμε τμήματα στις τάξεις Α,Β,Γ,Ε & για 5/θέσια Α,Β,Γ,Ε,ΣΤ</small></td></tr>';
+                echo "</table>";
+                echo "</div>";
+                echo "</div>";
             }
             // if nip
             else if ($type == 2) {
-                if ($oloimero) {
-                    echo "<td><input type=\"checkbox\" name='oloimero' checked >Ολοήμερο</td>";
-                } else {
-                    echo "<td><input type=\"checkbox\" name='oloimero'>Όλοήμερο</td>";
-                }
-                echo "<td>Μαθητές Πρωινής Ζώνης&nbsp;&nbsp;<input type='text' name='pz' size='1' value=$klasiko_exp[6]></td></tr>";
-                echo "<tr><td>Σχόλια: <textarea rows='4' cols='80' name='comments'>$comments</textarea></td>";
+                // Additional Features for Nipiagogeio
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Επιπλέον Χαρακτηριστικά</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='checkbox-group'>";
+                echo $oloimero ? 
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='oloimero' checked id='oloimero'/><label for='oloimero'>Όλοήμερο</label></div>" :
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='oloimero' id='oloimero'/><label for='oloimero'>Όλοήμερο</label></div>";
                 echo $anenergo ? 
-                    "<td><input type=\"checkbox\" name='anenergo' checked >Ανενεργό</td>" :
-                    "<td><input type=\"checkbox\" name='anenergo' >Ανενεργό</td>";
-                echo "</tr>";
-
-                // Θητεία Δ/ντή
-                echo "<tr>";
-                echo $thiteia ? 
-                        "<td><input type=\"checkbox\" name='thiteia' checked >Δ/ντής σε θητεία</td>" :
-                        "<td><input type=\"checkbox\" name='thiteia' >Δ/ντής σε θητεία</td>";
-                echo "<td>&nbsp;θητεία δ/ντή από - έως:&nbsp;";
-                my_calendar('thiteia_apo', $thiteia_apo);
-                echo "<br>";
-                my_calendar('thiteia_ews', $thiteia_ews);
-                echo "</td>";
-                echo "</tr>";
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='anenergo' checked id='anenergo'/><label for='anenergo'>Ανενεργό</label></div>" :
+                    "<div class='checkbox-item'><input type=\"checkbox\" name='anenergo' id='anenergo'/><label for='anenergo'>Ανενεργό</label></div>";
+                echo "</div>";
                 
-                echo  $disabled ? "<tr><td colspan=2><small>ΣΗΜ.: Μόνο ο διαχειριστής μπορεί να αλλάξει τα απενεργοποιημένα πεδία.</small></td></tr>" : '';
-                echo "</table>";
-                echo "<br>";
-                /////////    
-                echo "<h3>Μαθητές</h3><br>";
-                echo "<table class=\"imagetable\" border='1'>";
+                echo "<div class='form-item' style='margin-top: 16px;'>";
+                echo "<label class='form-label'>Μαθητές Πρωινής Ζώνης</label>";
+                echo "<input type='text' name='pz' size='1' value=$klasiko_exp[6] class='form-input' style='width: 60px;'/>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                
+                // Additional Information Section for Nipiagogeio
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Επιπλέον Πληροφορίες</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<div class='form-grid'>";
+                
+                echo "<div class='form-item' style='grid-column: 1 / -1;'>";
+                echo "<label class='form-label'>Σχόλια</label>";
+                echo "<textarea rows='4' cols='80' name='comments' class='form-textarea'>$comments</textarea>";
+                echo "</div>";
+                
+                // Θητεία Δ/ντή
+                echo "<div class='checkbox-item' style='grid-column: 1 / -1; margin-top: 8px;'>";
+                echo $thiteia ? 
+                        "<input type=\"checkbox\" name='thiteia' checked id='thiteia'/>" :
+                        "<input type=\"checkbox\" name='thiteia' id='thiteia'/>";
+                echo "<label for='thiteia'>Δ/ντής σε θητεία</label>";
+                echo "</div>";
+                
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Από</label>";
+                echo "<div>";
+                my_calendar('thiteia_apo', $thiteia_apo);
+                echo "</div>";
+                echo "</div>";
+                echo "<div class='form-item'>";
+                echo "<label class='form-label'>Έως</label>";
+                echo "<div>";
+                my_calendar('thiteia_ews', $thiteia_ews);
+                echo "</div>";
+                echo "</div>";
+                
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                
+                // Students Section for Nipiagogeio
+                echo "<div class='edit-section'>";
+                echo "<div class='edit-section-header'>Μαθητές</div>";
+                echo "<div class='edit-section-content'>";
+                echo "<table class=\"imagetable\" border='1' style='width: auto; max-width: 650px; margin: 0 auto;'>";
                 echo "<tr><td rowspan=2>Τμήμα</td><td colspan=2>Κλασικό</td><td colspan=2>Ολοήμερο</td></tr>";
                 echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Νήπια</td><td>Προνήπια</td></tr>";
                 // t1
-                echo "<tr><td>Τμ.1</td><td><input type='text' name='k1a' size='1' value=$klasiko_exp[0]></td><td><input type='text' name='k1b' size='1' value=$klasiko_exp[1]>";
-                echo "<td><input type='text' name='o1a' size='1' value=$oloimero_nip_exp[0]></td><td><input type='text' name='o1b' size='1' value=$oloimero_nip_exp[1]></td></tr>";
+                echo "<tr><td>Τμ.1</td><td><input type='text' name='k1a' size='1' value=$klasiko_exp[0] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k1b' size='1' value=$klasiko_exp[1] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o1a' size='1' value=$oloimero_nip_exp[0] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o1b' size='1' value=$oloimero_nip_exp[1] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t2
-                echo "<tr><td>Τμ.2</td><td><input type='text' name='k2a' size='1' value=$klasiko_exp[2]></td><td><input type='text' name='k2b' size='1' value=$klasiko_exp[3]>";
-                echo "<td><input type='text' name='o2a' size='1' value=$oloimero_nip_exp[2]></td><td><input type='text' name='o2b' size='1' value=$oloimero_nip_exp[3]></td></tr>";
+                echo "<tr><td>Τμ.2</td><td><input type='text' name='k2a' size='1' value=$klasiko_exp[2] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k2b' size='1' value=$klasiko_exp[3] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o2a' size='1' value=$oloimero_nip_exp[2] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o2b' size='1' value=$oloimero_nip_exp[3] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t3
-                echo "<tr><td>Τμ.3</td><td><input type='text' name='k3a' size='1' value=$klasiko_exp[4]></td><td><input type='text' name='k3b' size='1' value=$klasiko_exp[5]>";
-                echo "<td><input type='text' name='o3a' size='1' value=$oloimero_nip_exp[4]></td><td><input type='text' name='o3b' size='1' value=$oloimero_nip_exp[5]></td></tr>";
+                echo "<tr><td>Τμ.3</td><td><input type='text' name='k3a' size='1' value=$klasiko_exp[4] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k3b' size='1' value=$klasiko_exp[5] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o3a' size='1' value=$oloimero_nip_exp[4] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o3b' size='1' value=$oloimero_nip_exp[5] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t4
-                echo "<tr><td>Τμ.4</td><td><input type='text' name='k4a' size='1' value=$klasiko_exp[7]></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[8]>";
-                echo "<td><input type='text' name='o4a' size='1' value=$oloimero_nip_exp[6]></td><td><input type='text' name='o4b' size='1' value=$oloimero_nip_exp[7]></td></tr>";
+                echo "<tr><td>Τμ.4</td><td><input type='text' name='k4a' size='1' value=$klasiko_exp[7] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k4b' size='1' value=$klasiko_exp[8] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o4a' size='1' value=$oloimero_nip_exp[6] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o4b' size='1' value=$oloimero_nip_exp[7] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t5
-                echo "<tr><td>Τμ.5</td><td><input type='text' name='k5a' size='1' value=$klasiko_exp[9]></td><td><input type='text' name='k5b' size='1' value=$klasiko_exp[10]>";
-                echo "<td><input type='text' name='o5a' size='1' value=$oloimero_nip_exp[8]></td><td><input type='text' name='o5b' size='1' value=$oloimero_nip_exp[9]></td></tr>";
+                echo "<tr><td>Τμ.5</td><td><input type='text' name='k5a' size='1' value=$klasiko_exp[9] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k5b' size='1' value=$klasiko_exp[10] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o5a' size='1' value=$oloimero_nip_exp[8] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o5b' size='1' value=$oloimero_nip_exp[9] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t6
-                echo "<tr><td>Τμ.6</td><td><input type='text' name='k6a' size='1' value=$klasiko_exp[11]></td><td><input type='text' name='k6b' size='1' value=$klasiko_exp[12]>";
-                echo "<td><input type='text' name='o6a' size='1' value=$oloimero_nip_exp[10]></td><td><input type='text' name='o6b' size='1' value=$oloimero_nip_exp[11]></td></tr>";
+                echo "<tr><td>Τμ.6</td><td><input type='text' name='k6a' size='1' value=$klasiko_exp[11] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k6b' size='1' value=$klasiko_exp[12] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o6a' size='1' value=$oloimero_nip_exp[10] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o6b' size='1' value=$oloimero_nip_exp[11] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t7
-                echo "<tr><td>Τμ.7</td><td><input type='text' name='k7a' size='1' value=$klasiko_exp[13]></td><td><input type='text' name='k7b' size='1' value=$klasiko_exp[14]>";
-                echo "<td><input type='text' name='o7a' size='1' value=$oloimero_nip_exp[12]></td><td><input type='text' name='o7b' size='1' value=$oloimero_nip_exp[13]></td></tr>";
+                echo "<tr><td>Τμ.7</td><td><input type='text' name='k7a' size='1' value=$klasiko_exp[13] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k7b' size='1' value=$klasiko_exp[14] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o7a' size='1' value=$oloimero_nip_exp[12] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o7b' size='1' value=$oloimero_nip_exp[13] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 // t8
-                echo "<tr><td>Τμ.8</td><td><input type='text' name='k8a' size='1' value=$klasiko_exp[15]></td><td><input type='text' name='k8b' size='1' value=$klasiko_exp[16]>";
-                echo "<td><input type='text' name='o8a' size='1' value=$oloimero_nip_exp[14]></td><td><input type='text' name='o8b' size='1' value=$oloimero_nip_exp[15]></td></tr>";
+                echo "<tr><td>Τμ.8</td><td><input type='text' name='k8a' size='1' value=$klasiko_exp[15] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='k8b' size='1' value=$klasiko_exp[16] class='form-input' style='width: 50px; text-align: center;'>";
+                echo "</td><td><input type='text' name='o8a' size='1' value=$oloimero_nip_exp[14] class='form-input' style='width: 50px; text-align: center;'></td><td><input type='text' name='o8b' size='1' value=$oloimero_nip_exp[15] class='form-input' style='width: 50px; text-align: center;'></td></tr>";
                 echo "</table>";
                 
                 // Oloimero dieyrymenoy (16-17.30)
-                // Tmimata: oloimero_nip_exp[16] / Mathites: oloimero_nip_exp[17]
-                echo "<h4>Ολοήμερο διευρυμένου προγράμματος (16.00-17.30)</h4>";
-                echo "<table class=\"imagetable\" border='1' style='width:20%;'>";
-                echo "<thead><th>Τμήματα</th><th>Μαθητές</th></thead>";
-                echo "<tr><td><input type='text' name='o9a' size='3' value=$oloimero_nip_exp[16]></td><td><input type='text' name='o9b' size='3' value=$oloimero_nip_exp[17]>";
+                echo "<div style='margin-top: 24px;'>";
+                echo "<h4 style='margin-bottom: 12px;'>Ολοήμερο διευρυμένου προγράμματος (16.00-17.30)</h4>";
+                echo "<table class=\"imagetable\" border='1' style='width: auto; max-width: 350px; margin: 0 auto;'>";
+                echo "<thead><tr><th>Τμήματα</th><th>Μαθητές</th></tr></thead>";
+                echo "<tr><td><input type='text' name='o9a' size='3' value=$oloimero_nip_exp[16] class='form-input' style='width: 80px; text-align: center;'/></td><td><input type='text' name='o9b' size='3' value=$oloimero_nip_exp[17] class='form-input' style='width: 80px; text-align: center;'/></td></tr>";
                 echo "</table>";
-                echo "<br>";
+                echo "</div>";
 
-                echo "<table class=\"imagetable\" border='1'>";
-                echo "<tr><td colspan=3>Νηπιαγωγοί</td></tr>";
-                echo "<tr><td>Κλασικό</td><td>Ολοήμερο</td><td>Τμ.Ένταξης</td></tr>";
-                echo "<tr><td><input type='text' name='ekp_kl' size='1' value=$nip_exp[0]></td><td><input type='text' name='ekp_ol' size='1' value=$nip_exp[1]></td><td><input type='text' name='ekp_te' size='1' value=$nip_exp[2]></td></tr>";
+                echo "<div style='margin-top: 24px;'>";
+                echo "<h4 style='margin-bottom: 12px;'>Νηπιαγωγοί</h4>";
+                echo "<table class=\"imagetable\" border='1' style='width: auto; max-width: 450px; margin: 0 auto;'>";
+                echo "<thead><tr><th>Κλασικό</th><th>Ολοήμερο</th><th>Τμ.Ένταξης</th></tr></thead>";
+                echo "<tr><td><input type='text' name='ekp_kl' size='1' value=$nip_exp[0] class='form-input' style='width: 60px; text-align: center;'/></td><td><input type='text' name='ekp_ol' size='1' value=$nip_exp[1] class='form-input' style='width: 60px; text-align: center;'/></td><td><input type='text' name='ekp_te' size='1' value=$nip_exp[2] class='form-input' style='width: 60px; text-align: center;'/></td></tr>";
                 echo "</table>";
+                echo "</div>";
+                
+                echo "</div>"; // edit-section-content
+                echo "</div>"; // edit-section
             }
-                    
-            echo "</table>";
-            echo "<br>";
                     
             echo "	<input type='hidden' name = 'sch' value='$sch'>";
             echo "	<input type='hidden' name = 'name' value='$str1'>";
-                    
+            
+            // Action Buttons
+            echo "<div class='action-buttons'>";
             echo "<input type='submit' value='Αποθήκευση'>";
-            echo "</form>";
             $schLink = "school_status.php?org=$sch";
-            echo "	&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='$schLink'\">";
+            echo "<INPUT TYPE='button' VALUE='Επιστροφή' onClick=\"parent.location='$schLink'\">";
+            echo "</div>";
+            echo "</form>";
                 
         }
         ?>
