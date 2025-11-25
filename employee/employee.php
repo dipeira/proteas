@@ -84,6 +84,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             background: #ffffff;
         }
         
+        /* Data cells with colspan should have white background and normal font weight */
+        .imagetable td:nth-child(2)[colspan],
+        .imagetable td:nth-child(4)[colspan] {
+            background: #ffffff !important;
+            font-weight: normal !important;
+            color: #374151 !important;
+        }
+        
         /* Alternate row styling for visual separation */
         .imagetable tbody tr:nth-child(even) td:first-child,
         .imagetable tbody tr:nth-child(even) td:nth-child(3) {
@@ -98,12 +106,27 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         
         /* Section separator - visual grouping */
         .imagetable tbody tr td[colspan] {
-            background: #f0f9ff !important;
-            border-top: 2px solid #4FC5D6;
-            border-bottom: 1px solid #bae6fd;
+            background: linear-gradient(135deg, rgba(47,152,171,0.22) 0%, rgba(58,168,184,0.25) 48%, rgba(79,197,214,0.30) 100%) !important;
+            border-top: 3px solid #2A8B9A;
+            border-bottom: 2px solid #4FC5D6;
+            padding: 12px 20px !important;
+            font-weight: 700;
+            color: #0f3f66;
+            letter-spacing: 0.6px;
+            text-transform: none;
+        }
+
+        .separator {
+            text-transform: uppercase !important;  
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #0f3f66;
+            letter-spacing: 0.8px;
             padding: 10px 16px !important;
-            font-weight: 600;
-            color: #1e40af;
+            margin: 12px 0 !important;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(47,152,171,0.22) 0%, rgba(58,168,184,0.25) 48%, rgba(79,197,214,0.30) 100%) !important;
         }
         
         /* Expandable sections styling */
@@ -771,22 +794,27 @@ if ($_GET['op']=="edit") {
     }
     echo "<form id='updatefrm' name='update' action='update.php' method='POST'>";
     echo "<table class=\"imagetable\" border='1'>";
-        
-        echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
-        echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
+    
+    // ========== ΠΡΟΣΩΠΙΚΑ (Personal Information) ==========
+    echo "<tr><td colspan=2>Προσωπικα</td></tr>";
+    echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
+    echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
     echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' value=$patrwnymo /></td></tr>";
     echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' value=$mhtrwnymo /></td></tr>";
     echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
+    echo "<tr><td>email</td><td><input type='text' name='email' value='$email' /></td></tr>";
+    echo "<tr><td>email (ΠΣΔ)</td><td><input type='text' name='email_psd' value='$email_psd' /></td></tr>";
     echo "<tr><td>Τηλέφωνο</td><td><input size='30' type='text' name='tel' value='$tel' /></td></tr>";
     echo "<tr><td>Διεύθυνση</td><td><input size='50' type='text' name='address' value='$address' /></td></tr>";
     echo "<tr><td>Α.Δ.Τ.</td><td><input type='text' name='idnum' value='$idnum' /></td></tr>";
     echo "<tr><td>Α.Μ.K.A.</td><td><input type='text' name='amka' value='$amka' /></td></tr>";
-    echo "<tr><td>email<br>email (ΠΣΔ)</td><td><input type='text' name='email' value='$email' /><br><input type='text' name='email_psd' value='$email_psd' /></td></tr>";
+    
+    // ========== ΥΠΗΡΕΣΙΑΚΑ (Service Information) ==========
+    echo "<tr><td colspan=2>Υπηρεσιακα</td></tr>";
     echo "<tr><td>Α.Μ.</td><td><input type='text' name='am' value=$am /></td></tr>";
     echo "<tr><td>Κλάδος</td><td>";
     kladosCombo($klados_id, $mysqlconnection);
     echo "</td></tr>";
-    echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
     echo "<tr><td>";
     show_tooltip('Κατάσταση','Επιλέξτε ένα από: Εργάζεται, Λύση Σχέσης-Παραίτηση, Άδεια, Διαθεσιμότητα');
     echo "</td><td>";
@@ -804,7 +832,7 @@ if ($_GET['op']=="edit") {
     echo "<br><input type=\"input\" name='monimopoihsh_apof' value=$monimopoihsh_apof></td>"; 
     echo "</tr>";
 
-    echo "<tr><td>Αξιολόγηση/<br>Ημ/νία τελ.αξιολόγησης</td></td>";
+    echo "<tr><td>Αξιολόγηση/<br>Ημ/νία τελ.αξιολόγησης</td>";
     echo $aksiologhsh ? 
         "<td><input type=\"checkbox\" name='aksiologhsh' checked >Αξιολογήθηκε" :
         "<td><input type=\"checkbox\" name='aksiologhsh' >Αξιολογήθηκε";
@@ -813,41 +841,32 @@ if ($_GET['op']=="edit") {
     echo "</td>";
     echo "</tr>";
 
-    //<input type='text' name='vathm' value=$vathm /></td></tr>";
     echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
-        echo "<tr><td>Ημ/νία M.K.</td><td>";
+    echo "<tr><td>Ημ/νία M.K.</td><td>";
     $myCalendar = new tc_calendar("hm_mk", true);
     $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    //$myCalendar->setDate(date("d"), date("m"), date("Y"));
     $myCalendar->setDate(date('d', strtotime($hm_mk)), date('m', strtotime($hm_mk)), date('Y', strtotime($hm_mk)));
     $myCalendar->setPath("../tools/calendar/");
     $myCalendar->setYearInterval(1970, date("Y"));
     $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
     $myCalendar->setAlignment("left", "bottom");
-    //$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
     $myCalendar->disabledDay("sun,sat");
     $myCalendar->writeScript();
-          echo "</td></tr>";        
-                
+    echo "</td></tr>";        
                 
     echo "<tr><td>ΦΕΚ Διορισμού</td><td><input type='text' name='fek_dior' value=$fek_dior /></td></tr>";
-    //echo "<tr><td>hm_dior</td><td><input type='text' name='hm_dior' value=".date('d-m-Y',strtotime($hm_dior))." /></td></tr>";
         
     echo "<tr><td>Ημ/νία Διορισμού</td><td>";
     $myCalendar = new tc_calendar("hm_dior", true);
     $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    //$myCalendar->setDate(date("d"), date("m"), date("Y"));
     $myCalendar->setDate(date('d', strtotime($hm_dior)), date('m', strtotime($hm_dior)), date('Y', strtotime($hm_dior)));
     $myCalendar->setPath("../tools/calendar/");
     $myCalendar->setYearInterval(1970, date("Y"));
     $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
     $myCalendar->setAlignment("left", "bottom");
-    //$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
     $myCalendar->disabledDay("sun,sat");
     $myCalendar->writeScript();
-          echo "</td></tr>";        
-        
-    //echo "<tr><td>analipsi</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
+    echo "</td></tr>";        
         
     echo "<tr><td>Ημ/νία ανάληψης</td><td>";
     $myCalendar = new tc_calendar("hm_anal", true);
@@ -859,11 +878,17 @@ if ($_GET['op']=="edit") {
     $myCalendar->setAlignment("left", "bottom");
     $myCalendar->disabledDay("sun,sat");
     $myCalendar->writeScript();
-          echo "</td></tr>";        
+    echo "</td></tr>";        
                 
     echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
-    //<input type='text' name='met_did' value=$met_did /></td></tr>";
     metdidCombo($met_did);
+    echo "</td></tr>";
+    
+    echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
+    
+    // ========== ΧΡΟΝΟΙ ΥΠΗΡΕΣΙΑΣ (Service Times) ==========
+    echo "<tr><td colspan=2>Χρονοι υπηρεσιας</td></tr>";
+    
     $ymd=days2ymd($proyp);
     echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες&nbsp;<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες&nbsp;<input type='text' name='pdays' size=1 value=$ymd[2] />&nbsp;($proyp Ημέρες)</td></tr>";
     $ymdnot=days2ymd($proyp_not);
@@ -1024,65 +1049,75 @@ elseif ($_GET['op']=="view") {
         
        echo "<th colspan=4 align=center>Καρτέλα μόνιμου εκπαιδευτικού</th>";
     echo "</tr>";
+    
+    // ========== ΠΡΟΣΩΠΙΚΑ (Personal Information) ==========
+    echo "<tr><td colspan=4 class='separator'>Προσωπικα</td></tr>";
     echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
     echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
-                
-    // 16-05-2013 tel,address,amka,idnum moved to employee table
-        if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
-            echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-            echo "<td colspan=3><div class=\"slidingDiv\">";
-            echo "Τηλέφωνο: ".$tel."<br>";
-            // only for user_level < 3
-            if ($usrlvl < 3){
-                echo "Διεύθυνση: ".$address."<br>";
-                echo "ΑΔΤ: ".$idnum."<br>";
-                echo "AMKA: ".$amka."<br>";
-                if ($katoikon) {
-                    echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
-                } else {
-                    echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
-                }
-                $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
-                $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
-                echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
-            
-                idiwtika_table("Μόνιμος", $id, $mysqlconnection);
-            }
-            
-            echo "</div>";
-            echo "</td></tr>";
-        }
-        else
-        {
-            echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-            echo "<td colspan=3><div class=\"slidingDiv\">";
-            echo "Δε βρέθηκαν περισσότερα στοιχεία για τον/-ην υπάλληλο.<br>";
-            echo "O/H υπάλληλος δε μισθοδοτείται από τη Δ/νση Ηρακλείου<br>";
-            echo "ή δεν έχουν καταχωρηθεί στοιχεία.";
-            echo "</div>";
-            echo "</td></tr>";   
-        }
-    // more data ends
+    
+    // Email fields
+    echo "<tr><td>e-mail</td><td><a href=\"mailto:$email\">$email</a></td><td>e-mail (ΠΣΔ)</td><td><a href=\"mailto:$email_psd\">$email_psd</a></td></tr>";
+    
+    // AFM (only for user level < 3)
     if ($usrlvl < 3){
-        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
-    } else {
-        echo "<tr><td></td><td></td><td>Α.Μ.</td><td>$am</td></tr>";
+        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
     }
-    echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
+    
+    // Additional personal data in expandable section
+    if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
+        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+        echo "<td colspan=3><div class=\"slidingDiv\">";
+        echo "Τηλέφωνο: ".$tel."<br>";
+        // only for user_level < 3
+        if ($usrlvl < 3){
+            echo "Διεύθυνση: ".$address."<br>";
+            echo "ΑΔΤ: ".$idnum."<br>";
+            echo "AMKA: ".$amka."<br>";
+            if ($katoikon) {
+                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
+            } else {
+                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
+            }
+            $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
+            $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
+            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
+        
+            idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+        }
+        
+        echo "</div>";
+        echo "</td></tr>";
+    }
+    else
+    {
+        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+        echo "<td colspan=3><div class=\"slidingDiv\">";
+        echo "Δε βρέθηκαν περισσότερα στοιχεία για τον/-ην υπάλληλο.<br>";
+        echo "O/H υπάλληλος δε μισθοδοτείται από τη Δ/νση Ηρακλείου<br>";
+        echo "ή δεν έχουν καταχωρηθεί στοιχεία.";
+        echo "</div>";
+        echo "</td></tr>";   
+    }
+    
+    // ========== ΥΠΗΡΕΣΙΑΚΑ (Service Information) ==========
+    echo "<tr><td colspan=4 class='separator'>Υπηρεσιακα</td></tr>";
+    echo "<tr><td>Α.Μ.</td><td>$am</td><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection, true)."</td></tr>";
+    echo "<tr><td>Κατάσταση</td><td>$katast</td><td>Βαθμός</td><td>$vathm</td></tr>";
+    
     $hm_mk = date('d-m-Y', strtotime($hm_mk));
     if ($hm_mk > "01-01-1970") {
-        echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td></tr>";
+        echo "<tr><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td><td></td><td></td></tr>";
     } else {
-        echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk</td></tr>";
+        echo "<tr><td>Μ.Κ.</td><td>$mk</td><td></td><td></td></tr>";
     }
 
     // monimopoihsh - aksiologhsh
     echo "<tr><td>Μονιμοποίηση /<br>Απόφαση μονιμοποίησης</td>";
     echo $monimopoihsh ? 
-        "<td>NAI<br>$monimopoihsh_apof</td>" :
+        "<td>ΝΑΙ<br>$monimopoihsh_apof</td>" :
         "<td>ΟΧΙ</td>";
 
-    echo "<td>Αξιολόγηση /<br>Ημ/νία τελ.αξιολόγησης</td></td>";
+    echo "<td>Αξιολόγηση /<br>Ημ/νία τελ.αξιολόγησης</td>";
     if ($aksiologhsh) {
         echo "<td>ΝΑΙ<br>";
         echo $aksiologhsh_date>'2000-11-30'? date("d-m-Y", strtotime($aksiologhsh_date))."</td>" : "</td>";
@@ -1092,6 +1127,7 @@ elseif ($_GET['op']=="view") {
     echo "</tr>";
 
     echo "<tr><td>ΦΕΚ Διορισμού</td><td>$fek_dior</td><td>Ημ/νία Διορισμού</td><td>".date('d-m-Y', strtotime($hm_dior))."</td></tr>";
+    
     switch ($met_did)
     {
     case 0:
@@ -1113,24 +1149,15 @@ elseif ($_GET['op']=="view") {
 
     echo "<tr><td>Ημ/νία Ανάληψης</td><td>".date('d-m-Y', strtotime($hm_anal))."</td>";
     echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm' onclick=\"window.open('postgrad.php?op=list&afm=$afm','newwindow','width=1000,height=500');return false;\">(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
-    //echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm'>(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
-
-    $ymd=days2ymd($proyp);
-    $temp = "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td>";
-    //}
+    
+    echo "<tr><td>Ώρες υποχρ. ωραρίου</td><td>$wres</td><td></td><td></td></tr>";
+    
+    // Calculate anatr for service times section
     $hm_dior_org = $hm_dior;
-    // if hm_anal-hm_dior > 30
-    //$dt1 = strtotime($hm_anal);
-    //$dt2 = strtotime($hm_dior);
-    //if (abs($dt1-$dt2) > 30)
-    //    $hm_dior = $hm_anal;
-                
-    // 20-09-2013 - changed to hm_anal if diafora > 30 days
     $dt1 = strtotime($hm_anal);
     $dt2 = strtotime($hm_dior);
     $diafora = abs($dt1 - $dt2);
     $diafora = $diafora/86400;
-    //echo $diafora;
     if ($diafora > 30) {
         $d1 = strtotime($hm_anal);
         $hm_dior = $hm_anal;
@@ -1138,19 +1165,7 @@ elseif ($_GET['op']=="view") {
     else {
         $d1 = strtotime($hm_dior);
     }
-        
-    // Met h/kai did MONO gia katataksi
-    /*
-    if ($met_did==1)
-    $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp - 720;
-    else if ($met_did==2)
-    $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp - 2160;
-    else if ($met_did==3)
-    $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp - 2520;
-    else
-       */
-    // 27-02-2014: add aney to anatr
-    //$anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp;
+    
     $days_aney = 0;
     if ($aney && strtotime($aney_ews) > date("Y-m-d")) {
         $dtd = strtotime(date('Y-m-d'));
@@ -1165,18 +1180,22 @@ elseif ($_GET['op']=="view") {
     }
     $aney = $aney_xr + $days_aney;
     $anatr = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $proyp + $aney;
-    //$anatr_not = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp_not + $aney;
     $ymd = days2date($anatr);
-        
-    echo "$temp<td>Ανατρέχει</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td></tr>";
+    
+    // ========== ΧΡΟΝΟΙ ΥΠΗΡΕΣΙΑΣ (Service Times) ==========
+    echo "<tr><td colspan=4 class='separator'>Χρονοι υπηρεσιας</td></tr>";
+    
+    $ymd_proyp = days2ymd($proyp);
+    echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη: $ymd_proyp[0] &nbsp; Μήνες: $ymd_proyp[1] &nbsp; Ημέρες: $ymd_proyp[2]</td>";
+    echo "<td>Ανατρέχει</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td></tr>";
     
     $ymdnot = days2ymd($proyp_not);
     $ymdwrario = days2ymd($proyp_wrario);
     echo "<tr>";
-    echo "<td>Προϋπηρεσία που δε λαμβάνεται υπ'όψιν για μείωση ωραρίου</td><td>Έτη: $ymdnot[0] &nbsp; Μήνες: $ymdnot[1] &nbsp; Ημέρες: $ymdnot[2] </td>";
-    echo "<td>Προϋπηρεσία που λαμβάνεται υπ'όψιν για μείωση ωραρίου<br>(όχι στη συνολική)</td><td>Έτη: $ymdwrario[0] &nbsp; Μήνες: $ymdwrario[1] &nbsp; Ημέρες: $ymdwrario[2] </td>";
+    echo "<td>Προϋπηρεσία που δε λαμβάνεται υπ'όψιν για μείωση ωραρίου</td><td>Έτη: $ymdnot[0] &nbsp; Μήνες: $ymdnot[1] &nbsp; Ημέρες: $ymdnot[2]</td>";
+    echo "<td>Προϋπηρεσία που λαμβάνεται υπ'όψιν για μείωση ωραρίου<br>(όχι στη συνολική)</td><td>Έτη: $ymdwrario[0] &nbsp; Μήνες: $ymdwrario[1] &nbsp; Ημέρες: $ymdwrario[2]</td>";
+    echo "</tr>";
     
-    echo "</tr>";                
     // aney
     echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
     if ($aney) {
@@ -1185,13 +1204,10 @@ elseif ($_GET['op']=="view") {
         echo "<input type='checkbox' name='aney' disabled>";
     }
     if ($aney && $aney_apo && $aney_ews) {
-        // date('d-m-Y',strtotime($hm_dior))
         echo "<small>(Από ".date('d-m-Y', strtotime($aney_apo))." έως ".date('d-m-Y', strtotime($aney_ews)).")</small>";
     }
     $aney_ymd = days2ymd($aney_xr);
     echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
-    //
-    echo "<tr><td>Ώρες υποχρ. ωραρίου:</td><td>$wres</td><td>e-mail:<br>e-mail (ΠΣΔ):</td><td><a href=\"mailto:$email\">$email</a><br><a href=\"mailto:$email_psd\">$email_psd</a></td></tr>";
     echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br(stripslashes($comments))."</td></tr>"; 
     echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
     echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
