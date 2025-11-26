@@ -45,7 +45,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       }
       
       .info-section-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4f8188 0%, #30b7cb 100%);
         color: #ffffff;
         padding: 16px 24px;
         font-weight: 600;
@@ -228,6 +228,46 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
           padding: 16px;
         }
       }
+
+      /* Dynamiko table styling */
+      #dynamiko-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 24px 0;
+        font-size: 0.95rem;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+      }
+
+      #dynamiko-table th,
+      #dynamiko-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        text-align: center;
+      }
+
+      #dynamiko-table thead {
+        background: linear-gradient(135deg,rgb(113, 153, 209),rgb(89, 105, 140));
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      #dynamiko-table thead th {
+        color: #ffffff;
+        font-size: 0.9rem;
+        text-shadow: 0 2px 6px rgba(15, 23, 42, 0.45);
+      }
+
+      #dynamiko-table tbody tr:nth-child(odd) {
+        background: #f8fafc;
+      }
+
+      #dynamiko-table tbody tr:last-child td {
+        border-bottom: none;
+      }
       
       /* Personnel Tab Accordion Styling */
       #personnel-accordion {
@@ -235,7 +275,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       }
       
       #personnel-accordion .ui-accordion-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4f8188 0%, #30b7cb 100%);
         color: #ffffff;
         border: none;
         border-radius: 8px !important;
@@ -248,13 +288,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       }
       
       #personnel-accordion .ui-accordion-header:hover {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        background: linear-gradient(135deg,rgb(120, 162, 75) 0%,rgb(137, 234, 102) 100%);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
       }
       
       #personnel-accordion .ui-accordion-header-active {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        background: linear-gradient(135deg,rgb(127, 144, 146) 0%,rgb(142, 197, 205) 100%);
         border-radius: 8px 8px 0 0 !important;
       }
       
@@ -498,7 +538,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($type == 1 || $type == 2) {
             // Organizational Information Section
             echo "<div class='info-section'>";
-            echo "<div class='info-section-header'>Οργανωτικά Στοιχεία</div>";
+            echo "<div class='info-section-header'>Οργανικότητα - Λειτουργικότητα</div>";
             echo "<div class='info-section-content'>";
             echo "<div class='info-grid'>";
             echo "<div class='info-item'>";
@@ -939,8 +979,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($type == 1) {
             if ($synolo>0) {
             echo "<h3>Μαθητικό Δυναμικό</h3>";
-            echo "<table class=\"imagetable\" border='1'>";
-            echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολοήμερο</i></td><td class='tdnone'><i>Πρωινή Ζώνη</i></td></tr>";
+            echo "<table id='dynamiko-table' border='1'>";
+            echo "<thead><tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολοήμερο</i></td><td class='tdnone'><i>Πρωινή Ζώνη</i></td></tr></thead>";
+            echo "<tbody>";
             $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
             echo "<tr><td>Μαθ.Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td>";
             echo "<td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
@@ -991,6 +1032,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</table>";
                 echo "</div>";
             }
+            echo "</tbody>";
             echo "</table>";
             echo "<br>";
             }
@@ -1023,11 +1065,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
                 // Μαθητές
                 echo "<h3>Μαθητές</h3>";
-                echo "<table class=\"imagetable\" border='1'>";
+                echo "<table id='dynamiko-table' border='1'>";
                 $ola = $klasiko_nip + $klasiko_pro;
                 $olola = $oloimero_syn_nip + $oloimero_syn_pro;
-                echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
-                echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
+                echo "<thead><tr><td rowspan=2>Τμημα</td><td colspan=3>Κλασικο</small></td><td colspan=3>Ολοημερο</td></tr>";
+                echo "<tr><td>Νηπια</td><td>Προνηπια</td><td>Συνολο</td><td>Νηπια</td><td>Προνηπια</td><td>Συνολο</td></tr>";
+                echo "</thead>";
+                echo "<tbody>";
                 // t1
                 $syn = $klasiko_exp[0]+$klasiko_exp[1];
                 $tmimata_nip = 1;

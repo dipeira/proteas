@@ -1,4 +1,4 @@
-![logo](/images/logo.png)
+![logo](/images/pr_logo.png)
 
 # Πρωτέας
 
@@ -87,9 +87,10 @@ Mπορείτε να λάβετε βοήθεια:
 - [SwiftMailer](https://swiftmailer.symfony.com/)
 - [Simple PHP/MySQL authentication/login class](http://www.emirplicanic.com/php/simple-phpmysql-authentication-class)
 - [Paginator](https://code.tutsplus.com/tutorials/how-to-paginate-data-with-php--net-2928)
+- [Tailwind CSS](https://tailwindcss.com)
 
 Το σύστημα βρίσκεται υπό συνεχή ανάπτυξη, ανάλογα με τις ανάγκες της Δ/νσης Π.Ε. Ηρακλείου.
 
 
 
-(c) 2021
+(c) 2025

@@ -157,6 +157,7 @@ else {
         .imagetable tbody td:first-child {
             text-align: center;
             padding: 12px 8px;
+            vertical-align: middle;
         }
         
         .imagetable tbody td:first-child a {
@@ -325,17 +326,17 @@ else {
     </style>
     <script type="text/javascript">        
       $().ready(function() {
-          $("#org").autocomplete("employee/get_school.php", {
+          $("#org").autocomplete("get_school.php", {
             width: 260,
             matchContains: true,
             selectFirst: false
           });
-          $("#yphr").autocomplete("employee/get_school.php", {
+          $("#yphr").autocomplete("get_school.php", {
             width: 260,
             matchContains: true,
             selectFirst: false
           });
-          $("#surname").autocomplete("employee/get_name.php", {
+          $("#surname").autocomplete("get_name.php", {
             width: 260,
             matchContains: true,
             //mustMatch: true,
@@ -440,7 +441,7 @@ if ( isset($_REQUEST['yphr']) && strlen($_REQUEST['yphr'])>0) {
     // if ektaktos
 if (isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 && isset($_POST['pinakas']) && $_POST['pinakas']==1) {
     $surn = explode(' ', $_POST['surname'])[0];
-    $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
+    $url = "ektaktoi_list.php?surname=".urlencode($surn);
     echo "<script>window.location = '$url'</script>";
 }
 if ( isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0) {
@@ -516,7 +517,7 @@ if ($result) {
     // added 24-01-2013 - when 1 result, redirect to that employee page
 if ($num_record == 1 && $num_record1 > 1) {
     $id = mysqli_result($result, 0, "id");
-    $url = "employee/employee.php?id=$id&op=view";
+    $url = "employee.php?id=$id&op=view";
     echo "<script>window.location = '$url'</script>";
 }
 echo "<div style='margin: 0 auto; padding: 0 20px;'>";
@@ -593,14 +594,14 @@ if ($num == 0) {
         }
                   
         echo "<tr><td>";
-        echo "<span title=\"Προβολή\"><a href=\"employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;&nbsp;";
+        echo "<span title=\"Προβολή\"><a href=\"employee.php?id=$id&op=view\" class=\"action-icon view\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 12a2 2 0 100-4 2 2 0 000 4z\"></path><path fill-rule=\"evenodd\" d=\"M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z\" clip-rule=\"evenodd\"></path></svg></a></span>";
         if ($usrlvl < 3) {
-            echo "<span title=\"Επεξεργασία\"><a href=\"employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
+            echo "<span title=\"Επεξεργασία\"><a href=\"employee.php?id=$id&op=edit\" class=\"action-icon edit\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z\"></path></svg></a></span>";
         }
         if ($usrlvl < 2) {
-            echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+            echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee.php?id=$id&op=delete')\" class=\"action-icon delete\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" d=\"M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z\" clip-rule=\"evenodd\"></path></svg></a></span>";
         } else {
-            echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></span>";
+            echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><span class=\"action-icon delete disabled\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" d=\"M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z\" clip-rule=\"evenodd\"></path></svg></span></span>";
         }
         echo "</td>";
         echo "<td><a class='underline' href=\"employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
@@ -612,7 +613,7 @@ if ($num == 0) {
     echo "</tbody>\n";
     //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
 if ($usrlvl < 2) {
-    echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%); border-top: 2px solid #22c55e;'><a href=\"employee/employee.php?op=add\" style='color: #16a34a; font-weight: 600; font-size: 0.9375rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;'><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>➕ Προσθήκη εκπαιδευτικού</a></td></tr>";
+    echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%); border-top: 2px solid #22c55e;'><a href=\"employee.php?op=add\" style='color: #16a34a; font-weight: 600; font-size: 0.9375rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;'><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>➕ Προσθήκη εκπαιδευτικού</a></td></tr>";
 } else {
     echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: #f9fafb; color: #9ca3af;'><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
 }        

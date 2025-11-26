@@ -53,10 +53,25 @@
         });
     </script>
     <style>
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
         /* Fix width for 'Ονομα' column (3rd column) */
         #mytbl th:nth-child(3),
         #mytbl td:nth-child(3) {
             min-width: 150px;
+            width: auto;
+        }
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+        #mytbl {
+            border-collapse: collapse;
+            min-width: 720px;
             width: auto;
         }
     </style>
@@ -195,10 +210,11 @@
         echo "<script>window.location = '$url'</script>";
     }
     echo "<div style='margin: 0 auto; padding: 0 20px;'>";
+    echo "<div class='page-container'>";
     echo "<div class='page-header'>";
     echo "<h2>Αναπληρωτές</h2>";
     echo "</div>";
-    echo "<div style='display: flex; justify-content: center;'>";
+    echo "<div class='table-scroll'>";
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead>";
     echo "<tr><th style='min-width: 50px;'>Ενεργεια</th>\n";
@@ -206,7 +222,7 @@
     echo "<th style='min-width: 150px;'>Ονομα</th>\n";
     echo "<th>Ειδικοτητα</th>\n";
     echo "<th>Σχ.Υπηρετησης</th>\n";
-    echo "<th>Τύπος Απασχολησης</th>\n";
+    // echo "<th>Τύπος Απασχολησης</th>\n";
     echo "<th>Πραξη</th>\n";
     echo "</tr>";
     echo "<tr><form id='src' name='src' action='ektaktoi_list.php' method='POST'>\n";    
@@ -232,14 +248,14 @@
         echo "<td></td><td>\n";
         echo $klpost ? kladosCombo($klpost, $mysqlconnection) : kladosCmb($mysqlconnection);
         echo "</td>\n";
-        echo "<div id=\"content\">";
+        // echo "<div id=\"content\">";
         echo "<form autocomplete=\"off\">";
         echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" value='".getSchool($yppost, $mysqlconnection)."'/></td>";
         echo "</div>";
-        echo "<td>";
+        // echo "<td>";
         //echo "</td>";
-        echo $typepost ? typeCmb1($typepost, $mysqlconnection) : typeCmb($mysqlconnection);
-        echo "</td>";
+        // echo $typepost ? typeCmb1($typepost, $mysqlconnection) : typeCmb($mysqlconnection);
+        // echo "</td>";
         echo "<td>";
         tblCmb($mysqlconnection, 'praxi', $praxipost, 'praxi', 'name');
         echo "</td>";
@@ -263,23 +279,24 @@
                 $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
                 $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
                 $sx_yphrethshs_url = "<a class='underline' href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-                $type = mysqli_result($result, $i, "type");
+                // $type = mysqli_result($result, $i, "type");
                 $praxi = mysqli_result($result, $i, "praxi");
                 $praxi = getNamefromTbl($mysqlconnection, "praxi", $praxi);
                   
                 echo "<tr><td>";
-                echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>&nbsp;";
+                echo "<span title=\"Προβολή\"><a href=\"ektaktoi.php?id=$id&op=view\" class=\"action-icon view\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 12a2 2 0 100-4 2 2 0 000 4z\"></path><path fill-rule=\"evenodd\" d=\"M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z\" clip-rule=\"evenodd\"></path></svg></a></span>";
                 if ($usrlvl < 3) {
-                      echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>&nbsp;";
+                      echo "<span title=\"Επεξεργασία\"><a href=\"ektaktoi.php?id=$id&op=edit\" class=\"action-icon edit\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z\"></path></svg></a></span>";
                 }
                 if ($usrlvl < 2) {
-                      echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+                      echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('ektaktoi.php?id=$id&op=delete')\" class=\"action-icon delete\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" d=\"M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z\" clip-rule=\"evenodd\"></path></svg></a></span>";
                 } else {
-                    echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></span>";
+                    echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><span class=\"action-icon delete disabled\"><svg fill=\"currentColor\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" d=\"M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z\" clip-rule=\"evenodd\"></path></svg></span></span>";
                 }
                 echo "</td>";
-                  $typos = get_type($type, $mysqlconnection);
-                echo "<td><a class='underline' href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td><td>$typos</td><td>$praxi</td>\n";
+                //   $typos = get_type($type, $mysqlconnection);
+                echo "<td><a class='underline' href=\"ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_yphrethshs_url."</td>";//<td>$typos</td>
+                echo "<td>$praxi</td>\n";
                 echo "</tr>";
 
                 $i++;
@@ -349,7 +366,8 @@
         echo "<INPUT TYPE='button' class='btn-red' VALUE='🏠 Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
         echo "</td></tr>";
         echo "</table>\n";
-        ?>
+        ?>  
+        </div>
       </div>
 </div>
   </body>

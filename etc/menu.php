@@ -93,7 +93,7 @@
 		 <li>
 		  <a href="<?=$site_root?>/etc/about.php">Σχετικα</a>
 		 </li>
-		<li class="sub">
+		<li>
 			<a href='<?=$site_root?>/tools/login.php?logout=1'>Eξοδος</a>
 		</ul>
   

@@ -46,7 +46,7 @@ else {
   // Prepare data for permanent teachers chart
   $monimoi_data = array();
   $monimoi_labels = array();
-  $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma FROM employee e 
+  $query = "SELECT COUNT( * ) , k.perigrafh FROM employee e 
               JOIN klados k 
               ON k.id = e.klados 
               WHERE status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde) AND thesi!=5
@@ -54,14 +54,14 @@ else {
               ORDER BY COUNT( * ) DESC";
   $result_mon = mysqli_query($mysqlconnection, $query);
   while ($row = mysqli_fetch_array($result_mon, MYSQLI_NUM)) {
-      $monimoi_labels[] = $row[1] . ' (' . $row[2] . ')';
+      $monimoi_labels[] = $row[1];
       $monimoi_data[] = $row[0];
   }
 
   // Prepare data for substitute teachers chart
   $anapl_data = array();
   $anapl_labels = array();
-  $query = "SELECT COUNT( * ) , k.perigrafh, k.onoma, ek.type
+  $query = "SELECT COUNT( * ) , k.perigrafh, ek.type
               FROM ektaktoi e
               JOIN klados k ON k.id = e.klados
               JOIN ektaktoi_types ek ON e.type = ek.id
@@ -69,7 +69,8 @@ else {
               ORDER BY COUNT( * ) DESC";
   $result_anapl = mysqli_query($mysqlconnection, $query);
   while ($row = mysqli_fetch_array($result_anapl, MYSQLI_NUM)) {
-      $label = $row[3] . ' - ' . $row[1];
+      $espa = $row[2] == 'Αναπληρωτής ΕΣΠΑ' ? 'ΕΣΠΑ' : 'Κρατ.';     
+      $label = $row[1] . ' - ' . $espa;
       $anapl_labels[] = $label;
       $anapl_data[] = $row[0];
   }
@@ -98,7 +99,7 @@ else {
     ?>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type='text/javascript' src='js/jquery.autocomplete.js'></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css" />
+    <link rel="stylesheet" rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="js/jquery_notification_v.1.js"></script>
@@ -396,6 +397,30 @@ else {
     
     <!-- Chart.js Scripts -->
     <script>
+        const formatPieTooltip = function(context) {
+            const datasets = context.chart && context.chart.data && Array.isArray(context.chart.data.datasets)
+                ? context.chart.data.datasets
+                : [];
+            const dataset = datasets[context.datasetIndex] || {};
+            const dataArray = Array.isArray(dataset.data) ? dataset.data : [];
+            let rawValue = 0;
+            if (typeof context.raw !== 'undefined') {
+                rawValue = context.raw;
+            } else if (typeof context.parsed !== 'undefined') {
+                rawValue = context.parsed;
+            } else if (typeof dataArray[context.dataIndex] !== 'undefined') {
+                rawValue = dataArray[context.dataIndex];
+            }
+            const value = Number(rawValue) || 0;
+            const total = dataArray.reduce(function(sum, item) {
+                const numericValue = Number(item);
+                return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+            const label = context.label || dataset.label || '';
+            return label + ': ' + value + ' (' + percentage + '%)';
+        };
+        
         // Color palette
         const colors = [
             '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
@@ -431,11 +456,7 @@ else {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                let label = context.label || '';
-                                let value = context.parsed || 0;
-                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                let percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ' + value + ' (' + percentage + '%)';
+                                return formatPieTooltip(context);
                             }
                         }
                     }
@@ -472,11 +493,7 @@ else {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                let label = context.label || '';
-                                let value = context.parsed || 0;
-                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                let percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ' + value + ' (' + percentage + '%)';
+                                return formatPieTooltip(context);
                             }
                         }
                     }
