@@ -1240,3 +1240,471 @@ body {
 /* table.dataTable thead .sorting_asc {
 	background-image: none !important;
 } */
+
+/* ============================================
+   Modern Datepicker Styling - Matching App Theme
+   Global styles for jQuery UI Datepicker with Greek localization
+   ============================================ */
+
+.ui-datepicker {
+	background: #ffffff !important;
+	border: 2px solid #4FC5D6 !important;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(79, 197, 214, 0.3);
+	font-family: inherit;
+	padding: 0;
+	width: auto;
+	min-width: 200px;
+	max-width: 300px;
+	font-size: 11px;
+	z-index: 10000 !important;
+}
+
+/* Override jQuery UI widget defaults */
+.ui-widget.ui-widget-content {
+	background: #ffffff !important;
+	border: 2px solid #4FC5D6 !important;
+}
+
+.ui-datepicker-header {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	border: none !important;
+	border-radius: 6px 6px 0 0;
+	color: white !important;
+	padding: 6px 0;
+}
+
+.ui-datepicker-title {
+	color: white !important;
+	font-weight: 600;
+	font-size: 11px;
+}
+
+/* Override jQuery UI default header styling */
+.ui-widget-header {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	border: none !important;
+	color: white !important;
+}
+
+.ui-datepicker .ui-widget-header {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	border: none !important;
+	color: white !important;
+}
+
+/* Override jQuery UI default state colors */
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	background: #ffffff !important;
+	border: 1px solid #e5e7eb !important;
+	color: #374151 !important;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover {
+	background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%) !important;
+	border: 1px solid #4FC5D6 !important;
+	color: #2A8B9A !important;
+}
+
+/* Month and Year Selectors - Fix visibility issue */
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	border: 1px solid #bae6fd !important;
+	border-radius: 4px;
+	padding: 2px 4px !important;
+	font-weight: 600;
+	font-size: 11px !important;
+	margin: 0 2px;
+	cursor: pointer;
+	transition: all 0.2s;
+	-webkit-appearance: menulist;
+	-moz-appearance: menulist;
+	appearance: menulist;
+	line-height: 1.2;
+}
+
+/* Ensure dropdown options are visible */
+.ui-datepicker select.ui-datepicker-month option,
+.ui-datepicker select.ui-datepicker-year option {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	padding: 2px 4px;
+	font-size: 11px;
+}
+
+.ui-datepicker select.ui-datepicker-month:hover,
+.ui-datepicker select.ui-datepicker-year:hover {
+	background: #f0f9ff !important;
+	background-color: #f0f9ff !important;
+	border-color: #4FC5D6 !important;
+	box-shadow: 0 0 0 2px rgba(79, 197, 214, 0.2);
+}
+
+.ui-datepicker select.ui-datepicker-month:focus,
+.ui-datepicker select.ui-datepicker-year:focus {
+	outline: none;
+	border-color: #4FC5D6 !important;
+	box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.3);
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+}
+
+/* Additional fix for month/year in header */
+.ui-datepicker .ui-datepicker-title select {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+}
+
+/* General rule for all selects in datepicker */
+.ui-datepicker select {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	border: 1px solid #bae6fd !important;
+	font-size: 11px !important;
+}
+
+.ui-datepicker select option {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	font-size: 11px;
+}
+
+/* Datepicker Navigation Buttons */
+.ui-datepicker-prev,
+.ui-datepicker-next {
+	background: rgba(255, 255, 255, 0.2) !important;
+	border: none !important;
+	border-radius: 4px;
+	color: white !important;
+	cursor: pointer;
+	height: 22px;
+	width: 22px;
+	top: 6px;
+	transition: all 0.2s;
+	overflow: hidden;
+	position: relative;
+	height: 1.5em !important;
+}
+
+/* Override jQuery UI default prev/next styling */
+.ui-datepicker-prev.ui-state-hover,
+.ui-datepicker-next.ui-state-hover {
+	background: rgba(255, 255, 255, 0.3) !important;
+	border: none !important;
+}
+
+.ui-datepicker-prev:hover,
+.ui-datepicker-next:hover {
+	background: rgba(255, 255, 255, 0.3);
+	transform: scale(1.1);
+}
+
+.ui-datepicker-prev .ui-icon,
+.ui-datepicker-next .ui-icon {
+	background: none !important;
+	text-indent: 0 !important;
+	overflow: visible !important;
+	color: white !important;
+	font-weight: bold;
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	width: auto !important;
+	height: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+}
+
+.ui-datepicker-prev .ui-icon:before {
+	content: "‹" !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+	display: block !important;
+	color: white !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: relative !important;
+}
+
+.ui-datepicker-next .ui-icon:before {
+	content: "›" !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+	display: block !important;
+	color: white !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: relative !important;
+}
+
+/* Navigation text links (Previous/Next) - Hide text, show only icons */
+.ui-datepicker-prev a,
+.ui-datepicker-next a {
+	color: white !important;
+	text-decoration: none;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: visible !important;
+	text-align: center;
+	line-height: 22px;
+}
+
+.ui-datepicker-prev a:hover,
+.ui-datepicker-next a:hover {
+	color: white !important;
+	text-decoration: none;
+}
+
+/* Hide the text span if it exists - jQuery UI uses spans for text */
+.ui-datepicker-prev a span,
+.ui-datepicker-next a span {
+	/* display: none !important; */
+	visibility: hidden !important;
+	opacity: 0 !important;
+	width: 0 !important;
+	/* height: 0 !important; */
+	overflow: hidden !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+}
+
+/* Hide any text content in navigation buttons, but keep icons */
+.ui-datepicker-prev,
+.ui-datepicker-next {
+	overflow: visible !important;
+}
+
+/* Hide all text content except icons */
+.ui-datepicker-prev a *:not(.ui-icon),
+.ui-datepicker-next a *:not(.ui-icon) {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+/* But keep the icon visible and properly styled */
+.ui-datepicker-prev .ui-icon,
+.ui-datepicker-next .ui-icon {
+	font-size: 18px !important;
+	text-indent: 0 !important;
+	overflow: visible !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	width: auto !important;
+	height: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* Additional override for jQuery UI default span styling */
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+	/* display: none !important; */
+	/* visibility: hidden !important; */
+	/* opacity: 0 !important; */
+	/* width: 0 !important; */
+	/* height: 0 !important; */
+	overflow: hidden !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+}
+
+/* Ensure text in anchor is hidden but icon is visible */
+.ui-datepicker-prev a,
+.ui-datepicker-next a {
+	font-size: 0 !important;
+	color: transparent !important;
+}
+
+/* Make sure icon text content is visible */
+.ui-datepicker-prev .ui-icon:before,
+.ui-datepicker-next .ui-icon:before {
+	color: white !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	display: block !important;
+}
+
+/* Override jQuery UI default link colors in header */
+.ui-datepicker-header a {
+	color: white !important;
+}
+
+.ui-datepicker-header a:hover {
+	color: white !important;
+}
+
+/* Calendar Table */
+.ui-datepicker-calendar {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	table-layout: fixed;
+}
+
+.ui-datepicker-calendar th,
+.ui-datepicker-calendar td {
+	width: 14.28%;
+	box-sizing: border-box;
+}
+
+.ui-datepicker-calendar thead th {
+	background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+	color: #2A8B9A;
+	font-weight: 600;
+	padding: 4px 2px;
+	border: 1px solid #bae6fd;
+	font-size: 10px;
+	line-height: 1.2;
+}
+
+.ui-datepicker-calendar td {
+	border: 1px solid #e5e7eb;
+	padding: 0;
+}
+
+.ui-datepicker-calendar td a,
+.ui-datepicker-calendar td span {
+	background: #ffffff;
+	color: #374151;
+	display: block;
+	padding: 4px 2px;
+	text-align: center;
+	text-decoration: none;
+	transition: all 0.2s;
+	font-size: 11px;
+	line-height: 1.3;
+}
+
+.ui-datepicker-calendar td a:hover {
+	background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+	color: #2A8B9A;
+	font-weight: 600;
+}
+
+.ui-datepicker-calendar .ui-state-active {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+	color: white !important;
+	font-weight: 700;
+	border: 2px solid #2A8B9A !important;
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.4);
+}
+
+/* Override jQuery UI default active state */
+.ui-datepicker-calendar td.ui-state-active a,
+.ui-datepicker-calendar td.ui-state-active span {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+	color: white !important;
+	border: 2px solid #2A8B9A !important;
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.4) !important;
+}
+
+/* Remove any yellow/gold borders from selected dates */
+.ui-datepicker-calendar td.ui-state-active,
+.ui-datepicker-calendar td.ui-state-active a,
+.ui-datepicker-calendar td.ui-state-active span {
+	border-color: #2A8B9A !important;
+	background-color: transparent !important;
+	background-image: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+}
+
+.ui-datepicker-calendar .ui-state-highlight {
+	background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+	color: #1e40af;
+	font-weight: 600;
+	border: 1px solid #4FC5D6;
+}
+
+.ui-datepicker-calendar .ui-state-disabled {
+	background: #f9fafb;
+	color: #d1d5db;
+	cursor: not-allowed;
+}
+
+.ui-datepicker-calendar .ui-state-disabled span {
+	color: #d1d5db;
+}
+
+/* Today's date styling */
+.ui-datepicker-calendar .ui-datepicker-today a {
+	background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+	color: #2A8B9A !important;
+	font-weight: 700;
+	border: 2px solid #4FC5D6 !important;
+}
+
+/* Override jQuery UI default today styling */
+.ui-datepicker-calendar td.ui-datepicker-today a {
+	background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+	color: #2A8B9A !important;
+	border: 2px solid #4FC5D6 !important;
+}
+
+/* Button Panel */
+.ui-datepicker-buttonpane {
+	background: #f9fafb;
+	border-top: 1px solid #e5e7eb;
+	padding: 4px;
+	text-align: center;
+}
+
+.ui-datepicker-buttonpane button {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+	border: none;
+	border-radius: 4px;
+	color: white;
+	cursor: pointer;
+	font-weight: 600;
+	padding: 4px 12px;
+	font-size: 11px;
+	transition: all 0.2s;
+}
+
+.ui-datepicker-buttonpane button:hover {
+	background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+}
+
+/* Datepicker Input Field */
+.datepicker-input {
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 8px 12px;
+	transition: border-color 0.2s, box-shadow 0.2s;
+	cursor: pointer;
+}
+
+.datepicker-input:hover {
+	border-color: #4FC5D6;
+}
+
+.datepicker-input:focus {
+	outline: none;
+	border-color: #4FC5D6;
+	box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+}

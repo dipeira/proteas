@@ -592,24 +592,6 @@ function display_school_requests($sch, $sxol_etos, $mysqlconnection, $auth = fal
     } else echo "<h3>Δεν έχουν υποβληθεί αιτήματα από τη σχολική μονάδα!</h3>";
 }
 
-function my_calendar($name, $value = null) {
-    $myCalendar = new tc_calendar($name, true, false);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    if ($value) { 
-        $myCalendar->setDate(date('d', strtotime($value)), date('m', strtotime($value)), date('Y', strtotime($value)));
-    } //else {
-    //     $myCalendar->setDate(date("d"), date("m"), date("Y"));
-    // }
-    
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval('2000', '2050');
-    // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-    return $myCalendar;
-}
-
 function shorten_text($text, $length = 200)
 {
     return strlen($text) > $length ? substr($text, 0, $length) . '...' : $text;

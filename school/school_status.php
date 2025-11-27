@@ -2,7 +2,6 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once "../config.php";
   require_once "../include/functions.php";
-  require '../tools/calendar/tc_calendar.php';
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -350,7 +349,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript">
     $(function() {

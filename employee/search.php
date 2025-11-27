@@ -2,7 +2,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once "../include/functions.php";
-  require('../tools/calendar/tc_calendar.php');
+  require_once"../include/functions_controls.php";
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -25,9 +25,11 @@
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
+	<LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../js/datepicker-gr.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
-	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<style>
 		.form-section {
 			background: white;
@@ -403,27 +405,21 @@
 		echo "<div class='date-range-group'>";
 		echo "<div class='date-range-item'>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Από:</label>";
-		$myCalendar = new tc_calendar("hm_dior_from", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->setDatePair('hm_dior_from', 'hm_dior_to');
-		$myCalendar->writeScript();
+		modern_datepicker("hm_dior_from", null, array(
+			'minDate' => '1970-01-01',
+			'maxDate' => date('Y-m-d'),
+			'disabledDays' => array('sun', 'sat'),
+			'yearRange' => '1970:' . date('Y')
+		));
 		echo "</div>";
 		echo "<div class='date-range-item'>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Έως:</label>";
-		$myCalendar = new tc_calendar("hm_dior_to", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->setDatePair('hm_dior_from', 'hm_dior_to');
-		$myCalendar->writeScript();
+		modern_datepicker("hm_dior_to", null, array(
+			'minDate' => '1970-01-01',
+			'maxDate' => date('Y-m-d'),
+			'disabledDays' => array('sun', 'sat'),
+			'yearRange' => '1970:' . date('Y')
+		));
 		echo "</div>";
 		echo "</div>"; // date-range-group
 		echo "</div>"; // form-group
@@ -437,27 +433,21 @@
 		echo "<div class='date-range-group'>";
 		echo "<div class='date-range-item'>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Από:</label>";
-		$myCalendar = new tc_calendar("hm_anal_from", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->setDatePair('hm_anal_from', 'hm_anal_to');
-		$myCalendar->writeScript();
+		modern_datepicker("hm_anal_from", null, array(
+			'minDate' => '1970-01-01',
+			'maxDate' => date('Y-m-d'),
+			'disabledDays' => array('sun', 'sat'),
+			'yearRange' => '1970:' . date('Y')
+		));
 		echo "</div>";
 		echo "<div class='date-range-item'>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Έως:</label>";
-		$myCalendar = new tc_calendar("hm_anal_to", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->setDatePair('hm_anal_from', 'hm_anal_to');
-		$myCalendar->writeScript();
+		modern_datepicker("hm_anal_to", null, array(
+			'minDate' => '1970-01-01',
+			'maxDate' => date('Y-m-d'),
+			'disabledDays' => array('sun', 'sat'),
+			'yearRange' => '1970:' . date('Y')
+		));
 		echo "</div>";
 		echo "</div>"; // date-range-group
 		echo "</div>"; // form-group
@@ -522,14 +512,12 @@
 		echo "</div>";
 		echo "<div>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Συνολική Υπηρεσία έως:</label>";
-		$myCalendar = new tc_calendar("hm_synol", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->setYearInterval(1970, date("Y"));
-		$myCalendar->dateAllow("1970-01-01", "2030-12-31");
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
+		modern_datepicker("hm_synol", null, array(
+			'minDate' => '1970-01-01',
+			'maxDate' => '2030-12-31',
+			'disabledDays' => array('sun', 'sat'),
+			'yearRange' => '1970:' . date('Y')
+		));
 		echo "</div>";
 		echo "</div>";
 		

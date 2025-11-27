@@ -3,7 +3,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   Require_once "../config.php";
   Require_once "../include/functions.php";
-  require_once '../tools/calendar/tc_calendar.php';
+  
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -30,8 +30,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
     <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+    <script type="text/javascript" src="../js/datepicker-gr.js"></script>
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
     <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
@@ -966,47 +965,42 @@ if ($_GET['op']=="edit") {
         "<td><input type=\"checkbox\" name='aksiologhsh' checked >Αξιολογήθηκε" :
         "<td><input type=\"checkbox\" name='aksiologhsh' >Αξιολογήθηκε";
     echo "<br>";
-    my_calendar('aksiologhsh_date', $aksiologhsh_date);
+    modern_datepicker('aksiologhsh_date', $aksiologhsh_date, array(
+        'minDate' => '2020-01-01',
+        'disabledDays' => array('sun', 'sat'),
+        'maxDate' => date('Y-m-d')
+    ));
     echo "</td>";
     echo "</tr>";
 
     echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
     echo "<tr><td>Ημ/νία M.K.</td><td>";
-    $myCalendar = new tc_calendar("hm_mk", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date('d', strtotime($hm_mk)), date('m', strtotime($hm_mk)), date('Y', strtotime($hm_mk)));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
+    modern_datepicker("hm_mk", $hm_mk, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
     echo "</td></tr>";        
                 
     echo "<tr><td>ΦΕΚ Διορισμού</td><td><input type='text' name='fek_dior' value=$fek_dior /></td></tr>";
         
     echo "<tr><td>Ημ/νία Διορισμού</td><td>";
-    $myCalendar = new tc_calendar("hm_dior", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date('d', strtotime($hm_dior)), date('m', strtotime($hm_dior)), date('Y', strtotime($hm_dior)));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
+    modern_datepicker("hm_dior", $hm_dior, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
     echo "</td></tr>";        
         
     echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-    $myCalendar = new tc_calendar("hm_anal", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date('d', strtotime($hm_anal)), date('m', strtotime($hm_anal)), date('Y', strtotime($hm_anal)));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
+    modern_datepicker("hm_anal", $hm_anal, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
     echo "</td></tr>";        
                 
     echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
@@ -1014,6 +1008,32 @@ if ($_GET['op']=="edit") {
     echo "</td></tr>";
     
     echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
+
+    echo "<tr><td>";
+    show_tooltip("Σχολείο Οργανικής","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).");
+        echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
+        echo "<td><input type=\"text\" name=\"org\" id=\"org\" value='$sx_organikhs' size='40' />";
+
+        $count = count($yphr_arr);
+    for ($i=0; $i<$count; $i++)
+        {
+        echo "<tr><td>";
+        show_tooltip("Σχολείο (-α) Υπηρέτησης","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).<br>
+    Πατώντας 'Προσθήκη' προστίθεται μια επιπλέον υπηρέτηση σε άλλο σχολείο, με 'Αφαίρεση' διαγράφεται η υπηρέτηση αυτή.");
+        echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
+        echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
+        echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
+        echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
+        echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
+        echo "</tr>";
+    }       
+    echo "</td></tr>";
+
+    echo "<tr><td>Οργανική σε τμήμα ένταξης</td><td>";
+    echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
+    echo "</td></tr>";
+    echo "<tr>".thesiselectcmb($thesi)."</tr>";
+    echo "<tr>".ent_ty_selectcmb($entty)."</tr>";
     
     // ========== ΧΡΟΝΟΙ ΥΠΗΡΕΣΙΑΣ (Service Times) ==========
     echo "<tr><td colspan=2>Χρονοι υπηρεσιας</td></tr>";
@@ -1034,128 +1054,84 @@ if ($_GET['op']=="edit") {
     }
         echo "</tr>";
         echo "<tr><td>Τρέχουσα άδεια<br>άνευ αποδοχών: (Από / Έως)</td><td>";
-                                
-        $myCalendar = new tc_calendar("aney_apo", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($aney_apo)), date('m', strtotime($aney_apo)), date('Y', strtotime($aney_apo)));
-        $myCalendar->setPath("../tools/calendar/");
-        //$myCalendar->setYearInterval(1970, date("Y"));
-        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-
-        $myCalendar = new tc_calendar("aney_ews", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($aney_ews)), date('m', strtotime($aney_ews)), date('Y', strtotime($aney_ews)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        
+        modern_datepicker("aney_apo", $aney_apo, array(
+            'minDate' => '1980-01-01',
+            'maxDate' => date('Y-m-d')
+        ));
+        echo " / ";
+        modern_datepicker("aney_ews", $aney_ews, array(
+            'minDate' => '1980-01-01'
+        ));
         echo "</td></tr>";
         $aney_ymd = days2ymd($aney_xr);
         echo "<tr><td>Χρόνος παλαιών αδειών<br>άνευ αποδοχών (<small>χωρίς την παραπάνω</small>):</td><td><input type='text' name='aney_y' size='3' value=$aney_ymd[0]> έτη&nbsp;";
         echo "<input type='text' name='aney_m' size='3' value=$aney_ymd[1]> μήνες&nbsp; <input type='text' name='aney_d' size='3' value=$aney_ymd[2]> ημέρες</td></tr>";
         
         // idiwtiko ergo 07-11-2014
-        echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
-    if ($idiwtiko) {
-        echo "<input type='checkbox' name='idiwtiko' checked>";
-    } else {
-            echo "<input type='checkbox' name='idiwtiko'>";
-    }
-        echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
-        $myCalendar = new tc_calendar("idiwtiko_enarxi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_enarxi)), date('m', strtotime($idiwtiko_enarxi)), date('Y', strtotime($idiwtiko_enarxi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        $myCalendar = new tc_calendar("idiwtiko_liksi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_liksi)), date('m', strtotime($idiwtiko_liksi)), date('Y', strtotime($idiwtiko_liksi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        // idiwtiko sympl
-        echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
-    if ($idiwtiko_id) {
-        echo "<input type='checkbox' name='idiwtiko_id' checked>";
-    } else {
-            echo "<input type='checkbox' name='idiwtiko_id'>";
-    }
-        echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
-        $myCalendar = new tc_calendar("idiwtiko_id_enarxi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_id_enarxi)), date('m', strtotime($idiwtiko_id_enarxi)), date('Y', strtotime($idiwtiko_id_enarxi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        $myCalendar = new tc_calendar("idiwtiko_id_liksi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_id_liksi)), date('m', strtotime($idiwtiko_id_liksi)), date('Y', strtotime($idiwtiko_id_liksi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
+    //     echo "<tr><td colspan=2>Ιδιωτικα έργα</td></tr>";
+    //     echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
+    // if ($idiwtiko) {
+    //     echo "<input type='checkbox' name='idiwtiko' checked>";
+    // } else {
+    //         echo "<input type='checkbox' name='idiwtiko'>";
+    // }
+    //     echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
+    //     modern_datepicker("idiwtiko_enarxi", $idiwtiko_enarxi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo " / ";
+    //     modern_datepicker("idiwtiko_liksi", $idiwtiko_liksi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     // idiwtiko sympl
+    //     echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
+    // if ($idiwtiko_id) {
+    //     echo "<input type='checkbox' name='idiwtiko_id' checked>";
+    // } else {
+    //         echo "<input type='checkbox' name='idiwtiko_id'>";
+    // }
+    //     echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
+    //     modern_datepicker("idiwtiko_id_enarxi", $idiwtiko_id_enarxi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo " / ";
+    //     modern_datepicker("idiwtiko_id_liksi", $idiwtiko_id_liksi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
         // idiwtiko end
         // katoikon
-        echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
-    if ($katoikon) {
-        echo "<input type='checkbox' name='katoikon' checked>";
-    } else {
-            echo "<input type='checkbox' name='katoikon'>";
-    }
-        echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
-        $myCalendar = new tc_calendar("katoikon_apo", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($katoikon_apo)), date('m', strtotime($katoikon_apo)), date('Y', strtotime($katoikon_apo)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        $myCalendar = new tc_calendar("katoikon_ews", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($katoikon_ews)), date('m', strtotime($katoikon_ews)), date('Y', strtotime($katoikon_ews)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
+    //     echo "<tr><td colspan=2>Κατ' οίκον διδασκαλία</td></tr>";
+    //     echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
+    // if ($katoikon) {
+    //     echo "<input type='checkbox' name='katoikon' checked>";
+    // } else {
+    //         echo "<input type='checkbox' name='katoikon'>";
+    // }
+    //     echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
+    //     modern_datepicker("katoikon_apo", $katoikon_apo, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo " / ";
+    //     modern_datepicker("katoikon_ews", $katoikon_ews, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
         // katoikon_end
-        
+        echo "<tr><td colspan=2>Σχόλια</td></tr>";
         echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
         
     //new 15-02-2012: implemented with jquery.autocomplete
     echo "<div id=\"content\">";
-    echo "<form autocomplete=\"off\">";
-    echo "<tr><td>";
-    show_tooltip("Σχολείο Οργανικής","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).");
-        echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
-        echo "<td><input type=\"text\" name=\"org\" id=\"org\" value='$sx_organikhs' size='40' />";
+    // echo "<form autocomplete=\"off\">";
+    
 
-        $count = count($yphr_arr);
-    for ($i=0; $i<$count; $i++)
-        {
-        echo "<tr><td>";
-        show_tooltip("Σχολείο (-α) Υπηρέτησης","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).<br>
-    Πατώντας 'Προσθήκη' προστίθεται μια επιπλέον υπηρέτηση σε άλλο σχολείο, με 'Αφαίρεση' διαγράφεται η υπηρέτηση αυτή.");
-        echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a>";
-        echo "</td><td><input type=\"text\" name=\"yphr[]\" value='$yphr_arr[$i]' class=\"yphrow\" id=\"yphrow\" size=40/>";
-        echo "&nbsp;&nbsp;<input type=\"text\" name=\"hours[]\" value='$hours_arr[$i]' size=1 />";
-        echo "&nbsp;<input class=\"addRow\" type=\"button\" value=\"Προσθήκη\" />";
-        echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
-        echo "</tr>";
-    }       
-    echo "</div>";
-
-    echo "<tr><td>Οργανική σε τμήμα ένταξης</td><td>";
-    echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
-    echo "</td></tr>";
-    echo "<tr>".thesiselectcmb($thesi)."</tr>";
-    echo "<tr>".ent_ty_selectcmb($entty)."</tr>";
+    
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
     echo "	<input type='submit' value='Αποθήκευση'>";
@@ -1404,15 +1380,11 @@ elseif ($_GET['op']=="view") {
     // Service time form
     echo "<form id='yphrfrm' name='yphrfrm' action='' method='POST'>";
     echo "<tr><td>Χρόνοι Υπηρεσίας</td><td>";
-    $myCalendar = new tc_calendar("yphr", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date('d'), date('m'), date('Y'));
-    $myCalendar->setPath("../tools/calendar/");
-    // allow from diorismos 
-    $myCalendar->dateAllow($hm_dior, date("2050-01-01"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
+    modern_datepicker("yphr", date('Y-m-d'), array(
+        'minDate' => $hm_dior,
+        'maxDate' => '2050-01-01',
+        'disabledDays' => array('sun', 'sat')
+    ));
     echo "<br>";
     echo "<input type='hidden' name='id' value=$id>";
     echo "<input type='hidden' name='proyp_not' value=$proyp_not>";
@@ -1565,28 +1537,22 @@ if ($_GET['op']=="add") {
     echo "<tr><td>ΦΕΚ Διορισμού</td><td><input type='text' name='fek_dior' /></td></tr>";
                 
     echo "<tr><td>Ημ/νία Διορισμού</td><td>";
-    $myCalendar = new tc_calendar("hm_dior", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date("d"), date("m"), date("Y"));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
+    modern_datepicker("hm_dior", date('Y-m-d'), array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
         
     echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-    $myCalendar = new tc_calendar("hm_anal", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date("d"), date("m"), date("Y"));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
+    modern_datepicker("hm_anal", date('Y-m-d'), array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
                 
     echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
     metdidCombo(0);

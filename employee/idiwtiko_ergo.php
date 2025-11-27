@@ -2,7 +2,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../include/functions.php";
-  require '../tools/calendar/tc_calendar.php';
+  require_once"../include/functions_controls.php";
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -18,6 +18,9 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Ιδιωτικό έργο</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
+    <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../js/datepicker-gr.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/common.js"></script>
     <script type="text/javascript">
@@ -25,7 +28,6 @@
             $("#mytbl").tablesorter({widgets: ['zebra']}); 
         });
     </script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
   </head>
   <body> 
     <?php require '../etc/menu.php'; ?>
@@ -78,15 +80,11 @@
                     echo "</select></td></tr>";
                     echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot_no' value='".$row['prot_no']."'/></td></tr>";
                     echo "<tr><td>Ημ/νία πρωτοκόλλου</td><td>";
-                    $myCalendar = new tc_calendar("prot_date", true);
-                    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                    $date = $row['prot_date'];
-                    $myCalendar->setDate(date('d', strtotime($date)), date('m', strtotime($date)), date('Y', strtotime($date)));
-                    $myCalendar->setPath("../tools/calendar/");
-                    $myCalendar->dateAllow("2019-01-01", "2040-12-31");
-                    $myCalendar->setAlignment("left", "bottom");
-                    $myCalendar->disabledDay("sun,sat");
-                    $myCalendar->writeScript();
+                    modern_datepicker("prot_date", $row['prot_date'], array(
+                        'minDate' => '2019-01-01',
+                        'maxDate' => '2040-12-31',
+                        'disabledDays' => array('sun', 'sat')
+                    ));
                     echo "</td></tr>";
                     echo "<tr><td>Πράξη</td><td><input type='text' name='praxi' value='".$row['praxi']."'/></td></tr>";
                     echo "<tr><td>Α.Δ.Α.</td><td><input type='text' name='ada' value='".$row['ada']."'/></td></tr>";
@@ -119,14 +117,11 @@
                     echo "<tr><td>Τύπος έργου</td><td><select name='type'><option value=''>Επιλέξτε τύπο</option><option value='Ιδιωτικό'>Ιδιωτικό</option><option value='Δημόσιο'>Δημόσιο</option></select></td></tr>";
                     echo "<tr><td>Αρ.Πρωτ.</td><td><input type='text' name='prot_no' /></td></tr>";
                     echo "<tr><td>Ημ/νία πρωτοκόλλου</td><td>";
-                    $myCalendar = new tc_calendar("prot_date", true);
-                    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-                    $myCalendar->setDate(date("d"), date("m"), date("Y"));
-                    $myCalendar->setPath("../tools/calendar/");
-                    $myCalendar->dateAllow("2019-01-01", "2040-12-31");
-                    $myCalendar->setAlignment("left", "bottom");
-                    $myCalendar->disabledDay("sun,sat");
-                    $myCalendar->writeScript();
+                    modern_datepicker("prot_date", date('Y-m-d'), array(
+                        'minDate' => '2019-01-01',
+                        'maxDate' => '2040-12-31',
+                        'disabledDays' => array('sun', 'sat')
+                    ));
                     echo "</td></tr>";
                     echo "<tr><td>Πράξη</td><td><input type='text' name='praxi' /></td></tr>";
                     echo "<tr><td>Α.Δ.Α.</td><td><input type='text' name='ada' /></td></tr>";

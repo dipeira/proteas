@@ -2,8 +2,7 @@
     header('Content-type: text/html; charset=utf-8'); 
     require_once"../config.php";
     require_once"../include/functions.php";
-        require '../tools/calendar/tc_calendar.php';  
-
+    require_once"../include/functions_controls.php";
         session_start();
 ?>    
   <html>
@@ -15,7 +14,7 @@
         <script type="text/javascript" src="../js/jquery.validate.js"></script>
         <script src="../js/select2.min.js"></script>
         <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+        <script type="text/javascript" src="../js/datepicker-gr.js"></script>
         <script type="text/javascript">
             $(document).ready(function() { 
             $("#mytbl").tablesorter({widgets: ['zebra']}); 
@@ -72,14 +71,11 @@ while ($row = mysqli_fetch_array($result)){
         echo "</td></tr>";
         
         echo "<tr><td>Ημερομηνία πρόσληψης:</td><td>";
-        $myCal = new tc_calendar("date", true);
-        $myCal->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCal->setDate(date('d'), date('m'), date('Y'));
-        $myCal->setPath("../tools/calendar/");
-        $myCal->setYearInterval(1970, 2030);
-        $myCal->dateAllow("1970-01-01", date("2030-01-01"));
-        $myCal->setAlignment("left", "bottom");
-        $myCal->writeScript();
+        modern_datepicker("date", date('Y-m-d'), array(
+            'minDate' => '2020-01-01',
+            'maxDate' => '2030-12-31',
+            'disabledDays' => array('sun', 'sat')
+        ));
         echo "</td></tr>";
         echo "<tr><td>Τύπος πρόσληψης</td><td>";
         typeCmb($mysqlconnection);

@@ -2,7 +2,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../include/functions.php";
-  require('../tools/calendar/tc_calendar.php');
+  
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -29,8 +29,8 @@
 	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-        <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
-	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+	<script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
+	<script type="text/javascript" src="../js/datepicker-gr.js"></script>
         <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
         <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
@@ -554,15 +554,12 @@ if ($_GET['op']=="add")
         
         //echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
         echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-        $myCalendar = new tc_calendar("hm_anal", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date("d"), date("m"), date("Y"));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setYearInterval(1970, date("Y"));
-        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->disabledDay("sun,sat");
-        $myCalendar->writeScript();
+        modern_datepicker("hm_anal", date('Y-m-d'), array(
+            'minDate' => '2020-01-01',
+            'maxDate' => date('Y-m-d'),
+            'disabledDays' => array('sun', 'sat'),
+            'yearRange' => '2020:' . date('Y')
+        ));
         echo "</td></tr>";		
                         
         echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
@@ -648,26 +645,16 @@ if ($_GET['op']=="edit")
         //echo "<tr><td>Ανάληψη</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
         
         echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-        $myCalendar = new tc_calendar("hm_anal", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
-        $myCalendar->setPath("../tools/calendar/");
-        // $myCalendar->setYearInterval(1970, date("Y"));
-        // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->disabledDay("sun,sat");
-        $myCalendar->writeScript();
+        modern_datepicker("hm_anal", $hm_anal, array(
+            'minDate' => '2020-01-01',
+            'maxDate' => date('Y-m-d'),
+            'disabledDays' => array('sun', 'sat')
+        ));
         echo "</td></tr>";
         echo "<tr><td>Ημ/νία αποχώρησης</td><td>";
-        $myCalendar = new tc_calendar("hm_apox", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d',strtotime($hm_apox)),date('m',strtotime($hm_apox)),date('Y',strtotime($hm_apox)));
-        $myCalendar->setPath("../tools/calendar/");
-        // $myCalendar->setYearInterval(1970, date("Y"));
-        // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        //$myCalendar->disabledDay("sun,sat");
-        $myCalendar->writeScript();
+        modern_datepicker("hm_apox", $hm_apox, array(
+            'minDate' => '2020-01-01'
+        ));
         echo "</td></tr>";		
                         
         echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
@@ -992,11 +979,9 @@ elseif ($_GET['op']=="view")
         
         //Form gia Bebaiwsh
         echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
-        $myCalendar = new tc_calendar("sel_date", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setDate(date('d'), date('m'), date('Y'));
-        $myCalendar->writeScript();
+        modern_datepicker("sel_date", date('Y-m-d'), array(
+            'minDate' => '2020-01-01'
+        ));
         echo "<br>";
         echo "<input type='hidden' name='surname' value=$surname>";
         echo "<input type='hidden' name='name' value=$name>";

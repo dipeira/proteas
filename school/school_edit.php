@@ -2,7 +2,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once "../include/functions.php";
-  require '../tools/calendar/tc_calendar.php';
+  require_once"../include/functions_controls.php";
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -315,11 +315,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
+    <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../js/datepicker-gr.js"></script>
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
-    <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+    <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/>
     <link href="../css/select2.min.css" rel="stylesheet" />
     <script src="../js/select2.min.js"></script>
     <script type="text/javascript">    
@@ -829,26 +831,42 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<div class='form-item'>";
                     echo "<label class='form-label'>Από</label>";
                     echo "<div>";
-                    my_calendar('thiteia_apo', $thiteia_apo);
+                    modern_datepicker('thiteia_apo', $thiteia_apo, array(
+                        'minDate' => '2000-01-01',
+                        'maxDate' => '2050-12-31',
+                        'disabledDays' => array('sun', 'sat')
+                    ));
                     echo "</div>";
                     echo "</div>";
                     echo "<div class='form-item'>";
                     echo "<label class='form-label'>Έως</label>";
                     echo "<div>";
-                    my_calendar('thiteia_ews', $thiteia_ews);
+                    modern_datepicker('thiteia_ews', $thiteia_ews, array(
+                        'minDate' => '2000-01-01',
+                        'maxDate' => '2050-12-31',
+                        'disabledDays' => array('sun', 'sat')
+                    ));
                     echo "</div>";
                     echo "</div>";
                 } else {
                     echo "<div class='form-item'>";
                     echo "<label class='form-label'>Από</label>";
                     echo "<div>";
-                    my_calendar('thiteia_apo', $thiteia_apo);
+                    modern_datepicker('thiteia_apo', $thiteia_apo, array(
+                        'minDate' => '2000-01-01',
+                        'maxDate' => '2050-12-31',
+                        'disabledDays' => array('sun', 'sat')
+                    ));
                     echo "</div>";
                     echo "</div>";
                     echo "<div class='form-item'>";
                     echo "<label class='form-label'>Έως</label>";
                     echo "<div>";
-                    my_calendar('thiteia_ews', $thiteia_ews);
+                    modern_datepicker('thiteia_ews', $thiteia_ews, array(
+                        'minDate' => '2000-01-01',
+                        'maxDate' => '2050-12-31',
+                        'disabledDays' => array('sun', 'sat')
+                    ));
                     echo "</div>";
                     echo "</div>";
                 }
@@ -940,13 +958,21 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<div class='form-item'>";
                 echo "<label class='form-label'>Από</label>";
                 echo "<div>";
-                my_calendar('thiteia_apo', $thiteia_apo);
+                modern_datepicker('thiteia_apo', $thiteia_apo, array(
+                    'minDate' => '2000-01-01',
+                    'maxDate' => '2050-12-31',
+                    'disabledDays' => array('sun', 'sat')
+                ));
                 echo "</div>";
                 echo "</div>";
                 echo "<div class='form-item'>";
                 echo "<label class='form-label'>Έως</label>";
                 echo "<div>";
-                my_calendar('thiteia_ews', $thiteia_ews);
+                modern_datepicker('thiteia_ews', $thiteia_ews, array(
+                    'minDate' => '2000-01-01',
+                    'maxDate' => '2050-12-31',
+                    'disabledDays' => array('sun', 'sat')
+                ));
                 echo "</div>";
                 echo "</div>";
                 

@@ -2,8 +2,8 @@
   header('Content-type: text/html; charset=utf-8');
   require_once"../config.php";
   require_once"../include/functions.php";
+  require_once"../include/functions_controls.php";
   require_once '../tools/num2word.php';
-  require('../tools/calendar/tc_calendar.php');
 
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -24,10 +24,12 @@
     require '../etc/head.php'; 
     ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+	<script type="text/javascript" src="../js/datepicker-gr.js"></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
 	<style>
 		/* Button container styling */
@@ -245,42 +247,29 @@
 
 			echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' value=\"$prot_apof\" /></td></tr>";
 			echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
-			$myCalendar = new tc_calendar("hm_apof", true);
-			$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-			$myCalendar->setDate(date("d"), date("m"), date("Y"));
-			$myCalendar->setDate(date('d',strtotime($hm_apof)),date('m',strtotime($hm_apof)),date('Y',strtotime($hm_apof)));
-			$myCalendar->setPath("../tools/calendar/");
-			$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-			$myCalendar->setAlignment("left", "bottom");
-			//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-			$myCalendar->disabledDay("sun,sat");
-			$myCalendar->writeScript();
+			modern_datepicker("hm_apof", $hm_apof, array(
+				'minDate' => '2011-01-01',
+				'maxDate' => '2030-12-31',
+				'disabledDays' => array('sun', 'sat')
+			));
 			echo "</td></tr>";
 									
 			echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' value=\"$prot\" /></td></tr>";
 									
 			echo "<tr><td>Ημ/νία Πρωτοκόλου</td><td>";
-			$myCalendar = new tc_calendar("hm_prot", true);
-			$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-			$myCalendar->setDate(date("d"), date("m"), date("Y"));
-			$myCalendar->setDate(date('d',strtotime($hm_prot)),date('m',strtotime($hm_prot)),date('Y',strtotime($hm_prot)));
-			$myCalendar->setPath("../tools/calendar/");
-			$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-			$myCalendar->setAlignment("left", "bottom");
-			//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-			$myCalendar->disabledDay("sun,sat");
-			$myCalendar->writeScript();
+			modern_datepicker("hm_prot", $hm_prot, array(
+				'minDate' => '2011-01-01',
+				'maxDate' => '2030-12-31',
+				'disabledDays' => array('sun', 'sat')
+			));
 			echo "</td></tr>";
 									
 			echo "<tr><td>Ημ/νία αίτησης</td><td>";
-			$myCalendar = new tc_calendar("date", true);
-			$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-			$myCalendar->setDate(date('d',strtotime($date)),date('m',strtotime($date)),date('Y',strtotime($date)));
-			$myCalendar->setPath("../tools/calendar/");
-			$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-			$myCalendar->setAlignment("left", "bottom");
-			$myCalendar->disabledDay("sun,sat");
-			$myCalendar->writeScript();
+			modern_datepicker("date", $date, array(
+				'minDate' => '2011-01-01',
+				'maxDate' => '2030-12-31',
+				'disabledDays' => array('sun', 'sat')
+			));
 			echo "</td></tr>";
 
 			echo "<tr><td>Βεβαίωση / Δήλωση</td><td>";
@@ -304,29 +293,19 @@
 			echo "<tr><td>Ημέρες</td><td><input type='text' name='days' value=\"$days\" /></td></tr>";
 
 			echo "<tr><td>Ημ/νία έναρξης</td><td>";
-			$myCalendar = new tc_calendar("start", true);
-			$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-			//$myCalendar->setDate(date("d"), date("m"), date("Y"));
-			$myCalendar->setDate(date('d',strtotime($start)),date('m',strtotime($start)),date('Y',strtotime($start)));
-			$myCalendar->setPath("../tools/calendar/");
-			$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-			$myCalendar->setAlignment("left", "bottom");
-			//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-			$myCalendar->disabledDay("sun,sat");
-			$myCalendar->writeScript();
+			modern_datepicker("start", $start, array(
+				'minDate' => '2011-01-01',
+				'maxDate' => '2030-12-31',
+				'disabledDays' => array('sun', 'sat')
+			));
 			echo "</td></tr>";
 
 			echo "<tr><td>Ημ/νία λήξης</td><td>";
-			$myCalendar = new tc_calendar("finish", true);
-			$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-			//$myCalendar->setDate(date("d"), date("m"), date("Y"));
-			$myCalendar->setDate(date('d',strtotime($finish)),date('m',strtotime($finish)),date('Y',strtotime($finish)));
-			$myCalendar->setPath("../tools/calendar/");
-			$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-			$myCalendar->setAlignment("left", "bottom");
-			//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-			$myCalendar->disabledDay("sun,sat");
-			$myCalendar->writeScript();
+			modern_datepicker("finish", $finish, array(
+				'minDate' => '2011-01-01',
+				'maxDate' => '2030-12-31',
+				'disabledDays' => array('sun', 'sat')
+			));
 			echo "</td></tr>";
 
 			echo "<tr><td><div id='logos'>Λόγος</div></td><td><input type='text' name='logos' value=\"$logos\" /></td></tr>";
@@ -510,37 +489,28 @@
 
 		echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' /></td></tr>";
 		echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
-		$myCalendar = new tc_calendar("hm_apof", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setDate(date("d"), date("m"), date("Y"));
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
+		modern_datepicker("hm_apof", date('Y-m-d'), array(
+			'minDate' => '2011-01-01',
+			'maxDate' => '2030-12-31',
+			'disabledDays' => array('sun', 'sat')
+		));
 		echo "</td></tr>";
                 
 		echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' /></td></tr>";
 		echo "<tr><td>Ημ/νία Πρωτοκόλου αίτησης</td><td>";
-		$myCalendar = new tc_calendar("hm_prot", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setDate(date("d"), date("m"), date("Y"));
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
+		modern_datepicker("hm_prot", date('Y-m-d'), array(
+			'minDate' => '2011-01-01',
+			'maxDate' => '2030-12-31',
+			'disabledDays' => array('sun', 'sat')
+		));
 		echo "</td></tr>";
                 
 		echo "<tr><td>Ημ/νία αίτησης</td><td>";
-		$myCalendar = new tc_calendar("date", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setDate(date("d"), date("m"), date("Y"));
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-		$myCalendar->setAlignment("left", "bottom");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
+		modern_datepicker("date", date('Y-m-d'), array(
+			'minDate' => '2011-01-01',
+			'maxDate' => '2030-12-31',
+			'disabledDays' => array('sun', 'sat')
+		));
 		echo "</td></tr>";
 
 		//echo "<tr><td>Βεβαίωση / Δήλωση</td><td><input type='text' name='vev_dil' /></td></tr>";
@@ -557,16 +527,11 @@
 
 		echo "<tr><td>Ημέρες</td><td><input type='text' name='days' /></td></tr>";
 		echo "<tr><td>Ημ/νία έναρξης</td><td>";
-		$myCalendar = new tc_calendar("start", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setDate(date("d"), date("m"), date("Y"));
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-		$myCalendar->setAlignment("left", "bottom");
-		//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-		//$myCalendar->setOnChange("myChanged('test')");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
+		modern_datepicker("start", date('Y-m-d'), array(
+			'minDate' => '2011-01-01',
+			'maxDate' => '2030-12-31',
+			'disabledDays' => array('sun', 'sat')
+		));
                 
 ?>                
 		<script language="javascript">
@@ -583,15 +548,11 @@
   <?php              
 		echo "</td></tr>";
 		echo "<tr><td>Ημ/νία λήξης</td><td>";
-		$myCalendar = new tc_calendar("finish", true);
-		$myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-		$myCalendar->setDate(date("d"), date("m"), date("Y"));
-		$myCalendar->setPath("../tools/calendar/");
-		$myCalendar->dateAllow("2011-01-01", "2030-12-31");
-		$myCalendar->setAlignment("left", "bottom");
-		//$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-		$myCalendar->disabledDay("sun,sat");
-		$myCalendar->writeScript();
+		modern_datepicker("finish", date('Y-m-d'), array(
+			'minDate' => '2011-01-01',
+			'maxDate' => '2030-12-31',
+			'disabledDays' => array('sun', 'sat')
+		));
 		echo "</td></tr>";
 
 		echo "<tr><td><div id='logos'>Λόγος</div></td><td><input type='text' name='logos' /></td></tr>";

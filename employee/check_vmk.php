@@ -1,8 +1,8 @@
 <?php
 	header('Content-type: text/html; charset=utf-8'); 
-	require_once"../config.php";
-	require_once"../include/functions.php";
-	require('../tools/calendar/tc_calendar.php');  
+  require_once"../config.php";
+  require_once"../include/functions.php";
+  require_once"../include/functions_controls.php";
          
 ?>	
   <html>
@@ -14,8 +14,10 @@
     ?>
         <LINK href="../css/style.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../js/jquery.js"></script>
-        <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+        <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="../js/datepicker-gr.js"></script>
+        <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
         <script type="text/javascript">   
             $(document).ready(function() { 
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
@@ -37,15 +39,12 @@
     echo "<table class=\"imagetable stable\" border='1'>";
     echo "<form action='' method='POST' autocomplete='off'>";
     echo "<tr><td>Ημερομηνία αναζήτησης:</td><td>";
-    $myCalendar = new tc_calendar("date", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    if((int)$_POST['date'])
-            $myCalendar->setDate(date('d',strtotime($_POST['date'])),date('m',strtotime($_POST['date'])),date('Y',strtotime($_POST['date'])));
-    $myCalendar->setPath("../tools/calendar/");        
-    $myCalendar->setYearInterval(1970, 2030);
-    $myCalendar->dateAllow("1970-01-01", date("2030-01-01"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->writeScript();
+    $date_value = (int)$_POST['date'] ? $_POST['date'] : date('Y-m-d');
+    modern_datepicker("date", $date_value, array(
+        'minDate' => '1970-01-01',
+        'maxDate' => '2030-12-31',
+        'yearRange' => '1970:2030'
+    ));
     echo "</td></tr>";
     echo "<tr><td colspan=2>";
     // echo "<input type='radio' name='type' value='0'checked >Αλλαγή ΜΚ<br>";

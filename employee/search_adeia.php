@@ -2,7 +2,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once "../include/functions.php";
-  require('../tools/calendar/tc_calendar.php');
+  require_once"../include/functions_controls.php";
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -26,9 +26,11 @@
 	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
+	<LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../js/datepicker-gr.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
-	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
 	<style>
 		.form-section {
 			background: white;
@@ -230,29 +232,24 @@
             echo "<div class='form-group'>";
             echo "<label class='form-label'>Ημ/νία από</label>";
             echo "<div class='date-range-item'>";
-            $myCalendar = new tc_calendar("hm_from", true);
-            $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-            $myCalendar->setDate(date("d"), date("m"), date("Y"));
-            $myCalendar->setPath("../tools/calendar/");
-            $myCalendar->setYearInterval(2011, date("Y"));
-            $myCalendar->setAlignment("left", "bottom");
-            $myCalendar->disabledDay("sun,sat");
-            $myCalendar->writeScript();
+            modern_datepicker("hm_from", date('Y-m-d'), array(
+                'minDate' => '2011-01-01',
+                'maxDate' => '2030-12-31',
+                'disabledDays' => array('sun', 'sat'),
+                'yearRange' => '2011:' . date('Y')
+            ));
             echo "</div>";
             echo "</div>";
             
             echo "<div class='form-group'>";
             echo "<label class='form-label'>Ημ/νία έως</label>";
             echo "<div class='date-range-item'>";
-            $myCalendar = new tc_calendar("hm_to", true);
-            $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-            $myCalendar->setDate(date("d"), date("m"), date("Y"));
-            $myCalendar->setPath("../tools/calendar/");
-            $myCalendar->setYearInterval(2011, date("Y")+1);
-            $myCalendar->dateAllow("2011-01-01", "2030-12-31");
-            $myCalendar->setAlignment("left", "bottom");
-            $myCalendar->disabledDay("sun,sat");
-            $myCalendar->writeScript();
+            modern_datepicker("hm_to", date('Y-m-d'), array(
+                'minDate' => '2011-01-01',
+                'maxDate' => '2030-12-31',
+                'disabledDays' => array('sun', 'sat'),
+                'yearRange' => '2011:' . (date('Y') + 1)
+            ));
             echo "</div>";
             echo "</div>";
             
