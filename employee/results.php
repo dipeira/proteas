@@ -314,8 +314,14 @@ if ($flag) {
         echo "<BR><p><span title = '$qr'>Κανένα αποτέλεσμα...</span></p>";
     } else
     {
-        
-        echo "<p><span title='$qr'>Πλήθος εγγραφών που βρέθηκαν: $num</span><p>";
+        // find number of unique ids because of left joins
+        $unique_ids = array();
+        while ($row = mysqli_fetch_array($result)) {
+            $unique_ids[] = $row[0];
+        }
+        $unique_ids = array_unique($unique_ids);
+        $num_unique_ids = count($unique_ids);
+        echo "<p><span title='$qr'>Πλήθος εγγραφών που βρέθηκαν: $num_unique_ids</span><p>";
         $num1=$num;
         $num2=$num;
         echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";

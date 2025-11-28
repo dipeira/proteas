@@ -862,7 +862,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     // Load content after dialog is fully visible
                     var $dialogContent = $(this);
                     console.log('Loading content from postgrad.php');
-                    $dialogContent.load("postgrad.php?afm=" + afmValue + "&ajax=1", function(response, status, xhr) {
+                    $dialogContent.load("postgrad.php?afm=" + afmValue, function(response, status, xhr) {
                         console.log('Content loaded, status:', status);
                         if (status == "error") {
                             console.error('Error loading content:', xhr.status, xhr.statusText);
@@ -1124,7 +1124,7 @@ if ($_GET['op']=="edit") {
     //     echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
         // katoikon_end
         echo "<tr><td colspan=2>Σχόλια</td></tr>";
-        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
+        echo "<tr><td>Σχόλια</td><td><textarea rows=10 cols=95 name='comments' >$comments</textarea></td></tr>";
         
     //new 15-02-2012: implemented with jquery.autocomplete
     echo "<div id=\"content\">";
@@ -1256,6 +1256,41 @@ elseif ($_GET['op']=="view") {
     echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='#' id='postgrad-link' data-afm='$afm'>(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
     
     echo "<tr><td>Ώρες υποχρ. ωραρίου</td><td>$wres</td><td></td><td></td></tr>";
+    echo "<tr><td>Σχ.Οργανικής</td><td>&nbsp;<a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+    $count = count($yphr_arr);
+    $sxoleia = '';
+    $sxol_str = '';
+    $counthrs = 0;
+    for ($i=0; $i<$count; $i++)
+    {
+        $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
+        $sxol_str .=  "$yphr_arr[$i] ($hours_arr[$i] ώρες) ";
+        $counthrs += $hours_arr[$i];
+    }
+    if ($count>1) {
+        if ($counthrs > $wres) {
+            echo "<tr class='error-highlight'><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
+        }
+        else {
+            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
+        }
+    }
+    else {
+        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+    }
+    
+    $th = thesicmb($thesi);
+    echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
+
+    
+    echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
+    echo "</td><td></td><td></td></tr>";
+
+    
+    echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
+    display_yphrethsh_archive($mysqlconnection, $id, $sxol_etos, true);
+    echo "</td></tr>";
+    echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
     
     // Calculate anatr for service times section
     $hm_dior_org = $hm_dior;
@@ -1314,38 +1349,7 @@ elseif ($_GET['op']=="view") {
     $aney_ymd = days2ymd($aney_xr);
     echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
     echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br(stripslashes($comments))."</td></tr>"; 
-    echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-    echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
-    echo "</td><td></td><td></td></tr>";
-
-    $count = count($yphr_arr);
-    $sxoleia = '';
-    $sxol_str = '';
-    $counthrs = 0;
-    for ($i=0; $i<$count; $i++)
-    {
-        $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
-        $sxol_str .=  "$yphr_arr[$i] ($hours_arr[$i] ώρες) ";
-        $counthrs += $hours_arr[$i];
-    }
-    if ($count>1) {
-        if ($counthrs > $wres) {
-            echo "<tr class='error-highlight'><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
-        }
-        else {
-            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
-        }
-    }
-    else {
-        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
-    }
     
-    $th = thesicmb($thesi);
-    echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
-    echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
-    display_yphrethsh_archive($mysqlconnection, $id, $sxol_etos, true);
-    echo "</td></tr>";
-    echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
     // history
     $hist_qry = "SELECT * FROM yphrethsh WHERE emp_id=$id AND sxol_etos<$sxol_etos";
     $hist_res = mysqli_query($mysqlconnection, $hist_qry);

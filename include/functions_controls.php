@@ -25,7 +25,7 @@ function kladosCombo($klados,$conn)
     echo "</select>";
 }
 
-function kladosCmb($conn)
+function kladosCmb($conn, $show_name = false)
 {
     $query = "SELECT * from klados ORDER BY perigrafh";
     $result = mysqli_query($conn, $query);
@@ -35,14 +35,18 @@ function kladosCmb($conn)
     }
     $i = 0;
     $num=mysqli_num_rows($result);
-    echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
+    echo "<select style='max-width: 18em;' name=\"klados\" id=\"klados\">";
     echo "<option value='' selected>(Επιλογή:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
         $per=mysqli_result($result, $i, "perigrafh");
         $onoma=mysqli_result($result, $i, "onoma");
-        echo "<option value=\"".$id."\">".$per.", ".$onoma."</option>";
+        if ($show_name) {
+            echo "<option value=\"".$id."\">".$per.", ".$onoma."</option>";
+        } else {
+            echo "<option value=\"".$id."\">".$per."</option>";
+        }
         $i++;
     }
     echo "</select>";

@@ -274,7 +274,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       }
       
       #personnel-accordion .ui-accordion-header {
-        background: linear-gradient(135deg, #4f8188 0%, #30b7cb 100%);
+        background: linear-gradient(135deg,rgb(108, 176, 185) 0%, #30b7cb 100%) !important;
         color: #ffffff;
         border: none;
         border-radius: 8px !important;

@@ -51,38 +51,64 @@
 			margin-bottom: 8px;
 		}
 		.form-label {
-			display: block;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 			font-weight: 500;
 			color: #374151;
 			margin-bottom: 3px;
 			font-size: 0.8125rem;
+			min-height: 20px;
+		}
+		.form-label-text {
+			flex: 1;
+		}
+		.display-checkbox-wrapper {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			margin-left: 8px;
+		}
+		.display-checkbox-wrapper input[type="checkbox"] {
+			width: 14px;
+			height: 14px;
+			cursor: pointer;
+			margin: 0;
+		}
+		.display-checkbox-wrapper label {
+			font-size: 0.7rem;
+			color: #6b7280;
+			cursor: pointer;
+			margin: 0;
+			font-weight: 400;
 		}
 		.form-input, .form-select {
 			width: 100%;
-			padding: 6px 10px;
-			border: 1px solid #d1d5db;
-			border-radius: 4px;
-			font-size: 0.8125rem;
-			transition: border-color 0.2s, box-shadow 0.2s;
+			padding: 10px 14px;
+			border: 2px solid #e5e7eb;
+			border-radius: 8px;
+			font-size: 14px;
+			transition: all 0.2s ease;
+			background: #ffffff;
 		}
 		.form-input:focus, .form-select:focus {
 			outline: none;
-			border-color: #3b82f6;
-			box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+			border-color: #10b981;
+			box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 		}
 		.form-section select {
 			width: 100%;
-			padding: 6px 10px;
-			border: 1px solid #d1d5db;
-			border-radius: 4px;
-			font-size: 0.8125rem;
-			transition: border-color 0.2s, box-shadow 0.2s;
+			padding: 10px 14px;
+			border: 2px solid #e5e7eb;
+			border-radius: 8px;
+			font-size: 14px;
+			transition: all 0.2s ease;
 			background-color: white;
 		}
 		.form-section select:focus {
 			outline: none;
-			border-color: #3b82f6;
-			box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+			border-color: #10b981;
+			box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 		}
 		.checkbox-group {
 			display: flex;
@@ -242,39 +268,45 @@
 		echo "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3'>";
 		
 		echo "<div class='form-group'>";
+		echo "<label class='form-label'>Επώνυμο</label>";
+		echo "<input type='text' name='surname' id='surname' class='form-input' />";
+		echo "</div>";
+
+		echo "<div class='form-group'>";
 		echo "<label class='form-label'>Όνομα</label>";
 		echo "<input type='text' id='name' name='name' class='form-input' />";
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Επώνυμο</label>";
-		echo "<input type='text' name='surname' id='surname' class='form-input' />";
-		echo "</div>";
-		
-		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Πατρώνυμο</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dsppatr' id='dsppatr' />";
-		echo "<label for='dsppatr' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Πατρώνυμο</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dsppatr' id='dsppatr' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dsppatr' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<input type='text' name='patrwnymo' class='form-input' />";
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Α.Μ.</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspam' id='dspam' />";
-		echo "<label for='dspam' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Α.Μ.</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspam' id='dspam' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspam' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<input type='text' name='am' class='form-input' />";
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Α.Φ.Μ.</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspafm' id='dspafm' />";
-		echo "<label for='dspafm' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Α.Φ.Μ.</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspafm' id='dspafm' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspafm' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<input type='text' name='afm' class='form-input' />";
 		echo "</div>";
 		
@@ -284,11 +316,13 @@
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Email</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspemail' id='dspemail' />";
-		echo "<label for='dspemail' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Email</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspemail' id='dspemail' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspemail' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<input type='text' name='email' class='form-input' />";
 		echo "</div>";
 		
@@ -299,36 +333,50 @@
 		echo "<div class='form-section'>";
 		echo "<h3>Επαγγελματικά Στοιχεία</h3>";
 		echo "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3'>";
+
+		echo "<div class='form-group'>";
+		echo "<label class='form-label'>Μόνιμος/Αναπληρωτής</label>";
+		echo "<select name=\"emptype\" class='form-select'>";
+		echo "<option value=\"1\">Μόνιμος</option>";
+		echo "<option value=\"2\">Αναπληρωτής</option>";
+		echo "</select>";
+		echo "</div>";
 		
 		echo "<div class='form-group'>";
 		echo "<label class='form-label'>Κλάδος</label>";
-		kladosCmb($mysqlconnection);
+		kladosCmb($mysqlconnection, true);
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Βαθμός</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspvathmos' id='dspvathmos' />";
-		echo "<label for='dspvathmos' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Βαθμός</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspvathmos' id='dspvathmos' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspvathmos' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		vathmosCmb($mysqlconnection);
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Μ.Κ.</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspmk' id='dspmk' />";
-		echo "<label for='dspmk' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Μ.Κ.</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspmk' id='dspmk' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspmk' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<input type='text' name='mk' class='form-input' />";
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Κατάσταση</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspkatast' id='dspkatast' />";
-		echo "<label for='dspkatast' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Κατάσταση</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspkatast' id='dspkatast' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspkatast' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<select name=\"katast\" class='form-select'>";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		echo "<option value=\"1\">Εργάζεται</option>";
@@ -336,14 +384,6 @@
 		echo "<option value=\"3\">Άδεια</option>";
 		echo "<option value=\"4\">Διαθεσιμότητα</option>";
 		echo "<option value=\"5\">Απουσία COVID-19</option>";
-		echo "</select>";
-		echo "</div>";
-		
-		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Μον./Αναπλ.</label>";
-		echo "<select name=\"emptype\" class='form-select'>";
-		echo "<option value=\"1\">Μόνιμος</option>";
-		echo "<option value=\"2\">Αναπληρωτής</option>";
 		echo "</select>";
 		echo "</div>";
 		
@@ -397,11 +437,13 @@
 		echo "<div class='grid grid-cols-1 md:grid-cols-2 gap-3'>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Ημ/νία Διορισμού</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dsphm_dior' id='dsphm_dior' />";
-		echo "<label for='dsphm_dior' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Ημ/νία Διορισμού</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dsphm_dior' id='dsphm_dior' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dsphm_dior' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<div class='date-range-group'>";
 		echo "<div class='date-range-item'>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Από:</label>";
@@ -425,11 +467,13 @@
 		echo "</div>"; // form-group
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Ημ/νία Ανάληψης</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dsphm_anal' id='dsphm_anal' />";
-		echo "<label for='dsphm_anal' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Ημ/νία Ανάληψης</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dsphm_anal' id='dsphm_anal' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dsphm_anal' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<div class='date-range-group'>";
 		echo "<div class='date-range-item'>";
 		echo "<label class='text-xs text-gray-600 mb-1 block'>Από:</label>";
@@ -457,15 +501,17 @@
 		
 		// Education & Experience Section
 		echo "<div class='form-section'>";
-		echo "<h3>Εκπαίδευση & Εμπειρία</h3>";
+		echo "<h3>Εκπαίδευση & Προϋπηρεσία</h3>";
 		echo "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Μεταπτυχιακό/Διδακτορικό</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspmetdid' id='dspmetdid' />";
-		echo "<label for='dspmetdid' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Μεταπτυχιακό/Διδακτορικό</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspmetdid' id='dspmetdid' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspmetdid' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<select name=\"met_did\" class='form-select'>";
 		echo "<option value=''></option>";
 		echo "<option value='0'>Όχι</option>";
@@ -477,13 +523,15 @@
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Προϋπηρεσία</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspproyhp' id='dspproyhp' />";
-		echo "<label for='dspproyhp' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Προϋπηρεσία</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspproyhp' id='dspproyhp' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspproyhp' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<div class='duration-group'>";
-		echo "<select name=\"opp\" class='form-select' style='width: auto; padding: 6px 8px;'>";
+		echo "<select name=\"opp\" class='form-select' style='width: auto; padding: 8px 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;'>";
 		echo "<option value=\"=\" selected>=</option>";
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
@@ -495,13 +543,15 @@
 		echo "</div>";
 		
 		echo "<div class='form-group md:col-span-2'>";
-		echo "<label class='form-label'>Συνολική Υπηρεσία <small>(από διορισμό + προϋπηρεσία)</small></label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspsynol' id='dspsynol' />";
-		echo "<label for='dspsynol' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Συνολική Υπηρεσία <small>(από διορισμό + προϋπηρεσία)</small></span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspsynol' id='dspsynol' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspsynol' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<div class='duration-group mb-2'>";
-		echo "<select name=\"ops\" class='form-select' style='width: auto; padding: 6px 8px;'>";
+		echo "<select name=\"ops\" class='form-select' style='width: auto; padding: 8px 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;'>";
 		echo "<option value=\"=\" selected>=</option>";
 		echo "<option value=\">\" >></option>";
 		echo "<option value=\"<\" ><</option>";
@@ -535,11 +585,13 @@
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Μονιμοποίηση</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspmon' id='dspmon' />";
-		echo "<label for='dspmon' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Μονιμοποίηση</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspmon' id='dspmon' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspmon' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<div class='checkbox-group'>";
 		echo "<input type='checkbox' name='monimopoihsh' id='monimopoihsh' />";
 		echo "<label for='monimopoihsh' class='checkbox-label'>Ναι</label>";
@@ -547,11 +599,13 @@
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Ολοκληρωμένη Αξιολόγηση</label>";
-		echo "<div class='checkbox-group mb-2'>";
-		echo "<input type='checkbox' name='dspaks' id='dspaks' />";
-		echo "<label for='dspaks' class='checkbox-label' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
-		echo "</div>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Ολοκληρωμένη Αξιολόγηση</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspaks' id='dspaks' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspaks' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<div class='checkbox-group'>";
 		echo "<input type='checkbox' name='aksiologhsh' id='aksiologhsh' />";
 		echo "<label for='aksiologhsh' class='checkbox-label'>Ναι</label>";
