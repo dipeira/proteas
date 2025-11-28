@@ -77,8 +77,8 @@
         die();
       }
     echo $oligothesia ? 
-        "<p><a href='report_leit.php'>4/θέσια & άνω</a>&nbsp;&nbsp;Ολιγοθέσια</p>" :
-        "<p>4/θέσια & άνω&nbsp;&nbsp;<a href='report_leit.php?oligothesia=1'>Ολιγοθέσια</a></p>";
+        "<p><a class='underline' href='report_leit.php'>4/θέσια & άνω</a>&nbsp;&nbsp;Ολιγοθέσια</p>" :
+        "<p>4/θέσια & άνω&nbsp;&nbsp;<a class='underline' href='report_leit.php?oligothesia=1'>Ολιγοθέσια</a></p>";
     echo "<center>";
     $i=0;
     ob_start();
@@ -117,8 +117,8 @@ if (!$oligothesia) {
         echo "<th rowspan=2>Απ.86</th>";
         echo "<th rowspan=2>Απ.91</th>";
     }
-    echo "<th colspan=8>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
-    echo "<th colspan=13>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
+    echo "<th colspan=9>Υπάρχουν +/- <small>(με Δ/ντή, σε ώρες)</small></th>";
+    echo "<th colspan=14>Λειτουργικά Κενά +/- <small>(σε ώρες)</small></th>";
     echo "</tr>";
     echo "<th>05</th><th>07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
     echo "<th>70</th>";
@@ -130,7 +130,7 @@ if (!$oligothesia) {
     echo "<th>05</th><th>07</th><th>06</th><th>08</th><th>11</th><th>79</th><th>91</th><th>86</th>";
     echo "<th>70</th><th>70+Ολ+ΠΖ <strong>(A)</strong></th><th>70+Ολ+ΠΖ</strong></th>";
 } else {
-    echo "<th>Απαιτ.70</th><th>Απαιτ.70<br>+(Ολ+ΠΖ) <strong>(A)</strong></th>";
+    echo "<th>Απαιτ.70</th><th>Απαιτ.70<br>+(Ολ+ΠΖ) <strong>(A)</strong></th><th></th>";
 }
     
     echo "<th>+/- 08,11,<br>79,91 <strong>(B)</strong></th><th>A+B</th><th>+/- T.E.</th>";
