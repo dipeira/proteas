@@ -536,15 +536,49 @@
 ?>                
 		<script language="javascript">
 			function addDays2Date(){
-					var d = new Date (document.updatefrm.start.value);
-					temp1 = document.updatefrm.days.value - 1;
-			
-					tmp = new Date(d.getTime() + temp1*24*60*60*1000)
-					alert (tmp.format("d/m/Y"));                
-					//document.updatefrm.finish.value = tmp;
+					// Get the start date from the hidden field (Y-m-d format)
+					var startDateStr = document.getElementById('start_hidden').value;
+					var days = parseInt(document.updatefrm.days.value);
+					
+					if (!startDateStr || !days || isNaN(days)) {
+						alert('Παρακαλώ συμπληρώστε την ημ/νία έναρξης και τις ημέρες');
+						return;
+					}
+					
+					// Parse the date (Y-m-d format)
+					var parts = startDateStr.split('-');
+					if (parts.length !== 3) {
+						alert('Μη έγκυρη ημ/νία έναρξης');
+						return;
+					}
+					
+					var year = parseInt(parts[0]);
+					var month = parseInt(parts[1]) - 1; // JavaScript months are 0-based
+					var day = parseInt(parts[2]);
+					
+					// Create date object
+					var startDate = new Date(year, month, day);
+					
+					// Add days (subtract 1 because start date counts as day 1)
+					var finishDate = new Date(startDate);
+					finishDate.setDate(finishDate.getDate() + days - 1);
+					
+					// Set the datepicker value using jQuery UI (setDate accepts Date object)
+					if (typeof jQuery !== 'undefined' && jQuery('#finish').length) {
+						jQuery('#finish').datepicker('setDate', finishDate);
+					} else {
+						// Fallback: set the value directly
+						var dd = String(finishDate.getDate()).padStart(2, '0');
+						var mm = String(finishDate.getMonth() + 1).padStart(2, '0');
+						var yyyy = finishDate.getFullYear();
+						var formattedDate = dd + '-' + mm + '-' + yyyy;
+						document.getElementById('finish').value = formattedDate;
+						// Also update the hidden field (Y-m-d format)
+						document.getElementById('finish_hidden').value = yyyy + '-' + mm + '-' + dd;
+					}
 			}
 		</script>
-		<a href="javascript:addDays2Date();"><small>Υπολογισμός<br>Ημ.Λήξης</small></a>
+		<a href="javascript:addDays2Date();" style="cursor: pointer; color: #4FC5D6; text-decoration: underline;"><small>Υπολογισμός<br>Ημ.Λήξης</small></a>
   <?php              
 		echo "</td></tr>";
 		echo "<tr><td>Ημ/νία λήξης</td><td>";
