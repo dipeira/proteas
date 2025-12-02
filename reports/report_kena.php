@@ -4,11 +4,11 @@
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <!--
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    -->
-    <title>Πίνακας οργανικών κενών</title>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Πίνακας οργανικών κενών';
+    require '../etc/head.php'; 
+    ?>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -32,17 +32,36 @@
     echo "<body>";
     require '../etc/menu.php';
     echo "<h3>Οργανικά κενά</h3>";
+    
+    $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+    
+    echo "<form action='' method='POST' autocomplete='off'>";
+    echo "<table class=\"imagetable\" border='1'>";
+    echo "<tr><td colspan='2'>";
     echo "<p>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
-    echo "<a href='report_kena.php?type=1'>Δημοτικά Σχολεία</a><br>";
-    echo "<a href='report_kena.php?type=2'>Νηπιαγωγεία</a><br>";
-    echo "<a href='report_kena.php?type=3'>Ειδικά Δημοτικά Σχολεία</a><br>";
-    echo "<a href='report_kena.php?type=4'>Ειδικά Νηπιαγωγεία</a><br>";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    
+    $options = [
+        1 => "Δημοτικά Σχολεία",
+        2 => "Νηπιαγωγεία",
+        3 => "Ειδικά Δημοτικά Σχολεία",
+        4 => "Ειδικά Νηπιαγωγεία"
+    ];
+    
+    foreach ($options as $value => $label) {
+        $checked = ($value == $type) ? 'checked' : '';
+        echo "<input type='radio' name='type' value='$value' $checked >$label<br>";
+    }
+    
+    echo "</td></tr>";
+    echo "<tr><td colspan='2'><input type='submit' value='Προβολή'>";
+    echo "<input type='button' class='btn-red' value='Επιστροφή' onClick=\"parent.location='../index.php'\"></td></tr>";
+    echo "</table></form>";
+    echo "<br>";
 
 // dhmotika
-if ($_GET['type'] == 1) {
+if ($_REQUEST['type'] == 1) {
     $type = 1;
-    if ($_GET['type'] == 1) {
+    if ($_REQUEST['type'] == 1) {
         $query = "SELECT * from school WHERE type2 = 0 AND type = $type";
     }
     else {
@@ -95,7 +114,7 @@ if ($_GET['type'] == 1) {
         
         echo "<tr>";
         echo "<td>$code</td>";
-        echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
+        echo "<td><a class='underline' href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
         echo "<td>$organikothta</td>";
         echo "<td>$orgtop</td>";
@@ -160,7 +179,7 @@ if ($_GET['type'] == 1) {
     //ob_end_clean();
 }
 // eidika dhmotika
-else if ($_GET['type'] == 3) {
+else if ($_REQUEST['type'] == 3) {
     $type = 1;
     $query = "SELECT * from school WHERE type2 = 2 AND type = $type";
 
@@ -228,7 +247,7 @@ else if ($_GET['type'] == 3) {
         
         echo "<tr>";
         echo "<td>$code</td>";
-        echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
+        echo "<td><a class='underline' href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
         echo "<td>$organikothta</td>";
         echo "<td>$orgtop70eae</td>";
@@ -320,11 +339,11 @@ else if ($_GET['type'] == 3) {
     //ob_end_clean();
 }
 //nipiagogeia
-else if ($_GET['type'] == 2) {
+else if ($_REQUEST['type'] == 2) {
     $type = 2;
     $synorgtop = 0;
     // dhmosia or eidika (type2 = 0 or 2)
-    $query = $_GET['type'] == 2 ? 
+    $query = $_REQUEST['type'] == 2 ? 
         "SELECT * from school WHERE type2 = 0 AND type = $type" :
         "SELECT * from school WHERE type2 = 2 AND type = $type";
     $result = mysqli_query($mysqlconnection, $query);
@@ -378,7 +397,7 @@ else if ($_GET['type'] == 2) {
 
         echo "<tr>";
         echo "<td>$code</td>";
-        echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
+        echo "<td><a class='underline' href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
         echo "<td>$organikothta</td>";
         echo $organikes[0] > $organikothta ? 
@@ -419,7 +438,7 @@ else if ($_GET['type'] == 2) {
     echo "</form>";
 }
 // eidika nip
-else if ($_GET['type'] == 4) {
+else if ($_REQUEST['type'] == 4) {
     function nb($value) {
         return !$value ? 0 : $value;
     }
@@ -492,7 +511,7 @@ else if ($_GET['type'] == 4) {
 
         echo "<tr>";
         echo "<td>$code</td>";
-        echo "<td><a href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
+        echo "<td><a class='underline' href='../school/school_status.php?org=$sch' target='_blank'>$name</a></td>";
         echo "<td>$cat</td>";
         echo "<td>$organikothta</td>";
         // echo $organikes[0] > $organikothta ? 

@@ -1,135 +1,621 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&subset=greek');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 body, body * {
-	font-family : "Open Sans",Verdana,Helvetica,Arial,sans-serif;
+	font-family: "Inter", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
-.imagetable {
-	/* font-size : 90%; */
-	/* font-family : Verdana,Helvetica,Arial,sans-serif; */
-	font-size:15px;
-	color:#333333;
-	border-width: 1px;
-	border-color: #999999;
-	border-collapse: collapse;
+
+body {
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
+/* Tailwind-style Typography - Headers */
+/* High specificity to override Tailwind defaults */
+body h1, body h2, body h3, body h4, body h5, body h6 {
+	font-family: "Inter", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+	color: #111827 !important;
+	font-weight: 700 !important;
+	line-height: 1.25 !important;
+	letter-spacing: -0.025em !important;
+	margin-top: 0 !important;
+	margin-bottom: 0.5em !important;
+}
+
+body h1 {
+	font-size: 3rem !important;
+	font-weight: 800 !important;
+	line-height: 1.1 !important;
+	letter-spacing: -0.04em !important;
+	margin-bottom: 0.75em !important;
+}
+
+body h2 {
+	font-size: 1.875rem !important;
+	font-weight: 700 !important;
+	line-height: 1.2 !important;
+	letter-spacing: -0.03em !important;
+	margin-bottom: 0.75em !important;
+}
+
+body h3 {
+	font-size: 1.5rem !important;
+	font-weight: 600 !important;
+	line-height: 1.3 !important;
+	letter-spacing: -0.02em !important;
+	margin-bottom: 0.625em !important;
+}
+
+body h4 {
+	font-size: 1.25rem !important;
+	font-weight: 600 !important;
+	line-height: 1.4 !important;
+	letter-spacing: -0.01em !important;
+	margin-bottom: 0.5em !important;
+}
+
+body h5 {
+	font-size: 1.125rem !important;
+	font-weight: 600 !important;
+	line-height: 1.5 !important;
+	margin-bottom: 0.5em !important;
+}
+
+body h6 {
+	font-size: 1rem !important;
+	font-weight: 600 !important;
+	line-height: 1.5 !important;
+	margin-bottom: 0.5em !important;
+}
+
+/* Center-aligned headers (common in project) */
+center h1, center h2, center h3, center h4, center h5, center h6 {
+	text-align: center !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Responsive header sizes */
+@media screen and (max-width: 768px) {
+	body h1 {
+		font-size: 2.25rem !important;
+	}
+	
+	body h2 {
+		font-size: 1.5rem !important;
+	}
+	
+	body h3 {
+		font-size: 1.25rem !important;
+	}
+	
+	body h4 {
+		font-size: 1.125rem !important;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	body h1 {
+		font-size: 1.875rem !important;
+	}
+	
+	body h2 {
+		font-size: 1.25rem !important;
+	}
+	
+	body h3 {
+		font-size: 1.125rem !important;
+	}
+}
+
+/* Table container to prevent overflow */
+table {
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* Center container for tables */
+center {
+	max-width: 100%;
+	overflow-x: auto;
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Wrapper for table containers */
+center > table {
 	width: 90%;
+	max-width: 100%;
+	margin: 0 auto;
 }
+
+/* Ensure tables inside center don't overflow */
+center {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* Additional constraint for imagetable to prevent overflow */
+.imagetable {
+	font-size: 15px;
+	color: #1f2937;
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 90%;
+	max-width: 100%;
+	background: #ffffff;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-sizing: border-box;
+	table-layout: auto;
+	border: none !important;
+}
+
+/* Allow table cells to be flexible but constrained */
+.imagetable td,
 .imagetable th {
-	/* font-family : Verdana,Helvetica,Arial,sans-serif; */
-	background:#b5cfd2;
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #999999;
+	min-width: 0;
 }
-.imagetable td {
-	/* font-size : 80%; */
-	/* font-family : Verdana,Helvetica,Arial,sans-serif; */
-	background:#dddebc;
-	border-width: 1px;
-	padding: 6px;
-	border-style: solid;
-	border-color: #999999;
-}
-
-.imagetable tr:nth-child(even){background-color: #f2f2f2;}
-
-.imagetable tr:hover {background-color: #ddd;}
 
 .imagetable th {
-	padding-top: 10px;
-	padding-bottom: 10px;
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+	border: none !important;
+	padding: 14px 16px;
 	text-align: left;
-	background-color: #2a672ddb;
 	color: white;
+	font-weight: 600;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+	font-size: 13px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	hyphens: auto;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
+
+.imagetable th:first-child {
+	border-top-left-radius: 12px;
+}
+
+.imagetable th:last-child {
+	border-top-right-radius: 12px;
+}
+
+.imagetable td {
+	background: #ffffff;
+	border: none !important;
+	border-bottom: 1px solid #e5e7eb;
+	padding: 9px 10px;
+	transition: background-color 0.2s ease;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	hyphens: auto;
+}
+
+/* Ensure action buttons stay on one line */
+.imagetable td span {
+	display: inline;
+	white-space: nowrap;
+}
+
+.imagetable td span a {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.imagetable tr:last-child td:first-child {
+	border-bottom-left-radius: 12px;
+}
+
+.imagetable tr:last-child td:last-child {
+	border-bottom-right-radius: 12px;
+}
+
+.imagetable tr:nth-child(even) td {
+	background-color: #f9fafb;
+}
+
+.imagetable tr:hover td {
+	background-color: #f0fdf4;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Column width adjustments for imagetable */
+/* Method 1: Adjust specific columns by position using nth-child */
+/* Example: Make first column narrower, second column wider */
+.schooltable th:nth-child(1),
+.schooltable td:nth-child(1) {
+	width: 50px; /* Adjust as needed */
+	min-width: 50px;
+	max-width: 50px;
+}
+
+.schooltable th:nth-child(2),
+.schooltable td:nth-child(2) {
+	width: 200px; /* Adjust as needed */
+	min-width: 150px;
+}
+
+/* Method 2: Adjust columns by adding classes to specific tables */
+/* Use this when you want different widths for different tables */
+.schooltable.col-widths-1 th:nth-child(1),
+.schooltable.col-widths-1 td:nth-child(1) {
+	width: 60px;
+	min-width: 60px;
+	max-width: 60px;
+}
+
+.schooltable.col-widths-1 th:nth-child(2),
+.schooltable.col-widths-1 td:nth-child(2) {
+	width: 180px;
+	min-width: 150px;
+}
+
+.schooltable.col-widths-1 th:nth-child(3),
+.schooltable.col-widths-1 td:nth-child(3) {
+	width: 150px;
+	min-width: 120px;
+}
+
+/* Method 3: Adjust specific table by ID */
+/* #mytbl th:nth-child(1),
+#mytbl td:nth-child(1) {
+	width: 50px;
+	min-width: 50px;
+	max-width: 50px;
+}
+
+#mytbl th:nth-child(2),
+#mytbl td:nth-child(2) {
+	width: 200px;
+	min-width: 150px;
+} */
+
+/* Method 4: Use fixed table layout for precise control */
+/* Uncomment and adjust if you want fixed column widths */
+/*
+.imagetable.fixed-layout {
+	table-layout: fixed;
+}
+
+.imagetable.fixed-layout th:nth-child(1),
+.imagetable.fixed-layout td:nth-child(1) {
+	width: 10%;
+}
+
+.imagetable.fixed-layout th:nth-child(2),
+.imagetable.fixed-layout td:nth-child(2) {
+	width: 25%;
+}
+
+.imagetable.fixed-layout th:nth-child(3),
+.imagetable.fixed-layout td:nth-child(3) {
+	width: 20%;
+}
+*/
+
 .stable {
 	width: auto;
 }
 
 #navigation {
- margin: 0;
- padding: 8px 29px;
- background: #49ad4f;
- height: 20px;
- list-style: none;
- font-size : 110%;
- font-family : "Open Sans",Helvetica,Arial,sans-serif;
+	margin: 0;
+	padding: 12px 32px;
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+	height: auto;
+	min-height: 48px;
+	list-style: none;
+	font-size: 14px;
+	font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(79, 197, 214, 0.2);
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	position: relative;
+	z-index: 9999;
 }
 
 #navigation > li {
- float: left;
- height: 100%;
- margin-right: 0.5em;
- padding: 0 1em;
- font-size : 80%;
- font-family : "Open Sans",Helvetica,Arial,sans-serif;
+	float: none;
+	height: auto;
+	margin-right: 0;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
+	border-radius: 8px;
+	transition: all 0.2s ease;
+	cursor: pointer;
+	position: relative;
+}
+
+#navigation > li:hover {
+	background-color: rgba(255, 255, 255, 0.25);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#navigation > li:active {
+	transform: translateY(0);
+	background-color: rgba(255, 255, 255, 0.3);
 }
 
 #navigation > li > a {
- float: left;
- height: 100%;
- color: #fff;
- text-decoration: none;
- font-weight: bold;
- text-transform: uppercase;
+	float: none;
+	height: auto;
+	color: #fff;
+	text-decoration: none;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	display: block;
+	transition: all 0.2s ease;
+	white-space: nowrap;
 }
 
 #navigation > li > a:hover {
- color: orange;
- text-decoration: underline;
+	color: #ffffff;
+	text-decoration: none;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+
 #navigation > li.sub {
- position: relative;
+	position: relative;
 }
+
+/* Add padding to parent link to create hover area */
+#navigation > li.sub > a {
+	padding-right: 8px;
+}
+
+#navigation > li.sub > a::after {
+	content: " ▼";
+	font-size: 10px;
+	margin-left: 6px;
+	opacity: 0.8;
+	transition: transform 0.2s ease;
+}
+
+#navigation > li.sub:hover > a::after {
+	transform: rotate(180deg);
+}
+
 #navigation > li.sub ul {
- width: 12em;
- margin: 0;
- padding: 0.5em 0;
- list-style: none;
- background: #49ad4f;
- position: absolute;
- top: -1000em;
+	width: 240px;
+	margin: 0;
+	padding: 6px 0;
+	list-style: none;
+	background: #ffffff;
+	position: absolute;
+	top: -1000em;
+	left: 0;
+	border-radius: 10px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+	z-index: 10000;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	transition-delay: 0.1s;
+	opacity: 0;
+	transform: translateY(-10px);
+	pointer-events: none;
+}
+
+/* Add invisible bridge area to make it easier to move mouse to submenu */
+#navigation > li.sub ul::before {
+	content: '';
+	position: absolute;
+	top: -8px;
+	left: 0;
+	right: 0;
+	height: 8px;
+	background: transparent;
+	pointer-events: all;
 }
 
 #navigation > li.sub ul li {
- width: 90%;
- margin: 0 auto 0.3em auto;
+	width: 100%;
+	margin: 0;
+	position: relative;
+}
+
+#navigation > li.sub ul li:first-child a {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#navigation > li.sub ul li:last-child a {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
 #navigation > li.sub ul li a {
- height: 100%;
- display: block;
- padding: 0.4em;
- color: #fff;
- font-weight: bold;
- text-decoration: none;
+	height: auto;
+	display: block;
+	padding: 12px 18px;
+	color: #1f2937;
+	font-weight: 500;
+	text-decoration: none;
+	text-transform: none;
+	transition: all 0.15s ease;
+	position: relative;
+	border-left: 3px solid transparent;
 }
 
 #navigation > li.sub ul li a:hover {
- background: #255226;
- text-decoration: underline;
+	background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+	color: #2A8B9A;
+	text-decoration: none;
+	padding-left: 22px;
+	border-left-color: #4FC5D6;
+	font-weight: 600;
 }
-#navigation > li.sub:hover ul {
- top: 1.3em;
+
+#navigation > li.sub ul li a:active {
+	background: linear-gradient(90deg, #b2ebf2 0%, #80deea 100%);
+}
+
+/* Style separator items in dropdown menus (items without links) */
+#navigation > li.sub ul li:not(:has(a)) {
+	padding: 8px 18px;
+	color: #9ca3af;
+	font-size: 11px;
+	text-align: center;
+	border-top: 1px solid #e5e7eb;
+	margin-top: 4px;
+	pointer-events: none;
+	user-select: none;
+}
+
+#navigation > li.sub:hover ul,
+#navigation > li.sub ul:hover {
+	top: 100%;
+	margin-top: 0;
+	opacity: 1;
+	transform: translateY(0);
+	pointer-events: all;
+	transition-delay: 0s;
+}
+
+/* Ensure menu stays on top */
+#main-menu {
+	position: relative;
+	z-index: 9999;
 }
 
 .applogo {
-	height: 85px;
-	padding-bottom: 8px;
+	height: 115px;
+	padding-bottom: 12px;
 	padding-left: 30px;
+	border-radius: 10px;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-button, input[type=submit], input[type=button] {
-	background-color: #4CAF50;
-	color: white;
-	padding: 7px 13px;
-	margin: 8px 3px;
+/* Base button class with Tailwind-style utilities */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.625rem 1.25rem; /* 10px 20px */
+	margin: 0.5rem 0.25rem; /* 8px 4px */
 	border: none;
+	border-radius: 0.5rem; /* 8px */
+	font-weight: 500;
+	font-size: 0.875rem; /* 14px */
+	letter-spacing: 0.025em;
+	color: white;
 	cursor: pointer;
-	border-radius: 5%;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	text-decoration: none;
 }
+
+.btn:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+/* Button variants - single class each */
+.btn-primary {
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.btn-primary:hover {
+	background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
 .btn-red {
-	background-color: #ea150b !important;
+	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+.btn-red:hover {
+	background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+}
+
+.btn-yellow {
+	background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+}
+
+.btn-yellow:hover {
+	background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+}
+
+.btn-green {
+	background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+}
+
+.btn-green:hover {
+	background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+}
+
+.btn-excel {
+	background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+}
+
+.btn-excel:hover {
+	background: linear-gradient(135deg, #15803d 0%, #166534 100%) !important;
+}
+
+/* Size variants */
+.btn-sm {
+	padding: 0.5rem 1rem; /* 8px 16px */
+	font-size: 0.8125rem; /* 13px */
+}
+
+.btn-lg {
+	padding: 0.75rem 1.5rem; /* 12px 24px */
+	font-size: 1rem; /* 16px */
+}
+
+/* Legacy support - auto-apply button styles */
+button, input[type=submit], input[type=button], .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.625rem 1.25rem;
+	margin: 0.5rem 0.25rem;
+	border: none;
+	border-radius: 0.5rem;
+	font-weight: 500;
+	font-size: 0.875rem;
+	letter-spacing: 0.025em;
+	color: white;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+button:hover, input[type=submit]:hover, input[type=button]:hover, .button:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active, input[type=submit]:active, input[type=button]:active, .button:active {
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+button:focus, input[type=submit]:focus, input[type=button]:focus, .button:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
 }
 
 .btn-link a {
@@ -137,107 +623,1088 @@ button, input[type=submit], input[type=button] {
 	text-decoration: none;
 }
 
-.btn-yellow {
-	background-color: #e4a118;
-}
-
-/* Add a hover effect for buttons */
-button:hover {
-  opacity: 0.8;
-}
-
 .userdata {
-	font-size : 70%;
-	font-size:11px;
+	font-size: 12px;
+	color: #6b7280;
+	font-weight: 400;
+	letter-spacing: 0.025em;
 }
 
+table.tablesorter {
+	max-width: 98%;
+	width: 100%;
+	box-sizing: border-box;
+}
 
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	border: 1px solid #FFF;
-	padding: 4px;
+	border: none;
+	padding: 14px 16px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
+
 table.tablesorter thead tr .header {
-	background-image: url(../images/bg.gif);
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
+	transition: all 0.2s ease;
 }
-/* table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
-} */
+
+table.tablesorter thead tr .header:hover {
+	background: linear-gradient(135deg, #6BD9E8 0%, #4FC5D6 100%);
+}
+
 table.tablesorter thead tr .headerSortUp {
-	background-image: url(../images/asc.gif);
+	background-image: url(../images/asc.gif), linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+	background-position: center right, center;
+	background-repeat: no-repeat, no-repeat;
+	color: white;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
+
 table.tablesorter thead tr .headerSortDown {
-	background-image: url(../images/desc.gif);
+	background-image: url(../images/desc.gif), linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+	background-position: center right, center;
+	background-repeat: no-repeat, no-repeat;
+	color: white;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
+
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-	background-color: #49ad4f;
+	color: white;
 }
 
 /* Tooltip container */
 .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted #6b7280;
+	cursor: help;
 }
 
 /* Tooltip text */
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: 180px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 5px;
-  border-radius: 6px;
-
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
+	visibility: hidden;
+	width: 200px;
+	background-color: #1f2937;
+	color: #fff;
+	text-align: center;
+	padding: 10px 12px;
+	border-radius: 8px;
+	position: absolute;
+	z-index: 1000;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -100px;
+	opacity: 0;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	transform: translateY(-5px);
+	font-size: 13px;
+	line-height: 1.5;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Tooltip arrow */
 .tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 6px;
+	border-style: solid;
+	border-color: #1f2937 transparent transparent transparent;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
+	visibility: visible;
+	opacity: 1;
+	transform: translateY(0);
 }
 
-.ui-tabs .ui-tabs-nav
-{
-  background: #49ad4f;
-  border-width: 0px 0px 1px 0px; 
-  -moz-border-radius: 0px; 
-  -webkit-border-radius: 0px; 
-  border-radius: 0px; 
+.ui-tabs .ui-tabs-nav {
+	background: linear-gradient(135deg, #4dc3d4 0%, #2c8e9d 100%);
+	border-width: 0px 0px 1px 0px;
+	border-radius: 0px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-/* .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
-  color: #ea150b;
-} */
 
 .synola {
 	font-weight: 600;
+	color: #059669;
 }
 
 .import-choice {
-	margin: 8px;
+	margin: 12px;
+	padding: 12px;
+	background: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	transition: all 0.2s ease;
+}
+
+.import-choice:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+}
+
+/* Responsive table styles for smaller screens */
+@media screen and (max-width: 768px) {
+	.imagetable {
+		width: 100%;
+		font-size: 13px;
+	}
+	
+	.imagetable th,
+	.imagetable td {
+		padding: 8px 6px;
+		font-size: 12px;
+	}
+	
+	center > table {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.imagetable {
+		font-size: 11px;
+	}
+	
+	.imagetable th,
+	.imagetable td {
+		padding: 6px 4px;
+		font-size: 11px;
+	}
+}
+
+/* Additional modern enhancements */
+input[type="text"], input[type="number"], select, textarea {
+	padding: 10px 14px;
+	border: 2px solid #e5e7eb;
+	border-radius: 8px;
+	font-size: 14px;
+	transition: all 0.2s ease;
+	background: #ffffff;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+	outline: none;
+	border-color: #10b981;
+	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	accent-color: #10b981;
+}
+
+a {
+	color: #059669;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+a:hover {
+	color: #047857;
+	text-decoration: underline;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+/* Page-specific styling for list pages (index.php, ektaktoi_list.php, etc.) */
+body {
+	padding: 20px;
+}
+
+.page-header {
+	text-align: center;
+	margin: 20px 0 30px 0;
+}
+
+.page-header h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #1f2937;
+	margin-bottom: 12px;
+}
+
+.user-info {
+	background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+	padding: 10px 16px;
+	border-radius: 8px;
+	display: inline-block;
+	margin: 12px 0;
+	font-size: 0.875rem;
+	color: #1e40af;
+	font-weight: 500;
+	border: 1px solid #4FC5D6;
+}
+
+/* Search form row styling */
+.tablesorter-ignoreRow {
+	background: #f0f9ff !important;
+}
+
+.tablesorter-ignoreRow td {
+	background: #f0f9ff !important;
+	padding: 12px !important;
+	border: 1px solid #bae6fd !important;
+}
+
+.tablesorter-ignoreRow input[type="text"],
+.tablesorter-ignoreRow select {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	font-size: 0.875rem;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tablesorter-ignoreRow input[type="text"]:focus,
+.tablesorter-ignoreRow select:focus {
+	outline: none;
+	border-color: #4FC5D6;
+	box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+}
+
+.tablesorter-ignoreRow input[type="submit"],
+.tablesorter-ignoreRow button {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+	width: 100%;
+	margin-top: 8px;
+	font-size: 0.875rem;
+}
+
+.tablesorter-ignoreRow input[type="submit"]:hover,
+.tablesorter-ignoreRow button:hover {
+	background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+}
+
+.tablesorter-ignoreRow button.btn-yellow {
+	background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+	box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+}
+
+.tablesorter-ignoreRow button.btn-yellow:hover {
+	background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+	box-shadow: 0 4px 6px rgba(245, 158, 11, 0.4);
+}
+
+.tablesorter-ignoreRow input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	accent-color: #4FC5D6;
+	cursor: pointer;
+	margin-right: 8px;
+}
+
+.tablesorter-ignoreRow small {
+	color: #6b7280;
+	font-size: 0.8125rem;
+	line-height: 1.5;
+}
+
+/* Table header styling - override existing if needed */
+.imagetable thead th {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	color: white !important;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 14px 16px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Table rows */
+.imagetable tbody tr {
+	transition: background-color 0.2s ease;
+}
+
+.imagetable tbody tr:hover {
+	background-color: #f8fafc;
+}
+
+.imagetable tbody tr:nth-child(even) {
+	background-color: #f9fafb;
+}
+
+.imagetable tbody tr:nth-child(even):hover {
+	background-color: #f3f4f6;
+}
+
+/* Action column styling */
+.imagetable tbody td:first-child {
+	text-align: center;
+	padding: 12px 8px;
+	vertical-align: middle;
+}
+
+.imagetable tbody td:first-child a {
+	display: inline-block;
+	margin: 0 4px;
+	transition: transform 0.2s;
+}
+
+.imagetable tbody td:first-child a:hover {
+	transform: scale(1.15);
+}
+
+.imagetable tbody td:first-child img {
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Modern SVG icon styling */
+.imagetable tbody td:first-child span {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+	margin: 0 2px;
+}
+
+.action-icon {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+	cursor: pointer;
+	vertical-align: middle;
+	flex-shrink: 0;
+}
+
+.action-icon svg {
+	width: 18px;
+	height: 18px;
+	transition: all 0.2s ease;
+	display: block;
+}
+
+.action-icon.view {
+	color: #2563eb;
+	background-color: #eff6ff;
+}
+
+.action-icon.view:hover {
+	background-color: #dbeafe;
+	color: #1d4ed8;
+	transform: scale(1.1);
+}
+
+.action-icon.edit {
+	color: #16a34a;
+	background-color: #f0fdf4;
+}
+
+.action-icon.edit:hover {
+	background-color: #dcfce7;
+	color: #15803d;
+	transform: scale(1.1);
+}
+
+.action-icon.delete {
+	color: #dc2626;
+	background-color: #fef2f2;
+}
+
+.action-icon.delete:hover {
+	background-color: #fee2e2;
+	color: #b91c1c;
+	transform: scale(1.1);
+}
+
+.action-icon.disabled {
+	color: #9ca3af;
+	background-color: #f3f4f6;
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.action-icon.disabled:hover {
+	transform: none;
+}
+
+/* Data cells */
+.imagetable tbody td {
+	padding: 12px 16px;
+	color: #374151;
+	vertical-align: middle;
+}
+
+.imagetable tbody td a {
+	color: #2563eb;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s;
+}
+
+.imagetable tbody td a:hover {
+	color: #1d4ed8;
+	text-decoration: underline;
+}
+
+/* "No results" message */
+.imagetable tbody td[colspan] h3 {
+	color: #6b7280;
+	font-size: 1.125rem;
+	font-weight: 600;
+	padding: 20px;
+	text-align: center;
+}
+
+/* Add employee row */
+.imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) {
+	background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%);
+	border-top: 2px solid #22c55e;
+}
+
+.imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) td {
+	padding: 16px;
+	text-align: center;
+}
+
+.imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) a {
+	color: #16a34a;
+	font-weight: 600;
+	font-size: 0.9375rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	transition: color 0.2s;
+}
+
+.imagetable tbody tr:has(td[colspan]:contains("Προσθήκη")) a:hover {
+	color: #15803d;
+}
+
+/* Pagination row */
+.pagination-row {
+	background: #f9fafb;
+	padding: 16px;
+	text-align: center;
+	border-top: 2px solid #e5e7eb;
+}
+
+.pagination-info {
+	margin-bottom: 12px;
+	color: #6b7280;
+	font-size: 0.875rem;
+}
+
+.pagination-links {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	margin: 12px 0;
+}
+
+.pagination-links a {
+	color: #4FC5D6;
+	text-decoration: none;
+	font-weight: 600;
+	padding: 8px 16px;
+	border-radius: 6px;
+	background: white;
+	border: 1px solid #bae6fd;
+	transition: all 0.2s;
+}
+
+.pagination-links a:hover {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+	color: white;
+	border-color: #4FC5D6;
+	transform: translateY(-1px);
+}
+
+.pagination-links span {
+	color: #9ca3af;
+	padding: 8px 16px;
+}
+
+.pagination-form {
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid #e5e7eb;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.pagination-form input[type="text"] {
+	width: 60px;
+	padding: 8px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	text-align: center;
+}
+
+.pagination-form input[type="submit"] {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+	color: white;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.pagination-form input[type="submit"]:hover {
+	background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+	transform: translateY(-1px);
+}
+
+/* Action buttons row */
+.action-buttons-row {
+	background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+	padding: 16px;
+	text-align: center;
+	border-top: 2px solid #f59e0b;
+}
+
+.action-buttons-row input[type="button"] {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+	margin: 4px 8px;
+	font-size: 0.875rem;
+}
+
+.action-buttons-row input[type="button"]:hover {
+	background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+}
+
+.action-buttons-row input[type="button"].btn-red {
+	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+	box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.action-buttons-row input[type="button"].btn-red:hover {
+	background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+	box-shadow: 0 4px 6px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive adjustments for list pages */
+@media (max-width: 768px) {
+	.page-header h2 {
+		font-size: 1.5rem;
+	}
+	
+	.pagination-links {
+		flex-direction: column;
+		gap: 8px;
+	}
+	
+	.pagination-form {
+		flex-direction: column;
+	}
+	
+	.action-buttons-row input[type="button"] {
+		display: block;
+		width: 100%;
+		margin: 8px 0;
+	}
+}
+
+/* table.dataTable thead .sorting_asc {
+	background-image: none !important;
+} */
+
+/* ============================================
+   Modern Datepicker Styling - Matching App Theme
+   Global styles for jQuery UI Datepicker with Greek localization
+   ============================================ */
+
+.ui-datepicker {
+	background: #ffffff !important;
+	border: 2px solid #4FC5D6 !important;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(79, 197, 214, 0.3);
+	font-family: inherit;
+	padding: 0;
+	width: auto;
+	min-width: 200px;
+	max-width: 300px;
+	font-size: 11px;
+	z-index: 10000 !important;
+}
+
+/* Override jQuery UI widget defaults */
+.ui-widget.ui-widget-content {
+	background: #ffffff !important;
+	border: 2px solid #4FC5D6 !important;
+}
+
+.ui-datepicker-header {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	border: none !important;
+	border-radius: 6px 6px 0 0;
+	color: white !important;
+	padding: 6px 0;
+}
+
+.ui-datepicker-title {
+	color: white !important;
+	font-weight: 600;
+	font-size: 11px;
+}
+
+/* Override jQuery UI default header styling */
+.ui-widget-header {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	border: none !important;
+	color: white !important;
+}
+
+.ui-datepicker .ui-widget-header {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+	border: none !important;
+	color: white !important;
+}
+
+/* Override jQuery UI default state colors */
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	background: #ffffff !important;
+	border: 1px solid #e5e7eb !important;
+	color: #374151 !important;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover {
+	background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%) !important;
+	border: 1px solid #4FC5D6 !important;
+	color: #2A8B9A !important;
+}
+
+/* Month and Year Selectors - Fix visibility issue */
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	border: 1px solid #bae6fd !important;
+	border-radius: 4px;
+	padding: 2px 4px !important;
+	font-weight: 600;
+	font-size: 11px !important;
+	margin: 0 2px;
+	cursor: pointer;
+	transition: all 0.2s;
+	-webkit-appearance: menulist;
+	-moz-appearance: menulist;
+	appearance: menulist;
+	line-height: 1.2;
+}
+
+/* Ensure dropdown options are visible */
+.ui-datepicker select.ui-datepicker-month option,
+.ui-datepicker select.ui-datepicker-year option {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	padding: 2px 4px;
+	font-size: 11px;
+}
+
+.ui-datepicker select.ui-datepicker-month:hover,
+.ui-datepicker select.ui-datepicker-year:hover {
+	background: #f0f9ff !important;
+	background-color: #f0f9ff !important;
+	border-color: #4FC5D6 !important;
+	box-shadow: 0 0 0 2px rgba(79, 197, 214, 0.2);
+}
+
+.ui-datepicker select.ui-datepicker-month:focus,
+.ui-datepicker select.ui-datepicker-year:focus {
+	outline: none;
+	border-color: #4FC5D6 !important;
+	box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.3);
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+}
+
+/* Additional fix for month/year in header */
+.ui-datepicker .ui-datepicker-title select {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+}
+
+/* General rule for all selects in datepicker */
+.ui-datepicker select {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	border: 1px solid #bae6fd !important;
+	font-size: 11px !important;
+}
+
+.ui-datepicker select option {
+	background: #ffffff !important;
+	background-color: #ffffff !important;
+	color: #2A8B9A !important;
+	font-size: 11px;
+}
+
+/* Datepicker Navigation Buttons */
+.ui-datepicker-prev,
+.ui-datepicker-next {
+	background: rgba(255, 255, 255, 0.2) !important;
+	border: none !important;
+	border-radius: 4px;
+	color: white !important;
+	cursor: pointer;
+	height: 22px;
+	width: 22px;
+	top: 6px;
+	transition: all 0.2s;
+	overflow: hidden;
+	position: relative;
+	height: 1.5em !important;
+}
+
+/* Override jQuery UI default prev/next styling */
+.ui-datepicker-prev.ui-state-hover,
+.ui-datepicker-next.ui-state-hover {
+	background: rgba(255, 255, 255, 0.3) !important;
+	border: none !important;
+}
+
+.ui-datepicker-prev:hover,
+.ui-datepicker-next:hover {
+	background: rgba(255, 255, 255, 0.3);
+	transform: scale(1.1);
+}
+
+.ui-datepicker-prev .ui-icon,
+.ui-datepicker-next .ui-icon {
+	background: none !important;
+	text-indent: 0 !important;
+	overflow: visible !important;
+	color: white !important;
+	font-weight: bold;
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	width: auto !important;
+	height: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+}
+
+.ui-datepicker-prev .ui-icon:before {
+	content: "‹" !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+	display: block !important;
+	color: white !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: relative !important;
+}
+
+.ui-datepicker-next .ui-icon:before {
+	content: "›" !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+	display: block !important;
+	color: white !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: relative !important;
+}
+
+/* Navigation text links (Previous/Next) - Hide text, show only icons */
+.ui-datepicker-prev a,
+.ui-datepicker-next a {
+	color: white !important;
+	text-decoration: none;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: visible !important;
+	text-align: center;
+	line-height: 22px;
+}
+
+.ui-datepicker-prev a:hover,
+.ui-datepicker-next a:hover {
+	color: white !important;
+	text-decoration: none;
+}
+
+/* Hide the text span if it exists - jQuery UI uses spans for text */
+.ui-datepicker-prev a span,
+.ui-datepicker-next a span {
+	/* display: none !important; */
+	visibility: hidden !important;
+	opacity: 0 !important;
+	width: 0 !important;
+	/* height: 0 !important; */
+	overflow: hidden !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+}
+
+/* Hide any text content in navigation buttons, but keep icons */
+.ui-datepicker-prev,
+.ui-datepicker-next {
+	overflow: visible !important;
+}
+
+/* Hide all text content except icons */
+.ui-datepicker-prev a *:not(.ui-icon),
+.ui-datepicker-next a *:not(.ui-icon) {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+
+/* But keep the icon visible and properly styled */
+.ui-datepicker-prev .ui-icon,
+.ui-datepicker-next .ui-icon {
+	font-size: 18px !important;
+	text-indent: 0 !important;
+	overflow: visible !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	width: auto !important;
+	height: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* Additional override for jQuery UI default span styling */
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+	/* display: none !important; */
+	/* visibility: hidden !important; */
+	/* opacity: 0 !important; */
+	/* width: 0 !important; */
+	/* height: 0 !important; */
+	overflow: hidden !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+}
+
+/* Ensure text in anchor is hidden but icon is visible */
+.ui-datepicker-prev a,
+.ui-datepicker-next a {
+	font-size: 0 !important;
+	color: transparent !important;
+}
+
+/* Make sure icon text content is visible */
+.ui-datepicker-prev .ui-icon:before,
+.ui-datepicker-next .ui-icon:before {
+	color: white !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	display: block !important;
+}
+
+/* Override jQuery UI default link colors in header */
+.ui-datepicker-header a {
+	color: white !important;
+}
+
+.ui-datepicker-header a:hover {
+	color: white !important;
+}
+
+/* Calendar Table */
+.ui-datepicker-calendar {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	table-layout: fixed;
+}
+
+.ui-datepicker-calendar th,
+.ui-datepicker-calendar td {
+	width: 14.28%;
+	box-sizing: border-box;
+}
+
+.ui-datepicker-calendar thead th {
+	background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+	color: #2A8B9A;
+	font-weight: 600;
+	padding: 4px 2px;
+	border: 1px solid #bae6fd;
+	font-size: 10px;
+	line-height: 1.2;
+}
+
+.ui-datepicker-calendar td {
+	border: 1px solid #e5e7eb;
+	padding: 0;
+}
+
+.ui-datepicker-calendar td a,
+.ui-datepicker-calendar td span {
+	background: #ffffff;
+	color: #374151;
+	display: block;
+	padding: 4px 2px;
+	text-align: center;
+	text-decoration: none;
+	transition: all 0.2s;
+	font-size: 11px;
+	line-height: 1.3;
+}
+
+.ui-datepicker-calendar td a:hover {
+	background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+	color: #2A8B9A;
+	font-weight: 600;
+}
+
+.ui-datepicker-calendar .ui-state-active {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+	color: white !important;
+	font-weight: 700;
+	border: 2px solid #2A8B9A !important;
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.4);
+}
+
+/* Override jQuery UI default active state */
+.ui-datepicker-calendar td.ui-state-active a,
+.ui-datepicker-calendar td.ui-state-active span {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+	color: white !important;
+	border: 2px solid #2A8B9A !important;
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.4) !important;
+}
+
+/* Remove any yellow/gold borders from selected dates */
+.ui-datepicker-calendar td.ui-state-active,
+.ui-datepicker-calendar td.ui-state-active a,
+.ui-datepicker-calendar td.ui-state-active span {
+	border-color: #2A8B9A !important;
+	background-color: transparent !important;
+	background-image: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%) !important;
+}
+
+.ui-datepicker-calendar .ui-state-highlight {
+	background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+	color: #1e40af;
+	font-weight: 600;
+	border: 1px solid #4FC5D6;
+}
+
+.ui-datepicker-calendar .ui-state-disabled {
+	background: #f9fafb;
+	color: #d1d5db;
+	cursor: not-allowed;
+}
+
+.ui-datepicker-calendar .ui-state-disabled span {
+	color: #d1d5db;
+}
+
+/* Today's date styling */
+.ui-datepicker-calendar .ui-datepicker-today a {
+	background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+	color: #2A8B9A !important;
+	font-weight: 700;
+	border: 2px solid #4FC5D6 !important;
+}
+
+/* Override jQuery UI default today styling */
+.ui-datepicker-calendar td.ui-datepicker-today a {
+	background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+	color: #2A8B9A !important;
+	border: 2px solid #4FC5D6 !important;
+}
+
+/* Button Panel */
+.ui-datepicker-buttonpane {
+	background: #f9fafb;
+	border-top: 1px solid #e5e7eb;
+	padding: 4px;
+	text-align: center;
+}
+
+.ui-datepicker-buttonpane button {
+	background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+	border: none;
+	border-radius: 4px;
+	color: white;
+	cursor: pointer;
+	font-weight: 600;
+	padding: 4px 12px;
+	font-size: 11px;
+	transition: all 0.2s;
+}
+
+.ui-datepicker-buttonpane button:hover {
+	background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+}
+
+/* Datepicker Input Field */
+.datepicker-input {
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 8px 12px;
+	transition: border-color 0.2s, box-shadow 0.2s;
+	cursor: pointer;
+}
+
+.datepicker-input:hover {
+	border-color: #4FC5D6;
+}
+
+.datepicker-input:focus {
+	outline: none;
+	border-color: #4FC5D6;
+	box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
 }

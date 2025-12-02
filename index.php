@@ -16,38 +16,296 @@ else {
     $logged = 1;
 }        
   $usrlvl = $_SESSION['userlevel'];
+  
+  // Get statistics data (same as stats.php)
+  // init variables
+  $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
+  $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
+  $se_forea = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
+
+  $query = "SELECT count( * ) FROM employee WHERE status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde) AND thesi!=5";
+  $result = mysqli_query($mysqlconnection, $query);
+  $monimoi_her_total = mysqli_result($result, 0);
+  
+  $query = "SELECT count( * ) FROM ektaktoi";
+  $result = mysqli_query($mysqlconnection, $query);
+  $anapl_total = mysqli_result($result, 0);
+  
+  // Prepare data for schools
+  $sx_arr = array();
+  $query = "SELECT count(*) FROM school WHERE type = 1";
+  $res = mysqli_query($mysqlconnection, $query);
+  $res = mysqli_result($res, 0);
+  $sx_arr['Δημοτικά (Σύνολο)'] = $res;
+  $query = "SELECT count(*) FROM school WHERE type = 2";
+  $res = mysqli_query($mysqlconnection, $query);
+  $res = mysqli_result($res, 0);
+  $sx_arr['Νηπιαγωγεία (Σύνολο)'] = $res;
+  $total_schools = array_sum($sx_arr);
+
+  // Prepare data for permanent teachers chart
+  $monimoi_data = array();
+  $monimoi_labels = array();
+  $query = "SELECT COUNT( * ) , k.perigrafh FROM employee e 
+              JOIN klados k 
+              ON k.id = e.klados 
+              WHERE status!=2 AND sx_organikhs NOT IN ($allo_pyspe, $allo_pysde) AND thesi!=5
+              GROUP BY klados
+              ORDER BY COUNT( * ) DESC";
+  $result_mon = mysqli_query($mysqlconnection, $query);
+  while ($row = mysqli_fetch_array($result_mon, MYSQLI_NUM)) {
+      $monimoi_labels[] = $row[1];
+      $monimoi_data[] = $row[0];
+  }
+
+  // Prepare data for substitute teachers chart
+  $anapl_data = array();
+  $anapl_labels = array();
+  $query = "SELECT COUNT( * ) , k.perigrafh, ek.type
+              FROM ektaktoi e
+              JOIN klados k ON k.id = e.klados
+              JOIN ektaktoi_types ek ON e.type = ek.id
+              GROUP BY klados, e.type
+              ORDER BY COUNT( * ) DESC";
+  $result_anapl = mysqli_query($mysqlconnection, $query);
+  while ($row = mysqli_fetch_array($result_anapl, MYSQLI_NUM)) {
+      $espa = $row[2] == 'Αναπληρωτής ΕΣΠΑ' ? 'ΕΣΠΑ' : 'Κρατ.';     
+      $label = $row[1] . ' - ' . $espa;
+      $anapl_labels[] = $label;
+      $anapl_data[] = $row[0];
+  }
+
+  // Handle employee search redirect
+  if (isset($_POST['surname']) && strlen($_POST['surname'])>0) {
+      if (isset($_POST['pinakas']) && $_POST['pinakas']==1) {
+          $surn = explode(' ', $_POST['surname'])[0];
+          $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
+          echo "<script>window.location = '$url'</script>";
+          exit;
+      } else {
+          $surn = explode(' ', $_POST['surname'])[0];
+          $url = "employee/monimoi_list.php?surname=".urlencode($surn);
+          echo "<script>window.location = '$url'</script>";
+          exit;
+      }
+  }
 ?>
 <html>
   <head>
-    <LINK href="css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Πρωτέας</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <?php 
+    $root_path = '';
+    $page_title = 'Πρωτέας';
+    require 'etc/head.php'; 
+    ?>
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/jquery.validate.js"></script>
     <script type='text/javascript' src='js/jquery.autocomplete.js'></script>
-    <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
+    <link rel="stylesheet" rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="js/jquery_notification_v.1.js"></script>
-    <link rel="stylesheet" type="text/css" href="js/jquery.autocomplete.css" />
     <script type="text/javascript" src="js/common.js"></script>
-    <link href="css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f9fafb;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin: 20px 0 30px 0;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 10px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 12px 0;
+            font-size: 0.875rem;
+            color: #1e40af;
+            font-weight: 500;
+            border: 1px solid #4FC5D6;
+        }
+        
+        /* Search Box Styling */
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 30px;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        .search-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .search-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+        
+        .search-group input[type="text"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .search-group input[type="text"]:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        .search-group small {
+            display: block;
+            margin-top: 6px;
+            color: #6b7280;
+            font-size: 0.8125rem;
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+            height: 42px;
+        }
+        
+        .search-btn:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        /* Stat Cards */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 8px 0;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .stat-card .text-sm {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+        }
+        
+        .chart-container h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-wrapper {
+                height: 300px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-group {
+                width: 100%;
+            }
+        }
+    </style>
     <script type="text/javascript">        
       $().ready(function() {
-          $("#org").autocomplete("employee/get_school.php", {
-            width: 260,
-            matchContains: true,
-            selectFirst: false
-          });
-          $("#yphr").autocomplete("employee/get_school.php", {
-            width: 260,
-            matchContains: true,
-            selectFirst: false
-          });
           $("#surname").autocomplete("employee/get_name.php", {
             width: 260,
             matchContains: true,
-            //mustMatch: true,
             selectFirst: false
           });
           $("#surname").result(function(event, data, formatted) {
@@ -55,321 +313,196 @@ else {
               $("#pinakas").val(data[1]);
             }
           });
-          $("#mytbl").tablesorter({widgets: ['zebra']}); 
       });         
     </script>
     
   </head>
   <body> 
     <?php require 'etc/menu.php'; ?>
-    <div>
-<?php
-  // notify admin to delete init.php if it exists
-if ($usrlvl == 0) {
-    if (file_exists('init.php')) {
-        notify("ΠΡΟΣΟΧΗ: Παρακαλώ διαγράψτε το αρχείο <b>init.php</b> για λόγους ασφαλείας!</p>", 'error');
-    }
-}
-if (isset($_POST['clearall'])) {
-  $_POST = array();
-  echo "<script>window.location = 'index.php'</script>";
-}
-    //rpp = results per page
-if (isset($_POST['rpp'])) {
-    $rpp = $_POST['rpp'];
-} elseif (isset($_GET['rpp'])) {
-    $rpp = $_GET['rpp'];
-} else {
-    $rpp= 20;
-}
-
-if (isset($_POST['page']) && $_POST['page']!=0) {
-    $curpg = $_POST['page'];
-} elseif (isset($_GET['page'])) { 
-    $curpg = $_GET['page'];
-} else {
-    $curpg = 1;
-}
-    //limit in the query thing
-    $limitQ = ' LIMIT ' .($curpg - 1) * $rpp .',' .$rpp;
-
-    $query = "";
     
-    $klpost = 0;
-    $orgpost = 0;
-    $yppost = 0;
-    $whflag = 0;
-    $posted = 0;
-    $surpost = '';
-if (isset($_POST['klados']) && ($_POST['klados']>0) || (isset($_POST['org']) && strlen($_POST['org'])>0) || 
-(isset($_POST['yphr']) && strlen($_POST['yphr'])>0) || (isset($_POST['surname']) && strlen($_POST['surname'])>0)) {
-    $posted=1;
-    $curpg=1;
-}
-if (isset($_REQUEST['klados']) && strlen($_REQUEST['klados'])) {
-    if (isset($_POST['klados']) && $_POST['klados']>0) {
-        $klpost = $_POST['klados'];
-    }  
-    if (isset($_GET['klados']) && $_GET['klados']>0){
-        $klpost = $_GET['klados'];
-    }
-    $query .= "WHERE klados = $klpost ";
-    $whflag=1;
+    <?php
+      // notify admin to delete init.php if it exists
+      if ($usrlvl == 0) {
+          if (file_exists('init.php')) {
+              notify("ΠΡΟΣΟΧΗ: Παρακαλώ διαγράψτε το αρχείο <b>init.php</b> για λόγους ασφαλείας!</p>", 'error');
+          }
+      }
+    ?>
     
-}
-if ( isset($_REQUEST['org']) && strlen($_REQUEST['org']) ) {
-    if (isset ($_POST['org']) && strlen($_POST['org'])>0) {
-        $orgpost = getSchoolID($_POST['org'], $mysqlconnection);
-    }
-    if (isset($_GET['org']) && $_GET['org']>0) {
-        $orgpost = $_GET['org'];
-    }
-    if ($whflag) {
-        $query .= "AND sx_organikhs = $orgpost ";
-    } else
-    {
-        $query .= "WHERE sx_organikhs = $orgpost ";
-        $whflag=1;
-    }    
-}
-if ( isset($_REQUEST['yphr']) && strlen($_REQUEST['yphr'])>0) {
-    if (isset($_POST['yphr']) && strlen($_POST['yphr'])>0) {
-        $yppost = getSchoolID($_POST['yphr'], $mysqlconnection);
-    }
-    if (isset($_GET['yphr']) && $_GET['yphr']>0) {
-        $yppost = $_GET['yphr'];
-    }
-    if ($whflag) {
-        $query .= "AND sx_yphrethshs = $yppost ";
-    } else {
-        $query .= "WHERE sx_yphrethshs = $yppost ";
-        $whflag = 1;
-    }
-}
-    // if ektaktos
-if (isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 && $_POST['pinakas']==1) {
-    $surn = explode(' ', $_POST['surname'])[0];
-    $url = "employee/ektaktoi_list.php?surname=".urlencode($surn);
-    echo "<script>window.location = '$url'</script>";
-}
-if ( isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0) {
-    if (isset($_POST['surname']) && strlen($_POST['surname'])>0) {
-        $surpost = explode(' ', $_POST['surname'])[0];
-    } else {
-        $surpost = $_GET['surname'];
-    }
-    if ($whflag) {
-        $query .= "AND surname LIKE '%$surpost%' ";
-    } else
-    {
-        $query .= "WHERE surname LIKE '%$surpost%' ";
-        $whflag=1;
-    }
-}
-  // ΟΧΙ idiwtikoi
-  if ($whflag) {
-      $query .= " AND thesi NOT IN (5,6) ";
-  } else {
-      $query .= " WHERE thesi NOT IN (5,6) ";
-      $whflag = 1;
-  }
-
-  // exclude employees that don't belong in d/nsh
-  if (!isset($_REQUEST['outsiders'])) {
-    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
-    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
-    $text = " NOT (sx_yphrethshs IN ($allo_pyspe, $allo_pysde) AND sx_organikhs IN ($allo_pyspe, $allo_pysde))";
-    if ($whflag) {
-      $query .= " AND $text";
-    } else {
-      $query .= " WHERE $text";
-      $whflag = 1;
-    }
-  }
-  // include inactive employees
-  if (!isset($_REQUEST['inactive'])) {
-    $text = " status IN (1,3,5)";
-    if ($whflag) {
-      $query .= " AND $text";
-    } else {
-      $query .= " WHERE $text";
-      $whflag = 1;
-    }
-  }
-    
-    $query .= " ORDER BY surname ";
-                    
-    // Create queries...
-    $q_main = "SELECT * FROM employee ". $query . $limitQ;
-    $q_count = "SELECT count(*) as cnt FROM employee " . $query;
-
-    /////////////// debug
-    // echo $q_main;
-    /////////////// 
-    $result = mysqli_query($mysqlconnection, $q_main);
-    $result1 = mysqli_query($mysqlconnection, $q_count);
-    // Number of records found
-if ($result) {
-    $num_record = mysqli_num_rows($result);
-}
-if ($result1) {
-    $num_record1 = mysqli_result($result1, 0, "cnt");
-}
-
-    $lastpg = ceil($num_record1 / $rpp);
+    <div class="dashboard-container">
+        <div class="page-header">
+            <h1>Πρωτέας</h1>
+            <?php if ($logged) { 
+              $se = getParam('sxol_etos', $mysqlconnection);
+              $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
+              echo "<div class='user-info'>👤 Ενεργός Χρήστης: <strong>".$_SESSION['user']."</strong> &nbsp;&nbsp; 📅 Σχολ.Έτος: <strong>$sx_etos</strong></div>";
+            } ?>
+        </div>
+        
+        <!-- Search Box -->
+        <div class="search-box">
+            <form method="POST" action="index.php" class="search-form">
+                <div class="search-group">
+                    <label for="surname">Αναζήτηση Εκπαιδευτικού</label>
+                    <input type="text" name="surname" id="surname" placeholder="Εισάγετε επώνυμο..." />
+                    <input type="hidden" name="pinakas" id="pinakas" />
+                    <small>Ψάχνει σε μόνιμους & αναπληρωτές</small>
+                </div>
+                <button type="submit" class="search-btn" style="margin-bottom: 28px;">🔍 Αναζήτηση</button>
+            </form>
+        </div>
+        
+        <!-- Stat Cards -->
+        <div class="cards-grid">
+            <a href="employee/monimoi_list.php" class="stat-card">
+                <div class="stat-label">Μονιμοι Εκπαιδευτικοι</div>
+                <div class="stat-number"><?php echo number_format($monimoi_her_total); ?></div>
+                <div class="text-sm">Συνολικός αριθμός μόνιμων εκπαιδευτικών</div>
+            </a>
             
-if ($result) {
-    $num=mysqli_num_rows($result);
-}
-
-    // added 24-01-2013 - when 1 result, redirect to that employee page
-if ($num_record == 1 && $num_record1 > 1) {
-    $id = mysqli_result($result, 0, "id");
-    $url = "employee/employee.php?id=$id&op=view";
-    echo "<script>window.location = '$url'</script>";
-}
-echo "<center><h2>Μόνιμοι Εκπαιδευτικοί</h2></center>";
-if ($logged) {
-  $se = getParam('sxol_etos', $mysqlconnection);
-  $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);
-  echo "<p class='userdata'>Ενεργός Χρήστης: ".$_SESSION['user']."&nbsp;&nbsp;-&nbsp;&nbsp;Σχολ.Έτος:&nbsp;$sx_etos</p>";
-}
-    echo "<center>";        
-    echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-    echo "<thead>";
-    echo "<tr><th>Ενέργεια</th>\n";
-    echo "<th>Επώνυμο</th>\n";
-    echo "<th>Όνομα</th>\n";
-    echo "<th>Ειδικότητα</th>\n";
-    echo "<th>Σχ.Οργανικής</th>\n";
-    echo "<th>Σχ.Υπηρέτησης</th>\n";
-    echo "</tr>\n\n";
-   echo "<tr class='tablesorter-ignoreRow'><form id='src' name='src' action='index.php' method='POST'>\n";
-if ($posted || 
-      (isset($_REQUEST['klados']) && $_REQUEST['klados']>0) || 
-      (isset($_REQUEST['org']) && $_REQUEST['org']>0) || 
-      (isset($_REQUEST['yphr']) && $_REQUEST['yphr']>0) || 
-      (isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0) || 
-      (isset($_REQUEST['outsiders'])) ||
-      (isset($_REQUEST['inactive']))
-    ) {
-    echo "<input type='hidden' name='clearall' id='clearall' />";
-    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Επαναφορά'></td><td>\n";
-} else {    
-    echo "<td rowspan=2><INPUT TYPE='submit' VALUE='Αναζήτηση'></td><td>\n";
-}
-    echo isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0 ? "<input type='text' value='".$_REQUEST['surname']."' name='surname' id='surname''/>\n" : "<input type='text' name='surname' id='surname''/>\n";
-    echo "<input type='hidden' name='pinakas' id='pinakas' />";
-    echo "<td><span title='Ψάχνει σε μόνιμους & αναπληρωτές, εμφανίζοντας σε παρένθεση τη σχέση εργασίας'><small>(Σε μόνιμους<br> & αναπληρωτές)</small><img style=\"border: 0pt none;\" src=\"images/help.gif\" height='12' width='12'/></span></td></td><td>\n";
-    echo $klpost > 0 ? kladosCombo($klpost, $mysqlconnection) : kladosCmb($mysqlconnection);
-  //  kladosCmb($mysqlconnection);
-    echo "</td>\n";
-    echo "<div id=\"content\">";
-    echo "<form autocomplete=\"off\">";
-    echo "<td><input type=\"text\" name=\"org\" id=\"org\" /></td>";
-    echo "<td><input type=\"text\" name=\"yphr\" id=\"yphr\" /></td>";
-    echo "</div>";
-    echo "</td>";
-    echo "<tr>";
-    $has_outsiders = isset($_REQUEST['outsiders']) ? 'checked' : '';
-    echo "<td colspan=3><input type='checkbox' name = 'outsiders' $has_outsiders><small>Εμφάνιση και όσων δεν υπηρετούν και δεν ανήκουν στη Δ/νση</small></td>";	
-    $has_inactive = isset($_REQUEST['inactive']) ? 'checked' : '';
-    echo "<td colspan=2><input type='checkbox' name = 'inactive' $has_inactive><small>Εμφάνιση και όσων δεν εργάζονται (λύση σχέσης, διαθεσιμότητα)</small></small></td>";
-    echo "</form></tr></thead>\n";
+            <a href="employee/ektaktoi_list.php" class="stat-card">
+                <div class="stat-label">Αναπληρωτες / Ωρομισθιοι</div>
+                <div class="stat-number"><?php echo number_format($anapl_total); ?></div>
+                <div class="text-sm">Συνολικός αριθμός αναπληρωτών</div>
+            </a>
+            
+            <a href="school/school.php" class="stat-card">
+                <div class="stat-label">Σχολικες Μοναδες</div>
+                <div class="stat-number"><?php echo number_format($total_schools); ?></div>
+                <div class="text-sm">Συνολικός αριθμός σχολείων</div>
+            </a>
+        </div>
+        
+        <!-- Charts -->
+        <div class="charts-grid">
+            <?php if (count($monimoi_labels) > 0) { ?>
+            <div class="chart-container">
+                <h3>Μόνιμοι εκπαιδευτικοί (με οργανική στη Δ/νση <?php echo getParam('dnsh', $mysqlconnection); ?>)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="monimoiChart"></canvas>
+                </div>
+            </div>
+            <?php } ?>
+            
+            <?php if (count($anapl_labels) > 0) { ?>
+            <div class="chart-container">
+                <h3>Αναπληρωτές / Ωρομίσθιοι εκπαιδευτικοί</h3>
+                <div class="chart-wrapper">
+                    <canvas id="anaplChart"></canvas>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
     
-    echo "<tbody>\n";
-if ($num == 0) {
-    echo "<tr><td colspan=7><b><h3>Δε βρέθηκαν αποτελέσματα...</h3></b></td></tr>";
-} else {
-    $i = 0;
-    while ($i < $num)
-    {
-        $id = mysqli_result($result, $i, "id");
-        $name = mysqli_result($result, $i, "name");
-        $surname = mysqli_result($result, $i, "surname");
-        $klados_id = mysqli_result($result, $i, "klados");
-        $klados = getKlados($klados_id, $mysqlconnection);
-        $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
-        $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-        $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
-        $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-        $sx_organikhs_url = "<a href=\"school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-        $sx_yphrethshs_url = "<a href=\"school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a>";
-        // check if multiple schools
-        $qry = "select * from yphrethsh where emp_id=$id and sxol_etos=$sxol_etos";
-        $res = mysqli_query($mysqlconnection, $qry);
-        if (mysqli_num_rows($res) > 0) {
-            $sx_yphrethshs .= "*";
-        }
-                  
-        echo "<tr><td>";
-        echo "<span title=\"Προβολή\"><a href=\"employee/employee.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"images/view_action.png\"/></a></span>&nbsp;&nbsp;";
-        if ($usrlvl < 3) {
-            echo "<span title=\"Επεξεργασία\"><a href=\"employee/employee.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"images/edit_action.png\"/></a></span>&nbsp;&nbsp;";
-        }
-        if ($usrlvl < 2) {
-            echo "<span title=\"Διαγραφή\"><a href=\"javascript:confirmDelete('employee/employee.php?id=$id&op=delete')\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></a></span>";
-        } else {
-            echo "<span title=\"Η διαγραφή μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/delete_action.png\"/></span>";
-        }
-        echo "</td>";
-        echo "<td><a href=\"employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>".$sx_organikhs_url."</td><td>".$sx_yphrethshs_url."</td>\n";
-        echo "</tr>";
-
-        $i++;
-    }  
-} 
-    echo "</tbody>\n";
-    //echo "<tr><td colspan=7><input type='checkbox' name = 'outsiders'>Εμφάνιση και όσων δεν υπηρετούν ή ανήκουν στη Δ/νση;</td></tr>";
-if ($usrlvl < 2) {
-    echo "<tr><td colspan=7><span title=\"Προσθήκη\"><a href=\"employee/employee.php?op=add\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</a></span>";
-} else {
-    echo "<tr><td colspan=7><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
-}        
-    echo "<tr><td colspan=7 align=center>";
-    $prevpg = $curpg-1;
-if ($lastpg == 0) {
-    $curpg = 0;
-}
-    echo "Σελίδα $curpg από $lastpg ($num_record1 <span title='Query: ".str_replace(array('"','\''), '', $q_main)."'>εγγραφές</span>)<br>";
-$outsiders = isset($_REQUEST['outsiders']) ? '&outsiders=1' : '';
-$inactive = isset($_REQUEST['inactive']) ? '&inactive=1' : '';
-$getstring = "&rpp=$rpp";
-$getstring .= $klpost ? "&klados=$klpost" : '';
-$getstring .= $yppost ? "&yphr=$yppost" : '';
-$getstring .= $surpost ? "&surname=$surpost" : '';
-$getstring .= strlen($outsiders)>0 ? $outsiders : '';
-$getstring .= strlen($inactive)>0 ? $outsiders : '';
-if ($curpg!=1) {
-    echo "  <a href=index.php?page=1$getstring>Πρώτη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$prevpg$getstring>Προηγ/νη</a>";
-}
-else {
-        echo "  Πρώτη &nbsp;&nbsp; Προηγ/νη";
-}
-if ($curpg != $lastpg) {
-    $nextpg = $curpg+1;
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$nextpg$getstring>Επόμενη</a>";
-    echo "&nbsp;&nbsp;  <a href=index.php?page=$lastpg$getstring>Τελευταία</a>";
-}
-else { 
-        echo "  Επόμενη &nbsp;&nbsp; Τελευταία";
-}
-    echo "<FORM METHOD='POST' ACTION='index.php?".$_SERVER['QUERY_STRING']."'>";
-    echo " Μετάβαση στη σελ.  <input type=\"text\" name=\"page\" size=1 />";
-    echo "<input type=\"submit\" value=\"Μετάβαση\">";
-    echo "<br>";
-    echo "   Εγγρ./σελ.    <input type=\"text\" name=\"rpp\" value=\"$rpp\" size=1 />";
-    echo "<input type=\"submit\" value=\"Ορισμός\">";
-    echo "</FORM>";
-    echo "</td></tr>";
-    echo "</table>\n";
-?>
-      
-<br><br>
-     
-</center>
-</div>
+    <!-- Chart.js Scripts -->
+    <script>
+        const formatPieTooltip = function(context) {
+            const datasets = context.chart && context.chart.data && Array.isArray(context.chart.data.datasets)
+                ? context.chart.data.datasets
+                : [];
+            const dataset = datasets[context.datasetIndex] || {};
+            const dataArray = Array.isArray(dataset.data) ? dataset.data : [];
+            let rawValue = 0;
+            if (typeof context.raw !== 'undefined') {
+                rawValue = context.raw;
+            } else if (typeof context.parsed !== 'undefined') {
+                rawValue = context.parsed;
+            } else if (typeof dataArray[context.dataIndex] !== 'undefined') {
+                rawValue = dataArray[context.dataIndex];
+            }
+            const value = Number(rawValue) || 0;
+            const total = dataArray.reduce(function(sum, item) {
+                const numericValue = Number(item);
+                return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+            const label = context.label || dataset.label || '';
+            return label + ': ' + value + ' (' + percentage + '%)';
+        };
+        
+        // Color palette
+        const colors = [
+            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+            '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1',
+            '#14b8a6', '#a855f7', '#f43f5e', '#0ea5e9', '#22c55e'
+        ];
+        
+        <?php if (count($monimoi_labels) > 0) { ?>
+        // Permanent Teachers Chart
+        const monimoiCtx = document.getElementById('monimoiChart').getContext('2d');
+        new Chart(monimoiCtx, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode($monimoi_labels, JSON_UNESCAPED_UNICODE); ?>,
+                datasets: [{
+                    data: <?php echo json_encode($monimoi_data); ?>,
+                    backgroundColor: colors.slice(0, <?php echo count($monimoi_data); ?>),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: { size: 12 },
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return formatPieTooltip(context);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        <?php } ?>
+        
+        <?php if (count($anapl_labels) > 0) { ?>
+        // Substitute Teachers Chart
+        const anaplCtx = document.getElementById('anaplChart').getContext('2d');
+        new Chart(anaplCtx, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode($anapl_labels, JSON_UNESCAPED_UNICODE); ?>,
+                datasets: [{
+                    data: <?php echo json_encode($anapl_data); ?>,
+                    backgroundColor: colors.slice(0, <?php echo count($anapl_data); ?>),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 12
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return formatPieTooltip(context);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        <?php } ?>
+    </script>
+    
 </body>
 </html>
 <?php

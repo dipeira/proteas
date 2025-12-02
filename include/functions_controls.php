@@ -25,7 +25,7 @@ function kladosCombo($klados,$conn)
     echo "</select>";
 }
 
-function kladosCmb($conn)
+function kladosCmb($conn, $show_name = false)
 {
     $query = "SELECT * from klados ORDER BY perigrafh";
     $result = mysqli_query($conn, $query);
@@ -35,14 +35,18 @@ function kladosCmb($conn)
     }
     $i = 0;
     $num=mysqli_num_rows($result);
-    echo "<select style='max-width: 97px;' name=\"klados\" id=\"klados\">";
+    echo "<select style='max-width: 18em;' name=\"klados\" id=\"klados\">";
     echo "<option value='' selected>(Επιλογή:)</option>";
     while ($i < $num) 
     {
         $id=mysqli_result($result, $i, "id");
         $per=mysqli_result($result, $i, "perigrafh");
         $onoma=mysqli_result($result, $i, "onoma");
-        echo "<option value=\"".$id."\">".$per.", ".$onoma."</option>";
+        if ($show_name) {
+            echo "<option value=\"".$id."\">".$per.", ".$onoma."</option>";
+        } else {
+            echo "<option value=\"".$id."\">".$per."</option>";
+        }
         $i++;
     }
     echo "</select>";
@@ -583,6 +587,111 @@ function postgradCmb($v = null)
         echo "<option value='Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)'>Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</option>";
     }
     echo "</select>";
+}
+
+/**
+ * Modern Greek Datepicker Helper Function
+ * Creates a modern jQuery UI datepicker input with Greek localization
+ * 
+ * @param string $name - Input name and ID
+ * @param string $value - Default date value (Y-m-d format or empty)
+ * @param array $options - Additional options:
+ *   - minDate: Minimum selectable date (Y-m-d format or 'today')
+ *   - maxDate: Maximum selectable date (Y-m-d format or 'today')
+ *   - disabledDays: Array of days to disable ('sun', 'sat')
+ *   - yearRange: Year range string (default: '1970:2050')
+ *   - dateFormat: Date format (default: 'dd-mm-yy' for Greek)
+ */
+function modern_datepicker($name, $value = null, $options = array()) {
+    // Format value for display (convert Y-m-d to dd-mm-yy if needed)
+    $displayValue = '';
+    $hiddenValue = '';
+    if ($value && strtotime($value) > 0) {
+        $displayValue = date('d-m-Y', strtotime($value));
+        $hiddenValue = date('Y-m-d', strtotime($value));
+    }
+    
+    // Build input field - hidden field for Y-m-d format submission, visible for display
+    echo "<input type='hidden' name='$name' id='{$name}_hidden' value='$hiddenValue' />";
+    echo "<input type='text' id='$name' value='$displayValue' class='datepicker-input' style='width: 120px;' readonly />";
+    
+    // Build JavaScript initialization
+    $jsOptions = array();
+    
+    // Date format - display in Greek format (yy = 4-digit year in jQuery UI)
+    $jsOptions[] = "dateFormat: 'dd-mm-yy'";
+    
+    // Year range
+    $yearRange = isset($options['yearRange']) ? $options['yearRange'] : '1970:2050';
+    $jsOptions[] = "yearRange: '$yearRange'";
+    
+    // Min date
+    if (isset($options['minDate'])) {
+        if ($options['minDate'] === 'today') {
+            $jsOptions[] = "minDate: 0";
+        } else {
+            $jsOptions[] = "minDate: '" . date('d-m-Y', strtotime($options['minDate'])) . "'";
+        }
+    }
+    
+    // Max date
+    if (isset($options['maxDate'])) {
+        if ($options['maxDate'] === 'today') {
+            $jsOptions[] = "maxDate: 0";
+        } else {
+            $jsOptions[] = "maxDate: '" . date('d-m-Y', strtotime($options['maxDate'])) . "'";
+        }
+    }
+    
+    // Disabled days
+    if (isset($options['disabledDays']) && is_array($options['disabledDays'])) {
+        $disabledDays = $options['disabledDays'];
+        $beforeShowDay = "function(date) { var day = date.getDay(); ";
+        if (in_array('sun', $disabledDays)) {
+            $beforeShowDay .= "if (day === 0) return [false]; ";
+        }
+        if (in_array('sat', $disabledDays)) {
+            $beforeShowDay .= "if (day === 6) return [false]; ";
+        }
+        $beforeShowDay .= "return [true]; }";
+        $jsOptions[] = "beforeShowDay: $beforeShowDay";
+    }
+    
+    // Additional options
+    $jsOptions[] = "changeMonth: true";
+    $jsOptions[] = "changeYear: true";
+    $jsOptions[] = "showButtonPanel: true";
+    $jsOptions[] = "firstDay: 1"; // Monday
+    
+    $jsOptionsStr = implode(",\n            ", $jsOptions);
+    
+    // Output initialization script with date conversion
+    echo "<script type='text/javascript'>\n";
+    echo "    jQuery(document).ready(function($) {\n";
+    echo "        $('#$name').datepicker({\n";
+    echo "            $jsOptionsStr,\n";
+    echo "            onSelect: function(dateText, inst) {\n";
+    echo "                // Convert dd-mm-yy to Y-m-d for form submission\n";
+    echo "                // jQuery UI datepicker with 'yy' format returns 4-digit year\n";
+    echo "                var parts = dateText.split('-');\n";
+    echo "                if (parts.length === 3) {\n";
+    echo "                    var day = parts[0];\n";
+    echo "                    var month = parts[1];\n";
+    echo "                    var year = parts[2];\n";
+    echo "                    // 'yy' format already returns 4-digit year, but handle edge cases\n";
+    echo "                    if (year.length === 2) {\n";
+    echo "                        var currentYear = new Date().getFullYear();\n";
+    echo "                        var century = Math.floor(currentYear / 100) * 100;\n";
+    echo "                        year = parseInt(year) + century;\n";
+    echo "                        if (year > currentYear + 10) year -= 100;\n";
+    echo "                    }\n";
+    echo "                    var ymdDate = year + '-' + month + '-' + day;\n";
+    echo "                    $('#{$name}_hidden').val(ymdDate);\n";
+    echo "                }\n";
+    echo "            }\n";
+    echo "        });\n";
+    echo "    });\n";
+    echo "</script>\n";
 }
 
 ?>

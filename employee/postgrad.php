@@ -17,7 +17,6 @@ $page_name = "Μεταπτυχιακοί Τίτλοι";
 $search_column = 'afm';
 ////////////////////////////////////////
 
-
 // Demand authorization                
 require "../tools/class.login.php";
 $log = new logmein();
@@ -67,6 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = "INSERT INTO $table ($fields) VALUES ('$values_str')";
         // echo $query;
         $mysqli->query($query);
+        // Redirect to list view after successful creation
+        $afm_value = $_POST[$search_column];
+        $redirect_url = "?$search_column=$afm_value";
+        header("Location: postgrad.php$redirect_url");
+        exit;
     } elseif (isset($_POST['update'])) {
         $id = $_POST['id'];
         $updates = [];
@@ -86,24 +90,206 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         $query = "UPDATE $table SET " . implode(", ", $updates) . " WHERE id = $id";
-        echo "<h3>Η εγγραφή ενημερώθηκε επιτυχώς!</h3>";
         $mysqli->query($query);
+        // Redirect to list view after successful update
+        $afm_value = $_POST[$search_column];
+        $redirect_url = "?$search_column=$afm_value";
+        header("Location: postgrad.php$redirect_url");
+        exit;
     } elseif (isset($_POST['delete'])) {
         $id = $_POST['id'];
+        // Get afm before deleting to redirect properly
+        $result = $mysqli->query("SELECT $search_column FROM $table WHERE id = $id");
+        $row = $result->fetch_assoc();
+        $afm_value = $row[$search_column];
         $query = "DELETE FROM $table WHERE id = $id";
         $mysqli->query($query);
+        // Redirect to list view after successful deletion
+        $redirect_url = "?$search_column=$afm_value";
+        header("Location: postgrad.php$redirect_url");
+        exit;
     }
 }
-
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.tablesorter.min.js"></script>
     <title><?php echo $page_name; ?></title>
+    <style>
+        /* Postgrad page styling - matching employee.php */
+        body {
+            padding: 20px;
+        }
+        
+        /* Main header styling */
+        .imagetable th {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 700;
+            padding: 14px 16px;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Table row styling */
+        .imagetable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .imagetable tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Label cells styling - first column */
+        .imagetable td:first-child {
+            background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+            font-weight: 600;
+            color: #1e40af;
+            padding: 12px 16px;
+            border-right: 2px solid #bae6fd;
+            width: 25%;
+            vertical-align: top;
+        }
+        
+        /* Data cells styling - second column */
+        .imagetable td:nth-child(2) {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: top;
+            background: #ffffff;
+        }
+        
+        /* Alternate row styling for visual separation */
+        .imagetable tbody tr:nth-child(even) td:first-child {
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+        }
+        
+        /* Hover effect for rows */
+        .imagetable tbody tr:hover td:nth-child(2) {
+            background-color: #f8fafc;
+        }
+        
+        /* Link styling */
+        .imagetable a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .imagetable a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        /* Form inputs */
+        .imagetable input[type="text"],
+        .imagetable input[type="date"],
+        .imagetable input[type="submit"],
+        .imagetable textarea,
+        .imagetable select {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .imagetable textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .imagetable input[type="text"]:focus,
+        .imagetable input[type="date"]:focus,
+        .imagetable textarea:focus,
+        .imagetable select:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        /* Buttons styling */
+        .imagetable button,
+        .imagetable input[type="submit"],
+        .imagetable input[type="button"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+            width: auto;
+        }
+        
+        .imagetable button:hover,
+        .imagetable input[type="submit"]:hover,
+        .imagetable input[type="button"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        .btn-link {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+        }
+        
+        .btn-link a {
+            color: white !important;
+        }
+        
+        .btn-red {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+        }
+        
+        .btn-yellow {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+        }
+        
+        /* Checkbox styling */
+        .imagetable input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4FC5D6;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        
+        /* Modal-specific styling */
+        #postgrad-modal .imagetable {
+            width: 100%;
+            margin: 0;
+        }
+        
+        #postgrad-modal h1,
+        #postgrad-modal h2 {
+            color: #0f3f66;
+            margin-top: 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .imagetable td:first-child {
+                width: 30%;
+            }
+        }
+    </style>
 </head>
 <body>
+
 <h1><?php echo $page_name; ?></h1>
 
 <?php
@@ -126,23 +312,23 @@ if (isset($_GET['edit'])):
                 switch ($column['DATA_TYPE']) {
                     case 'varchar':
                     case 'int':
-                        $input = "<input type='text' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;' $is_disabled>";
+                        $input = "<input type='text' name='". $column['COLUMN_NAME'] ."' value='". htmlspecialchars($edit_record[$column['COLUMN_NAME']], ENT_QUOTES) ."' $is_disabled>";
                         break;
                     case 'date':
-                        $input = "<input type='date' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;'>";
+                        $input = "<input type='date' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."'>";
                         break;
                     case 'tinyint':
                         $is_checked = $edit_record[$column['COLUMN_NAME']] == 1 ? 'checked' : '';
                         $input = "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ."/>";
                         break;
                     case 'text':
-                        $input = "<textarea name='". $column['COLUMN_NAME'] ."' rows='1' cols='80'>".$edit_record[$column['COLUMN_NAME']]."</textarea>";
+                        $input = "<textarea name='". $column['COLUMN_NAME'] ."' rows='4' cols='80'>".htmlspecialchars($edit_record[$column['COLUMN_NAME']], ENT_QUOTES)."</textarea>";
                         break;
                     case 'enum':
                         // Extracting the enum values from COLUMN_TYPE
                         preg_match("/^enum\((.*)\)$/", $column['COLUMN_TYPE'], $matches);
                         $enum_values = str_getcsv($matches[1], ',', "'");
-                        $input = "<select name='". $column['COLUMN_NAME'] ."' style='width:90%;'>";
+                        $input = "<select name='". $column['COLUMN_NAME'] ."'>";
                         foreach ($enum_values as $value) {
                             $is_selected = $edit_record[$column['COLUMN_NAME']] == $value ? 'selected' : '';
                             $input .= "<option value='$value' $is_selected>$value</option>";
@@ -150,14 +336,14 @@ if (isset($_GET['edit'])):
                         $input .= "</select>";
                         break;
                     case 'timestamp':
-                        $input = "<p style='width:90%;' >" . date("d-m-Y, H:i:s",strtotime($edit_record[$column['COLUMN_NAME']])). "</p>";
+                        $input = "<p>" . date("d-m-Y, H:i:s",strtotime($edit_record[$column['COLUMN_NAME']])). "</p>";
                     default:
                         # code...
                         break;
                 }
                 ?>
                 <tr>
-                <td style="width:25%;"><label><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?>:</label></td>
+                <td><label><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?>:</label></td>
                 <td><?php echo $input; ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -188,25 +374,25 @@ if (isset($_GET['edit'])):
         switch ($column['DATA_TYPE']) {
             case 'varchar':
             case 'int':
-                $input = "<input type='text' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;' $is_disabled>";
+                $input = "<input type='text' name='". $column['COLUMN_NAME'] ."' value='". htmlspecialchars($edit_record[$column['COLUMN_NAME']] ?? '', ENT_QUOTES) ."' $is_disabled>";
                 break;
             case 'date':
-                $input = "<input type='date' name='". $column['COLUMN_NAME'] ."' value='". $edit_record[$column['COLUMN_NAME']] ."' style='width:90%;'>";
+                $input = "<input type='date' name='". $column['COLUMN_NAME'] ."' value='". ($edit_record[$column['COLUMN_NAME']] ?? '') ."'>";
                 break;
             case 'tinyint':
-                $is_checked = $edit_record[$column['COLUMN_NAME']] == 1 ? 'checked' : '';
+                $is_checked = ($edit_record[$column['COLUMN_NAME']] ?? 0) == 1 ? 'checked' : '';
                 $input = "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ."/>";
                 break;
             case 'text':
-                $input = "<textarea name='". $column['COLUMN_NAME'] ."' rows='1' cols='80'>".$edit_record[$column['COLUMN_NAME']]."</textarea>";
+                $input = "<textarea name='". $column['COLUMN_NAME'] ."' rows='4' cols='80'>".htmlspecialchars($edit_record[$column['COLUMN_NAME']] ?? '', ENT_QUOTES)."</textarea>";
                 break;
             case 'enum':
                 // Extracting the enum values from COLUMN_TYPE
                 preg_match("/^enum\((.*)\)$/", $column['COLUMN_TYPE'], $matches);
                 $enum_values = str_getcsv($matches[1], ',', "'");
-                $input = "<select name='". $column['COLUMN_NAME'] ."' style='width:90%;'>";
+                $input = "<select name='". $column['COLUMN_NAME'] ."'>";
                 foreach ($enum_values as $value) {
-                    $is_selected = $edit_record[$column['COLUMN_NAME']] == $value ? 'selected' : '';
+                    $is_selected = ($edit_record[$column['COLUMN_NAME']] ?? '') == $value ? 'selected' : '';
                     $input .= "<option value='$value' $is_selected>$value</option>";
                 }
                 $input .= "</select>";
@@ -219,7 +405,7 @@ if (isset($_GET['edit'])):
         
         ?>
         <tr>
-        <td style="width:25%;"><label><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?>:</label></td>
+        <td><label><?php echo $column['COLUMN_COMMENT'] ?: $column['COLUMN_NAME']; ?>:</label></td>
         <td><?php echo $input; ?></td>
         </tr>
     <?php endforeach; ?>
@@ -238,14 +424,16 @@ if (isset($_GET['edit'])):
         $query = "SELECT * FROM $table ";    
     } else {
     // Fetch records filtered by search_column
-        $query = "SELECT * FROM $table WHERE $search_column = '".$_GET[$search_column]."'";
+        $query = "SELECT * FROM $table WHERE $search_column = '".$mysqli->real_escape_string($_GET[$search_column])."'";
     }
     // echo $query;
     $result = $mysqli->query($query);
     $records = [];
     if (mysqli_num_rows($result) == 0){
         echo "<h2>Δε βρέθηκαν εγγραφές</h2>";
-        echo "<br><button class='btn-link'><a href='?add=1&$search_column=".$_GET[$search_column]."'>Προσθήκη</a></button>";
+        echo "<br><button class='btn-link'><a href='postgrad.php?add=1&$search_column=".$_GET[$search_column]."'>Προσθήκη</a></button>";
+        $mysqli->close();
+        echo "</body></html>";
         die();
     }
     while ($row = $result->fetch_assoc()) {
@@ -254,7 +442,29 @@ if (isset($_GET['edit'])):
 ?>
     <!-- Records List -->
     <h2>Λίστα εγγραφών</h2>
+    <?php
+    // Get employee ID from AFM to create link to employee page
+    $afm_value = $_GET[$search_column];
+    $emp_query = "SELECT id FROM employee WHERE afm like '%".$mysqli->real_escape_string($afm_value)."%' LIMIT 1";
+    $ektaktoi_query = "SELECT id FROM ektaktoi WHERE afm like '%".$mysqli->real_escape_string($afm_value)."%' LIMIT 1";
+    $ektaktoi_result = $mysqli->query($ektaktoi_query);
+    if ($ektaktoi_result && mysqli_num_rows($ektaktoi_result) > 0) {
+        $ektaktoi_row = $ektaktoi_result->fetch_assoc();
+        $ektaktoi_id = $ektaktoi_row['id'];
+        $profile_link = "<p><button class='btn-link'><a href='ektaktoi.php?id=$ektaktoi_id&op=view'>← Επιστροφή στην καρτέλα εκπαιδευτικού</a></button></p>";
+    } else {
+        $emp_query = "SELECT id FROM employee WHERE afm like '%".$mysqli->real_escape_string($afm_value)."%' LIMIT 1";
+        $emp_result = $mysqli->query($emp_query);
+        if ($emp_result && mysqli_num_rows($emp_result) > 0) {
+            $emp_row = $emp_result->fetch_assoc();
+            $emp_id = $emp_row['id'];
+            $profile_link = "<p><button class='btn-link'><a href='employee.php?id=$emp_id&op=view'>← Επιστροφή στην καρτέλα εκπαιδευτικού</a></button></p>";
+        }
+    }
+    echo $profile_link;
+    ?>
     <table border="1" class="imagetable tablesorter" style="width:100%;">
+        <thead>
         <tr>
             <?php foreach ($columns as $column): 
                 if (!in_array($column['COLUMN_NAME'],$table_list_columns)) continue;
@@ -263,6 +473,8 @@ if (isset($_GET['edit'])):
             <?php endforeach; ?>
             <th>Ενέργειες</th>
         </tr>
+        </thead>
+        <tbody>
         <?php foreach ($records as $record): ?>
             <tr>
                 <?php foreach ($columns as $column): 
@@ -270,14 +482,14 @@ if (isset($_GET['edit'])):
                     ?>
                     <td><?php if ($column['DATA_TYPE'] == 'tinyint') { 
                             $is_checked = $record[$column['COLUMN_NAME']] == 1 ? 'checked' : '';
-                            echo "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ."/>";
+                            echo "<input type='checkbox' name='". $column['COLUMN_NAME'] ."' ". $is_checked ." disabled/>";
                         } else {
-                            echo $record[$column['COLUMN_NAME']] ;
+                            echo htmlspecialchars($record[$column['COLUMN_NAME']] ?? '');
                         }
                     ?></td>
                 <?php endforeach; ?>
                 <td>
-                    <button class="btn-link"><a href="?edit=<?php echo $record['id']; ?>">Επεξεργασία</a></button>
+                    <button class="btn-link"><a href="postgrad.php?edit=<?php echo $record['id']; ?>">Επεξεργασία</a></button>
                     <form method="POST" style="display:inline;" onsubmit="return confirmDelete();">
                         <input type="hidden" name="id" value="<?php echo $record['id']; ?>">
                         <button class="btn-red" type="submit" name="delete">Διαγραφή</button>
@@ -285,21 +497,30 @@ if (isset($_GET['edit'])):
                 </td>
             </tr>
         <?php endforeach; ?>
+        </tbody>
+        <tfoot>
         <tr><td>
-        <button class="btn-link"><a href="?add=1&<?php echo $search_column; ?>=<?php echo $record[$search_column]; ?>">Προσθήκη</a></button>
-        </td><td colspan=<?php echo count($table_list_columns); ?>></td></tr>
+        <button class="btn-link"><a href="postgrad.php?add=1&<?php echo $search_column; ?>=<?php echo $record[$search_column]; ?>">Προσθήκη</a></button>
+        </td><td colspan="<?php echo count($table_list_columns) + 1; ?>"></td></tr>
+        </tfoot>
     </table>
 <?php else: ?>
     <h1>Δεν υπάρχουν εγγραφές για εμφάνιση</h1>
 <?php endif; ?>
-</body>
-</html>
 
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.tablesorter.min.js"></script>
 <script>
 function confirmDelete() {
     return confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή την εγγραφή;');
 }
+
+$(document).ready(function() {
+    $('table.tablesorter').tablesorter({widgets: ['zebra']});
+});
 </script>
+</body>
+</html>
 
 <?php
 $mysqli->close();

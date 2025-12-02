@@ -3,7 +3,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   Require_once "../config.php";
   Require_once "../include/functions.php";
-  require_once '../tools/calendar/tc_calendar.php';
+  
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -19,18 +19,363 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Μόνιμο Προσωπικό</title>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Μόνιμο Προσωπικό';
+    require '../etc/head.php'; 
+    ?>
+    <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
     <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+    <script type="text/javascript" src="../js/datepicker-gr.js"></script>
     <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
     <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+    <style>
+        /* Employee View Page Styling */
+        body {
+            padding: 20px;
+        }
+        
+        /* Main header styling */
+        .imagetable th[colspan] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 18px 20px;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Table row styling with section grouping */
+        .imagetable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .imagetable tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Label cells styling - first and third columns */
+        .imagetable td:first-child,
+        .imagetable td:nth-child(3) {
+            background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+            font-weight: 600;
+            color: #1e40af;
+            padding: 12px 16px;
+            border-right: 2px solid #bae6fd;
+            width: 25%;
+            vertical-align: top;
+        }
+        
+        /* Data cells styling - second and fourth columns */
+        .imagetable td:nth-child(2),
+        .imagetable td:nth-child(4) {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: top;
+            background: #ffffff;
+        }
+        
+        /* Data cells with colspan should have white background and normal font weight */
+        .imagetable td:nth-child(2)[colspan],
+        .imagetable td:nth-child(4)[colspan] {
+            background: #ffffff !important;
+            font-weight: normal !important;
+            color: #374151 !important;
+        }
+        
+        /* Alternate row styling for visual separation */
+        .imagetable tbody tr:nth-child(even) td:first-child,
+        .imagetable tbody tr:nth-child(even) td:nth-child(3) {
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+        }
+        
+        /* Hover effect for rows */
+        .imagetable tbody tr:hover td:nth-child(2),
+        .imagetable tbody tr:hover td:nth-child(4) {
+            background-color: #f8fafc;
+        }
+        
+        /* Section separator - visual grouping */
+        .imagetable tbody tr td[colspan] {
+            background: linear-gradient(135deg, rgba(47,152,171,0.22) 0%, rgba(58,168,184,0.25) 48%, rgba(79,197,214,0.30) 100%) !important;
+            border-top: 3px solid #2A8B9A;
+            border-bottom: 2px solid #4FC5D6;
+            padding: 12px 20px !important;
+            font-weight: 700;
+            color: #0f3f66;
+            letter-spacing: 0.6px;
+            text-transform: none;
+        }
+
+        .separator {
+            text-transform: uppercase !important;  
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #0f3f66;
+            letter-spacing: 0.8px;
+            padding: 10px 16px !important;
+            margin: 12px 0 !important;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, rgba(47,152,171,0.22) 0%, rgba(58,168,184,0.25) 48%, rgba(79,197,214,0.30) 100%) !important;
+        }
+        
+        /* Expandable sections styling */
+        .show_hide, .show_hide2, .show_hide3, #archive-toggle {
+            color: #4FC5D6;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            transition: all 0.2s;
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+            border: 1px solid #4FC5D6;
+        }
+        
+        .show_hide:hover, .show_hide2:hover, .show_hide3:hover, #archive-toggle:hover {
+            background: linear-gradient(90deg, #b2ebf2 0%, #80deea 100%);
+            color: #2A8B9A;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        /* Expandable content styling */
+        .slidingDiv, .slidingDiv2, .slidingDiv3 {
+            background: #f9fafb;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #4FC5D6;
+            margin-top: 8px;
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        /* Important data highlighting */
+        .imagetable td strong {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        
+        /* Link styling */
+        .imagetable a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .imagetable a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        /* Email links */
+        .imagetable a[href^="mailto:"] {
+            color: #4FC5D6;
+        }
+        
+        .imagetable a[href^="mailto:"]:hover {
+            color: #3BA8B8;
+        }
+        
+        /* Small text styling */
+        .imagetable small {
+            color: #6b7280;
+            font-size: 0.8125rem;
+        }
+        
+        /* Status information highlighting */
+        .imagetable td {
+            word-wrap: break-word;
+        }
+        
+        /* Form inputs in view mode */
+        .imagetable input[type="text"],
+        .imagetable input[type="submit"],
+        .imagetable textarea,
+        .imagetable select {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .imagetable input[type="text"]:focus,
+        .imagetable textarea:focus,
+        .imagetable select:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        /* Buttons styling */
+        .imagetable input[type="submit"],
+        .imagetable input[type="button"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        .imagetable input[type="submit"]:hover,
+        .imagetable input[type="button"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        /* Button navigation */
+        INPUT[type="button"][value="<<"],
+        INPUT[type="button"][value=">>"] {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+            font-size: 1.25rem;
+            padding: 8px 16px;
+        }
+        
+        /* Print button */
+        input[value="Εκτύπωση"] {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        }
+        
+        /* Archive toggle */
+        #archive-toggle {
+            margin: 8px 0;
+        }
+        
+        /* Lists in expandable sections */
+        .slidingDiv ul, .slidingDiv2 ul, .slidingDiv3 ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 8px 0;
+        }
+        
+        .slidingDiv li, .slidingDiv2 li, .slidingDiv3 li {
+            padding: 8px 12px;
+            margin: 4px 0;
+            background: white;
+            border-left: 3px solid #4FC5D6;
+            border-radius: 4px;
+        }
+        
+        /* Checkbox styling */
+        .imagetable input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4FC5D6;
+            cursor: pointer;
+        }
+        
+        /* Service time form styling */
+        #yphrfrm {
+            background: #f0f9ff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #bae6fd;
+            margin: 12px 0;
+        }
+        
+        #wordfrm {
+            background: #f0fdf4;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #86efac;
+            margin: 12px 0;
+        }
+        
+        /* Error highlighting - will be applied via inline styles if needed */
+        .error-highlight {
+            background-color: #fee2e2 !important;
+            color: #dc2626 !important;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .imagetable td:first-child {
+                width: 30%;
+            }
+            
+            .imagetable th[colspan] {
+                font-size: 1rem;
+                padding: 14px 16px;
+            }
+        }
+        
+        /* Last update info */
+        .imagetable tr:last-child td {
+            background: #f9fafb;
+            color: #6b7280;
+            font-size: 0.8125rem;
+            padding: 8px 16px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        /* Modal dialog styling */
+        .ui-dialog {
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .ui-dialog-titlebar {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+            color: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            font-weight: 600;
+        }
+        
+        .ui-dialog-titlebar-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: background 0.2s;
+        }
+        
+        .ui-dialog-titlebar-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon {
+            background-image: none;
+            text-indent: 0;
+            overflow: visible;
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon:before {
+            content: "×";
+            /* color: white; */
+            font-size: 20px;
+            line-height: 1;
+        }
+        
+        .ui-widget-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 1;
+        }
+    </style>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#yphrfrm").validate({
@@ -268,10 +613,298 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         });
     });
             
-    $().ready(function() {
-        $("#adeia").click(function() {
+    $(document).ready(function() {
+        // Check if jQuery UI Dialog is available
+        if (typeof $.ui === 'undefined' || typeof $.ui.dialog === 'undefined') {
+            console.error('jQuery UI Dialog is not loaded');
+            return;
+        }
+        
+        $("#adeia").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var MyVar = <?php if (isset($id)) echo $id; else echo 0; ?>;
-            $("#adeies").load("adeia_list.php?id="+ MyVar );
+            
+            console.log('Opening modal for employee ID:', MyVar);
+            
+            // Clean up any existing modal and overlay
+            if ($("#adeia-modal").length > 0) {
+                if ($("#adeia-modal").hasClass('ui-dialog-content') || $("#adeia-modal").parent().hasClass('ui-dialog')) {
+                    $("#adeia-modal").dialog('destroy');
+                }
+                $("#adeia-modal").remove();
+            }
+            $(".ui-widget-overlay").remove();
+            $(".ui-dialog").filter(function() {
+                return $(this).find('#adeia-modal').length > 0;
+            }).remove();
+            
+            // Create new modal div (must be hidden to prevent flash of content)
+            var $modalDiv = $('<div id="adeia-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Λίστα Αδειών"></div>');
+            $("body").append($modalDiv);
+            
+            // Show loading state
+            $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+            
+            // Initialize dialog
+            $modalDiv.dialog({
+                modal: true,
+                width: 950,
+                height: 600,
+                maxHeight: $(window).height() - 50,
+                resizable: true,
+                autoOpen: true,
+                position: {
+                    my: "center",
+                    at: "center",
+                    of: window
+                },
+                show: {
+                    effect: "fade",
+                    duration: 300
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 200
+                },
+                close: function() {
+                    var $this = $(this);
+                    $this.dialog('destroy');
+                    $this.remove();
+                    $(".ui-widget-overlay").remove();
+                },
+                create: function(event, ui) {
+                    // Ensure dialog is properly positioned and visible
+                    $(this).css('display', 'block');
+                },
+                open: function(event, ui) {
+                    console.log('Dialog opened');
+                    // Ensure dialog is visible and positioned correctly
+                    var $dialog = $(this);
+                    var $dialogParent = $dialog.parent();
+                    
+                    // Ensure dialog wrapper is properly positioned
+                    $dialogParent.css({
+                        'position': 'fixed',
+                        'top': '50%',
+                        'left': '50%',
+                        'transform': 'translate(-50%, -50%)',
+                        'z-index': 1000
+                    });
+                    
+                    $dialog.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'position': 'relative',
+                        'top': 'auto',
+                        'left': 'auto'
+                    });
+                    
+                    // Load content after dialog is fully visible
+                    var $dialogContent = $(this);
+                    console.log('Loading content from adeia_list.php');
+                    $dialogContent.load("adeia_list.php?id=" + MyVar + "&ajax=1", function(response, status, xhr) {
+                        console.log('Content loaded, status:', status);
+                        if (status == "error") {
+                            console.error('Error loading content:', xhr.status, xhr.statusText);
+                            $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                        } else {
+                            console.log('Content loaded successfully');
+                            // Ensure content is within dialog and not elsewhere
+                            $dialogContent.css({
+                                'display': 'block',
+                                'visibility': 'visible',
+                                'position': 'relative',
+                                'top': 'auto',
+                                'left': 'auto'
+                            });
+                            
+                            // Make sure dialog is still visible and positioned
+                            $dialogParent.css({
+                                'position': 'fixed',
+                                'top': '50%',
+                                'left': '50%',
+                                'transform': 'translate(-50%, -50%)',
+                                'z-index': 1000
+                            });
+                            
+                            // Reinitialize tabs and tablesorter after content is loaded
+                            setTimeout(function() {
+                                var $tabs = $dialogContent.find("#tabs");
+                                
+                                // Initialize tabs
+                                if ($tabs.length && typeof $.ui !== 'undefined' && $.ui.tabs) {
+                                    try {
+                                        // Destroy existing tabs if any
+                                        if ($tabs.hasClass('ui-tabs')) {
+                                            $tabs.tabs('destroy');
+                                        }
+                                        // Initialize tabs
+                                        $tabs.tabs({
+                                            active: 0,
+                                            collapsible: false,
+                                            heightStyle: "content"
+                                        });
+                                        console.log('Tabs initialized successfully');
+                                    } catch(e) {
+                                        console.error('Tabs initialization error:', e);
+                                        // Fallback: try simple initialization
+                                        try {
+                                            $tabs.tabs();
+                                        } catch(e2) {
+                                            console.error('Tabs fallback failed:', e2);
+                                        }
+                                    }
+                                } else {
+                                    console.warn('Tabs element or jQuery UI Tabs not available');
+                                }
+                                
+                                // Initialize tablesorter for all tables in tab panels (each tab has its own table)
+                                $dialogContent.find('.ui-tabs-panel table.tablesorter, table.tablesorter').each(function() {
+                                    var $tbl = $(this);
+                                    if (!$tbl.data('tablesorter-initialized')) {
+                                        try {
+                                            $tbl.tablesorter({widgets: ['zebra']});
+                                            $tbl.data('tablesorter-initialized', true);
+                                        } catch(e) {
+                                            console.error('Tablesorter error for table:', e);
+                                        }
+                                    }
+                                });
+                            }, 200);
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Postgrad modal handler
+        $("#postgrad-link").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var afmValue = $(this).data('afm');
+            
+            //console.log('Opening modal for postgrad with AFM:', afmValue);
+            
+            // Clean up any existing modal and overlay
+            if ($("#postgrad-modal").length > 0) {
+                if ($("#postgrad-modal").hasClass('ui-dialog-content') || $("#postgrad-modal").parent().hasClass('ui-dialog')) {
+                    $("#postgrad-modal").dialog('destroy');
+                }
+                $("#postgrad-modal").remove();
+            }
+            $(".ui-widget-overlay").remove();
+            $(".ui-dialog").filter(function() {
+                return $(this).find('#postgrad-modal').length > 0;
+            }).remove();
+            
+            // Create new modal div (must be hidden to prevent flash of content)
+            var $modalDiv = $('<div id="postgrad-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Μεταπτυχιακοί Τίτλοι"></div>');
+            $("body").append($modalDiv);
+            
+            // Show loading state
+            $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+            
+            // Initialize dialog
+            $modalDiv.dialog({
+                modal: true,
+                width: 1100,
+                height: 600,
+                maxHeight: $(window).height() - 50,
+                resizable: true,
+                autoOpen: true,
+                position: {
+                    my: "center",
+                    at: "center",
+                    of: window
+                },
+                show: {
+                    effect: "fade",
+                    duration: 300
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 200
+                },
+                close: function() {
+                    var $this = $(this);
+                    $this.dialog('destroy');
+                    $this.remove();
+                    $(".ui-widget-overlay").remove();
+                },
+                create: function(event, ui) {
+                    // Ensure dialog is properly positioned and visible
+                    $(this).css('display', 'block');
+                },
+                open: function(event, ui) {
+                    console.log('Postgrad dialog opened');
+                    // Ensure dialog is visible and positioned correctly
+                    var $dialog = $(this);
+                    var $dialogParent = $dialog.parent();
+                    
+                    // Ensure dialog wrapper is properly positioned
+                    $dialogParent.css({
+                        'position': 'fixed',
+                        'top': '50%',
+                        'left': '50%',
+                        'transform': 'translate(-50%, -50%)',
+                        'z-index': 1000
+                    });
+                    
+                    $dialog.css({
+                        'display': 'block',
+                        'visibility': 'visible',
+                        'position': 'relative',
+                        'top': 'auto',
+                        'left': 'auto'
+                    });
+                    
+                    // Load content after dialog is fully visible
+                    var $dialogContent = $(this);
+                    console.log('Loading content from postgrad.php');
+                    $dialogContent.load("postgrad.php?afm=" + afmValue, function(response, status, xhr) {
+                        console.log('Content loaded, status:', status);
+                        if (status == "error") {
+                            console.error('Error loading content:', xhr.status, xhr.statusText);
+                            $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                        } else {
+                            console.log('Content loaded successfully');
+                            // Ensure content is within dialog and not elsewhere
+                            $dialogContent.css({
+                                'display': 'block',
+                                'visibility': 'visible',
+                                'position': 'relative',
+                                'top': 'auto',
+                                'left': 'auto'
+                            });
+                            
+                            // Make sure dialog is still visible and positioned
+                            $dialogParent.css({
+                                'position': 'fixed',
+                                'top': '50%',
+                                'left': '50%',
+                                'transform': 'translate(-50%, -50%)',
+                                'z-index': 1000
+                            });
+                            
+                            // Initialize tablesorter after content is loaded
+                            setTimeout(function() {
+                                $dialogContent.find('table.tablesorter').each(function() {
+                                    var $tbl = $(this);
+                                    if (!$tbl.data('tablesorter-initialized')) {
+                                        try {
+                                            $tbl.tablesorter({widgets: ['zebra']});
+                                            $tbl.data('tablesorter-initialized', true);
+                                        } catch(e) {
+                                            console.error('Tablesorter error for table:', e);
+                                        }
+                                    }
+                                });
+                            }, 200);
+                        }
+                    });
+                }
+            });
         });
     });
 </script>
@@ -289,22 +922,27 @@ if ($_GET['op']=="edit") {
     }
     echo "<form id='updatefrm' name='update' action='update.php' method='POST'>";
     echo "<table class=\"imagetable\" border='1'>";
-        
-        echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
-        echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
+    
+    // ========== ΠΡΟΣΩΠΙΚΑ (Personal Information) ==========
+    echo "<tr><td colspan=2>Προσωπικα</td></tr>";
+    echo "<tr><td>Επώνυμο</td><td><input type='text' name='surname' value=$surname /></td></tr>";
+    echo "<tr><td>Όνομα</td><td><input type='text' name='name' value=$name /></td></tr>";
     echo "<tr><td>Πατρώνυμο</td><td><input type='text' name='patrwnymo' value=$patrwnymo /></td></tr>";
     echo "<tr><td>Μητρώνυμο</td><td><input type='text' name='mhtrwnymo' value=$mhtrwnymo /></td></tr>";
     echo "<tr><td>Α.Φ.Μ.</td><td><input type='text' name='afm' value=$afm /></td></tr>";
+    echo "<tr><td>email</td><td><input type='text' name='email' value='$email' /></td></tr>";
+    echo "<tr><td>email (ΠΣΔ)</td><td><input type='text' name='email_psd' value='$email_psd' /></td></tr>";
     echo "<tr><td>Τηλέφωνο</td><td><input size='30' type='text' name='tel' value='$tel' /></td></tr>";
     echo "<tr><td>Διεύθυνση</td><td><input size='50' type='text' name='address' value='$address' /></td></tr>";
     echo "<tr><td>Α.Δ.Τ.</td><td><input type='text' name='idnum' value='$idnum' /></td></tr>";
     echo "<tr><td>Α.Μ.K.A.</td><td><input type='text' name='amka' value='$amka' /></td></tr>";
-    echo "<tr><td>email<br>email (ΠΣΔ)</td><td><input type='text' name='email' value='$email' /><br><input type='text' name='email_psd' value='$email_psd' /></td></tr>";
+    
+    // ========== ΥΠΗΡΕΣΙΑΚΑ (Service Information) ==========
+    echo "<tr><td colspan=2>Υπηρεσιακα</td></tr>";
     echo "<tr><td>Α.Μ.</td><td><input type='text' name='am' value=$am /></td></tr>";
     echo "<tr><td>Κλάδος</td><td>";
     kladosCombo($klados_id, $mysqlconnection);
     echo "</td></tr>";
-    echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
     echo "<tr><td>";
     show_tooltip('Κατάσταση','Επιλέξτε ένα από: Εργάζεται, Λύση Σχέσης-Παραίτηση, Άδεια, Διαθεσιμότητα');
     echo "</td><td>";
@@ -322,179 +960,55 @@ if ($_GET['op']=="edit") {
     echo "<br><input type=\"input\" name='monimopoihsh_apof' value=$monimopoihsh_apof></td>"; 
     echo "</tr>";
 
-    echo "<tr><td>Αξιολόγηση/<br>Ημ/νία τελ.αξιολόγησης</td></td>";
+    echo "<tr><td>Αξιολόγηση/<br>Ημ/νία τελ.αξιολόγησης</td>";
     echo $aksiologhsh ? 
         "<td><input type=\"checkbox\" name='aksiologhsh' checked >Αξιολογήθηκε" :
         "<td><input type=\"checkbox\" name='aksiologhsh' >Αξιολογήθηκε";
     echo "<br>";
-    my_calendar('aksiologhsh_date', $aksiologhsh_date);
+    modern_datepicker('aksiologhsh_date', $aksiologhsh_date, array(
+        'minDate' => '2020-01-01',
+        'disabledDays' => array('sun', 'sat'),
+        'maxDate' => date('Y-m-d')
+    ));
     echo "</td>";
     echo "</tr>";
 
-    //<input type='text' name='vathm' value=$vathm /></td></tr>";
     echo "<tr><td>Μ.Κ.</td><td><input type='text' name='mk' value=$mk /></td></tr>";
-        echo "<tr><td>Ημ/νία M.K.</td><td>";
-    $myCalendar = new tc_calendar("hm_mk", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    //$myCalendar->setDate(date("d"), date("m"), date("Y"));
-    $myCalendar->setDate(date('d', strtotime($hm_mk)), date('m', strtotime($hm_mk)), date('Y', strtotime($hm_mk)));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    //$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
-                
+    echo "<tr><td>Ημ/νία M.K.</td><td>";
+    modern_datepicker("hm_mk", $hm_mk, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
                 
     echo "<tr><td>ΦΕΚ Διορισμού</td><td><input type='text' name='fek_dior' value=$fek_dior /></td></tr>";
-    //echo "<tr><td>hm_dior</td><td><input type='text' name='hm_dior' value=".date('d-m-Y',strtotime($hm_dior))." /></td></tr>";
         
     echo "<tr><td>Ημ/νία Διορισμού</td><td>";
-    $myCalendar = new tc_calendar("hm_dior", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    //$myCalendar->setDate(date("d"), date("m"), date("Y"));
-    $myCalendar->setDate(date('d', strtotime($hm_dior)), date('m', strtotime($hm_dior)), date('Y', strtotime($hm_dior)));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    //$myCalendar->setSpecificDate(array("2011-04-01", "2011-04-14", "2010-12-25"), 0, "year");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
-        
-    //echo "<tr><td>analipsi</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
+    modern_datepicker("hm_dior", $hm_dior, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
         
     echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-    $myCalendar = new tc_calendar("hm_anal", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date('d', strtotime($hm_anal)), date('m', strtotime($hm_anal)), date('Y', strtotime($hm_anal)));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
+    modern_datepicker("hm_anal", $hm_anal, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
                 
     echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
-    //<input type='text' name='met_did' value=$met_did /></td></tr>";
     metdidCombo($met_did);
-    $ymd=days2ymd($proyp);
-    echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες&nbsp;<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες&nbsp;<input type='text' name='pdays' size=1 value=$ymd[2] />&nbsp;($proyp Ημέρες)</td></tr>";
-    $ymdnot=days2ymd($proyp_not);
-    echo "<tr><td>Προϋπηρεσία που δε λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου</td><td>Έτη&nbsp;<input type='text' name='peyears' size=1 value=$ymdnot[0] />Μήνες&nbsp;<input type='text' name='pemonths' size=1 value=$ymdnot[1] />Ημέρες&nbsp;<input type='text' name='pedays' size=1 value=$ymdnot[2] /></td></tr>";
-    $ymdwrario=days2ymd($proyp_wrario);
-    echo "<tr><td>Προϋπηρεσία που λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου (όχι στη συνολική)</td><td>Έτη&nbsp;<input type='text' name='pe1years' size=1 value=$ymdwrario[0] />Μήνες&nbsp;<input type='text' name='pe1months' size=1 value=$ymdwrario[1] />Ημέρες&nbsp;<input type='text' name='pe1days' size=1 value=$ymdwrario[2] /></td></tr>";
-                
-    // aney
-        echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
-    if ($aney) {
-        echo "<input type='checkbox' name='aney' checked>";
-    } else {
-            echo "<input type='checkbox' name='aney'>";
-    }
-        echo "</tr>";
-        echo "<tr><td>Τρέχουσα άδεια<br>άνευ αποδοχών: (Από / Έως)</td><td>";
-                                
-        $myCalendar = new tc_calendar("aney_apo", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($aney_apo)), date('m', strtotime($aney_apo)), date('Y', strtotime($aney_apo)));
-        $myCalendar->setPath("../tools/calendar/");
-        //$myCalendar->setYearInterval(1970, date("Y"));
-        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
+    echo "</td></tr>";
+    
+    echo "<tr><td>Ώρες Υποχρ.Ωρ.</td><td><input type='text' name='wres' value=$wres /></td></tr>";
 
-        $myCalendar = new tc_calendar("aney_ews", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($aney_ews)), date('m', strtotime($aney_ews)), date('Y', strtotime($aney_ews)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        
-        echo "</td></tr>";
-        $aney_ymd = days2ymd($aney_xr);
-        echo "<tr><td>Χρόνος παλαιών αδειών<br>άνευ αποδοχών (<small>χωρίς την παραπάνω</small>):</td><td><input type='text' name='aney_y' size='3' value=$aney_ymd[0]> έτη&nbsp;";
-        echo "<input type='text' name='aney_m' size='3' value=$aney_ymd[1]> μήνες&nbsp; <input type='text' name='aney_d' size='3' value=$aney_ymd[2]> ημέρες</td></tr>";
-        
-        // idiwtiko ergo 07-11-2014
-        echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
-    if ($idiwtiko) {
-        echo "<input type='checkbox' name='idiwtiko' checked>";
-    } else {
-            echo "<input type='checkbox' name='idiwtiko'>";
-    }
-        echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
-        $myCalendar = new tc_calendar("idiwtiko_enarxi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_enarxi)), date('m', strtotime($idiwtiko_enarxi)), date('Y', strtotime($idiwtiko_enarxi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        $myCalendar = new tc_calendar("idiwtiko_liksi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_liksi)), date('m', strtotime($idiwtiko_liksi)), date('Y', strtotime($idiwtiko_liksi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        // idiwtiko sympl
-        echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
-    if ($idiwtiko_id) {
-        echo "<input type='checkbox' name='idiwtiko_id' checked>";
-    } else {
-            echo "<input type='checkbox' name='idiwtiko_id'>";
-    }
-        echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
-        $myCalendar = new tc_calendar("idiwtiko_id_enarxi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_id_enarxi)), date('m', strtotime($idiwtiko_id_enarxi)), date('Y', strtotime($idiwtiko_id_enarxi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        $myCalendar = new tc_calendar("idiwtiko_id_liksi", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($idiwtiko_id_liksi)), date('m', strtotime($idiwtiko_id_liksi)), date('Y', strtotime($idiwtiko_id_liksi)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        // idiwtiko end
-        // katoikon
-        echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
-    if ($katoikon) {
-        echo "<input type='checkbox' name='katoikon' checked>";
-    } else {
-            echo "<input type='checkbox' name='katoikon'>";
-    }
-        echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
-        $myCalendar = new tc_calendar("katoikon_apo", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($katoikon_apo)), date('m', strtotime($katoikon_apo)), date('Y', strtotime($katoikon_apo)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        $myCalendar = new tc_calendar("katoikon_ews", true, false);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d', strtotime($katoikon_ews)), date('m', strtotime($katoikon_ews)), date('Y', strtotime($katoikon_ews)));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->dateAllow("1970-01-01", '2050-01-01');
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->writeScript();
-        echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
-        // katoikon_end
-        
-        echo "<tr><td>Σχόλια</td><td><textarea rows=4 cols=80 name='comments' >$comments</textarea></td></tr>";
-        
-    //new 15-02-2012: implemented with jquery.autocomplete
-    echo "<div id=\"content\">";
-    echo "<form autocomplete=\"off\">";
     echo "<tr><td>";
     show_tooltip("Σχολείο Οργανικής","Επιλέξτε σχολείο αφού εισάγετε μερικούς χαρακτήρες (αυτόματη συμπλήρωση).");
         echo "<a href=\"\" onclick=\"window.open('../help/help.html#school','', 'width=400, height=250, location=no, menubar=no, status=no,toolbar=no, scrollbars=no, resizable=no'); return false\"><img style=\"border: 0pt none;\" src=\"../images/help.gif\"/></a></td>";
@@ -513,13 +1027,111 @@ if ($_GET['op']=="edit") {
         echo "<input class=\"delRow\" type=\"button\" value=\"Αφαίρεση\" />";
         echo "</tr>";
     }       
-    echo "</div>";
+    echo "</td></tr>";
 
     echo "<tr><td>Οργανική σε τμήμα ένταξης</td><td>";
     echo $org_ent ? "<input type='checkbox' name='org_ent' checked>" : "<input type='checkbox' name='org_ent'>";
     echo "</td></tr>";
     echo "<tr>".thesiselectcmb($thesi)."</tr>";
     echo "<tr>".ent_ty_selectcmb($entty)."</tr>";
+    
+    // ========== ΧΡΟΝΟΙ ΥΠΗΡΕΣΙΑΣ (Service Times) ==========
+    echo "<tr><td colspan=2>Χρονοι υπηρεσιας</td></tr>";
+    
+    $ymd=days2ymd($proyp);
+    echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες&nbsp;<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες&nbsp;<input type='text' name='pdays' size=1 value=$ymd[2] />&nbsp;($proyp Ημέρες)</td></tr>";
+    $ymdnot=days2ymd($proyp_not);
+    echo "<tr><td>Προϋπηρεσία που δε λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου</td><td>Έτη&nbsp;<input type='text' name='peyears' size=1 value=$ymdnot[0] />Μήνες&nbsp;<input type='text' name='pemonths' size=1 value=$ymdnot[1] />Ημέρες&nbsp;<input type='text' name='pedays' size=1 value=$ymdnot[2] /></td></tr>";
+    $ymdwrario=days2ymd($proyp_wrario);
+    echo "<tr><td>Προϋπηρεσία που λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου (όχι στη συνολική)</td><td>Έτη&nbsp;<input type='text' name='pe1years' size=1 value=$ymdwrario[0] />Μήνες&nbsp;<input type='text' name='pe1months' size=1 value=$ymdwrario[1] />Ημέρες&nbsp;<input type='text' name='pe1days' size=1 value=$ymdwrario[2] /></td></tr>";
+                
+    // aney
+        echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
+    if ($aney) {
+        echo "<input type='checkbox' name='aney' checked>";
+    } else {
+            echo "<input type='checkbox' name='aney'>";
+    }
+        echo "</tr>";
+        echo "<tr><td>Τρέχουσα άδεια<br>άνευ αποδοχών: (Από / Έως)</td><td>";
+        modern_datepicker("aney_apo", $aney_apo, array(
+            'minDate' => '1980-01-01',
+            'maxDate' => date('Y-m-d')
+        ));
+        echo " / ";
+        modern_datepicker("aney_ews", $aney_ews, array(
+            'minDate' => '1980-01-01'
+        ));
+        echo "</td></tr>";
+        $aney_ymd = days2ymd($aney_xr);
+        echo "<tr><td>Χρόνος παλαιών αδειών<br>άνευ αποδοχών (<small>χωρίς την παραπάνω</small>):</td><td><input type='text' name='aney_y' size='3' value=$aney_ymd[0]> έτη&nbsp;";
+        echo "<input type='text' name='aney_m' size='3' value=$aney_ymd[1]> μήνες&nbsp; <input type='text' name='aney_d' size='3' value=$aney_ymd[2]> ημέρες</td></tr>";
+        
+        // idiwtiko ergo 07-11-2014
+    //     echo "<tr><td colspan=2>Ιδιωτικα έργα</td></tr>";
+    //     echo "<tr><td>Ιδ.έργο σε δημ.φορέα</td><td>";
+    // if ($idiwtiko) {
+    //     echo "<input type='checkbox' name='idiwtiko' checked>";
+    // } else {
+    //         echo "<input type='checkbox' name='idiwtiko'>";
+    // }
+    //     echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε δημ.φορέα</td><td>";
+    //     modern_datepicker("idiwtiko_enarxi", $idiwtiko_enarxi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo " / ";
+    //     modern_datepicker("idiwtiko_liksi", $idiwtiko_liksi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     // idiwtiko sympl
+    //     echo "<tr><td>Ιδ.έργο σε ιδιωτ.φορέα</td><td>";
+    // if ($idiwtiko_id) {
+    //     echo "<input type='checkbox' name='idiwtiko_id' checked>";
+    // } else {
+    //         echo "<input type='checkbox' name='idiwtiko_id'>";
+    // }
+    //     echo "<tr><td>Ημ/νία έναρξης/λήξης Ιδ.Έργου σε ιδιωτ.φορέα</td><td>";
+    //     modern_datepicker("idiwtiko_id_enarxi", $idiwtiko_id_enarxi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo " / ";
+    //     modern_datepicker("idiwtiko_id_liksi", $idiwtiko_id_liksi, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+        // idiwtiko end
+        // katoikon
+    //     echo "<tr><td colspan=2>Κατ' οίκον διδασκαλία</td></tr>";
+    //     echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
+    // if ($katoikon) {
+    //     echo "<input type='checkbox' name='katoikon' checked>";
+    // } else {
+    //         echo "<input type='checkbox' name='katoikon'>";
+    // }
+    //     echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
+    //     modern_datepicker("katoikon_apo", $katoikon_apo, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo " / ";
+    //     modern_datepicker("katoikon_ews", $katoikon_ews, array(
+    //         'minDate' => '1980-01-01',
+    //         'maxDate' => '2050-01-01'
+    //     ));
+    //     echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
+        // katoikon_end
+        echo "<tr><td colspan=2>Σχόλια</td></tr>";
+        echo "<tr><td>Σχόλια</td><td><textarea rows=10 cols=95 name='comments' >$comments</textarea></td></tr>";
+        
+    //new 15-02-2012: implemented with jquery.autocomplete
+    echo "<div id=\"content\">";
+    // echo "<form autocomplete=\"off\">";
+    
+
+    
     echo "	</table>";
     echo "	<input type='hidden' name = 'id' value='$id'>";
     echo "	<input type='submit' value='Αποθήκευση'>";
@@ -542,65 +1154,75 @@ elseif ($_GET['op']=="view") {
         
        echo "<th colspan=4 align=center>Καρτέλα μόνιμου εκπαιδευτικού</th>";
     echo "</tr>";
+    
+    // ========== ΠΡΟΣΩΠΙΚΑ (Personal Information) ==========
+    echo "<tr><td colspan=4 class='separator'>Προσωπικα</td></tr>";
     echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
     echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
-                
-    // 16-05-2013 tel,address,amka,idnum moved to employee table
-        if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
-            echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-            echo "<td colspan=3><div class=\"slidingDiv\">";
-            echo "Τηλέφωνο: ".$tel."<br>";
-            // only for user_level < 3
-            if ($usrlvl < 3){
-                echo "Διεύθυνση: ".$address."<br>";
-                echo "ΑΔΤ: ".$idnum."<br>";
-                echo "AMKA: ".$amka."<br>";
-                if ($katoikon) {
-                    echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
-                } else {
-                    echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
-                }
-                $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
-                $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
-                echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
-            
-                idiwtika_table("Μόνιμος", $id, $mysqlconnection);
-            }
-            
-            echo "</div>";
-            echo "</td></tr>";
-        }
-        else
-        {
-            echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-            echo "<td colspan=3><div class=\"slidingDiv\">";
-            echo "Δε βρέθηκαν περισσότερα στοιχεία για τον/-ην υπάλληλο.<br>";
-            echo "O/H υπάλληλος δε μισθοδοτείται από τη Δ/νση Ηρακλείου<br>";
-            echo "ή δεν έχουν καταχωρηθεί στοιχεία.";
-            echo "</div>";
-            echo "</td></tr>";   
-        }
-    // more data ends
+    
+    // Email fields
+    echo "<tr><td>e-mail</td><td><a href=\"mailto:$email\">$email</a></td><td>e-mail (ΠΣΔ)</td><td><a href=\"mailto:$email_psd\">$email_psd</a></td></tr>";
+    
+    // AFM (only for user level < 3)
     if ($usrlvl < 3){
-        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td>Α.Μ.</td><td>$am</td></tr>";
-    } else {
-        echo "<tr><td></td><td></td><td>Α.Μ.</td><td>$am</td></tr>";
+        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
     }
-    echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
+    
+    // Additional personal data in expandable section
+    if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
+        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+        echo "<td colspan=3><div class=\"slidingDiv\">";
+        echo "Τηλέφωνο: ".$tel."<br>";
+        // only for user_level < 3
+        if ($usrlvl < 3){
+            echo "Διεύθυνση: ".$address."<br>";
+            echo "ΑΔΤ: ".$idnum."<br>";
+            echo "AMKA: ".$amka."<br>";
+            if ($katoikon) {
+                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
+            } else {
+                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
+            }
+            $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
+            $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
+            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
+        
+            idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+        }
+        
+        echo "</div>";
+        echo "</td></tr>";
+    }
+    else
+    {
+        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+        echo "<td colspan=3><div class=\"slidingDiv\">";
+        echo "Δε βρέθηκαν περισσότερα στοιχεία για τον/-ην υπάλληλο.<br>";
+        echo "O/H υπάλληλος δε μισθοδοτείται από τη Δ/νση Ηρακλείου<br>";
+        echo "ή δεν έχουν καταχωρηθεί στοιχεία.";
+        echo "</div>";
+        echo "</td></tr>";   
+    }
+    
+    // ========== ΥΠΗΡΕΣΙΑΚΑ (Service Information) ==========
+    echo "<tr><td colspan=4 class='separator'>Υπηρεσιακα</td></tr>";
+    echo "<tr><td>Α.Μ.</td><td>$am</td><td>Κλάδος</td><td>".getKlados($klados_id, $mysqlconnection, true)."</td></tr>";
+    echo "<tr><td>Κατάσταση</td><td>$katast</td><td>Βαθμός</td><td>$vathm</td></tr>";
+    
     $hm_mk = date('d-m-Y', strtotime($hm_mk));
     if ($hm_mk > "01-01-1970") {
-        echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td></tr>";
+        echo "<tr><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td><td></td><td></td></tr>";
     } else {
-        echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk</td></tr>";
+        echo "<tr><td>Μ.Κ.</td><td>$mk</td><td></td><td></td></tr>";
     }
 
     // monimopoihsh - aksiologhsh
     echo "<tr><td>Μονιμοποίηση /<br>Απόφαση μονιμοποίησης</td>";
     echo $monimopoihsh ? 
-        "<td>NAI<br>$monimopoihsh_apof</td>" :
+        "<td>ΝΑΙ<br>$monimopoihsh_apof</td>" :
         "<td>ΟΧΙ</td>";
 
-    echo "<td>Αξιολόγηση /<br>Ημ/νία τελ.αξιολόγησης</td></td>";
+    echo "<td>Αξιολόγηση /<br>Ημ/νία τελ.αξιολόγησης</td>";
     if ($aksiologhsh) {
         echo "<td>ΝΑΙ<br>";
         echo $aksiologhsh_date>'2000-11-30'? date("d-m-Y", strtotime($aksiologhsh_date))."</td>" : "</td>";
@@ -610,6 +1232,7 @@ elseif ($_GET['op']=="view") {
     echo "</tr>";
 
     echo "<tr><td>ΦΕΚ Διορισμού</td><td>$fek_dior</td><td>Ημ/νία Διορισμού</td><td>".date('d-m-Y', strtotime($hm_dior))."</td></tr>";
+    
     switch ($met_did)
     {
     case 0:
@@ -630,25 +1253,51 @@ elseif ($_GET['op']=="view") {
     }
 
     echo "<tr><td>Ημ/νία Ανάληψης</td><td>".date('d-m-Y', strtotime($hm_anal))."</td>";
-    echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm' onclick=\"window.open('postgrad.php?op=list&afm=$afm','newwindow','width=1000,height=500');return false;\">(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
-    //echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm'>(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
+    echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='#' id='postgrad-link' data-afm='$afm'>(Λεπτομέρειες)</a></small></td><td>$met</td></tr>";
+    
+    echo "<tr><td>Ώρες υποχρ. ωραρίου</td><td>$wres</td><td></td><td></td></tr>";
+    echo "<tr><td>Σχ.Οργανικής</td><td>&nbsp;<a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
+    $count = count($yphr_arr);
+    $sxoleia = '';
+    $sxol_str = '';
+    $counthrs = 0;
+    for ($i=0; $i<$count; $i++)
+    {
+        $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
+        $sxol_str .=  "$yphr_arr[$i] ($hours_arr[$i] ώρες) ";
+        $counthrs += $hours_arr[$i];
+    }
+    if ($count>1) {
+        if ($counthrs > $wres) {
+            echo "<tr class='error-highlight'><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
+        }
+        else {
+            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
+        }
+    }
+    else {
+        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+    }
+    
+    $th = thesicmb($thesi);
+    echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
 
-    $ymd=days2ymd($proyp);
-    $temp = "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td>";
-    //}
+    
+    echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
+    echo "</td><td></td><td></td></tr>";
+
+    
+    echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
+    display_yphrethsh_archive($mysqlconnection, $id, $sxol_etos, true);
+    echo "</td></tr>";
+    echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
+    
+    // Calculate anatr for service times section
     $hm_dior_org = $hm_dior;
-    // if hm_anal-hm_dior > 30
-    //$dt1 = strtotime($hm_anal);
-    //$dt2 = strtotime($hm_dior);
-    //if (abs($dt1-$dt2) > 30)
-    //    $hm_dior = $hm_anal;
-                
-    // 20-09-2013 - changed to hm_anal if diafora > 30 days
     $dt1 = strtotime($hm_anal);
     $dt2 = strtotime($hm_dior);
     $diafora = abs($dt1 - $dt2);
     $diafora = $diafora/86400;
-    //echo $diafora;
     if ($diafora > 30) {
         $d1 = strtotime($hm_anal);
         $hm_dior = $hm_anal;
@@ -656,19 +1305,7 @@ elseif ($_GET['op']=="view") {
     else {
         $d1 = strtotime($hm_dior);
     }
-        
-    // Met h/kai did MONO gia katataksi
-    /*
-    if ($met_did==1)
-    $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp - 720;
-    else if ($met_did==2)
-    $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp - 2160;
-    else if ($met_did==3)
-    $anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp - 2520;
-    else
-       */
-    // 27-02-2014: add aney to anatr
-    //$anatr = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp;
+    
     $days_aney = 0;
     if ($aney && strtotime($aney_ews) > date("Y-m-d")) {
         $dtd = strtotime(date('Y-m-d'));
@@ -683,18 +1320,22 @@ elseif ($_GET['op']=="view") {
     }
     $aney = $aney_xr + $days_aney;
     $anatr = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $proyp + $aney;
-    //$anatr_not = (date('d',$d1) + date('m',$d1)*30 + date('Y',$d1)*360) - $proyp_not + $aney;
     $ymd = days2date($anatr);
-        
-    echo "$temp<td>Ανατρέχει</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] </td></tr>";
+    
+    // ========== ΧΡΟΝΟΙ ΥΠΗΡΕΣΙΑΣ (Service Times) ==========
+    echo "<tr><td colspan=4 class='separator'>Χρονοι υπηρεσιας</td></tr>";
+    
+    $ymd_proyp = days2ymd($proyp);
+    echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη: $ymd_proyp[0] &nbsp; Μήνες: $ymd_proyp[1] &nbsp; Ημέρες: $ymd_proyp[2]</td>";
+    echo "<td>Ανατρέχει</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td></tr>";
     
     $ymdnot = days2ymd($proyp_not);
     $ymdwrario = days2ymd($proyp_wrario);
     echo "<tr>";
-    echo "<td>Προϋπηρεσία που δε λαμβάνεται υπ'όψιν για μείωση ωραρίου</td><td>Έτη: $ymdnot[0] &nbsp; Μήνες: $ymdnot[1] &nbsp; Ημέρες: $ymdnot[2] </td>";
-    echo "<td>Προϋπηρεσία που λαμβάνεται υπ'όψιν για μείωση ωραρίου<br>(όχι στη συνολική)</td><td>Έτη: $ymdwrario[0] &nbsp; Μήνες: $ymdwrario[1] &nbsp; Ημέρες: $ymdwrario[2] </td>";
+    echo "<td>Προϋπηρεσία που δε λαμβάνεται υπ'όψιν για μείωση ωραρίου</td><td>Έτη: $ymdnot[0] &nbsp; Μήνες: $ymdnot[1] &nbsp; Ημέρες: $ymdnot[2]</td>";
+    echo "<td>Προϋπηρεσία που λαμβάνεται υπ'όψιν για μείωση ωραρίου<br>(όχι στη συνολική)</td><td>Έτη: $ymdwrario[0] &nbsp; Μήνες: $ymdwrario[1] &nbsp; Ημέρες: $ymdwrario[2]</td>";
+    echo "</tr>";
     
-    echo "</tr>";                
     // aney
     echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
     if ($aney) {
@@ -703,46 +1344,12 @@ elseif ($_GET['op']=="view") {
         echo "<input type='checkbox' name='aney' disabled>";
     }
     if ($aney && $aney_apo && $aney_ews) {
-        // date('d-m-Y',strtotime($hm_dior))
         echo "<small>(Από ".date('d-m-Y', strtotime($aney_apo))." έως ".date('d-m-Y', strtotime($aney_ews)).")</small>";
     }
     $aney_ymd = days2ymd($aney_xr);
     echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
-    //
-    echo "<tr><td>Ώρες υποχρ. ωραρίου:</td><td>$wres</td><td>e-mail:<br>e-mail (ΠΣΔ):</td><td><a href=\"mailto:$email\">$email</a><br><a href=\"mailto:$email_psd\">$email_psd</a></td></tr>";
     echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br(stripslashes($comments))."</td></tr>"; 
-    echo "<tr><td>Σχ.Οργανικής</td><td><a href=\"../school/school_status.php?org=$sx_organ_id\">$sx_organikhs</a>";
-    echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
-    echo "</td><td></td><td></td></tr>";
-
-    $count = count($yphr_arr);
-    $sxoleia = '';
-    $sxol_str = '';
-    $counthrs = 0;
-    for ($i=0; $i<$count; $i++)
-    {
-        $sxoleia .=  "<a href=\"../school/school_status.php?org=$yphr_id_arr[$i]\">$yphr_arr[$i]</a> ($hours_arr[$i] ώρες)<br>";
-        $sxol_str .=  "$yphr_arr[$i] ($hours_arr[$i] ώρες) ";
-        $counthrs += $hours_arr[$i];
-    }
-    if ($count>1) {
-        if ($counthrs > $wres) {
-            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";
-        }
-        else {
-            echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
-        }
-    }
-    else {
-        echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
-    }
     
-    $th = thesicmb($thesi);
-    echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
-    echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
-    display_yphrethsh_archive($mysqlconnection, $id, $sxol_etos, true);
-    echo "</td></tr>";
-    echo "<tr><td>Υπηρέτηση σε Τμήμα Ένταξης<br> / Τάξη υποδοχής</td><td colspan=3>".ent_ty_cmb($entty)."</td></tr>";
     // history
     $hist_qry = "SELECT * FROM yphrethsh WHERE emp_id=$id AND sxol_etos<$sxol_etos";
     $hist_res = mysqli_query($mysqlconnection, $hist_qry);
@@ -777,15 +1384,11 @@ elseif ($_GET['op']=="view") {
     // Service time form
     echo "<form id='yphrfrm' name='yphrfrm' action='' method='POST'>";
     echo "<tr><td>Χρόνοι Υπηρεσίας</td><td>";
-    $myCalendar = new tc_calendar("yphr", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date('d'), date('m'), date('Y'));
-    $myCalendar->setPath("../tools/calendar/");
-    // allow from diorismos 
-    $myCalendar->dateAllow($hm_dior, date("2050-01-01"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
+    modern_datepicker("yphr", date('Y-m-d'), array(
+        'minDate' => $hm_dior,
+        'maxDate' => '2050-01-01',
+        'disabledDays' => array('sun', 'sat')
+    ));
     echo "<br>";
     echo "<input type='hidden' name='id' value=$id>";
     echo "<input type='hidden' name='proyp_not' value=$proyp_not>";
@@ -858,7 +1461,7 @@ elseif ($_GET['op']=="view") {
         echo "	<INPUT TYPE='button' VALUE='<<' onClick=\"parent.location='employee.php?id=$previd&op=view'\">";
     }
     if ($usrlvl < 3){
-        echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+        echo "  <INPUT TYPE='button' id='adeia' VALUE='Άδειες'>";
     }
     if ($usrlvl < 3) {
         echo "	<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='employee.php?id=$id&op=edit'\">";
@@ -875,13 +1478,12 @@ elseif ($_GET['op']=="view") {
         echo "<br><br><INPUT TYPE='button' VALUE='Σελίδα ιδιωτικών' onClick=\"parent.location='idiwtikoi.php'\">";
     }
      echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-    ?>
-    <div id="adeies"></div>
-    <?php
+    
     
     echo "    </center>";
     echo "</body>";
     echo "</html>";    
+    // echo "</div>";
 }
 ///////////////////////////////////
 // ************ DELETE ************
@@ -939,28 +1541,22 @@ if ($_GET['op']=="add") {
     echo "<tr><td>ΦΕΚ Διορισμού</td><td><input type='text' name='fek_dior' /></td></tr>";
                 
     echo "<tr><td>Ημ/νία Διορισμού</td><td>";
-    $myCalendar = new tc_calendar("hm_dior", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date("d"), date("m"), date("Y"));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
+    modern_datepicker("hm_dior", date('Y-m-d'), array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
         
     echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-    $myCalendar = new tc_calendar("hm_anal", true);
-    $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-    $myCalendar->setDate(date("d"), date("m"), date("Y"));
-    $myCalendar->setPath("../tools/calendar/");
-    $myCalendar->setYearInterval(1970, date("Y"));
-    $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-    $myCalendar->setAlignment("left", "bottom");
-    $myCalendar->disabledDay("sun,sat");
-    $myCalendar->writeScript();
-          echo "</td></tr>";        
+    modern_datepicker("hm_anal", date('Y-m-d'), array(
+        'minDate' => '1980-01-01',
+        'maxDate' => date('Y-m-d'),
+        'disabledDays' => array('sun', 'sat'),
+        'yearRange' => '1980:' . date('Y')
+    ));
+    echo "</td></tr>";        
                 
     echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
     metdidCombo(0);

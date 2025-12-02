@@ -1,5 +1,28 @@
 <?php
-  session_start();
+  // Configure session timeout (in seconds)
+  // 3600 = 1 hour, 7200 = 2 hours, 14400 = 4 hours, 28800 = 8 hours
+  if (!isset($_SESSION)) {
+    $session_timeout = 14400; // 4 hours (adjust as needed)
+    
+    // Set session garbage collection lifetime
+    ini_set('session.gc_maxlifetime', $session_timeout);
+    
+    // Set session cookie lifetime (0 = until browser closes, or set to timeout value)
+    ini_set('session.cookie_lifetime', $session_timeout);
+    
+    // Configure session cookie parameters
+    session_set_cookie_params([
+      'lifetime' => $session_timeout,
+      'path' => '/',
+      'domain' => '',
+      'secure' => false, // Set to true if using HTTPS
+      'httponly' => true,
+      'samesite' => 'Lax'
+    ]);
+    session_start();
+  }
+  
+  
   //require_once('../config.php');
   require_once("functions.php");
   // getParam1: Διαβάζει παραμέτρους από τη βάση

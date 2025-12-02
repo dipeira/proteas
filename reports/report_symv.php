@@ -3,14 +3,66 @@
 ?>
 <html>
   <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Αναφορά Εκπαιδευτικών ανά περιφέρεια συμβούλου εκπαίδευσης';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-    <title>Αναφορά Εκπαιδευτικών ανά περιφέρεια συμβούλου εκπαίδευσης</title>
-    
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
 	  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
+    <style>
+        /* Styled select dropdown */
+        select[name='symvoulos'] {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            margin: 1rem 0;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1f2937;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 12px;
+            padding-right: 3rem;
+            min-width: 300px;
+            font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
+        }
+        
+        select[name='symvoulos']:hover {
+            border-color: #10b981;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.15);
+        }
+        
+        select[name='symvoulos']:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+        
+        select[name='symvoulos'] option {
+            padding: 0.5rem;
+            background: #ffffff;
+            color: #1f2937;
+        }
+        
+        select[name='symvoulos'] option:first-child {
+            color: #9ca3af;
+            font-style: italic;
+        }
+    </style>
   </head>
 
 <?php
@@ -102,9 +154,9 @@
 
           echo "<tr>";
           echo "<td>$code</td>";
-          echo "<td><a href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
+          echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
           $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
-          echo "<td><a href=$link target='_blank'>$surname</td>";
+          echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
           echo "<td>$name</td>";
           echo "<td>$thesi</td>";
           echo "<td>$klados</td>";

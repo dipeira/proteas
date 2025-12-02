@@ -6,9 +6,13 @@
   session_start();
 ?>	
   <html>
-  <head>      
+  <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Συμπλήρωση ωραρίου εκπαιδευτικών';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <title>Συμπλήρωση ωραρίου εκπαιδευτικών</title>
     <!-- <link href="../css/select2.min.css" rel="stylesheet" /> -->
     <script type="text/javascript" src="../js/jquery.js"></script>
     <!-- <script src="../js/select2.min.js"></script> -->
@@ -50,7 +54,7 @@
     $result = mysqli_query($mysqlconnection, $sql);
  
     echo "<tr><td>Σχέση υπηρέτησης:</td>";
-    echo "<td><select name='sxesi' class='sxesi_select'>";
+    echo "<td><select class='block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body' name='sxesi' class='sxesi_select'>";
     if (isset($_POST['sxesi']) && $_POST['sxesi'] == 'mon') {
         echo "<option value='mon' selected>Μόνιμος</option>";
         echo "<option value='ana'>Αναπληρωτής</option>";
@@ -64,7 +68,7 @@
     echo "</td></tr>";
 
     echo "<tr><td>Επιλογή κλάδου:</td><td>";
-    $cmb = "<select name='klados' class='klados_select'>";
+    $cmb = "<select class='block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body' name='klados' class='klados_select'>";
     while ($row = mysqli_fetch_array($result)) {
       if (isset($_POST['klados']) && $row['id'] == $_POST['klados'])
           $cmb .= "<option value=\"".$row['id']."\" selected>".$row['perigrafh']."</option>";
@@ -107,15 +111,10 @@
     // echo $query;
 		$result = mysqli_query($mysqlconnection, $query);
 		
-    ob_start();
-    echo "<br>";
-    // echo "<h2>Συμπλήρωση ωραρίου εκπ/κών κλάδου: ". implode(', ', $praxinm)."</h2>";
-		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
-    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Υποχρ.ωράριο</th><th>Σύνολο ωρών<br> ανάθεσης</th><th>Πλήθος υπηρετήσεων</th><th>Σχολεία</th>";
-    echo $has_changes ? '<th>Τελ.αλλαγή σχ.υπηρέτησης</th>' : '';
-    echo "</tr></thead><tbody>";
-    
+    // Store all data in array for both display and export
+    $table_data = array();
     $previd = $employees = 0;
+    
     while ($row = mysqli_fetch_array($result))	
     {
       $id = $row['id'];
@@ -123,7 +122,6 @@
         $employees++;
         $previd = $id;
       }
-      $employees += ($previd <> $id) ? 1 : 0;
 		  $name = $row['name'];
       $surname = $row['surname'];
       $wrario = $row['wres'];
@@ -131,44 +129,82 @@
       
       $yphr_qry = "select s.id,s.name,y.hours from $yphr_tbl y join school s on y.yphrethsh = s.id where emp_id=$id and sxol_etos=$sxol_etos";
       $res_yphr = mysqli_query($mysqlconnection, $yphr_qry);
-      $schools = '<ul>';
+      $schools_list = array();
+      $schools_html = '<ul>';
       $anathesi = 0;
-      while ($row = mysqli_fetch_array($res_yphr)) {
-        
-        $schools .= "<li><a href=\"../school/school_status.php?org=".$row['id']."\">".$row['name']." (" .$row['hours']. ' ώρες)</li>';
-        $anathesi += $row['hours'];
+      while ($row_yphr = mysqli_fetch_array($res_yphr)) {
+        $schools_list[] = $row_yphr['name'] . " (" . $row_yphr['hours'] . " ώρες)";
+        $schools_html .= "<li><a class='underline' href=\"../school/school_status.php?org=".$row_yphr['id']."\">".$row_yphr['name']." (" .$row_yphr['hours']. ' ώρες)</li>';
+        $anathesi += $row_yphr['hours'];
         $topo++;
       }
-      $schools .= '</ul>';
+      $schools_html .= '</ul>';
+      $schools_text = implode(', ', $schools_list);
       
       // if monimos, examine employee_log for latest change in sx_yphreshsh
+      $yphr_latest = '';
       if ($has_changes){
-        $yphr_latest = '';
-        $log_qry = "SELECT max(timestamp),timestamp,query FROM employee_log WHERE emp_id = $id AND query LIKE '%sx_yphrethshs%' ";
+        $log_qry = "SELECT max(timestamp) as max_ts FROM employee_log WHERE emp_id = $id AND query LIKE '%sx_yphrethshs%' ";
         $res_log = mysqli_query($mysqlconnection, $log_qry);
-        while ($row = mysqli_fetch_array($res_log)) {
-          $yphr_latest = $row[0];
+        if ($log_row = mysqli_fetch_array($res_log)) {
+          $yphr_latest = $log_row['max_ts'] ? $log_row['max_ts'] : '';
         }
       }
 
-      echo "<tr><td><a href=\"$emp_tbl.php?id=$id&op=view\">$surname $name</a></td><td>$wrario</td><td>$anathesi</td><td>$plithos</td><td>$schools</td>";
-      echo $has_changes ? "<td>$yphr_latest</td>" : '';
-      echo "</tr>";
+      $table_data[] = array(
+        'id' => $id,
+        'surname' => $surname,
+        'name' => $name,
+        'wrario' => $wrario,
+        'anathesi' => $anathesi,
+        'plithos' => $plithos,
+        'schools_text' => $schools_text,
+        'schools_html' => $schools_html,
+        'yphr_latest' => $yphr_latest
+      );
       $i++;
+    }
+    
+    // Build Excel table HTML
+    $excel_table = "<table border='1'>";
+    $excel_table .= "<thead><tr><th>Ονοματεπώνυμο</th><th>Υποχρ.ωράριο</th><th>Σύνολο ωρών ανάθεσης</th><th>Πλήθος υπηρετήσεων</th><th>Σχολεία</th>";
+    if ($has_changes) {
+      $excel_table .= '<th>Τελ.αλλαγή σχ.υπηρέτησης</th>';
+    }
+    $excel_table .= "</tr></thead><tbody>";
+    
+    foreach ($table_data as $data) {
+      $excel_table .= "<tr><td>".$data['surname']." ".$data['name']."</td><td>".$data['wrario']."</td><td>".$data['anathesi']."</td><td>".$data['plithos']."</td><td>".$data['schools_text']."</td>";
+      if ($has_changes) {
+        $excel_table .= "<td>".$data['yphr_latest']."</td>";
+      }
+      $excel_table .= "</tr>";
+    }
+    $excel_table .= "</tbody></table>";
+    
+    // Display table with links
+    echo "<br>";
+		echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">";
+    echo "<thead><tr><th>Ονοματεπώνυμο</th><th>Υποχρ.ωράριο</th><th>Σύνολο ωρών<br> ανάθεσης</th><th>Πλήθος υπηρετήσεων</th><th>Σχολεία</th>";
+    echo $has_changes ? '<th>Τελ.αλλαγή σχ.υπηρέτησης</th>' : '';
+    echo "</tr></thead><tbody>";
+    
+    foreach ($table_data as $data) {
+      echo "<tr><td><a class='underline' href=\"$emp_tbl.php?id=".$data['id']."&op=view\">".$data['surname']." ".$data['name']."</a></td><td>".$data['wrario']."</td><td>".$data['anathesi']."</td><td>".$data['plithos']."</td><td>".$data['schools_html']."</td>";
+      if ($has_changes) {
+        echo "<td>".$data['yphr_latest']."</td>";
+      }
+      echo "</tr>";
     }
 		echo "</tbody></table>";
     echo "<small><i>$i εκπ/κοί, $topo τοποθετήσεις</i></small>";
     echo "<br><br>";
 
     mysqli_close($mysqlconnection);
-                
-    $page = ob_get_contents(); 
-    $page = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $page);
-		ob_end_flush();
 			
 		echo "<form action='../tools/2excel.php' method='post'>";
-		echo "<input type='hidden' name = 'data' value='".  $page."'>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+		echo "<input type='hidden' name='data' value='".htmlspecialchars($excel_table, ENT_QUOTES, 'UTF-8')."'>";
+    echo "<BUTTON TYPE='submit' class='btn'><IMG SRC='../images/excel.png' ALIGN='absmiddle' style='display: inline-block; vertical-align: middle;'>Εξαγωγή στο excel</BUTTON>";
     echo "&nbsp;&nbsp;&nbsp;";
     echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
     echo "</form>";

@@ -16,10 +16,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Εκπ/κοί που βρίσκονται σε άδεια</title>
-    
+    <?php 
+    $root_path = '../';
+    $page_title = 'Εκπ/κοί που βρίσκονται σε άδεια';
+    require '../etc/head.php'; 
+    ?>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -76,7 +77,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $surname = $row['surname'];
                 $klados_id = $row['klados'];
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = $row['comments'];
+                $comments = shorten_text($row['comments']);
                 $comm = $comments;
                 $today = date("Y-m-d");
                 $return = $row['finish'];

@@ -1,20 +1,250 @@
 <?php
+  require_once "../config.php";
+  require_once '../include/functions.php';
   header('Content-type: text/html; charset=utf-8'); 
 ?>
 <html>
   <head>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Εισαγωγή δεδομένων από αρχείο';
+    require '../etc/head.php'; 
+    ?>
 	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Εισαγωγή δεδομένων από αρχείο</title>
     <script type="text/javascript" src="../js/jquery.js"></script>
+    <style>
+      .import-container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      
+      .import-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      
+      .import-section {
+        margin: 30px 0;
+        padding: 25px;
+        background: #f9fafb;
+        border-radius: 12px;
+        border-left: 4px solid #4FC5D6;
+      }
+      
+      .import-section h4 {
+        margin-top: 0;
+        color: #1f2937;
+        font-weight: 600;
+      }
+      
+      #mytbl.import-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin: 20px 0;
+        table-layout: fixed;
+      }
+      
+      #mytbl.import-table thead th {
+        background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+        color: #ffffff;
+        padding: 16px 20px;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        border: none;
+      }
+      
+      #mytbl.import-table thead th:first-child {
+        width: 200px;
+      }
+      
+      #mytbl.import-table thead th:last-child {
+        width: auto;
+      }
+      
+      #mytbl.import-table tbody td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #e5e7eb;
+        vertical-align: top;
+        word-wrap: break-word;
+      }
+      
+      #mytbl.import-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      
+      #mytbl.import-table tbody tr:hover {
+        background: #f0f9ff;
+      }
+      
+      #mytbl.import-table tbody td:first-child {
+        font-weight: 600;
+        color: #1f2937;
+        background: #f3f4f6;
+        width: 200px;
+        vertical-align: middle;
+        text-align: center;
+        padding: 20px;
+      }
+      
+      #mytbl.import-table tbody td.rowspan-cell {
+        font-weight: 600;
+        color: #1f2937;
+        background: #f3f4f6;
+        vertical-align: middle;
+        text-align: center;
+        padding: 20px;
+        border-right: 2px solid #e5e7eb;
+      }
+      
+      #mytbl.import-table tbody td:last-child {
+        color: #374151;
+        vertical-align: middle;
+        padding-left: 20px;
+      }
+      
+      .import-choice {
+        margin-right: 12px;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        accent-color: #4FC5D6;
+      }
+      
+      .import-choice-label {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        width: 100%;
+        margin: 4px 0;
+      }
+      
+      .import-choice-label:hover {
+        background: #e0f7fa;
+      }
+      
+      .import-choice-label input[type="radio"] {
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+      
+      .file-upload-section {
+        margin: 30px 0;
+        padding: 25px;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f7fa 100%);
+        border-radius: 12px;
+        border: 2px dashed #4FC5D6;
+      }
+      
+      .file-input-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        margin: 15px 0;
+      }
+      
+      input[type="file"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        background: #ffffff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      input[type="file"]:hover {
+        border-color: #4FC5D6;
+        box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+      }
+      
+      .warning-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        color: #92400e;
+      }
+      
+      .info-box {
+        background: #dbeafe;
+        border-left: 4px solid #3b82f6;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        color: #1e40af;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      
+      .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #e5e7eb;
+      }
+      
+      .link-sample {
+        color: #4FC5D6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      
+      .link-sample:hover {
+        color: #3BA8B8;
+        text-decoration: underline;
+      }
+      
+      .result-message {
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+      }
+      
+      .result-success {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        color: #065f46;
+      }
+      
+      .result-error {
+        background: #fee2e2;
+        border-left: 4px solid #ef4444;
+        color: #991b1b;
+      }
+      
+      .result-warning {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        color: #92400e;
+      }
+    </style>
   </head>
   <body>
 
 <?php
   //session_start();
 
-  require_once "../config.php";
-  require_once '../include/functions.php';
+ 
   
   include_once("class.login.php");
   $log = new logmein();
@@ -37,55 +267,69 @@
   if (!isset($_POST['submit']))
   {
     require '../etc/menu.php';
-    echo "<h2> Εισαγωγή δεδομένων στη βάση δεδομένων </h2>";
+    echo "<div class='import-container'>";
+    echo "<div class='import-header'>";
+    echo "<h2>Εισαγωγή δεδομένων στη βάση δεδομένων</h2>";
+    echo "</div>";
+    
     echo "<form enctype='multipart/form-data' action='import.php' method='post'>";
-    echo "<h4>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού του προσθέσετε δεδομένα εισάγετε το.</h4>";
-    echo "<p><b>Επιλογή τύπου δεδομένων & ενέργειας:</b></p<br>";
-
-    echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
-    echo "<thead><th>Τύπος</th><th>Ενέργεια</th></thead>\n";
+    
+    echo "<div class='import-section'>";
+    echo "<h4>Οδηγίες</h4>";
+    echo "<p>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού του προσθέσετε δεδομένα εισάγετε το.</p>";
+    echo "</div>";
+    
+    echo "<div class='import-section'>";
+    echo "<h4>Επιλογή τύπου δεδομένων & ενέργειας</h4>";
+    echo "<table id=\"mytbl\" class=\"import-table imagetable tablesorter\">\n";
+    echo "<thead><tr><th>Τύπος</th><th>Ενέργεια</th></tr></thead>\n";
     echo "<tbody>";
     echo "<tr>";
-    echo "<td rowspan=4>Σχολεία/Μαθητές</td>";
-    echo "<td><input type='radio' class='import-choice' name='type' value='2'>Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)</td>";
+    echo "<td rowspan=\"4\" class=\"rowspan-cell\">Σχολεία/Μαθητές</td>";
+    echo "<td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='2'>Σχολεία&nbsp; (<a href='schools.csv' class='link-sample'>Δείγμα</a>)</label></td>";
     echo "</tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='22'>Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)</td></tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='3'>Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>) *</td></tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='4'>Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>) *</td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='22'>Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)</label></td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='3'>Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv' class='link-sample'>Δείγμα</a>)&nbsp;(<a href='import_check.php' class='link-sample'>Έλεγχος εισαγωγής</a>) *</label></td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='4'>Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv' class='link-sample'>Δείγμα</a>) *</label></td></tr>";
     echo "<tr>";
-    echo "<td rowspan=4>Μόνιμοι</td>";
-    echo "<td><input type='radio' class='import-choice' name='type' value='1'>Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)</td>";
+    echo "<td rowspan=\"4\" class=\"rowspan-cell\">Μόνιμοι</td>";
+    echo "<td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='1'>Μόνιμοι&nbsp; (<a href='employees.csv' class='link-sample'>Δείγμα</a>)</label></td>";
     echo "</tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='5'>Μαζικές τοποθετήσεις μονίμων εκπ/κών &nbsp;(<a href='topo.csv'>Δείγμα</a>)</td></tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='6'>Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)</td></tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='8'>Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)</td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='5'>Μαζικές τοποθετήσεις μονίμων εκπ/κών &nbsp;(<a href='topo.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='6'>Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='8'>Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
     echo "<tr>";
-    echo "<td rowspan=4>Αναπληρωτές</td>";
-    echo "<td><input type='radio' class='import-choice' name='type' value='7'>Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)</td>";
+    echo "<td rowspan=\"4\" class=\"rowspan-cell\">Αναπληρωτές</td>";
+    echo "<td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='7'>Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv' class='link-sample'>Δείγμα</a>)</label></td>";
     echo "</tr>";
-    echo "<tr><td><input type='radio' class='import-choice' name='type' value='9'>Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv'>Δείγμα</a>)</td></tr>";
-    echo "<tr><td><a href='ektaktoi_import.php'>Εισαγωγή αναπληρωτών</a></td></tr>";
-    echo "<tr><td><a href='ektaktoi_import_minedu.php'>Εισαγωγή αναπληρωτών (από αρχεία υπουργείου)</a></td></tr>";
+    echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='9'>Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
+    echo "<tr><td><a href='ektaktoi_import.php' class='link-sample'>Εισαγωγή αναπληρωτών</a></td></tr>";
+    echo "<tr><td><a href='ektaktoi_import_minedu.php' class='link-sample'>Εισαγωγή αναπληρωτών (από αρχεία υπουργείου)</a></td></tr>";
     echo "</tbody></table>";
+    echo "</div>";
 
-    // echo "<input type='radio' class='import-choice' name='type' value='2'>1α) Σχολεία&nbsp; (<a href='schools.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='22'>1β) Σχολεία&nbsp; (από αναφορά MySchool 2.2. Εκτεταμένα Στοιχεία Σχολικών Μονάδων)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='1'>2) Μόνιμοι&nbsp; (<a href='employees.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='3'>3) Μαθητές / Τμήματα Δ.Σ.&nbsp;(<a href='students_ds.csv'>Δείγμα</a>)&nbsp;(<a href='import_check.php'>Έλεγχος εισαγωγής</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='4'>4) Μαθητές / Τμήματα Νηπ.&nbsp;(<a href='students_nip.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='5'>5) Μαζικές τοποθετήσεις μονίμων εκπ/κών &nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='6'>6) Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='7'>7) Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='8'>8) Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv'>Δείγμα</a>)<br>";
-    // echo "<input type='radio' class='import-choice' name='type' value='9'>9) Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv'>Δείγμα</a>)<br>";
-    echo "<br><b>* ΠΡΟΣΟΧΗ: </b> Nα εισάγονται ΜΟΝΟ αφού αλλάξει το σχ. έτος.<br />\n";
-    echo "<br>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή:<br />\n";
-    echo "<input size='50' type='file' name='filename'><br />\n";
-    print "<input type='submit' name='submit' value='Μεταφόρτωση'></form>";
-    echo "<small>ΣΗΜ.: Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.</small>";
+    echo "<div class='warning-box'>";
+    echo "<strong>* ΠΡΟΣΟΧΗ: </strong> Nα εισάγονται ΜΟΝΟ αφού αλλάξει το σχ. έτος.";
+    echo "</div>";
+    
+    echo "<div class='file-upload-section'>";
+    echo "<h4>Υποβολή συμπληρωμένου αρχείου προς εισαγωγή</h4>";
+    echo "<div class='file-input-wrapper'>";
+    echo "<input type='file' name='filename' accept='.csv' required>";
+    echo "</div>";
+    echo "</div>";
+    
+    echo "<div class='info-box'>";
+    echo "<strong>ΣΗΜ.:</strong> Η εισαγωγή ενδέχεται να διαρκέσει μερικά λεπτά, ειδικά για μεγάλα αρχεία.<br>Μη φύγετε από τη σελίδα αν δεν πάρετε κάποιο μήνυμα.";
+    echo "</div>";
+    
+    echo "<div class='form-actions'>";
+    echo "<input type='submit' name='submit' value='Μεταφόρτωση' class='btn btn-primary'>";
+    echo "<INPUT TYPE='button' class='btn btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "</div>";
+    
     echo "</form>";
-    echo "<br><br>";
-    echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "</div>";
     exit;
   }
 		
@@ -94,13 +338,22 @@
   mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
   if (!isset($_POST['type'])){
+    require '../etc/menu.php';
+    echo "<div class='import-container'>";
+    echo "<div class='result-message result-error'>";
     echo "<h3>Σφάλμα: Δεν επιλέξατε τύπο δεδομένων.</h3>";
-    echo "<br><a href='import.php'>Επιστροφή</a>";
+    echo "<br><a href='import.php' class='btn btn-primary'>Επιστροφή</a>";
+    echo "</div>";
+    echo "</div>";
     die();
   }
   //Upload File
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
-      echo "<p>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</p>";
+      require '../etc/menu.php';
+      echo "<div class='import-container'>";
+      echo "<div class='result-message result-success'>";
+      echo "<p><strong>Το αρχείο ". htmlspecialchars($_FILES['filename']['name']) ." ανέβηκε με επιτυχία.</strong></p>";
+      echo "</div>";
 
       //Import uploaded file to Database
       $handle = fopen($_FILES['filename']['tmp_name'], "r");
@@ -129,6 +382,7 @@
       $headers = 1;
       $error = false;
       $warnings = 0;
+      $warn_msg = '';
       $er_msg = '';
       $top_afm = null;
       
@@ -173,8 +427,11 @@
 
           if ($csvcols <> $tblcols)
           {
+            echo "<div class='result-message result-error'>";
             echo "<h3>Σφάλμα: Λάθος αρχείο (Στήλες αρχείου: $csvcols <> στήλες πίνακα: $tblcols)</h3>";
-            echo "<a href='import.php'>Επιστροφή</a>";
+            echo "<a href='import.php' class='btn btn-primary'>Επιστροφή</a>";
+            echo "</div>";
+            echo "</div>";
             die();
           }
           else
@@ -389,8 +646,11 @@
 
             // If anaplirotes & am in csv, abort with a message
             if (!$is_mon && $searchcol == 'am'){
-              echo 'ΣΦΑΛΜΑ: Δεν είναι δυνατή η εισαγωγή τοποθετήσεων αναπληρωτών με ΑΜ!<br>';
-              echo "<a href='import.php'>Επιστροφή</a>";
+              echo "<div class='result-message result-error'>";
+              echo "<h3>ΣΦΑΛΜΑ: Δεν είναι δυνατή η εισαγωγή τοποθετήσεων αναπληρωτών με ΑΜ!</h3>";
+              echo "<a href='import.php' class='btn btn-primary'>Επιστροφή</a>";
+              echo "</div>";
+              echo "</div>";
               die();
             }
             $delete_yphr = $_POST['type'] == 6 ? true : false;
@@ -565,11 +825,14 @@
           }
         }
         if (!mysqli_commit($mysqlconnection)){
+          echo "<div class='result-message result-error'>";
           echo "<h3>Σφάλμα κατά την εκτέλεση των ενημερώσεων στη βάση</h3>";
           foreach($errors as $k=>$v){
-            echo "<br>".$k.": ".$err;
+            echo "<br>".htmlspecialchars($k).": ".htmlspecialchars($v);
           }
           echo "<h4>Ελέγξτε το αρχείο ή επικοινωνήστε με το διαχειριστή.</h4>";
+          echo "</div>";
+          echo "</div>";
           die();
         }
 
@@ -587,31 +850,46 @@
         //   echo "Προέκυψε σφάλμα κατά την εκτέλεση των ενημερώσεων στη Β.Δ...";
         // }
         if ($warnings > 0){
-          echo "<br>Παρατηρήσεις - προειδοποιήσεις:<br>";
+          echo "<div class='result-message result-warning'>";
+          echo "<h4>Παρατηρήσεις - προειδοποιήσεις:</h4>";
           echo $warn_msg;
-          echo "<br>";
+          echo "</div>";
         }
         if ($saves > 0){ 
-          print "<h3>Η εισαγωγή πραγματοποιήθηκε με επιτυχία!</h3>";
-          echo "Έγινε εισαγωγή $saves εγγραφών στον πίνακα $tbl.$infolink<br>";
+          echo "<div class='result-message result-success'>";
+          echo "<h3>Η εισαγωγή πραγματοποιήθηκε με επιτυχία!</h3>";
+          echo "<p>Έγινε εισαγωγή <strong>$saves</strong> εγγραφών στον πίνακα <strong>$tbl</strong>.$infolink</p>";
+          echo "</div>";
         } else {
-          echo "<br><h3>Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.$infolink</h3><br>";
+          echo "<div class='result-message result-warning'>";
+          echo "<h3>Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.$infolink</h3>";
+          echo "</div>";
         }
       }
       else
       {
+          echo "<div class='result-message result-error'>";
           echo "<h3>Παρουσιάστηκε σφάλμα κατά την εισαγωγή</h3>";
           
-          echo mysqli_error($mysqlconnection) ? "Μήνυμα λάθους:".mysqli_error($mysqlconnection) : '';
-          echo $er_msg ? "<h3>$er_msg</h3>" : '';
-          echo "<h4>Ελέγξτε το αρχείο ή επικοινωνήστε με το διαχειριστή.</h4>";
+          echo mysqli_error($mysqlconnection) ? "<p><strong>Μήνυμα λάθους:</strong> ".htmlspecialchars(mysqli_error($mysqlconnection))."</p>" : '';
+          echo $er_msg ? "<p><strong>$er_msg</strong></p>" : '';
+          echo "<p>Ελέγξτε το αρχείο ή επικοινωνήστε με το διαχειριστή.</p>";
+          echo "</div>";
       }
     }
     else {
-        echo "<h3>Σφάλμα: Δεν επιλέξατε αρχείο</h3><br><br>";
+        require '../etc/menu.php';
+        echo "<div class='import-container'>";
+        echo "<div class='result-message result-error'>";
+        echo "<h3>Σφάλμα: Δεν επιλέξατε αρχείο</h3>";
+        echo "</div>";
+        echo "</div>";
     }
                 
-    echo "<a href='import.php'>Επιστροφή</a>";
+    echo "<div style='text-align: center; margin-top: 20px;'>";
+    echo "<a href='import.php' class='btn btn-primary'>Επιστροφή</a>";
+    echo "</div>";
+    echo "</div>";
 ?>
 
 </body>

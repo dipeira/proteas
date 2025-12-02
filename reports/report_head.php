@@ -4,11 +4,11 @@
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <!--
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    -->
-    <title>Αναφορά Διευθυντών / Προϊσταμένων</title>
+    <?php 
+    $root_path = '../';
+    $page_title = 'Αναφορά Διευθυντών / Προϊσταμένων';
+    require '../etc/head.php'; 
+    ?>
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="../js/stickytable.js"></script>
@@ -32,13 +32,17 @@
     echo "<body>";
     require '../etc/menu.php';
 
-    $req_type = $_GET['type'] ? $_GET['type'] : 0;
+    $req_type = isset($_GET['type']) ? (int)$_GET['type'] : 0;
     echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
-    echo "<p>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
-    echo $req_type == 0 ? "<b>Δημοτικά Σχολεία</b><br>" : "<a href='report_head.php?type=0'>Δημοτικά Σχολεία</a><br>";
-    echo $req_type == 3 ? "<b>Δημοτικά Σχολεία (μόνο Δ/ντές)</b><br>" : "<a href='report_head.php?type=3'>Δημοτικά Σχολεία (μόνο Δ/ντές)</a><br>";
-    echo $req_type == 1 ? "<b>Νηπιαγωγεία</b><br>" : "<a href='report_head.php?type=1'>Νηπιαγωγεία</a><br>";
-    echo $req_type == 2 ? '<b>Ειδικά Σχολεία</b><br>' : "<a href='report_head.php?type=2'>Ειδικά Σχολεία</a><br>";
+    echo "<form method='GET' action='report_head.php' id='typeForm' style='margin: 20px 0;'>";
+    echo "<p style='margin-bottom: 15px; font-weight: 500;'>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
+    echo "<div style='background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 500px;'>";
+    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='0' " . ($req_type == 0 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία</label>";
+    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='3' " . ($req_type == 3 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία (μόνο Δ/ντές)</label>";
+    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='1' " . ($req_type == 1 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Νηπιαγωγεία</label>";
+    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='2' " . ($req_type == 2 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Ειδικά Σχολεία</label>";
+    echo "</div>";
+    echo "</form>";
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     
     function print_table($result, $num, $mysqlconnection, $mon = true){
@@ -79,15 +83,15 @@
 
           echo "<tr>";
           echo "<td>$code</td>";
-          echo "<td><a href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
+          echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
           echo "<td>$leitoyrg</td>";
           echo "<td>$thesi</td>";
           $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
-          echo "<td><a href=$link target='_blank'>$surname</td>";
+          echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
           echo "<td>$name</td>";
           echo "<td>$klados</td>";
           echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
-          echo "<td><a href='mailto:$email'>$email</a></td>";
+          echo "<td><a class='underline' href='mailto:$email'>$email</a></td>";
           echo "<td>$afm</td>";
           echo $mon ? "<td>$am</td>" : '';
           echo "</tr>\n";
@@ -137,9 +141,9 @@
 
     echo "<form action='../tools/2excel_ses.php' method='post'>";
     //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-    echo "<BUTTON TYPE='submit'><IMG SRC='../images/excel.png' ALIGN='absmiddle'>Εξαγωγή στο excel</BUTTON>";
+    echo "<BUTTON TYPE='submit' class='button btn-yellow'><IMG SRC='../images/excel.png' ALIGN='absmiddle' style='display: inline-block; vertical-align: middle;'>Εξαγωγή στο excel</BUTTON>";
     echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+    echo "<input type='button' class='button btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     echo "</form>";
     //ob_end_clean();
 

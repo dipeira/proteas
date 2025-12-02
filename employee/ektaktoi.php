@@ -2,7 +2,7 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once"../config.php";
   require_once"../include/functions.php";
-  require('../tools/calendar/tc_calendar.php');
+  
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -19,17 +19,332 @@
 ?>
 <html>
   <head>
-	<LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Αναπληρωτές</title>
+  <?php 
+    $root_path = '../';
+    $page_title = 'Καρτέλα Αναπληρωτή';
+    require '../etc/head.php'; 
+  ?>
+	<LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-        <script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
-	<script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+	<script type="text/javascript" src="../js/jquery.table.addrow.js"></script>
+	<script type="text/javascript" src="../js/datepicker-gr.js"></script>
         <script type="text/javascript" src="../js/jquery_notification_v.1.js"></script>
         <link href="../css/jquery_notification.css" type="text/css" rel="stylesheet"/> 
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+	<style>
+        /* Employee View Page Styling - Same as employee.php */
+        body {
+            padding: 20px;
+        }
+        
+        /* Main header styling */
+        .imagetable th[colspan] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%) !important;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 18px 20px;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Table row styling with section grouping */
+        .imagetable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .imagetable tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Label cells styling - first and third columns */
+        .imagetable td:first-child,
+        .imagetable td:nth-child(3) {
+            background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+            font-weight: 600;
+            color: #1e40af;
+            padding: 12px 16px;
+            border-right: 2px solid #bae6fd;
+            width: 25%;
+            vertical-align: top;
+        }
+        
+        /* Data cells styling - second and fourth columns */
+        .imagetable td:nth-child(2),
+        .imagetable td:nth-child(4) {
+            padding: 12px 16px;
+            color: #374151;
+            vertical-align: top;
+            background: #ffffff;
+        }
+        
+        /* Alternate row styling for visual separation */
+        .imagetable tbody tr:nth-child(even) td:first-child,
+        .imagetable tbody tr:nth-child(even) td:nth-child(3) {
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+        }
+        
+        /* Hover effect for rows */
+        .imagetable tbody tr:hover td:nth-child(2),
+        .imagetable tbody tr:hover td:nth-child(4) {
+            background-color: #f8fafc;
+        }
+        
+        /* Section separator - visual grouping */
+        .imagetable tbody tr td[colspan] {
+            background: #f0f9ff !important;
+            border-top: 2px solid #4FC5D6;
+            border-bottom: 1px solid #bae6fd;
+            padding: 10px 16px !important;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        /* Expandable sections styling */
+        .show_hide, .show_hide2, .show_hide3, #archive-toggle {
+            color: #4FC5D6;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            transition: all 0.2s;
+            background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+            border: 1px solid #4FC5D6;
+        }
+        
+        .show_hide:hover, .show_hide2:hover, .show_hide3:hover, #archive-toggle:hover {
+            background: linear-gradient(90deg, #b2ebf2 0%, #80deea 100%);
+            color: #2A8B9A;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        /* Expandable content styling */
+        .slidingDiv, .slidingDiv2, .slidingDiv3 {
+            background: #f9fafb;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #4FC5D6;
+            margin-top: 8px;
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        /* Important data highlighting */
+        .imagetable td strong {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        
+        /* Link styling */
+        .imagetable a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .imagetable a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+        
+        /* Email links */
+        .imagetable a[href^="mailto:"] {
+            color: #4FC5D6;
+        }
+        
+        .imagetable a[href^="mailto:"]:hover {
+            color: #3BA8B8;
+        }
+        
+        /* Small text styling */
+        .imagetable small {
+            color: #6b7280;
+            font-size: 0.8125rem;
+        }
+        
+        /* Table cell text wrapping */
+        .imagetable td {
+            word-wrap: break-word;
+        }
+        
+        /* Form inputs in view mode */
+        .imagetable input[type="text"],
+        .imagetable input[type="submit"],
+        .imagetable textarea,
+        .imagetable select {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .imagetable input[type="text"]:focus,
+        .imagetable textarea:focus,
+        .imagetable select:focus {
+            outline: none;
+            border-color: #4FC5D6;
+            box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
+        }
+        
+        /* Buttons styling */
+        .imagetable input[type="submit"],
+        .imagetable input[type="button"] {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
+        }
+        
+        .imagetable input[type="submit"]:hover,
+        .imagetable input[type="button"]:hover {
+            background: linear-gradient(135deg, #3BA8B8 0%, #2A8B9A 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(79, 197, 214, 0.4);
+        }
+        
+        /* Button navigation */
+        INPUT[type="button"][value="<<"],
+        INPUT[type="button"][value=">>"] {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+            font-size: 1.25rem;
+            padding: 8px 16px;
+        }
+        
+        /* Print button */
+        input[value="Εκτύπωση"] {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        }
+        
+        /* Archive toggle */
+        #archive-toggle {
+            margin: 8px 0;
+        }
+        
+        /* Lists in expandable sections */
+        .slidingDiv ul, .slidingDiv2 ul, .slidingDiv3 ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 8px 0;
+        }
+        
+        .slidingDiv li, .slidingDiv2 li, .slidingDiv3 li {
+            padding: 8px 12px;
+            margin: 4px 0;
+            background: white;
+            border-left: 3px solid #4FC5D6;
+            border-radius: 4px;
+        }
+        
+        /* Checkbox styling */
+        .imagetable input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4FC5D6;
+            cursor: pointer;
+        }
+        
+        /* Service time form styling */
+        #wordfrm {
+            background: #f0fdf4;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #86efac;
+            margin: 12px 0;
+        }
+        
+        /* Error highlighting - will be applied via inline styles if needed */
+        .error-highlight {
+            background-color: #fee2e2 !important;
+            color: #dc2626 !important;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .imagetable td:first-child,
+            .imagetable td:nth-child(3) {
+                width: 30%;
+            }
+            
+            .imagetable th[colspan] {
+                font-size: 1rem;
+                padding: 14px 16px;
+            }
+        }
+        
+        /* Last update info */
+        .imagetable tr:last-child td {
+            background: #f9fafb;
+            color: #6b7280;
+            font-size: 0.8125rem;
+            padding: 8px 16px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        /* Modal dialog styling */
+        .ui-dialog {
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .ui-dialog-titlebar {
+            background: linear-gradient(135deg, #4FC5D6 0%, #3BA8B8 50%, #2A8B9A 100%);
+            color: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
+            font-weight: 600;
+        }
+        
+        .ui-dialog-titlebar-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: background 0.2s;
+        }
+        
+        .ui-dialog-titlebar-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon {
+            background-image: none;
+            text-indent: 0;
+            overflow: visible;
+        }
+        
+        .ui-dialog-titlebar-close .ui-icon:before {
+            content: "×";
+            font-size: 20px;
+            line-height: 1;
+        }
+        
+        .ui-widget-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 1;
+        }
+    </style>
 	<script type="text/javascript">
            
     $(document).ready(function(){
@@ -239,15 +554,12 @@ if ($_GET['op']=="add")
         
         //echo "<tr><td>Ανάληψη υπηρεσίας</td><td><input type='text' name='analipsi' /></td></tr>";
         echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-        $myCalendar = new tc_calendar("hm_anal", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date("d"), date("m"), date("Y"));
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setYearInterval(1970, date("Y"));
-        $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->disabledDay("sun,sat");
-        $myCalendar->writeScript();
+        modern_datepicker("hm_anal", date('Y-m-d'), array(
+            'minDate' => '2020-01-01',
+            'maxDate' => date('Y-m-d'),
+            'disabledDays' => array('sun', 'sat'),
+            'yearRange' => '2020:' . date('Y')
+        ));
         echo "</td></tr>";		
                         
         echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
@@ -333,26 +645,16 @@ if ($_GET['op']=="edit")
         //echo "<tr><td>Ανάληψη</td><td><input type='text' name='analipsi' value=$analipsi /></td></tr>";
         
         echo "<tr><td>Ημ/νία ανάληψης</td><td>";
-        $myCalendar = new tc_calendar("hm_anal", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d',strtotime($hm_anal)),date('m',strtotime($hm_anal)),date('Y',strtotime($hm_anal)));
-        $myCalendar->setPath("../tools/calendar/");
-        // $myCalendar->setYearInterval(1970, date("Y"));
-        // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        $myCalendar->disabledDay("sun,sat");
-        $myCalendar->writeScript();
+        modern_datepicker("hm_anal", $hm_anal, array(
+            'minDate' => '2020-01-01',
+            'maxDate' => date('Y-m-d'),
+            'disabledDays' => array('sun', 'sat')
+        ));
         echo "</td></tr>";
         echo "<tr><td>Ημ/νία αποχώρησης</td><td>";
-        $myCalendar = new tc_calendar("hm_apox", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setDate(date('d',strtotime($hm_apox)),date('m',strtotime($hm_apox)),date('Y',strtotime($hm_apox)));
-        $myCalendar->setPath("../tools/calendar/");
-        // $myCalendar->setYearInterval(1970, date("Y"));
-        // $myCalendar->dateAllow("1970-01-01", date("Y-m-d"));
-        $myCalendar->setAlignment("left", "bottom");
-        //$myCalendar->disabledDay("sun,sat");
-        $myCalendar->writeScript();
+        modern_datepicker("hm_apox", $hm_apox, array(
+            'minDate' => '2020-01-01'
+        ));
         echo "</td></tr>";		
                         
         echo "<tr><td>Μεταπτυχιακό/Διδακτορικό</td><td>";
@@ -421,12 +723,260 @@ elseif ($_GET['op']=="view")
 {
         ?>
         <script type="text/javascript">
-        $().ready(function() {
-                $("#adeia").click(function() {
-                        var MyVar = <?php echo $id; ?>;
-                        var sxEtos = <?php echo $sxol_etos; ?>;
-                        $("#adeies").load("ekt_adeia_list.php?id="+ MyVar+"&sxol_etos="+sxEtos);
+        $(document).ready(function() {
+            // Check if jQuery UI Dialog is available
+            if (typeof $.ui === 'undefined' || typeof $.ui.dialog === 'undefined') {
+                console.error('jQuery UI Dialog is not loaded');
+                return;
+            }
+            
+            $("#adeia").click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var MyVar = <?php echo $id; ?>;
+                var sxEtos = <?php echo $sxol_etos; ?>;
+                
+                console.log('Opening modal for temporary employee ID:', MyVar, 'School year:', sxEtos);
+                
+                // Clean up any existing modal and overlay
+                if ($("#ekt-adeia-modal").length > 0) {
+                    if ($("#ekt-adeia-modal").hasClass('ui-dialog-content') || $("#ekt-adeia-modal").parent().hasClass('ui-dialog')) {
+                        $("#ekt-adeia-modal").dialog('destroy');
+                    }
+                    $("#ekt-adeia-modal").remove();
+                }
+                $(".ui-widget-overlay").remove();
+                $(".ui-dialog").filter(function() {
+                    return $(this).find('#ekt-adeia-modal').length > 0;
+                }).remove();
+                
+                // Create new modal div (must be hidden to prevent flash of content)
+                var $modalDiv = $('<div id="ekt-adeia-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Λίστα Αδειών Αναπληρωτή"></div>');
+                $("body").append($modalDiv);
+                
+                // Show loading state
+                $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+                
+                // Initialize dialog
+                $modalDiv.dialog({
+                    modal: true,
+                    width: 950,
+                    height: 600,
+                    maxHeight: $(window).height() - 50,
+                    resizable: true,
+                    autoOpen: true,
+                    position: {
+                        my: "center",
+                        at: "center",
+                        of: window
+                    },
+                    show: {
+                        effect: "fade",
+                        duration: 300
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 200
+                    },
+                    close: function() {
+                        var $this = $(this);
+                        $this.dialog('destroy');
+                        $this.remove();
+                        $(".ui-widget-overlay").remove();
+                    },
+                    create: function(event, ui) {
+                        $(this).css('display', 'block');
+                    },
+                    open: function(event, ui) {
+                        console.log('Dialog opened');
+                        var $dialog = $(this);
+                        var $dialogParent = $dialog.parent();
+                        
+                        $dialogParent.css({
+                            'position': 'fixed',
+                            'top': '50%',
+                            'left': '50%',
+                            'transform': 'translate(-50%, -50%)',
+                            'z-index': 1000
+                        });
+                        
+                        $dialog.css({
+                            'display': 'block',
+                            'visibility': 'visible',
+                            'position': 'relative',
+                            'top': 'auto',
+                            'left': 'auto'
+                        });
+                        
+                        // Load content after dialog is fully visible
+                        var $dialogContent = $(this);
+                        console.log('Loading content from ekt_adeia_list.php');
+                        $dialogContent.load("ekt_adeia_list.php?id=" + MyVar + "&sxol_etos=" + sxEtos + "&ajax=1", function(response, status, xhr) {
+                            console.log('Content loaded, status:', status);
+                            if (status == "error") {
+                                console.error('Error loading content:', xhr.status, xhr.statusText);
+                                $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                            } else {
+                                console.log('Content loaded successfully');
+                                $dialogContent.css({
+                                    'display': 'block',
+                                    'visibility': 'visible',
+                                    'position': 'relative',
+                                    'top': 'auto',
+                                    'left': 'auto'
+                                });
+                                
+                                $dialogParent.css({
+                                    'position': 'fixed',
+                                    'top': '50%',
+                                    'left': '50%',
+                                    'transform': 'translate(-50%, -50%)',
+                                    'z-index': 1000
+                                });
+                                
+                                // Initialize tablesorter after content is loaded
+                                setTimeout(function() {
+                                    $dialogContent.find('table.tablesorter').each(function() {
+                                        var $tbl = $(this);
+                                        if (!$tbl.data('tablesorter-initialized')) {
+                                            try {
+                                                $tbl.tablesorter({widgets: ['zebra']});
+                                                $tbl.data('tablesorter-initialized', true);
+                                            } catch(e) {
+                                                console.error('Tablesorter error for table:', e);
+                                            }
+                                        }
+                                    });
+                                }, 200);
+                            }
+                        });
+                    }
                 });
+            });
+            
+            // Postgrad modal handler
+            $("#postgrad-link").click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var afmValue = $(this).data('afm');
+                
+                console.log('Opening modal for postgrad with AFM:', afmValue);
+                
+                // Clean up any existing modal and overlay
+                if ($("#postgrad-modal").length > 0) {
+                    if ($("#postgrad-modal").hasClass('ui-dialog-content') || $("#postgrad-modal").parent().hasClass('ui-dialog')) {
+                        $("#postgrad-modal").dialog('destroy');
+                    }
+                    $("#postgrad-modal").remove();
+                }
+                $(".ui-widget-overlay").remove();
+                $(".ui-dialog").filter(function() {
+                    return $(this).find('#postgrad-modal').length > 0;
+                }).remove();
+                
+                // Create new modal div (must be hidden to prevent flash of content)
+                var $modalDiv = $('<div id="postgrad-modal" style="display:none !important; visibility:hidden; position:absolute; top:-9999px;" title="Μεταπτυχιακοί Τίτλοι"></div>');
+                $("body").append($modalDiv);
+                
+                // Show loading state
+                $modalDiv.html('<div style="padding: 20px; text-align: center;"><p>Φόρτωση δεδομένων...</p></div>');
+                
+                // Initialize dialog
+                $modalDiv.dialog({
+                    modal: true,
+                    width: 1100,
+                    height: 600,
+                    maxHeight: $(window).height() - 50,
+                    resizable: true,
+                    autoOpen: true,
+                    position: {
+                        my: "center",
+                        at: "center",
+                        of: window
+                    },
+                    show: {
+                        effect: "fade",
+                        duration: 300
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 200
+                    },
+                    close: function() {
+                        var $this = $(this);
+                        $this.dialog('destroy');
+                        $this.remove();
+                        $(".ui-widget-overlay").remove();
+                    },
+                    create: function(event, ui) {
+                        $(this).css('display', 'block');
+                    },
+                    open: function(event, ui) {
+                        console.log('Postgrad dialog opened');
+                        var $dialog = $(this);
+                        var $dialogParent = $dialog.parent();
+                        
+                        $dialogParent.css({
+                            'position': 'fixed',
+                            'top': '50%',
+                            'left': '50%',
+                            'transform': 'translate(-50%, -50%)',
+                            'z-index': 1000
+                        });
+                        
+                        $dialog.css({
+                            'display': 'block',
+                            'visibility': 'visible',
+                            'position': 'relative',
+                            'top': 'auto',
+                            'left': 'auto'
+                        });
+                        
+                        // Load content after dialog is fully visible
+                        var $dialogContent = $(this);
+                        console.log('Loading content from postgrad.php');
+                        $dialogContent.load("postgrad.php?afm=" + afmValue, function(response, status, xhr) {
+                            console.log('Content loaded, status:', status);
+                            if (status == "error") {
+                                console.error('Error loading content:', xhr.status, xhr.statusText);
+                                $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                            } else {
+                                console.log('Content loaded successfully');
+                                $dialogContent.css({
+                                    'display': 'block',
+                                    'visibility': 'visible',
+                                    'position': 'relative',
+                                    'top': 'auto',
+                                    'left': 'auto'
+                                });
+                                
+                                $dialogParent.css({
+                                    'position': 'fixed',
+                                    'top': '50%',
+                                    'left': '50%',
+                                    'transform': 'translate(-50%, -50%)',
+                                    'z-index': 1000
+                                });
+                                
+                                // Initialize tablesorter after content is loaded
+                                setTimeout(function() {
+                                    $dialogContent.find('table.tablesorter').each(function() {
+                                        var $tbl = $(this);
+                                        if (!$tbl.data('tablesorter-initialized')) {
+                                            try {
+                                                $tbl.tablesorter({widgets: ['zebra']});
+                                                $tbl.data('tablesorter-initialized', true);
+                                            } catch(e) {
+                                                console.error('Tablesorter error for table:', e);
+                                            }
+                                        }
+                                    });
+                                }, 200);
+                            }
+                        });
+                    }
+                });
+            });
         });
         </script>
 <?php
@@ -481,7 +1031,7 @@ elseif ($_GET['op']=="view")
                         break;
         }
         // echo "<tr><td colspan>Μεταπτυχιακό/Διδακτορικό</td><td colspan=3>$met</td></tr>";
-        echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='postgrad.php?op=list&afm=$afm' onclick=\"window.open('postgrad.php?op=list&afm=$afm','newwindow','width=1000,height=500');return false;\">(Λεπτομέρειες)</a></small></td><td colspan=3>$met</td></tr>";
+        echo "<td>Μεταπτυχιακό/Διδακτορικό <small><a href='#' id='postgrad-link' data-afm='$afm'>(Λεπτομέρειες)</a></small></td><td colspan=3>$met</td></tr>";
                         
         echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br($comments)."</td></tr>"; 
         echo "<tr><td>Υποχρεωτικό ωράριο</td><td colspan='3'>$wres</td></tr>";
@@ -553,11 +1103,9 @@ elseif ($_GET['op']=="view")
         
         //Form gia Bebaiwsh
         echo "<form id='wordfrm' name='wordfrm' action='' method='POST'>";
-        $myCalendar = new tc_calendar("sel_date", true);
-        $myCalendar->setIcon("../tools/calendar/images/iconCalendar.gif");
-        $myCalendar->setPath("../tools/calendar/");
-        $myCalendar->setDate(date('d'), date('m'), date('Y'));
-        $myCalendar->writeScript();
+        modern_datepicker("sel_date", date('Y-m-d'), array(
+            'minDate' => '2020-01-01'
+        ));
         echo "<br>";
         echo "<input type='hidden' name='surname' value=$surname>";
         echo "<input type='hidden' name='name' value=$name>";
@@ -613,17 +1161,13 @@ elseif ($_GET['op']=="view")
         }
         echo "  <input type='button' value='Εκτύπωση' onclick='javascript:window.print()' />";
         if ($usrlvl < 3){
-                echo "  <INPUT TYPE='submit' id='adeia' VALUE='Άδειες'>";
+                echo "  <INPUT TYPE='button' id='adeia' VALUE='Άδειες'>";
         }
         echo $sxoletos ?
                 "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_prev.php?sxoletos=$sxoletos'\">" :
                 "   <INPUT TYPE='button' VALUE='Επιστροφή στη λίστα αναπληρωτών' onClick=\"parent.location='ektaktoi_list.php'\">";
 
         echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
-        ?>
-        <div id="adeies"></div>
-        <?php
-        
         echo "    </center>";
         echo "</body>";
         echo "</html>";	
@@ -648,7 +1192,7 @@ if ($_GET['op']=="delete")
                 echo "Η εγγραφή με κωδικό $id διαγράφηκε με επιτυχία.";
         else
                 echo "Η διαγραφή απέτυχε...";
-        echo "	<INPUT TYPE='button' class=btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
+        echo "	<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='ektaktoi_list.php'\">";
 }
 
 mysqli_close($mysqlconnection);

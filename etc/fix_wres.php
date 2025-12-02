@@ -2,7 +2,7 @@
 	header('Content-type: text/html; charset=utf-8'); 
 	require_once "config.php";
 	require_once "functions.php";
-	require('calendar/tc_calendar.php');  
+	require_once"../include/functions_controls.php";
          
 ?>	
   <html>
@@ -14,7 +14,7 @@
 			$("#mytbl").tablesorter({widgets: ['zebra']}); 
 		});
         </script>
-        <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
+        <script type="text/javascript" src="../js/datepicker-gr.js"></script>
         
 <?php        
 	

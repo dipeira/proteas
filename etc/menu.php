@@ -1,12 +1,12 @@
-<a href="<?=$site_root?>"><IMG src="<?=$site_root?>/images/logo.png" class="applogo"></a>
+<a href="<?=$site_root?>"><IMG src="<?=$site_root?>/images/pr_logo.png" class="applogo"></a>
 <div id="main-menu">
 		<ul id="navigation">
 			<li><a href="<?=$site_root?>/index.php">Αρχικη</a></li>
 			
       <li class="sub">
-        <a href="<?=$site_root?>/index.php">Μονιμοι</a>
+        <a href="<?=$site_root?>/employee/monimoi_list.php">Μονιμοι</a>
 				<ul>
-          <li><a href="<?=$site_root?>/index.php">Λίστα</a></li>
+          <li><a href="<?=$site_root?>/employee/monimoi_list.php">Λίστα</a></li>
 					<li><a href="<?=$site_root?>/employee/idiwtikoi.php">Ιδιωτικοί εκπ/κοί</a></li>
 					<li><a href="<?=$site_root?>/employee/apof_ad.php">Αποφάσεις Αδειών</a></li>
 				</ul>
@@ -70,7 +70,7 @@
 		  <a href="#">Διαχειριση</a>
 		  <ul>
 			  <li><a href="<?=$site_root?>/etc/end_of_year.php">Λήξη Διδακτικού Έτους - Ενέργειες</a></li>
-			  <li><a href="<?=$site_root?>/employee/check_vmk.php">Αλλαγές ΜΚ</a></li>
+			  <!-- <li><a href="<?=$site_root?>/employee/check_vmk.php">Αλλαγές ΜΚ</a></li> -->
         <li><a href='<?=$site_root?>/tools/import.php'>Εισαγωγή δεδομένων</a></li>
 			  <li><a href='<?=$site_root?>/etc/params.php'>Παράμετροι</a></li>
 			  <li><a href="<?=$site_root?>/employee/klados.php">Ειδικότητες</a></li>
@@ -90,10 +90,10 @@
 		  </ul>
 		 </li>
 		 <?php endif; ?>
-		 <li class="sub">
+		 <li>
 		  <a href="<?=$site_root?>/etc/about.php">Σχετικα</a>
 		 </li>
-		<li class="sub">
+		<li>
 			<a href='<?=$site_root?>/tools/login.php?logout=1'>Eξοδος</a>
 		</ul>
   

@@ -2,7 +2,6 @@
   header('Content-type: text/html; charset=utf-8'); 
   require_once "../config.php";
   require_once "../include/functions.php";
-  require '../tools/calendar/tc_calendar.php';
   
   $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
   mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
@@ -17,21 +16,352 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 ?>
 <html>
   <head>
-    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <?php 
+    $root_path = '../';
+    $page_title = 'Καρτέλα σχολείου';
+    require '../etc/head.php'; 
+    ?>
     <LINK href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Καρτέλα σχολείου</title>
+    <style type="text/css">
+      /* General Information Tab Styling */
+      #general {
+        padding: 20px 0;
+      }
+      
+      .info-section {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 24px;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+      }
+      
+      .info-section:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      }
+      
+      .info-section-header {
+        background: linear-gradient(135deg, #4f8188 0%, #30b7cb 100%);
+        color: #ffffff;
+        padding: 16px 24px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      .info-section-content {
+        padding: 24px;
+      }
+      
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        padding: 12px 0;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      
+      .info-item:last-child {
+        border-bottom: none;
+      }
+      
+      .info-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-weight: 500;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .info-value {
+        font-size: 1rem;
+        color: #111827;
+        font-weight: 500;
+        word-break: break-word;
+      }
+      
+      .info-value a {
+        color: #667eea;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      
+      .info-value a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+      }
+      
+      .info-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        background: #f3f4f6;
+        color: #374151;
+      }
+      
+      .info-badge.active {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      
+      .info-badge.inactive {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 8px;
+      }
+      
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+      }
+      
+      .checkbox-item input[type="checkbox"] {
+        margin: 0;
+        cursor: not-allowed;
+      }
+      
+      .checkbox-item label {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: #374151;
+        cursor: not-allowed;
+      }
+      
+      .action-buttons {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      
+      .action-buttons input[type="button"] {
+        padding: 10px 24px;
+        background: #667eea;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.1s ease;
+      }
+      
+      .action-buttons input[type="button"]:hover {
+        background: #764ba2;
+        transform: translateY(-1px);
+      }
+      
+      .organikes-table-wrapper {
+        margin-top: 16px;
+        overflow-x: auto;
+      }
+      
+      .organikes-table-wrapper table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+      
+      .organikes-table-wrapper th {
+        background: #f9fafb;
+        padding: 10px 8px;
+        text-align: center;
+        font-weight: 600;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+      }
+      
+      .organikes-table-wrapper td {
+        padding: 10px 8px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+      }
+      
+      .organikes-toggle {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+      
+      .organikes-toggle:hover {
+        background: #e5e7eb;
+        color: #764ba2;
+      }
+      
+      @media (max-width: 768px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .info-section-content {
+          padding: 16px;
+        }
+      }
+
+      /* Dynamiko table styling */
+      #dynamiko-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 24px 0;
+        font-size: 0.95rem;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+      }
+
+      #dynamiko-table th,
+      #dynamiko-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        text-align: center;
+      }
+
+      #dynamiko-table thead {
+        background: linear-gradient(135deg,rgb(113, 153, 209),rgb(89, 105, 140));
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      #dynamiko-table thead th {
+        color: #ffffff;
+        font-size: 0.9rem;
+        text-shadow: 0 2px 6px rgba(15, 23, 42, 0.45);
+      }
+
+      #dynamiko-table tbody tr:nth-child(odd) {
+        background: #f8fafc;
+      }
+
+      #dynamiko-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      
+      /* Personnel Tab Accordion Styling */
+      #personnel-accordion {
+        margin-top: 20px;
+      }
+      
+      #personnel-accordion .ui-accordion-header {
+        background: linear-gradient(135deg,rgb(108, 176, 185) 0%, #30b7cb 100%) !important;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px !important;
+        margin-bottom: 8px;
+        padding: 16px 20px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      #personnel-accordion .ui-accordion-header:hover {
+        background: linear-gradient(135deg,rgb(120, 162, 75) 0%,rgb(137, 234, 102) 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+      
+      #personnel-accordion .ui-accordion-header-active {
+        background: linear-gradient(135deg,rgb(127, 144, 146) 0%,rgb(142, 197, 205) 100%);
+        border-radius: 8px 8px 0 0 !important;
+      }
+      
+      #personnel-accordion .ui-accordion-header .ui-accordion-header-icon {
+        float: right;
+        margin-top: 0;
+        margin-right: 0;
+      }
+      
+      #personnel-accordion .ui-accordion-content {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        padding: 20px;
+        margin-bottom: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      
+      #personnel-accordion .ui-accordion-content h3 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        color: #374151;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      
+      #personnel-accordion .ui-accordion-content h2 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        color: #374151;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      
+      #personnel-accordion .ui-accordion-content h2:first-child {
+        margin-top: 0;
+      }
+      
+      #personnel-accordion .personnel-count {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        margin-left: 8px;
+        font-weight: 500;
+      }
+    </style>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
     <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../js/jquery.validate.js"></script>
     <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
     <script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
-    <script type="text/javascript" src='../tools/calendar/calendar.js'></script>
     <link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
     <script type="text/javascript">
     $(function() {
         $( "#tabs" ).tabs();
+        $( "#personnel-accordion" ).accordion({
+            collapsible: true,
+            heightStyle: "content",
+            active: false,
+            icons: {
+                header: "ui-icon-triangle-1-e",
+                activeHeader: "ui-icon-triangle-1-s"
+            }
+        });
     });
     $().ready(function() {
       $("#org").autocomplete("../employee/get_school.php", {
@@ -41,10 +371,18 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       });
       $("#slidingDiv").hide();
       $("#slidingDiv2").hide();
-      $('#show_hide').click(function(){
+      $('#show_hide').click(function(e){
+          e.preventDefault();
           $("#slidingDiv").slideToggle();
+          var $this = $(this);
+          if ($this.text().indexOf('▼') !== -1) {
+              $this.text($this.text().replace('▼', '▲'));
+          } else {
+              $this.text($this.text().replace('▲', '▼'));
+          }
       });
-      $('#show_hide2').click(function(){
+      $('#show_hide2').click(function(e){
+          e.preventDefault();
           $("#slidingDiv2").slideToggle();
       });
     });
@@ -139,22 +477,92 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
       // general tab
       echo "<div id='general'>";
-        echo "<table class=\"imagetable\" border='1'>";
-        echo "<tr><td colspan=2>Τύπος: ".get_school_type($sch, $conn)."</td></tr>";
-        echo "<tr><td colspan=3>Τίτλος (αναλυτικά): $titlos</td></tr>";
-        echo "<tr><td>Δ/νση: $address - Τ.Κ. $tk - Δήμος: $dimos</td><td>Τηλ.: $tel<br>Τηλ.2: $tel2</td></tr>";
-        echo "<tr><td>email: <a href=\"mailto:$email\">$email</a><br>email2: <a href=\"mailto:$email2\">$email2</a></td>";
-        echo "<td>Fax: $fax</td></tr>";
+        
+        // Basic Information Section
+        echo "<div class='info-section'>";
+        echo "<div class='info-section-header'>Βασικές Πληροφορίες</div>";
+        echo "<div class='info-section-content'>";
+        echo "<div class='info-grid'>";
+        echo "<div class='info-item'>";
+        echo "  <span class='info-label'>Τύπος Σχολείου</span>";
+        echo "  <span class='info-value'>".get_school_type($sch, $conn)."</span>";
+        echo "</div>";
+        echo "<div class='info-item'>";
+        echo "  <span class='info-label'>Κωδικός ΥΠΑΙΘ</span>";
+        echo "  <span class='info-value'>$code</span>";
+        echo "</div>";
+        echo "<div class='info-item' style='grid-column: 1 / -1;'>";
+        echo "  <span class='info-label'>Τίτλος (αναλυτικά)</span>";
+        echo "  <span class='info-value'>$titlos</span>";
+        echo "</div>";
+
+        echo "<div class='info-item'>";
+        echo "  <span class='info-label'>Διεύθυνση</span>";
+        echo "  <span class='info-value'>$address</span>";
+        echo "</div>";
+        echo "<div class='info-item'>";
+        echo "  <span class='info-label'>Ταχυδρομικός Κώδικας</span>";
+        echo "  <span class='info-value'>$tk</span>";
+        echo "</div>";
+        echo "<div class='info-item'>";
+        echo "  <span class='info-label'>Δήμος</span>";
+        echo "  <span class='info-value'>$dimos</span>";
+        echo "</div>";
+
+        if ($tel) {
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Τηλέφωνο</span>";
+            echo "  <span class='info-value'>".preg_replace('/\s+/', '', $tel)."</span>";
+            echo "</div>";
+          }
+          if ($email) {
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Email</span>";
+            echo "  <span class='info-value'><a href=\"mailto:$email\">$email</a></span>";
+            echo "</div>";
+          }
+          if ($email2) {
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Email 2</span>";
+            echo "  <span class='info-value'><a href=\"mailto:$email2\">$email2</a></span>";
+            echo "</div>";
+          }
+
+        echo "</div>"; //info-grid
+        echo "</div>"; //info-section-content
+        echo "</div>"; //info-section
+        
+        
         if ($type == 1 || $type == 2) {
-            echo "<tr><td>Οργανικότητα: $organikothta</td><td>Λειτουργικότητα: $leitoyrg</td></tr>";
-            
+            // Organizational Information Section
+            echo "<div class='info-section'>";
+            echo "<div class='info-section-header'>Οργανικότητα - Λειτουργικότητα</div>";
+            echo "<div class='info-section-content'>";
+            echo "<div class='info-grid'>";
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Οργανικότητα</span>";
+            echo "  <span class='info-value'>$organikothta</span>";
+            echo "</div>";
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Λειτουργικότητα</span>";
+            echo "  <span class='info-value'>$leitoyrg</span>";
+            echo "</div>"   ;
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Κατηγορία</span>";
+            echo "  <span class='info-value'>$cat</span>";
+            echo "</div>";
             // οργανικά τοποθετηθέντες
             $klados_qry = ($type == 1) ? 2 : 1;
             $qry = "SELECT count(*) as cnt FROM employee WHERE sx_organikhs = $sch AND klados= $klados_qry AND status IN (1,3,5) AND thesi IN (0,1,2)";
             $rs = mysqli_query($conn, $qry);
             $orgtop = mysqli_result($rs, 0, "cnt");
-        
-            echo "<tr><td>Οργανικά τοποθετηθέντες (πλην Τ.Ε.): $orgtop</td><td colspan=3>Κατηγορία: $cat</td></tr>";
+            
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Οργανικά τοποθετηθέντες (πλην Τ.Ε.)</span>";
+            echo "  <span class='info-value'>$orgtop</span>";
+            echo "</div>";
+            
+
             
             // 05-10-2012 - organikes
             $organikes = is_array($organikes) ? $organikes : [];
@@ -166,8 +574,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             
             // if ds
             if ($type == 1) {
-                echo "<tr><td colspan=2><a href='#' id='show_hide'>Οργανικές</a><br>";
-                echo "<div id='slidingDiv'>";
+                echo "<div style='margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;'>";
+                echo "<a href='#' id='show_hide' class='organikes-toggle'>▼ Οργανικές Θέσεις</a>";
+                echo "<div id='slidingDiv' style='display: none; margin-top: 16px;'>";
+                echo "<div class='organikes-table-wrapper'>";
                 echo "<table>";
                 echo "<thead><tr>";
                 echo "<th>Κλάδος</th>";
@@ -220,9 +630,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             }
             // if nip
             else if ($type == 2) {
-            echo "<tr><td colspan=2>Οργανικές: ΠΕ60: $organikes[0]";
+                echo "<div style='margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;'>";
+                echo "<div class='info-item'>";
+                echo "<span class='info-label'>Οργανικές ΠΕ60</span>";
+                echo "<span class='info-value'>$organikes[0]</span>";
+                echo "</div>";
                 // if eidiko
                 if ($type2 == 2) {
+                    echo "<div class='organikes-table-wrapper' style='margin-top: 16px;'>";
                     echo "<table>";
                     echo "<thead><tr>";
                     echo "<th>Κλάδος</th>";
@@ -237,7 +652,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<th><span title='Βοηθ.Προσ.Ειδ.Αγ.'>ΔΕ1ΕΒΠ</th>";
                     echo "</tr></thead><tbody>";
                     echo "<tr>";
-                    echo "<td>Οργανικές</td>";
+                    echo "<td><strong>Οργανικές</strong></td>";
                     echo "<td>$organikes[0]</td>";
                     echo "<td>$organikes[1]</td>";
                     echo "<td>$organikes[2]</td>";
@@ -250,7 +665,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "</tr>";
                     echo "<tr>";
                     $orgs = get_orgs($sch,$conn);
-                    echo "<td>Οργ.ανήκοντες</td>";
+                    echo "<td><strong>Οργ.ανήκοντες</strong></td>";
                     echo "<td>".($orgs['ΠΕ60ΕΑΕ']+$orgs['ΠΕ61'])."</td>";
                     echo "<td>".$orgs['ΠΕ21']."</td>";
                     echo "<td>".$orgs['ΠΕ23']."</td>";
@@ -263,7 +678,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "</tr>";
                     echo "<tr>";
                     $orgs = get_orgs($sch,$conn);
-                    echo "<td>Οργ.Κενά</td>";
+                    echo "<td><strong>Οργ.Κενά</strong></td>";
                     echo "<td>".($organikes[0] - $orgs['ΠΕ60ΕΑΕ'] - $orgs['ΠΕ61'])."</td>";
                     echo "<td>".($organikes[1] - $orgs['ΠΕ21'])."</td>";
                     echo "<td>".($organikes[2] - $orgs['ΠΕ23'])."</td>";
@@ -275,12 +690,15 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     echo "<td>".($organikes[8] - $orgs['ΔΕ1ΕΒΠ'])."</td>";
                     echo "</tr>";
                     echo "</tbody></table>";
+                    echo "</div>";
                 } else {
-                    echo "<br>Oργανικά κενά ΠΕ60: ".($organikes[0] - $orgtop);
+                    echo "<div class='info-item' style='margin-top: 12px;'>";
+                    echo "<span class='info-label'>Οργανικά κενά ΠΕ60</span>";
+                    echo "<span class='info-value'>".($organikes[0] - $orgtop)."</span>";
+                    echo "</div>";
                 }
+                echo "</div>";
             }
-            
-            echo "</td></tr>";
             // 05-10-2012 - kena_leit, kena_org
             $kena_org_count = is_array($kena_org) ? count($kena_org) : 0;
             for ($i=0; $i<$kena_org_count; $i++) {
@@ -343,118 +761,225 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 }
                 echo "</tr>";
                 echo "</table>";
-                echo "</div>"; // of organikes
+                echo "</div>"; // organikes-table-wrapper
+                echo "</div>"; // slidingDiv
+                echo "</div>"; // organikes wrapper
             }
-            echo "</td></tr>";
-        
+            
+            echo "</div>"; // info-grid
+            echo "</div>"; // info-section-content
+            echo "</div>"; // info-section
+            
+            // Special Programs/Features Section
+            echo "<div class='info-section'>";
+            echo "<div class='info-section-header'>Ειδικά Προγράμματα & Χαρακτηριστικά</div>";
+            echo "<div class='info-section-content'>";
+            echo "<div class='checkbox-group'>";
+            
             if ($entaksis[0]) {
-                echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</td>";
+                echo "<div class='checkbox-item'>";
+                echo "<input type=\"checkbox\" checked disabled>";
+                echo "<label>Τμήμα Ένταξης / Μαθητές: $entaksis[1]</label>";
+                echo "</div>";
             } else {
-                echo "<td><input type=\"checkbox\" disabled>Τμήμα Ένταξης</td>";
+                echo "<div class='checkbox-item'>";
+                echo "<input type=\"checkbox\" disabled>";
+                echo "<label>Τμήμα Ένταξης</label>";
+                echo "</div>";
             }
+            
             if ($ypodoxis) {
-                echo "<td><input type=\"checkbox\" checked disabled>Τμήμα Υποδοχής</td>";
+                echo "<div class='checkbox-item'>";
+                echo "<input type=\"checkbox\" checked disabled>";
+                echo "<label>Τμήμα Υποδοχής</label>";
+                echo "</div>";
             } else {
-                echo "<td><input type=\"checkbox\" disabled>Τμήμα Υποδοχής</td>";
+                echo "<div class='checkbox-item'>";
+                echo "<input type=\"checkbox\" disabled>";
+                echo "<label>Τμήμα Υποδοχής</label>";
+                echo "</div>";
             }
-            echo "</tr>";
-            if ($entaksis[0] || $ypodoxis) {
-                echo "<tr><td>Εκπ/κοί Τμ.Ένταξης: $ekp_ee_exp[0]</td><td>Εκπ/κοί Τμ.Υποδοχής: $ekp_ee_exp[1]</td></tr>";
-            }
-
-            echo "<tr>";
+            
             if ($type == 1) {
                 if ($frontistiriako) {
-                    echo "<td><input type=\"checkbox\" checked disabled>Φροντιστηριακό Τμήμα</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" checked disabled>";
+                    echo "<label>Φροντιστηριακό Τμήμα</label>";
+                    echo "</div>";
                 } else {
-                    echo "<td><input type=\"checkbox\" disabled>Φροντιστηριακό Τμήμα</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" disabled>";
+                    echo "<label>Φροντιστηριακό Τμήμα</label>";
+                    echo "</div>";
                 }
             }
             // if nip print Proini Zoni (klasiko[6])
-            else {
+            else if ($type == 2) {
                 if ($klasiko_exp[6]) {
-                    echo "<td><input type=\"checkbox\" checked disabled>Πρωινή Ζώνη / Μαθητές: $klasiko_exp[6]</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" checked disabled>";
+                    echo "<label>Πρωινή Ζώνη / Μαθητές: $klasiko_exp[6]</label>";
+                    echo "</div>";
                 } else {
-                    echo "<td><input type=\"checkbox\" disabled>Πρωινή Ζώνη</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" disabled>";
+                    echo "<label>Πρωινή Ζώνη</label>";
+                    echo "</div>";
                 }
             }
                                                 
             if ($oloimero) {
-                if ($type == 1) {
-                    echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
-                    //echo "<tr><td>Μαθητές Ολοημέρου: $oloimero_stud</td>";
-                    //echo "<td>Εκπ/κοί Ολοημέρου: $oloimero_tea</td></tr>";
-                }
-                else {
-                    echo "<td><input type=\"checkbox\" checked disabled>Όλοήμερο</td></tr>";
-                }
-            }
-            else {
-                echo "<td><input type=\"checkbox\" disabled>Όλοήμερο</td></tr>";
+                echo "<div class='checkbox-item'>";
+                echo "<input type=\"checkbox\" checked disabled>";
+                echo "<label>Όλοήμερο</label>";
+                echo "</div>";
+            } else {
+                echo "<div class='checkbox-item'>";
+                echo "<input type=\"checkbox\" disabled>";
+                echo "<label>Όλοήμερο</label>";
+                echo "</div>";
             }
             
             if ($type == 1) {
-                echo "<tr>";
                 if ($ted) {
-                    echo "<td><input type=\"checkbox\" checked disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" checked disabled>";
+                    echo "<label>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</label>";
+                    echo "</div>";
                 } else {
-                    echo "<td><input type=\"checkbox\" disabled>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" disabled>";
+                    echo "<label>Τμ.Ενισχ.Διδασκαλίας (Τ.Ε.Δ.)</label>";
+                    echo "</div>";
                 }
                 if ($vivliothiki) {
-                    echo "<td><input type=\"checkbox\" checked disabled>Σχολική βιβλιοθήκη";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" checked disabled>";
+                    echo "<label>Σχολική βιβλιοθήκη";
                     $qry1 = "SELECT surname,name,perigrafh from employee e JOIN klados k ON e.klados = k.id WHERE e.id=$vivliothiki";
                     $res1 = mysqli_query($conn, $qry1);
                     if ($row = mysqli_fetch_assoc($res1)){
-                    echo "<i><small> (Υπευθυνος/-η: ".$row['surname'].' '.$row['name'].', '.$row['perigrafh'].')</small></i>';
+                        echo "<i><small> (Υπευθυνος/-η: ".$row['surname'].' '.$row['name'].', '.$row['perigrafh'].')</small></i>';
                     } else {
-                    echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
+                        echo '<i><small> (Δεν έχει οριστεί υπεύθυνος βιβλιοθήκης)</small></i>';
                     }
-                    echo '</td>';
+                    echo "</label>";
+                    echo "</div>";
                 } else {
-                    echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
+                    echo "<div class='checkbox-item'>";
+                    echo "<input type=\"checkbox\" disabled>";
+                    echo "<label>Σχολική βιβλιοθήκη</label>";
+                    echo "</div>";
                 }
-                echo "</tr>";
-                echo "<tr><td>Ενότητα Σχολικών Συμβούλων: ".$perif."η</td>";
-                echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
-                echo "</tr>";
-            } else if ($type == 2){
-                echo $anenergo ? "<tr><td>Κατάσταση: Σε αναστολή</td><td></td>" : "<td>Κατάσταση: Ενεργό</td><td></td></tr>";
             }
             
-        //}
-        if ($thiteia) {
-            if ($thiteia_apo){
-                echo "<tr><td>Διευθυντής με θητεία: ΝΑΙ (Από ".date("d-m-Y", strtotime($thiteia_apo)). ' έως '.date("d-m-Y", strtotime($thiteia_ews)). ')</td><td></td></tr>';                
-            } else {
-                echo "<tr><td>Διευθυντής με θητεία: ΝΑΙ (Έως ".date("d-m-Y", strtotime($thiteia_ews)). ")</td><td></td></tr>";
+            echo "</div>"; // checkbox-group
+            
+            if ($entaksis[0] || $ypodoxis) {
+                echo "<div class='info-grid' style='margin-top: 16px;'>";
+                if ($entaksis[0]) {
+                    echo "<div class='info-item'>";
+                    echo "<span class='info-label'>Εκπ/κοί Τμ.Ένταξης</span>";
+                    echo "<span class='info-value'>$ekp_ee_exp[0]</span>";
+                    echo "</div>";
+                }
+                if ($ypodoxis) {
+                    echo "<div class='info-item'>";
+                    echo "<span class='info-label'>Εκπ/κοί Τμ.Υποδοχής</span>";
+                    echo "<span class='info-value'>$ekp_ee_exp[1]</span>";
+                    echo "</div>";
+                }
+                echo "</div>";
             }
-        } else {
-            echo "<tr><td>Διευθυντής με θητεία: ΟΧΙ</td><td></td></tr>";
+            
+            echo "</div>"; // info-section-content
+            echo "</div>"; // info-section
+            
+            // Additional Information Section
+            echo "<div class='info-section'>";
+            echo "<div class='info-section-header'>Επιπλέον Πληροφορίες</div>";
+            echo "<div class='info-section-content'>";
+            echo "<div class='info-grid'>";
+            
+            if ($type == 1) {
+                echo "<div class='info-item'>";
+                echo "<span class='info-label'>Ενότητα Σχολικών Συμβούλων</span>";
+                echo "<span class='info-value'>".$perif."η</span>";
+                echo "</div>";
+            }
+            
+            echo "<div class='info-item'>";
+            echo "<span class='info-label'>Κατάσταση</span>";
+            echo "<span class='info-value'>";
+            echo $anenergo ? "<span class='info-badge inactive'>Σε αναστολή</span>" : "<span class='info-badge active'>Ενεργό</span>";
+            echo "</span>";
+            echo "</div>";
+            
+            if ($thiteia) {
+                echo "<div class='info-item'>";
+                echo "<span class='info-label'>Διευθυντής με θητεία</span>";
+                echo "<span class='info-value'>";
+                if ($thiteia_apo){
+                    echo "ΝΑΙ (Από ".date("d-m-Y", strtotime($thiteia_apo)). ' έως '.date("d-m-Y", strtotime($thiteia_ews)). ')';
+                } else {
+                    echo "ΝΑΙ (Έως ".date("d-m-Y", strtotime($thiteia_ews)). ")";
+                }
+                echo "</span>";
+                echo "</div>";
+            } else {
+                echo "<div class='info-item'>";
+                echo "<span class='info-label'>Διευθυντής με θητεία</span>";
+                echo "<span class='info-value'>ΟΧΙ</span>";
+                echo "</div>";
+            }
+            
+            if ($systeg) {
+                echo "<div class='info-item' style='grid-column: 1 / -1;'>";
+                echo "<span class='info-label'>Συστεγαζόμενη σχολική μονάδα</span>";
+                echo "<span class='info-value'><a href='school_status.php?org=$systeg' target='_blank'>$systegName</a></span>";
+                echo "</div>";
+            }
+            
+            if ($comments) {
+                echo "<div class='info-item' style='grid-column: 1 / -1;'>";
+                echo "<span class='info-label'>Σχόλια</span>";
+                echo "<span class='info-value'>".nl2br($comments)."</span>";
+                echo "</div>";
+            }
+            
+            if ($updated>0) {
+                echo "<div class='info-item' style='grid-column: 1 / -1; text-align: right; border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 8px;'>";
+                echo "<span class='info-label' style='font-size: 0.75rem;'>Τελ.ενημέρωση</span>";
+                echo "<span class='info-value' style='font-size: 0.875rem; color: #6b7280;'>".date("d-m-Y H:i", strtotime($updated))."</span>";
+                echo "</div>";
+            }
+            
+            echo "</div>"; //info-grid
+            echo "</div>"; //info-section-content
+            echo "</div>"; //info-section
+            // echo "</div>";
         }
-        echo "<tr><td>Σχόλια: ".nl2br($comments)."</td><td>Κωδικός ΥΠΑΙΘ: $code</td></tr>";
-        if ($systeg) {
-            echo "<tr><td colspan=2>Συστεγαζόμενη σχολική μονάδα: <a href='school_status.php?org=$systeg' target='_blank'>$systegName</td></tr>";    
-        }
-    }
-        if ($updated>0) {
-            echo "<tr><td colspan=2 align=right><small>Τελ.ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."<small></td></tr>";
-        }
-        echo "</table>";
+        
+        // Action Buttons
         if ( $_SESSION['userlevel'] < 3){
+            echo "<div class='action-buttons'>";
             echo "<INPUT TYPE='button' VALUE='Επεξεργασία' onClick=\"parent.location='school_edit.php?org=$sch'\">";
             if ($type == 1 || $type == 2){
-                echo "&nbsp;&nbsp;&nbsp;<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
+                echo "<INPUT TYPE='button' VALUE='Εκδρομές' onClick=\"parent.location='ekdromi.php?sch=$sch&op=list'\">";
             }
+            echo "</div>";
         }
-      echo "</div>"; // of general
+      echo "</div>"; // of general tab
+      
       if ($type == 1 || $type == 2){
-        echo "<div id='leit'>";
+        echo "<div id='leit'>"; // leit tab
             
         if ($type == 1) {
             if ($synolo>0) {
             echo "<h3>Μαθητικό Δυναμικό</h3>";
-            echo "<table class=\"imagetable\" border='1'>";
-            echo "<tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολοήμερο</i></td><td class='tdnone'><i>Πρωινή Ζώνη</i></td></tr>";
+            echo "<table id='dynamiko-table' border='1'>";
+            echo "<thead><tr><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td class='tdnone'><i>Ολοήμερο</i></td><td class='tdnone'><i>Πρωινή Ζώνη</i></td></tr></thead>";
+            echo "<tbody>";
             $synolo_pr = $classes[0]+$classes[1]+$classes[2]+$classes[3]+$classes[4]+$classes[5];
             echo "<tr><td>Μαθ.Πρωινού<br><b>Σύνολο: $synolo_pr</b></td><td>$classes[0]</td><td>$classes[1]</td><td>$classes[2]</td><td>$classes[3]</td>";
             echo "<td>$classes[4]</td><td>$classes[5]</td><td class='tdnone'><i>$classes[6]</i></td><td class='tdnone'><i>$classes[7]</i></td></tr>";
@@ -505,6 +1030,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "</table>";
                 echo "</div>";
             }
+            echo "</tbody>";
             echo "</table>";
             echo "<br>";
             }
@@ -537,11 +1063,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
                 // Μαθητές
                 echo "<h3>Μαθητές</h3>";
-                echo "<table class=\"imagetable\" border='1'>";
+                echo "<table id='dynamiko-table' border='1'>";
                 $ola = $klasiko_nip + $klasiko_pro;
                 $olola = $oloimero_syn_nip + $oloimero_syn_pro;
-                echo "<tr><td rowspan=2>Τμήμα</td><td colspan=3>Κλασικό</small></td><td colspan=3>Ολοήμερο</td></tr>";
-                echo "<tr><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td><td>Νήπια</td><td>Προνήπια</td><td>Σύνολο</td></tr>";
+                echo "<thead><tr><td rowspan=2>Τμημα</td><td colspan=3>Κλασικο</small></td><td colspan=3>Ολοημερο</td></tr>";
+                echo "<tr><td>Νηπια</td><td>Προνηπια</td><td>Συνολο</td><td>Νηπια</td><td>Προνηπια</td><td>Συνολο</td></tr>";
+                echo "</thead>";
+                echo "<tbody>";
                 // t1
                 $syn = $klasiko_exp[0]+$klasiko_exp[1];
                 $tmimata_nip = 1;
@@ -768,7 +1296,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</div>";
             echo "<br><br>";
         }
-        echo "</div>";
+        echo "</div>"; // of leit tab
       }
     } // of disp_school
       
@@ -829,21 +1357,24 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
           echo $_SESSION['requests'] && $schooltype != 0 ? "<li><a href='#requests'>Αιτήματα</a></li>" : '';
           echo "</ul>";
 
-          disp_school($sch, $sxol_etos, $mysqlconnection);
+         disp_school($sch, $sxol_etos, $mysqlconnection);
 
         
 
         // personnel tab
         echo "<div id='personnel'>";
+        echo "<div id='personnel-accordion'>";
+        
         //Υπηρετούν με θητεία
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Υπηρετούν με θητεία</h3><br>";
+            echo "<h3>Υπηρετούν με θητεία<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             
             $i=0;
-            echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -861,16 +1392,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $thesi = mysqli_result($result, $i, "thesi");
                 $th = thesicmb($thesi);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }                   
         //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)
         //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
@@ -879,9 +1410,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Ανήκουν οργανικά και υπηρετούν (ΠΕ60/ΠΕ70)</h3>";
+            echo "<h3>Ανήκουν οργανικά και υπηρετούν (ΠΕ60/ΠΕ70)<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -896,15 +1428,15 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         //Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)
         //$query = "SELECT * from employee WHERE sx_organikhs='$sch' AND sx_yphrethshs='$sch' AND status=1 AND thesi=0";
@@ -913,9 +1445,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)</h3>";
+            echo "<h3>Ανήκουν οργανικά και υπηρετούν (Ειδικότητες)<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -930,16 +1463,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $surname = mysqli_result($result, $i, "surname");
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         
         
@@ -948,9 +1481,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Με οργανική σε άλλο σχολείο και υπηρετούν</h3>";
+            echo "<h3>Με οργανική σε άλλο σχολείο και υπηρετούν<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl3\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -968,16 +1502,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         
         // Οργανική αλλού και δευτερεύουσα υπηρέτηση
@@ -986,9 +1520,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Με οργανική και κύρια υπηρέτηση σε άλλο σχολείο, που υπηρετούν με διάθεση</h3>";
+            echo "<h3>Με οργανική και κύρια υπηρέτηση σε άλλο σχολείο, που υπηρετούν με διάθεση<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl3\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl3\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1007,26 +1542,27 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 $hours = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$hours</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         //Υπηρετούν σε τμήμα ένταξης
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND ent_ty=1";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Υπηρετούν σε τμήμα ένταξης</h3>";
+            echo "<h3>Υπηρετούν σε τμήμα ένταξης<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1044,25 +1580,26 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         //Υπηρετούν σε τάξη υποδοχής
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND ent_ty=2";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h3>Υπηρετούν σε τάξη υποδοχής</h3>";
+            echo "<h3>Υπηρετούν σε τάξη υποδοχής<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl2\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl2\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1080,16 +1617,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_organ_id = mysqli_result($result, $i, "sx_organikhs");
                 $sx_organikhs = getSchool($sx_organ_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_organikhs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         
         //Αναπληρωτές
@@ -1100,9 +1637,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $num = mysqli_num_rows($result);
         $sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
         if ($num) {
-            echo "<h3>Αναπληρωτές</h3>";
+            echo "<h3>Αναπληρωτές <span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1139,17 +1677,17 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                         break;
                 }
 
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 $wres = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxi</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxi</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         
         //Απουσιάζουν: Ανήκουν οργανικά και υπηρετούν αλλού
@@ -1157,10 +1695,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h2>Απουσιάζουν</h2>";
-            echo "<h3>Ανήκουν οργανικά και υπηρετούν αλλού</h3>";
+            echo "<h3>Απουσιάζουν: Ανήκουν οργανικά και υπηρετούν αλλού<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl5\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl5\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1178,16 +1716,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $sx_yphrethshs_id = mysqli_result($result, $i, "sx_yphrethshs");
                 $sx_yphrethshs = getSchool($sx_yphrethshs_id, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$sx_yphrethshs</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
         }
         
         //Σε άδεια
@@ -1206,10 +1744,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<h2>Σε Άδεια</h2>";
-            echo "<h3>Μόνιμοι</h3>";
+            echo "<h3>Σε Άδεια - Μόνιμοι<span class='personnel-count'>$num</span></h3>";
+            echo "<div>";
             $i=0;
-            echo "<table id=\"mytbl6\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl6\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1230,7 +1768,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               $surname = mysqli_result($result, $i, "surname");
               $klados_id = mysqli_result($result, $i, "klados");
               $klados = getKlados($klados_id, $mysqlconnection);
-              $comments = mysqli_result($result, $i, "comments");
+              $comments = shorten_text(mysqli_result($result, $i, "comments"));
               $comm = $comments;
               $today = date("Y-m-d");
               $return = mysqli_result($result, $i, "finish");
@@ -1275,12 +1813,13 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
                   echo "<tr>";
                   echo "<td>".($i+1)."</td>";
-                  echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='../employee/adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
+                  echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$typewrd</td><td><a href='../employee/adeia.php?adeia=$adeia_id&op=view'>$ret</a></td><td>$comments</td>\n";
                   echo "</tr>";
               }
               $i++;
             }
             echo "</tbody></table>";
+            echo "</div>";
         }
         //Αναπληρωτές σε άδεια
         $query = "SELECT *,e.type as emptype, e.name as empname, p.name as praxiname FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id join praxi p on p.id=e.praxi where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 3)";
@@ -1291,7 +1830,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         if ($num) {
             echo "<h3>Αναπληρωτές</h3>";
             $i=0;
-            echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
             echo "<thead><tr>";
             echo "<th>A/A</th>";
             echo "<th>Επώνυμο</th>";
@@ -1312,96 +1851,99 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 $typos = mysqli_result($result, $i, "emptype");
                 $praxiname = mysqli_result($result, $i, "praxiname");
                 $type = get_type($typos, $mysqlconnection);
-                $comments = mysqli_result($result, $i, "comments");
+                $comments = shorten_text(mysqli_result($result, $i, "comments"));
                 $wres = mysqli_result($result, $i, "hours");
                 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxiname</td><td>$wres</td><td>$comments</td>\n";
+                echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$praxiname</td><td>$wres</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
             echo "</tbody></table>";
-            echo "<br>";
+            echo "</div>";
           }
 
         //Aπουσία COVID-19
-        $query = "SELECT *,e.id as empid FROM employee e join yphrethsh y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
-        $query_ekt = "SELECT *,e.id as empid FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
-        //echo $query;
-        $result = mysqli_query($mysqlconnection, $query);
-        $result_ekt = mysqli_query($mysqlconnection, $query_ekt);
-        $num = mysqli_num_rows($result);
-        $num_ekt = mysqli_num_rows($result_ekt);
-        //$sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
-        if (($num + $num_ekt) > 0){
-            echo "<h2>Απουσία COVID-19</h2>";
-            if ($num > 0){
-                echo "<h3>Μόνιμοι</h3>";
-                echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
-                echo "<thead><tr>";
-                echo "<th>A/A</th>";
-                echo "<th>Επώνυμο</th>";
-                echo "<th>Όνομα</th>";
-                echo "<th>Κλάδος</th>";
-                echo "<th>Τύπος Απασχόλησης</th>";
-                echo "<th>Ώρες</th>";
-                echo "<th>Σχόλια</th>";
-                echo "</tr></thead>\n<tbody>";
-                while ($row = mysqli_fetch_assoc($result))
-                {
-                    $id = $row['empid'];
-                    $name = $row['name'];
-                    $surname = $row['surname'];
-                    $klados_id = $row['klados'];
-                    $klados = getKlados($klados_id, $mysqlconnection);
-                    $typos = $row['type'];
-                    $type = get_type($typos, $mysqlconnection);
-                    $comments = $row['comments'];
-                    $wres = $row['hours'];
+        // $query = "SELECT *,e.id as empid FROM employee e join yphrethsh y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
+        // $query_ekt = "SELECT *,e.id as empid FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
+        // //echo $query;
+        // $result = mysqli_query($mysqlconnection, $query);
+        // $result_ekt = mysqli_query($mysqlconnection, $query_ekt);
+        // $num = mysqli_num_rows($result);
+        // $num_ekt = mysqli_num_rows($result_ekt);
+        // //$sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
+        // if (($num + $num_ekt) > 0){
+        //     echo "<h3>Απουσία COVID-19<span class='personnel-count'>".($num + $num_ekt)."</span></h3>";
+        //     echo "<div>";
+        //     if ($num > 0){
+        //         echo "<h4>Μόνιμοι</h4>";
+        //         echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
+        //         echo "<thead><tr>";
+        //         echo "<th>A/A</th>";
+        //         echo "<th>Επώνυμο</th>";
+        //         echo "<th>Όνομα</th>";
+        //         echo "<th>Κλάδος</th>";
+        //         echo "<th>Τύπος Απασχόλησης</th>";
+        //         echo "<th>Ώρες</th>";
+        //         echo "<th>Σχόλια</th>";
+        //         echo "</tr></thead>\n<tbody>";
+        //         while ($row = mysqli_fetch_assoc($result))
+        //         {
+        //             $id = $row['empid'];
+        //             $name = $row['name'];
+        //             $surname = $row['surname'];
+        //             $klados_id = $row['klados'];
+        //             $klados = getKlados($klados_id, $mysqlconnection);
+        //             $typos = $row['type'];
+        //             $type = get_type($typos, $mysqlconnection);
+        //             $comments = shorten_text($row['comments']);
+        //             $wres = $row['hours'];
                     
-                    echo "<tr>";
-                    echo "<td>".($i+1)."</td>";
-                    echo "<td><a href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-                    echo "</tr>";
-                }
-                echo "</tbody></table>";
-            }
-            // ektaktoi
-            if ($num_ekt > 0){
-                echo "<h3>Αναπληρωτές</h3>";
-                // $i=0;
-                echo "<table id=\"mytbl4\" class=\"imagetable tablesorter\" border=\"2\">\n";
-                echo "<thead><tr>";
-                echo "<th>A/A</th>";
-                echo "<th>Επώνυμο</th>";
-                echo "<th>Όνομα</th>";
-                echo "<th>Κλάδος</th>";
-                echo "<th>Τύπος Απασχόλησης</th>";
-                echo "<th>Ώρες</th>";
-                echo "<th>Σχόλια</th>";
-                echo "</tr></thead>\n<tbody>";
-                while ($row = mysqli_fetch_assoc($result_ekt))
-                {
-                    $id = $row['empid'];
-                    $name = $row['name'];
-                    $surname = $row['surname'];
-                    $klados_id = $row['klados'];
-                    $klados = getKlados($klados_id, $mysqlconnection);
-                    $typos = $row['type'];
-                    $type = get_type($typos, $mysqlconnection);
-                    $comments = $row['comments'];
-                    $wres = $row['hours'];
+        //             echo "<tr>";
+        //             echo "<td>".($i+1)."</td>";
+        //             echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+        //             echo "</tr>";
+        //         }
+        //         echo "</tbody></table>";
+        //     }
+        //     // ektaktoi
+        //     if ($num_ekt > 0){
+        //         echo "<h4>Αναπληρωτές</h4>";
+        //         // $i=0;
+        //         echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
+        //         echo "<thead><tr>";
+        //         echo "<th>A/A</th>";
+        //         echo "<th>Επώνυμο</th>";
+        //         echo "<th>Όνομα</th>";
+        //         echo "<th>Κλάδος</th>";
+        //         echo "<th>Τύπος Απασχόλησης</th>";
+        //         echo "<th>Ώρες</th>";
+        //         echo "<th>Σχόλια</th>";
+        //         echo "</tr></thead>\n<tbody>";
+        //         while ($row = mysqli_fetch_assoc($result_ekt))
+        //         {
+        //             $id = $row['empid'];
+        //             $name = $row['name'];
+        //             $surname = $row['surname'];
+        //             $klados_id = $row['klados'];
+        //             $klados = getKlados($klados_id, $mysqlconnection);
+        //             $typos = $row['type'];
+        //             $type = get_type($typos, $mysqlconnection);
+        //             $comments = shorten_text($row['comments']);
+        //             $wres = $row['hours'];
                     
-                    echo "<tr>";
-                    echo "<td>".($i+1)."</td>";
-                    echo "<td><a href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-                    echo "</tr>";
-                }
-                echo "</tbody></table>";
-            }
-        }
-          echo "</div>"; // of personnel tab
+        //             echo "<tr>";
+        //             echo "<td>".($i+1)."</td>";
+        //             echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
+        //             echo "</tr>";
+        //         }
+        //         echo "</tbody></table>";
+        //     }
+        //     echo "</div>";
+        // }
+        echo "</div>"; // of personnel-accordion
+        echo "</div>"; // of personnel tab
           
           // requests tab
           if ($_SESSION['requests'] && $schooltype != 0) {
