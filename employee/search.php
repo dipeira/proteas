@@ -450,7 +450,6 @@
 		modern_datepicker("hm_dior_from", null, array(
 			'minDate' => '1970-01-01',
 			'maxDate' => date('Y-m-d'),
-			'disabledDays' => array('sun', 'sat'),
 			'yearRange' => '1970:' . date('Y')
 		));
 		echo "</div>";
@@ -459,7 +458,6 @@
 		modern_datepicker("hm_dior_to", null, array(
 			'minDate' => '1970-01-01',
 			'maxDate' => date('Y-m-d'),
-			'disabledDays' => array('sun', 'sat'),
 			'yearRange' => '1970:' . date('Y')
 		));
 		echo "</div>";
@@ -480,7 +478,6 @@
 		modern_datepicker("hm_anal_from", null, array(
 			'minDate' => '1970-01-01',
 			'maxDate' => date('Y-m-d'),
-			'disabledDays' => array('sun', 'sat'),
 			'yearRange' => '1970:' . date('Y')
 		));
 		echo "</div>";
@@ -489,7 +486,6 @@
 		modern_datepicker("hm_anal_to", null, array(
 			'minDate' => '1970-01-01',
 			'maxDate' => date('Y-m-d'),
-			'disabledDays' => array('sun', 'sat'),
 			'yearRange' => '1970:' . date('Y')
 		));
 		echo "</div>";
@@ -565,7 +561,6 @@
 		modern_datepicker("hm_synol", null, array(
 			'minDate' => '1970-01-01',
 			'maxDate' => '2030-12-31',
-			'disabledDays' => array('sun', 'sat'),
 			'yearRange' => '1970:' . date('Y')
 		));
 		echo "</div>";

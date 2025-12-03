@@ -195,16 +195,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<tr><td>Ημ/νία έναρξης</td><td>";
             modern_datepicker("start", $start, array(
                 'minDate' => '2011-01-01',
-                'maxDate' => '2030-12-31',
-                'disabledDays' => array('sun', 'sat')
+                'maxDate' => '2030-12-31'
             ));
             echo "</td></tr>";
 
                 echo "<tr><td>Ημ/νία λήξης</td><td>";
             modern_datepicker("finish", $finish, array(
                 'minDate' => '2011-01-01',
-                'maxDate' => '2030-12-31',
-                'disabledDays' => array('sun', 'sat')
+                'maxDate' => '2030-12-31'
             ));
             echo "</td></tr>";
 
@@ -439,8 +437,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<tr><td>Ημ/νία έναρξης</td><td>";
             modern_datepicker("start", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
-                'maxDate' => '2030-12-31',
-                'disabledDays' => array('sun', 'sat')
+                'maxDate' => '2030-12-31'
             ));
             ?>                
                 <script language="javascript">
@@ -459,8 +456,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 echo "<tr><td>Ημ/νία λήξης</td><td>";
             modern_datepicker("finish", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
-                'maxDate' => '2030-12-31',
-                'disabledDays' => array('sun', 'sat')
+                'maxDate' => '2030-12-31'
             ));
             echo "</td></tr>";
 

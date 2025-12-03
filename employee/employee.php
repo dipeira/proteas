@@ -1386,8 +1386,7 @@ elseif ($_GET['op']=="view") {
     echo "<tr><td>Χρόνοι Υπηρεσίας</td><td>";
     modern_datepicker("yphr", date('Y-m-d'), array(
         'minDate' => $hm_dior,
-        'maxDate' => '2050-01-01',
-        'disabledDays' => array('sun', 'sat')
+        'maxDate' => '2050-01-01'
     ));
     echo "<br>";
     echo "<input type='hidden' name='id' value=$id>";

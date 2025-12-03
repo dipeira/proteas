@@ -73,8 +73,7 @@ while ($row = mysqli_fetch_array($result)){
         echo "<tr><td>Ημερομηνία πρόσληψης:</td><td>";
         modern_datepicker("date", date('Y-m-d'), array(
             'minDate' => '2020-01-01',
-            'maxDate' => '2030-12-31',
-            'disabledDays' => array('sun', 'sat')
+            'maxDate' => '2030-12-31'
         ));
         echo "</td></tr>";
         echo "<tr><td>Τύπος πρόσληψης</td><td>";

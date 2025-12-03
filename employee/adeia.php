@@ -295,16 +295,14 @@
 			echo "<tr><td>Ημ/νία έναρξης</td><td>";
 			modern_datepicker("start", $start, array(
 				'minDate' => '2011-01-01',
-				'maxDate' => '2030-12-31',
-				'disabledDays' => array('sun', 'sat')
+				'maxDate' => '2030-12-31'
 			));
 			echo "</td></tr>";
 
 			echo "<tr><td>Ημ/νία λήξης</td><td>";
 			modern_datepicker("finish", $finish, array(
 				'minDate' => '2011-01-01',
-				'maxDate' => '2030-12-31',
-				'disabledDays' => array('sun', 'sat')
+				'maxDate' => '2030-12-31'
 			));
 			echo "</td></tr>";
 
@@ -492,7 +490,6 @@
 		modern_datepicker("hm_apof", date('Y-m-d'), array(
 			'minDate' => '2011-01-01',
 			'maxDate' => '2030-12-31',
-			'disabledDays' => array('sun', 'sat')
 		));
 		echo "</td></tr>";
                 
@@ -501,7 +498,6 @@
 		modern_datepicker("hm_prot", date('Y-m-d'), array(
 			'minDate' => '2011-01-01',
 			'maxDate' => '2030-12-31',
-			'disabledDays' => array('sun', 'sat')
 		));
 		echo "</td></tr>";
                 
@@ -509,7 +505,6 @@
 		modern_datepicker("date", date('Y-m-d'), array(
 			'minDate' => '2011-01-01',
 			'maxDate' => '2030-12-31',
-			'disabledDays' => array('sun', 'sat')
 		));
 		echo "</td></tr>";
 
@@ -529,8 +524,7 @@
 		echo "<tr><td>Ημ/νία έναρξης</td><td>";
 		modern_datepicker("start", date('Y-m-d'), array(
 			'minDate' => '2011-01-01',
-			'maxDate' => '2030-12-31',
-			'disabledDays' => array('sun', 'sat')
+			'maxDate' => '2030-12-31'
 		));
                 
 ?>                
@@ -584,8 +578,7 @@
 		echo "<tr><td>Ημ/νία λήξης</td><td>";
 		modern_datepicker("finish", date('Y-m-d'), array(
 			'minDate' => '2011-01-01',
-			'maxDate' => '2030-12-31',
-			'disabledDays' => array('sun', 'sat')
+			'maxDate' => '2030-12-31'
 		));
 		echo "</td></tr>";
 

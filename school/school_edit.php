@@ -834,7 +834,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     modern_datepicker('thiteia_apo', $thiteia_apo, array(
                         'minDate' => '2000-01-01',
                         'maxDate' => '2050-12-31',
-                        'disabledDays' => array('sun', 'sat')
                     ));
                     echo "</div>";
                     echo "</div>";
@@ -844,7 +843,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     modern_datepicker('thiteia_ews', $thiteia_ews, array(
                         'minDate' => '2000-01-01',
                         'maxDate' => '2050-12-31',
-                        'disabledDays' => array('sun', 'sat')
                     ));
                     echo "</div>";
                     echo "</div>";
@@ -855,7 +853,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     modern_datepicker('thiteia_apo', $thiteia_apo, array(
                         'minDate' => '2000-01-01',
                         'maxDate' => '2050-12-31',
-                        'disabledDays' => array('sun', 'sat')
                     ));
                     echo "</div>";
                     echo "</div>";
@@ -865,7 +862,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     modern_datepicker('thiteia_ews', $thiteia_ews, array(
                         'minDate' => '2000-01-01',
                         'maxDate' => '2050-12-31',
-                        'disabledDays' => array('sun', 'sat')
                     ));
                     echo "</div>";
                     echo "</div>";
@@ -961,7 +957,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 modern_datepicker('thiteia_apo', $thiteia_apo, array(
                     'minDate' => '2000-01-01',
                     'maxDate' => '2050-12-31',
-                    'disabledDays' => array('sun', 'sat')
                 ));
                 echo "</div>";
                 echo "</div>";
@@ -971,7 +966,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 modern_datepicker('thiteia_ews', $thiteia_ews, array(
                     'minDate' => '2000-01-01',
                     'maxDate' => '2050-12-31',
-                    'disabledDays' => array('sun', 'sat')
                 ));
                 echo "</div>";
                 echo "</div>";

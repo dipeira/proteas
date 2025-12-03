@@ -235,7 +235,6 @@
             modern_datepicker("hm_from", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
                 'maxDate' => '2030-12-31',
-                'disabledDays' => array('sun', 'sat'),
                 'yearRange' => '2011:' . date('Y')
             ));
             echo "</div>";
@@ -247,7 +246,6 @@
             modern_datepicker("hm_to", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
                 'maxDate' => '2030-12-31',
-                'disabledDays' => array('sun', 'sat'),
                 'yearRange' => '2011:' . (date('Y') + 1)
             ));
             echo "</div>";
