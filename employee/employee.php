@@ -978,7 +978,6 @@ if ($_GET['op']=="edit") {
     modern_datepicker("hm_mk", $hm_mk, array(
         'minDate' => '1980-01-01',
         'maxDate' => date('Y-m-d'),
-        'disabledDays' => array('sun', 'sat'),
         'yearRange' => '1980:' . date('Y')
     ));
     echo "</td></tr>";        
