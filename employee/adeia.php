@@ -557,19 +557,16 @@
 					var finishDate = new Date(startDate);
 					finishDate.setDate(finishDate.getDate() + days - 1);
 					
-					// Set the datepicker value using jQuery UI (setDate accepts Date object)
-					if (typeof jQuery !== 'undefined' && jQuery('#finish').length) {
-						jQuery('#finish').datepicker('setDate', finishDate);
-					} else {
-						// Fallback: set the value directly
-						var dd = String(finishDate.getDate()).padStart(2, '0');
-						var mm = String(finishDate.getMonth() + 1).padStart(2, '0');
-						var yyyy = finishDate.getFullYear();
-						var formattedDate = dd + '-' + mm + '-' + yyyy;
-						document.getElementById('finish').value = formattedDate;
-						// Also update the hidden field (Y-m-d format)
-						document.getElementById('finish_hidden').value = yyyy + '-' + mm + '-' + dd;
-					}
+					// Format the dates
+					var dd = String(finishDate.getDate()).padStart(2, '0');
+					var mm = String(finishDate.getMonth() + 1).padStart(2, '0');
+					var yyyy = finishDate.getFullYear();
+					var displayDate = dd + '-' + mm + '-' + yyyy;
+					var hiddenDate = yyyy + '-' + mm + '-' + dd;
+					
+					// Update both the display field and the hidden field
+					document.getElementById('finish').value = displayDate;
+					document.getElementById('finish_hidden').value = hiddenDate;
 			}
 		</script>
 		<a href="javascript:addDays2Date();" style="cursor: pointer; color: #4FC5D6; text-decoration: underline;"><small>Υπολογισμός<br>Ημ.Λήξης</small></a>

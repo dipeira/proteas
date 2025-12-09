@@ -119,8 +119,66 @@
         box-shadow: 0 2px 4px rgba(79, 197, 214, 0.3);
     }
     
-    .imagetable td:first-child {
-        width: 110px;
+    #ekt-adeia-modal .imagetable th:first-child,
+    #ekt-adeia-modal .imagetable td:first-child {
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+        text-align: center;
+        white-space: nowrap;
+        padding: 6px 4px;
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+        margin: 0 2px;
+        width: 26px;
+        height: 26px;
+        border-radius: 5px;
+        transition: all 0.2s ease;
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child a:hover {
+        transform: scale(1.1);
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child .icon-view {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child .icon-edit {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child .icon-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child .icon-view:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child .icon-edit:hover {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child .icon-delete:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    }
+    
+    #ekt-adeia-modal .imagetable td:first-child svg {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
     }
     
     #ekt-adeia-modal .imagetable th:nth-child(2),
@@ -142,6 +200,40 @@
         text-overflow: ellipsis;
         padding: 8px 5px;
     }
+    
+    /* Add button styling */
+    #ekt-adeia-modal .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95em;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        white-space: nowrap;
+        min-width: fit-content;
+    }
+    
+    #ekt-adeia-modal .btn-add:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    #ekt-adeia-modal .btn-add svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
 </style>
 <div class="adeia-content">
       <?php
@@ -161,15 +253,17 @@
         {
             echo "<div style='text-align: center; padding: 20px;'><p style='font-size: 1.1em; margin-bottom: 15px;'>Δε βρέθηκαν άδειες</p>";
             $emp_id = $_GET['id'];
-            if ($usrlvl < 2 || (isset($_SESSION['adeia']) && $_SESSION['adeia']))
-                echo "<div class='adeia-actions'><span title=\"Προσθήκη Άδειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\">Προσθήκη Άδειας<img style=\"border: 0pt none; vertical-align: middle; margin-left: 5px;\" src=\"../images/user_add.png\"/></a></span></div>";
+            if ($usrlvl < 2 || (isset($_SESSION['adeia']) && $_SESSION['adeia'])) {
+                $addIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>';
+                echo "<div class='adeia-actions'><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\" class=\"btn-add\">$addIcon Προσθήκη Άδειας</a></div>";
+            }
             echo "</div>";
             mysqli_close($mysqlconnection);
             echo "</div>";
             exit;
         }
                     
-        echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border='1'>";	
+        echo "<table id=\"mytbl\" class=\"imagetable\" border='1'>";	
         echo "<thead><tr>";
         echo "<th style='min-width: 30px;'>Ενέργεια</th><th>Τύπος</th><th>Αρ.Πρωτ.</th><th>Ημ.Αίτησης</th><th>Ημέρες</th><th>Ημ.Έναρξης</th><th>Ημ.Λήξης</th>";
         echo "</tr></thead>";
@@ -191,12 +285,16 @@
           $query1 = "select type from adeia_ekt_type where id=$type";
           $result1 = mysqli_query($mysqlconnection, $query1);
           $typewrd = mysqli_result($result1, 0, "type");
-          $viewlink = "<span title='Προβολή'><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/view_action.png'></a></span>&nbsp;";
+          $viewIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+          $editIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+          $deleteIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
+          
           echo "<tr><td>";
-          echo "$viewlink<span title='Επεξεργασία'><a href='ekt_adeia.php?adeia=$id&op=edit&sxol_etos=$sxol_etos'><img style='border: 0pt none;' src='../images/edit_action.png'></a></span>&nbsp;";
+          echo "<a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos' class='icon-view' title='Προβολή'>$viewIcon</a>";
+          echo "<a href='ekt_adeia.php?adeia=$id&op=edit&sxol_etos=$sxol_etos' class='icon-edit' title='Επεξεργασία'>$editIcon</a>";
           if ($usrlvl < 2 || (isset($_SESSION['adeia']) && $_SESSION['adeia'])) {
             $deleteUrl = htmlspecialchars("ekt_adeia.php?adeia=$id&op=delete&sxol_etos=$sxol_etos", ENT_QUOTES);
-            echo "<span title=\"Διαγραφή\"><a href=\"javascript:void(0);\" onclick=\"confirmDelete('$deleteUrl')\"><img style=\"border: 0pt none;\" src=\"../images/delete_action.png\"/></a></span>";
+            echo "<a href=\"javascript:void(0);\" onclick=\"confirmDelete('$deleteUrl')\" class='icon-delete' title='Διαγραφή'>$deleteIcon</a>";
           }
           echo "</td><td><a href='ekt_adeia.php?adeia=$id&op=view&sxol_etos=$sxol_etos'>$typewrd</a></td><td>$prot</td><td>".date('d-m-Y',strtotime($date))."</td><td>$days</td><td>".date('d-m-Y',strtotime($start))."</td><td>".date('d-m-Y',strtotime($finish))."</td></tr>";
           $i++;
@@ -206,7 +304,8 @@
         echo "<tfoot><tr>";
         // add absence only on current year
         if (($usrlvl < 2 || (isset($_SESSION['adeia']) && $_SESSION['adeia'])) && $sxol_etos == getParam('sxol_etos',$mysqlconnection)) {
-            echo "<td colspan=7 style='text-align: left; padding: 10px;'><span title=\"Προσθήκη Άδειας\"><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\" style='color: #2563eb; font-weight: 600;'>Προσθήκη Άδειας<img style=\"border: 0pt none; vertical-align: middle; margin-left: 5px;\" src=\"../images/user_add.png\"/></a></span></td>";
+            $addIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>';
+            echo "<td colspan=7 style='text-align: left; padding: 12px;'><a href=\"ekt_adeia.php?emp=$emp_id&op=add&sxol_etos=$sxol_etos\" class=\"btn-add\">$addIcon Προσθήκη Άδειας</a></td>";
         } else {
             echo "<td colspan=7></td>";
         }

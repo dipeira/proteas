@@ -736,8 +736,6 @@ elseif ($_GET['op']=="view")
                 var MyVar = <?php echo $id; ?>;
                 var sxEtos = <?php echo $sxol_etos; ?>;
                 
-                console.log('Opening modal for temporary employee ID:', MyVar, 'School year:', sxEtos);
-                
                 // Clean up any existing modal and overlay
                 if ($("#ekt-adeia-modal").length > 0) {
                     if ($("#ekt-adeia-modal").hasClass('ui-dialog-content') || $("#ekt-adeia-modal").parent().hasClass('ui-dialog')) {
@@ -788,7 +786,6 @@ elseif ($_GET['op']=="view")
                         $(this).css('display', 'block');
                     },
                     open: function(event, ui) {
-                        console.log('Dialog opened');
                         var $dialog = $(this);
                         var $dialogParent = $dialog.parent();
                         
@@ -810,14 +807,10 @@ elseif ($_GET['op']=="view")
                         
                         // Load content after dialog is fully visible
                         var $dialogContent = $(this);
-                        console.log('Loading content from ekt_adeia_list.php');
                         $dialogContent.load("ekt_adeia_list.php?id=" + MyVar + "&sxol_etos=" + sxEtos + "&ajax=1", function(response, status, xhr) {
-                            console.log('Content loaded, status:', status);
                             if (status == "error") {
-                                console.error('Error loading content:', xhr.status, xhr.statusText);
                                 $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
                             } else {
-                                console.log('Content loaded successfully');
                                 $dialogContent.css({
                                     'display': 'block',
                                     'visibility': 'visible',
@@ -860,7 +853,6 @@ elseif ($_GET['op']=="view")
                 e.stopPropagation();
                 var afmValue = $(this).data('afm');
                 
-                console.log('Opening modal for postgrad with AFM:', afmValue);
                 
                 // Clean up any existing modal and overlay
                 if ($("#postgrad-modal").length > 0) {
@@ -912,7 +904,6 @@ elseif ($_GET['op']=="view")
                         $(this).css('display', 'block');
                     },
                     open: function(event, ui) {
-                        console.log('Postgrad dialog opened');
                         var $dialog = $(this);
                         var $dialogParent = $dialog.parent();
                         
@@ -934,14 +925,10 @@ elseif ($_GET['op']=="view")
                         
                         // Load content after dialog is fully visible
                         var $dialogContent = $(this);
-                        console.log('Loading content from postgrad.php');
                         $dialogContent.load("postgrad.php?afm=" + afmValue, function(response, status, xhr) {
-                            console.log('Content loaded, status:', status);
                             if (status == "error") {
-                                console.error('Error loading content:', xhr.status, xhr.statusText);
                                 $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
                             } else {
-                                console.log('Content loaded successfully');
                                 $dialogContent.css({
                                     'display': 'block',
                                     'visibility': 'visible',

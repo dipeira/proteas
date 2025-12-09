@@ -616,7 +616,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     $(document).ready(function() {
         // Check if jQuery UI Dialog is available
         if (typeof $.ui === 'undefined' || typeof $.ui.dialog === 'undefined') {
-            console.error('jQuery UI Dialog is not loaded');
             return;
         }
         
@@ -624,8 +623,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             e.preventDefault();
             e.stopPropagation();
             var MyVar = <?php if (isset($id)) echo $id; else echo 0; ?>;
-            
-            console.log('Opening modal for employee ID:', MyVar);
             
             // Clean up any existing modal and overlay
             if ($("#adeia-modal").length > 0) {
@@ -678,7 +675,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     $(this).css('display', 'block');
                 },
                 open: function(event, ui) {
-                    console.log('Dialog opened');
                     // Ensure dialog is visible and positioned correctly
                     var $dialog = $(this);
                     var $dialogParent = $dialog.parent();
@@ -702,14 +698,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     
                     // Load content after dialog is fully visible
                     var $dialogContent = $(this);
-                    console.log('Loading content from adeia_list.php');
                     $dialogContent.load("adeia_list.php?id=" + MyVar + "&ajax=1", function(response, status, xhr) {
-                        console.log('Content loaded, status:', status);
                         if (status == "error") {
-                            console.error('Error loading content:', xhr.status, xhr.statusText);
                             $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
                         } else {
-                            console.log('Content loaded successfully');
                             // Ensure content is within dialog and not elsewhere
                             $dialogContent.css({
                                 'display': 'block',
@@ -745,18 +737,14 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                                             collapsible: false,
                                             heightStyle: "content"
                                         });
-                                        console.log('Tabs initialized successfully');
                                     } catch(e) {
-                                        console.error('Tabs initialization error:', e);
                                         // Fallback: try simple initialization
                                         try {
                                             $tabs.tabs();
                                         } catch(e2) {
-                                            console.error('Tabs fallback failed:', e2);
+                                            // Silent fail
                                         }
                                     }
-                                } else {
-                                    console.warn('Tabs element or jQuery UI Tabs not available');
                                 }
                                 
                                 // Initialize tablesorter for all tables in tab panels (each tab has its own table)
@@ -767,7 +755,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                                             $tbl.tablesorter({widgets: ['zebra']});
                                             $tbl.data('tablesorter-initialized', true);
                                         } catch(e) {
-                                            console.error('Tablesorter error for table:', e);
+                                            // Silent fail
                                         }
                                     }
                                 });
@@ -837,7 +825,6 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     $(this).css('display', 'block');
                 },
                 open: function(event, ui) {
-                    console.log('Postgrad dialog opened');
                     // Ensure dialog is visible and positioned correctly
                     var $dialog = $(this);
                     var $dialogParent = $dialog.parent();
@@ -861,14 +848,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                     
                     // Load content after dialog is fully visible
                     var $dialogContent = $(this);
-                    console.log('Loading content from postgrad.php');
                     $dialogContent.load("postgrad.php?afm=" + afmValue, function(response, status, xhr) {
-                        console.log('Content loaded, status:', status);
                         if (status == "error") {
-                            console.error('Error loading content:', xhr.status, xhr.statusText);
-                            $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></div>');
+                            $dialogContent.html('<div style="padding: 20px; text-align: center; color: red;"><p>Σφάλμα φόρτωσης δεδομένων</p></dialog>');
                         } else {
-                            console.log('Content loaded successfully');
                             // Ensure content is within dialog and not elsewhere
                             $dialogContent.css({
                                 'display': 'block',
@@ -896,7 +879,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                                             $tbl.tablesorter({widgets: ['zebra']});
                                             $tbl.data('tablesorter-initialized', true);
                                         } catch(e) {
-                                            console.error('Tablesorter error for table:', e);
+                                            // Silent fail
                                         }
                                     }
                                 });

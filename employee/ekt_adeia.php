@@ -64,6 +64,18 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
                 });
             }
         });
+        
+        // When hm_prot date is selected, copy it to date field
+        $('#hm_prot').on('change', function() {
+            var selectedDate = $(this).val();
+            if (selectedDate) {
+                $('#date').val(selectedDate);
+                // Also update the hidden field if it exists
+                if ($('#hm_prot_hidden').length && $('#date_hidden').length) {
+                    $('#date_hidden').val($('#hm_prot_hidden').val());
+                }
+            }
+        });
       });                
     </script>
   </head>
@@ -469,19 +481,16 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 					var finishDate = new Date(startDate);
 					finishDate.setDate(finishDate.getDate() + days - 1);
 					
-					// Set the datepicker value using jQuery UI (setDate accepts Date object)
-					if (typeof jQuery !== 'undefined' && jQuery('#finish').length) {
-						jQuery('#finish').datepicker('setDate', finishDate);
-					} else {
-						// Fallback: set the value directly
-						var dd = String(finishDate.getDate()).padStart(2, '0');
-						var mm = String(finishDate.getMonth() + 1).padStart(2, '0');
-						var yyyy = finishDate.getFullYear();
-						var formattedDate = dd + '-' + mm + '-' + yyyy;
-						document.getElementById('finish').value = formattedDate;
-						// Also update the hidden field (Y-m-d format)
-						document.getElementById('finish_hidden').value = yyyy + '-' + mm + '-' + dd;
-					}
+					// Format the dates
+					var dd = String(finishDate.getDate()).padStart(2, '0');
+					var mm = String(finishDate.getMonth() + 1).padStart(2, '0');
+					var yyyy = finishDate.getFullYear();
+					var displayDate = dd + '-' + mm + '-' + yyyy;
+					var hiddenDate = yyyy + '-' + mm + '-' + dd;
+					
+					// Update both the display field and the hidden field
+					document.getElementById('finish').value = displayDate;
+					document.getElementById('finish_hidden').value = hiddenDate;
 			    }
             </script>
                 <a href="javascript:addDays2Date();"><small>Υπολογισμός<br>Ημ.Λήξης</small></a>

@@ -385,6 +385,29 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
           e.preventDefault();
           $("#slidingDiv2").slideToggle();
       });
+      
+      // Expand/Collapse all accordion sections
+      $('#expandAllBtn').click(function(e){
+          e.preventDefault();
+          var $accordion = $("#personnel-accordion");
+          var $headers = $accordion.find(".ui-accordion-header");
+          var $contents = $accordion.find(".ui-accordion-content");
+          var isExpanded = $(this).data('expanded') || false;
+          
+          if (!isExpanded) {
+              // Expand all
+              $headers.removeClass('ui-corner-all').addClass('ui-accordion-header-active ui-state-active ui-corner-top');
+              $headers.find('.ui-accordion-header-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
+              $contents.show().addClass('ui-accordion-content-active');
+              $(this).text('Σύμπτυξη όλων ▲').data('expanded', true);
+          } else {
+              // Collapse all
+              $headers.removeClass('ui-accordion-header-active ui-state-active ui-corner-top').addClass('ui-corner-all');
+              $headers.find('.ui-accordion-header-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
+              $contents.hide().removeClass('ui-accordion-content-active');
+              $(this).text('Ανάπτυξη όλων ▼').data('expanded', false);
+          }
+      });
     });
     $(document).ready(function() { 
       $(".tablesorter").tablesorter({widgets: ['zebra']}); 
@@ -1363,6 +1386,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
         // personnel tab
         echo "<div id='personnel'>";
+        echo "<div style='margin-bottom: 15px; text-align: right;'>";
+        echo "<button id='expandAllBtn' class='btn' style='padding: 8px 16px; cursor: pointer;'>Ανάπτυξη όλων ▼</button>";
+        echo "</div>";
         echo "<div id='personnel-accordion'>";
         
         //Υπηρετούν με θητεία

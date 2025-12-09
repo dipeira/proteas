@@ -17,18 +17,35 @@
   mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
   
 
+  // Helper function to parse date in either Y-m-d or d-m-Y format
+  function parseDate($dateStr) {
+      if (empty($dateStr)) return null;
+      // Try Y-m-d format first (from hidden field)
+      $d = DateTime::createFromFormat('Y-m-d', $dateStr);
+      if ($d && $d->format('Y-m-d') === $dateStr) {
+          return $d->format('Y-m-d');
+      }
+      // Try d-m-Y format (display format)
+      $d = DateTime::createFromFormat('d-m-Y', $dateStr);
+      if ($d && $d->format('d-m-Y') === $dateStr) {
+          return $d->format('Y-m-d');
+      }
+      // Fallback to strtotime
+      return date('Y-m-d', strtotime($dateStr));
+  }
+
   $id = $_POST['id'];
   $emp_id = $_POST["emp_id"];  
   $type = $_POST['type']; 
   $prot =$_POST['prot']; 
-  $hm_prot = date('Y-m-d',strtotime($_POST['hm_prot']));
+  $hm_prot = parseDate($_POST['hm_prot']);
   $prot_apof = $_POST['prot_apof'];
-  $hm_apof = date('Y-m-d',strtotime($_POST['hm_apof']));
-  $date = date('Y-m-d',strtotime($_POST['date']));
+  $hm_apof = parseDate($_POST['hm_apof']);
+  $date = parseDate($_POST['date']);
   $vev_dil =$_POST['vev_dil']; 
   $days =$_POST['days']; 
-  $start = date('Y-m-d',strtotime($_POST['start']));
-  $finish = date('Y-m-d',strtotime($_POST['finish']));
+  $start = parseDate($_POST['start']);
+  $finish = parseDate($_POST['finish']);
   $logos =$_POST['logos']; 
   $comments =$_POST['comments']; 
   $sxoletos = $_POST['sxoletos']; 

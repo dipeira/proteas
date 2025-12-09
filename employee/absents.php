@@ -21,13 +21,45 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
     $page_title = 'Εκπ/κοί που βρίσκονται σε άδεια';
     require '../etc/head.php'; 
     ?>
-    <script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="../js/stickytable.js"></script>
-    <script type="text/javascript">    
+    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+    <script type="text/javascript">
+        // Custom sorting function for date in DD-MM-YYYY format
+        $.fn.dataTable.ext.type.order['date-dd-mm-yyyy-pre'] = function(date) {
+            if (!date || date === '') return 0;
+            var parts = date.split('-');
+            if (parts.length !== 3) return 0;
+            return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
+        };
+        
         $(document).ready(function() { 
-            $("#mytbl").tablesorter({widgets: ['zebra']}); 
-            $("#mytbl").stickyTableHeaders();
+            $("#mytbl").DataTable({
+                lengthMenu: [
+                    [20, 50, -1],
+                    [20, 50, 'Όλοι']
+                ],
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/el.json'
+                },
+                dom: 'Bfrtlip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Εξαγωγή σε Excel',
+                        className: 'btn-green',
+                        title: 'Εκπαιδευτικοί σε άδεια'
+                    }
+                ],
+                columnDefs: [
+                    { type: 'date-dd-mm-yyyy', targets: [4] }
+                ],
+                order: [[4, 'desc']]
+            });
         });
     </script>
   </head>
@@ -56,9 +88,9 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $result = mysqli_query($mysqlconnection, $query);
             $num = mysqli_num_rows($result);
         if ($num) {
-            echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
+            echo "<table id=\"mytbl\" class=\"imagetable\" border=\"2\" style=\"width:95%\">\n";
             echo "<thead><tr>";
-            echo "<th>Επώνυμο</th>";
+            echo "<th style='min-width: 180px;'>Επώνυμο</th>";
             echo "<th>Όνομα</th>";
             echo "<th>Κλάδος</th>";
             echo "<th>Τύπος</th>";
