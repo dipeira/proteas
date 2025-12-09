@@ -387,27 +387,33 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<form id='updatefrm' name='updatefrm' action='ekt_update_adeia.php' method='POST'>";
             echo "<table class=\"imagetable\" border='1'>";
             $emp_id = $_GET['emp'];
-            //echo "<tr>";
-            //echo "<td>ID</td><td>$id</td>";
-            //echo "</tr>";
-                $query1 = "select * from ektaktoi where id=$emp_id";
-                $result1 = mysqli_query($mysqlconnection, $query1);
+            
+            $query1 = "select * from ektaktoi where id=$emp_id";
+            $result1 = mysqli_query($mysqlconnection, $query1);
             $name = mysqli_result($result1, 0, "name");
-                $surname = mysqli_result($result1, 0, "surname");
-                $kl1 = mysqli_result($result1, 0, "klados");
-                $q2 = "select * from klados where id=$kl1";
-                $res2 = mysqli_query($mysqlconnection, $q2);
-                $klados = mysqli_result($res2, 0, "perigrafh");
+            $surname = mysqli_result($result1, 0, "surname");
+            $kl1 = mysqli_result($result1, 0, "klados");
+            $q2 = "select * from klados where id=$kl1";
+            $res2 = mysqli_query($mysqlconnection, $q2);
+            $klados = mysqli_result($res2, 0, "perigrafh");
             echo "<tr><td>Όνομα</td><td>$name</td></tr>";
             echo "<tr><td>Επώνυμο</td><td>$surname</td></tr>";
-                echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
+            echo "<tr><td>Κλάδος</td><td>$klados</td></tr>";
 
             echo "<tr><td>Τύπος</td><td>";
-                adeiaCmb($type, $mysqlconnection, 1);
-                echo "</td></tr>";
+            adeiaCmb($type, $mysqlconnection, 1);
+            echo "</td></tr>";
+
+            echo "<tr id='vevdil'><td>Βεβαίωση / Δήλωση<br>(για αναρρωτικές)</td><td>";
+            echo "<select name='vev_dil'>";
+            echo "<option value=\"0\" selected>Όχι</option>";
+            echo "<option value=\"1\">Βεβαίωση</option>";
+            echo "<option value=\"2\">Υπεύθυνη Δήλωση</option>";
+            echo "</select>";
+            echo "</td></tr>";
                 
-                echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' /></td></tr>";
-                echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
+            echo "<tr><td>Αρ.Πρωτοκόλου απόφασης</td><td><input type='text' name='prot_apof' /></td></tr>";
+            echo "<tr><td>Ημ/νία Πρωτοκόλου απόφασης</td><td>";
             modern_datepicker("hm_apof", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
                 'maxDate' => '2030-12-31',
@@ -417,7 +423,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
             echo "<tr><td>Αρ.Πρωτοκόλου αίτησης</td><td><input type='text' name='prot' /></td></tr>";
                 
-                echo "<tr><td>Ημ/νία Πρωτοκόλου αίτησης</td><td>";
+            echo "<tr><td>Ημ/νία Πρωτοκόλου αίτησης</td><td>";
             modern_datepicker("hm_prot", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
                 'maxDate' => '2030-12-31',
@@ -425,7 +431,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             ));
             echo "</td></tr>";
                 
-                echo "<tr><td>Ημ/νία αίτησης</td><td>";
+            echo "<tr><td>Ημ/νία αίτησης</td><td>";
             modern_datepicker("date", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
                 'maxDate' => '2030-12-31',
@@ -433,26 +439,32 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             ));
             echo "</td></tr>";
 
-            //echo "<tr><td>Βεβαίωση / Δήλωση</td><td><input type='text' name='vev_dil' /></td></tr>";
-                // Need to check - hide-unhide depending on adeia type...
-                echo "<div id='vevdil' style='display:none'><tr><td>Βεβαίωση / Δήλωση<br>(για αναρρωτικές)</td><td>";
-                
-                //<input type='text' name='vev_dil' value=$vev_dil /></td></tr>";
-                echo "<select name='vev_dil'>";
-            echo "<option value=\"0\" selected>Όχι</option>";
-                echo "<option value=\"1\">Βεβαίωση</option>";
-                echo "<option value=\"2\">Υπεύθυνη Δήλωση</option>";
-                echo "</select>";
-                echo "</td></tr></div>";
+            
 
-                echo "<tr><td>Ημέρες</td><td><input type='text' name='days' /></td></tr>";
-                echo "<tr><td>Ημ/νία έναρξης</td><td>";
+            echo "<tr><td>Ημέρες</td><td><input type='text' name='days' /></td></tr>";
+            echo "<tr><td>Ημ/νία έναρξης</td><td>";
             modern_datepicker("start", date('Y-m-d'), array(
                 'minDate' => '2011-01-01',
                 'maxDate' => '2030-12-31'
             ));
             ?>                
             <script language="javascript">
+                // Show/hide vevdil row based on adeia type selection
+                document.addEventListener('DOMContentLoaded', function() {
+                    var typeSelect = document.getElementById('type');
+                    if (typeSelect) {
+                        typeSelect.addEventListener('change', function() {
+                            var vevdilRow = document.getElementById('vevdil');
+                            if (this.value == '1') {
+                                // Type 1 = αναρρωτική (sick leave)
+                                vevdilRow.style.display = '';
+                            } else {
+                                vevdilRow.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+                
                 function addDays2Date(){
 					// Get the start date from the hidden field (Y-m-d format)
 					var startDateStr = document.getElementById('start_hidden').value;
