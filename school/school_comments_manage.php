@@ -11,10 +11,10 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 }
 $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') === 'gram-pispe');
 if (!$can_view_comments) {
-    die('No permission');
+    die('Σφάλμα: Δεν έχετε τα απαραίτητα δικαιώματα για αυτή τη σελίδα...');
 }
 if (!isset($_GET['sch'])) {
-    die('No school ID');
+    die('Σφάλμα: Δε δόθηκε Α/Α/ σχολείου.');
 }
 $sch = intval($_GET['sch']);
 $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
@@ -33,7 +33,8 @@ if ($row = mysqli_fetch_assoc($r)) {
 
 $add_mode = isset($_GET['add']);
 $edit_mode = isset($_GET['edit']);
-$mode = $add_mode ? 'add' : ($edit_mode ? 'edit' : null);
+$delete_mode = isset($_GET['delete']);
+$mode = $add_mode ? 'add' : ($edit_mode ? 'edit' : ($delete_mode ? 'delete' : null));
 $comment_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $form_data = ['comment' => '', 'action' => '', 'done' => 0, 'done_at' => ''];
@@ -77,6 +78,24 @@ if ($mode) {
             }
             mysqli_stmt_close($check_stmt);
         }
+    } elseif ($mode === 'delete' && $comment_id > 0) {
+        // Verify comment belongs to school
+        $check_sql = "SELECT id FROM school_comments WHERE id = ? AND school_id = ?";
+        $check_stmt = mysqli_prepare($mysqlconnection, $check_sql);
+        mysqli_stmt_bind_param($check_stmt, "ii", $comment_id, $sch);
+        mysqli_stmt_execute($check_stmt);
+        $check_result = mysqli_stmt_get_result($check_stmt);
+        if (mysqli_num_rows($check_result) > 0) {
+            $delete_sql = "DELETE FROM school_comments WHERE id = ?";
+            $stmt = mysqli_prepare($mysqlconnection, $delete_sql);
+            mysqli_stmt_bind_param($stmt, "i", $comment_id);
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_close($stmt);
+                header("Location: school_comments_manage.php?sch=$sch");
+                exit;
+            }
+        }
+        mysqli_stmt_close($check_stmt);
     }
 
     if ($mode === 'edit' && $comment_id > 0) {
@@ -111,6 +130,10 @@ if ($mode) {
     $page_title = 'Διαχείριση Σχολίων - ' . $school_name;
     require '../etc/head.php';
     ?>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="../js/datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="../js/datatables/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="../js/datatables/fixedheader/fixedHeader.dataTables.css">
     <style>
         /* Reuse styles from school_status.php */
         .info-section {
@@ -291,16 +314,34 @@ if ($mode) {
         .form-actions input[type="button"]:hover {
             background: #4b5563;
         }
+        .btn-red {
+            background: #dc2626;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+        .btn-red:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
         }
+        .top, .bottom {
+            padding: 0px !important;
+            /* margin-top: 5px; */
+            /* padding-top: 30px; */
+        }
     </style>
 </head>
 <body>
 <?php require '../etc/menu.php'; ?>
-<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+<div style="margin: 0 auto; padding: 20px;">
 <?php if ($mode): ?>
     <h2><?php echo $mode === 'add' ? 'Προσθήκη' : 'Επεξεργασία'; ?> Σχολίου για: <?php echo htmlspecialchars($school_name); ?></h2>
     <form method="POST" action="">
@@ -342,6 +383,14 @@ if ($mode) {
                 <INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick="parent.location='school_status.php?org=<?php echo $sch; ?>'">
             </div>
             <?php if ($comments_rs && mysqli_num_rows($comments_rs) > 0): ?>
+                <div style="margin-bottom: 15px;">
+                    <label for="done-filter">Φίλτρο κατάστασης:</label>
+                    <select id="done-filter" class="form-control" style="display: inline-block; width: auto; padding: 5px; margin-left: 10px;">
+                        <option value="">Όλα</option>
+                        <option value="1">Ολοκληρωμένα</option>
+                        <option value="0">Εκκρεμή</option>
+                    </select>
+                </div>
                 <table id="comments-table">
                     <thead>
                         <tr>
@@ -365,8 +414,9 @@ if ($mode) {
                             $done = (int)$row['done'] === 1;
                             $doneLabel = $done ? '<span class="done-yes">ΝΑΙ</span>' : '<span class="done-no">ΟΧΙ</span>';
                             $doneAt = ($row['done_at'] && $row['done_at'] !== '0000-00-00 00:00:00') ? date("d-m-Y", strtotime($row['done_at'])) : '';
+                            $doneValue = $done ? '1' : '0';
                             ?>
-                            <tr>
+                            <tr data-done="<?php echo $doneValue; ?>">
                                 <td><?php echo $i++; ?></td>
                                 <td><?php echo $comment; ?></td>
                                 <td><?php echo $action; ?></td>
@@ -376,6 +426,7 @@ if ($mode) {
                                 <td><?php echo $doneAt; ?></td>
                                 <td>
                                     <INPUT TYPE='button' VALUE='Επεξεργασία' onClick="parent.location = 'school_comments_manage.php?sch=<?php echo $sch; ?>&edit=1&id=<?php echo $row['id']; ?>'">
+                                    <INPUT TYPE='button' class='btn-red' VALUE='Διαγραφη' onClick="if(confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το σχόλιο;')) { parent.location = 'school_comments_manage.php?sch=<?php echo $sch; ?>&delete=1&id=<?php echo $row['id']; ?>'; }">
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -388,5 +439,42 @@ if ($mode) {
     </div>
 <?php endif; ?>
 </div>
+<!-- DataTables JS -->
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../js/datatables/fixedheader/dataTables.fixedHeader.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Initialize DataTable
+    var table = $('#comments-table').DataTable({
+        "language": {
+            "url": "../js/datatables/greek.json"
+        },
+        "dom": '<"top"f>rt<"bottom"lip><"clear">',
+        "pageLength": 25,
+        "order": [[0, 'desc']], // Order by A/A column by default
+        "columnDefs": [
+            { "orderable": false, "targets": [5, 7] } // Disable ordering for Ολοκληρωμενο and Ενεργειες columns
+        ]
+    });
+
+    // Add filter for done column
+    $('#done-filter').on('change', function() {
+        var filterValue = $(this).val();
+        
+        if (filterValue === '') {
+            // Show all rows
+            table.columns(5).search('').draw();
+        } else if (filterValue === '1') {
+            // Show only completed
+            table.columns(5).search('ΝΑΙ').draw();
+        } else if (filterValue === '0') {
+            // Show only pending
+            table.columns(5).search('ΟΧΙ').draw();
+        }
+    });
+});
+</script>
 </body>
 </html>
