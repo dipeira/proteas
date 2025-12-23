@@ -697,20 +697,10 @@ CREATE TABLE `postgrad` (
   `title` text NOT NULL COMMENT 'Τίτλος',
   `idryma` text NOT NULL COMMENT 'Ίδρυμα',
   `aitisi_protocol` int(10) NOT NULL COMMENT 'Αρ.Πρωτ.Αίτησης',
-  `aitisi_date` date NOT NULL COMMENT 'Ημ/νία Αίτησης',
-  `dikaiologhtiko` text NOT NULL COMMENT 'Δικαιολογητικό',
-  `elegxos_gnhsiothtas` text NOT NULL COMMENT 'Έλεγχος Γνησιότητας',
-  `protocol_incoming` text NOT NULL COMMENT 'Εισερχόμενο Πρωτόκολλο',
-  `protocol_confirm` text NOT NULL COMMENT 'Πρωτόκολλο Επιβεβαίωσης',
-  `opsyd` text NOT NULL COMMENT 'ΟΠΣΥΔ',
-  `praxi` text NOT NULL COMMENT 'Πράξη',
-  `anagnwrish` varchar(100) NOT NULL COMMENT 'Αναγνώριση',
-  `anagnwrish_date` date NOT NULL COMMENT 'Ημ/νία Αναγνώρισης',
+  `praxi` text NOT NULL COMMENT 'Πράξη αναγνώρισης συνάφειας',
+  `anagnwrish` tinyint(1) NOT NULL COMMENT 'Αναγνώριση',
   `gnhsiothta` tinyint(1) NOT NULL COMMENT 'Γνησιότητα',
-  `prot_gnhsiothta` varchar(100) NOT NULL COMMENT 'Πρωτόκολλο Γνησιότητας',
   `synafeia` tinyint(1) NOT NULL COMMENT 'Συνάφεια',
-  `synafeia_praxi` varchar(100) NOT NULL COMMENT 'Πράξη Συνάφειας',
-  `synafeia_aitisi_date` date NOT NULL COMMENT 'Ημ/νία Αίτησης Συνάφειας',
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

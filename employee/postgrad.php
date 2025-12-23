@@ -77,15 +77,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($columns as $column) {
             if ($column['COLUMN_NAME'] != 'id') {
                 $columnName = $column['COLUMN_NAME'];
-                $value = $_POST[$columnName];
                 
+                // Special handling for 'updated' column - set to current timestamp
+                if ($columnName == 'updated') {
+                    $updates[] = "$columnName = NOW()";
+                    continue;
+                }
+                
+                $value = $_POST[$columnName];
+                 
                 // Check if the column is a checkbox (assuming 'tinyint' is used for checkboxes)
                 if ($column['DATA_TYPE'] === 'tinyint') {
                     $value = isset($_POST[$columnName]) ? 1 : 0;
                 } else {
                     $value = $mysqli->real_escape_string($value);
                 }
-                
+                 
                 $updates[] = "$columnName = '$value'";
             }
         }
