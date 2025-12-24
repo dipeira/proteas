@@ -1086,27 +1086,27 @@ if ($_GET['op']=="edit") {
     //     ));
         // idiwtiko end
         // katoikon
-    //     echo "<tr><td colspan=2>Κατ' οίκον διδασκαλία</td></tr>";
-    //     echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
-    // if ($katoikon) {
-    //     echo "<input type='checkbox' name='katoikon' checked>";
-    // } else {
-    //         echo "<input type='checkbox' name='katoikon'>";
-    // }
-    //     echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
-    //     modern_datepicker("katoikon_apo", $katoikon_apo, array(
-    //         'minDate' => '1980-01-01',
-    //         'maxDate' => '2050-01-01'
-    //     ));
-    //     echo " / ";
-    //     modern_datepicker("katoikon_ews", $katoikon_ews, array(
-    //         'minDate' => '1980-01-01',
-    //         'maxDate' => '2050-01-01'
-    //     ));
-    //     echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
-        // katoikon_end
-        echo "<tr><td colspan=2>Σχόλια</td></tr>";
-        echo "<tr><td>Σχόλια</td><td><textarea rows=10 cols=95 name='comments' >$comments</textarea></td></tr>";
+    echo "<tr><td colspan=2>Κατ' οίκον διδασκαλία</td></tr>";
+    echo "<tr><td>Κατ' οίκον διδασκαλία</td><td>";
+    if ($katoikon) {
+        echo "<input type='checkbox' name='katoikon' checked>";
+    } else {
+        echo "<input type='checkbox' name='katoikon'>";
+    }
+    echo "<tr><td>Έναρξη/λήξη κατ'οίκον διδασκαλίας</td><td>";
+    modern_datepicker("katoikon_apo", $katoikon_apo, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => '2050-01-01'
+    ));
+    echo " / ";
+    modern_datepicker("katoikon_ews", $katoikon_ews, array(
+        'minDate' => '1980-01-01',
+        'maxDate' => '2050-01-01'
+    ));
+    echo "<tr><td>Σχόλια κατ'οίκον διδασκαλίας</td><td><input size=50 type='text' name='katoikon_comm' value=$katoikon_comm /></td></tr>";
+    // katoikon_end
+    echo "<tr><td colspan=2>Σχόλια</td></tr>";
+    echo "<tr><td>Σχόλια</td><td><textarea rows=10 cols=95 name='comments' >$comments</textarea></td></tr>";
         
     //new 15-02-2012: implemented with jquery.autocomplete
     echo "<div id=\"content\">";
@@ -1167,8 +1167,8 @@ elseif ($_GET['op']=="view") {
             }
             $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
             $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
-            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια:&nbsp;".stripslashes($katoikon_comm) : "");
-        
+            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια κατ'οίκον:&nbsp;".stripslashes($katoikon_comm) : "");
+            echo "<br><br>";
             idiwtika_table("Μόνιμος", $id, $mysqlconnection);
         }
         
