@@ -710,6 +710,16 @@ CREATE TABLE `symvouloi` (
   `emp_id` int(11) NOT NULL COMMENT 'Α/Α εκπ/κού'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `symvouloi_epist` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY, 
+  `klados` VARCHAR(255), 
+  `afm` VARCHAR(255), 
+  `eponymo` VARCHAR(255), 
+  `onoma` VARCHAR(255), 
+  `emp_id` INT NULL, 
+  `sch_ids` TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Ευρετήρια για πίνακα `symvouloi`
 --
