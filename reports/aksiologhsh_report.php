@@ -112,11 +112,12 @@ if ($_SESSION['userlevel']<>0) {
         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
         $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
         $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
+        $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό',$mysqlconnection);
         $foreas = getSchoolID('Απόσπαση σε φορέα',$mysqlconnection);
         $dipe = '398';
         
         // Build the query based on filters
-        $query = "SELECT 
+        $query = "SELECT
             e.surname as emp_surname,
             e.name as emp_name,
             e.afm as emp_afm,
@@ -129,10 +130,13 @@ if ($_SESSION['userlevel']<>0) {
             se.afm as symv_epist_afm,
             se.eponymo as symv_epist_surname,
             se.onoma as symv_epist_name,
+            se.sch_ids,
             d.thesi,
             CASE WHEN sp.id = se.emp_id THEN 1 ELSE 0 END as taytish,
             k.perigrafh as klados,
-            s.name,
+            e.klados as klados_id,
+            s.name as sch_name,
+            s.id as sch_id,
             s.perif,
             e.hm_dior,
             e.thesi
@@ -144,7 +148,7 @@ if ($_SESSION['userlevel']<>0) {
         LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2)
         LEFT JOIN symvouloi_epist se ON (e.klados = se.klados)
         WHERE e.status = 1 
-        AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas)
+        AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
         AND s.type2 = 0"; // dhmosio
 
         // Add filters
@@ -183,6 +187,7 @@ if ($_SESSION['userlevel']<>0) {
                 <th>Επώνυμο</th>
                 <th>Όνομα</th>
                 <th>ΑΦΜ</th>
+                <th>Σχολείο</th>
                 <th>Συμβ.παιδ.επώνυμο</th>
                 <th>Συμβ.παιδ.όνομα</th>
                 <th>Συμβ.παιδ.ΑΦΜ</th>
@@ -202,21 +207,72 @@ if ($_SESSION['userlevel']<>0) {
             
             $count = 1;
             while ($row = mysqli_fetch_array($result)) {
-                // if PE60 or PE70, symboulos epist = symvoulos paidag
-                if ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70'){
-                    $symv_epist_afm = $row['symv_paid_afm'];
-                    $symv_epist_surname = $row['symv_paid_surname'];
-                    $symv_epist_name = $row['symv_paid_name'];
+                $sid_array = explode(',', $row['sch_ids']);
+                // if PE60 or PE70 
+                if (($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70')) {
+                    // if no specific schools, symboulos epist = symvoulos paidag
+                    if (empty($row['sch_ids']) || !in_array($row['sch_id'], $sid_array)) {
+                        $symv_epist_afm = $row['symv_paid_afm'];
+                        $symv_epist_surname = $row['symv_paid_surname'];
+                        $symv_epist_name = $row['symv_paid_name'];
+                    // if has schools and current school is one of them
+                    } else {
+                        $symv_epist_afm = $row['symv_epist_afm'];
+                        $symv_epist_surname = $row['symv_epist_surname'];
+                        $symv_epist_name = $row['symv_epist_name'];
+                    }
+                // if other klados
                 } else {
-                    $symv_epist_afm = $row['symv_epist_afm'];
-                    $symv_epist_surname = $row['symv_epist_surname'];
-                    $symv_epist_name = $row['symv_epist_name'];
+                    // Get all consultants for this klados to find the appropriate one
+                    $klados_query = "SELECT se.afm, se.eponymo, se.onoma, se.sch_ids
+                                   FROM symvouloi_epist se
+                                   WHERE se.klados = '".$row['klados_id']."'";
+                    $klados_result = mysqli_query($mysqlconnection, $klados_query);
+                    
+                    $consultant_found = false;
+                    $default_consultant = null;
+                    
+                    // First pass: look for consultant who has this school in sch_ids
+                    while ($consultant = mysqli_fetch_array($klados_result)) {
+                        if (!empty($consultant['sch_ids'])) {
+                            $consultant_schools = explode(',', $consultant['sch_ids']);
+                            if (in_array($row['sch_id'], $consultant_schools)) {
+                                // Found consultant responsible for this specific school
+                                $symv_epist_afm = $consultant['afm'];
+                                $symv_epist_surname = $consultant['eponymo'];
+                                $symv_epist_name = $consultant['onoma'];
+                                $consultant_found = true;
+                                break;
+                            }
+                        } else {
+                            // Store consultant with no specific schools as default
+                            if (!$default_consultant) {
+                                $default_consultant = $consultant;
+                            }
+                        }
+                    }
+                    
+                    // If no specific consultant found, use default (consultant with empty sch_ids)
+                    // or fallback to original data if no default consultant exists
+                    if (!$consultant_found) {
+                        if ($default_consultant) {
+                            $symv_epist_afm = $default_consultant['afm'];
+                            $symv_epist_surname = $default_consultant['eponymo'];
+                            $symv_epist_name = $default_consultant['onoma'];
+                        } else {
+                            // Fallback to what was joined in the original query
+                            $symv_epist_afm = $row['symv_epist_afm'];
+                            $symv_epist_surname = $row['symv_epist_surname'];
+                            $symv_epist_name = $row['symv_epist_name'];
+                        }
+                    }
                 }
                 echo "<tr>";
                 echo "<td>".$count++."</td>";
                 echo "<td>".$row['emp_surname']."</td>";
                 echo "<td>".$row['emp_name']."</td>";
                 echo "<td>".$row['emp_afm']."</td>";
+                echo "<td>".$row['sch_name']."</td>";
                 echo "<td>".$row['symv_paid_surname']."</td>";
                 echo "<td>".$row['symv_paid_name']."</td>";
                 echo "<td>".$row['symv_paid_afm']."</td>";
