@@ -139,13 +139,15 @@ if ($_SESSION['userlevel']<>0) {
             s.id as sch_id,
             s.perif,
             e.hm_dior,
-            e.thesi
+            e.thesi,
+            e.monimopoihsh,
+            e.aksiologhsh
         FROM employee e
         LEFT JOIN klados k ON e.klados = k.id
         LEFT JOIN school s ON e.sx_yphrethshs = s.id
         LEFT JOIN symvouloi sm ON s.perif = sm.perif
         LEFT JOIN employee sp ON sm.emp_id = sp.id
-        LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2)
+        LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
         LEFT JOIN symvouloi_epist se ON (e.klados = se.klados)
         WHERE e.status = 1 
         AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
@@ -162,10 +164,10 @@ if ($_SESSION['userlevel']<>0) {
             $klados = implode(",", $_POST['klados']);
             $query .= " AND e.klados IN ($klados)";
         }
-        if ($_POST['monimopoihsh'] !== '' && $_POST['monimopoihsh'] !== '0') {
+        if ($_POST['monimopoihsh'] !== '') {
             $query .= " AND e.monimopoihsh = ".$_POST['monimopoihsh'];
         }
-        if ($_POST['aksiologhsh'] !== '' && $_POST['aksiologhsh'] !== '0') {
+        if ($_POST['aksiologhsh'] !== '') {
             $query .= " AND e.aksiologhsh = ".$_POST['aksiologhsh'];
         }
         if (!empty($_POST['aks_date_from'])) {
@@ -202,6 +204,8 @@ if ($_SESSION['userlevel']<>0) {
                 <th>Περιφέρεια</th>
                 <th>Ημ. Διορ.</th>
                 <th>Δντης/Πρνος</th>
+                <th>Μονιμοποίηση</th>
+                <th>Αξιολόγηση</th>
             </tr></thead><tbody>";
             
             
@@ -287,6 +291,9 @@ if ($_SESSION['userlevel']<>0) {
                 echo "<td>".$row['perif']."</td>";
                 echo "<td>".$row['hm_dior']."</td>";
                 echo "<td>".($row['thesi'] == 2 ? 'Ναι' : 'Όχι')."</td>";
+                echo "<td>".($row['monimopoihsh'] == 1 ? 'Ναι' : 'Όχι')."</td>";
+                echo "<td>".($row['aksiologhsh'] == 1 ? 'Ναι' : 'Όχι')."</td>";
+                // echo "<td>".$row['aksiologhsh_date']."</td>"; // future use
                 echo "</tr>";
             }
             echo "</tbody></table>";

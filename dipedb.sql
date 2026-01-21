@@ -355,9 +355,9 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `katoikon_comm` text NULL,
   `email` text NULL,
   `email_psd` text NULL,
-  `monimopoihsh` BOOLEAN NULL COMMENT 'Μονιμοποίηση',
+  `monimopoihsh` BOOLEAN NULL NULL DEFAULT '0' COMMENT 'Μονιμοποίηση',
   `monimopoihsh_apof` varchar(100) NULL COMMENT 'Απόφαση μονιμοποίησης',
-  `aksiologhsh` BOOLEAN NULL COMMENT 'Ολοκλήρωση αξιολόγησης',
+  `aksiologhsh` BOOLEAN NULL NULL DEFAULT '0' COMMENT 'Ολοκλήρωση αξιολόγησης',
   `aksiologhsh_date` date NULL COMMENT 'Ημ/νία τελευταίας αξιολόγησης'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
