@@ -299,12 +299,13 @@
     echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='6'>Μαζικές τοποθετήσεις μονίμων εκπ/κών με αντικατάσταση τοποθετήσεων &nbsp;(για αποσπάσεις - <a href='topo.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
     echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='8'>Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
     echo "<tr>";
-    echo "<td rowspan=\"4\" class=\"rowspan-cell\">Αναπληρωτές</td>";
+    echo "<td rowspan=\"5\" class=\"rowspan-cell\">Αναπληρωτές</td>";
     echo "<td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='7'>Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv' class='link-sample'>Δείγμα</a>)</label></td>";
     echo "</tr>";
     echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='9'>Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
     echo "<tr><td><a href='ektaktoi_import.php' class='link-sample'>Εισαγωγή αναπληρωτών</a></td></tr>";
     echo "<tr><td><a href='ektaktoi_import_minedu.php' class='link-sample'>Εισαγωγή αναπληρωτών (από αρχεία υπουργείου)</a></td></tr>";
+    echo "<tr><td><a href='import_postgrad.php' class='link-sample'>Εισαγωγή μεταπτυχιακών τίτλων</a></td></tr>";
     echo "</tbody></table>";
     echo "</div>";
 
