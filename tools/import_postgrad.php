@@ -284,7 +284,7 @@
     echo "<div class='import-section'>";
     echo "<h4>Οδηγίες</h4>";
     echo "<p>Κατεβάστε το δείγμα των δεδομένων που θέλετε να εισάγετε και αφού του προσθέσετε δεδομένα εισάγετε το.</p>";
-    echo "<p>Το αρχείο θα πρέπει να είναι σε μορφή CSV (χωρισμένο με ερωτηματικό ;) ή Excel.</p>";
+    echo "<p>Το αρχείο θα πρέπει να είναι σε μορφή CSV (χωρισμένο με ερωτηματικό ;).</p>";
     echo "</div>";
     
     echo "<div class='import-section' id='postgrad-section'>";
@@ -530,7 +530,7 @@
            $category = $data[1];
            $title = $data[2];
            $idryma = $data[3];
-           $aitisi_protocol = intval($data[4]);
+           $aitisi_protocol = $data[4];
            $praxi = $data[5];
            $synafeia_raw = $data[6]; // Keep original value before conversion
            $log_entries[] = "Γραμμή " . ($num+2) . ": ΑΦΜ=$afm, Κατηγορία=$category, Τίτλος=$title";
@@ -592,11 +592,11 @@
             break;
           }
           
-          // check if afm already exists in postgrad
-          $qry = "SELECT id FROM postgrad WHERE afm = $afm";
+          // check if afm-title-protocol already exists in postgrad table
+          $qry = "SELECT id FROM postgrad WHERE afm = $afm AND title = '$title' AND aitisi_protocol = '$aitisi_protocol'";
           if (mysqli_num_rows(mysqli_query($mysqlconnection, $qry)) > 0) {
             $warnings++;
-            $warn_msg .= "Προειδοποίηση: ΑΦΜ $afm υπάρχει ήδη (γραμμή ".($num+2).")<br>";
+            $warn_msg .= "Προειδοποίηση: Ο συνδυασμός ΑΦΜ - Τίτλος - Πρωτόκολλο (για το ΑΦΜ: $afm) υπάρχει ήδη (γραμμή ".($num+2)."). Η εισαγωγή παραλείφθηκε.<br>";
             $num++;
             continue;
           }
@@ -678,7 +678,7 @@
         echo "<p><strong>Αποτυχίες: $failed</strong></p>";
       }
       if ($warnings > 0) {
-        echo "<p><strong>Προειδοποιήσεις:</strong><br>$warn_msg</p>";
+        echo "<p><strong>Προειδοποιήσεις ($warnings):</strong><br>$warn_msg</p>";
       }
       echo "</div>";
       
