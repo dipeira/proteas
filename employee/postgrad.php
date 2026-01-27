@@ -6,7 +6,7 @@
 // Table name to generate CRUD for
 $table = 'postgrad';
 // Columns to be displayed on list view
-$table_list_columns = array('category','title','idryma','gnhsiothta','synafeia');
+$table_list_columns = array('category','title','idryma','aitisi_protocol','gnhsiothta','synafeia');
 // Columns to be hidden on edit view
 $hide_edit_columns = array('id', 'afm');
 // Columns to be skipped on add view

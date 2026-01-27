@@ -876,7 +876,7 @@ elseif ($_GET['op']=="view")
                 // Initialize dialog
                 $modalDiv.dialog({
                     modal: true,
-                    width: 1100,
+                    width: '80%',
                     height: 600,
                     maxHeight: $(window).height() - 50,
                     resizable: true,
