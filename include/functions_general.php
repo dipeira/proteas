@@ -23,7 +23,7 @@ function show_tooltip($text, $tooltip) {
     echo "</div>";
 }
 
-function sendEmail($email, $subject, $body, $debug = false){
+function sendEmail($email, $subject, $body, $debug = false, $is_html = false){
     require_once '../vendor/autoload.php';
     require_once '../config.php';
     global $db_user, $db_host, $db_name, $db_password, $db_user;
@@ -64,11 +64,15 @@ function sendEmail($email, $subject, $body, $debug = false){
     }
 
     $message = Swift_Message::newInstance($subject)
-    ->setContentType("text/html")
-    ->setFrom($mymail)
+    ->setFrom($mymail);
+    
+    if ($is_html) {
+        $message->setContentType("text/html");
+    }
+    
     // *** SOS *** uncomment '$testemail', comment '$email' to test
     // ->setTo("it@dipe.ira.sch.gr")
-    ->setTo($email)
+    $message->setTo($email)
     ->setBody($body);
     $result = $mailer->send($message);
     return $result;

@@ -437,11 +437,11 @@
                 }
 
                 $subject = "Ενημέρωση για ".$type;
-                $from = "Δ/νση ΠΕ Ηρακλείου";
+                $from = getParam('foreas',$mysqlconnection);
                 //$headers = "From:".$from;
                 
                 //echo "<br>$subject<br>".$mail_body."<br>".$email;
-                $mymail = "mail@dipe.ira.sch.gr";
+                $mymail = getParam('email',$mysqlconnection);
 
                 // trim emails
                 $emails_to_trimmed = array_map('trim', $emails_to);
