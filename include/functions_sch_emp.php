@@ -92,6 +92,71 @@ function anagkes_wrwn($tm)
     }
 }
 
+// sort teachers by: Position, klados, mon/anapl, alphabetically
+// used by ektimhseis_wrwn
+function sortTeachers(array $data): array
+{
+    $sorted = $data;
+
+    usort($sorted, function ($a, $b) {
+
+        $nameA = $a['fullname'];
+        $nameB = $b['fullname'];
+
+        // ---- 1. Director first ----
+        $isDirectorA = mb_strpos($nameA, '(Δ/ντής/-ντρια)') !== false;
+        $isDirectorB = mb_strpos($nameB, '(Δ/ντής/-ντρια)') !== false;
+
+        if ($isDirectorA !== $isDirectorB) {
+            return $isDirectorA ? -1 : 1;
+        }
+
+        // ---- 2. ΠΕ70 first ----
+        if ($a['klados'] === 'ΠΕ70' && $b['klados'] !== 'ΠΕ70') {
+            return -1;
+        }
+        if ($a['klados'] !== 'ΠΕ70' && $b['klados'] === 'ΠΕ70') {
+            return 1;
+        }
+
+        // ---- 3. ΠΕ70: Αναπλ last ----
+        if ($a['klados'] === 'ΠΕ70' && $b['klados'] === 'ΠΕ70') {
+            $isAnaplA = mb_strpos($nameA, '(Αναπλ)') !== false;
+            $isAnaplB = mb_strpos($nameB, '(Αναπλ)') !== false;
+
+            if ($isAnaplA !== $isAnaplB) {
+                return $isAnaplA <=> $isAnaplB;
+            }
+        }
+
+        // ---- 4. Klados alphabetical ----
+        if ($a['klados'] !== $b['klados']) {
+            return strcmp($a['klados'], $b['klados']);
+        }
+
+        // ---- 5. Special units last inside klados ----
+        $unitPriority = function ($name) {
+            if (mb_strpos($name, '(Τάξη Υποδοχής)') !== false) return 1;
+            if (mb_strpos($name, '(Τμ.Ένταξης)') !== false) return 2;
+            if (mb_strpos($name, '(Παράλληλη)') !== false) return 3;
+            return 0;
+        };
+
+        $unitA = $unitPriority($nameA);
+        $unitB = $unitPriority($nameB);
+
+        if ($unitA !== $unitB) {
+            return $unitA <=> $unitB;
+        }
+
+        // ---- 6. Alphabetical by fullname ----
+        return strcmp($nameA, $nameB);
+    });
+
+    return $sorted;
+}
+
+
 /*
 * ektimhseis_wrwn
 * Function to compute required and available hours for oloimero schedule (since 2016-17)
@@ -290,13 +355,27 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         $query = "SELECT e.name, e.surname, e.thesi, k.perigrafh, y.hours, e.ent_ty FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k ON e.klados=k.id where y.yphrethsh=$sch AND y.sxol_etos = $sxoletos AND e.status = 1 AND e.type != 6 ORDER BY e.klados";
         $result = mysqli_query($mysqlconnection, $query);
         while ($row = mysqli_fetch_array($result)){
-            $fname = $row['surname'] . ' '. substr($row['name'], 0, 6).' *';
+            $fname = $row['surname'] . ' '. substr($row['name'], 0, 6).' (Αναπλ)';
             $fname .= $row['ent_ty'] == 1 ? '<small> (Τμ.Ένταξης)</small>' : '';
             $fname .= $row['ent_ty'] == 2 ? '<small> (Τάξη Υποδοχής)</small>' : '';
             $fname .= $row['ent_ty'] == 3 ? '<small> (Παράλληλη)</small>' : '';
             $ar = Array('fullname' => $fname, 'klados' => $row['perigrafh'], 'hours' => $row['hours']);
             $all[] = $ar;
-            $allcnt[$row['perigrafh']]++;
+            // Ιf ent_ty = 1,2 or 3 count individually
+            switch ($row['ent_ty']) {
+                case 1:
+                    $allcnt['T.E.']++;
+                    break;
+                case 2:
+                    $allcnt['T.Y.']++;
+                    break;
+                case 3:
+                    $allcnt['Παράλληλη']++;
+                    break;
+                default:
+                    $allcnt[$row['perigrafh']]++;
+                    break;
+            }
         }
     }
     // PE70 entaksis
@@ -406,21 +485,23 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
         }
         echo "<a class='underline' id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";
-            echo "<table class=\"imagetable stable\" border='1'>";
-            echo "<tr><td colspan=3><u>Σύνολα εκπ/κών:</u> ";
+
+        echo "<table class=\"imagetable stable\" border='1' style='max-width: 50em;'>";
+        echo "<tr><td colspan=3><u>Σύνολα εκπ/κών:</u><br> ";
         foreach ($allcnt as $key=>$value){
             echo "&nbsp;&nbsp;$key: <strong>$value</strong>";
         }
-            echo "</td></tr>";
-            echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
+        echo "</td></tr>";
+        echo "<tr><td><b>Ον/μο</b></td><td><b>Κλάδος</b></td><td><b>Ώρες</b></td></tr>";
         
-        foreach ($all as $row) {
+        // sort teachers by: Position, klados, mon/anapl, alphabetically
+        $sorted = sortTeachers($all);
+        foreach ($sorted as $row) {
             echo "<tr><td>".$row['fullname']."</td><td>".$row['klados']."</td><td>".$row['hours']."</td></tr>";
         }
-            echo "</table>";
-            echo "* Αναπληρωτής";
-            echo "</div>";
-            echo "<br><br>";
+        echo "</table>";
+        echo "</div>";
+        echo "<br><br>";
     }
     else if ($analytika) {
         return ['required' => $reqhrs, 'available' => $avar, 'diff' => $ret, 'leit' => $leit, 'analytika' => $all, 'analytika_cnt' => $allcnt];

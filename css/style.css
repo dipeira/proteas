@@ -952,7 +952,7 @@ body {
 
 /* Action column styling */
 .imagetable tbody td:first-child {
-	text-align: center;
+	/* text-align: center; */
 	padding: 12px 8px;
 	vertical-align: middle;
 }

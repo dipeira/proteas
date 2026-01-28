@@ -525,12 +525,16 @@ if ($_REQUEST['type']) {
             }
             // count employees per specialty
             $ekp_ar = [];
-            $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 AND e.thesi in (0,1) GROUP BY e.klados";
+            $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM employee e join yphrethsh y on e.id = y.emp_id 
+            JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos 
+            AND e.status=1 AND e.thesi in (0,1) AND ent_ty = 0 GROUP BY e.klados";
             $res = mysqli_query($mysqlconnection, $qry);
             while ($row = mysqli_fetch_array($res)){
                 $ekp_ar[$row['klados']] = $row['count'];
             }
-            $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status=1 GROUP BY e.klados";
+            $qry = "SELECT k.perigrafh as klados, count(k.perigrafh) as count FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id 
+            JOIN klados k on k.id=e.klados WHERE y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos 
+            AND e.status=1 AND ent_ty = 0 GROUP BY e.klados";
             $res = mysqli_query($mysqlconnection, $qry);
             while ($row = mysqli_fetch_array($res)){
                 $ekp_ar[$row['klados']] += $row['count'];
@@ -604,6 +608,7 @@ if ($_REQUEST['type']) {
         // echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         // echo "</tr>";
         echo "</tbody></table>";
+        echo "ΣΗΜ: Δεν περιλαμβάνονται Δ/ντές/ντριες και εκπ/κοί Τ.Ε., Τ.Υ., Παράλληλης";
         echo "</div>";
         
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
