@@ -646,7 +646,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // Initialize dialog
             $modalDiv.dialog({
                 modal: true,
-                width: 950,
+                width: '80%',
                 height: 600,
                 maxHeight: $(window).height() - 50,
                 resizable: true,
@@ -796,7 +796,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             // Initialize dialog
             $modalDiv.dialog({
                 modal: true,
-                width: 80%,
+                width: '80%',
                 height: 600,
                 maxHeight: $(window).height() - 50,
                 resizable: true,
