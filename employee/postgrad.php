@@ -59,7 +59,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $values = [];
         foreach ($filtered_columns as $column) {
             $column_name = $column['COLUMN_NAME'];
-            $values[] = $mysqli->real_escape_string($_POST[$column_name]);
+            $value = $_POST[$column_name] ?? ''; # Default to empty string if not set
+
+            # Special handling for 'tinyint' columns (checkboxes)
+            if ($column['DATA_TYPE'] === 'tinyint') {
+                $value = isset($_POST[$column_name]) ? 1 : 0;
+            } else {
+                $value = $mysqli->real_escape_string($value);
+            }
+            $values[] = $value;
         }
         
         $values_str = implode("', '", $values);
