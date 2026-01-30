@@ -729,6 +729,7 @@ CREATE TABLE `school_comments` (
   `done_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Ημ/νία διεκπεραίωσης',
   `added_by` int(11) NOT NULL COMMENT 'Α/Α χρήστη',
   `added_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Ημ/νία προσθήκης',
+  `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος',
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 --

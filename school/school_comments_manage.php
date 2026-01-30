@@ -46,16 +46,70 @@ if ($mode) {
         $done = isset($_POST['done']) ? 1 : 0;
         $done_at = trim($_POST['done_at'] ?? '');
 
+        // If 'done' is checked and 'done_at' is empty, set current date/time
+        if ($done == 1 && empty($done_at)) {
+            $done_at = date('Y-m-d H:i:s');
+        }
+
         if ($mode === 'add') {
-            if (!empty($comment)) {
-                $insert_sql = "INSERT INTO school_comments (school_id, comment, action, done, done_at, added_by, added_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
-                $stmt = mysqli_prepare($mysqlconnection, $insert_sql);
-                mysqli_stmt_bind_param($stmt, "issssi", $sch, $comment, $action, $done, $done_at, $userid);
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_close($stmt);
-                    header("Location: school_status.php?org=$sch");
-                    exit;
-                }
+            // 1. Input Validation (Error Handling, Best Practices)
+            if (empty($comment)) {
+                $_SESSION["error_message"] = "Comment cannot be empty.";
+                header("Location: school_status.php?org=$sch&error=empty_comment");
+                exit;
+            }
+            $sxol_etos = getParam("sxol_etos", $mysqlconnection);
+
+            // SQL statement with correct placeholders (Readability, Best Practices)
+            $insert_sql = "INSERT INTO school_comments (school_id, comment, action, done, done_at, sxol_etos, added_by, added_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+
+            // 2. Error Handling for prepare statement (Error Handling)
+            $stmt = mysqli_prepare($mysqlconnection, $insert_sql);
+            if ($stmt === false) {
+                $_SESSION["error_message"] = "Database error: Could not prepare comment insertion statement. Please try again.";
+                error_log("Failed to prepare statement for school_comments_manage.php: " . mysqli_error($mysqlconnection)); // Log error for debugging
+                header("Location: school_status.php?org=$sch&error=db_prepare_failed");
+                exit;
+            }
+
+            // Determine correct bind parameters based on assumed types:
+            // 3. Correcting mysqli_stmt_bind_param (Readability, Best Practices)
+            // Make sure the order of variables matches the placeholders in the SQL query.
+            $bind_success = mysqli_stmt_bind_param(
+                $stmt,
+                "isssisi", // i:school_id, s:comment, s:action, s:done, s:done_at, i:sxol_etos, i:added_by
+                $sch,
+                $comment,
+                $action,
+                $done,
+                $done_at,
+                $sxol_etos,
+                $userid
+            );
+
+            // 4. Error Handling for bind_param (Error Handling)
+            if ($bind_success === false) {
+                $_SESSION["error_message"] = "Database error: Could not bind parameters for comment insertion. Please try again.";
+                error_log("Failed to bind parameters for school_comments_manage.php: " . mysqli_stmt_error($stmt));
+                mysqli_stmt_close($stmt); // Close statement before exiting
+                header("Location: school_status.php?org=$sch&error=db_bind_failed");
+                exit;
+            }
+
+            // 5. Error Handling for execute statement (Error Handling)
+            if (mysqli_stmt_execute($stmt)) {
+                // Success
+                mysqli_stmt_close($stmt);
+                $_SESSION["success_message"] = "Comment added successfully.";
+                header("Location: school_status.php?org=$sch");
+                exit;
+            } else {
+                // Error during execution
+                $_SESSION["error_message"] = "Database error: Failed to add comment. Please try again.";
+                error_log("Failed to execute statement for school_comments_manage.php: " . mysqli_stmt_error($stmt));
+                mysqli_stmt_close($stmt); // Close statement on error
+                header("Location: school_status.php?org=$sch&error=db_execute_failed");
+                exit;
             }
         } elseif ($mode === 'edit' && $comment_id > 0) {
             // Verify comment belongs to school
@@ -66,6 +120,10 @@ if ($mode) {
             $check_result = mysqli_stmt_get_result($check_stmt);
             if (mysqli_num_rows($check_result) > 0) {
                 if (!empty($comment)) {
+                    // If 'done' is checked and 'done_at' is empty, set current date/time
+                    if ($done == 1 && empty($done_at)) {
+                        $done_at = date('Y-m-d H:i:s');
+                    }
                     $update_sql = "UPDATE school_comments SET comment = ?, action = ?, done = ?, done_at = ? WHERE id = ?";
                     $stmt = mysqli_prepare($mysqlconnection, $update_sql);
                     mysqli_stmt_bind_param($stmt, "ssssi", $comment, $action, $done, $done_at, $comment_id);
@@ -356,7 +414,7 @@ if ($mode) {
             </div>
             <div class="form-group">
                 <label for="action">Ενέργεια</label>
-                <input type="text" name="action" id="action" value="<?php echo htmlspecialchars($form_data['action']); ?>">
+                <textarea name="action" id="action"><?php echo htmlspecialchars($form_data['action']); ?></textarea>
             </div>
             <div class="form-group">
                 <label for="done">

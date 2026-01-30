@@ -14,12 +14,14 @@ if ($log->logincheck($_SESSION['loggedin']) == false) {
 $conn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
 mysqli_query($conn, "SET NAMES 'utf8'");
 mysqli_query($conn, "SET CHARACTER SET 'utf8'");
+$sxol_etos = getParam('sxol_etos', $conn);
 
 $query = "
     SELECT sc.*, s.name AS school_name, s.code AS school_code, l.username AS added_by_username
     FROM school_comments sc
     LEFT JOIN school s ON sc.school_id = s.id
     LEFT JOIN logon l ON sc.added_by = l.userid
+    WHERE sxol_etos = $sxol_etos
     ORDER BY sc.added_at DESC, sc.id DESC
 ";
 $result = mysqli_query($conn, $query);
@@ -129,8 +131,8 @@ $(document).ready(function() {
         >
           <td><?php echo (int)$row['id']; ?></td>
           <td><?php echo htmlspecialchars($schoolLabel); ?></td>
-          <td class="comment-cell"><?php echo $comment; ?></td>
-          <td class="action-cell"><?php echo $action; ?></td>
+          <td class="comment-cell"><?php echo substr($comment,0,100).'...'; ?></td>
+          <td class="action-cell"><?php echo substr($action,0,100).'...'; ?></td>
           <td><?php echo $addedAt; ?></td>
           <td><?php echo htmlspecialchars($addedBy); ?></td>
           <td><?php echo $done ? "<span class='badge success'>ΝΑΙ</span>" : "<span class='badge muted'>ΟΧΙ</span>"; ?></td>

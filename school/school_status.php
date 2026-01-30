@@ -1381,7 +1381,7 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
       $schooltype = $row['type'];
       $school_comments_rs = null;
       if ($can_view_comments) {
-          $comments_sql = "SELECT sc.*, l.username AS added_by_username FROM school_comments sc LEFT JOIN logon l ON sc.added_by = l.userid WHERE sc.school_id = $sch ORDER BY sc.added_at DESC, sc.id DESC";
+          $comments_sql = "SELECT sc.*, l.username AS added_by_username FROM school_comments sc LEFT JOIN logon l ON sc.added_by = l.userid WHERE sc.school_id = $sch AND sxol_etos = $sxol_etos ORDER BY sc.added_at DESC, sc.id DESC";
           $school_comments_rs = mysqli_query($mysqlconnection, $comments_sql);
       }
 
@@ -1988,8 +1988,8 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
             echo "</tr></thead><tbody>";
             $i = 1;
             while ($row = mysqli_fetch_assoc($school_comments_rs)) {
-              $comment = htmlspecialchars($row['comment']);
-              $action = htmlspecialchars($row['action']);
+              $comment = substr(htmlspecialchars($row['comment']), 0, 100) . '...';
+              $action = substr(htmlspecialchars($row['action']), 0, 100) . '...';
               $addedBy = $row['added_by_username'] ? $row['added_by_username'] : '';
               $addedAt = $row['added_at'] ? date("d-m-Y H:i", strtotime($row['added_at'])) : '';
               $done = (int)$row['done'] === 1;
