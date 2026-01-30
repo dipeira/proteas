@@ -343,6 +343,11 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
         margin-left: 8px;
         font-weight: 500;
       }
+      #school-comment-modal .info-value {
+        max-height: 150px; /* Adjust as needed */
+        overflow-y: auto;
+        white-space: normal; /* Ensure text wraps */
+      }
     </style>
     
     <script type="text/javascript" src="../js/jquery.js"></script>
@@ -1988,8 +1993,8 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
             echo "</tr></thead><tbody>";
             $i = 1;
             while ($row = mysqli_fetch_assoc($school_comments_rs)) {
-              $comment = substr(htmlspecialchars($row['comment']), 0, 100) . '...';
-              $action = substr(htmlspecialchars($row['action']), 0, 100) . '...';
+              $comment = htmlspecialchars($row['comment']);
+              $action = htmlspecialchars($row['action']);
               $addedBy = $row['added_by_username'] ? $row['added_by_username'] : '';
               $addedAt = $row['added_at'] ? date("d-m-Y H:i", strtotime($row['added_at'])) : '';
               $done = (int)$row['done'] === 1;
@@ -1997,8 +2002,8 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
               $doneAt = ($row['done_at'] && $row['done_at'] !== '0000-00-00 00:00:00') ? date("d-m-Y H:i", strtotime($row['done_at'])) : '';
               echo "<tr data-id='". $row['id'] ."' data-school='$str1' data-comment='$comment' data-action='$action' data-added-by='$addedBy' data-added-at='$addedAt' data-done='$doneLabel' data-done-at='$doneAt'>";
               echo "<td>".$i++."</td>";
-              echo "<td>$comment</td>";
-              echo "<td>$action</td>";
+              echo "<td>".shorten_text($comment, 100)."</td>";
+              echo "<td>".shorten_text($action, 100)."</td>";
               echo "<td>".htmlspecialchars($addedBy)."</td>";
               echo "<td>$addedAt</td>";
               echo "<td>$doneLabel</td>";

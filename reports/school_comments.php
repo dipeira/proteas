@@ -30,7 +30,7 @@ $result = mysqli_query($conn, $query);
 <head>
 <?php
   $root_path = '../';
-  $page_title = 'Σχόλια σχολικών μονάδων';
+  $page_title = 'Σχόλια / ενέργειες σχολικών μονάδων';
   require '../etc/head.php';
 ?>
 <link href="../css/style.css" rel="stylesheet" type="text/css">
@@ -57,6 +57,11 @@ $(document).ready(function() {
     language: {
       url: '../js/datatables/Greek.json'
     }
+  });
+
+  $('#status-filter').on('change', function() {
+    const value = $(this).val();
+    table.column(6).search(value).draw();
   });
 
   const $modal = $("#comment-modal").dialog({
@@ -89,10 +94,18 @@ $(document).ready(function() {
   <?php require '../etc/menu.php'; ?>
   <div class="page-container">
     <div class="page-header">
-      <h2>Σχόλια σχολικών μονάδων</h2>
+      <h2>Σχόλια / ενέργειες σχολικών μονάδων</h2>
       <div>
         <button onclick="window.location.reload();" class="btn">Ανανέωση</button>
       </div>
+    </div>
+    <div class="filter-container" style="margin-bottom: 16px;">
+      <label for="status-filter">Φίλτρο κατάστασης:</label>
+      <select id="status-filter">
+        <option value="">Όλα</option>
+        <option value="ΝΑΙ">Ολοκληρωμένα</option>
+        <option value="ΟΧΙ">Εκκρεμή</option>
+      </select>
     </div>
     <table id="comments-table" class="display">
       <thead>
@@ -121,6 +134,7 @@ $(document).ready(function() {
         ?>
         <tr
           data-school="<?php echo htmlspecialchars($schoolLabel); ?>"
+          data-school-id="<?php echo (int)$row['school_id']; ?>"
           data-comment="<?php echo $comment; ?>"
           data-action="<?php echo $action; ?>"
           data-added-by="<?php echo htmlspecialchars($addedBy); ?>"
@@ -130,9 +144,9 @@ $(document).ready(function() {
           data-updated-at="<?php echo $updatedAt; ?>"
         >
           <td><?php echo (int)$row['id']; ?></td>
-          <td><?php echo htmlspecialchars($schoolLabel); ?></td>
-          <td class="comment-cell"><?php echo substr($comment,0,100).'...'; ?></td>
-          <td class="action-cell"><?php echo substr($action,0,100).'...'; ?></td>
+          <td><a href="../school/school_status.php?org=<?php echo (int)$row['school_id']; ?>" ><?php echo htmlspecialchars($schoolLabel); ?></a></td>
+          <td class="comment-cell"><?php echo shorten_text($comment,100); ?></td>
+          <td class="action-cell"><?php echo shorten_text($action,100); ?></td>
           <td><?php echo $addedAt; ?></td>
           <td><?php echo htmlspecialchars($addedBy); ?></td>
           <td><?php echo $done ? "<span class='badge success'>ΝΑΙ</span>" : "<span class='badge muted'>ΟΧΙ</span>"; ?></td>
