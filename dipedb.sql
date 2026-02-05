@@ -710,6 +710,18 @@ CREATE TABLE `symvouloi` (
   `emp_id` int(11) NOT NULL COMMENT 'Α/Α εκπ/κού'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `school_comments` (
+  `id` int(11) NOT NULL COMMENT 'A/A' PRIMARY KEY AUTO_INCREMENT,
+  `school_id` int(10) NOT NULL COMMENT 'Α/Α σχολείου',
+  `comment` text NOT NULL COMMENT 'Σχόλιο',
+  `action` text NOT NULL COMMENT 'Ενέργεια',
+  `done` tinyint(1) NOT NULL COMMENT 'Διεκπεραίωση',
+  `done_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Ημ/νία διεκπεραίωσης',
+  `added_by` int(11) NOT NULL COMMENT 'Α/Α χρήστη',
+  `added_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'Ημ/νία προσθήκης',
+  `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος',
+  `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 --
 -- Ευρετήρια για πίνακα `symvouloi`
 --

@@ -13,6 +13,7 @@
 if($log->logincheck($_SESSION['loggedin']) == false) {
     header("Location: ../tools/login.php");
 }
+$can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') === 'gram-pispe');
 ?>
 <html>
   <head>
@@ -341,6 +342,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
         font-size: 0.875rem;
         margin-left: 8px;
         font-weight: 500;
+      }
+      #school-comment-modal .info-value {
+        max-height: 150px; /* Adjust as needed */
+        overflow-y: auto;
+        white-space: normal; /* Ensure text wraps */
       }
     </style>
     
@@ -1350,6 +1356,18 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
               die('Το σχολείο δε βρέθηκε...');
           }
       }
+      $sch = intval($sch);
+      
+      if (isset($_POST['delete_comment_id']) && $can_view_comments) {
+          $comment_id = intval($_POST['delete_comment_id']);
+          $delete_sql = "DELETE FROM school_comments WHERE id = ? AND school_id = ?";
+          $stmt = mysqli_prepare($mysqlconnection, $delete_sql);
+          if ($stmt) {
+              mysqli_stmt_bind_param($stmt, "ii", $comment_id, $sch);
+              mysqli_stmt_execute($stmt);
+              mysqli_stmt_close($stmt);
+          }
+      }
       
       echo "<h1>$str1</h1>";
       echo "<div align='right'>";
@@ -1366,6 +1384,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
       $result = mysqli_query($mysqlconnection, $query);
       $row = mysqli_fetch_assoc($result);
       $schooltype = $row['type'];
+      $school_comments_rs = null;
+      if ($can_view_comments) {
+          $comments_sql = "SELECT sc.*, l.username AS added_by_username FROM school_comments sc LEFT JOIN logon l ON sc.added_by = l.userid WHERE sc.school_id = $sch AND sxol_etos = $sxol_etos ORDER BY sc.added_at DESC, sc.id DESC";
+          $school_comments_rs = mysqli_query($mysqlconnection, $comments_sql);
+      }
 
       // Tabs
       echo "<div id='container' style='width: 98%; padding: 8px;'>";
@@ -1377,12 +1400,69 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "<li><a href='#leit'>Μαθ.Δυναμικό - Κενά/Πλεονάσματα</a></li>";
           }
           echo "<li><a href='#personnel'>Προσωπικό</a></li>";
+          if ($can_view_comments) {
+            echo "<li><a href='#comments'>Σχόλια</a></li>";
+          }
           echo $_SESSION['requests'] && $schooltype != 0 ? "<li><a href='#requests'>Αιτήματα</a></li>" : '';
           echo "</ul>";
 
          disp_school($sch, $sxol_etos, $mysqlconnection);
 
-        
+         ?>
+         <script>
+          $(document).ready(function() { 
+     
+      // Comments modal per school
+      var $commentModal = $("#school-comment-modal");
+      var schoolId = <?php echo $sch; ?>;
+      if ($commentModal.length) {
+          $commentModal.dialog({
+              autoOpen: false,
+              modal: true,
+              width: 640,
+              buttons: []
+          });
+          $("#school-comments-table tbody").on("click", "tr", function(){
+              var $row = $(this);
+              var commentId = $row.data("id") || "";
+              $("#scm-school").text($row.data("school") || "");
+              $("#scm-comment").text($row.data("comment") || "");
+              $("#scm-action").text($row.data("action") || "");
+              $("#scm-added-by").text($row.data("added-by") || "");
+              $("#scm-added-at").text($row.data("added-at") || "");
+              $("#scm-done").text($row.data("done") || "");
+              $("#scm-done-at").text($row.data("done-at") || "");
+              $commentModal.dialog("option", "buttons", [{
+                  text: "Επεξεργασία",
+                  click: function() {
+                      if (commentId) {
+                          window.location.href = 'school_comments_manage.php?edit=1&sch=' + schoolId + '&id=' + commentId;
+                      }
+                      $(this).dialog("close");
+                  }
+              }, {
+                  text: "Διαγραφή",
+                  click: function() {
+                      if (confirm("Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το σχόλιο;")) {
+                          if (commentId) {
+                              $.post(window.location.href, {delete_comment_id: commentId}, function() {
+                                  location.reload();
+                              }).fail(function() {
+                                  alert("Σφάλμα κατά τη διαγραφή του σχολίου.");
+                              });
+                          }
+                      }
+                  }
+              }, {
+                  text: "Κλείσιμο",
+                  click: function() { $(this).dialog("close"); }
+              }]);
+              $commentModal.dialog("open");
+          });
+      }
+    });
+          </script>
+        <?php
 
         // personnel tab
         echo "<div id='personnel'>";
@@ -1890,86 +1970,51 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             echo "</div>";
           }
 
-        //Aπουσία COVID-19
-        // $query = "SELECT *,e.id as empid FROM employee e join yphrethsh y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
-        // $query_ekt = "SELECT *,e.id as empid FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 5)";
-        // //echo $query;
-        // $result = mysqli_query($mysqlconnection, $query);
-        // $result_ekt = mysqli_query($mysqlconnection, $query_ekt);
-        // $num = mysqli_num_rows($result);
-        // $num_ekt = mysqli_num_rows($result_ekt);
-        // //$sx_yphrethshs = mysqli_result($result, 0, "sx_yphrethshs");
-        // if (($num + $num_ekt) > 0){
-        //     echo "<h3>Απουσία COVID-19<span class='personnel-count'>".($num + $num_ekt)."</span></h3>";
-        //     echo "<div>";
-        //     if ($num > 0){
-        //         echo "<h4>Μόνιμοι</h4>";
-        //         echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
-        //         echo "<thead><tr>";
-        //         echo "<th>A/A</th>";
-        //         echo "<th>Επώνυμο</th>";
-        //         echo "<th>Όνομα</th>";
-        //         echo "<th>Κλάδος</th>";
-        //         echo "<th>Τύπος Απασχόλησης</th>";
-        //         echo "<th>Ώρες</th>";
-        //         echo "<th>Σχόλια</th>";
-        //         echo "</tr></thead>\n<tbody>";
-        //         while ($row = mysqli_fetch_assoc($result))
-        //         {
-        //             $id = $row['empid'];
-        //             $name = $row['name'];
-        //             $surname = $row['surname'];
-        //             $klados_id = $row['klados'];
-        //             $klados = getKlados($klados_id, $mysqlconnection);
-        //             $typos = $row['type'];
-        //             $type = get_type($typos, $mysqlconnection);
-        //             $comments = shorten_text($row['comments']);
-        //             $wres = $row['hours'];
-                    
-        //             echo "<tr>";
-        //             echo "<td>".($i+1)."</td>";
-        //             echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-        //             echo "</tr>";
-        //         }
-        //         echo "</tbody></table>";
-        //     }
-        //     // ektaktoi
-        //     if ($num_ekt > 0){
-        //         echo "<h4>Αναπληρωτές</h4>";
-        //         // $i=0;
-        //         echo "<table id=\"mytbl4\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
-        //         echo "<thead><tr>";
-        //         echo "<th>A/A</th>";
-        //         echo "<th>Επώνυμο</th>";
-        //         echo "<th>Όνομα</th>";
-        //         echo "<th>Κλάδος</th>";
-        //         echo "<th>Τύπος Απασχόλησης</th>";
-        //         echo "<th>Ώρες</th>";
-        //         echo "<th>Σχόλια</th>";
-        //         echo "</tr></thead>\n<tbody>";
-        //         while ($row = mysqli_fetch_assoc($result_ekt))
-        //         {
-        //             $id = $row['empid'];
-        //             $name = $row['name'];
-        //             $surname = $row['surname'];
-        //             $klados_id = $row['klados'];
-        //             $klados = getKlados($klados_id, $mysqlconnection);
-        //             $typos = $row['type'];
-        //             $type = get_type($typos, $mysqlconnection);
-        //             $comments = shorten_text($row['comments']);
-        //             $wres = $row['hours'];
-                    
-        //             echo "<tr>";
-        //             echo "<td>".($i+1)."</td>";
-        //             echo "<td><a class='underline' href=\"../employee/ektaktoi.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$type</td><td>$wres</td><td>$comments</td>\n";
-        //             echo "</tr>";
-        //         }
-        //         echo "</tbody></table>";
-        //     }
-        //     echo "</div>";
-        // }
         echo "</div>"; // of personnel-accordion
         echo "</div>"; // of personnel tab
+        
+        // comments tab (admins & specific user)
+        if ($can_view_comments) {
+          echo "<div id='comments'>";
+          echo "<div style='margin-bottom: 15px;'>";
+          echo "<INPUT TYPE='button' VALUE='Προσθήκη σχολίου' onClick=\"parent.location = 'school_comments_manage.php?sch=$sch&add=1'\">";
+          echo "<INPUT TYPE='button' VALUE='Λίστα σχολίων' onClick=\"parent.location = 'school_comments_manage.php?sch=$sch'\" style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;'>";
+          echo "</div>";
+          if ($school_comments_rs && mysqli_num_rows($school_comments_rs) > 0) {
+            echo "<p style='margin: 6px 0 12px 0; color: #4b5563;'>Κάντε κλικ σε μία γραμμή για λεπτομέρειες.</p>";
+            echo "<table id='school-comments-table' class='imagetable schooltable tablesorter' border='2'>";
+            echo "<thead><tr>";
+            echo "<th>A/A</th>";
+            echo "<th>Σχολιο</th>";
+            echo "<th>Ενεργεια</th>";
+            echo "<th>Καταχωρησε</th>";
+            echo "<th>Υποβληθηκε</th>";
+            echo "<th>Ολοκληρωση</th>";
+            echo "</tr></thead><tbody>";
+            $i = 1;
+            while ($row = mysqli_fetch_assoc($school_comments_rs)) {
+              $comment = htmlspecialchars($row['comment']);
+              $action = htmlspecialchars($row['action']);
+              $addedBy = $row['added_by_username'] ? $row['added_by_username'] : '';
+              $addedAt = $row['added_at'] ? date("d-m-Y H:i", strtotime($row['added_at'])) : '';
+              $done = (int)$row['done'] === 1;
+              $doneLabel = $done ? 'ΝΑΙ' : 'ΟΧΙ';
+              $doneAt = ($row['done_at'] && $row['done_at'] !== '0000-00-00 00:00:00') ? date("d-m-Y H:i", strtotime($row['done_at'])) : '';
+              echo "<tr data-id='". $row['id'] ."' data-school='$str1' data-comment='$comment' data-action='$action' data-added-by='$addedBy' data-added-at='$addedAt' data-done='$doneLabel' data-done-at='$doneAt'>";
+              echo "<td>".$i++."</td>";
+              echo "<td>".shorten_text($comment, 100)."</td>";
+              echo "<td>".shorten_text($action, 100)."</td>";
+              echo "<td>".htmlspecialchars($addedBy)."</td>";
+              echo "<td>$addedAt</td>";
+              echo "<td>$doneLabel</td>";
+              echo "</tr>";
+            }
+            echo "</tbody></table>";
+          } else {
+            echo "<p>Δεν υπάρχουν σχόλια για το συγκεκριμένο σχολείο.</p>";
+          }
+          echo "</div>";
+        }
           
           // requests tab
           if ($_SESSION['requests'] && $schooltype != 0) {
@@ -1982,6 +2027,17 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
     } // of school status
     ?>
+<div id="school-comment-modal" title="Σχόλιο μονάδας" style="display:none;">
+  <div class="info-grid" style="display:grid;grid-template-columns:150px 1fr;grid-row-gap:8px;grid-column-gap:12px;">
+    <span class="info-label">Σχολείο</span><span class="info-value" id="scm-school"></span>
+    <span class="info-label">Σχόλιο</span><span class="info-value" id="scm-comment"></span>
+    <span class="info-label">Ενέργεια</span><span class="info-value" id="scm-action"></span>
+    <span class="info-label">Καταχώρησε</span><span class="info-value" id="scm-added-by"></span>
+    <span class="info-label">Υποβλήθηκε</span><span class="info-value" id="scm-added-at"></span>
+    <span class="info-label">Ολοκλήρωση</span><span class="info-value" id="scm-done"></span>
+    <span class="info-label">Ημ/νία ολοκλήρωσης</span><span class="info-value" id="scm-done-at"></span>
+  </div>
+</div>
 </center>
 <div id='results'></div>
 </body>
