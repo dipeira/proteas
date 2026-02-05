@@ -174,7 +174,7 @@ if ($mode) {
     }
 } else {
     // Fetch comments for listing
-    $comments_sql = "SELECT sc.*, l.username AS added_by_username FROM school_comments sc LEFT JOIN logon l ON sc.added_by = l.userid WHERE sc.school_id = $sch ORDER BY sc.added_at DESC, sc.id DESC";
+    $comments_sql = "SELECT sc.*, l.username AS added_by_username FROM school_comments sc LEFT JOIN logon l ON sc.added_by = l.userid WHERE sc.school_id = $sch AND sxol_etos = $sxol_etos ORDER BY sc.added_at DESC, sc.id DESC";
     $comments_rs = mysqli_query($mysqlconnection, $comments_sql);
 }
 
