@@ -55,7 +55,7 @@ $(document).ready(function() {
     pageLength: 25,
     order: [[4, 'desc']],
     language: {
-      url: '../js/datatables/Greek.json'
+      url: '../js/datatables/greek.json'
     }
   });
 
