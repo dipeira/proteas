@@ -415,8 +415,8 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
           }
       });
     });
-    $(document).ready(function() { 
-      $(".tablesorter").tablesorter({widgets: ['zebra']}); 
+    $(document).ready(function() {
+      $(".tablesorter").tablesorter({widgets: ['zebra']});
       $('#toggleBtn').click(function(){
           event.preventDefault();
           $("#analysis").slideToggle();
@@ -425,7 +425,8 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
           event.preventDefault();
           $("#systeg").slideToggle();
       });
-    });    
+      $('#expandAllBtn').click();
+    });
     </script>
   </head>
   <body> 
@@ -1475,6 +1476,14 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
         $query = "SELECT * from employee WHERE sx_yphrethshs='$sch' AND status=1 AND thesi in (1,2,6) ORDER BY thesi DESC";
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
+        $dntis_mon = true;
+        // if not monimoi, check if anaplirotes 
+        if (!$num) {
+            $query_anapl = "SELECT * from ektaktoi WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 1 ORDER BY thesi DESC";
+            $result = mysqli_query($mysqlconnection, $query_anapl);
+            $num = mysqli_num_rows($result);
+            $dntis_mon = false;
+        }
         if ($num) {
             echo "<h3>Υπηρετούν με θητεία<span class='personnel-count'>$num</span></h3>";
             echo "<div>";
@@ -1497,12 +1506,13 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
                 $klados_id = mysqli_result($result, $i, "klados");
                 $klados = getKlados($klados_id, $mysqlconnection);
                 $thesi = mysqli_result($result, $i, "thesi");
-                $th = thesicmb($thesi);
+                $th = $dntis_mon ? thesicmb($thesi) : 'Διευθυντής/Προϊστάμενος';
                 $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
                 echo "<tr>";
                 echo "<td>".($i+1)."</td>";
-                echo "<td><a class='underline' href=\"../employee/employee.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
+                $emp_tbl = $dntis_mon ? 'employee' : 'ektaktoi';
+                echo "<td><a class='underline' href=\"../employee/$emp_tbl.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td><td>$th</td><td>$comments</td>\n";
                 echo "</tr>";
                 $i++;
             }
@@ -1735,9 +1745,9 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
             echo "</div>";
         }
         
-        //Αναπληρωτές
+        //Αναπληρωτές (όχι Πρ/νοι)
         //$query = "SELECT * FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos)";
-        $query = "SELECT *,e.type as etype, e.name as ename, p.name as praxiname FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id join praxi p on e.praxi = p.id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1)";
+        $query = "SELECT *,e.type as etype, e.name as ename, p.name as praxiname FROM ektaktoi e join yphrethsh_ekt y on e.id = y.emp_id join praxi p on e.praxi = p.id where (y.yphrethsh=$sch AND y.sxol_etos = $sxol_etos AND e.status = 1 AND thesi=0)";
         //echo $query;
         $result = mysqli_query($mysqlconnection, $query);
         $num = mysqli_num_rows($result);
