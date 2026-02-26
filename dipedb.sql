@@ -722,6 +722,17 @@ CREATE TABLE `school_comments` (
   `sxol_etos` int(11) NOT NULL COMMENT 'Σχολικό έτος',
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
+CREATE TABLE `organikes` (
+  `id` int(11) NOT NULL COMMENT 'A/A' PRIMARY KEY AUTO_INCREMENT,
+  `school_id` int(10) NOT NULL COMMENT 'A/A σχολείου',
+  `klados_id` int(10) NOT NULL COMMENT 'A/A κλάδου',
+  `organikes` int(10) NOT NULL COMMENT 'Πλήθος οργανικών',
+  `fek` varchar(50) NOT NULL COMMENT 'ΦΕΚ οργανικών',
+  `comments` text NOT NULL COMMENT 'Σχόλια'
+)
+
 --
 -- Ευρετήρια για πίνακα `symvouloi`
 --

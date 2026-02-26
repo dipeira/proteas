@@ -606,7 +606,8 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
             if ($type == 1) {
                 echo "<div style='margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;'>";
                 echo "<a href='#' id='show_hide' class='organikes-toggle'>▼ Οργανικές Θέσεις</a>";
-                echo "<div id='slidingDiv' style='display: none; margin-top: 16px;'>";
+                echo "<a href='organikes.php?id=$sch&action=list' class='btn' style='margin-left: 12px;'>Διαχείριση Οργανικών</a>";
+                echo "<div id='slidingDiv' style='display: none; margin-top: 16px; width:35em'>";
                 echo "<div class='organikes-table-wrapper'>";
                 echo "<table>";
                 echo "<thead><tr>";

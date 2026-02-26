@@ -42,6 +42,7 @@
 		   		<li><a href="<?=$site_root?>/reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
            <li><a href="<?=$site_root?>/reports/report_head.php">Διευθυντές / Προϊστάμενοι</a></li>
 					<li><a href="<?=$site_root?>/reports/report_kena.php?type=1">Οργανικά Κενά</a></li>
+					<li><a href="<?=$site_root?>/school/organikes.php?id=0&action=list">Οργανικές θέσεις</a></li>
 					<li><a href="<?=$site_root?>/reports/report_leit.php">Λειτουργικά Κενά Δημοτικών</a></li>
 					<li><a href="<?=$site_root?>/reports/report_tm_ekp.php?type=4">Λειτουργικά Κενά Νηπιαγωγείων</a></li>
 					<li><a href="<?=$site_root?>/reports/report_leit_yp.php">Λειτουργικά Κενά (για Υπουργείο)</a></li>
