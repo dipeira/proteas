@@ -7,11 +7,31 @@
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type="text/javascript">    
-    $(document).ready(function() { 
-        $("#mytbl").tablesorter({widgets: ['zebra']}); 
-    }); 
+    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // Add custom parser for d-m-Y date format
+        $.tablesorter.addParser({
+            id: "date-dmy",
+            is: function(s) {
+                return false; // don't auto-detect
+            },
+            format: function(s) {
+                if (s === '') return 0;
+                var date = s.split('-');
+                return new Date(date[2], date[1] - 1, date[0]).getTime();
+            },
+            type: "numeric"
+        });
+        
+        $("#mytbl").tablesorter({
+            widgets: ['zebra'],
+            headers: {
+                4: { sorter: 'date-dmy' }, // Έναρξη (start) column - 5th column (0-indexed: 4)
+                5: { sorter: 'date-dmy' }  // Λήξη (finish) column - 6th column (0-indexed: 5)
+            }
+        });
+    });
     
     </script>
   </head>
