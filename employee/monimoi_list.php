@@ -615,7 +615,7 @@ if ($num == 0) {
 if ($usrlvl < 2) {
     echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%); border-top: 2px solid #22c55e;'><a href=\"employee.php?op=add\" style='color: #16a34a; font-weight: 600; font-size: 0.9375rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;'><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>➕ Προσθήκη εκπαιδευτικού</a></td></tr>";
 } else {
-    echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: #f9fafb; color: #9ca3af;'><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
+    echo "<tr><td colspan=7 style='text-align: center; padding: 16px; background: #f9fafb; color: #9ca3af;'><span title=\"Η προσθήκη μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή\"><img style=\"border: 0pt none;\" src=\"../images/user_add.png\"/>Προσθήκη εκπαιδευτικού</span></td></tr>";
 }        
     echo "<tr><td colspan=7 class='pagination-row'>";
     $prevpg = $curpg-1;

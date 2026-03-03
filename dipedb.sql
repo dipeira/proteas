@@ -355,9 +355,9 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `katoikon_comm` text NULL,
   `email` text NULL,
   `email_psd` text NULL,
-  `monimopoihsh` BOOLEAN NULL COMMENT 'Μονιμοποίηση',
+  `monimopoihsh` BOOLEAN NULL NULL DEFAULT '0' COMMENT 'Μονιμοποίηση',
   `monimopoihsh_apof` varchar(100) NULL COMMENT 'Απόφαση μονιμοποίησης',
-  `aksiologhsh` BOOLEAN NULL COMMENT 'Ολοκλήρωση αξιολόγησης',
+  `aksiologhsh` BOOLEAN NULL NULL DEFAULT '0' COMMENT 'Ολοκλήρωση αξιολόγησης',
   `aksiologhsh_date` date NULL COMMENT 'Ημ/νία τελευταίας αξιολόγησης'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -710,6 +710,7 @@ CREATE TABLE `symvouloi` (
   `emp_id` int(11) NOT NULL COMMENT 'Α/Α εκπ/κού'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 CREATE TABLE `school_comments` (
   `id` int(11) NOT NULL COMMENT 'A/A' PRIMARY KEY AUTO_INCREMENT,
   `school_id` int(10) NOT NULL COMMENT 'Α/Α σχολείου',
@@ -732,6 +733,17 @@ CREATE TABLE `organikes` (
   `fek` varchar(50) NOT NULL COMMENT 'ΦΕΚ οργανικών',
   `comments` text NOT NULL COMMENT 'Σχόλια'
 )
+
+CREATE TABLE IF NOT EXISTS `symvouloi_epist` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY, 
+  `klados` VARCHAR(255), 
+  `afm` VARCHAR(255), 
+  `eponymo` VARCHAR(255), 
+  `onoma` VARCHAR(255), 
+  `emp_id` INT NULL, 
+  `sch_ids` TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Ευρετήρια για πίνακα `symvouloi`
