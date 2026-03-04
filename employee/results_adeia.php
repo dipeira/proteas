@@ -97,7 +97,7 @@ if ($num==0) {
       echo !$_POST['mon_anapl'] ? '<th>Σχ.Οργανικής</th>' : '';
       echo "<th>Σχ.Υπηρέτησης</th>";
       if (isset($_POST['show_comments']) && $_POST['show_comments'] == 1) {
-          echo "<th>Σχόλια</th>";
+          echo "<th>Λόγος / Σχόλια</th>";
       }
     echo "</tr></thead>\n<tbody>";
     while ($i < $num)
@@ -165,7 +165,7 @@ if ($num==0) {
             $result1 = mysqli_query($mysqlconnection, $query1);
             $typewrd = mysqli_result($result1, 0, "type");
             
-            $comments = mysqli_result($result, $i, "comments");
+            $comments = mysqli_result($result, $i, "logos") . " / " . mysqli_result($result, $i, "comments");
                      
             $i++;
                                                                              
