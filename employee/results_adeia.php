@@ -87,7 +87,7 @@ if ($num==0) {
     echo "<thead><tr>";
     echo "<th>ΑΦΜ</th>";
     echo "<th>Επώνυμο, Όνομα</th>";
-    echo "<th>Ειδικότητα</th>";    
+    echo "<th>Ειδικότητα</th>";
     echo "<th>Είδος</th>";
       echo "<th>Έναρξη</th>";
       echo "<th>Λήξη</th>";
@@ -96,8 +96,9 @@ if ($num==0) {
       echo "<th>Αρ.Απόφασης</th>";
       echo !$_POST['mon_anapl'] ? '<th>Σχ.Οργανικής</th>' : '';
       echo "<th>Σχ.Υπηρέτησης</th>";
-    echo "</th>\n";
-                    
+      if (isset($_POST['show_comments']) && $_POST['show_comments'] == 1) {
+          echo "<th>Σχόλια</th>";
+      }
     echo "</tr></thead>\n<tbody>";
     while ($i < $num)
     {                      
@@ -163,9 +164,11 @@ if ($num==0) {
             $query1 = "select type from adeia_type where id=$type";
             $result1 = mysqli_query($mysqlconnection, $query1);
             $typewrd = mysqli_result($result1, 0, "type");
-                    
+            
+            $comments = mysqli_result($result, $i, "comments");
+                     
             $i++;
-                                                                            
+                                                                             
             echo "<tr><td>$afm</td><td>";
             if (!$_POST['mon_anapl']) {
                 $tmpl = "adeia";
@@ -179,6 +182,9 @@ if ($num==0) {
                     <td>$start</td><td>$finish</td><td>$days <small><i>($days_to_end)</i></small></td><td>$ar_prot/".date("d-m-Y",  strtotime($hm_prot))."</td><td>$apof_all\n";
             echo !$_POST['mon_anapl'] ? "<td>$organ</td>" : '';
             echo "<td>$school</td>";
+            if (isset($_POST['show_comments']) && $_POST['show_comments'] == 1) {
+                echo "<td>" . htmlspecialchars($comments) . "</td>";
+            }
             echo "</tr>";
         }
     }

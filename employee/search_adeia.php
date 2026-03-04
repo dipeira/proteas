@@ -296,6 +296,13 @@
             echo "</div>";
             echo "</div>";
             
+            echo "<div class='form-group'>";
+            echo "<div class='radio-item'>";
+            echo "<input type='checkbox' name='show_comments' id='show_comments' value='1' />";
+            echo "<label for='show_comments' class='form-label' style='margin-left: 8px;'>Εμφάνιση σχολίων</label>";
+            echo "</div>";
+            echo "</div>";
+            
             echo "</div>"; // grid
             echo "</div>"; // form-section
             
