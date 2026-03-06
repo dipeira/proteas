@@ -79,6 +79,7 @@ if ($num==0) {
     $num1=$num;
     $num2=$num;
     $synolo_ola = $synolo_ews = 0;
+    $is_mon = !$_POST['mon_anapl'] || $_POST['mon_anapl'] == 0 ? true : false;
     echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";
     echo "<body>";
     echo "<center>";
@@ -86,19 +87,21 @@ if ($num==0) {
     echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"2\">\n";
     echo "<thead><tr>";
     echo "<th>ΑΦΜ</th>";
+    echo $is_mon ? "<th>ΑΜ</th>" : '';
     echo "<th>Επώνυμο, Όνομα</th>";
     echo "<th>Ειδικότητα</th>";
     echo "<th>Είδος</th>";
-      echo "<th>Έναρξη</th>";
-      echo "<th>Λήξη</th>";
-      echo "<th>Ημ.αδ<br><small>Ημ.έως</small></th>";
-      echo "<th>Αρ.Πρωτοκόλλου</th>";
-      echo "<th>Αρ.Απόφασης</th>";
-      echo !$_POST['mon_anapl'] ? '<th>Σχ.Οργανικής</th>' : '';
-      echo "<th>Σχ.Υπηρέτησης</th>";
-      if (isset($_POST['show_comments']) && $_POST['show_comments'] == 1) {
-          echo "<th>Λόγος / Σχόλια</th>";
-      }
+    echo "<th>Έναρξη</th>";
+    echo "<th>Λήξη</th>";
+    echo "<th>Ημ.αδ<br><small>Ημ.έως</small></th>";
+    echo "<th>Αρ.Πρωτοκόλλου</th>";
+    echo "<th>Αρ.Απόφασης</th>";
+    echo !$_POST['mon_anapl'] ? '<th>Σχ.Οργανικής</th>' : '';
+    echo "<th>Σχ.Υπηρέτησης</th>";
+    echo "<th>Κωδ.Σχ.Υπηρ.</th>";
+    if (isset($_POST['show_comments']) && $_POST['show_comments'] == 1) {
+        echo "<th>Λόγος / Σχόλια</th>";
+    }
     echo "</tr></thead>\n<tbody>";
     while ($i < $num)
     {                      
@@ -106,7 +109,7 @@ if ($num==0) {
         $emp_id = mysqli_result($result, $i, "emp_id");
                 
         if (!$_POST['mon_anapl']) {
-            $query0 = "select e.name,surname,afm,s.name as schname,klados,sx_yphrethshs from employee e JOIN school s ON e.sx_organikhs = s.id where e.id=$emp_id";
+            $query0 = "select e.name,surname,afm,am,s.name as schname,klados,sx_yphrethshs from employee e JOIN school s ON e.sx_organikhs = s.id where e.id=$emp_id";
         } else {
             $query0 = $_POST['mon_anapl'] == 1 ? 
                 "select name,surname,afm,klados,sx_yphrethshs from ektaktoi where id=$emp_id" :
@@ -125,6 +128,7 @@ if ($num==0) {
             $name = mysqli_result($result0, 0, "name");
             $surname = mysqli_result($result0, 0, "surname");
             $afm = mysqli_result($result0, 0, "afm");
+            $am = $is_mon ? mysqli_result($result0, 0, "am") : 0;
             $start = mysqli_result($result, $i, "start");
             $finish = mysqli_result($result, $i, "finish");
             $days = mysqli_result($result, $i, "days");
@@ -135,6 +139,7 @@ if ($num==0) {
             $klados = getKlados($klados_id, $mysqlconnection);
             $sch_id = mysqli_result($result0, 0, "sx_yphrethshs");
             $school = getSchool($sch_id, $mysqlconnection);
+            $schcode = $is_mon ? getSchoolCode($sch_id, $mysqlconnection) : '';
 
             $organ = !$_POST['mon_anapl'] ? mysqli_result($result0, 0, 'schname') : '';
             // add days
@@ -170,6 +175,7 @@ if ($num==0) {
             $i++;
                                                                              
             echo "<tr><td>$afm</td><td>";
+            echo $is_mon ? "$am</td><td>" : '';
             if (!$_POST['mon_anapl']) {
                 $tmpl = "adeia";
                 $tmpl1 = "employee";
@@ -182,6 +188,7 @@ if ($num==0) {
                     <td>$start</td><td>$finish</td><td>$days <small><i>($days_to_end)</i></small></td><td>$ar_prot/".date("d-m-Y",  strtotime($hm_prot))."</td><td>$apof_all\n";
             echo !$_POST['mon_anapl'] ? "<td>$organ</td>" : '';
             echo "<td>$school</td>";
+            echo "<td>$schcode</td>";
             if (isset($_POST['show_comments']) && $_POST['show_comments'] == 1) {
                 echo "<td>" . htmlspecialchars($comments) . "</td>";
             }
