@@ -512,6 +512,8 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $proyp = mysqli_result($result, 0, "proyp");
             $proyp_not = mysqli_result($result, 0, "proyp_not");
             $proyp_wrario = mysqli_result($result, 0, "proyp_wrario");
+            $proyp_misth = mysqli_result($result, 0, "proyp_misth");
+            $proyp_vathm = mysqli_result($result, 0, "proyp_vathm");
             $anatr = mysqli_result($result, 0, "anatr");
             $comments = mysqli_result($result, 0, "comments");
             $comments = str_replace(" ", "&nbsp;", $comments);
@@ -1021,11 +1023,15 @@ if ($_GET['op']=="edit") {
     echo "<tr><td colspan=2>Χρονοι υπηρεσιας</td></tr>";
     
     $ymd=days2ymd($proyp);
-    echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες&nbsp;<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες&nbsp;<input type='text' name='pdays' size=1 value=$ymd[2] />&nbsp;($proyp Ημέρες)</td></tr>";
+    echo "<tr><td>Συνολική πραγματική δημόσια προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears' size=1 value=$ymd[0] />Μήνες&nbsp;<input type='text' name='pmonths' size=1 value=$ymd[1] />Ημέρες&nbsp;<input type='text' name='pdays' size=1 value=$ymd[2] />&nbsp;($proyp Ημέρες)</td></tr>";
     $ymdnot=days2ymd($proyp_not);
     echo "<tr><td>Προϋπηρεσία που δε λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου</td><td>Έτη&nbsp;<input type='text' name='peyears' size=1 value=$ymdnot[0] />Μήνες&nbsp;<input type='text' name='pemonths' size=1 value=$ymdnot[1] />Ημέρες&nbsp;<input type='text' name='pedays' size=1 value=$ymdnot[2] /></td></tr>";
     $ymdwrario=days2ymd($proyp_wrario);
     echo "<tr><td>Προϋπηρεσία που λαμβάνεται<br> υπ'όψιν για μείωση ωραρίου (όχι στη συνολική)</td><td>Έτη&nbsp;<input type='text' name='pe1years' size=1 value=$ymdwrario[0] />Μήνες&nbsp;<input type='text' name='pe1months' size=1 value=$ymdwrario[1] />Ημέρες&nbsp;<input type='text' name='pe1days' size=1 value=$ymdwrario[2] /></td></tr>";
+    $ymd_misth=days2ymd($proyp_misth);
+    echo "<tr><td>Μισθολογική προϋπηρεσία<br><small>(αρ.26, παρ.2, ν.4354/2015)</small></td><td>Έτη&nbsp;<input type='text' name='pyears_misth' size=1 value=$ymd_misth[0] />Μήνες&nbsp;<input type='text' name='pmonths_misth' size=1 value=$ymd_misth[1] />Ημέρες&nbsp;<input type='text' name='pdays_misth' size=1 value=$ymd_misth[2] />&nbsp;($proyp_misth Ημέρες)</td></tr>";
+    $ymd_vathm=days2ymd($proyp_vathm);
+    echo "<tr><td>Βαθμολογική προϋπηρεσία</td><td>Έτη&nbsp;<input type='text' name='pyears_vathm' size=1 value=$ymd_vathm[0] />Μήνες&nbsp;<input type='text' name='pmonths_vathm' size=1 value=$ymd_vathm[1] />Ημέρες&nbsp;<input type='text' name='pdays_vathm' size=1 value=$ymd_vathm[2] />&nbsp;($proyp_vathm Ημέρες)</td></tr>";
                 
     // aney
         echo "<tr><td>Σε άδ.άνευ αποδοχών:</td><td>";
@@ -1308,7 +1314,7 @@ elseif ($_GET['op']=="view") {
     echo "<tr><td colspan=4 class='separator'>Χρονοι υπηρεσιας</td></tr>";
     
     $ymd_proyp = days2ymd($proyp);
-    echo "<tr><td>Συνολική δημόσια προϋπηρεσία</td><td>Έτη: $ymd_proyp[0] &nbsp; Μήνες: $ymd_proyp[1] &nbsp; Ημέρες: $ymd_proyp[2]</td>";
+    echo "<tr><td>Συνολική πραγματική δημόσια προϋπηρεσία</td><td>Έτη: $ymd_proyp[0] &nbsp; Μήνες: $ymd_proyp[1] &nbsp; Ημέρες: $ymd_proyp[2]</td>";
     echo "<td>Ανατρέχει</td><td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td></tr>";
     
     $ymdnot = days2ymd($proyp_not);
@@ -1316,6 +1322,13 @@ elseif ($_GET['op']=="view") {
     echo "<tr>";
     echo "<td>Προϋπηρεσία που δε λαμβάνεται υπ'όψιν για μείωση ωραρίου</td><td>Έτη: $ymdnot[0] &nbsp; Μήνες: $ymdnot[1] &nbsp; Ημέρες: $ymdnot[2]</td>";
     echo "<td>Προϋπηρεσία που λαμβάνεται υπ'όψιν για μείωση ωραρίου<br>(όχι στη συνολική)</td><td>Έτη: $ymdwrario[0] &nbsp; Μήνες: $ymdwrario[1] &nbsp; Ημέρες: $ymdwrario[2]</td>";
+    echo "</tr>";
+    
+    $ymd_misth = days2ymd($proyp_misth);
+    $ymd_vathm = days2ymd($proyp_vathm);
+    echo "<tr>";
+    echo "<td>Μισθολογική προϋπηρεσία<br><small>(αρ.26, παρ.2, ν.4354/2015)</small></td><td>Έτη: $ymd_misth[0] &nbsp; Μήνες: $ymd_misth[1] &nbsp; Ημέρες: $ymd_misth[2]</td>";
+    echo "<td>Βαθμολογική προϋπηρεσία</td><td>Έτη: $ymd_vathm[0] &nbsp; Μήνες: $ymd_vathm[1] &nbsp; Ημέρες: $ymd_vathm[2]</td>";
     echo "</tr>";
     
     // aney
@@ -1374,6 +1387,7 @@ elseif ($_GET['op']=="view") {
     echo "<input type='hidden' name='id' value=$id>";
     echo "<input type='hidden' name='proyp_not' value=$proyp_not>";
     echo "<input type='hidden' name='proyp_wrario' value=$proyp_wrario>";
+    echo "<input type='hidden' name='proyp_misth' value=$proyp_misth>";
     echo "<INPUT TYPE='submit' VALUE='Υπολογισμός'>";
     echo "<br>";
     echo "</form>";
