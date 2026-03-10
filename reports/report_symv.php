@@ -127,6 +127,7 @@
       echo "<th>Κλάδος</th>";
       echo "<th>Κατάσταση</th>";
       echo $mon ? "<th>Ημ.Διορισμού</th><th>Μονιμοποίηση</th><th>Αξιολόγηση</th>" : '<th>Ημ.Ανάληψης</th>';
+      echo "<th>email</th>";
       echo "</tr>";
       echo "</thead>\n<tbody>\n";
 
@@ -150,6 +151,7 @@
             $hm_anal_dt = mysqli_result($result, $i, "hm_anal");
             $hm_anal = date('d-m-Y',strtotime($hm_anal_dt));
           }
+          $email = mysqli_result($result, $i, "email");
           
 
           echo "<tr>";
@@ -162,6 +164,7 @@
           echo "<td>$klados</td>";
           echo "<td>$status</td>";
           echo $mon ? "<td>$hm_dior</td><td>$monimopoihsh</td><td>$aksiologhsh</td>" : "<td>$hm_anal</td>";
+          echo "<td>$email</td>";
           echo "</tr>\n";
           $i++;                        
       }
