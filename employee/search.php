@@ -339,6 +339,7 @@
 		echo "<select name=\"emptype\" class='form-select'>";
 		echo "<option value=\"1\">Μόνιμος</option>";
 		echo "<option value=\"2\">Αναπληρωτής</option>";
+		echo "<option value=\"3\">Ιδιωτικός</option>";
 		echo "</select>";
 		echo "</div>";
 		
@@ -377,7 +378,7 @@
 		echo "<label for='dspkatast' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
 		echo "</span>";
 		echo "</label>";
-		echo "<select name=\"katast\" class='form-select'>";
+		echo "<select name=\"katast[]\" class='form-select' multiple>";
 		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
 		echo "<option value=\"1\">Εργάζεται</option>";
 		echo "<option value=\"2\">Λύση Σχέσης-Παραίτηση</option>";

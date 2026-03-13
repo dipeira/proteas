@@ -40,8 +40,10 @@
 if (strlen($_POST['emptype'])>0 && $_POST['emptype'] == 2) {
   $query = "SELECT * FROM ektaktoi e LEFT JOIN yphrethsh_ekt y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
   $is_anapl = true;
+} elseif (strlen($_POST['emptype'])>0 && $_POST['emptype'] == 3) {
+  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND thesi IN (5,6) AND ";
 } else {
-  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
+  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND thesi NOT IN (5,6) AND ";
 }
 // if SMEAE
 if (isset($_POST['smeae'])) {
@@ -137,11 +139,19 @@ if (strlen($_POST['tel'])>0) {
     $query .= " tel like '%".$_POST['tel']."%'";
     $flag=1;
 }
-if (strlen($_POST['katast'])>0) {
+if (!empty($_POST['katast'])) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " status like '".$_POST['katast']."'";
+
+    if (is_array($_POST['katast'])) {
+        $katast_values = array_map(function($value) {
+            return "'" . $value . "'";
+        }, $_POST['katast']);
+        $query .= " status IN (" . implode(',', $katast_values) . ")";
+    } else {
+        $query .= " status like '" . mysqli_real_escape_string($mysqlconnection, $_POST['katast']) . "'";
+    }
     $flag=1;
 }
 if((int)$_POST['hm_dior_from'] && !$is_anapl) {
