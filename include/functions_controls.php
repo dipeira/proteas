@@ -551,7 +551,7 @@ function tblCmb($conn, $tbl, $inp = 0, $fieldnm = null, $sortby = null, $query =
         return;
     }
     $num=mysqli_num_rows($result);
-    echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" >" : "<select id=\"$tbl\" name=\"$tbl\" >";
+    echo $fieldnm ? "<select id=\"$fieldnm\" name=\"$fieldnm\" style='width:100%'>" : "<select id=\"$tbl\" name=\"$tbl\" style='width:100%'>";
     //echo "<select id=\"$tbl\" name=\"$tbl\" onchange='replace()' >";
     echo "<option value=\"\"> </option>";
     while ($i < $num) 

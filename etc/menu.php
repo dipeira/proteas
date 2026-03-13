@@ -1,6 +1,6 @@
-<a href="<?=$site_root?>"><IMG src="<?=$site_root?>/images/pr_logo.png" class="applogo"></a>
 <div id="main-menu">
 		<ul id="navigation">
+			<IMG src="<?=$site_root?>/images/pr_logo.png" style='width:60px; border-radius:20%'>
 			<li><a href="<?=$site_root?>/index.php">Αρχικη</a></li>
 			
       <li class="sub">

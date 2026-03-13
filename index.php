@@ -331,7 +331,8 @@ else {
     
     <div class="dashboard-container">
         <div class="page-header">
-            <h1>Πρωτέας</h1>
+            <center><IMG src="<?=$site_root?>/images/pr_logo.png" style='width:300px'></center>
+            <!-- <h1>Πρωτέας</h1> -->
             <?php if ($logged) { 
               $se = getParam('sxol_etos', $mysqlconnection);
               $sx_etos = substr($se, 0, 4).'-'.substr($se, 4, 2);

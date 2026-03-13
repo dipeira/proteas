@@ -156,7 +156,7 @@ else {
         /* Action column styling */
         .imagetable tbody td:first-child {
             text-align: center;
-            padding: 12px 8px;
+            padding: 10px 8px;
             vertical-align: middle;
         }
         
@@ -176,7 +176,7 @@ else {
         
         /* Data cells */
         .imagetable tbody td {
-            padding: 12px 16px;
+            padding: 10px 16px;
             color: #374151;
             vertical-align: middle;
         }

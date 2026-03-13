@@ -326,7 +326,7 @@ center {
 	float: none;
 	height: auto;
 	margin-right: 0;
-	padding: 10px 18px;
+	padding: 10px 15px;
 	font-size: 14px;
 	font-family: "Inter", "Open Sans", Helvetica, Arial, sans-serif;
 	border-radius: 8px;
@@ -953,7 +953,7 @@ body {
 /* Action column styling */
 .imagetable tbody td:first-child {
 	/* text-align: center; */
-	padding: 12px 8px;
+	padding: 10px 8px;
 	vertical-align: middle;
 }
 
@@ -1045,7 +1045,7 @@ body {
 
 /* Data cells */
 .imagetable tbody td {
-	padding: 12px 16px;
+	padding: 10px 16px;
 	color: #374151;
 	vertical-align: middle;
 }
