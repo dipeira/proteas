@@ -607,7 +607,7 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
                 echo "<div style='margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;'>";
                 echo "<a href='#' id='show_hide' class='organikes-toggle'>▼ Οργανικές Θέσεις</a>";
                 echo "<a href='organikes.php?id=$sch&action=list' class='btn' style='margin-left: 12px;'>Διαχείριση Οργανικών</a>";
-                echo "<div id='slidingDiv' style='display: none; margin-top: 16px; width:35em'>";
+                echo "<div id='slidingDiv' style='display: none; margin-top: 16px; width:55em'>";
                 echo "<div class='organikes-table-wrapper'>";
                 echo "<table>";
                 echo "<thead><tr>";
@@ -668,7 +668,7 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
                 echo "</div>";
                 // if eidiko
                 if ($type2 == 2) {
-                    echo "<div class='organikes-table-wrapper' style='margin-top: 16px;'>";
+                    echo "<div class='organikes-table-wrapper' style='margin-top: 16px; width:55em;'>";
                     echo "<table>";
                     echo "<thead><tr>";
                     echo "<th>Κλάδος</th>";
@@ -744,14 +744,14 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
                 $orgs = get_orgs($sch,$conn);
                 echo "<td>Οργανικά ανήκοντες</td>";
                 echo $type2 != 2 ? "<td>".$orgs['ΠΕ70']."</td>" : "<td>".($orgs['ΠΕ70ΕΑΕ'] + $orgs['ΠΕ71'])."</td>";
-                echo "<td>".$orgs['ΠΕ11']."</td>";
+                echo "<td>".($orgs['ΠΕ11'] + $orgs['ΠΕ11ΕΑΕ'])."</td>";
                 echo "<td>".$orgs['ΠΕ06']."</td>";
-                echo "<td>".$orgs['ΠΕ79']."</td>";
+                echo "<td>".($orgs['ΠΕ79'] + $orgs['ΠΕ79.01ΕΑΕ'])."</td>";
                 echo "<td>".$orgs['ΠΕ05']."</td>";
                 echo "<td>".$orgs['ΠΕ07']."</td>";
                 echo "<td>".$orgs['ΠΕ08']."</td>";
-                echo "<td>".$orgs['ΠΕ86']."</td>";
-                echo "<td>".$orgs['ΠΕ91']."</td>";
+                echo "<td>".($orgs['ΠΕ86'] + $orgs['ΠΕ86ΕΑΕ'])."</td>";
+                echo "<td>".($orgs['ΠΕ91'] + $orgs['ΠΕ91.01ΕΑΕ'])."</td>";
                 echo $org_ent ? "<td>".$orgs['ent']."</td>" : '';
                 // if eidiko
                 if ($type2 == 2) {
@@ -771,14 +771,14 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
                 $orgs = get_orgs($sch,$conn);
                 echo "<td>Οργανικά κενά</td>";
                 echo $type2 != 2 ? "<td>".($organikes[0] - $orgs['ΠΕ70'])."</td>" : "<td>".($organikes[0] - $orgs['ΠΕ70ΕΑΕ'] - $orgs['ΠΕ71'])."</td>";
-                echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
+                echo "<td>".($organikes[1] - $orgs['ΠΕ11'] - $orgs['ΠΕ11ΕΑΕ'])."</td>";
                 echo "<td>".($organikes[2] - $orgs['ΠΕ06'])."</td>";
-                echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
+                echo "<td>".($organikes[3] - $orgs['ΠΕ79'] - $orgs['ΠΕ79.01ΕΑΕ'])."</td>";
                 echo "<td>".($organikes[4] - $orgs['ΠΕ05'])."</td>";
                 echo "<td>".($organikes[5] - $orgs['ΠΕ07'])."</td>";
                 echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
-                echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
-                echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+                echo "<td>".($organikes[7] - $orgs['ΠΕ86'] - $orgs['ΠΕ86ΕΑΕ'])."</td>";
+                echo "<td>".($organikes[8] - $orgs['ΠΕ91'] - $orgs['ΠΕ91.01ΕΑΕ'])."</td>";
                 echo $org_ent ? "<td>".($org_ent - $orgs['ent'])."</td>" : '';
                 if ($type2 == 2) {
                     echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";

@@ -261,11 +261,11 @@ else if ($_REQUEST['type'] == 3) {
         }
         echo "<td>$organikes[0]</td>";
         // echo "<td>$org_ent</td>";
-        echo "<td>".($organikes[1] - $orgs['ΠΕ11'])."</td>";
-        echo "<td>".($organikes[3] - $orgs['ΠΕ79'])."</td>";
+        echo "<td>".($organikes[1] - $orgs['ΠΕ11'] - $orgs['ΠΕ11ΕΑΕ'])."</td>";
+        echo "<td>".($organikes[3] - $orgs['ΠΕ79'] - $orgs['ΠΕ79.01ΕΑΕ'])."</td>";
         echo "<td>".($organikes[6] - $orgs['ΠΕ08'])."</td>";
-        echo "<td>".($organikes[7] - $orgs['ΠΕ86'])."</td>";
-        echo "<td>".($organikes[8] - $orgs['ΠΕ91'])."</td>";
+        echo "<td>".($organikes[7] - $orgs['ΠΕ86'] - $orgs['ΠΕ86ΕΑΕ'])."</td>";
+        echo "<td>".($organikes[8] - $orgs['ΠΕ91'] - $orgs['ΠΕ91.01ΕΑΕ'])."</td>";
         echo "<td>".($organikes[9] - $orgs['ΠΕ21'])."</td>";
         echo "<td>".($organikes[10] - $orgs['ΠΕ23'])."</td>";
         echo "<td>".($organikes[11] - $orgs['ΠΕ25'])."</td>";
