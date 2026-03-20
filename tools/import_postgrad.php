@@ -512,7 +512,7 @@
                 $new_comment = empty($existing_comment) ? $comment : $existing_comment . "\n" . $comment;
                 $new_comment = mysqli_real_escape_string($mysqlconnection, $new_comment);
                 
-                $update_query = "UPDATE ektaktoi SET comments = '$new_comment' WHERE id = $ekt_id";
+                $update_query = "UPDATE ektaktoi SET comments = '$new_comment', met_did = $met_did WHERE id = $ekt_id";
                 $update_queries[] = array('table' => 'ektaktoi', 'query' => $update_query);
                 $saves++;
               }
