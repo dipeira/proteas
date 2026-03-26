@@ -1268,11 +1268,9 @@ elseif ($_GET['op']=="view") {
     }
     
     $th = thesicmb($thesi);
-    echo "<tr><td>Θέση</td><td colspan=3>$th</td></tr>";
-
-    
+    echo "<tr><td>Θέση</td><td colspan=3>$th&nbsp;&nbsp;";
     echo $org_ent ? '&nbsp;(Οργανική σε Τ.Ε.)' : '';
-    echo "</td><td></td><td></td></tr>";
+    echo "</td></tr>";
 
     
     echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";
