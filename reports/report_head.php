@@ -1,154 +1,161 @@
 <?php
-    header('Content-type: text/html; charset=utf-8'); 
-    //require_once "../include/functions.php";
+header('Content-type: text/html; charset=utf-8');
+//require_once "../include/functions.php";
 ?>
 <html>
-  <head>
-    <?php 
-    $root_path = '../';
-    $page_title = 'Αναφορά Διευθυντών / Προϊσταμένων';
-    require '../etc/head.php'; 
-    ?>
-    <script type="text/javascript" src="../js/jquery.js"></script>
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type="text/javascript" src="../js/stickytable.js"></script>
-    <script type="text/javascript">    
-        $(document).ready(function() { 
-            $(".tablesorter").tablesorter({widgets: ['zebra']}); 
-            $(".tablesorter").stickyTableHeaders();
-        });  
-    </script>
-  </head>
+
+<head>
+  <?php
+  $root_path = '../';
+  $page_title = 'Αναφορά Διευθυντών / Προϊσταμένων';
+  require '../etc/head.php';
+  ?>
+  <script type="text/javascript" src="../js/jquery.js"></script>
+  <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
+  <script type="text/javascript" src="../js/stickytable.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $(".tablesorter").tablesorter({ widgets: ['zebra'] });
+      $(".tablesorter").stickyTableHeaders();
+    });  
+  </script>
+</head>
 
 <?php
-    require_once"../config.php";
-    require_once"../include/functions.php";
-    session_start();
+require_once "../config.php";
+require_once "../include/functions.php";
+session_start();
 
-    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
-    echo "<body>";
-    require '../etc/menu.php';
+echo "<body>";
+require '../etc/menu.php';
 
-    $req_type = isset($_GET['type']) ? (int)$_GET['type'] : 0;
-    echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
-    echo "<form method='GET' action='report_head.php' id='typeForm' style='margin: 20px 0;'>";
-    echo "<p style='margin-bottom: 15px; font-weight: 500;'>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
-    echo "<div style='background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 500px;'>";
-    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='0' " . ($req_type == 0 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία</label>";
-    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='3' " . ($req_type == 3 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία (μόνο Δ/ντές)</label>";
-    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='1' " . ($req_type == 1 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Νηπιαγωγεία</label>";
-    echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='2' " . ($req_type == 2 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Ειδικά Σχολεία</label>";
-    echo "</div>";
-    echo "</form>";
-    echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-    
-    function print_table($result, $num, $mysqlconnection, $mon = true){
-      $i=0;
-      echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
-      echo "<thead>";
-      echo "<tr><th>Κωδ.</th>";
-      echo "<th>Ονομασία</th>";
-      echo "<th>Λειτ.</th>";
-      echo "<th>Θέση</th>";
-      echo "<th>Επώνυμο</th>";
-      echo "<th>Όνομα</th>";
-      echo "<th>Κλάδος</th>";
-      echo "<th>Τηλέφωνο</th>";
-      echo "<th>email</th>";
-      echo "<th>ΑΦΜ</th>";
-      echo $mon ? "<th>ΑΜ</th>" : '';
-      echo "</tr>";
-      echo "</thead>\n<tbody>\n";
+$req_type = isset($_GET['type']) ? (int) $_GET['type'] : 0;
+echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
+echo "<form method='GET' action='report_head.php' id='typeForm' style='margin: 20px 0;'>";
+echo "<p style='margin-bottom: 15px; font-weight: 500;'>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
+echo "<div style='background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 500px;'>";
+echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='0' " . ($req_type == 0 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία <i>(Δ/ντές & Υποδ/ντές)</i></label>";
+echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='1' " . ($req_type == 1 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία <i>(μόνο Δ/ντές)</i></label>";
+echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='2' " . ($req_type == 2 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Νηπιαγωγεία</label>";
+echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='3' " . ($req_type == 3 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Ειδικά Σχολεία</label>";
+echo "</div>";
+echo "</form>";
+echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 
-      while ($i < $num)
-      {        
-          $sid = mysqli_result($result, $i, "sid");
-          $sname = mysqli_result($result, $i, "sname");
-          $code = mysqli_result($result, $i, "code");
-          $leitoyrg = get_leitoyrgikothta($sid, $mysqlconnection);
-          $id = mysqli_result($result, $i, "id");
-          $name = mysqli_result($result, $i, "name");
-          $surname = mysqli_result($result, $i, "surname");
-          $email = mysqli_result($result, $i, "email");
-          $thesi = $leitoyrg > 3 ? 
-            mysqli_result($result, $i, "thesi") == 2 ? 'Διευθυντής/-ντρια' : 'Υποδιευθυντής/-ντρια' :
-            'Πρ/νος/-η';
-          $klados = getKlados(mysqli_result($result, $i, "klados"),$mysqlconnection);
-          $tel = $mon ? mysqli_result($result, $i, "tel") : mysqli_result($result, $i, "stathero") . ' / ' . mysqli_result($result, $i, "kinhto");
-          $afm = mysqli_result($result, $i, "afm");
-          $am = $mon ? mysqli_result($result, $i, "am") : 0;
+function print_table($result, $num, $mysqlconnection, $mon = true)
+{
+  $i = 0;
+  echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
+  echo "<thead>";
+  echo "<tr><th>Κωδ.</th>";
+  echo "<th>Ονομασία</th>";
+  echo "<th>Λειτ.</th>";
+  echo "<th>Θέση</th>";
+  echo "<th>Επώνυμο</th>";
+  echo "<th>Όνομα</th>";
+  echo "<th>Κλάδος</th>";
+  echo "<th>Τηλέφωνο</th>";
+  echo "<th>email</th>";
+  echo "<th>ΑΦΜ</th>";
+  echo $mon ? "<th>ΑΜ</th>" : '';
+  echo "</tr>";
+  echo "</thead>\n<tbody>\n";
 
-          echo "<tr>";
-          echo "<td>$code</td>";
-          echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
-          echo "<td>$leitoyrg</td>";
-          echo "<td>$thesi</td>";
-          $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
-          echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
-          echo "<td>$name</td>";
-          echo "<td>$klados</td>";
-          echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
-          echo "<td><a class='underline' href='mailto:$email'>$email</a></td>";
-          echo "<td>$afm</td>";
-          echo $mon ? "<td>$am</td>" : '';
-          echo "</tr>\n";
-          $i++;                        
-      }
-      echo "</tbody></table>";
-    }
-    if ($req_type == 1){
-      $type = 2;
-      $type2 = 0;
-    } else {
-      $type = 1;
-      $type2 = $req_type;
-    }
-    if ($req_type == 3) {
-      $thesi = "(2)";
-      $type2 = 0;
-    } else {
-      $thesi = "(1,2)";
-    }
-    $query = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
-    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi IN $thesi AND status IN (1,3,5)";
-    $query2 = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
-    WHERE s.type2 = $type2 AND s.type = $type AND e.thesi = 1 AND status IN (1,3,5)";
+  while ($i < $num) {
+    $sid = mysqli_result($result, $i, "sid");
+    $sname = mysqli_result($result, $i, "sname");
+    $code = mysqli_result($result, $i, "code");
+    $leitoyrg = get_leitoyrgikothta($sid, $mysqlconnection);
+    $id = mysqli_result($result, $i, "id");
+    $name = mysqli_result($result, $i, "name");
+    $surname = mysqli_result($result, $i, "surname");
+    $email = mysqli_result($result, $i, "email");
+    $thesi = $leitoyrg > 3 ?
+      mysqli_result($result, $i, "thesi") == 2 ? 'Διευθυντής/-ντρια' : 'Υποδιευθυντής/-ντρια' :
+      'Πρ/νος/-η';
+    $klados = getKlados(mysqli_result($result, $i, "klados"), $mysqlconnection);
+    $tel = $mon ? mysqli_result($result, $i, "tel") : mysqli_result($result, $i, "stathero") . ' / ' . mysqli_result($result, $i, "kinhto");
+    $afm = mysqli_result($result, $i, "afm");
+    $am = $mon ? mysqli_result($result, $i, "am") : 0;
 
-    $result = mysqli_query($mysqlconnection, $query);
-    $num = mysqli_num_rows($result);
+    echo "<tr>";
+    echo "<td>$code</td>";
+    echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
+    echo "<td>$leitoyrg</td>";
+    echo "<td>$thesi</td>";
+    $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
+    echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
+    echo "<td>$name</td>";
+    echo "<td>$klados</td>";
+    echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
+    echo "<td><a class='underline' href='mailto:$email'>$email</a></td>";
+    echo "<td>$afm</td>";
+    echo $mon ? "<td>$am</td>" : '';
+    echo "</tr>\n";
+    $i++;
+  }
+  echo "</tbody></table>";
+}
+if ($req_type == 0) {
+  $type = "(1)";
+  $type2 = 0;
+  $thesi = "(1,2)";
+} else if ($req_type == 1) {
+  $type = "(1)";
+  $type2 = 0;
+  $thesi = "(2)";
+} else if ($req_type == 2) {
+  $type = "(2)";
+  $type2 = 0;
+  $thesi = "(2)";
+} else if ($req_type == 3) {
+  $type = "(1,2)";
+  $type2 = 2;
+  $thesi = "(1, 2)";
+}
 
-    echo "<center>";
-    
-    ob_start();
-    echo "<h2>Μόνιμοι</h2>";
-    print_table($result, $num, $mysqlconnection);
-    
-    
-    
-    $result = mysqli_query($mysqlconnection, $query2);
-    $num = mysqli_num_rows($result);
-    if ($num){
-      echo "<h2>Αναπληρωτές</h2>";
-      print_table($result, $num, $mysqlconnection, false);
-    }
 
-    $page = ob_get_contents(); 
-    $_SESSION['page'] = $page;
-    ob_end_flush();
+$query = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
+    WHERE s.type2 = $type2 AND s.type IN $type AND e.thesi IN $thesi AND status IN (1,3,5)";
+$query2 = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
+    WHERE s.type2 = $type2 AND s.type IN $type AND e.thesi = 1 AND status IN (1,3,5)";
 
-    echo "<form action='../tools/2excel_ses.php' method='post'>";
-    //echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
-    echo "<BUTTON TYPE='submit' class='button btn-yellow'><IMG SRC='../images/excel.png' ALIGN='absmiddle' style='display: inline-block; vertical-align: middle;'>Εξαγωγή στο excel</BUTTON>";
-    echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo "<input type='button' class='button btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-    echo "</form>";
-    //ob_end_clean();
+$result = mysqli_query($mysqlconnection, $query);
+$num = mysqli_num_rows($result);
+
+echo "<center>";
+
+ob_start();
+echo "<h2>Μόνιμοι</h2>";
+print_table($result, $num, $mysqlconnection);
+
+
+
+$result = mysqli_query($mysqlconnection, $query2);
+$num = mysqli_num_rows($result);
+if ($num) {
+  echo "<h2>Αναπληρωτές</h2>";
+  print_table($result, $num, $mysqlconnection, false);
+}
+
+$page = ob_get_contents();
+$_SESSION['page'] = $page;
+ob_end_flush();
+
+echo "<form action='../tools/2excel_ses.php' method='post'>";
+//echo "<input type='hidden' name = 'data' value=\"$page\"></input>";
+echo "<BUTTON TYPE='submit' class='button btn-yellow'><IMG SRC='../images/excel.png' ALIGN='absmiddle' style='display: inline-block; vertical-align: middle;'>Εξαγωγή στο excel</BUTTON>";
+echo "	&nbsp;&nbsp;&nbsp;&nbsp;";
+echo "<input type='button' class='button btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
+echo "</form>";
+//ob_end_clean();
 
 
 ?>
 </body>
+
 </html>
-                
