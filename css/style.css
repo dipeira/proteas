@@ -1708,3 +1708,14 @@ body {
 	border-color: #4FC5D6;
 	box-shadow: 0 0 0 3px rgba(79, 197, 214, 0.1);
 }
+
+/* Comment spacing classes */
+.comment-item {
+    margin-bottom: 0.5em;
+}
+.comment-item:last-child {
+    margin-bottom: 0;
+}
+.comment-item-empty {
+    height: 0.5em;
+}

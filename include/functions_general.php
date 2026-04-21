@@ -601,4 +601,29 @@ function shorten_text($text, $length = 200)
     return strlen($text) > $length ? substr($text, 0, $length) . '...' : $text;
 }
 
+function format_comments($text)
+{
+    // Escape HTML characters for security
+    $text = htmlspecialchars($text);
+    
+    // Split text into lines to process each line individually
+    $lines = preg_split('/\r\n|\r|\n/', $text);
+    
+    $formatted = "";
+    foreach ($lines as $line) {
+        // Only add a bullet point if the line is not empty (ignoring whitespace)
+        if (trim($line) !== '') {
+            $formatted .= "<div class='comment-item'>• " . $line . "</div>";
+        } else {
+            // Provide a small space for empty lines using CSS
+            $formatted .= "<div class='comment-item-empty'></div>";
+        }
+    }
+    
+    // Cleanup any extra spacing artifacts if they exist
+    $formatted = str_replace(['&nbsp;', '&amp;nbsp;'], '', $formatted);
+    
+    return $formatted;
+}
+
 ?>

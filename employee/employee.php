@@ -1341,7 +1341,7 @@ elseif ($_GET['op']=="view") {
     }
     $aney_ymd = days2ymd($aney_xr);
     echo "</td><td>Χρόνος σε άδ.άνευ αποδοχών:</td><td>$aney_ymd[0] έτη, $aney_ymd[1] μήνες, $aney_ymd[2] ημέρες</td></tr>";
-    echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br(stripslashes($comments))."</td></tr>"; 
+    echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".format_comments($comments)."</td></tr>"; 
     
     // history
     $hist_qry = "SELECT * FROM yphrethsh WHERE emp_id=$id AND sxol_etos<$sxol_etos";
