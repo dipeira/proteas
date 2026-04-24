@@ -539,10 +539,16 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
         echo "  <span class='info-value'>$dimos</span>";
         echo "</div>";
 
-        if ($tel) {
+          if ($tel) {
             echo "<div class='info-item'>";
             echo "  <span class='info-label'>Τηλέφωνο</span>";
             echo "  <span class='info-value'>".preg_replace('/\s+/', '', $tel)."</span>";
+            echo "</div>";
+          }
+          if ($tel2) {
+            echo "<div class='info-item'>";
+            echo "  <span class='info-label'>Τηλέφωνο 2</span>";
+            echo "  <span class='info-value'>".preg_replace('/\s+/', '', $tel2)."</span>";
             echo "</div>";
           }
           if ($email) {
