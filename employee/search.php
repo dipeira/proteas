@@ -30,6 +30,8 @@
 	<script type="text/javascript" src="../js/datepicker-gr.js"></script>
 	<script type='text/javascript' src='../js/jquery.autocomplete.js'></script>
 	<link rel="stylesheet" type="text/css" href="../js/jquery.autocomplete.css" />
+	<link href="../css/select2.min.css" rel="stylesheet" />
+	<script type="text/javascript" src="../js/select2.min.js"></script>
 	<style>
 		.form-section {
 			background: white;
@@ -251,6 +253,23 @@
 				selectFirst: false
 			});
 		});
+		$(document).ready(function() {
+			$("#katast").select2({
+				placeholder: "Επιλέξτε κατάσταση...",
+				allowClear: true,
+				width: '100%'
+			});
+			$("#thesi").select2({
+				placeholder: "Επιλέξτε θέση...",
+				allowClear: true,
+				width: '100%'
+			});
+			$("#klados").select2({
+				placeholder: "Επιλέξτε κλάδο...",
+				allowClear: true,
+				width: '100%'
+			});
+		});
 	</script>
   </head>
   <body class="p-4 md:p-6 lg:p-8"> 
@@ -345,7 +364,7 @@
 		
 		echo "<div class='form-group'>";
 		echo "<label class='form-label'>Κλάδος</label>";
-		kladosCmb($mysqlconnection, true);
+		kladosMultiCmb($mysqlconnection, true);
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
@@ -367,7 +386,12 @@
 		echo "<label for='dspmk' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
 		echo "</span>";
 		echo "</label>";
-		echo "<input type='text' name='mk' class='form-input' />";
+		echo "<select name='mk' class='form-select'>";
+		echo "<option value=''></option>";
+		for ($i = 1; $i <= 19; $i++) {
+			echo "<option value='$i'>$i</option>";
+		}
+		echo "</select>";
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
@@ -378,11 +402,11 @@
 		echo "<label for='dspkatast' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
 		echo "</span>";
 		echo "</label>";
-		echo "<select name=\"katast[]\" class='form-select' multiple>";
-		echo "<option value=\"\" selected>(Παρακαλώ επιλέξτε:)</option>";
-		echo "<option value=\"1\">Εργάζεται</option>";
+		echo "<select name=\"katast[]\" id=\"katast\" class='form-select' multiple>";
+		echo "<option value=\"\"></option>";
+		echo "<option value=\"1\" selected>Εργάζεται</option>";
 		echo "<option value=\"2\">Λύση Σχέσης-Παραίτηση</option>";
-		echo "<option value=\"3\">Άδεια</option>";
+		echo "<option value=\"3\" selected>Άδεια</option>";
 		echo "<option value=\"4\">Διαθεσιμότητα</option>";
 		echo "<option value=\"5\">Απουσία COVID-19</option>";
 		echo "</select>";
@@ -390,7 +414,8 @@
 		
 		echo "<div class='form-group'>";
 		echo "<label class='form-label'>Θέση</label>";
-		echo "<select name=\"thesi\" class='form-select'>";
+		echo "<select name=\"thesi[]\" id=\"thesi\" class='form-select' multiple>";
+		echo "<option value=''></option>";
 		echo "<option value='0' selected>Εκπαιδευτικός</option>";
 		echo "<option value='1'>Υποδιευθυντής</option>";
 		echo "<option value='2'>Διευθυντής/Προϊστάμενος</option>";

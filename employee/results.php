@@ -1,49 +1,50 @@
 <?php
-    header('Content-type: text/html; charset=utf-8'); 
-    //require_once "../include/functions.php";
+header('Content-type: text/html; charset=utf-8');
+//require_once "../include/functions.php";
 ?>
 <html>
-  <head>
+
+<head>
     <LINK href="../css/style.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script> 
-    <script type="text/javascript">    
-    $(document).ready(function() { 
-            $("#mytbl").tablesorter({widgets: ['zebra']}); 
-        }); 
-    
+
+    <script type="text/javascript" src="../js/jquery.tablesorter.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#mytbl").tablesorter({ widgets: ['zebra'] });
+        });
+
     </script>
-  </head>
+</head>
 
 <?php
-  require_once"../config.php";
-  require_once"../include/functions.php";
-  session_start();
-  $usrlvl = $_SESSION['userlevel'];
-  
-  $onlysynol=0;
-  $synol_find=0;
-  $is_anapl = false;
-    
-  $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-  mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
-  mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-    $flag=0;
-  if (isset($_POST['or'])) {
-      $op = " OR";
-  } else {
-      $op = " AND";
-  }
+require_once "../config.php";
+require_once "../include/functions.php";
+session_start();
+$usrlvl = $_SESSION['userlevel'];
+
+$onlysynol = 0;
+$synol_find = 0;
+$is_anapl = false;
+
+$mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+$flag = 0;
+if (isset($_POST['or'])) {
+    $op = " OR";
+} else {
+    $op = " AND";
+}
 
 // if anaplirotis
-if (strlen($_POST['emptype'])>0 && $_POST['emptype'] == 2) {
-  $query = "SELECT * FROM ektaktoi e LEFT JOIN yphrethsh_ekt y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
-  $is_anapl = true;
-} elseif (strlen($_POST['emptype'])>0 && $_POST['emptype'] == 3) {
-  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND thesi IN (5,6) AND ";
+if (strlen($_POST['emptype']) > 0 && $_POST['emptype'] == 2) {
+    $query = "SELECT * FROM ektaktoi e LEFT JOIN yphrethsh_ekt y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
+    $is_anapl = true;
+} elseif (strlen($_POST['emptype']) > 0 && $_POST['emptype'] == 3) {
+    $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
 } else {
-  $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND thesi NOT IN (5,6) AND ";
+    $query = "SELECT * FROM employee e LEFT JOIN yphrethsh y ON e.id = y.emp_id WHERE sxol_etos=$sxol_etos AND ";
 }
 // if SMEAE
 if (isset($_POST['smeae'])) {
@@ -52,14 +53,37 @@ if (isset($_POST['smeae'])) {
     WHERE sxol_etos=$sxol_etos AND s.type2=2 ";
     $flag = 1;
 }
-if ((int)$_POST['thesi']>0 && !$is_anapl) {
-    $flag ? $query .= $op : '';
-    $query .= " thesi = '".$_POST['thesi']."'";
-    $flag=1;
-} else if ((int)$_POST['thesi']>0 && $is_anapl) {
-    $flag ? $query .= $op : '';
-    $query .= " thesi = '1'";
-    $flag=1;
+if (!empty($_POST['thesi'])) {
+    $thesi_values = array_filter($_POST['thesi'], function ($val) {
+        return $val !== '';
+    });
+    if (!empty($thesi_values)) {
+        $flag ? $query .= $op : '';
+        if (!$is_anapl) {
+            $thesi_mapped = array_map(function ($value) use ($mysqlconnection) {
+                return "'" . mysqli_real_escape_string($mysqlconnection, $value) . "'";
+            }, $thesi_values);
+            $query .= " thesi IN (" . implode(',', $thesi_mapped) . ")";
+        } else {
+            $has_greater_than_zero = false;
+            $has_zero = false;
+            foreach ($thesi_values as $v) {
+                if ((int) $v > 0) {
+                    $has_greater_than_zero = true;
+                } else if ($v === '0') {
+                    $has_zero = true;
+                }
+            }
+            if ($has_greater_than_zero && $has_zero) {
+                $query .= " thesi IN ('0', '1')";
+            } else if ($has_greater_than_zero) {
+                $query .= " thesi = '1'";
+            } else if ($has_zero) {
+                $query .= " thesi = '0'";
+            }
+        }
+        $flag = 1;
+    }
 }
 
 // if (strlen($_POST['emptype'])>0) {
@@ -81,63 +105,71 @@ if ((int)$_POST['thesi']>0 && !$is_anapl) {
 //}
 
 if (!isset($_POST['outsiders']) && !$is_anapl) {
-  if ($flag) {
-    $query .= $op;
-  }
-  $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
-  $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
-  $query .= " (sx_organikhs NOT IN ($allo_pyspe, $allo_pysde)) ";
-  $flag = 1;
+    if ($flag) {
+        $query .= $op;
+    }
+    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ', $mysqlconnection);
+    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $mysqlconnection);
+    $query .= " (sx_organikhs NOT IN ($allo_pyspe, $allo_pysde)) ";
+    $flag = 1;
 }
 
-if (strlen($_POST['name'])>0) {
+if (strlen($_POST['name']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " name like '".$_POST['name']."'";
-    $flag=1;
+    $query .= " name like '" . $_POST['name'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['surname'])>0) {
+if (strlen($_POST['surname']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " surname like '%".$_POST['surname']."%'";
-    $flag=1;
+    $query .= " surname like '%" . $_POST['surname'] . "%'";
+    $flag = 1;
 }
-if (strlen($_POST['patrwnymo'])>0) {
+if (strlen($_POST['patrwnymo']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " patrwnymo like '".$_POST['patrwnymo']."'";
-    $flag=1;
+    $query .= " patrwnymo like '" . $_POST['patrwnymo'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['klados'])>0) {
-    if ($flag) {
-        $query .= $op;
+if (!empty($_POST['klados'])) {
+    $klados_values = array_filter($_POST['klados'], function ($val) {
+        return $val !== '';
+    });
+    if (!empty($klados_values)) {
+        if ($flag) {
+            $query .= $op;
+        }
+        $klados_mapped = array_map(function ($value) use ($mysqlconnection) {
+            return "'" . mysqli_real_escape_string($mysqlconnection, $value) . "'";
+        }, $klados_values);
+        $query .= " klados IN (" . implode(',', $klados_mapped) . ")";
+        $flag = 1;
     }
-    $query .= " klados = '".$_POST['klados']."'";
-    $flag=1;
 }
-if (strlen($_POST['am'])>0 && !$is_anapl) {
+if (strlen($_POST['am']) > 0 && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " am like '".$_POST['am']."'";
-    $flag=1;
+    $query .= " am like '" . $_POST['am'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['afm'])>0) {
+if (strlen($_POST['afm']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " afm like '".$_POST['afm']."'";
-    $flag=1;
+    $query .= " afm like '" . $_POST['afm'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['tel'])>0) {
+if (strlen($_POST['tel']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " tel like '%".$_POST['tel']."%'";
-    $flag=1;
+    $query .= " tel like '%" . $_POST['tel'] . "%'";
+    $flag = 1;
 }
 if (!empty($_POST['katast'])) {
     if ($flag) {
@@ -145,89 +177,87 @@ if (!empty($_POST['katast'])) {
     }
 
     if (is_array($_POST['katast'])) {
-        $katast_values = array_map(function($value) {
+        $katast_values = array_map(function ($value) {
             return "'" . $value . "'";
         }, $_POST['katast']);
         $query .= " status IN (" . implode(',', $katast_values) . ")";
     } else {
         $query .= " status like '" . mysqli_real_escape_string($mysqlconnection, $_POST['katast']) . "'";
     }
-    $flag=1;
+    $flag = 1;
 }
-if((int)$_POST['hm_dior_from'] && !$is_anapl) {
+if ((int) $_POST['hm_dior_from'] && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " hm_dior >= '".$_POST['hm_dior_from']."'";
-    $flag=1;
+    $query .= " hm_dior >= '" . $_POST['hm_dior_from'] . "'";
+    $flag = 1;
 }
-if((int)$_POST['hm_dior_to'] && !$is_anapl) {
-  if ($flag) {
-      $query .= $op;
-  }
-  $query .= " hm_dior <= '".$_POST['hm_dior_to']."'";
-  $flag=1;
+if ((int) $_POST['hm_dior_to'] && !$is_anapl) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " hm_dior <= '" . $_POST['hm_dior_to'] . "'";
+    $flag = 1;
 }
 
-if (strlen($_POST['vathm'])>0 && !$is_anapl) {
+if (strlen($_POST['vathm']) > 0 && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " vathm = '".$_POST['vathm']."'";
-    $flag=1;
+    $query .= " vathm = '" . $_POST['vathm'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['entty'])>0) {
-    if ($_POST['entty'] == '-1'){
+if (strlen($_POST['entty']) > 0) {
+    if ($_POST['entty'] == '-1') {
         // do nothing...
     } else {
         if ($flag) {
             $query .= $op;
         }
-        
-        $query .= " ent_ty = '".$_POST['entty']."'";
-        $flag=1;
+
+        $query .= " ent_ty = '" . $_POST['entty'] . "'";
+        $flag = 1;
     }
 }
-if (strlen($_POST['mk'])>0) {
+if (strlen($_POST['mk']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " mk like '".$_POST['mk']."'";
-    $flag=1;
+    $query .= " mk like '" . $_POST['mk'] . "'";
+    $flag = 1;
 }
-    
-if((int)$_POST['hm_anal_from'])
-{
+
+if ((int) $_POST['hm_anal_from']) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " hm_anal >= '".$_POST['hm_anal_from']."'";
-    $flag=1;
+    $query .= " hm_anal >= '" . $_POST['hm_anal_from'] . "'";
+    $flag = 1;
 }
-if((int)$_POST['hm_anal_to'])
-{
+if ((int) $_POST['hm_anal_to']) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " hm_anal <= '".$_POST['hm_anal_to']."'";
-    $flag=1;
+    $query .= " hm_anal <= '" . $_POST['hm_anal_to'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['met_did'])>0) {
+if (strlen($_POST['met_did']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " met_did like '".$_POST['met_did']."'";
-    $flag=1;
+    $query .= " met_did like '" . $_POST['met_did'] . "'";
+    $flag = 1;
 }
-if (strlen($_POST['pyears'])>0 || strlen($_POST['pmonths'])>0 || strlen($_POST['pdays'])>0) {
-  if (!$is_anapl){
-    if ($flag) {
-        $query .= $op;
+if (strlen($_POST['pyears']) > 0 || strlen($_POST['pmonths']) > 0 || strlen($_POST['pdays']) > 0) {
+    if (!$is_anapl) {
+        if ($flag) {
+            $query .= $op;
+        }
+        $days = $_POST['pyears'] * 360 + $_POST['pmonths'] * 30 + $_POST['pdays'];
+        $query .= " proyp " . $_POST['opp'] . " '$days'";
+        $flag = 1;
     }
-    $days = $_POST['pyears']*360 + $_POST['pmonths']*30 + $_POST['pdays'];
-    $query .= " proyp ".$_POST['opp']." '$days'";
-    $flag=1;
-  }
 }
 //    if (strlen($_POST['ayears'])>0 || strlen($_POST['amonths'])>0 || strlen($_POST['adays'])>0)
 //    {
@@ -238,16 +268,16 @@ if (strlen($_POST['pyears'])>0 || strlen($_POST['pmonths'])>0 || strlen($_POST['
 //        $query .= " anatr ".$_POST['opa']." '$days'";
 //        $flag=1;
 //    }
-if (strlen($_POST['org'])>0 && !$is_anapl) {
+if (strlen($_POST['org']) > 0 && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
     $str1 = $_POST['org'];
     $org = getSchoolID($str1, $mysqlconnection);
     $query .= " sx_organikhs = '$org'";
-    $flag=1;
+    $flag = 1;
 }
-if (strlen($_POST['yphr'])>0) {
+if (strlen($_POST['yphr']) > 0) {
     if ($flag) {
         $query .= $op;
     }
@@ -255,38 +285,38 @@ if (strlen($_POST['yphr'])>0) {
     $yphr = getSchoolID($str1, $mysqlconnection);
     //$query .= " sx_yphrethshs = '$yphr'";
     $query .= " (sx_yphrethshs = '$yphr' OR yphrethsh = '$yphr')";
-    $flag=1;
-}
-        
-        
-if (strlen($_POST['syears'])>0 || strlen($_POST['smonths'])>0 || strlen($_POST['sdays'])>0) {
-  if (!$is_anapl){
-    $synol_find = $_POST['syears']*360 + $_POST['smonths']*30 + $_POST['sdays'];
-    if (!$flag) {
-        $onlysynol=1;
-    }
-        $flag=1;
-  }
-}
-if ((int)$_POST['hm_synol']) {
-            $d1 = strtotime($_POST['hm_synol']);
-} else {
-            $d1 = strtotime("now");
+    $flag = 1;
 }
 
-if (strlen($_POST['comments'])>0) {
-    if ($flag) {
-        $query .= $op;
+
+if (strlen($_POST['syears']) > 0 || strlen($_POST['smonths']) > 0 || strlen($_POST['sdays']) > 0) {
+    if (!$is_anapl) {
+        $synol_find = $_POST['syears'] * 360 + $_POST['smonths'] * 30 + $_POST['sdays'];
+        if (!$flag) {
+            $onlysynol = 1;
+        }
+        $flag = 1;
     }
-    $query .= " comments like '".$_POST['comments']."'";
-    $flag=1;
 }
-if (strlen($_POST['email'])>0) {
+if ((int) $_POST['hm_synol']) {
+    $d1 = strtotime($_POST['hm_synol']);
+} else {
+    $d1 = strtotime("now");
+}
+
+if (strlen($_POST['comments']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " email like '%".$_POST['email']."%'";
-    $flag=1;
+    $query .= " comments like '" . $_POST['comments'] . "'";
+    $flag = 1;
+}
+if (strlen($_POST['email']) > 0) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " email like '%" . $_POST['email'] . "%'";
+    $flag = 1;
 }
 
 if ($_POST['monimopoihsh'] == 'on' && !$is_anapl) {
@@ -294,7 +324,7 @@ if ($_POST['monimopoihsh'] == 'on' && !$is_anapl) {
         $query .= $op;
     }
     $query .= " monimopoihsh=1";
-    $flag=1;
+    $flag = 1;
 }
 
 if ($_POST['aksiologhsh'] == 'on' && !$is_anapl) {
@@ -302,28 +332,28 @@ if ($_POST['aksiologhsh'] == 'on' && !$is_anapl) {
         $query .= $op;
     }
     $query .= " aksiologhsh=1";
-    $flag=1;
+    $flag = 1;
 }
-        
-        
+
+
 if (!$flag) {
     echo "<p>Παρακαλώ επιλέξτε κάποιο κριτήριο αναζήτησης...</p>";
 }
 if ($flag && $onlysynol) {
-        $query = "SELECT * from employee";
+    $query = "SELECT * from employee e";
 }
 if ($flag) {
-    $i=0;
+    $i = 0;
+    $query .= " ORDER BY e.surname, e.name";
     /////////////////////////////////
     // echo $query; // for debugging...
     /////////////////////////////////
     $result = mysqli_query($mysqlconnection, $query);
     $num = mysqli_num_rows($result);
-    $qr = str_replace("'", "", $query);    
-    if ($num==0) {
+    $qr = str_replace("'", "", $query);
+    if ($num == 0) {
         echo "<BR><p><span title = '$qr'>Κανένα αποτέλεσμα...</span></p>";
-    } else
-    {
+    } else {
         // find number of unique ids because of left joins
         $unique_ids = array();
         while ($row = mysqli_fetch_array($result)) {
@@ -332,8 +362,8 @@ if ($flag) {
         $unique_ids = array_unique($unique_ids);
         $num_unique_ids = count($unique_ids);
         echo "<p><span title='$qr'>Πλήθος εγγραφών που βρέθηκαν: $num_unique_ids</span><p>";
-        $num1=$num;
-        $num2=$num;
+        $num1 = $num;
+        $num2 = $num;
         echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">";
         echo "<body>";
         echo "<center>";
@@ -345,7 +375,7 @@ if ($flag) {
         echo "<th>Κλάδος</th>";
         echo $is_anapl ? '' : "<th>Σχ.Οργανικής</th>";
         echo "<th>Σχ.Υπηρέτησης</td></th>\n";
-        
+
         if (isset($_POST['dsppatr'])) {
             echo "<th>Πατρώνυμο</th>\n";
         }
@@ -353,7 +383,7 @@ if ($flag) {
             echo "<th>Ημ/νία Διορισμού</th>\n";
         }
         if (isset($_POST['dsphm_anal'])) {
-          echo "<th>Ημ/νία Ανάληψης</th>\n";
+            echo "<th>Ημ/νία Ανάληψης</th>\n";
         }
         if (isset($_POST['dspmetdid'])) {
             echo "<th>Μεταπτ./Διδακτ.</th>\n";
@@ -389,8 +419,7 @@ if ($flag) {
             echo "<th>Αξιολόγηση</th>\n";
         }
         echo "</tr></thead>\n<tbody>";
-        while ($i < $num)
-        {
+        while ($i < $num) {
             // fix to avoid double records display
             $oldid = $id;
             $id = mysqli_result($result, $i, 0);
@@ -413,7 +442,7 @@ if ($flag) {
             if (mysqli_num_rows($res) > 1) {
                 $sx_yphrethshs .= "*";
             }
-                
+
             $patrwnymo = mysqli_result($result, $i, "patrwnymo");
             $am = mysqli_result($result, $i, "am");
             $afm = mysqli_result($result, $i, "afm");
@@ -424,75 +453,74 @@ if ($flag) {
             $met_did = mysqli_result($result, $i, "met_did");
             $proyp = mysqli_result($result, $i, "proyp");
             $katast = mysqli_result($result, $i, "status");
-            $email = mysqli_result($result,$i,'email');
-            $_psd = mysqli_result($result,$i,'email_psd');
+            $email = mysqli_result($result, $i, 'email');
+            $_psd = mysqli_result($result, $i, 'email_psd');
             if (!$is_anapl) {
-                $monimopoihsh = mysqli_result($result,$i,'monimopoihsh') == 1 ? 'Ναι' : 'Όχι';
-                $aksiologhsh = mysqli_result($result,$i,'aksiologhsh') == 1 ? 'Ναι' : 'Όχι';
+                $monimopoihsh = mysqli_result($result, $i, 'monimopoihsh') == 1 ? 'Ναι' : 'Όχι';
+                $aksiologhsh = mysqli_result($result, $i, 'aksiologhsh') == 1 ? 'Ναι' : 'Όχι';
             }
-            if (strlen($_psd) > 0){
-                $email = $email . ' // '. $_psd;
+            if (strlen($_psd) > 0) {
+                $email = $email . ' // ' . $_psd;
             }
             $i++;
             if (isset($_POST['dspsynol'])) {
                 $hm_dior1 = strtotime($hm_dior);
-                $temp = (date('d', $hm_dior1) + date('m', $hm_dior1)*30 + date('Y', $hm_dior1)*360);
-                $res1 = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $temp + $proyp;
-                                    
+                $temp = (date('d', $hm_dior1) + date('m', $hm_dior1) * 30 + date('Y', $hm_dior1) * 360);
+                $res1 = (date('d', $d1) + date('m', $d1) * 30 + date('Y', $d1) * 360) - $temp + $proyp;
+
                 if ($synol_find) {
-                  if ((strcmp($_POST['ops'], "<")==0) && ($res1 >= $synol_find)) {
-                    $num1-=1;
-                    continue;
-                  }
-                  if ((strcmp($_POST['ops'], "=")==0) && ($res1 <> $synol_find)) {
-                    $num1-=1;
-                    continue;
-                  }
-                  if ((strcmp($_POST['ops'], ">")==0) && ($res1 <= $synol_find)) {
-                    $num1-=1;
-                    continue;
-                  }
+                    if ((strcmp($_POST['ops'], "<") == 0) && ($res1 >= $synol_find)) {
+                        $num1 -= 1;
+                        continue;
+                    }
+                    if ((strcmp($_POST['ops'], "=") == 0) && ($res1 <> $synol_find)) {
+                        $num1 -= 1;
+                        continue;
+                    }
+                    if ((strcmp($_POST['ops'], ">") == 0) && ($res1 <= $synol_find)) {
+                        $num1 -= 1;
+                        continue;
+                    }
                 }
-                                     
+
             }
-                                        
+
             echo "<tr><td>";
             $table = $is_anapl ? 'ektaktoi' : 'employee';
             echo "<span title=\"Προβολή\"><a href=\"$table.php?id=$id&op=view\"><img style=\"border: 0pt none;\" src=\"../images/view_action.png\"/></a></span>";
             if ($usrlvl < 3) {
-              echo "<span title=\"Επεξεργασία\"><a href=\"$table.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
+                echo "<span title=\"Επεξεργασία\"><a href=\"$table.php?id=$id&op=edit\"><img style=\"border: 0pt none;\" src=\"../images/edit_action.png\"/></a></span>";
             }
             echo "</td>";
-            echo "<td><a href=\"$table.php?id=$id&op=view\">".$surname."</a></td><td>".$name."</td><td>".$klados."</td>";
-            echo $is_anapl ? '' : "<td>".$sx_organikhs."</td>";
-            echo "<td>".$sx_yphrethshs."</td>\n";
+            echo "<td><a href=\"$table.php?id=$id&op=view\">" . $surname . "</a></td><td>" . $name . "</td><td>" . $klados . "</td>";
+            echo $is_anapl ? '' : "<td>" . $sx_organikhs . "</td>";
+            echo "<td>" . $sx_yphrethshs . "</td>\n";
             if (isset($_POST['dsppatr'])) {
                 echo "<td>$patrwnymo</td>\n";
             }
             if (isset($_POST['dsphm_dior'])) {
-                echo "<td>".date('d-m-Y', strtotime($hm_dior))."</td>\n";
+                echo "<td>" . date('d-m-Y', strtotime($hm_dior)) . "</td>\n";
             }
             if (isset($_POST['dsphm_anal'])) {
-              echo "<td>".date('d-m-Y', strtotime($hm_anal))."</td>\n";
+                echo "<td>" . date('d-m-Y', strtotime($hm_anal)) . "</td>\n";
             }
             if (isset($_POST['dspmetdid'])) {
-                switch ($met_did)
-                {
-                case 0:
-                    echo "<td>Όχι</td>\n";
-                    break;
-                case 1:
-                    echo "<td>Μεταπτυχιακό</td>\n";
-                    break;
-                case 2:
-                    echo "<td>Διδακτορικό</td>\n";
-                    break;
-                case 3:
-                    echo "<td>Μεταπτυχιακό & Διδακτορικό</td>\n";
-                    break;
-                case 4:
-                    echo "<td>Ενιαίος και αδιάσπαστος τίτλος σπουδών<br>μεταπτυχιακού επιπέδου (Integrated master)</td>";
-                    break;
+                switch ($met_did) {
+                    case 0:
+                        echo "<td>Όχι</td>\n";
+                        break;
+                    case 1:
+                        echo "<td>Μεταπτυχιακό</td>\n";
+                        break;
+                    case 2:
+                        echo "<td>Διδακτορικό</td>\n";
+                        break;
+                    case 3:
+                        echo "<td>Μεταπτυχιακό & Διδακτορικό</td>\n";
+                        break;
+                    case 4:
+                        echo "<td>Ενιαίος και αδιάσπαστος τίτλος σπουδών<br>μεταπτυχιακού επιπέδου (Integrated master)</td>";
+                        break;
                 }
             }
             if (isset($_POST['dspam'])) {
@@ -502,7 +530,7 @@ if ($flag) {
                 echo "<td>$afm</td>\n";
             }
             if (isset($_POST['dspproyhp'])) {
-                $ymd=days2ymd($proyp);
+                $ymd = days2ymd($proyp);
                 echo "<td>$ymd[0] Έτη, $ymd[1] Μήνες, $ymd[2] Ημέρες</td>\n";
             }
             if (isset($_POST['dspvathmos'])) {
@@ -512,27 +540,26 @@ if ($flag) {
                 echo "<td>$mk</td>\n";
             }
             if (isset($_POST['dspkatast'])) {
-                switch ($katast)
-                {
-                case 1:
-                    echo "<td>Εργάζεται</td>\n";
-                    break;
-                case 2:
-                    echo "<td>Λύση Σχέσης-Παραίτηση</td>\n";
-                    break;
-                case 3:
-                    echo "<td>Άδεια</td>\n";
-                    break;
-                case 4:
-                    echo "<td>Διαθεσιμότητα</td>\n";
-                    break;
-                case 5:
-                    echo "<td>Απουσία COVID-19</td>\n";
-                    break;
+                switch ($katast) {
+                    case 1:
+                        echo "<td>Εργάζεται</td>\n";
+                        break;
+                    case 2:
+                        echo "<td>Λύση Σχέσης-Παραίτηση</td>\n";
+                        break;
+                    case 3:
+                        echo "<td>Άδεια</td>\n";
+                        break;
+                    case 4:
+                        echo "<td>Διαθεσιμότητα</td>\n";
+                        break;
+                    case 5:
+                        echo "<td>Απουσία COVID-19</td>\n";
+                        break;
                 }
             }
             if (isset($_POST['dspsynol'])) {
-                $ymd=days2ymd($res1);    
+                $ymd = days2ymd($res1);
                 echo "<td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td>";
             }
             if (isset($_POST['dspemail'])) {
@@ -546,18 +573,18 @@ if ($flag) {
             }
             echo "</tr>";
 
-                
+
         }
         //}            
         echo "</tbody></table>";
-                        
+
         if ($synol_find) {
             $asd = $num1;
             echo "Εγγραφές που πληρούν τα κριτήρια: $asd";
         }
-        $page = ob_get_contents(); 
+        $page = ob_get_contents();
         ob_end_flush();
-            
+
         echo "<form action='../tools/2excel.php' method='post'>";
         echo "<input type='hidden' name = 'data' value='$page'>";
         //echo "<INPUT TYPE='submit' VALUE='Εξαγωγή στο excel'></form>";
@@ -567,7 +594,7 @@ if ($flag) {
     echo "</center>";
     echo "</body>";
     echo "</html>";
-                
-        
-}    
+
+
+}
 ?>

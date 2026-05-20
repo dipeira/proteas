@@ -52,6 +52,33 @@ function kladosCmb($conn, $show_name = false)
     echo "</select>";
 }
 
+function kladosMultiCmb($conn, $show_name = false)
+{
+    $query = "SELECT * from klados ORDER BY perigrafh";
+    $result = mysqli_query($conn, $query);
+    if (!$result) { 
+        echo "Δε βρέθηκαν αποτελέσματα...";
+        return;
+    }
+    $i = 0;
+    $num=mysqli_num_rows($result);
+    echo "<select name=\"klados[]\" id=\"klados\" class='form-select' multiple>";
+    echo "<option value=\"\"></option>";
+    while ($i < $num) 
+    {
+        $id=mysqli_result($result, $i, "id");
+        $per=mysqli_result($result, $i, "perigrafh");
+        $onoma=mysqli_result($result, $i, "onoma");
+        if ($show_name) {
+            echo "<option value=\"".$id."\">".$per.", ".$onoma."</option>";
+        } else {
+            echo "<option value=\"".$id."\">".$per."</option>";
+        }
+        $i++;
+    }
+    echo "</select>";
+}
+
 function typeCmb($conn)
 {
     $query = "SELECT * from ektaktoi_types";
