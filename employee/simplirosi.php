@@ -134,7 +134,7 @@
       $anathesi = 0;
       while ($row_yphr = mysqli_fetch_array($res_yphr)) {
         $schools_list[] = $row_yphr['name'] . " (" . $row_yphr['hours'] . " ώρες)";
-        $schools_html .= "<li><a class='underline' href=\"../school/school_status.php?org=".$row_yphr['id']."\">".$row_yphr['name']." (" .$row_yphr['hours']. ' ώρες)</li>';
+        $schools_html .= "<li><a class='underline' href=\"../school/school_status.php?org=".$row_yphr['id']."\">".$row_yphr['name']." (" .$row_yphr['hours']. ' ώρες)</a></li>';
         $anathesi += $row_yphr['hours'];
         $topo++;
       }

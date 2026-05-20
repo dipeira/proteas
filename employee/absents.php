@@ -68,7 +68,7 @@ if ($log->logincheck($_SESSION['loggedin']) == false) {
 <body>
     <?php require '../etc/menu.php'; ?>
     <center>
-        <h2>Εκπ/κοί που βρίσκονται σε άδεια</h2>
+        <h2>Εκπαιδευτικοί που βρίσκονται σε άδεια</h2>
         <?php
         if ($_SESSION['userlevel'] == 3) {
             echo "Σφάλμα: Δεν επιτρέπεται η πρόσβαση...";

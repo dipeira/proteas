@@ -89,7 +89,7 @@
             echo "<tbody>";
             foreach ($mon_diffs as $row) {
                echo "<tr>";
-               echo "<td><a class='underline' href='../employee/employee.php?id=".$row['empid']."&op=view'>".$row['surname']."</td>";
+               echo "<td><a class='underline' href='../employee/employee.php?id=".$row['empid']."&op=view'>".$row['surname']."</a></td>";
                $df = $row['wres'] - $row['hours'];
                echo "<td>".$row['name']."</td><td>".$row['wres']."</td><td>".$row['hours']."</td><td>$df</td>";
                echo "</tr>";
@@ -104,7 +104,7 @@
             echo "<tbody>";
             foreach ($ekt_diffs as $row) {
                echo "<tr>";
-               echo "<td><a class='underline' href='../employee/ektaktoi.php?id=".$row['empid']."&op=view'>".$row['surname']."</td>";
+               echo "<td><a class='underline' href='../employee/ektaktoi.php?id=".$row['empid']."&op=view'>".$row['surname']."</a></td>";
                $df = $row['wres'] - $row['hours'];
                echo "<td>".$row['name']."</td><td>".$row['wres']."</td><td>".$row['hours']."</td><td>$df</td>";
                echo "</tr>";

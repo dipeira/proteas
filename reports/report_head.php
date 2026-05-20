@@ -34,6 +34,7 @@ echo "<body>";
 require '../etc/menu.php';
 
 $req_type = isset($_GET['type']) ? (int) $_GET['type'] : 0;
+$show_personal = isset($_GET['show_personal']) ? 1 : 0;
 echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
 echo "<form method='GET' action='report_head.php' id='typeForm' style='margin: 20px 0;'>";
 echo "<p style='margin-bottom: 15px; font-weight: 500;'>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
@@ -42,12 +43,15 @@ echo "<label style='display: block; padding: 12px; cursor: pointer; border-radiu
 echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='1' " . ($req_type == 1 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Δημοτικά Σχολεία <i>(μόνο Δ/ντές)</i></label>";
 echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='2' " . ($req_type == 2 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Νηπιαγωγεία</label>";
 echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='3' " . ($req_type == 3 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Ειδικά Σχολεία</label>";
+echo "<hr style='border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;'>";
+echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='checkbox' name='show_personal' value='1' " . ($show_personal ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Εμφάνιση προσωπικών στοιχείων</label>";
 echo "</div>";
 echo "</form>";
 echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 
 function print_table($result, $num, $mysqlconnection, $mon = true)
 {
+  global $show_personal, $req_type;
   $i = 0;
   echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
   echo "<thead>";
@@ -55,12 +59,17 @@ function print_table($result, $num, $mysqlconnection, $mon = true)
   echo "<th>Ονομασία</th>";
   echo "<th>Λειτ.</th>";
   echo "<th>Θέση</th>";
+  if ($req_type == 1) {
+    echo "<th>Σε θητεία</th>";
+  }
   echo "<th>Επώνυμο</th>";
   echo "<th>Όνομα</th>";
   echo "<th>Κλάδος</th>";
-  echo "<th>Τηλέφωνο</th>";
-  echo "<th>email</th>";
-  echo "<th>ΑΦΜ</th>";
+  if ($show_personal) {
+    echo "<th>Τηλέφωνο</th>";
+    echo "<th>email</th>";
+    echo "<th>ΑΦΜ</th>";
+  }
   echo $mon ? "<th>ΑΜ</th>" : '';
   echo "</tr>";
   echo "</thead>\n<tbody>\n";
@@ -81,19 +90,39 @@ function print_table($result, $num, $mysqlconnection, $mon = true)
     $tel = $mon ? mysqli_result($result, $i, "tel") : mysqli_result($result, $i, "stathero") . ' / ' . mysqli_result($result, $i, "kinhto");
     $afm = mysqli_result($result, $i, "afm");
     $am = $mon ? mysqli_result($result, $i, "am") : 0;
+    $thiteia = mysqli_result($result, $i, "thiteia");
+    $thiteia_apo = mysqli_result($result, $i, "thiteia_apo");
+    $thiteia_ews = mysqli_result($result, $i, "thiteia_ews");
 
     echo "<tr>";
     echo "<td>$code</td>";
     echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
     echo "<td>$leitoyrg</td>";
     echo "<td>$thesi</td>";
+    
+    // Σε θητεία cell
+    if ($req_type == 1) {
+      $thiteia_cell = '';
+      if ($thiteia) {
+        $thiteia_cell = "<input type='checkbox' checked disabled style='margin-right: 5px; vertical-align: middle; accent-color: #10b981;'>";
+        if ($thiteia_apo && $thiteia_apo != '0000-00-00') {
+          $thiteia_cell .= "Από " . date("d-m-Y", strtotime($thiteia_apo)) . " έως " . date("d-m-Y", strtotime($thiteia_ews));
+        } else {
+          $thiteia_cell .= "έως " . date("d-m-Y", strtotime($thiteia_ews));
+        }
+      }
+      echo "<td>$thiteia_cell</td>";
+    }
+
     $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
-    echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
+    echo "<td><a class='underline' href=$link target='_blank'>$surname</a></td>";
     echo "<td>$name</td>";
     echo "<td>$klados</td>";
-    echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
-    echo "<td><a class='underline' href='mailto:$email'>$email</a></td>";
-    echo "<td>$afm</td>";
+    if ($show_personal) {
+      echo $_SESSION['userlevel'] < 3 ? "<td>$tel</td>" : "<td></td>";
+      echo "<td><a class='underline' href='mailto:$email'>$email</a></td>";
+      echo "<td>$afm</td>";
+    }
     echo $mon ? "<td>$am</td>" : '';
     echo "</tr>\n";
     $i++;
@@ -119,9 +148,9 @@ if ($req_type == 0) {
 }
 
 
-$query = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
+$query = "SELECT s.id as sid, s.code, s.name AS sname, s.thiteia, s.thiteia_apo, s.thiteia_ews, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
     WHERE s.type2 = $type2 AND s.type IN $type AND e.thesi IN $thesi AND status IN (1,3,5)";
-$query2 = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
+$query2 = "SELECT s.id as sid, s.code, s.name AS sname, s.thiteia, s.thiteia_apo, s.thiteia_ews, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
     WHERE s.type2 = $type2 AND s.type IN $type AND e.thesi = 1 AND status IN (1,3,5)";
 
 $result = mysqli_query($mysqlconnection, $query);

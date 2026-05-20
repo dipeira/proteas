@@ -8,10 +8,10 @@
     }
     
     if (!empty($contents)) {
-        // Strip image tags (icons) completely
-        $contents = preg_replace('/<img[^>]*>/i', '', $contents);
-        // Strip anchor tags (links) but keep their content
-        $contents = preg_replace('/<a\b[^>]*>(.*?)<\/a>/is', '$1', $contents);
+        // Replace checked checkboxes with a checkmark
+        $contents = preg_replace('/<input[^>]*checked[^>]*>/i', '✓ ', $contents);
+        // Strip all HTML tags except table structure and headings
+        $contents = strip_tags($contents, '<table><thead><tbody><tr><td><th><h2><h3>');
     }
     
     $filename = "export.xls";

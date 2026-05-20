@@ -117,9 +117,9 @@ $results    = $Paginator->getData( $limit, $page );
         echo "<tr>";
         echo "<td>".$results->data[$i]['id']."</a></td>";
         echo "<td>".$results->data[$i]['code']."</a></td>";
-        echo "<td><a href='school_status.php?org=".$results->data[$i]['id']."'>".$results->data[$i]['name']."</td>";
+        echo "<td><a href='school_status.php?org=".$results->data[$i]['id']."'>".$results->data[$i]['name']."</a></td>";
         echo "<td>".$results->data[$i]['tel']."</td>";
-        echo "<td><a href='mailto:".$results->data[$i]['email']."'>".$results->data[$i]['email']."</td>";
+        echo "<td><a href='mailto:".$results->data[$i]['email']."'>".$results->data[$i]['email']."</a></td>";
         echo "<td>".$results->data[$i]['organikothta']."</td>";
         echo "<td>";
         switch ($results->data[$i]['type']) {

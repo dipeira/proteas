@@ -51,7 +51,7 @@
 					<!--<li><a href="report_kena_eid_eaep.php?klados=3">Λειτουργ.Κενά Ειδικοτήτων ΕΑΕΠ</a></li>-->
 					<li><a href="<?=$site_root?>/reports/aksiologhsh_report.php">Αναφορά αξιολογούμενων</a></li>
 					<li><a href="<?=$site_root?>/reports/report_symv.php">Στατιστικά συμβούλων εκπαίδευσης</a></li>
-					<li><a href="<?=$site_root?>/employee/absents.php">Εκπ/κοί σε άδεια</a></li>
+					<li><a href="<?=$site_root?>/employee/absents.php">Εκπαιδευτικοί σε άδεια</a></li>
 					<?php
 					if ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') === 'gram-pispe'){
 						echo "<li><a href='$site_root/reports/school_comments.php'>Σχόλια/Ενέργειες σχολικών μονάδων</a></li>";

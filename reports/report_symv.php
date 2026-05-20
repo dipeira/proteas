@@ -158,7 +158,7 @@
           echo "<td>$code</td>";
           echo "<td><a class='underline' href='../school/school_status.php?org=$sid' target='_blank'>$sname</a></td>";
           $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
-          echo "<td><a class='underline' href=$link target='_blank'>$surname</td>";
+          echo "<td><a class='underline' href=$link target='_blank'>$surname</a></td>";
           echo "<td>$name</td>";
           echo "<td>$thesi</td>";
           echo "<td>$klados</td>";
