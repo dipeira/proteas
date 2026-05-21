@@ -344,6 +344,44 @@
             background: rgba(0, 0, 0, 0.5);
             opacity: 1;
         }
+        
+        /* Fancier 'Αναλυτικά' link button */
+        .analytika-link {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            color: #0369a1 !important;
+            border: 1px solid #7dd3fc;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none !important;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .analytika-link:hover {
+            background: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%);
+            color: #02507d !important;
+            border-color: #38bdf8;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(3, 105, 161, 0.15);
+        }
+        
+        .analytika-link svg {
+            width: 12px;
+            height: 12px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .analytika-link:hover svg {
+            transform: scale(1.1);
+        }
     </style>
 	<script type="text/javascript">
            
@@ -1023,6 +1061,7 @@ elseif ($_GET['op']=="view")
         echo "<tr><td>Σχόλια<br><br></td><td colspan='3'>".nl2br($comments)."</td></tr>"; 
         echo "<tr><td>Υποχρεωτικό ωράριο</td><td colspan='3'>$wres</td></tr>";
         
+        $analytika_link = "<br><a href='yphrethseis.php?emp_id=$id&type=anapl' target='_blank' class='analytika-link'><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' d='M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'/></svg>Αναλυτικά</a>";
         // check if multiple schools
         if ($multi)
         {
@@ -1033,13 +1072,13 @@ elseif ($_GET['op']=="view")
                 $counthrs += $hours_arr[$i];
                 }
                 if ($count > 1)
-                echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
+                echo "<tr><td>Σχ.Υπηρέτησης$analytika_link</td><td colspan=3>$sxoleia<br><small>($counthrs ώρες σε $count Σχολεία)</small></td></tr>";
                 else
-                echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3>$sxoleia</td></tr>";
+                echo "<tr><td>Σχ.Υπηρέτησης$analytika_link</td><td colspan=3>$sxoleia</td></tr>";
         }
         else
         {
-                echo "<tr><td>Σχ.Υπηρέτησης</td><td colspan=3><a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a></td></tr>";
+                echo "<tr><td>Σχ.Υπηρέτησης$analytika_link</td><td colspan=3><a href=\"../school/school_status.php?org=$sx_yphrethshs_id\">$sx_yphrethshs</a></td></tr>";
         }
         
         echo "<tr><td><a id='archive-toggle' href='#'>Ιστορικό αλλαγών υπηρετήσεων</a></td><td colspan=3>";

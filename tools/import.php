@@ -310,6 +310,7 @@
     echo "<tr><td><a href='ektaktoi_import_minedu.php' class='link-sample'>Εισαγωγή αναπληρωτών (από αρχεία υπουργείου)</a></td></tr>";
     echo "<tr><td><a href='import_postgrad.php' class='link-sample'>Εισαγωγή μεταπτυχιακών τίτλων</a></td></tr>";
     echo "<tr><td><a href='import_organikes.php' class='link-sample'>Εισαγωγή οργανικών θέσεων</a></td></tr>";
+    echo "<tr><td><a href='import_yphrethsh.php' class='link-sample'>Εισαγωγή υπηρετήσεων (από αρχείο τοποθετήσεων XLS)</a></td></tr>";
     echo "</table>";
     echo "</div>";
 
