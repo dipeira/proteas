@@ -22,14 +22,22 @@ if ($_GET['op'] == 'delete') {
     }
     $id = intval($_GET['id']);
     // Fetch details first to redirect back
-    $res = mysqli_query($mysqlconnection, "SELECT emp_id, mon_anapl FROM yphrethsh_ext WHERE id = $id");
+    $res = mysqli_query($mysqlconnection, "SELECT emp_id, mon_anapl, afm FROM yphrethsh_ext WHERE id = $id");
     if ($row = mysqli_fetch_assoc($res)) {
         $emp_id = $row['emp_id'];
         $type = ($row['mon_anapl'] == 'Μόνιμος') ? 'mon' : 'anapl';
+        $afm = $row['afm'];
+        if (empty($afm)) {
+            $table = ($type == 'mon') ? 'employee' : 'ektaktoi';
+            $afm_res = mysqli_query($mysqlconnection, "SELECT afm FROM $table WHERE id = $emp_id");
+            if ($afm_res && $afm_row = mysqli_fetch_assoc($afm_res)) {
+                $afm = $afm_row['afm'];
+            }
+        }
         
         // Delete record
         mysqli_query($mysqlconnection, "DELETE FROM yphrethsh_ext WHERE id = $id");
-        header("Location: yphrethseis.php?emp_id=$emp_id&type=$type&msg=deleted");
+        header("Location: yphrethseis.php?afm=$afm&msg=deleted");
         exit;
     }
     die("<h3>Σφάλμα: Δεν βρέθηκε η εγγραφή.</h3>");
@@ -44,6 +52,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update') {
     $id = intval($_POST['id']);
     $emp_id = intval($_POST['emp_id']);
     $type = $_POST['type'];
+    $afm = trim($_POST['afm']);
     
     $school_name = trim($_POST['school_name']);
     $sxesh = trim($_POST['sxesh']);
@@ -57,16 +66,37 @@ if (isset($_POST['action']) && $_POST['action'] == 'update') {
     $state = trim($_POST['state']);
     $sxol_etos = trim($_POST['sxol_etos']);
     
-    // Resolve school name to ID
+    // Resolve school name to ID or match existing custom name
+    $sch_id_val = 'NULL';
+    $sch_code_val = 'NULL';
+    $sch_name_val = 'NULL';
+    $is_valid = false;
+    
     $sch_id = getSchoolID($school_name, $mysqlconnection);
-    if (!$sch_id) {
+    if ($sch_id) {
+        $sch_id_val = $sch_id;
+        $code = getSchoolCode($sch_id, $mysqlconnection);
+        $sch_code_val = $code ? "'$code'" : "NULL";
+        $is_valid = true;
+    } else {
+        // Check if it matches existing sch_name on this record
+        $check_rec = mysqli_query($mysqlconnection, "SELECT sch_name, sch_code FROM yphrethsh_ext WHERE id = $id");
+        if ($check_rec && $check_row = mysqli_fetch_assoc($check_rec)) {
+            if ($check_row['sch_name'] === $school_name) {
+                $sch_name_val = "'" . mysqli_real_escape_string($mysqlconnection, $school_name) . "'";
+                $sch_code_val = $check_row['sch_code'] ? "'" . mysqli_real_escape_string($mysqlconnection, $check_row['sch_code']) . "'" : "NULL";
+                $is_valid = true;
+            }
+        }
+    }
+    
+    if (!$is_valid) {
         $error = "Το σχολείο '" . htmlspecialchars($school_name) . "' δεν βρέθηκε. Παρακαλώ επιλέξτε ένα έγκυρο σχολείο από την αναδυόμενη λίστα.";
     } else {
-        $sch_code = getSchoolCode($sch_id, $mysqlconnection);
-        
         $sql = "UPDATE yphrethsh_ext SET 
-                  sch_id = $sch_id,
-                  sch_code = '$sch_code',
+                  sch_id = $sch_id_val,
+                  sch_code = $sch_code_val,
+                  sch_name = $sch_name_val,
                   sxesh = " . ($sxesh ? "'$sxesh'" : "NULL") . ",
                   sxesh_topo = " . ($sxesh_topo ? "'$sxesh_topo'" : "NULL") . ",
                   date_from = " . ($date_from ? "'$date_from'" : "NULL") . ",
@@ -77,7 +107,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'update') {
                 WHERE id = $id";
         
         if (mysqli_query($mysqlconnection, $sql)) {
-            header("Location: yphrethseis.php?emp_id=$emp_id&type=$type&msg=updated");
+            header("Location: yphrethseis.php?afm=$afm&msg=updated");
             exit;
         } else {
             $error = "Αποτυχία ενημέρωσης: " . mysqli_error($mysqlconnection);
@@ -86,26 +116,45 @@ if (isset($_POST['action']) && $_POST['action'] == 'update') {
 }
 
 // Context parameters
+$afm = trim($_GET['afm'] ?: $_POST['afm']);
 $emp_id = intval($_GET['emp_id'] ?: $_POST['emp_id']);
 $type = $_GET['type'] ?: $_POST['type'];
 
-if (!$emp_id || !in_array($type, ['mon', 'anapl'])) {
+if (!$afm && $emp_id && in_array($type, ['mon', 'anapl'])) {
+    // Get afm from employee or ektaktoi for backward compatibility
+    $table = ($type == 'mon') ? 'employee' : 'ektaktoi';
+    $afm_res = mysqli_query($mysqlconnection, "SELECT afm FROM $table WHERE id = $emp_id");
+    if ($afm_res && $row = mysqli_fetch_assoc($afm_res)) {
+        $afm = $row['afm'];
+    }
+}
+
+if (!$afm) {
     die("<h3>Σφάλμα: Μη έγκυρες παράμετροι.</h3>");
 }
+$afm = mysqli_real_escape_string($mysqlconnection, $afm);
 
-if ($type == 'mon') {
-    $emp_query = "SELECT surname, name, afm FROM employee WHERE id = $emp_id";
+// Try to find the employee in 'employee' table (mon)
+$emp_query = "SELECT surname, name, afm, id, 'mon' as type FROM employee WHERE afm = '$afm'";
+$emp_res = mysqli_query($mysqlconnection, $emp_query);
+if ($emp_res && mysqli_num_rows($emp_res) > 0) {
+    $employee = mysqli_fetch_assoc($emp_res);
+    $emp_id = intval($employee['id']);
+    $type = 'mon';
     $mon_anapl_db = 'Μόνιμος';
 } else {
-    $emp_query = "SELECT surname, name, afm FROM ektaktoi WHERE id = $emp_id";
-    $mon_anapl_db = 'Αναπληρωτής';
+    // Try to find the employee in 'ektaktoi' table (anapl)
+    $emp_query = "SELECT surname, name, afm, id, 'anapl' as type FROM ektaktoi WHERE afm = '$afm'";
+    $emp_res = mysqli_query($mysqlconnection, $emp_query);
+    if ($emp_res && mysqli_num_rows($emp_res) > 0) {
+        $employee = mysqli_fetch_assoc($emp_res);
+        $emp_id = intval($employee['id']);
+        $type = 'anapl';
+        $mon_anapl_db = 'Αναπληρωτής';
+    } else {
+        die("<h3>Σφάλμα: Ο εκπαιδευτικός δεν βρέθηκε.</h3>");
+    }
 }
-
-$emp_res = mysqli_query($mysqlconnection, $emp_query);
-if (!$emp_res || mysqli_num_rows($emp_res) == 0) {
-    die("<h3>Σφάλμα: Ο εκπαιδευτικός δεν βρέθηκε.</h3>");
-}
-$employee = mysqli_fetch_assoc($emp_res);
 
 $root_path = '../';
 $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
@@ -200,7 +249,7 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
         }
         ?>
         <div class="mb-6">
-            <a href="yphrethseis.php?emp_id=<?php echo $emp_id; ?>&type=<?php echo $type; ?>" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">
+            <a href="yphrethseis.php?afm=<?php echo htmlspecialchars($employee['afm']); ?>" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">
                 &larr; Επιστροφή στις υπηρετήσεις
             </a>
         </div>
@@ -222,10 +271,11 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
                 <input type="hidden" name="id" value="<?php echo $record['id']; ?>" />
                 <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>" />
                 <input type="hidden" name="type" value="<?php echo $type; ?>" />
+                <input type="hidden" name="afm" value="<?php echo htmlspecialchars($employee['afm']); ?>" />
                 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1">Σχολείο Υπηρέτησης</label>
-                    <input type="text" name="school_name" id="school_name" value="<?php echo htmlspecialchars($record['school_name']); ?>" class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-blue-500" required />
+                    <input type="text" name="school_name" id="school_name" value="<?php echo htmlspecialchars($record['school_name'] ?: $record['sch_name']); ?>" class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-blue-500" required />
                 </div>
                 
                 <div>
@@ -265,7 +315,7 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
                 </div>
                 
                 <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
-                    <a href="yphrethseis.php?emp_id=<?php echo $emp_id; ?>&type=<?php echo $type; ?>" class="px-4 py-2 border border-slate-300 rounded text-slate-700 hover:bg-slate-50 transition">
+                    <a href="yphrethseis.php?afm=<?php echo htmlspecialchars($employee['afm']); ?>" class="px-4 py-2 border border-slate-300 rounded text-slate-700 hover:bg-slate-50 transition">
                         Ακύρωση
                     </a>
                     <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow transition">
@@ -290,7 +340,7 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
         $query = "SELECT y.*, s.name as school_name 
                   FROM yphrethsh_ext y 
                   LEFT JOIN school s ON y.sch_id = s.id 
-                  WHERE y.emp_id = $emp_id 
+                  WHERE (y.afm = '$afm' OR y.emp_id = $emp_id) 
                     AND y.mon_anapl = '$mon_anapl_db'
                   ORDER BY y.sxol_etos DESC, y.date_from ASC";
         $result = mysqli_query($mysqlconnection, $query);
@@ -318,7 +368,7 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
             <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-100 pb-4 mb-6">
                 <div>
                     <h1 class="text-2xl font-bold text-slate-800">Υπηρετήσεις Εκπαιδευτικού</h1>
-                    <p class="text-blue-600 font-semibold text-sm tracking-wide uppercase mt-1">Υπηρετήσεις από σύστημα MySchool</p>
+                    <p class="text-blue-600 font-semibold text-sm tracking-wide mt-1">Υπηρετήσεις από σύστημα MySchool</p>
                 </div>
                 <div class="mt-4 md:mt-0 text-slate-500 text-sm border-t md:border-t-0 md:border-l border-slate-200 pt-4 md:pt-0 md:pl-6">
                     <div>Όνομα: <strong class="text-slate-800"><?php echo htmlspecialchars($employee['surname'] . ' ' . $employee['name']); ?></strong></div>
@@ -382,7 +432,7 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
                                         ?>
                                             <tr class="hover:bg-slate-50/80 transition-colors">
                                                 <td class="px-6 py-4">
-                                                    <div class="font-semibold text-slate-800"><?php echo htmlspecialchars($row['school_name'] ?: 'Άγνωστο'); ?></div>
+                                                    <div class="font-semibold text-slate-800"><?php echo htmlspecialchars($row['school_name'] ?: ($row['sch_name'] ?: 'Άγνωστο')); ?></div>
                                                     <div class="text-xs text-slate-400">Κωδικός: <?php echo htmlspecialchars($row['sch_code'] ?: '-'); ?></div>
                                                 </td>
                                                 <td class="px-6 py-4 text-slate-600 text-sm">
@@ -427,7 +477,7 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
                                                     <td class="px-6 py-4 text-center whitespace-nowrap">
                                                         <div class="flex items-center justify-center space-x-2">
                                                             <span title="Επεξεργασία">
-                                                                <a href="yphrethseis.php?op=edit&id=<?php echo $row['id']; ?>&emp_id=<?php echo $emp_id; ?>&type=<?php echo $type; ?>" class="hover:opacity-80 transition">
+                                                                <a href="yphrethseis.php?op=edit&id=<?php echo $row['id']; ?>&afm=<?php echo htmlspecialchars($employee['afm']); ?>" class="hover:opacity-80 transition">
                                                                     <img style="border: 0pt none;" src="../images/edit_action.png" alt="Επεξεργασία" />
                                                                 </a>
                                                             </span>

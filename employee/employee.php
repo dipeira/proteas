@@ -381,7 +381,7 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             display: inline-flex !important;
             align-items: center;
             gap: 4px;
-            margin-top: 6px;
+            margin-top: 6px !important;
             padding: 4px 8px;
             background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
             color: #0369a1 !important;
@@ -1293,7 +1293,7 @@ elseif ($_GET['op']=="view") {
         $sxol_str .=  "$yphr_arr[$i] ($hours_arr[$i] ώρες) ";
         $counthrs += $hours_arr[$i];
     }
-    $analytika_link = "<br><a href='yphrethseis.php?emp_id=$id&type=mon' target='_blank' class='analytika-link'><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' d='M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'/></svg>Αναλυτικά</a>";
+    $analytika_link = "<br><a href='yphrethseis.php?afm=$afm' target='_blank' class='analytika-link'><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' d='M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'/></svg>Αναλυτικά</a>";
     if ($count>1) {
         if ($counthrs > $wres) {
             echo "<tr class='error-highlight'><td>Σχ.Υπηρέτησης$analytika_link</td><td colspan=3>$sxoleia<br><strong>$counthrs ώρες > $wres υποχρ.ωραρίου: ΣΦΑΛΜΑ! Παρακαλώ διορθώστε!!!</strong></td></tr>";

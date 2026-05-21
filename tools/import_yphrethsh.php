@@ -272,6 +272,7 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                   $sch_code = isset($val[7]) ? trim($val[7]) : '';
                   $sch_name = isset($val[8]) ? trim($val[8]) : '';
                   $hours = isset($val[14]) ? (int)trim($val[14]) : 0;
+                  $area = isset($val[19]) ? trim($val[19]) : '';
                   
                   if (empty($afm)) {
                       continue;
@@ -286,6 +287,38 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                   $date_to = $date_to_php ? date("Y-m-d", $date_to_php) : null;
                   
                   $state = isset($val[17]) ? trim($val[17]) : '';
+                  
+                  // Calculate sxol_etos dynamically based on date_from/date_to
+                  $row_sxol_etos = $sxol_etos;
+                  $ref_date = null;
+                  if ($date_from && $date_to) {
+                      $t_from = strtotime($date_from);
+                      $t_to = strtotime($date_to);
+                      if ($t_from && $t_to && $t_to >= $t_from) {
+                          // Use the midpoint of the range to determine which school year it belongs to
+                          $midpoint = $t_from + ($t_to - $t_from) / 2;
+                          $ref_date = date('Y-m-d', $midpoint);
+                      } else {
+                          $ref_date = $date_from ?: $date_to;
+                      }
+                  } else {
+                      $ref_date = $date_from ?: $date_to;
+                  }
+                  
+                  if ($ref_date) {
+                      $time_ref = strtotime($ref_date);
+                      if ($time_ref) {
+                          $year = (int)date('Y', $time_ref);
+                          $month = (int)date('n', $time_ref);
+                          if ($month >= 9) {
+                              $start_year = $year;
+                          } else {
+                              $start_year = $year - 1;
+                          }
+                          $end_year = $start_year + 1;
+                          $row_sxol_etos = $start_year . substr((string)$end_year, -2);
+                      }
+                  }
                   
                   $emp_id = null;
                   $mon_anapl = null;
@@ -322,6 +355,7 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                   }
                   
                   $sch_id = null;
+                  $row_sch_name = null;
                   if (!empty($sch_code)) {
                       $sch_query = "SELECT id, name FROM school WHERE code = '$sch_code' LIMIT 1";
                       $sch_res = mysqli_query($mysqlconnection, $sch_query);
@@ -329,10 +363,11 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                           $sch_row = mysqli_fetch_assoc($sch_res);
                           $sch_id = $sch_row['id'];
                       } else {
-                          $warnings_list[] = "Γραμμή $row: Το σχολείο με κωδικό <strong>$sch_code</strong> ($sch_name) δεν βρέθηκε στον πίνακα school.";
+                          $row_sch_name = !empty($area) ? "$sch_name ($area)" : $sch_name;
+                          $warnings_list[] = "Γραμμή $row: ΑΦΜ: <strong>$afm</strong> ($surname $name) - Το σχολείο με κωδικό <strong>$sch_code</strong> ($sch_name) δεν βρέθηκε στον πίνακα school. Αποθηκεύτηκε ως κείμενο.";
                       }
                   } else {
-                      $warnings_list[] = "Γραμμή $row: Δεν καθορίστηκε κωδικός σχολείου για τον εκπαιδευτικό με ΑΦΜ $afm ($surname $name).";
+                      $warnings_list[] = "Γραμμή $row: ΑΦΜ: <strong>$afm</strong> ($surname $name) - Δεν καθορίστηκε κωδικός σχολείου για τον εκπαιδευτικό.";
                   }
                   
                   // Check if row already exists
@@ -341,7 +376,7 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                                     AND sch_code = '$sch_code' 
                                     AND date_from = " . ($date_from ? "'$date_from'" : "NULL") . " 
                                     AND date_to = " . ($date_to ? "'$date_to'" : "NULL") . "
-                                    AND sxol_etos = '$sxol_etos'
+                                    AND sxol_etos = '$row_sxol_etos'
                                   LIMIT 1";
                   $check_res = mysqli_query($mysqlconnection, $check_query);
                   
@@ -351,7 +386,7 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                   }
                   
                   // Insert record
-                  $sql = "INSERT INTO yphrethsh_ext (afm, mon_anapl, emp_id, sxesh, sxesh_topo, sch_code, sch_id, date_from, date_to, hours, state, sxol_etos)
+                  $sql = "INSERT INTO yphrethsh_ext (afm, mon_anapl, emp_id, sxesh, sxesh_topo, sch_code, sch_id, sch_name, date_from, date_to, hours, state, sxol_etos)
                           VALUES (
                             " . ($afm ? "'$afm'" : "NULL") . ",
                             " . ($mon_anapl ? "'$mon_anapl'" : "NULL") . ",
@@ -360,11 +395,12 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
                             " . ($sxesh_topo ? "'$sxesh_topo'" : "NULL") . ",
                             " . ($sch_code ? "'$sch_code'" : "NULL") . ",
                             " . ($sch_id ? $sch_id : "NULL") . ",
+                            " . ($row_sch_name ? "'" . mysqli_real_escape_string($mysqlconnection, $row_sch_name) . "'" : "NULL") . ",
                             " . ($date_from ? "'$date_from'" : "NULL") . ",
                             " . ($date_to ? "'$date_to'" : "NULL") . ",
                             " . $hours . ",
                             " . ($state ? "'$state'" : "NULL") . ",
-                            " . ($sxol_etos ? "'$sxol_etos'" : "NULL") . "
+                            " . ($row_sxol_etos ? "'$row_sxol_etos'" : "NULL") . "
                           )";
                   
                   if (mysqli_query($mysqlconnection, $sql)) {
@@ -466,14 +502,15 @@ $page_title = 'Εισαγωγή υπηρετήσεων από αρχείο excel
       } else {
           // Display Upload Form
           ?>
-          <h2>Εισαγωγή Υπηρετήσεων από Excel (.xls)</h2>
+          <h2>Εισαγωγή Υπηρετήσεων από Excel (.xls) συστήματος MySchool</h2>
           <p class="subtitle">Εισαγωγή δεδομένων υπηρετήσεων στον πίνακα yphrethsh_ext</p>
           
           <div class="alert alert-info">
             <strong>Πληροφορίες αρχείου Excel:</strong><br>
             • Το αρχείο πρέπει να είναι μορφής Excel 97-2003 (<strong>.xls</strong>).<br>
+            • Εξάγεται από το MySchool (Προσωπικό -> Τοποθετήσεις εργαζομένων στην περιοχή ευθύνης μου -> Αναζήτηση (επιλέξτε μόνο έτος) -> Εξαγωγή).<br>
             • Οι γραμμές 1 και 2 θεωρούνται κεφαλίδες. Τα δεδομένα πρέπει να ξεκινούν από τη <strong>γραμμή 3</strong>.<br>
-            • Απαιτούμενες στήλες: <strong>Α.Φ.Μ.</strong> (στήλη B), <strong>Σχέση εργασίας</strong> (στήλη F), <strong>Κωδικός σχολείου</strong> (στήλη H), <strong>Ώρες</strong> (στήλη O), <strong>Από</strong> (στήλη P), <strong>Έως</strong> (στήλη Q), <strong>Κατάσταση</strong> (στήλη R).
+            • Απαιτούμενες στήλες: <strong>Α.Φ.Μ.</strong> (στήλη B), <strong>Σχέση εργασίας</strong> (στήλη F), <strong>Κωδικός σχολείου</strong> (στήλη H), <strong>Ώρες</strong> (στήλη O), <strong>Από</strong> (στήλη P), <strong>Έως</strong> (στήλη Q), <strong> Κατάσταση</strong> (στήλη R).
           </div>
           
           <form enctype="multipart/form-data" action="import_yphrethsh.php" method="post">
