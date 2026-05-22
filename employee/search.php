@@ -354,7 +354,7 @@
 		echo "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3'>";
 
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Μόνιμος/Αναπληρωτής</label>";
+		echo "<label class='form-label'><strong>Μόνιμος / Αναπληρωτής</strong></label>";
 		echo "<select name=\"emptype\" class='form-select'>";
 		echo "<option value=\"1\">Μόνιμος</option>";
 		echo "<option value=\"2\">Αναπληρωτής</option>";
@@ -592,6 +592,25 @@
 		echo "</div>";
 		echo "</div>";
 		
+		echo "<div class='form-group'>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Ώρες υποχρεωτικού ωραρίου</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dspwrario' id='dspwrario' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dspwrario' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
+		echo "<select name='wrario' id='wrario' class='form-select'>";
+		echo "<option value=''></option>";
+		echo "<option value='30'>30</option>";
+		echo "<option value='25'>25</option>";
+		echo "<option value='24'>24</option>";
+		echo "<option value='23'>23</option>";
+		echo "<option value='22'>22</option>";
+		echo "<option value='21'>21</option>";
+		echo "</select>";
+		echo "</div>";
+		
 		echo "</div>"; // grid
 		echo "</div>"; // form-section
 		
@@ -613,10 +632,11 @@
 		echo "<label for='dspmon' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
 		echo "</span>";
 		echo "</label>";
-		echo "<div class='checkbox-group'>";
-		echo "<input type='checkbox' name='monimopoihsh' id='monimopoihsh' />";
-		echo "<label for='monimopoihsh' class='checkbox-label'>Ναι</label>";
-		echo "</div>";
+		echo "<select name='monimopoihsh' id='monimopoihsh' class='form-select'>";
+		echo "<option value=''></option>";
+		echo "<option value='1'>Ναι</option>";
+		echo "<option value='0'>Όχι</option>";
+		echo "</select>";
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
@@ -627,10 +647,11 @@
 		echo "<label for='dspaks' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
 		echo "</span>";
 		echo "</label>";
-		echo "<div class='checkbox-group'>";
-		echo "<input type='checkbox' name='aksiologhsh' id='aksiologhsh' />";
-		echo "<label for='aksiologhsh' class='checkbox-label'>Ναι</label>";
-		echo "</div>";
+		echo "<select name='aksiologhsh' id='aksiologhsh' class='form-select'>";
+		echo "<option value=''></option>";
+		echo "<option value='1'>Ναι</option>";
+		echo "<option value='0'>Όχι</option>";
+		echo "</select>";
 		echo "</div>";
 		
 		echo "</div>"; // grid

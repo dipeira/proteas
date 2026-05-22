@@ -249,6 +249,13 @@ if (strlen($_POST['met_did']) > 0) {
     $query .= " met_did like '" . $_POST['met_did'] . "'";
     $flag = 1;
 }
+if (isset($_POST['wrario']) && strlen($_POST['wrario']) > 0) {
+    if ($flag) {
+        $query .= $op;
+    }
+    $query .= " e.wres = " . intval($_POST['wrario']);
+    $flag = 1;
+}
 if (strlen($_POST['pyears']) > 0 || strlen($_POST['pmonths']) > 0 || strlen($_POST['pdays']) > 0) {
     if (!$is_anapl) {
         if ($flag) {
@@ -308,7 +315,7 @@ if (strlen($_POST['comments']) > 0) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " comments like '" . $_POST['comments'] . "'";
+    $query .= " comments like '%" . mysqli_real_escape_string($mysqlconnection, $_POST['comments']) . "%'";
     $flag = 1;
 }
 if (strlen($_POST['email']) > 0) {
@@ -319,19 +326,19 @@ if (strlen($_POST['email']) > 0) {
     $flag = 1;
 }
 
-if ($_POST['monimopoihsh'] == 'on' && !$is_anapl) {
+if (isset($_POST['monimopoihsh']) && strlen($_POST['monimopoihsh']) > 0 && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " monimopoihsh=1";
+    $query .= " monimopoihsh=" . intval($_POST['monimopoihsh']);
     $flag = 1;
 }
 
-if ($_POST['aksiologhsh'] == 'on' && !$is_anapl) {
+if (isset($_POST['aksiologhsh']) && strlen($_POST['aksiologhsh']) > 0 && !$is_anapl) {
     if ($flag) {
         $query .= $op;
     }
-    $query .= " aksiologhsh=1";
+    $query .= " aksiologhsh=" . intval($_POST['aksiologhsh']);
     $flag = 1;
 }
 
@@ -397,6 +404,9 @@ if ($flag) {
         if (isset($_POST['dspproyhp'])) {
             echo "<th>Προϋπηρεσία</th>\n";
         }
+        if (isset($_POST['dspwrario'])) {
+            echo "<th>Υποχρ. Ωράριο</th>\n";
+        }
         if (isset($_POST['dspvathmos'])) {
             echo "<th>Βαθμός</th>\n";
         }
@@ -455,6 +465,7 @@ if ($flag) {
             $katast = mysqli_result($result, $i, "status");
             $email = mysqli_result($result, $i, 'email');
             $_psd = mysqli_result($result, $i, 'email_psd');
+            $wres = mysqli_result($result, $i, "wres");
             if (!$is_anapl) {
                 $monimopoihsh = mysqli_result($result, $i, 'monimopoihsh') == 1 ? 'Ναι' : 'Όχι';
                 $aksiologhsh = mysqli_result($result, $i, 'aksiologhsh') == 1 ? 'Ναι' : 'Όχι';
@@ -532,6 +543,9 @@ if ($flag) {
             if (isset($_POST['dspproyhp'])) {
                 $ymd = days2ymd($proyp);
                 echo "<td>$ymd[0] Έτη, $ymd[1] Μήνες, $ymd[2] Ημέρες</td>\n";
+            }
+            if (isset($_POST['dspwrario'])) {
+                echo "<td>$wres</td>\n";
             }
             if (isset($_POST['dspvathmos'])) {
                 echo "<td>$vathm</td>\n";
