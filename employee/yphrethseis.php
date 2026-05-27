@@ -306,7 +306,20 @@ $page_title = "Υπηρετήσεις Εκπαιδευτικού (MySchool)";
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Κατάσταση</label>
-                        <input type="text" name="state" value="<?php echo htmlspecialchars($record['state']); ?>" class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-blue-500" />
+                        <?php
+                        $current_state = '';
+                        if ($record['state']) {
+                            $current_state = mb_strtoupper(trim($record['state']), 'UTF-8');
+                            $accents = array('Ά' => 'Α', 'Έ' => 'Ε', 'Ή' => 'Η', 'Ί' => 'Ι', 'Ό' => 'Ο', 'Ύ' => 'Υ', 'Ώ' => 'Ω');
+                            $current_state = strtr($current_state, $accents);
+                        }
+                        ?>
+                        <select name="state" class="w-full px-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-blue-500">
+                            <option value="">-</option>
+                            <option value="ΠΑΡΟΥΣΙΑ" <?php if ($current_state === 'ΠΑΡΟΥΣΙΑ') echo 'selected'; ?>>ΠΑΡΟΥΣΙΑ</option>
+                            <option value="ΑΠΟΥΣΙΑ" <?php if ($current_state === 'ΑΠΟΥΣΙΑ') echo 'selected'; ?>>ΑΠΟΥΣΙΑ</option>
+                            <option value="ΠΑΡΗΛΘΕ" <?php if ($current_state === 'ΠΑΡΗΛΘΕ') echo 'selected'; ?>>ΠΑΡΗΛΘΕ</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Σχολικό Έτος</label>
