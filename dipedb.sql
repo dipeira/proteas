@@ -687,7 +687,35 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_archive` (
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Ενημερώθηκε'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---------------------------------------------------------
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `yphrethsh_ext`
+--
+
+CREATE TABLE IF NOT EXISTS `yphrethsh_ext` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `afm` varchar(11) DEFAULT NULL,
+  `mon_anapl` varchar(20) DEFAULT NULL,
+  `emp_id` int(11) DEFAULT NULL,
+  `sxesh` varchar(100) DEFAULT NULL,
+  `sxesh_topo` varchar(100) DEFAULT NULL,
+  `sch_code` varchar(10) DEFAULT NULL,
+  `sch_id` int(11) DEFAULT NULL,
+  `date_from` date DEFAULT NULL,
+  `date_to` date DEFAULT NULL,
+  `hours` int(11) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  `sxol_etos` varchar(10) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `added_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `emp_id` (`emp_id`),
+  KEY `sch_id` (`sch_id`),
+  KEY `afm` (`afm`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `postgrad`
