@@ -702,6 +702,7 @@ CREATE TABLE IF NOT EXISTS `yphrethsh_ext` (
   `sxesh_topo` varchar(100) DEFAULT NULL,
   `sch_code` varchar(10) DEFAULT NULL,
   `sch_id` int(11) DEFAULT NULL,
+  `sch_name` varchar(150) DEFAULT NULL,
   `date_from` date DEFAULT NULL,
   `date_to` date DEFAULT NULL,
   `hours` int(11) DEFAULT NULL,
