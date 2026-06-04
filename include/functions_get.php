@@ -1,26 +1,27 @@
 <?php
 // Returns username from a given userid
-function getUser($id, $conn){
-    $query = "SELECT username from logon where userid=".$id;
-    
+function getUser($id, $conn)
+{
+    $query = "SELECT username from logon where userid=" . $id;
+
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
+    if (!$result) {
         return;
     }
     $row = mysqli_fetch_assoc($result);
     return $row['username'];
 }
 
-function getKlados($id,$conn,$full = false)
+function getKlados($id, $conn, $full = false)
 {
-    $query = "SELECT perigrafh,onoma from klados where id=".$id;
+    $query = "SELECT perigrafh,onoma from klados where id=" . $id;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
     //    die('Could not query:' . mysqli_error($conn));
     $row = mysqli_fetch_assoc($result);
     return $full ? $row['perigrafh'] . ' (' . $row['onoma'] . ')' :
-      $row['perigrafh'];
-      //"<span title='".$row['onoma']."'>".$row['perigrafh']."</span>";
+        $row['perigrafh'];
+    //"<span title='".$row['onoma']."'>".$row['perigrafh']."</span>";
 }
 
 function getKladosFromDescription($desc, $conn)
@@ -28,34 +29,34 @@ function getKladosFromDescription($desc, $conn)
     $query = "
         SELECT id 
         FROM klados 
-        WHERE '".$desc."' LIKE CONCAT(perigrafh, '%')
+        WHERE '" . $desc . "' LIKE CONCAT(perigrafh, '%')
         LIMIT 1
     ";
     $result = mysqli_query($conn, $query);
     return mysqli_result($result, 0);
 }
-    
-function getSchool($id,$conn)
+
+function getSchool($id, $conn)
 {
-    $query = "SELECT name from school where id=".$id;
+    $query = "SELECT name from school where id=" . $id;
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
+    if (!$result) {
         return;
     }
     //    die('Could not query:' . mysqli_error($conn));
-               //else
-    return mysqli_result($result, 0);    
+    //else
+    return mysqli_result($result, 0);
 }
-    
-function getSchoolID($name,$conn)
+
+function getSchoolID($name, $conn)
 {
-    $query = "SELECT id from school where name='".$name."'";
+    $query = "SELECT id from school where name='" . $name . "'";
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
+    if (!$result) {
         return false;
     } else {
         return mysqli_result($result, 0);
-    }    
+    }
 }
 function getSchoolFromCode($code, $conn)
 {
@@ -67,7 +68,7 @@ function getSchoolFromCode($code, $conn)
     //die('Could not query:' . mysqli_error($conn));
     else {
         return mysqli_result($result, 0);
-    }    
+    }
 }
 function getSchoolNameFromCode($code, $conn)
 {
@@ -79,21 +80,22 @@ function getSchoolNameFromCode($code, $conn)
     //die('Could not query:' . mysqli_error($conn));
     else {
         return mysqli_result($result, 0);
-    }    
+    }
 }
-function getSchoolCode($id,$conn)
+function getSchoolCode($id, $conn)
 {
-    $query = "SELECT code from school where id=".$id;
+    $query = "SELECT code from school where id=" . $id;
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
+    if (!$result) {
         return;
     }
     //    die('Could not query:' . mysqli_error($conn));
-               //else
-    return mysqli_result($result, 0);    
+    //else
+    return mysqli_result($result, 0);
 }
 
-function getEmail($id, $conn) {
+function getEmail($id, $conn)
+{
     $query = "SELECT email from school WHERE id = $id";
     $result = mysqli_query($conn, $query);
     if (!mysqli_num_rows($result)) {
@@ -103,37 +105,38 @@ function getEmail($id, $conn) {
     return $row['email'];
 }
 
-function get_school_type($id, $conn) {
-  $query = "SELECT type,type2 from school where id = $id";
-  $result = mysqli_query($conn, $query);
-  $row = mysqli_fetch_array($result);
-  switch ($row['type2']) {
-    case 0:
-      $sch_type2 = 'Δημόσιο';
-      break;
-    case 1:
-      $sch_type2 = 'Ιδιωτικό';
-      break;
-    case 2:
-      $sch_type2 = 'Ειδικό';
-      break;
-  }
-  switch ($row['type']) {
-    case 0:
-      $sch_type = 'ς Φορέας/Περιοχή κλπ';
-      break;
-    case 1:
-      $sch_type = ' Δημοτικό Σχολείο';
-      break;
-    case 2:
-      $sch_type = ' Νηπιαγωγείο';
-      break;
-  }
-  return $sch_type2.$sch_type;
+function get_school_type($id, $conn)
+{
+    $query = "SELECT type,type2 from school where id = $id";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_array($result);
+    switch ($row['type2']) {
+        case 0:
+            $sch_type2 = 'Δημόσιο';
+            break;
+        case 1:
+            $sch_type2 = 'Ιδιωτικό';
+            break;
+        case 2:
+            $sch_type2 = 'Ειδικό';
+            break;
+    }
+    switch ($row['type']) {
+        case 0:
+            $sch_type = 'ς Φορέας/Περιοχή κλπ';
+            break;
+        case 1:
+            $sch_type = ' Δημοτικό Σχολείο';
+            break;
+        case 2:
+            $sch_type = ' Νηπιαγωγείο';
+            break;
+    }
+    return $sch_type2 . $sch_type;
 }
-        
-    //The function returns the no. of business days between two dates and it skips the holidays
-function getWorkingDays($startDate,$endDate,$holidays)
+
+//The function returns the no. of business days between two dates and it skips the holidays
+function getWorkingDays($startDate, $endDate, $holidays)
 {
     // do strtotime calculations just once
     $endDate = strtotime($endDate);
@@ -153,12 +156,13 @@ function getWorkingDays($startDate,$endDate,$holidays)
     //---->The two can be equal in leap years when february has 29 days, the equal sign is added here
     //In the first case the whole interval is within a week, in the second case the interval falls in two weeks.
     if ($the_first_day_of_week <= $the_last_day_of_week) {
-        if ($the_first_day_of_week <= 6 && 6 <= $the_last_day_of_week) { $no_remaining_days--;
+        if ($the_first_day_of_week <= 6 && 6 <= $the_last_day_of_week) {
+            $no_remaining_days--;
         }
-        if ($the_first_day_of_week <= 7 && 7 <= $the_last_day_of_week) { $no_remaining_days--;
+        if ($the_first_day_of_week <= 7 && 7 <= $the_last_day_of_week) {
+            $no_remaining_days--;
         }
-    }
-    else {
+    } else {
         // (edit by Tokes to fix an edge case where the start day was a Sunday
         // and the end day was NOT a Saturday)
 
@@ -171,24 +175,23 @@ function getWorkingDays($startDate,$endDate,$holidays)
                 // if the end date is a Saturday, then we subtract another day
                 $no_remaining_days--;
             }
-        }
-        else {
+        } else {
             // the start date was a Saturday (or earlier), and the end date was (Mon..Fri)
             // so we skip an entire weekend and subtract 2 days
             $no_remaining_days -= 2;
         }
     }
 
-        //The no. of business days is: (number of weeks between the two dates) * (5 working days) + the remainder
+    //The no. of business days is: (number of weeks between the two dates) * (5 working days) + the remainder
     //---->february in none leap years gave a remainder of 0 but still calculated weekends between first and last day, this is one way to fix it
     $workingDays = $no_full_weeks * 5;
-    if ($no_remaining_days > 0 ) {
+    if ($no_remaining_days > 0) {
         $workingDays += $no_remaining_days;
     }
 
-        //We subtract the holidays
-    foreach($holidays as $holiday){
-        $time_stamp=strtotime($holiday);
+    //We subtract the holidays
+    foreach ($holidays as $holiday) {
+        $time_stamp = strtotime($holiday);
         //If the holiday doesn't fall in weekend
         if ($startDate <= $time_stamp && $time_stamp <= $endDate && date("N", $time_stamp) != 6 && date("N", $time_stamp) != 7) {
             $workingDays--;
@@ -198,20 +201,20 @@ function getWorkingDays($startDate,$endDate,$holidays)
     return $workingDays;
 }
 
-function get_type($typeid,$conn)
+function get_type($typeid, $conn)
 {
     $query = "SELECT * from ektaktoi_types WHERE id=$typeid";
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
-      return;
+    if (!$result) {
+        return;
         //die('Could not query:' . mysqli_error($conn));
     }
-    $typos=mysqli_result($result, $i, "type");
+    $typos = mysqli_result($result, $i, "type");
     return $typos;
 }
-function getDimos($id,$conn)
+function getDimos($id, $conn)
 {
-    $query = "SELECT name from dimos where id=".$id;
+    $query = "SELECT name from dimos where id=" . $id;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
     //    die('Could not query:' . mysqli_error($conn));
@@ -223,10 +226,10 @@ function getDimos($id,$conn)
         return $dimos;
     }
 }
-function getDimosId($name,$conn,$add = false)
+function getDimosId($name, $conn, $add = false)
 {
-    $query = "SELECT * from dimos where name='".$name."'";
-    $query1 = iconv('cp1253','utf-8',$query);
+    $query = "SELECT * from dimos where name='" . $name . "'";
+    $query1 = iconv('cp1253', 'utf-8', $query);
     $result = mysqli_query($conn, $query1);
     $num = mysqli_num_rows($result);
     // find dimos. If not found, add (if param add = true)
@@ -234,8 +237,8 @@ function getDimosId($name,$conn,$add = false)
         $row = mysqli_fetch_row($result);
         return $row[0];
     } else {
-        if ( $add ) {
-            $nm = iconv('cp1253','utf-8',$name);
+        if ($add) {
+            $nm = iconv('cp1253', 'utf-8', $name);
             $qry = "INSERT INTO dimos (name) VALUES ('$nm')";
             $res = mysqli_query($conn, $qry);
             $id = mysqli_insert_id($conn);
@@ -245,9 +248,9 @@ function getDimosId($name,$conn,$add = false)
         }
     }
 }
-function getSchDimos($id,$conn)
+function getSchDimos($id, $conn)
 {
-    $query = "SELECT d.name from school s JOIN dimos d ON s.dimos = d.id where s.id=".$id;
+    $query = "SELECT d.name from school s JOIN dimos d ON s.dimos = d.id where s.id=" . $id;
     //echo $query;
     $result = mysqli_query($conn, $query);
     //if (!$result) 
@@ -261,19 +264,24 @@ function getSchDimos($id,$conn)
     }
 }
 
-function get_anatr($id, $mysqlconnection) 
+function get_anatr($id, $mysqlconnection, $misth = false)
 {
     $query = "SELECT * from employee WHERE id=$id";
     $result = mysqli_query($mysqlconnection, $query);
     $row = mysqli_fetch_assoc($result);
-    
+
     $dt1 = strtotime($row['hm_anal']);
     $dt2 = strtotime($row['hm_dior']);
     $diafora = abs($dt1 - $dt2);
-    
-    $diafora = $diafora/86400;
+
+    $diafora = $diafora / 86400;
+    // if difference between hm_anal & hm_dior > 30, hm_anal, else hm_dior
     $d1 = $diafora > 30 ? strtotime($row['hm_anal']) : strtotime($row['hm_dior']);
-    $anatr = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $row['proyp'] + $row['aney_xr'];
+    if ($misth) {
+        $anatr = (date('d', $d1) + date('m', $d1) * 30 + date('Y', $d1) * 360) - $row['proyp_misth'] + $row['aney_xr'];
+    } else {
+        $anatr = (date('d', $d1) + date('m', $d1) * 30 + date('Y', $d1) * 360) - $row['proyp'] + $row['aney_xr'];
+    }
     return $anatr;
 }
 
@@ -281,69 +289,69 @@ function getNamefromTbl($conn, $tbl, $id)
 {
     $query = "SELECT * from $tbl WHERE id=$id";
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
-    return;
+    if (!$result) {
+        return;
         //die('Could not query:' . mysqli_error($conn));
     }
-    $name=mysqli_result($result, 0, "name");
+    $name = mysqli_result($result, 0, "name");
     return $name;
 }
 function getIDfromTbl($conn, $tbl, $name)
 {
     $query = "SELECT * from $tbl WHERE name=$name";
     $result = mysqli_query($conn, $query);
-    if (!$result) { 
+    if (!$result) {
         die('Could not query:' . mysqli_error($conn));
     }
-    $id=mysqli_result($result, 0, "id");
+    $id = mysqli_result($result, 0, "id");
     return $id;
 }
 
 // returns school category
 function getCategory($cat)
 {
-    switch ($cat){
-    case 0:
-        return "Άγνωστο";
+    switch ($cat) {
+        case 0:
+            return "Άγνωστο";
             exit;
-    case 1:
-        return "Α' ($cat)";
+        case 1:
+            return "Α' ($cat)";
             exit;
-    case 2:
-        return "Β' ($cat)";
+        case 2:
+            return "Β' ($cat)";
             exit;
-    case 3:
-        return "Γ' ($cat)";
+        case 3:
+            return "Γ' ($cat)";
             exit;
-    case 4:
-        return "Δ' ($cat)";
+        case 4:
+            return "Δ' ($cat)";
             exit;
-    case 5:
-        return "Ε' ($cat)";
+        case 5:
+            return "Ε' ($cat)";
             exit;
-    case 6:
-        return "ΣΤ' ($cat)";
+        case 6:
+            return "ΣΤ' ($cat)";
             exit;
-    case 7:
-        return "Ζ' ($cat)";
+        case 7:
+            return "Ζ' ($cat)";
             exit;
-    case 8:
-        return "Η' ($cat)";
+        case 8:
+            return "Η' ($cat)";
             exit;
-    case 9:
-        return "Θ' ($cat)";
+        case 9:
+            return "Θ' ($cat)";
             exit;
-    case 10:
-        return "Ι' ($cat)";
+        case 10:
+            return "Ι' ($cat)";
             exit;
-    case 11:
-        return "ΙΑ' ($cat)";
+        case 11:
+            return "ΙΑ' ($cat)";
             exit;
-    case 12:
-        return "ΙΒ' ($cat)";
+        case 12:
+            return "ΙΒ' ($cat)";
             exit;
-    case 13:
-        return "ΙΓ' ($cat)";
+        case 13:
+            return "ΙΓ' ($cat)";
             exit;
     }
 }
@@ -367,23 +375,23 @@ function get_adeies($id, $mysqlconnection)
             // case 5:
             //     $has_loxeia = 1; break;
             // anarrwtikh or anarrwtikh (ygeionomiko)
-        case 1:
-        case 3:
-            $anar_days += $arr_ad['days'];
-            break;
+            case 1:
+            case 3:
+                $anar_days += $arr_ad['days'];
+                break;
             // aney or aney anatrofhs
-        case 10:
-        case 12:
-            $aney += $arr_ad['days'];
-            break;
+            case 10:
+            case 12:
+                $aney += $arr_ad['days'];
+                break;
             // apergia
-        case 17:
-            $apergies += $arr_ad['days'];
-            break;
+            case 17:
+                $apergies += $arr_ad['days'];
+                break;
             // stash
-        case 18:
-            $apergies += ($arr_ad['days']*0.5);
-            break;
+            case 18:
+                $apergies += ($arr_ad['days'] * 0.5);
+                break;
         }
     }
     // if kyhsh or loxeia, subtract every anarrwtikh
@@ -400,12 +408,12 @@ function get_adeies($id, $mysqlconnection)
     // subtract (rounded down) apergies
     //$subtract += floor($apergies);
 
-    $ret = Array(
-        'subtracted'=>$subtract, 
-        'anar_sub'=>$anar_days_subtr,
-        'anar'=>$anar_days,
-        'aney'=>$aney,
-        'apergies'=>floor($apergies)
+    $ret = array(
+        'subtracted' => $subtract,
+        'anar_sub' => $anar_days_subtr,
+        'anar' => $anar_days,
+        'aney' => $aney,
+        'apergies' => floor($apergies)
     );
     return $ret;
 }
@@ -443,61 +451,87 @@ function get_orgs($id, $mysqlconnection, $eidiko = false)
     if ($eidiko) {
         $ret = array(
             'ΠΕ70ΕΑΕ' => 0,
-            'ΠΕ11' => 0, 
+            'ΠΕ11' => 0,
             'ΠΕ11ΕΑΕ' => 0,
-            'ΠΕ06' => 0, 
-            'ΠΕ79' => 0, 
-            'ΠΕ79.01ΕΑΕ' => 0, 
-            'ΠΕ05' => 0, 
-            'ΠΕ07' => 0, 
-            'ΠΕ08' => 0, 
-            'ΠΕ86' => 0, 
-            'ΠΕ86ΕΑΕ' => 0, 
-            'ΠΕ91' =>0,
+            'ΠΕ06' => 0,
+            'ΠΕ79' => 0,
+            'ΠΕ79.01ΕΑΕ' => 0,
+            'ΠΕ05' => 0,
+            'ΠΕ07' => 0,
+            'ΠΕ08' => 0,
+            'ΠΕ86' => 0,
+            'ΠΕ86ΕΑΕ' => 0,
+            'ΠΕ91' => 0,
             'ΠΕ91.01ΕΑΕ' => 0,
-            'ΠΕ21' =>0,
-            'ΠΕ23' =>0,
-            'ΠΕ25' =>0,
-            'ΠΕ26' =>0,
-            'ΠΕ28' =>0,
-            'ΠΕ29' =>0,
-            'ΠΕ30' =>0,
-            'ΔΕ1ΕΒΠ' =>0,
+            'ΠΕ21' => 0,
+            'ΠΕ23' => 0,
+            'ΠΕ25' => 0,
+            'ΠΕ26' => 0,
+            'ΠΕ28' => 0,
+            'ΠΕ29' => 0,
+            'ΠΕ30' => 0,
+            'ΔΕ1ΕΒΠ' => 0,
             'ent' => 0
         );
     } else {
         $ret = array(
             'ΠΕ70' => 0,
-            'ΠΕ11' => 0, 
-            'ΠΕ06' => 0, 
-            'ΠΕ79' => 0, 
-            'ΠΕ05' => 0, 
-            'ΠΕ07' => 0, 
-            'ΠΕ08' => 0, 
-            'ΠΕ86' => 0, 
-            'ΠΕ91' =>0, 
+            'ΠΕ11' => 0,
+            'ΠΕ06' => 0,
+            'ΠΕ79' => 0,
+            'ΠΕ05' => 0,
+            'ΠΕ07' => 0,
+            'ΠΕ08' => 0,
+            'ΠΕ86' => 0,
+            'ΠΕ91' => 0,
             'ent' => 0
         );
     }
-    
-    while ($row = mysqli_fetch_array($result)){
-      $plithos = strval($row['plithos']);
-      $kl = $row['klname'];
-      $ret[$kl] += $plithos;
+
+    while ($row = mysqli_fetch_array($result)) {
+        $plithos = strval($row['plithos']);
+        $kl = $row['klname'];
+        $ret[$kl] += $plithos;
     }
     // @ entaksis
     $query = "SELECT count(*) as plithos FROM employee e 
     WHERE e.sx_organikhs='$id' AND status IN (1,3,5) AND org_ent=1";
     $result = mysqli_query($mysqlconnection, $query);
-    while ($row = mysqli_fetch_array($result)){
-      $plithos = strval($row['plithos']);
-      $ret['ent'] = $plithos;
+    while ($row = mysqli_fetch_array($result)) {
+        $plithos = strval($row['plithos']);
+        $ret['ent'] = $plithos;
     }
     return $ret;
 }
 
-function get_wres($days)
+function get_wres($days, $klados = null)
 {
+    if ($klados !== null) {
+        $klados = (int) $klados;
+        // ΠΕ60
+        if ($klados == 1) {
+            return 25;
+            //ΔΕ1ΕΒΠ
+        } elseif (in_array($klados, [12, 31])) {
+            return 30;
+        }
+        // ΠΕ21, ΠΕ23, ΠΕ25, ΠΕ26, ΠΕ28, ΠΕ29, ΠΕ30, ΠΕ87.02
+        elseif (in_array($klados, [8, 9, 10, 11, 26, 27, 30])) {
+            if ($days < 1800) {
+                return 25;
+            } elseif ($days >= 1800 && $days < 3600) {
+                return 24;
+            } elseif ($days >= 3600 && $days < 5400) {
+                return 23;
+            } elseif ($days >= 5400 && $days < 7200) {
+                return 22;
+            } else {
+                return 21;
+            }
+        }
+    }
+
+    // Γενικός κανόνας: ΠΕ70 & Ειδικότητες
     // 0-10: 24 wres, 11-15: 23 wres, 15-20: 22 wres, >20: 21 wres
     // 10y = 3600 days, 15y = 5400 days, 20y = 7200 days
     if ($days <= 3600) {
@@ -506,26 +540,26 @@ function get_wres($days)
         return 23;
     } elseif ($days > 5400 && $days <= 7200) {
         return 22;
-    } elseif ($days >7200) {
+    } elseif ($days > 7200) {
         return 21;
     }
 }
 
 // Returns a string with names, surnames, klados of Proini Zoni teachers
-function get_pz_names($pz, $conn){
+function get_pz_names($pz, $conn)
+{
     $proini = unserialize($pz);
     $names = 'Εκπ/κοί Π.Ζ.: ';
-    $prids = implode(',',$proini);
+    $prids = implode(',', $proini);
     $query = "SELECT e.surname, e.name, k.perigrafh FROM employee e join klados k on e.klados = k.id WHERE e.id in ($prids)";
     $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) == 0){
+    if (mysqli_num_rows($result) == 0) {
         return 'Δεν έχουν οριστεί εκπ/κοί Π.Ζ.';
     }
-    while ($row = mysqli_fetch_assoc($result))  
-    {
-        $names .= $row["name"]. " " . $row["surname"]. " (" . $row['perigrafh'] . '), ';
+    while ($row = mysqli_fetch_assoc($result)) {
+        $names .= $row["name"] . " " . $row["surname"] . " (" . $row['perigrafh'] . '), ';
     }
-    return $names;    
+    return $names;
 }
 
 ?>

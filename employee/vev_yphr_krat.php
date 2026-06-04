@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     }
 
     // Query teachers of interest (Kratikoy)
-    $query = "SELECT e.*, p.name as praksi, p.ya, p.ada, p.apofasi, p.type as ptype 
+    $query = "SELECT e.*, p.name as praksi, p.ya, p.ada, p.apofasi, p.ada_apof, p.type as ptype 
               FROM ektaktoi e 
               JOIN praxi p ON e.praxi = p.id 
               WHERE e.type IN (1,2) AND p.type = 'ΚΡΑΤ'";
@@ -74,6 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
             $hmapox = $teacher['hm_apox'];
             $ya = $teacher['ya'];
             $ada = $teacher['ada'];
+            $ada_apof = $teacher['ada_apof'];
+            $apofasi = $teacher['apofasi'];
 
             // Get placements from yphrethsh_ext table
             $afm_esc = mysqli_real_escape_string($mysqlconnection, $afm);
@@ -321,6 +323,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
             $document->setValue('wrario', $wrario_text);
             $document->setValue('ya', $ya);
             $document->setValue('ada', str_replace(array('(', ')'), "", $ada));
+            $document->setValue('ada_apof', str_replace(array('(', ')'), "", $ada_apof));
+            $document->setValue('apofasi', $apofasi);
             $document->setValue('endofyear', $endofyear);
             $document->setValue('protapol', $protapol);
 
@@ -652,7 +656,8 @@ if ($num_teachers > 0) {
                 <div>
                     <h2 class="krat-title">Έκδοση Βεβαιώσεων Κρατικού</h2>
                     <p class="krat-subtitle">Προετοιμασία και μαζική παραγωγή εγγράφων Word (.docx) βάσει του προτύπου
-                        <strong>tmpl_vev_anapl_2026.docx</strong></p>
+                        <strong>tmpl_vev_anapl_2026.docx</strong>
+                    </p>
                 </div>
                 <span class="info-badge">Σχ. Έτος: <?php echo htmlspecialchars($sxol_etos_display); ?></span>
             </div>
@@ -668,7 +673,9 @@ if ($num_teachers > 0) {
             </div>
 
             <div class="flex gap-2">
-                <div class="badge-count">Βρέθηκαν: <?php echo $num_teachers; ?> εκπαιδευτικοί με συνολικά <?php echo $total_placements; ?> υπηρετήσεις</div>
+                <div class="badge-count">Βρέθηκαν: <?php echo $num_teachers; ?> εκπαιδευτικοί με συνολικά
+                    <?php echo $total_placements; ?> υπηρετήσεις
+                </div>
             </div>
 
             <form action="" method="POST">
@@ -698,7 +705,8 @@ if ($num_teachers > 0) {
                     <?php if ($submitted): ?>
                         Λίστα Εκπαιδευτικών &amp; Υπηρετήσεων (MySchool)
                     <?php else: ?>
-                        Βρέθηκαν: <?php echo $num_teachers; ?> εκπαιδευτικοί με συνολικά <?php echo $total_placements; ?> υπηρετήσεις
+                        Βρέθηκαν: <?php echo $num_teachers; ?> εκπαιδευτικοί με συνολικά <?php echo $total_placements; ?>
+                        υπηρετήσεις
                     <?php endif; ?>
                 </h3>
             </div>
@@ -720,7 +728,7 @@ if ($num_teachers > 0) {
                                         Δεν βρέθηκαν εκπαιδευτικοί κρατικού προϋπολογισμού.
                                     </td>
                                 </tr>
-                            <?php
+                                <?php
                             else:
                                 while ($row = mysqli_fetch_assoc($result)):
                                     $t_id = $row['id'];
@@ -780,7 +788,7 @@ if ($num_teachers > 0) {
                                             <?php endif; ?>
                                         </td>
                                     </tr>
-                                <?php
+                                    <?php
                                 endwhile;
                             endif;
                             ?>

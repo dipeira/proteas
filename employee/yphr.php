@@ -7,6 +7,13 @@
   $id = $_POST['id'];
   $anatr = get_anatr($id, $mysqlconnection);
   
+  $klados = null;
+  $q_kl = mysqli_query($mysqlconnection, "SELECT klados FROM employee WHERE id = $id");
+  if ($q_kl && mysqli_num_rows($q_kl) > 0) {
+      $r_kl = mysqli_fetch_assoc($q_kl);
+      $klados = $r_kl['klados'];
+  }
+  
   // compute days of service
   $d1 = strtotime($_POST['yphr']);
   $result = (date('d', $d1) + date('m', $d1)*30 + date('Y', $d1)*360) - $anatr;
@@ -33,6 +40,6 @@
     die("Λάθος ημερομηνία");
   }
   $ymd = days2ymd($result);
-  $hours = get_wres($result);
+  $hours = get_wres($result, $klados);
   echo "<br><b>Χρόνος υπηρεσίας για μείωση ωραρίου:<br><small>(έως 31/12/$year)</small></b><br>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2] &nbsp;($hours ώρες)<br>";
 ?>

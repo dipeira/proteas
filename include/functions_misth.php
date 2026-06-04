@@ -321,16 +321,21 @@ function get_mk($id, $mysqlconnection, $date = null) {
     $result = mysqli_query($mysqlconnection, $query);
     $row = mysqli_fetch_assoc($result);
     // compute anatr
-    $anatr = get_anatr($id, $mysqlconnection);
-    
+    $anatr = get_anatr($id, $mysqlconnection, true);
+
     ///////////////////
     // compute MK time
     // compute subtracted MK days
     $asked = date('Y-m-d', strtotime($asked_date));
     $start = date('Y-m-d', strtotime('2016-01-01'));
     $end = date('Y-m-d', strtotime('2017-12-31'));
+    $hm_dior = date('Y-m-d', strtotime($row['hm_dior']));
+    // if diorismos after 01-01-2018
+    if ($hm_dior > date2days($end)) {
+        $subtract = 0;
+    } 
     // if diorismos after 2016-01-01
-    if ($anatr > date2days($start)) {
+    elseif ($anatr > date2days($start)) {
       $subtract = $anatr - date2days($start);
       // if asked date > 2017-12-31
     } elseif ($asked > $end) {
