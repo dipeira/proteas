@@ -61,6 +61,8 @@ function print_table($result, $num, $mysqlconnection, $mon = true)
   echo "<th>Θέση</th>";
   if ($req_type == 1) {
     echo "<th>Σε θητεία</th>";
+    echo "<th>Από</th>";
+    echo "<th>Έως</th>";
   }
   echo "<th>Επώνυμο</th>";
   echo "<th>Όνομα</th>";
@@ -102,16 +104,21 @@ function print_table($result, $num, $mysqlconnection, $mon = true)
     
     // Σε θητεία cell
     if ($req_type == 1) {
-      $thiteia_cell = '';
+      $thiteia_checked = '';
+      $apo = '';
+      $ews = '';
       if ($thiteia) {
-        $thiteia_cell = "<input type='checkbox' checked disabled style='margin-right: 5px; vertical-align: middle; accent-color: #10b981;'>";
+        $thiteia_checked = "<input type='checkbox' checked disabled style='vertical-align: middle; accent-color: #10b981;'>";
         if ($thiteia_apo && $thiteia_apo != '0000-00-00') {
-          $thiteia_cell .= "Από " . date("d-m-Y", strtotime($thiteia_apo)) . " έως " . date("d-m-Y", strtotime($thiteia_ews));
-        } else {
-          $thiteia_cell .= "έως " . date("d-m-Y", strtotime($thiteia_ews));
+          $apo = date("d-m-Y", strtotime($thiteia_apo));
+        }
+        if ($thiteia_ews && $thiteia_ews != '0000-00-00') {
+          $ews = date("d-m-Y", strtotime($thiteia_ews));
         }
       }
-      echo "<td>$thiteia_cell</td>";
+      echo "<td>$thiteia_checked</td>";
+      echo "<td>$apo</td>";
+      echo "<td>$ews</td>";
     }
 
     $link = $mon ? "../employee/employee.php?id=$id&op=view" : "../employee/ektaktoi.php?id=$id&op=view";
