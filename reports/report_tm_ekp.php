@@ -26,14 +26,14 @@
             margin: 0;
         }
         
-        #mytbl tbody td, thead th {
+        #mytbl tbody td, thead th, tfoot td, tfoot th {
             padding: 6px 4px !important;
             text-align: center;
             border: 1px solid #dee2e6;
             white-space: nowrap;
         }
         
-        #mytbl tbody td:first-child {
+        #mytbl tbody td:first-child, #mytbl tfoot td:first-child {
             text-align: left;
             white-space: normal;
             max-width: 200px;
@@ -178,8 +178,17 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            var nameColIdx = 0;
+            $('#mytbl thead th').each(function(idx) {
+                if ($(this).text().trim() === 'Ονομασία') {
+                    nameColIdx = idx;
+                    return false;
+                }
+            });
+
             /* Init DataTables */
             var table = $('#mytbl').DataTable({
+                order: [[ nameColIdx, 'asc' ]],
                 paging: false,
                 fixedHeader: true,
                 scrollX: true,
@@ -203,6 +212,9 @@
                     {
                         extend: 'copy',
                         text: 'Αντιγραφή',
+                        exportOptions: {
+                            footer: true
+                        }
                     },
                     {
                         extend: 'excel',
@@ -213,10 +225,7 @@
                         },
                         exportOptions: {
                             columns: ':visible',
-                            rows: function(idx, data, node) {
-                                // Exclude the first row (index 0)
-                                return idx !== 0;
-                            },
+                            footer: true,
                             format: {
                                 body: function (data, row, column, node) {
                                     // Remove HTML tags and get text content
@@ -233,7 +242,8 @@
                         extend: 'print',
                         text: 'Εκτύπωση',
                         exportOptions: {
-                            columns: ':visible'
+                            columns: ':visible',
+                            footer: true
                         }
                     },
                     {
@@ -600,6 +610,8 @@ if ($_REQUEST['type']) {
 
         $synolo_stud = is_array($sums) ? array_sum($sums) : 0;
         $synolo_teach =  is_array($sumt) ? array_sum($sumt) : 0;
+        echo "</tbody>";
+        echo "<tfoot>";
         echo "<tr><td>Πλήθος: $sumschools</td><td></td><td></td><td></td><td>ΣΥΝΟΛΑ:</td><td>$sums[0]</td><td>$sums[1]</td><td>$sums[2]</td><td>$sums[3]</td><td>$sums[4]</td><td>$sums[5]</td><td>$synolo_stud</td>";
         echo "<td>$sumt[0]</td><td>$sumt[1]</td><td>$sumt[2]</td><td>$sumt[3]</td><td>$sumt[4]</td><td>$sumt[5]</td><td>$synolo_teach</td><td></td><td>$sumte</td><td>$sum70</td><td>$sum06</td><td>$sum11</td><td>$sum16</td>";
         echo "<td>$ekp_count_sum</td><td>$sumol</td><td>$sumol15</td><td>$sumol16</td><td>$sumolstud</td><td>$sumpz</td><td>$summpz</td></tr>";
@@ -607,7 +619,8 @@ if ($_REQUEST['type']) {
         // echo "<tr><td></td><td></td><td></td><td></td><td></td><td>Α'</td><td>Β'</td><td>Γ'</td><td>Δ'</td><td>Ε'</td><td>ΣΤ'</td><td>Σύν.</td>";
         // echo "<td>Τμ.Α'</td><td>Τμ.Β'</td><td>Τμ.Γ'</td><td>Τμ.Δ'</td><td>Τμ.Ε'</td><td>Τμ.ΣΤ'</td><td>Σύν.Τμ.</td><td></td><td>Μαθ.Τ.Ε.</td><td>ΠΕ70</td><td>ΠΕ06</td><td>ΠΕ11</td><td>ΠΕ79</td><td>Συν.προσ.</td><td>Τμ. Ολ.</td><td>Μαθ. Ολ.</td>";//<td>Εκπ. T.E.</td><td>Εκπ. T.Y.</td>";
         // echo "</tr>";
-        echo "</tbody></table>";
+        echo "</tfoot>";
+        echo "</table>";
         echo "ΣΗΜ: Δεν περιλαμβάνονται Δ/ντές/ντριες και εκπ/κοί Τ.Ε., Τ.Υ., Παράλληλης";
         echo "</div>";
         
@@ -790,6 +803,8 @@ if ($_REQUEST['type']) {
             $i++;
         }
         
+        echo "</tbody>";
+        echo "<tfoot>";
         echo "<tr>";
         echo "<td>Σύνολα</td><td></td><td></td><td></td>";
         echo "<td>$synolo_tm_klas</td>";
@@ -810,7 +825,8 @@ if ($_REQUEST['type']) {
         echo "<td>$synolo_k_pl_06</td>";
         
         echo "</tr>";
-        echo "</tbody></table>";
+        echo "</tfoot>";
+        echo "</table>";
         echo "</div>";
 
         echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
