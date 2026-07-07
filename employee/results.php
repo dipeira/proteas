@@ -419,6 +419,9 @@ if ($flag) {
         if (isset($_POST['dspsynol'])) {
             echo "<th>Συνολική Υπηρεσία</th>\n";
         }
+        if (isset($_POST['dsptel'])) {
+            echo "<th>Τηλέφωνο</th>\n";
+        }
         if (isset($_POST['dspemail'])) {
             echo "<th>Email</th>\n";
         }
@@ -463,6 +466,7 @@ if ($flag) {
             $met_did = mysqli_result($result, $i, "met_did");
             $proyp = mysqli_result($result, $i, "proyp");
             $katast = mysqli_result($result, $i, "status");
+            $tel = mysqli_result($result, $i, "tel");
             $email = mysqli_result($result, $i, 'email');
             $_psd = mysqli_result($result, $i, 'email_psd');
             $wres = mysqli_result($result, $i, "wres");
@@ -575,6 +579,9 @@ if ($flag) {
             if (isset($_POST['dspsynol'])) {
                 $ymd = days2ymd($res1);
                 echo "<td>Έτη: $ymd[0] &nbsp; Μήνες: $ymd[1] &nbsp; Ημέρες: $ymd[2]</td>";
+            }
+            if (isset($_POST['dsptel'])) {
+                echo "<td>$tel</td>\n";
             }
             if (isset($_POST['dspemail'])) {
                 echo "<td>$email</td>\n";

@@ -330,7 +330,13 @@
 		echo "</div>";
 		
 		echo "<div class='form-group'>";
-		echo "<label class='form-label'>Τηλέφωνο</label>";
+		echo "<label class='form-label'>";
+		echo "<span class='form-label-text'>Τηλέφωνο</span>";
+		echo "<span class='display-checkbox-wrapper'>";
+		echo "<input type='checkbox' name='dsptel' id='dsptel' title='Εμφάνιση πεδίου στα αποτελέσματα' />";
+		echo "<label for='dsptel' title='Εμφάνιση πεδίου στα αποτελέσματα'>Εμφάνιση</label>";
+		echo "</span>";
+		echo "</label>";
 		echo "<input type='text' name='tel' class='form-input' />";
 		echo "</div>";
 		
