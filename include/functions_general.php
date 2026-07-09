@@ -684,4 +684,12 @@ function format_comments($text)
     return $formatted;
 }
 
+function safe_iconv_to_utf8($string)
+{
+    if (mb_check_encoding($string, 'UTF-8')) {
+        return $string;
+    }
+    return iconv('cp1253', 'utf-8', $string);
+}
+
 ?>

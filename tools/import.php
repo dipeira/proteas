@@ -478,7 +478,7 @@
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]',0,'$data[6]','$data[7]',
             '$data[8]','$data[9]','$data[10]','$data[11]','$data[12]','$data[13]','$data[14]','$status',
             '$data[16]','$data[17]','$data[18]','$data[19]','$data[20]','$data[21]','$data[22]', $sx_organ, $sx_yphr)";
-            $imp_8 = mb_detect_encoding($string, $encodings, true) == 'cp1253' ? $imp_8 = iconv('cp1253','utf-8',$import) : $import;
+            $imp_8 = safe_iconv_to_utf8($import);
             $update_queries[] = $imp_8;
             
             $saves++;
@@ -505,8 +505,8 @@
             // columns:
             // Κατηγορία Μοριοδότησης (4),	Δήμος	(6), Είδος	(10) Κωδ. ΥΠΠΘ (12)	Ονομασία (13)	Λειτουργικότητα	(14) 
             // Οργανικότητα	(15) Τηλέφωνο	(17) ΦΑΞ	(18) e-mail	(19) Ταχ. Διεύθυνση	(21) ΤΚ	(22) Αναστολή	(46) 
-            $eidos = iconv('cp1253','utf-8',$data[10]);
-            $typos = iconv('cp1253','utf-8',$data[11]);
+            $eidos = safe_iconv_to_utf8($data[10]);
+            $typos = safe_iconv_to_utf8($data[11]);
             if ($eidos == 'Νηπιαγωγεία') {
               $type2 = 0;
               $type = 0;
@@ -525,7 +525,7 @@
             
             $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2,dimos) 
             values('$code','$data[4]',$type,'$data[13]','$data[21]','$data[22]','$data[17]','$data[18]','$data[19]','$data[15]','$data[14]','$type2',$dimos)";
-            $imp_8 = iconv('cp1253','utf-8',$import);
+            $imp_8 = safe_iconv_to_utf8($import);
 
             $update_queries[] = $imp_8;
             $saves++;
@@ -544,7 +544,7 @@
             }
             $import="INSERT into school(code,category,type,name,address,tk,tel,fax,email,organikothta,leitoyrg,type2) 
             values('$data[0]','$data[1]','$data[2]','$data[3]','$data[4]','$data[5]','$data[6]','$data[7]','$data[8]','$data[9]','$data[10]','$data[11]')";
-            $imp_8 = iconv('cp1253','utf-8',$import);
+            $imp_8 = safe_iconv_to_utf8($import);
             
             $update_queries[] = $imp_8;
             $saves++;
@@ -584,13 +584,13 @@
               $archive_arr[$sxoletos] = $archive_data;
             }
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
-            $update_queries[] = $sql;
+            $update_queries[] = safe_iconv_to_utf8($sql);
             
             // update school table
             if ($students <> $students_old || $tmimata <> $tmimata_old || $entaksis <> $entaksis_old){
               $sql="UPDATE school SET students='$students', tmimata='$tmimata', entaksis='$entaksis' WHERE code=".$data[0];
               
-              $update_queries[] = $sql;
+              $update_queries[] = safe_iconv_to_utf8($sql);
               $saves++;
             }
             break;
@@ -627,12 +627,12 @@
               $archive_arr[$sxoletos] = $archive_data;
             }
             $sql="UPDATE school SET archive = '". serialize($archive_arr) . "' WHERE code=".$data[0];
-            $update_queries[] = $sql;
+            $update_queries[] = safe_iconv_to_utf8($sql);
 
             // update school table
             if ($klasiko <> $klasiko_old || $oloimero_nip <> $oloimero_nip_old || $entaksis <> $entaksis_old){
               $sql="UPDATE school SET klasiko='$klasiko', oloimero_nip='$oloimero_nip', entaksis='$entaksis' WHERE code=".$data[0];
-              $update_queries[] = $sql;
+              $update_queries[] = safe_iconv_to_utf8($sql);
               $saves++;
             }
             break;
@@ -722,7 +722,7 @@
               } else {
                 $upd_qry = "UPDATE ektaktoi SET sx_yphrethshs = $sch_id WHERE id = $id";
               }
-              $update_queries[] = $upd_qry;
+              $update_queries[] = safe_iconv_to_utf8($upd_qry);
               $top_afm = $data[0];
             } 
 
@@ -734,7 +734,7 @@
               $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) 
                 values ($id, '$sch_id', '$data[2]', '$sxol_etos')";
             }
-            $update_queries[] = $query;
+            $update_queries[] = safe_iconv_to_utf8($query);
             $saves++;
             
             break;
@@ -770,7 +770,7 @@
             // update employee table
             $upd_qry = "UPDATE employee set comments=concat(comments,'\n".$data[1]."') where $searchcol='".$data[0]."'";
             $saves++;
-            $update_queries[] = $upd_qry;
+            $update_queries[] = safe_iconv_to_utf8($upd_qry);
              
             break;
           // Assign praxi to ektaktoi
@@ -798,7 +798,7 @@
             // update employee table
             $upd_qry = "UPDATE ektaktoi set praxi=$data[1] where afm='".$data[0]."'";
             $saves++;
-            $update_queries[] = $upd_qry;
+            $update_queries[] = safe_iconv_to_utf8($upd_qry);
              
             break;
         }

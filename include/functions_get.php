@@ -229,7 +229,7 @@ function getDimos($id, $conn)
 function getDimosId($name, $conn, $add = false)
 {
     $query = "SELECT * from dimos where name='" . $name . "'";
-    $query1 = iconv('cp1253', 'utf-8', $query);
+    $query1 = safe_iconv_to_utf8($query);
     $result = mysqli_query($conn, $query1);
     $num = mysqli_num_rows($result);
     // find dimos. If not found, add (if param add = true)
@@ -238,7 +238,7 @@ function getDimosId($name, $conn, $add = false)
         return $row[0];
     } else {
         if ($add) {
-            $nm = iconv('cp1253', 'utf-8', $name);
+            $nm = safe_iconv_to_utf8($name);
             $qry = "INSERT INTO dimos (name) VALUES ('$nm')";
             $res = mysqli_query($conn, $qry);
             $id = mysqli_insert_id($conn);
