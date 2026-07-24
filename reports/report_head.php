@@ -35,6 +35,7 @@ require '../etc/menu.php';
 
 $req_type = isset($_GET['type']) ? (int) $_GET['type'] : 0;
 $show_personal = isset($_GET['show_personal']) ? 1 : 0;
+$show_thiteia = isset($_GET['show_thiteia']) ? 1 : 0;
 echo "<h3>Αναφορά Διευθυντών / Προϊσταμένων</h3>";
 echo "<form method='GET' action='report_head.php' id='typeForm' style='margin: 20px 0;'>";
 echo "<p style='margin-bottom: 15px; font-weight: 500;'>Παρακαλώ επιλέξτε τύπο σχολείου:</p>";
@@ -45,13 +46,17 @@ echo "<label style='display: block; padding: 12px; cursor: pointer; border-radiu
 echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='radio' name='type' value='3' " . ($req_type == 3 ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Ειδικά Σχολεία</label>";
 echo "<hr style='border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;'>";
 echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='checkbox' name='show_personal' value='1' " . ($show_personal ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Εμφάνιση προσωπικών στοιχείων</label>";
+if ($req_type == 2) {
+  echo "<label style='display: block; padding: 12px; cursor: pointer; border-radius: 6px; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor=\"#f0fdf4\"' onmouseout='this.style.backgroundColor=\"\"'><input type='checkbox' name='show_thiteia' value='1' " . ($show_thiteia ? 'checked' : '') . " onchange='this.form.submit()' style='margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;'> Εμφάνιση στοιχείων θητείας</label>";
+}
 echo "</div>";
 echo "</form>";
 echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
 
 function print_table($result, $num, $mysqlconnection, $mon = true)
 {
-  global $show_personal, $req_type;
+  global $show_personal, $req_type, $show_thiteia;
+  $display_thiteia = ($req_type == 1) || ($req_type == 2 && $show_thiteia);
   $i = 0;
   echo "<table id=\"mytbl\" class=\"imagetable tablesorter\" border=\"1\">\n";
   echo "<thead>";
@@ -59,7 +64,7 @@ function print_table($result, $num, $mysqlconnection, $mon = true)
   echo "<th>Ονομασία</th>";
   echo "<th>Λειτ.</th>";
   echo "<th>Θέση</th>";
-  if ($req_type == 1) {
+  if ($display_thiteia) {
     echo "<th>Σε θητεία</th>";
     echo "<th>Από</th>";
     echo "<th>Έως</th>";
@@ -103,7 +108,7 @@ function print_table($result, $num, $mysqlconnection, $mon = true)
     echo "<td>$thesi</td>";
     
     // Σε θητεία cell
-    if ($req_type == 1) {
+    if ($display_thiteia) {
       $thiteia_checked = '';
       $apo = '';
       $ews = '';
