@@ -33,6 +33,7 @@
   ob_clean();
 	
 ?>
+<script type="text/javascript" src="../js/common.js"></script>
 <style>
     /* Modal-specific styling for adeia list */
     #adeia-modal {
