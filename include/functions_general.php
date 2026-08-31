@@ -692,4 +692,66 @@ function safe_iconv_to_utf8($string)
     return iconv('cp1253', 'utf-8', $string);
 }
 
+/**
+ * Parses a date string (e.g. DD/MM/YYYY, D/M/YYYY, DD-MM-YYYY, YYYY-MM-DD)
+ * and converts it to MySQL compatible 'YYYY-MM-DD' format.
+ *
+ * @param string|null $dateStr
+ * @return string|null 'YYYY-MM-DD' on success, or null if invalid/empty
+ */
+function parse_date_to_mysql($dateStr)
+{
+    if ($dateStr === null) {
+        return null;
+    }
+    // Remove UTF-8 BOM, non-breaking spaces, quotes, and whitespace
+    $dateStr = str_replace("\xEF\xBB\xBF", '', (string)$dateStr);
+    $dateStr = str_replace("\xC2\xA0", ' ', $dateStr);
+    $dateStr = trim($dateStr, " \t\n\r\0\x0B\"'");
+
+    if ($dateStr === '' || $dateStr === '0000-00-00' || $dateStr === '00/00/0000' || $dateStr === '00-00-0000') {
+        return null;
+    }
+
+    // Match DD/MM/YYYY, D/M/YYYY, DD-MM-YYYY, DD.MM.YYYY (European / Greek format)
+    if (preg_match('/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})$/', $dateStr, $matches)) {
+        $day = (int)$matches[1];
+        $month = (int)$matches[2];
+        $year = (int)$matches[3];
+        if ($year < 100) {
+            $year += ($year > 50) ? 1900 : 2000;
+        }
+        if (checkdate($month, $day, $year)) {
+            return sprintf('%04d-%02d-%02d', $year, $month, $day);
+        }
+    }
+
+    // Match YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD (ISO format)
+    if (preg_match('/^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})$/', $dateStr, $matches)) {
+        $year = (int)$matches[1];
+        $month = (int)$matches[2];
+        $day = (int)$matches[3];
+        if (checkdate($month, $day, $year)) {
+            return sprintf('%04d-%02d-%02d', $year, $month, $day);
+        }
+    }
+
+    // Fallback: Try DateTime formats
+    $formats = array('d/m/Y', 'j/n/Y', 'd-m-Y', 'j-n-Y', 'Y-m-d', 'Y/m/d');
+    foreach ($formats as $format) {
+        $d = DateTime::createFromFormat('!' . $format, $dateStr);
+        if ($d && $d->format($format) === $dateStr) {
+            return $d->format('Y-m-d');
+        }
+    }
+
+    // Fallback: strtotime
+    $ts = strtotime($dateStr);
+    if ($ts !== false && $ts > 0) {
+        return date('Y-m-d', $ts);
+    }
+
+    return null;
+}
+
 ?>

@@ -467,9 +467,9 @@
               break;
             }
             // fix dates
-            $data[7] = date ("Y-m-d", strtotime($data[7]));
-            $data[10] = date ("Y-m-d", strtotime($data[10]));
-            $data[11] = date ("Y-m-d", strtotime($data[11]));
+            $data[7] = parse_date_to_mysql($data[7]);
+            $data[10] = parse_date_to_mysql($data[10]);
+            $data[11] = parse_date_to_mysql($data[11]);
             $status = 1;
             // proceed to import
             $import="INSERT into employee(name,surname,patrwnymo,mhtrwnymo,klados,am,thesi,fek_dior,hm_dior,
