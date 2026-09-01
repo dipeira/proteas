@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4ef4144537650074482209ca2e31cfe",
+    "content-hash": "2f1d21aee10d0b0928cf280e209d1581",
     "packages": [
         {
             "name": "jasig/phpcas",
@@ -58,24 +58,26 @@
                 "cas",
                 "jasig"
             ],
+            "abandoned": "apereo/phpcas",
             "time": "2015-11-16T20:44:36+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.7.9",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "7a7634fba664249a04fc771df677a9b9f755d7ec"
+                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/7a7634fba664249a04fc771df677a9b9f755d7ec",
-                "reference": "7a7634fba664249a04fc771df677a9b9f755d7ec",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
+                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
                 "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
+                "ext-xmlwriter": "*",
                 "php": ">=5.2.0"
             },
             "type": "library",
@@ -115,7 +117,7 @@
                 "xlsx"
             ],
             "abandoned": "phpoffice/phpspreadsheet",
-            "time": "2013-05-24T11:57:42+00:00"
+            "time": "2014-03-02T15:22:49+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -273,6 +275,7 @@
                 "mail",
                 "mailer"
             ],
+            "abandoned": "symfony/mailer",
             "time": "2018-07-31T09:26:32+00:00"
         }
     ],
