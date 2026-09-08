@@ -1,5 +1,7 @@
 word/anapl/
 word/*.docx
+word/*.csv
+word/*.zip
 .vscode/
 tools/mail.*
 config.php
