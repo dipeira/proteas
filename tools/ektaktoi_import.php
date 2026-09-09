@@ -1,44 +1,42 @@
-<html>
-  <head>
-    <?php 
-    $root_path = '../';
-    $page_title = 'Εισαγωγή εκπαιδευτικών από αρχείο excel';
-    require '../etc/head.php'; 
-    ?>
-	  <LINK href="../css/style.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="../js/jquery.js"></script>
-  </head>
-  <body>
 <?php
-
-require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
-require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 require_once "../config.php";
 require_once "../include/functions.php";
-
-$showRows = 10;
-
-
 require_once "../tools/class.login.php";
+
 $log = new logmein();
 if($log->logincheck($_SESSION['loggedin']) == false) {   
   header("Location: login.php");
+  exit;
 }
 else {
   $logged = 1;
 }
-require_once '../etc/menu.php';
 
 $usrlvl = $_SESSION['userlevel'];
-
 if ($usrlvl > 1) {
   echo "<h3>Σφάλμα: Αυτή η ενέργεια μπορεί να γίνει μόνο από προϊστάμενο ή διαχειριστή...</h3>";
   echo "<INPUT TYPE='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
   die();
 }
 
+$root_path = '../';
+$page_title = 'Εισαγωγή εκπαιδευτικών από αρχείο excel';
+?>
+<html>
+  <head>
+    <?php require '../etc/head.php'; ?>
+    <LINK href="../css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+  </head>
+  <body>
+<?php
+require_once '../etc/menu.php';
+
+$showRows = 10;
 
 if (isset($_POST['submit'])) {
+  require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
+  require_once '../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
     echo "<h3>" . "To αρχείο ". $_FILES['filename']['name'] ." ανέβηκε με επιτυχία." . "</h3>";
 
