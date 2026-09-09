@@ -300,7 +300,7 @@
     echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='8'>Μαζική προσθήκη σχολίων&nbsp;(<a href='comments.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
     echo "<tr>";
     echo "<td rowspan=\"5\" class=\"rowspan-cell\">Αναπληρωτές</td>";
-    echo "<td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='7'>Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo.csv' class='link-sample'>Δείγμα</a>)</label></td>";
+    echo "<td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='7'>Μαζικές τοποθετήσεις αναπληρωτών εκπ/κών&nbsp;(<a href='topo_anapl.csv' class='link-sample'>Δείγμα</a>)</label></td>";
     echo "</tr>";
     echo "<tr><td><label class='import-choice-label'><input type='radio' class='import-choice' name='type' value='9'>Μαζική ανάθεση αναπληρωτών σε πράξεις&nbsp;(<a href='praxi.csv' class='link-sample'>Δείγμα</a>)</label></td></tr>";
     echo "</tbody></table>";
@@ -390,7 +390,8 @@
       $warnings = 0;
       $warn_msg = '';
       $er_msg = '';
-      $top_afm = null;
+      $top_afm = array();
+      $top_wres = array();
       
       // set max execution time (for large files)
       set_time_limit (480);
@@ -421,8 +422,11 @@
           else if ($_POST['type'] == 4){
             $tblcols = 13;
           }
-          else if ($_POST['type'] == 5 || $_POST['type'] == 6 || $_POST['type'] == 7){
+          else if ($_POST['type'] == 5 || $_POST['type'] == 6){
             $tblcols = 3;
+          }
+          else if ($_POST['type'] == 7){
+            $tblcols = 4;
           }
           else if ($_POST['type'] == 8 || $_POST['type'] == 9){
             $tblcols = 2;
@@ -660,7 +664,17 @@
               die();
             }
             $delete_yphr = $_POST['type'] == 6 ? true : false;
-            // csv: AM/ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
+            // csv monimoi: AM/ΑΦΜ εκπ/κού;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
+            // csv ektaktoi: AM/ΑΦΜ εκπ/κού;Ωράριο;Κωδικός ΥΠΑΙΘ σχολείου;Ώρες
+            if ($is_mon) {
+              $sch_code = trim($data[1]);
+              $hours = trim($data[2]);
+            } else {
+              $wrario = intval(trim($data[1]));
+              $sch_code = trim($data[2]);
+              $hours = trim($data[3]);
+            }
+
             $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
             // check if am/afm exists @ monimoi & ektaktoi
             $emp_qry = $is_mon ? "SELECT * FROM employee WHERE $searchcol = '$data[0]'" : "SELECT * FROM ektaktoi WHERE $searchcol = '$data[0]'";
@@ -674,17 +688,24 @@
             }
             
             // check school codes
-            $sch_id = getSchoolFromCode($data[1],$mysqlconn);
+            $sch_id = getSchoolFromCode($sch_code,$mysqlconn);
             if (!$sch_id) {
               $error = true;
-              $er_msg = 'Σφάλμα: Δε βρέθηκε το σχολείο με 7ψήφιο κωδικό: ' . $data[1];
+              $er_msg = 'Σφάλμα: Δε βρέθηκε το σχολείο με 7ψήφιο κωδικό: ' . $sch_code;
               $er_msg .= " (γραμμή ".($num+1).")";
               break;
             }
             // check hours
-            if ($data[2] <= 0 || $data[2] > 30) {
+            if ($hours <= 0 || $hours > 30) {
               $error = true;
-              $er_msg = 'Σφάλμα: Λάθος αριθμός ωρών: ' . $data[1];
+              $er_msg = 'Σφάλμα: Λάθος αριθμός ωρών: ' . $hours;
+              $er_msg .= " (γραμμή ".($num+1).")";
+              break;
+            }
+            // check wrario for ektaktoi
+            if (!$is_mon && ($wrario <= 0 || $wrario > 30)) {
+              $error = true;
+              $er_msg = 'Σφάλμα: Λάθος ωράριο αναπληρωτή: ' . $data[1];
               $er_msg .= " (γραμμή ".($num+1).")";
               break;
             }
@@ -708,31 +729,34 @@
                 $warn_msg .= '<br>- Η τοποθέτηση υπάρχει ήδη: ';
                 $warn_msg .= $emp_row['afm'] . ': '.$emp_row['surname'].' '.$emp_row['name'];
                 $warn_msg .= " (γραμμή ".($num+1).")";
+                if (!$is_mon && !in_array($data[0], $top_wres, true)) {
+                  $upd_wres = "UPDATE ektaktoi SET wres = $wrario WHERE id = $id";
+                  $update_queries[] = safe_iconv_to_utf8($upd_wres);
+                  $top_wres[] = $data[0];
+                }
                 continue 2;
               }
             }
 
             // insert yphrethsh @ employee table
-            if (!$top_afm) {
-              $top_afm = $data[0];
-            }
-            if ($top_afm != $data[0]){
+            if (!in_array($data[0], $top_afm, true)){
               if ($is_mon) {
                 $upd_qry = "UPDATE employee SET sx_yphrethshs = $sch_id WHERE id = $id";
               } else {
-                $upd_qry = "UPDATE ektaktoi SET sx_yphrethshs = $sch_id WHERE id = $id";
+                $upd_qry = "UPDATE ektaktoi SET sx_yphrethshs = $sch_id, wres = $wrario WHERE id = $id";
+                $top_wres[] = $data[0];
               }
               $update_queries[] = safe_iconv_to_utf8($upd_qry);
-              $top_afm = $data[0];
+              $top_afm[] = $data[0];
             } 
 
             if ($is_mon) {
               $sx_organ = $emp_row['sx_organikhs'];
               $query = "insert into yphrethsh (emp_id, yphrethsh, hours, organikh, sxol_etos) 
-                values ($id, '$sch_id', '$data[2]', '$sx_organ', '$sxol_etos')";
+                values ($id, '$sch_id', '$hours', '$sx_organ', '$sxol_etos')";
             } else {
               $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) 
-                values ($id, '$sch_id', '$data[2]', '$sxol_etos')";
+                values ($id, '$sch_id', '$hours', '$sxol_etos')";
             }
             $update_queries[] = safe_iconv_to_utf8($query);
             $saves++;
