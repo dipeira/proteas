@@ -305,26 +305,52 @@ if (isset($_GET['download'])) {
                     }
                 }
 
-                if ($consultant_found) {
-                    $symv_epist_afm = $consultant_found['afm'];
-                    $symv_epist_surname = $consultant_found['eponymo'];
-                    $symv_epist_name = $consultant_found['onoma'];
-                } elseif ($default_consultant) {
-                    $symv_epist_afm = $default_consultant['afm'];
-                    $symv_epist_surname = $default_consultant['eponymo'];
-                    $symv_epist_name = $default_consultant['onoma'];
-                } elseif ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70') {
-                    // Fallback to pedagogical consultant for PE60/PE70 if no specific scientific consultant
+                $is_eae = (in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || in_array($row['klados_id'], [16, 17, 18, 19]));
+
+                if ($is_eae) {
+                    // Για τους εκπ/κούς Ειδικής Αγωγής (ΠΕ60ΕΑΕ, ΠΕ70ΕΑΕ, ΠΕ61, ΠΕ71):
+                    // Επιστημονική ευθύνη (Πεδίο Α1) έχει ο σύμβουλος Παιδαγωγικής ευθύνης του σχολείου
                     $symv_epist_afm = $row['symv_paid_afm'];
                     $symv_epist_surname = $row['symv_paid_surname'];
                     $symv_epist_name = $row['symv_paid_name'];
+
+                    // Παιδαγωγική ευθύνη (Πεδίο Α2 & Β) έχει ο σύμβουλος Ειδικής Αγωγής (από τον πίνακα symvouloi_epist)
+                    $eae_c = $consultant_found ?: $default_consultant;
+                    if ($eae_c) {
+                        $symv_paid_afm = $eae_c['afm'];
+                        $symv_paid_surname = $eae_c['eponymo'];
+                        $symv_paid_name = $eae_c['onoma'];
+                    } else {
+                        $symv_paid_afm = $row['symv_paid_afm'];
+                        $symv_paid_surname = $row['symv_paid_surname'];
+                        $symv_paid_name = $row['symv_paid_name'];
+                    }
                 } else {
-                    $symv_epist_afm = '';
-                    $symv_epist_surname = '';
-                    $symv_epist_name = '';
+                    if ($consultant_found) {
+                        $symv_epist_afm = $consultant_found['afm'];
+                        $symv_epist_surname = $consultant_found['eponymo'];
+                        $symv_epist_name = $consultant_found['onoma'];
+                    } elseif ($default_consultant) {
+                        $symv_epist_afm = $default_consultant['afm'];
+                        $symv_epist_surname = $default_consultant['eponymo'];
+                        $symv_epist_name = $default_consultant['onoma'];
+                    } elseif ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70') {
+                        // Fallback to pedagogical consultant for PE60/PE70 if no specific scientific consultant
+                        $symv_epist_afm = $row['symv_paid_afm'];
+                        $symv_epist_surname = $row['symv_paid_surname'];
+                        $symv_epist_name = $row['symv_paid_name'];
+                    } else {
+                        $symv_epist_afm = '';
+                        $symv_epist_surname = '';
+                        $symv_epist_name = '';
+                    }
+
+                    $symv_paid_afm = $row['symv_paid_afm'];
+                    $symv_paid_surname = $row['symv_paid_surname'];
+                    $symv_paid_name = $row['symv_paid_name'];
                 }
 
-                $taytish = (!empty($symv_epist_afm) && !empty($row['symv_paid_afm']) && $symv_epist_afm === $row['symv_paid_afm']);
+                $taytish = (!empty($symv_epist_afm) && !empty($symv_paid_afm) && $symv_epist_afm === $symv_paid_afm);
 
                 if ($is_generate_csv) {
                     $emp_name = trim($row['emp_name']);
@@ -334,9 +360,9 @@ if (isset($_GET['download'])) {
                     $se_name = trim($symv_epist_name);
                     $se_surname = trim($symv_epist_surname);
 
-                    $sp_afm = trim($row['symv_paid_afm']);
-                    $sp_name = trim($row['symv_paid_name']);
-                    $sp_surname = trim($row['symv_paid_surname']);
+                    $sp_afm = trim($symv_paid_afm);
+                    $sp_name = trim($symv_paid_name);
+                    $sp_surname = trim($symv_paid_surname);
 
                     $dnt_afm = trim($row['dnt_afm']);
                     $dnt_name = trim($row['dnt_name']);
@@ -393,9 +419,9 @@ if (isset($_GET['download'])) {
                 echo "<td>".$row['emp_name']."</td>";
                 echo "<td>".$row['emp_afm']."</td>";
                 echo "<td>".$row['sch_name']."</td>";
-                echo "<td>".$row['symv_paid_surname']."</td>";
-                echo "<td>".$row['symv_paid_name']."</td>";
-                echo "<td>".$row['symv_paid_afm']."</td>";
+                echo "<td>".$symv_paid_surname."</td>";
+                echo "<td>".$symv_paid_name."</td>";
+                echo "<td>".$symv_paid_afm."</td>";
                 echo "<td>".$row['dnt_surname']."</td>";
                 echo "<td>".$row['dnt_name']."</td>";
                 echo "<td>".$row['dnt_afm']."</td>";
