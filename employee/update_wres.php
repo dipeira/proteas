@@ -58,7 +58,11 @@ $usrlvl = $_SESSION['userlevel'];
     $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-    $query = "SELECT e.*,k.perigrafh as kname from employee e JOIN klados k ON k.id = e.klados WHERE klados <> 1 ORDER BY e.surname";
+
+    // Δε γίνεται αλλαγή ωραρίου για ΠΕ60, ΠΕ60ΕΑΕ, ΠΕ61, ΔΕ1ΕΒΠ
+    $query = "SELECT e.*,k.perigrafh as kname from employee e JOIN klados k ON k.id = e.klados "
+    ." WHERE klados NOT IN (1, 16, 17, 12) ORDER BY e.surname";
+    
     // $query = "SELECT * from employee WHERE status NOT IN (2,4)";
     // 07-08-2013
     // $query = "SELECT * from employee WHERE status NOT IN (2,4) AND klados NOT IN (22,23,24)";
