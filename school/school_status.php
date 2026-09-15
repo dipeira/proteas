@@ -1500,6 +1500,7 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
         echo "<div>";
 
         $i = 0;
+        $headmaster_count = 0;
         echo "<table id=\"mytbl\" class=\"imagetable schooltable tablesorter\" border=\"2\">\n";
         echo "<thead><tr>";
         echo "<th>A/A</th>";
@@ -1516,6 +1517,9 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
           $klados_id = mysqli_result($result, $i, "klados");
           $klados = getKlados($klados_id, $mysqlconnection);
           $thesi = mysqli_result($result, $i, "thesi");
+          if ($dntis_mon && $thesi == 2) {
+            $headmaster_count++;
+          }
           $th = $dntis_mon ? thesicmb($thesi) : 'Διευθυντής/Προϊστάμενος';
           $comments = shorten_text(mysqli_result($result, $i, "comments"));
 
@@ -1527,6 +1531,12 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
           $i++;
         }
         echo "</tbody></table>";
+        if ($headmaster_count > 1) {
+          echo "<div style='margin-top: 15px; padding: 12px 16px; background-color: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; border-radius: 6px; color: #92400e; display: flex; align-items: center; gap: 8px;'>";
+          echo "<span style='font-size: 1.25rem;'>⚠️</span>";
+          echo "<span><strong>Προσοχή:</strong> Στη σχολική μονάδα έχουν οριστεί περισσότεροι από ένας ($headmaster_count) Διευθυντές/Προϊστάμενοι.</span>";
+          echo "</div>";
+        }
         echo "</div>";
       }
       //Ανήκουν οργανικά και υπηρετούν (ΠΕ60-70)

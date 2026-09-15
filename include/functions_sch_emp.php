@@ -169,6 +169,7 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     set_time_limit(1200);
     $avhrs = [];
     $all = $allcnt = [];
+    $headmaster_count = 0;
     // init db
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
@@ -215,7 +216,8 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
     // ώρες Δ/ντή
     $query = "SELECT *,e.id emp_id from employee e JOIN klados k ON e.klados = k.id WHERE sx_yphrethshs='$sch' AND status=1 AND thesi = 2";
     $result = mysqli_query($mysqlconnection, $query);
-    if (mysqli_num_rows($result)) {
+    $headmaster_count = mysqli_num_rows($result);
+    if ($headmaster_count) {
         $dnthrs = wres_dnth($leit);
         $klados = mysqli_result($result, 0, "klados");
         $klper = mysqli_result($result, 0, "perigrafh");
@@ -482,6 +484,12 @@ function ektimhseis_wrwn($sch, $mysqlconnection, $sxoletos, $print = false, $ana
             echo $meiwsh_ypnth > 0 ? "Υποδιευθυντών ($meiwsh_ypnth_klados): ".$meiwsh_ypnth.' ώρες<br>' : '';
             echo $vivliothiki > 0 ? 'Υπευθύνου Βιβλιοθήκης: '.MEIWSH_VIVLIOTHIKIS.' ώρες<br>' : '';
             echo "</p>";
+        }
+        if ($headmaster_count > 1) {
+            echo "<div style='margin-top: 15px; margin-bottom: 15px; padding: 12px 16px; background-color: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; border-radius: 6px; color: #92400e; display: flex; align-items: center; gap: 8px;'>";
+            echo "<span style='font-size: 1.25rem;'>⚠️</span>";
+            echo "<span><strong>Προσοχή:</strong> Στη σχολική μονάδα έχουν οριστεί περισσότεροι από ένας ($headmaster_count) Διευθυντές/Προϊστάμενοι.</span>";
+            echo "</div>";
         }
         echo "<a class='underline' id='toggleBtn' href='#' onClick=>Αναλυτικά</a>";
         echo "<div id='analysis' style='display: none;'>";
