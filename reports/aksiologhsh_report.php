@@ -16,29 +16,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
 
 // check if super-user
 if ($_SESSION['userlevel']<>0) {
-    header("Location: ../index.php");
+    echo 'Σφάλμα: Δεν επιτρέπεται η πρόσβαση σε αυτή τη σελίδα.';
+    echo '<br><br><a href="../index.php">Επιστροφή στην αρχική σελίδα</a>';
+    exit();
 }
 
-// handle CSV or ZIP download
-if (isset($_GET['download'])) {
-    $type = $_GET['download'];
-    $files = [
-        'a1' => ['file' => 'a1.csv', 'mime' => 'text/csv; charset=utf-8'],
-        'a2' => ['file' => 'a2.csv', 'mime' => 'text/csv; charset=utf-8'],
-        'b' => ['file' => 'b.csv', 'mime' => 'text/csv; charset=utf-8'],
-        'zip' => ['file' => 'aksiologhsh_csv.zip', 'mime' => 'application/zip'],
-    ];
-    if (isset($files[$type])) {
-        $filepath = __DIR__ . '/../word/' . $files[$type]['file'];
-        if (file_exists($filepath)) {
-            header('Content-Type: ' . $files[$type]['mime']);
-            header('Content-Disposition: attachment; filename="' . $files[$type]['file'] . '"');
-            header('Content-Length: ' . filesize($filepath));
-            readfile($filepath);
-            exit();
-        }
-    }
-}
 
 ?>
 <!DOCTYPE html>
@@ -61,12 +43,6 @@ if (isset($_GET['download'])) {
             min-width: 220px;
             vertical-align: middle;
         }
-        #generate_csv_btn:disabled, .btn-export-csv.disabled {
-            opacity: 0.5 !important;
-            cursor: not-allowed !important;
-            background-color: #6c757d !important;
-            border-color: #6c757d !important;
-        }
     </style>
     <script type="text/javascript">
     $(document).ready(function() {
@@ -85,29 +61,10 @@ if (isset($_GET['download'])) {
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Όλα"]],
                 "dom": 'Bfrtip',
                 "buttons": [
-                    'copy', 'excel', 'pdf',
-                    {
-                        text: 'Παραγωγή αρχείων csv',
-                        className: 'btn-export-csv',
-                        action: function ( e, dt, node, config ) {
-                            if (!$('#generate_csv_btn').prop('disabled')) {
-                                $('#generate_csv_btn').click();
-                            }
-                        }
-                    }
+                    'copy', 'excel', 'pdf'
                 ],
                 "language": {
                     "url": "../js/datatables/greek.json"
-                },
-                "initComplete": function() {
-                    var rowCount = this.api().rows().count();
-                    if (rowCount > 0) {
-                        $('#generate_csv_btn').prop('disabled', false).removeAttr('title');
-                        this.api().buttons('.btn-export-csv').enable();
-                    } else {
-                        $('#generate_csv_btn').prop('disabled', true).attr('title', 'Δεν υπάρχουν αποτελέσματα στον πίνακα');
-                        this.api().buttons('.btn-export-csv').disable();
-                    }
                 }
             });
         }
@@ -117,7 +74,12 @@ if (isset($_GET['download'])) {
 <body>
     <?php require '../etc/menu.php'; ?>
 <div id="container">
-    <h1>Αναφορά Αξιολόγησης Εκπαιδευτικών</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h1 style="margin: 0;">Αναφορά Αξιολόγησης Εκπαιδευτικών</h1>
+        <a href="create_eval_csv.php" class="btn btn-green" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold;">
+            ⚙️ Δημιουργία CSV Αξιολόγησης
+        </a>
+    </div>
     
     <!-- Search Form -->
     <form method="post">
@@ -161,13 +123,11 @@ if (isset($_GET['download'])) {
             <input type="date" name="aks_date_to" value="<?php echo isset($_POST['aks_date_to']) ? $_POST['aks_date_to'] : ''; ?>">
             
             <input type="submit" name="submit" value="Αναζήτηση">
-            <input type="submit" name="generate_csv" id="generate_csv_btn" value="Παραγωγή αρχείων csv" class="btn btn-green" style="margin-left: 10px; font-weight: bold;" disabled title="Πρέπει πρώτα να εκτελεστεί αναζήτηση και να φορτωθούν αποτελέσματα στον πίνακα">
         </div>
     </form>
 
     <?php
-    if (isset($_POST['submit']) || isset($_POST['generate_csv'])) {
-        $is_generate_csv = isset($_POST['generate_csv']);
+    if (isset($_POST['submit'])) {
         $sxol_etos = getParam('sxol_etos', $mysqlconnection);
         $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ',$mysqlconnection);
         $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ',$mysqlconnection);
@@ -241,14 +201,7 @@ if (isset($_GET['download'])) {
 
         $result = mysqli_query($mysqlconnection, $query);
 
-        $a1_lines = ["Αναγνωριστικό-Εκκρεμότητας;Αξιολογούμενος-Όνομα;Αξιολογούμενος-Επίθετο;Αξιολογούμενος-ΑΦΜ;Αξιολογητής-Όνομα;Αξιολογητής-Επίθετο;Αξιολογητής-ΑΦΜ"];
-        $a2_lines = ["Αναγνωριστικό-Εκκρεμότητας;Αξιολογούμενος-Όνομα;Αξιολογούμενος-Επίθετο;Αξιολογούμενος-ΑΦΜ;Αξιολογητής-Όνομα;Αξιολογητής-Επίθετο;Αξιολογητής-ΑΦΜ"];
-        $b_lines = ["Αναγνωριστικό-Εκκρεμότητας;Αξιολογούμενος-Όνομα;Αξιολογούμενος-Επίθετο;Αξιολογούμενος-ΑΦΜ;Αξιολογητής-1-Όνομα;Αξιολογητής-1-Επίθετο;Αξιολογητής-1-ΑΦΜ;Αξιολογητής-2-Όνομα;Αξιολογητής-2-Επίθετο;Αξιολογητής-2-ΑΦΜ"];
-
         $seen_table = [];
-        $seen_a1 = [];
-        $seen_a2 = [];
-        $seen_b = [];
 
         ob_start();
         
@@ -352,67 +305,6 @@ if (isset($_GET['download'])) {
 
                 $taytish = (!empty($symv_epist_afm) && !empty($symv_paid_afm) && $symv_epist_afm === $symv_paid_afm);
 
-                if ($is_generate_csv) {
-                    $emp_name = trim($row['emp_name']);
-                    $emp_surname = trim($row['emp_surname']);
-
-                    $se_afm = trim($symv_epist_afm);
-                    $se_name = trim($symv_epist_name);
-                    $se_surname = trim($symv_epist_surname);
-
-                    $sp_afm = trim($symv_paid_afm);
-                    $sp_name = trim($symv_paid_name);
-                    $sp_surname = trim($symv_paid_surname);
-
-                    $dnt_afm = trim($row['dnt_afm']);
-                    $dnt_name = trim($row['dnt_name']);
-                    $dnt_surname = trim($row['dnt_surname']);
-
-                    $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm));
-
-                    // A1 (Πεδίο Α1: Σύμβουλος Επιστημονικής Ευθύνης)
-                    if (!empty($se_afm) && !empty($emp_afm) && !isset($seen_a1[$emp_afm])) {
-                        $seen_a1[$emp_afm] = true;
-                        $a1_id = $se_afm . ':' . $emp_afm;
-                        $a1_lines[] = implode(';', [$a1_id, $emp_name, $emp_surname, $emp_afm, $se_name, $se_surname, $se_afm]);
-                    }
-
-                    // A2 (Πεδίο Α2: Διευθυντής ή Σύμβουλος Παιδαγωγικής Ευθύνης αν είναι ο ίδιος Δ/ντής ή δεν υπάρχει Δ/ντής)
-                    if ($is_director || empty($dnt_afm)) {
-                        if (!empty($sp_afm) && !empty($emp_afm) && !isset($seen_a2[$emp_afm])) {
-                            $seen_a2[$emp_afm] = true;
-                            $a2_id = $sp_afm . ':' . $emp_afm;
-                            $a2_lines[] = implode(';', [$a2_id, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm]);
-                        }
-                    } else {
-                        if (!empty($dnt_afm) && !empty($emp_afm) && !isset($seen_a2[$emp_afm])) {
-                            $seen_a2[$emp_afm] = true;
-                            $a2_id = $dnt_afm . ':' . $emp_afm;
-                            $a2_lines[] = implode(';', [$a2_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm]);
-                        }
-                    }
-
-                    // B (Πεδίο Β: Διευθυντής + Σύμβουλος Παιδαγωγικής Ευθύνης, ή μόνο Σύμβουλος Παιδαγωγικής Ευθύνης)
-                    if ($is_director || empty($dnt_afm)) {
-                        if (!empty($sp_afm) && !empty($emp_afm) && !isset($seen_b[$emp_afm])) {
-                            $seen_b[$emp_afm] = true;
-                            $b_id = $sp_afm . ':' . $emp_afm;
-                            $b_lines[] = implode(';', [$b_id, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm, '', '', '']);
-                        }
-                    } else {
-                        if (!empty($dnt_afm) && !empty($emp_afm) && !isset($seen_b[$emp_afm])) {
-                            $seen_b[$emp_afm] = true;
-                            if (!empty($sp_afm)) {
-                                $b_id = $dnt_afm . ':' . $sp_afm . ':' . $emp_afm;
-                                $b_lines[] = implode(';', [$b_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sp_name, $sp_surname, $sp_afm]);
-                            } else {
-                                $b_id = $dnt_afm . ':' . $emp_afm;
-                                $b_lines[] = implode(';', [$b_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, '', '', '']);
-                            }
-                        }
-                    }
-                }
-
                 echo "<tr>";
                 echo "<td>".$count++."</td>";
                 echo "<td>".$row['emp_surname']."</td>";
@@ -444,61 +336,6 @@ if (isset($_GET['download'])) {
 
         $unique_count = count($seen_table);
         $count_display = "<div style='margin: 10px 0; font-weight: bold; color: #1b5e20;'><span title='$query'>$unique_count μοναδικοί εκπαιδευτικοί</span></div>";
-
-        if ($is_generate_csv && $unique_count > 0) {
-            $a1_content = implode("\r\n", $a1_lines) . "\r\n";
-            $a2_content = implode("\r\n", $a2_lines) . "\r\n";
-            $b_content = implode("\r\n", $b_lines) . "\r\n";
-
-            $word_dir = __DIR__ . '/../word';
-            if (!is_dir($word_dir)) {
-                mkdir($word_dir, 0777, true);
-            }
-
-            file_put_contents($word_dir . '/a1.csv', $a1_content);
-            file_put_contents($word_dir . '/a2.csv', $a2_content);
-            file_put_contents($word_dir . '/b.csv', $b_content);
-
-            $zipname = $word_dir . '/aksiologhsh_csv.zip';
-            if (class_exists('ZipArchive')) {
-                $zip = new ZipArchive();
-                if ($zip->open($zipname, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-                    $zip->addFromString('a1.csv', $a1_content);
-                    $zip->addFromString('a2.csv', $a2_content);
-                    $zip->addFromString('b.csv', $b_content);
-                    $zip->close();
-                }
-            }
-
-            $count_a1 = count($a1_lines) - 1;
-            $count_a2 = count($a2_lines) - 1;
-            $count_b = count($b_lines) - 1;
-
-            echo "
-            <div style='background: #e8f5e9; border: 1px solid #4caf50; border-radius: 6px; padding: 15px 20px; margin: 20px 0;'>
-                <div style='display: flex; align-items: center; margin-bottom: 10px;'>
-                    <span style='font-size: 24px; color: #2e7d32; margin-right: 10px;'>✓</span>
-                    <strong style='font-size: 16px; color: #1b5e20;'>Τα αρχεία CSV δημιουργήθηκαν με επιτυχία!</strong>
-                </div>
-                <p style='margin: 5px 0 15px 0; color: #333;'>
-                    Τα αρχεία <code>a1.csv</code>, <code>a2.csv</code> και <code>b.csv</code> αποθηκεύτηκαν στο διακομιστή (φάκελος word/) και είναι διαθέσιμα για άμεση λήψη:
-                </p>
-                <div style='display: flex; gap: 12px; flex-wrap: wrap; align-items: center;'>
-                    <a href='?download=a1' class='btn btn-primary' style='text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;'>
-                        📥 <strong>a1.csv</strong> ($count_a1 εγγραφές)
-                    </a>
-                    <a href='?download=a2' class='btn btn-primary' style='text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;'>
-                        📥 <strong>a2.csv</strong> ($count_a2 εγγραφές)
-                    </a>
-                    <a href='?download=b' class='btn btn-primary' style='text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;'>
-                        📥 <strong>b.csv</strong> ($count_b εγγραφές)
-                    </a>
-                    <a href='?download=zip' class='btn btn-green' style='text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;'>
-                        📦 <strong>Όλα σε ZIP</strong> (aksiologhsh_csv.zip)
-                    </a>
-                </div>
-            </div>";
-        }
 
         echo $count_display;
         echo $table_html;

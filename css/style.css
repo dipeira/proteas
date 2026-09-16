@@ -386,7 +386,7 @@ center {
 	transform: rotate(180deg);
 }
 
-#navigation > li.sub ul {
+#navigation > li.sub > ul {
 	width: 240px;
 	margin: 0;
 	padding: 6px 0;
@@ -406,7 +406,7 @@ center {
 }
 
 /* Add invisible bridge area to make it easier to move mouse to submenu */
-#navigation > li.sub ul::before {
+#navigation > li.sub > ul::before {
 	content: '';
 	position: absolute;
 	top: -8px;
@@ -423,12 +423,12 @@ center {
 	position: relative;
 }
 
-#navigation > li.sub ul li:first-child a {
+#navigation > li.sub ul li:first-child > a {
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }
 
-#navigation > li.sub ul li:last-child a {
+#navigation > li.sub ul li:last-child > a {
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
 }
@@ -446,7 +446,8 @@ center {
 	border-left: 3px solid transparent;
 }
 
-#navigation > li.sub ul li a:hover {
+#navigation > li.sub ul li a:hover,
+#navigation > li.sub ul li.has-submenu:hover > a {
 	background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
 	color: #2A8B9A;
 	text-decoration: none;
@@ -457,6 +458,71 @@ center {
 
 #navigation > li.sub ul li a:active {
 	background: linear-gradient(90deg, #b2ebf2 0%, #80deea 100%);
+}
+
+/* Second level flyout submenu */
+#navigation li.has-submenu {
+	position: relative;
+}
+
+#navigation li.has-submenu > a {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#navigation li.has-submenu > a::after {
+	content: " ▶";
+	font-size: 8px;
+	opacity: 0.6;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+	margin-left: 8px;
+}
+
+#navigation li.has-submenu:hover > a::after {
+	opacity: 1;
+	transform: translateX(3px);
+}
+
+#navigation li.has-submenu > ul {
+	width: 270px;
+	margin: 0;
+	padding: 6px 0;
+	list-style: none;
+	background: #ffffff;
+	position: absolute;
+	top: -6px;
+	left: 100%;
+	border-radius: 10px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+	z-index: 10005;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateX(-10px);
+	pointer-events: none;
+	transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+	transition-delay: 0.08s;
+}
+
+/* Invisible bridge area to maintain hover state across submenu boundary */
+#navigation li.has-submenu > ul::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -12px;
+	width: 14px;
+	height: 100%;
+	background: transparent;
+	pointer-events: all;
+}
+
+#navigation li.has-submenu:hover > ul,
+#navigation li.has-submenu > ul:hover {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(0);
+	pointer-events: all;
+	transition-delay: 0s;
 }
 
 /* Style separator items in dropdown menus (items without links) */
@@ -471,8 +537,8 @@ center {
 	user-select: none;
 }
 
-#navigation > li.sub:hover ul,
-#navigation > li.sub ul:hover {
+#navigation > li.sub:hover > ul,
+#navigation > li.sub > ul:hover {
 	top: 100%;
 	margin-top: 0;
 	opacity: 1;
