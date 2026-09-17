@@ -1013,27 +1013,18 @@ elseif ($_GET['op']=="view")
         echo "</tr>";
         echo "<tr><td>Επώνυμο</td><td>$surname</td><td>Όνομα</td><td>$name</td></tr>";
         echo "<tr><td>Πατρώνυμο</td><td>$patrwnymo</td><td>Μητρώνυμο</td><td>$mhtrwnymo</td></tr>";
-        if ($usrlvl < 3){
-                echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
-        }
+        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
         echo "<tr><td>Κλάδος</td><td>".getKlados($klados_id,$mysqlconnection, true)."</td><td>Κατάσταση</td><td>$katast</td></tr>";
-        if ($usrlvl < 3){
-                echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-                echo "<td colspan=3><div class=\"slidingDiv\">";
-                echo "Τηλ.: $stathero - $kinhto<br>";
-                echo "email: <a href='mailto:$email'>$email</a><br>";
-                echo "email (ΠΣΔ): <a href='mailto:$email_psd'>$email_psd</a><br>";
-                idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
-                echo "</div>";
-                echo "</td></tr>";
-        } else {
-                echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
-                echo "<td colspan=3><div class=\"slidingDiv\">";
-                echo "email: <a href='mailto:$email'>$email</a><br>";
-                echo "email (ΠΣΔ): <a href='mailto:$email_psd'>$email_psd</a><br>";
-                echo "</div>";
-                echo "</td></tr>";
-        }
+        
+        echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
+        echo "<td colspan=3><div class=\"slidingDiv\">";
+        echo "Τηλ.: $stathero - $kinhto<br>";
+        echo "email: <a href='mailto:$email'>$email</a><br>";
+        echo "email (ΠΣΔ): <a href='mailto:$email_psd'>$email_psd</a><br>";
+        idiwtika_table("Αναπληρωτής", $id, $mysqlconnection);
+        echo "</div>";
+        echo "</td></tr>";
+        
         
         //$hm_mk = date ('d-m-Y', strtotime($hm_mk));
         //echo "<tr><td>Βαθμός</td><td>$vathm</td><td>Μ.Κ.</td><td>$mk &nbsp;<small>(από $hm_mk)</small></td></tr>";

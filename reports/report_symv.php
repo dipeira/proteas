@@ -1,4 +1,187 @@
 <?php
+    require_once "../config.php";
+    require_once "../include/functions.php";
+    session_start();
+
+    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
+    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
+    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
+
+    // Handle Excel export
+    if (isset($_GET['export']) && $_GET['export'] == 'excel' && !empty($_GET['enothta'])) {
+        $perif = (int)$_GET['enothta'];
+
+        // Get consultant details
+        $symv_sql = "SELECT s.perif, e.surname, e.name, e.klados FROM symvouloi s JOIN employee e ON s.emp_id = e.id WHERE s.perif = $perif";
+        $symv_res = mysqli_query($mysqlconnection, $symv_sql);
+        $symv_row = mysqli_fetch_assoc($symv_res);
+        $symv_title = $symv_row ? ($symv_row['surname'] . ' ' . $symv_row['name']) : "Περιφέρεια $perif";
+
+        // Calculate target date (31/8 of the school year)
+        $se = getParam('sxol_etos', $mysqlconnection);
+        if ($se && strlen($se) >= 4) {
+            $end_year = (int)substr($se, 0, 4) + 1;
+            $sx_etos = substr($se, 0, 4) . '-' . substr($se, 4, 2);
+        } else {
+            $curr_month = (int)date('n');
+            $end_year = $curr_month >= 9 ? ((int)date('Y') + 1) : (int)date('Y');
+            $sx_etos = ($end_year - 1) . '-' . substr((string)$end_year, -2);
+        }
+        $target_date = $end_year . "-08-31";
+
+        // Query permanent teachers
+        $query_mon = "SELECT s.id as sid, s.code, s.name AS sname, e.* FROM school s JOIN employee e ON s.id = e.sx_yphrethshs 
+                      WHERE e.status IN (1,3,5) AND s.perif = $perif ORDER BY s.name, e.surname, e.name";
+        $res_mon = mysqli_query($mysqlconnection, $query_mon);
+
+        // Query substitute teachers
+        $query_anapl = "SELECT s.id as sid, s.code, s.name AS sname, e.* FROM school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
+                        WHERE e.status IN (1,3,5) AND s.perif = $perif ORDER BY s.name, e.surname, e.name";
+        $res_anapl = mysqli_query($mysqlconnection, $query_anapl);
+
+        $filename = "ekpaideytikoi_symv_" . $perif . "_" . date('Ymd_His') . ".xls";
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Cache-Control: max-age=0");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+    table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 13px; }
+    th { background-color: #10b981; color: #ffffff; border: 1px solid #059669; padding: 6px 8px; text-align: left; }
+    td { border: 1px solid #d1d5db; padding: 5px 8px; }
+    tr:nth-child(even) { background-color: #f9fafb; }
+    .text { mso-number-format: "\@"; }
+    .center { text-align: center; }
+</style>
+</head>
+<body>
+<h3>Αναφορά Εκπαιδευτικών - Σύμβουλος: <?=htmlspecialchars($symv_title)?> (Σχολικό Έτος: <?=$sx_etos?>)</h3>
+<table border="1">
+<thead>
+    <tr>
+        <th>Κωδ.</th>
+        <th>Ονομασία Σχολείου</th>
+        <th>Επώνυμο</th>
+        <th>Όνομα</th>
+        <th>Τύπος</th>
+        <th>Θέση</th>
+        <th>Κλάδος</th>
+        <th>Κατάσταση</th>
+        <th>Ημ. Διορισμού</th>
+        <th>Ημ. Ανάληψης</th>
+        <th>Μονιμοποίηση</th>
+        <th>Αξιολόγηση</th>
+        <th>Συνολική Υπηρεσία (έως 31/08/<?=$end_year?>)</th>
+        <th>Τηλέφωνο</th>
+        <th>email</th>
+        <th>email ΠΣΔ</th>
+    </tr>
+</thead>
+<tbody>
+<?php
+        // Output permanent teachers
+        while ($row = mysqli_fetch_assoc($res_mon)) {
+            $code = $row['code'];
+            $sname = $row['sname'];
+            $surname = $row['surname'];
+            $name = $row['name'];
+            $thesi = $row['thesi'] == 2 ? 'Δ/ντής/ντρια' : 'Εκπ/κός';
+            $klados = getKlados($row['klados'], $mysqlconnection);
+            $status = $row['status'] == 1 ? 'Εργάζεται' : 'Άδεια';
+            $hm_dior = (!empty($row['hm_dior']) && $row['hm_dior'] != '0000-00-00') ? date('d-m-Y', strtotime($row['hm_dior'])) : '-';
+            $hm_anal = (!empty($row['hm_anal']) && $row['hm_anal'] != '0000-00-00') ? date('d-m-Y', strtotime($row['hm_anal'])) : '-';
+            $monimopoihsh = $row['monimopoihsh'] == 1 ? 'Ναι' : 'Όχι';
+            $aksiologhsh = $row['aksiologhsh'] == 1 ? 'Ναι' : 'Όχι';
+            if (!empty($row['hm_dior']) && $row['hm_dior'] != '0000-00-00') {
+                $total_days = date2days($target_date) - date2days($row['hm_dior']) + (int)$row['proyp'];
+                if ($total_days > 0) {
+                    $ymd = days2ymd($total_days);
+                    $synolikh = "{$ymd[0]} έτη, {$ymd[1]} μήνες, {$ymd[2]} ημέρες";
+                } else {
+                    $synolikh = "-";
+                }
+            } else {
+                $synolikh = "-";
+            }
+            $tel = trim((string)$row['tel']);
+            $email = trim((string)$row['email']);
+            $email_psd = trim((string)$row['email_psd']);
+
+            echo "<tr>";
+            echo "<td class='text'>$code</td>";
+            echo "<td>$sname</td>";
+            echo "<td>$surname</td>";
+            echo "<td>$name</td>";
+            echo "<td class='center'>Μόνιμος</td>";
+            echo "<td>$thesi</td>";
+            echo "<td>$klados</td>";
+            echo "<td>$status</td>";
+            echo "<td class='text center'>$hm_dior</td>";
+            echo "<td class='text center'>$hm_anal</td>";
+            echo "<td class='center'>$monimopoihsh</td>";
+            echo "<td class='center'>$aksiologhsh</td>";
+            echo "<td>$synolikh</td>";
+            echo "<td class='text'>$tel</td>";
+            echo "<td>$email</td>";
+            echo "<td>$email_psd</td>";
+            echo "</tr>\n";
+        }
+
+        // Output substitute teachers
+        while ($row = mysqli_fetch_assoc($res_anapl)) {
+            $code = $row['code'];
+            $sname = $row['sname'];
+            $surname = $row['surname'];
+            $name = $row['name'];
+            $thesi = $row['thesi'] == 2 ? 'Δ/ντής/ντρια' : 'Εκπ/κός';
+            $klados = getKlados($row['klados'], $mysqlconnection);
+            $status = $row['status'] == 1 ? 'Εργάζεται' : 'Άδεια';
+            $hm_dior = '-';
+            $hm_anal = (!empty($row['hm_anal']) && $row['hm_anal'] != '0000-00-00') ? date('d-m-Y', strtotime($row['hm_anal'])) : '-';
+            $monimopoihsh = '-';
+            $aksiologhsh = '-';
+            $synolikh = '-';
+            $stathero = trim((string)$row['stathero']);
+            $kinhto = trim((string)$row['kinhto']);
+            $tel = implode(' / ', array_filter([$stathero, $kinhto]));
+            $email = trim((string)$row['email']);
+            $email_psd = trim((string)$row['email_psd']);
+
+            echo "<tr>";
+            echo "<td class='text'>$code</td>";
+            echo "<td>$sname</td>";
+            echo "<td>$surname</td>";
+            echo "<td>$name</td>";
+            echo "<td class='center'>Αναπληρωτής</td>";
+            echo "<td>$thesi</td>";
+            echo "<td>$klados</td>";
+            echo "<td>$status</td>";
+            echo "<td class='text center'>$hm_dior</td>";
+            echo "<td class='text center'>$hm_anal</td>";
+            echo "<td class='center'>$monimopoihsh</td>";
+            echo "<td class='center'>$aksiologhsh</td>";
+            echo "<td class='center'>$synolikh</td>";
+            echo "<td class='text'>$tel</td>";
+            echo "<td>$email</td>";
+            echo "<td>$email_psd</td>";
+            echo "</tr>\n";
+        }
+?>
+</tbody>
+</table>
+</body>
+</html>
+<?php
+        exit;
+    }
+
     header('Content-type: text/html; charset=utf-8'); 
 ?>
 <html>
@@ -66,14 +249,6 @@
   </head>
 
 <?php
-    require_once"../config.php";
-    require_once"../include/functions.php";
-    session_start();
-
-    $mysqlconnection = mysqli_connect($db_host, $db_user, $db_password, $db_name);  
-    mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
-    mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
-
     echo "<body>";
     require '../etc/menu.php';
 
@@ -110,10 +285,11 @@
     echo "<h2>Στατιστικά συμβούλων εκπαίδευσης</h2>";
     get_symv_select($mysqlconnection);
 
-    
+    $perif = isset($_GET['enothta']) && !empty($_GET['enothta']) ? $_GET['enothta'] : null;
+    if ($perif) {
+      echo "<input type='button' class='btn-excel' VALUE='Εξαγωγή σε excel' onClick=\"location.href='report_symv.php?enothta=$perif&export=excel'\">&nbsp;&nbsp;";
+    }
     echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
-
-    $perif = $_GET['enothta'] ? $_GET['enothta'] : null;
     
     function print_table($result, $num, $mysqlconnection, $mon = true){
       $i=0;
@@ -127,6 +303,7 @@
       echo "<th>Κλάδος</th>";
       echo "<th>Κατάσταση</th>";
       echo $mon ? "<th>Ημ.Διορισμού</th><th>Μονιμοποίηση</th><th>Αξιολόγηση</th>" : '<th>Ημ.Ανάληψης</th>';
+      echo "<th>Τηλέφωνο</th>";
       echo "<th>email</th>";
       echo "</tr>";
       echo "</thead>\n<tbody>\n";
@@ -147,9 +324,13 @@
             $hm_dior = date('d-m-Y',strtotime($hm_dior_dt));
             $monimopoihsh = mysqli_result($result,$i,'monimopoihsh') == 1 ? 'Ναι' : 'Όχι';
             $aksiologhsh = mysqli_result($result,$i,'aksiologhsh') == 1 ? 'Ναι' : 'Όχι';
+            $tel = mysqli_result($result, $i, "tel");
           } else {
             $hm_anal_dt = mysqli_result($result, $i, "hm_anal");
             $hm_anal = date('d-m-Y',strtotime($hm_anal_dt));
+            $stathero = trim((string)mysqli_result($result, $i, "stathero"));
+            $kinhto = trim((string)mysqli_result($result, $i, "kinhto"));
+            $tel = implode(' / ', array_filter([$stathero, $kinhto]));
           }
           $email = mysqli_result($result, $i, "email");
           
@@ -164,6 +345,7 @@
           echo "<td>$klados</td>";
           echo "<td>$status</td>";
           echo $mon ? "<td>$hm_dior</td><td>$monimopoihsh</td><td>$aksiologhsh</td>" : "<td>$hm_anal</td>";
+          echo "<td>$tel</td>";
           echo "<td>$email</td>";
           echo "</tr>\n";
           $i++;                        
@@ -238,6 +420,7 @@
         print_table($result, $num, $mysqlconnection, false);
       }
 
+      echo "<input type='button' class='btn-excel' VALUE='Εξαγωγή σε excel' onClick=\"location.href='report_symv.php?enothta=$perif&export=excel'\">&nbsp;&nbsp;";
       echo "<input type='button' class='btn-red' VALUE='Επιστροφή' onClick=\"parent.location='../index.php'\">";
     }
     

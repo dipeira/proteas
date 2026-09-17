@@ -1189,33 +1189,27 @@ elseif ($_GET['op']=="view") {
     // Email fields
     echo "<tr><td>e-mail</td><td><a href=\"mailto:$email\">$email</a></td><td>e-mail (ΠΣΔ)</td><td><a href=\"mailto:$email_psd\">$email_psd</a></td></tr>";
     
-    // AFM (only for user level < 3)
-    if ($usrlvl < 3){
-        echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
-    }
+    // AFM
+    echo "<tr><td>Α.Φ.Μ.</td><td>$afm</td><td></td><td></td></tr>";
     
     // Additional personal data in expandable section
     if ($amka || $tel || $address || $idnum || $idiwtiko || $idiwtiko_id || $katoikon) {
         echo "<tr><td><a href=\"#\" class=\"show_hide\"><small>Εμφάνιση/Απόκρυψη<br>περισσοτέρων στοιχείων</small></a></td>";
         echo "<td colspan=3><div class=\"slidingDiv\">";
         echo "Τηλέφωνο: ".$tel."<br>";
-        // only for user_level < 3
-        if ($usrlvl < 3){
-            echo "Διεύθυνση: ".$address."<br>";
-            echo "ΑΔΤ: ".$idnum."<br>";
-            echo "AMKA: ".$amka."<br>";
-            if ($katoikon) {
-                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
-            } else {
-                echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
-            }
-            $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
-            $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
-            echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια κατ'οίκον:&nbsp;".stripslashes($katoikon_comm) : "");
-            echo "<br><br>";
-            idiwtika_table("Μόνιμος", $id, $mysqlconnection);
+        echo "Διεύθυνση: ".$address."<br>";
+        echo "ΑΔΤ: ".$idnum."<br>";
+        echo "AMKA: ".$amka."<br>";
+        if ($katoikon) {
+            echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' checked disabled>";
+        } else {
+            echo "Κατ'οίκον διδασκαλία<input type='checkbox' name='katoikon' disabled>";
         }
-        
+        $sdate = strtotime($katoikon_apo)>0 ? date('d-m-Y', strtotime($katoikon_apo)) : '';
+        $ldate = strtotime($katoikon_ews)>0 ? date('d-m-Y', strtotime($katoikon_ews)) : '';
+        echo ($katoikon > 0 ? "&nbsp;&nbsp;Έναρξη:&nbsp;$sdate&nbsp;-&nbsp;Λήξη:&nbsp;$ldate<br>Σχόλια κατ'οίκον:&nbsp;".stripslashes($katoikon_comm) : "");
+        echo "<br><br>";
+        idiwtika_table("Μόνιμος", $id, $mysqlconnection);
         echo "</div>";
         echo "</td></tr>";
     }
