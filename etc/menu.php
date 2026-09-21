@@ -53,7 +53,8 @@
 				<li class="has-submenu">
 					<a href="#">Σύμβουλοι Εκπαίδευσης</a>
 					<ul>
-						<li><a href="<?=$site_root?>/reports/report_symv.php">Στατιστικά συμβούλων εκπαίδευσης</a></li>
+						<li><a href="<?=$site_root?>/reports/report_symv.php">Σύμβουλοι εκπαίδευσης ΠΕ60/ΠΕ70</a></li>
+						<li><a href="<?=$site_root?>/reports/report_symv_eid.php">Σύμβουλοι εκπαίδευσης ειδικοτήτων</a></li>
 						<li><a href="<?=$site_root?>/reports/aksiologhsh_report.php">Αναφορά αξιολογούμενων</a></li>
 					</ul>
 				</li>

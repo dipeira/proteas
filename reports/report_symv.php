@@ -7,6 +7,11 @@
     mysqli_query($mysqlconnection, "SET NAMES 'utf8'");
     mysqli_query($mysqlconnection, "SET CHARACTER SET 'utf8'");
 
+    $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ', $mysqlconnection);
+    $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $mysqlconnection);
+    $exclude_pyspe_arr = array_filter([(int)$allo_pyspe, (int)$allo_pysde]);
+    $exclude_pyspe_cond = !empty($exclude_pyspe_arr) ? " AND e.sx_yphrethshs NOT IN (" . implode(',', $exclude_pyspe_arr) . ")" : "";
+
     // Handle Excel export
     if (isset($_GET['export']) && $_GET['export'] == 'excel' && !empty($_GET['enothta'])) {
         $perif = (int)$_GET['enothta'];
@@ -28,16 +33,40 @@
             $sx_etos = ($end_year - 1) . '-' . substr((string)$end_year, -2);
         }
         $target_date = $end_year . "-08-31";
+        $sxol_etos = $se ? (int)$se : (int)(($end_year - 1) . substr((string)$end_year, -2));
 
         // Query permanent teachers
         $query_mon = "SELECT s.id as sid, s.code, s.name AS sname, e.* FROM school s JOIN employee e ON s.id = e.sx_yphrethshs 
-                      WHERE e.status IN (1,3,5) AND s.perif = $perif ORDER BY s.name, e.surname, e.name";
+                      WHERE e.status IN (1,3) AND s.perif = $perif $exclude_pyspe_cond ORDER BY s.name, e.surname, e.name";
         $res_mon = mysqli_query($mysqlconnection, $query_mon);
 
         // Query substitute teachers
         $query_anapl = "SELECT s.id as sid, s.code, s.name AS sname, e.* FROM school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
-                        WHERE e.status IN (1,3,5) AND s.perif = $perif ORDER BY s.name, e.surname, e.name";
+                        WHERE e.status IN (1,3) AND s.perif = $perif $exclude_pyspe_cond ORDER BY s.name, e.surname, e.name";
         $res_anapl = mysqli_query($mysqlconnection, $query_anapl);
+
+        // Fetch all placements for permanent and substitute teachers for the school year
+        $mon_yphr_map = [];
+        $mon_yphr_res = mysqli_query($mysqlconnection, "SELECT y.emp_id, y.yphrethsh, y.hours, s.name as school_name 
+                                                         FROM yphrethsh y 
+                                                         JOIN school s ON y.yphrethsh = s.id 
+                                                         WHERE y.sxol_etos = $sxol_etos");
+        if ($mon_yphr_res) {
+            while ($y_row = mysqli_fetch_assoc($mon_yphr_res)) {
+                $mon_yphr_map[$y_row['emp_id']][] = $y_row;
+            }
+        }
+
+        $anapl_yphr_map = [];
+        $anapl_yphr_res = mysqli_query($mysqlconnection, "SELECT y.emp_id, y.yphrethsh, y.hours, s.name as school_name 
+                                                           FROM yphrethsh_ekt y 
+                                                           JOIN school s ON y.yphrethsh = s.id 
+                                                           WHERE y.sxol_etos = $sxol_etos");
+        if ($anapl_yphr_res) {
+            while ($y_row = mysqli_fetch_assoc($anapl_yphr_res)) {
+                $anapl_yphr_map[$y_row['emp_id']][] = $y_row;
+            }
+        }
 
         $filename = "ekpaideytikoi_symv_" . $perif . "_" . date('Ymd_His') . ".xls";
         header("Content-Type: application/vnd.ms-excel; charset=utf-8");
@@ -68,6 +97,7 @@
     <tr>
         <th>Κωδ.</th>
         <th>Ονομασία Σχολείου</th>
+        <th>Λοιπά Σχολεία υπηρέτησης</th>
         <th>Επώνυμο</th>
         <th>Όνομα</th>
         <th>Τύπος</th>
@@ -114,9 +144,24 @@
             $email = trim((string)$row['email']);
             $email_psd = trim((string)$row['email_psd']);
 
+            $loipa_sxoleia = '';
+            if (isset($mon_yphr_map[$row['id']]) && count($mon_yphr_map[$row['id']]) > 1) {
+                $other_schools = [];
+                foreach ($mon_yphr_map[$row['id']] as $yp) {
+                    if ((int)$yp['yphrethsh'] !== (int)$row['sid']) {
+                        $hrs_str = (!empty($yp['hours']) && $yp['hours'] > 0) ? " (" . $yp['hours'] . " ώρες)" : "";
+                        $other_schools[] = "• " . $yp['school_name'] . $hrs_str;
+                    }
+                }
+                if (!empty($other_schools)) {
+                    $loipa_sxoleia = implode(', ', $other_schools);
+                }
+            }
+
             echo "<tr>";
             echo "<td class='text'>$code</td>";
             echo "<td>$sname</td>";
+            echo "<td>$loipa_sxoleia</td>";
             echo "<td>$surname</td>";
             echo "<td>$name</td>";
             echo "<td class='center'>Μόνιμος</td>";
@@ -154,9 +199,24 @@
             $email = trim((string)$row['email']);
             $email_psd = trim((string)$row['email_psd']);
 
+            $loipa_sxoleia = '';
+            if (isset($anapl_yphr_map[$row['id']]) && count($anapl_yphr_map[$row['id']]) > 1) {
+                $other_schools = [];
+                foreach ($anapl_yphr_map[$row['id']] as $yp) {
+                    if ((int)$yp['yphrethsh'] !== (int)$row['sid']) {
+                        $hrs_str = (!empty($yp['hours']) && $yp['hours'] > 0) ? " (" . $yp['hours'] . " ώρες)" : "";
+                        $other_schools[] = "• " . $yp['school_name'] . $hrs_str;
+                    }
+                }
+                if (!empty($other_schools)) {
+                    $loipa_sxoleia = implode(', ', $other_schools);
+                }
+            }
+
             echo "<tr>";
             echo "<td class='text'>$code</td>";
             echo "<td>$sname</td>";
+            echo "<td>$loipa_sxoleia</td>";
             echo "<td>$surname</td>";
             echo "<td>$name</td>";
             echo "<td class='center'>Αναπληρωτής</td>";
@@ -282,7 +342,9 @@
   
     echo "<center>";
 
-    echo "<h2>Στατιστικά συμβούλων εκπαίδευσης</h2>";
+    echo "<h2>Σύμβουλοι εκπαίδευσης ΠΕ60/ΠΕ70</h2>";
+    echo "<p><small>Λίστα εκπ/κών που υπηρετούν στα σχολεία της ενότητας του επιλεγμένου συμβούλου εκπαίδευσης.</small></p>";
+    echo "<p><small>ΣΗΜ: Η εξαγωγή σε excel περιλαμβάνει επιπλέον στοιχεία, όπως συν.υπηρεσία, λοιπά σχολεία τοποθέτησης κλπ.</small></p>";
     get_symv_select($mysqlconnection);
 
     $perif = isset($_GET['enothta']) && !empty($_GET['enothta']) ? $_GET['enothta'] : null;
@@ -358,14 +420,14 @@
       // Statistics
       $stat_query0 = "SELECT count(*) from school where perif=$perif and anenergo = 0";
       $stat_query1 = "SELECT count(*) from school s JOIN employee e ON s.id = e.sx_yphrethshs 
-      WHERE status IN (1,3,5) AND s.perif=$perif";
+      WHERE e.status IN (1,3) AND s.perif=$perif $exclude_pyspe_cond";
       $stat_query2 = "SELECT count(*) from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
-      WHERE status IN (1,3,5) AND s.perif=$perif";
+      WHERE e.status IN (1,3) AND s.perif=$perif $exclude_pyspe_cond";
       // Teachers per specialty queries
       $stat_query_klados_mon = "SELECT k.perigrafh, count(*) from employee e JOIN school s ON s.id = e.sx_yphrethshs JOIN klados k ON e.klados = k.id
-      WHERE e.status IN (1,3,5) AND s.perif=$perif GROUP BY klados";
+      WHERE e.status IN (1,3) AND s.perif=$perif $exclude_pyspe_cond GROUP BY klados";
       $stat_query_klados_anapl = "SELECT k.perigrafh, count(*) from ektaktoi e JOIN school s ON s.id = e.sx_yphrethshs JOIN klados k ON e.klados = k.id
-      WHERE e.status IN (1,3,5) AND s.perif=$perif GROUP BY klados";
+      WHERE e.status IN (1,3) AND s.perif=$perif $exclude_pyspe_cond GROUP BY klados";
       
       $result0 = mysqli_query($mysqlconnection, $stat_query0);
       $row0 = mysqli_fetch_row($result0);
@@ -403,9 +465,9 @@
 
       // Gather table data
       $query = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN employee e ON s.id = e.sx_yphrethshs 
-      WHERE status IN (1,3,5) AND s.perif=$perif";
+      WHERE e.status IN (1,3) AND s.perif=$perif $exclude_pyspe_cond";
       $query2 = "SELECT s.id as sid, s.code,s.name AS sname, e.* from school s JOIN ektaktoi e ON s.id = e.sx_yphrethshs 
-      WHERE status IN (1,3,5) AND s.perif=$perif";
+      WHERE e.status IN (1,3) AND s.perif=$perif $exclude_pyspe_cond";
 
       $result = mysqli_query($mysqlconnection, $query);
       $num = mysqli_num_rows($result);
