@@ -200,6 +200,13 @@ function extract_evaluations_from_rows(array $rows) {
     $completed_by_category = ["A1" => [], "A2" => [], "B" => []];
     $completed_all = [];
 
+    $teacher_afm_col_idx = null;
+    try {
+        $teacher_afm_col_idx = find_column_index($headers, ["ΑΦΜ", "Αξιολογούμενος-ΑΦΜ", "Αξιολογούμενος ΑΦΜ"]);
+    } catch (Exception $e) {
+        $teacher_afm_col_idx = null;
+    }
+
     $target_norm = normalize_greek_text(TARGET_STATUS);
     $excluded_norms = array_map('normalize_greek_text', EXCLUDED_STATUSES);
 
@@ -215,16 +222,18 @@ function extract_evaluations_from_rows(array $rows) {
             $row = $rows[$r];
             $val_id = clean_str($row[$id_idx] ?? '');
             $val_status = clean_str($row[$status_idx] ?? '');
-            if ($val_id === '') continue;
+            if ($val_id === '' && ($teacher_afm_col_idx === null || clean_str($row[$teacher_afm_col_idx] ?? '') === '')) continue;
 
-            $afm_key = extract_afms($val_id);
-            if (empty($afm_key)) continue;
-
-            $key_str = implode(':', $afm_key);
-            if (!isset($status_map[$key_str])) {
-                $status_map[$key_str] = [];
+            if ($val_id !== '') {
+                $afm_key = extract_afms($val_id);
+                if (!empty($afm_key)) {
+                    $key_str = implode(':', $afm_key);
+                    if (!isset($status_map[$key_str])) {
+                        $status_map[$key_str] = [];
+                    }
+                    $status_map[$key_str][] = $val_status;
+                }
             }
-            $status_map[$key_str][] = $val_status;
 
             $val_status_norm = normalize_greek_text($val_status);
             foreach ($excluded_norms as $ex_norm) {
@@ -233,6 +242,13 @@ function extract_evaluations_from_rows(array $rows) {
                     if ($t_afm !== '') {
                         $completed_by_category[$cat_name][$t_afm] = true;
                         $completed_all[$t_afm] = true;
+                    }
+                    if ($teacher_afm_col_idx !== null) {
+                        $col_afm = normalize_afm($row[$teacher_afm_col_idx] ?? '');
+                        if ($col_afm !== '') {
+                            $completed_by_category[$cat_name][$col_afm] = true;
+                            $completed_all[$col_afm] = true;
+                        }
                     }
                     break;
                 }
@@ -631,7 +647,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
 
     <p style="color: #475569; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
         Η παρούσα διαδικασία επεξεργάζεται τα δεδομένα εκπαιδευτικών σε συνδυασμό με το αρχείο αξιολόγησης του Υπουργείου (Excel ή CSV),
-        εξαιρεί όσους εκπαιδευτικούς έχουν ήδη ολοκληρώσει την αξιολόγηση και ενημερώνει με επίθημα (suffix) τις εκκρεμότητες στα αρχεία
+        εξαιρεί από το αντίστοιχο αρχείο (A1, A2, B) όσους εκπαιδευτικούς έχουν ήδη ολοκληρώσει την αξιολόγηση στο συγκεκριμένο πεδίο και ενημερώνει με επίθημα (suffix) τις εκκρεμότητες στα αρχεία
         <code>a1.csv</code>, <code>a2.csv</code> και <code>b.csv</code> (μονομερή).
     </p>
 
@@ -656,11 +672,11 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                 <div class="form-group" style="flex: 1; min-width: 260px;">
                     <label>Κανόνας εξαίρεσης ολοκληρωμένων:</label>
                     <select name="exclusion_mode" class="form-control">
-                        <option value="all" <?php echo (($_POST['exclusion_mode'] ?? 'all') === 'all') ? 'selected' : ''; ?>>
-                            Εξαίρεση εάν ολοκλήρωσε σε οποιοδήποτε πεδίο (Α1, Α2, Β) - Προτεινόμενο
+                        <option value="per_category" <?php echo (($_POST['exclusion_mode'] ?? 'per_category') === 'per_category') ? 'selected' : ''; ?>>
+                            Εξαίρεση ανά συγκεκριμένο πεδίο (Α1, Α2, Β) - Προτεινόμενο
                         </option>
-                        <option value="per_category" <?php echo (($_POST['exclusion_mode'] ?? '') === 'per_category') ? 'selected' : ''; ?>>
-                            Εξαίρεση ανά συγκεκριμένο πεδίο (πεδίο προς πεδίο)
+                        <option value="all" <?php echo (($_POST['exclusion_mode'] ?? '') === 'all') ? 'selected' : ''; ?>>
+                            Εξαίρεση εάν ολοκλήρωσε σε οποιοδήποτε πεδίο (καθολική)
                         </option>
                     </select>
                 </div>
@@ -763,7 +779,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
     if (isset($_POST['process_eval'])) {
         $suffix = clean_str($_POST['suffix'] ?? DEFAULT_SUFFIX);
         if ($suffix === '') $suffix = DEFAULT_SUFFIX;
-        $per_category = (($_POST['exclusion_mode'] ?? 'all') === 'per_category');
+        $per_category = (($_POST['exclusion_mode'] ?? 'per_category') === 'per_category');
         $data_source = $_POST['data_source'] ?? 'db';
 
         // 1. Verify File Upload
@@ -1173,20 +1189,35 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     </p>
 
                     <div class='stats-grid'>
+                        " . ($per_category ? "
                         <div class='stat-card'>
-                            <div class='stat-value' style='color: #166534;'>".count($completed_all)."</div>
-                            <div class='stat-label'>Ολοκλήρωσαν αξιολόγηση</div>
+                            <div class='stat-value' style='color: #166534;'>" . count($completed_by_cat['A1']) . "</div>
+                            <div class='stat-label'>Ολοκλήρωσαν Α1</div>
                         </div>
                         <div class='stat-card'>
-                            <div class='stat-value' style='color: #b45309;'>".count($pending_dict['A1'])."</div>
+                            <div class='stat-value' style='color: #166534;'>" . count($completed_by_cat['A2']) . "</div>
+                            <div class='stat-label'>Ολοκλήρωσαν Α2</div>
+                        </div>
+                        <div class='stat-card'>
+                            <div class='stat-value' style='color: #166534;'>" . count($completed_by_cat['B']) . "</div>
+                            <div class='stat-label'>Ολοκλήρωσαν Β</div>
+                        </div>
+                        " : "
+                        <div class='stat-card'>
+                            <div class='stat-value' style='color: #166534;'>" . count($completed_all) . "</div>
+                            <div class='stat-label'>Ολοκλήρωσαν αξιολόγηση</div>
+                        </div>
+                        ") . "
+                        <div class='stat-card'>
+                            <div class='stat-value' style='color: #b45309;'>" . count($pending_dict['A1']) . "</div>
                             <div class='stat-label'>Εκκρεμότητες Α1 (Αρχείο)</div>
                         </div>
                         <div class='stat-card'>
-                            <div class='stat-value' style='color: #b45309;'>".count($pending_dict['A2'])."</div>
+                            <div class='stat-value' style='color: #b45309;'>" . count($pending_dict['A2']) . "</div>
                             <div class='stat-label'>Εκκρεμότητες Α2 (Αρχείο)</div>
                         </div>
                         <div class='stat-card'>
-                            <div class='stat-value' style='color: #b45309;'>".count($pending_dict['B'])."</div>
+                            <div class='stat-value' style='color: #b45309;'>" . count($pending_dict['B']) . "</div>
                             <div class='stat-label'>Εκκρεμότητες Β (Αρχείο)</div>
                         </div>
                     </div>
