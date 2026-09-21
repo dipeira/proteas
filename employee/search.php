@@ -414,7 +414,6 @@
 		echo "<option value=\"2\">Λύση Σχέσης-Παραίτηση</option>";
 		echo "<option value=\"3\" selected>Άδεια</option>";
 		echo "<option value=\"4\">Διαθεσιμότητα</option>";
-		echo "<option value=\"5\">Απουσία COVID-19</option>";
 		echo "</select>";
 		echo "</div>";
 		

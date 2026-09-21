@@ -491,11 +491,6 @@ function katastCmb($v)
     } else {
         echo "<option value=\"4\">Διαθεσιμότητα</option>";
     }
-    if ($v==5) {
-        echo "<option value=\"5\" selected>Απουσία COVID-19</option>";
-    } else {
-        echo "<option value=\"5\">Απουσία COVID-19</option>";
-    }
     echo "</select>";
 }
     
