@@ -843,6 +843,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     }
                 } else {
                     // Process directly from Database
+                    $sxol_etos = getParam('sxol_etos', $mysqlconnection);
                     $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ', $mysqlconnection);
                     $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $mysqlconnection);
                     $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό', $mysqlconnection);
@@ -877,12 +878,41 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         e.aksiologhsh
                     FROM employee e
                     LEFT JOIN klados k ON e.klados = k.id
-                    LEFT JOIN school s ON e.sx_yphrethshs = s.id
+                    LEFT JOIN (
+                        SELECT 
+                            emp_id,
+                            SUBSTRING_INDEX(
+                                GROUP_CONCAT(
+                                    yphrethsh 
+                                    ORDER BY 
+                                        total_hours DESC, 
+                                        is_sx_yphr DESC,
+                                        yphrethsh ASC
+                                    SEPARATOR ','
+                                ), 
+                                ',', 
+                                1
+                            ) AS primary_sch_id
+                        FROM (
+                            SELECT 
+                                y.emp_id,
+                                y.yphrethsh,
+                                SUM(y.hours + 0) as total_hours,
+                                MAX(y.yphrethsh = e.sx_yphrethshs) as is_sx_yphr
+                            FROM yphrethsh y
+                            JOIN employee e ON y.emp_id = e.id
+                            WHERE y.sxol_etos = '$sxol_etos'
+                            GROUP BY y.emp_id, y.yphrethsh
+                        ) sch_hours
+                        GROUP BY emp_id
+                    ) yp ON e.id = yp.emp_id
+                    LEFT JOIN school s ON COALESCE(yp.primary_sch_id, e.sx_yphrethshs) = s.id
                     LEFT JOIN symvouloi sm ON s.perif = sm.perif
                     LEFT JOIN employee sp ON sm.emp_id = sp.id
                     LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
                     WHERE e.status = 1 
                     AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
+                    AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
                     AND s.type2 = 0";
 
                     if (!empty($_POST['hm_dior_from'])) {

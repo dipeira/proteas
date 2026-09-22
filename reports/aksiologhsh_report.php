@@ -165,12 +165,41 @@ if ($_SESSION['userlevel']<>0) {
             e.aksiologhsh
         FROM employee e
         LEFT JOIN klados k ON e.klados = k.id
-        LEFT JOIN school s ON e.sx_yphrethshs = s.id
+        LEFT JOIN (
+            SELECT 
+                emp_id,
+                SUBSTRING_INDEX(
+                    GROUP_CONCAT(
+                        yphrethsh 
+                        ORDER BY 
+                            total_hours DESC, 
+                            is_sx_yphr DESC,
+                            yphrethsh ASC
+                        SEPARATOR ','
+                    ), 
+                    ',', 
+                    1
+                ) AS primary_sch_id
+            FROM (
+                SELECT 
+                    y.emp_id,
+                    y.yphrethsh,
+                    SUM(y.hours + 0) as total_hours,
+                    MAX(y.yphrethsh = e.sx_yphrethshs) as is_sx_yphr
+                FROM yphrethsh y
+                JOIN employee e ON y.emp_id = e.id
+                WHERE y.sxol_etos = '$sxol_etos'
+                GROUP BY y.emp_id, y.yphrethsh
+            ) sch_hours
+            GROUP BY emp_id
+        ) yp ON e.id = yp.emp_id
+        LEFT JOIN school s ON COALESCE(yp.primary_sch_id, e.sx_yphrethshs) = s.id
         LEFT JOIN symvouloi sm ON s.perif = sm.perif
         LEFT JOIN employee sp ON sm.emp_id = sp.id
         LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
         WHERE e.status = 1 
         AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
+        AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
         AND s.type2 = 0"; // dhmosio
 
         // Add filters
@@ -335,7 +364,8 @@ if ($_SESSION['userlevel']<>0) {
         $table_html = ob_get_clean();
 
         $unique_count = count($seen_table);
-        $count_display = "<div style='margin: 10px 0; font-weight: bold; color: #1b5e20;'><span title='$query'>$unique_count μοναδικοί εκπαιδευτικοί</span></div>";
+        $query_title = htmlspecialchars($query, ENT_QUOTES, 'UTF-8');
+        $count_display = "<div style='margin: 10px 0; font-weight: bold; color: #1b5e20;'><span title=\"$query_title\">$unique_count μοναδικοί εκπαιδευτικοί</span></div>";
 
         echo $count_display;
         echo $table_html;
