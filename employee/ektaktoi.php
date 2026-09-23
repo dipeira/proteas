@@ -1141,7 +1141,7 @@ elseif ($_GET['op']=="view")
         }
         echo "</form>";
         //Form gia metakinhsh (only for user pispe)
-        if ($_SESSION['user'] === 'pispe'){
+        if ($_SESSION['user'] === 'pispe' || $usrlvl == 0){
           echo "<form id='metakfrm' name='metakfrm' action='metakinhsh.php' method='POST'>";
           echo "<input type='hidden' name='type' value=$type>";
           echo "<input type='hidden' name='surname' value=$surname>";

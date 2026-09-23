@@ -103,13 +103,14 @@
       if ($is_kratikos)
         $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_krat.docx');
       else {
+        $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa.docx');
         // choose template depending on praxi
-        if ( in_array( $emp_data['praxi'], array(2,4) ) )
-          $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa2.docx');
-        else if ( in_array($emp_data['praxi'], array(13) ) )
-          $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa_aney.docx');
-        else //if ( in_array( $emp_data['praxi'], array(3,7,8,9,10) ) )
-          $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa.docx');
+        // if ( in_array( $emp_data['praxi'], array(2,4) ) )
+        //   $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa2.docx');
+        // else if ( in_array($emp_data['praxi'], array(13) ) )
+        //   $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa_aney.docx');
+        // else //if ( in_array( $emp_data['praxi'], array(3,7,8,9,10) ) )
+        //   $document = $PHPWord->loadTemplate('../word/tmpl/tmpl_metak_espa.docx');
       }
         
     }

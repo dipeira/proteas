@@ -1442,12 +1442,12 @@ elseif ($_GET['op']=="view") {
     echo "<input type='hidden' name='ymd' value='$ymd'>";
     //echo "<input type='hidden' name='afm' value=$afm>";
     if ($usrlvl < 3) {
-        echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ.Κατάστασης'>"; 
+        echo "<INPUT TYPE='submit' name='yphr' VALUE='Βεβαίωση Υπηρ. Κατάστασης'>"; 
     }
     //echo "&nbsp;&nbsp;<INPUT TYPE='submit' name='anadr' VALUE='Βεβαίωση διεκδίκησης αναδρομικών'>"; 
     echo "</form>";
     //Form gia metakinhsh
-    if ($_SESSION['user'] === 'pispe'){
+    if ($_SESSION['user'] === 'pispe' || $usrlvl == 0){
       echo "<form id='metakfrm' name='metakfrm' action='metakinhsh.php' method='POST'>";
       echo "<input type='hidden' name='type' value='mon'>";
       echo "<input type='hidden' name='surname' value=$surname>";
