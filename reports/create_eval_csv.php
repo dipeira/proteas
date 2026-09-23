@@ -871,6 +871,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         e.klados as klados_id,
                         s.name as sch_name,
                         s.id as sch_id,
+                        s.type2,
                         s.perif,
                         e.hm_dior,
                         e.thesi,
@@ -913,7 +914,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     WHERE e.status = 1 
                     AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
                     AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
-                    AND s.type2 = 0";
+                    AND s.type2 IN (0, 2)";
 
                     if (!empty($_POST['hm_dior_from'])) {
                         $query .= " AND e.hm_dior >= '".$_POST['hm_dior_from']."'";
@@ -994,7 +995,11 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             }
                         }
 
-                        $is_eae = (in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || in_array($row['klados_id'], [16, 17, 18, 19]));
+                        $is_eae = (
+                            in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
+                            in_array($row['klados_id'], [16, 17, 18, 19]) || 
+                            ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
+                        );
 
                         if ($is_eae) {
                             $symv_epist_afm = $row['symv_paid_afm'];
@@ -1002,6 +1007,24 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             $symv_epist_name = $row['symv_paid_name'];
 
                             $eae_c = $consultant_found ?: $default_consultant;
+                            if (!$eae_c && $row['type2'] == 2) {
+                                $eae_kladoi = ($row['klados_id'] == 1 || $row['klados'] == 'ΠΕ60') ? [16, 17] : [18, 19];
+                                foreach ($eae_kladoi as $ek) {
+                                    if (!empty($se_by_klados[$ek])) {
+                                        foreach ($se_by_klados[$ek] as $c) {
+                                            if (!empty($c['sch_ids'])) {
+                                                $c_schools = explode(',', $c['sch_ids']);
+                                                if (in_array($row['sch_id'], $c_schools)) {
+                                                    $eae_c = $c;
+                                                    break 2;
+                                                }
+                                            } elseif (!$eae_c) {
+                                                $eae_c = $c;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             if ($eae_c) {
                                 $symv_paid_afm = $eae_c['afm'];
                                 $symv_paid_surname = $eae_c['eponymo'];

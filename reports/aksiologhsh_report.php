@@ -158,6 +158,7 @@ if ($_SESSION['userlevel']<>0) {
             e.klados as klados_id,
             s.name as sch_name,
             s.id as sch_id,
+            s.type2,
             s.perif,
             e.hm_dior,
             e.thesi,
@@ -200,7 +201,7 @@ if ($_SESSION['userlevel']<>0) {
         WHERE e.status = 1 
         AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
         AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
-        AND s.type2 = 0"; // dhmosio
+        AND s.type2 IN (0, 2)"; // dhmosio, eidiko
 
         // Add filters
         if (!empty($_POST['hm_dior_from'])) {
@@ -287,10 +288,14 @@ if ($_SESSION['userlevel']<>0) {
                     }
                 }
 
-                $is_eae = (in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || in_array($row['klados_id'], [16, 17, 18, 19]));
+                $is_eae = (
+                    in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
+                    in_array($row['klados_id'], [16, 17, 18, 19]) || 
+                    ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
+                );
 
                 if ($is_eae) {
-                    // Για τους εκπ/κούς Ειδικής Αγωγής (ΠΕ60ΕΑΕ, ΠΕ70ΕΑΕ, ΠΕ61, ΠΕ71):
+                    // Για τους εκπ/κούς Ειδικής Αγωγής (ΠΕ60ΕΑΕ, ΠΕ70ΕΑΕ, ΠΕ61, ΠΕ71) ή εκπ/κούς γενικής που υπηρετούν σε ειδικό σχολείο (type2 = 2):
                     // Επιστημονική ευθύνη (Πεδίο Α1) έχει ο σύμβουλος Παιδαγωγικής ευθύνης του σχολείου
                     $symv_epist_afm = $row['symv_paid_afm'];
                     $symv_epist_surname = $row['symv_paid_surname'];
@@ -298,6 +303,24 @@ if ($_SESSION['userlevel']<>0) {
 
                     // Παιδαγωγική ευθύνη (Πεδίο Α2 & Β) έχει ο σύμβουλος Ειδικής Αγωγής (από τον πίνακα symvouloi_epist)
                     $eae_c = $consultant_found ?: $default_consultant;
+                    if (!$eae_c && $row['type2'] == 2) {
+                        $eae_kladoi = ($row['klados_id'] == 1 || $row['klados'] == 'ΠΕ60') ? [16, 17] : [18, 19];
+                        foreach ($eae_kladoi as $ek) {
+                            if (!empty($se_by_klados[$ek])) {
+                                foreach ($se_by_klados[$ek] as $c) {
+                                    if (!empty($c['sch_ids'])) {
+                                        $c_schools = explode(',', $c['sch_ids']);
+                                        if (in_array($row['sch_id'], $c_schools)) {
+                                            $eae_c = $c;
+                                            break 2;
+                                        }
+                                    } elseif (!$eae_c) {
+                                        $eae_c = $c;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if ($eae_c) {
                         $symv_paid_afm = $eae_c['afm'];
                         $symv_paid_surname = $eae_c['eponymo'];
