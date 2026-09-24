@@ -305,6 +305,7 @@ header('Content-type: text/html; charset=utf-8');
     echo "<tr><td>7</td><td>synafeia</td><td>0/1 ή ΝΑΙ/NAI/ΟΧΙ/OXI</td><td>Συνάφεια (0 ή ΟΧΙ=Όχι, 1 ή ΝΑΙ=Ναι)</td></tr>";
     echo "</tbody>";
     echo "</table>";
+    echo "<p style='margin-top: 15px;'><a href='templates/postgrad.csv' class='link-sample' download>📥 Λήψη δείγματος CSV Μεταπτυχιακών (postgrad.csv)</a></p>";
     echo "</div>";
 
     echo "<div class='import-section' id='comments-section' style='display:none;'>";
@@ -318,12 +319,13 @@ header('Content-type: text/html; charset=utf-8');
     echo "<th>Περιγραφή</th>";
     echo "</tr></thead>";
     echo "<tbody>";
-    echo "<tr><td>1</td><td>afm</td><td>Αριθμός</td><td>Αριθμός Φορολογικού Μητρώου (θα αναζητηθεί στον πίνακα εκπ/κών, μόνιμος ή αναπληρωτής)</td></tr>";
+    echo "<tr><td>1</td><td>afm / am</td><td>Αριθμός</td><td>Αριθμός Φορολογικού Μητρώου (για μόνιμους ή αναπληρωτές) ή Αριθμός Μητρώου (για μόνιμους)</td></tr>";
     echo "<tr><td>2</td><td>category</td><td>Κατηγορία</td><td>Ένα από τα: Μεταπτυχιακό / Διδακτορικό / Ενιαίος και αδιάσπαστος τίτλος σπουδών μεταπτυχιακού επιπέδου (Integrated master)</td></tr>";
     echo "<tr><td>3</td><td>comment</td><td>Κείμενο</td><td>Σχόλιο που θα προστεθεί</td></tr>";
     echo "</tbody>";
     echo "</table>";
-    echo "<p><strong>Σημ.:</strong> Το σχόλιο θα προστεθεί στο τέλος του υπάρχοντος και met_did θα ενημερωθεί ανάλογα με την κατηγορία.</p>";
+    echo "<p><strong>Σημ.:</strong> Το σχόλιο θα προστεθεί στο τέλος του υπάρχοντος και το πεδίο <strong>met_did</strong> θα ενημερωθεί ανάλογα με την κατηγορία.</p>";
+    echo "<p style='margin-top: 15px;'><a href='templates/postgrad_comments.csv' class='link-sample' download>📥 Λήψη δείγματος CSV Σχολίων (postgrad_comments.csv)</a></p>";
     echo "</div>";
 
     echo "<div class='file-upload-section'>";
@@ -358,9 +360,6 @@ header('Content-type: text/html; charset=utf-8');
   if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
     require '../etc/menu.php';
     echo "<div class='import-container'>";
-    echo "<div class='result-message result-success'>";
-    echo "<p><strong>Το αρχείο " . htmlspecialchars($_FILES['filename']['name']) . " ανέβηκε με επιτυχία.</strong></p>";
-    echo "</div>";
 
     //Import uploaded file to Database
     $handle = fopen($_FILES['filename']['tmp_name'], "r");
@@ -415,15 +414,20 @@ header('Content-type: text/html; charset=utf-8');
       // comment importing
       if ($import_type === 'comments') {
         // COMMENTS IMPORT LOGIC
-        $afm = intval($data[0]);
+        $raw_id = trim($data[0]);
         $category = $data[1];
         $comment = $data[2];
-        $log_entries[] = "Γραμμή " . ($num + 2) . ": ΑΦΜ=$afm, Κατηγορία=$category";
 
-        // validate afm
-        if ($afm <= 0) {
+        // Determine if 1st column is AM (permanent teachers) or AFM
+        $is_am = (strlen($raw_id) <= 7);
+        $id_type = $is_am ? 'ΑΜ' : 'ΑΦΜ';
+        $log_entries[] = "Γραμμή " . ($num + 2) . ": $id_type=$raw_id, Κατηγορία=$category";
+
+        // validate identifier
+        $id_num = intval($raw_id);
+        if ($id_num <= 0) {
           $error = true;
-          $er_msg = "Σφάλμα: Άκυρο ΑΦΜ στη γραμμή " . ($num + 2);
+          $er_msg = "Σφάλμα: Άκυρο $id_type '$raw_id' στη γραμμή " . ($num + 2);
           break;
         }
 
@@ -468,59 +472,73 @@ header('Content-type: text/html; charset=utf-8');
           $met_did = 4;
         }
 
-        // Search in employee table first
-        $qry_emp = "SELECT id, comments FROM employee WHERE afm = $afm";
-        $result_emp = mysqli_query($mysqlconnection, $qry_emp);
+        $target_table = null;
+        $target_id = null;
+        $existing_comment = null;
 
-        if (mysqli_num_rows($result_emp) > 0) {
-          // Found in employee table
-          $row_emp = mysqli_fetch_assoc($result_emp);
-          $emp_id = $row_emp['id'];
-          $existing_comment = $row_emp['comments'];
+        if ($is_am) {
+          // Search in employee table by AM
+          $qry_emp = "SELECT id, comments FROM employee WHERE am = $id_num";
+          $result_emp = mysqli_query($mysqlconnection, $qry_emp);
 
-          // Check if comment already exists
+          if (mysqli_num_rows($result_emp) > 0) {
+            $row_emp = mysqli_fetch_assoc($result_emp);
+            $target_table = 'employee';
+            $target_id = $row_emp['id'];
+            $existing_comment = $row_emp['comments'];
+          } else {
+            // AM not found in permanent teachers
+            $warnings++;
+            $warn_msg .= "Προειδοποίηση: ΑΜ $raw_id δεν βρέθηκε στους μονίμους (γραμμή " . ($num + 2) . ")<br>";
+          }
+        } else {
+          // Search in employee table first by AFM
+          $raw_id_esc = mysqli_real_escape_string($mysqlconnection, $raw_id);
+          $padded_id = (strlen($raw_id) == 8) ? '0' . $raw_id : $raw_id;
+          $padded_id_esc = mysqli_real_escape_string($mysqlconnection, $padded_id);
+
+          $qry_emp = "SELECT id, comments FROM employee WHERE afm = '$raw_id_esc' OR afm = '$padded_id_esc' OR afm = $id_num";
+          $result_emp = mysqli_query($mysqlconnection, $qry_emp);
+
+          if (mysqli_num_rows($result_emp) > 0) {
+            // Found in employee table
+            $row_emp = mysqli_fetch_assoc($result_emp);
+            $target_table = 'employee';
+            $target_id = $row_emp['id'];
+            $existing_comment = $row_emp['comments'];
+          } else {
+            // Search in ektaktoi table by AFM
+            $qry_ekt = "SELECT id, comments FROM ektaktoi WHERE afm = '$raw_id_esc' OR afm = '$padded_id_esc' OR afm = $id_num";
+            $result_ekt = mysqli_query($mysqlconnection, $qry_ekt);
+
+            if (mysqli_num_rows($result_ekt) > 0) {
+              // Found in ektaktoi table
+              $row_ekt = mysqli_fetch_assoc($result_ekt);
+              $target_table = 'ektaktoi';
+              $target_id = $row_ekt['id'];
+              $existing_comment = $row_ekt['comments'];
+            } else {
+              // Teacher not found
+              $warnings++;
+              $warn_msg .= "Προειδοποίηση: ΑΦΜ $raw_id δεν βρέθηκε ούτε στους μονίμους ούτε στους αναπληρωτές (γραμμή " . ($num + 2) . ")<br>";
+            }
+          }
+        }
+
+        // If teacher was found, check and update comments
+        if ($target_table !== null) {
           if (!empty($existing_comment) && stripos($existing_comment, $comment) !== false) {
             // Comment already exists
             $warnings++;
-            $warn_msg .= "Προειδοποίηση: Το σχόλιο για ΑΦΜ $afm υπάρχει ήδη και δεν θα ξαναπροστεθεί (γραμμή " . ($num + 2) . ")<br>";
+            $warn_msg .= "Προειδοποίηση: Το σχόλιο για $id_type $raw_id υπάρχει ήδη και δεν θα ξαναπροστεθεί (γραμμή " . ($num + 2) . ")<br>";
           } else {
             // Append new comment
             $new_comment = empty($existing_comment) ? $comment : $existing_comment . "\n" . $comment;
             $new_comment = mysqli_real_escape_string($mysqlconnection, $new_comment);
 
-            $update_query = "UPDATE employee SET comments = '$new_comment', met_did = $met_did WHERE id = $emp_id";
-            $update_queries[] = array('table' => 'employee', 'query' => $update_query);
+            $update_query = "UPDATE $target_table SET comments = '$new_comment', met_did = $met_did WHERE id = $target_id";
+            $update_queries[] = array('table' => $target_table, 'query' => $update_query);
             $saves++;
-          }
-        } else {
-          // Search in ektaktoi table
-          $qry_ekt = "SELECT id, comments FROM ektaktoi WHERE afm = $afm";
-          $result_ekt = mysqli_query($mysqlconnection, $qry_ekt);
-
-          if (mysqli_num_rows($result_ekt) > 0) {
-            // Found in ektaktoi table
-            $row_ekt = mysqli_fetch_assoc($result_ekt);
-            $ekt_id = $row_ekt['id'];
-            $existing_comment = $row_ekt['comments'];
-
-            // Check if comment already exists
-            if (!empty($existing_comment) && stripos($existing_comment, $comment) !== false) {
-              // Comment already exists
-              $warnings++;
-              $warn_msg .= "Προειδοποίηση: Το σχόλιο για ΑΦΜ $afm υπάρχει ήδη και δεν θα ξαναπροστεθεί (γραμμή " . ($num + 2) . ")<br>";
-            } else {
-              // Append new comment
-              $new_comment = empty($existing_comment) ? $comment : $existing_comment . "\n" . $comment;
-              $new_comment = mysqli_real_escape_string($mysqlconnection, $new_comment);
-
-              $update_query = "UPDATE ektaktoi SET comments = '$new_comment', met_did = $met_did WHERE id = $ekt_id";
-              $update_queries[] = array('table' => 'ektaktoi', 'query' => $update_query);
-              $saves++;
-            }
-          } else {
-            // Teacher not found
-            $warnings++;
-            $warn_msg .= "Προειδοποίηση: ΑΦΜ $afm δεν βρέθηκε ούτε στους μονίμους ούτε στους αναπληρωτές (γραμμή " . ($num + 2) . ")<br>";
           }
         }
 
@@ -665,8 +683,16 @@ header('Content-type: text/html; charset=utf-8');
       }
     }
 
-    echo "<div class='result-message result-success'>";
-    echo "<h3>Εισαγωγή ολοκληρώθηκε!</h3>";
+    $result_class = ($failed == 0) ? 'result-success' : ($successful > 0 ? 'result-warning' : 'result-error');
+    echo "<div class='result-message $result_class'>";
+    if ($failed == 0) {
+      echo "<p><strong>Το αρχείο " . htmlspecialchars($_FILES['filename']['name']) . " ανέβηκε με επιτυχία.</strong></p>";
+      echo "<h3>Εισαγωγή ολοκληρώθηκε!</h3>";
+    } else if ($successful > 0) {
+      echo "<h3>Η εισαγωγή ολοκληρώθηκε με μερικά σφάλματα</h3>";
+    } else {
+      echo "<h3>Η εισαγωγή απέτυχε</h3>";
+    }
 
     if ($import_type === 'comments') {
       // Display statistics for comments import
