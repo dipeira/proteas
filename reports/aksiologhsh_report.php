@@ -262,12 +262,14 @@ if ($_SESSION['userlevel']<>0) {
             </tr></thead><tbody>";
             
             $count = 1;
+            $evaluated_emp_ids = [];
             while ($row = mysqli_fetch_array($result)) {
                 $emp_afm = trim($row['emp_afm']);
                 if (isset($seen_table[$emp_afm])) {
                     continue;
                 }
                 $seen_table[$emp_afm] = true;
+                $evaluated_emp_ids[] = (int)$row['emp_id'];
 
                 // Find consultant for this klados and school
                 $consultants = $se_by_klados[$row['klados_id']] ?? [];
@@ -387,8 +389,19 @@ if ($_SESSION['userlevel']<>0) {
         $table_html = ob_get_clean();
 
         $unique_count = count($seen_table);
+        $_SESSION['eval_emp_ids'] = $evaluated_emp_ids;
         $query_title = htmlspecialchars($query, ENT_QUOTES, 'UTF-8');
-        $count_display = "<div style='margin: 10px 0; font-weight: bold; color: #1b5e20;'><span title=\"$query_title\">$unique_count μοναδικοί εκπαιδευτικοί</span></div>";
+        $count_display = "<div style='display: flex; justify-content: space-between; align-items: center; margin: 15px 0;'>
+            <div style='font-weight: bold; color: #1b5e20; font-size: 15px;'><span title=\"$query_title\">$unique_count μοναδικοί εκπαιδευτικοί</span></div>
+            <div>
+                <form method='post' action='aksiologhsh_topo.php' target='_blank' style='margin: 0; display: inline-block;'>
+                    <input type='hidden' name='emp_ids' value='" . implode(',', $evaluated_emp_ids) . "'>
+                    <button type='submit' class='btn btn-blue' style='cursor: pointer; padding: 7px 16px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12);'>
+                        🏫 Αναφορά Τοποθετήσεων Αξιολογούμενων ($unique_count)
+                    </button>
+                </form>
+            </div>
+        </div>";
 
         echo $count_display;
         echo $table_html;
