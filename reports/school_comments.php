@@ -48,15 +48,48 @@ $result = mysqli_query($conn, $query);
   .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.82rem; }
   .badge.success { background: #d1fae5; color: #065f46; }
   .badge.muted { background: #f3f4f6; color: #374151; }
+  .dt-buttons { margin-bottom: 12px; }
+  .dt-button { border-radius: 6px !important; padding: 6px 14px !important; font-weight: 500 !important; margin-right: 6px !important; }
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
   const table = $('#comments-table').DataTable({
     pageLength: 25,
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, 'Όλα']
+    ],
     order: [[4, 'desc']],
     language: {
       url: '../js/datatables/greek.json'
-    }
+    },
+    dom: 'Bfrtlip',
+    buttons: [
+      {
+        extend: 'excel',
+        text: 'Εξαγωγή σε Excel',
+        className: 'btn-green',
+        title: 'Σχόλια - Ενέργειες Σχολικών Μονάδων',
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5, 6, 7],
+          format: {
+            body: function(data, row, column, node) {
+              const $tr = $(node).closest('tr');
+              if (column === 2) {
+                return $tr.data('comment') !== undefined ? $tr.data('comment') : $(node).text().trim();
+              }
+              if (column === 3) {
+                return $tr.data('action') !== undefined ? $tr.data('action') : $(node).text().trim();
+              }
+              if (column === 6) {
+                return $tr.data('done') !== undefined ? $tr.data('done') : $(node).text().trim();
+              }
+              return $(node).text().trim();
+            }
+          }
+        }
+      }
+    ]
   });
 
   $('#status-filter').on('change', function() {
