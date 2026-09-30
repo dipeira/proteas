@@ -234,17 +234,7 @@ CREATE TABLE IF NOT EXISTS `ektaktoi` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ektaktoi_log`
---
-
-CREATE TABLE IF NOT EXISTS `ektaktoi_log` (
-  `emp_id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `action` int(11) NOT NULL COMMENT '0 add, 1 edit, 2 delete',
-  `ip` varchar(30) NOT NULL,
-  `query` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- Table `ektaktoi_log` merged into unified `employee_log`
 
 -- --------------------------------------------------------
 
@@ -429,13 +419,19 @@ CREATE TABLE IF NOT EXISTS `employee_deleted` (
 --
 
 CREATE TABLE IF NOT EXISTS `employee_log` (
-  `emp_id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `action` int(11) NOT NULL COMMENT '0 add, 1 edit, 2 delete',
-  `ip` varchar(30) NOT NULL,
-  `query` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int(10) unsigned NOT NULL,
+  `emp_type` tinyint(3) unsigned NOT NULL DEFAULT 1 COMMENT '1: Μόνιμος (employee), 2: Αναπληρωτής (ektaktoi)',
+  `emp_id` int(11) NOT NULL COMMENT 'affected employee id',
+  `user_id` int(11) NOT NULL COMMENT 'who made the change',
+  `table_name` varchar(64) NOT NULL DEFAULT 'employee',
+  `action` enum('add','edit','delete') NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `query` text NOT NULL,
+  `affected_fields` json DEFAULT NULL,
+  `old_values` json DEFAULT NULL,
+  `new_values` json DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -875,12 +871,7 @@ ALTER TABLE `ektaktoi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `klados` (`klados`);
 
---
--- Indexes for table `ektaktoi_log`
---
-ALTER TABLE `ektaktoi_log`
-  ADD PRIMARY KEY (`timestamp`),
-  ADD KEY `userid` (`userid`);
+-- Indexes for table `ektaktoi_log` merged into `employee_log`
 
 --
 -- Indexes for table `ektaktoi_old`
@@ -915,8 +906,13 @@ ALTER TABLE `employee_deleted`
 -- Indexes for table `employee_log`
 --
 ALTER TABLE `employee_log`
-  ADD PRIMARY KEY (`timestamp`),
-  ADD KEY `userid` (`userid`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_emp` (`emp_id`),
+  ADD KEY `idx_emp_type_emp` (`emp_type`,`emp_id`),
+  ADD KEY `idx_user` (`user_id`),
+  ADD KEY `idx_table` (`table_name`),
+  ADD KEY `idx_action` (`action`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- Indexes for table `klados`
@@ -1038,6 +1034,11 @@ ALTER TABLE `employee`
 --
 ALTER TABLE `employee_deleted`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `employee_log`
+--
+ALTER TABLE `employee_log`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `klados`
 --

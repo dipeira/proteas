@@ -122,6 +122,11 @@
                     $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
                     mysqli_query($mysqlconnection, $query);
             }
+            // insert 2 log
+            $qry_new = "SELECT * FROM ektaktoi WHERE id = $id";
+            $res_new = mysqli_query($mysqlconnection, $qry_new);
+            $new_row = $res_new ? mysqli_fetch_assoc($res_new) : null;
+            employeeAuditLog($mysqlconnection, (int)$id, (int)$_SESSION['userid'], 'ektaktoi', 'add', 2, 'Προσθήκη αναπληρωτή', null, $new_row);
       }
       // if already inserted display error
       else 
@@ -132,19 +137,18 @@
   }
   else
   {
+      // get current row from db before modification
+      $qry = "SELECT * from ektaktoi WHERE id=$id";
+      $res = mysqli_query($mysqlconnection, $qry);
+      $before = mysqli_fetch_assoc($res);
+
       if ($multi)
       {
-          // get current row from db
-          $qry = "SELECT * from ektaktoi WHERE id=$id";
-          $res = mysqli_query($mysqlconnection, $qry);
-          $before = mysqli_fetch_row($res);
-          
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr_arr[0]',";
           $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',hm_apox='$hm_apox',thesi=$thesi,wres=$wres, ent_ty=$entty, ";
           $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto',email='$email',email_psd='$email_psd' WHERE id='$id'";
           $query = $query1.$query2.$query3;
 
-          $qlog .= $query;
           mysqli_query($mysqlconnection, $query);
           // Archive current yphrethseis before saving new
           archive_yphrethseis($mysqlconnection, $id, $sxol_etos, $yphr_arr, $hours_arr, false);
@@ -156,26 +160,15 @@
           {
                 $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[$i]', '$hours_arr[$i]', $sxol_etos)";
                 mysqli_query($mysqlconnection, $query);
-                $qlog = $qlog . ' \n ' . $query;
           }
-          // insert 2 log
-          $qlog = addslashes($qlog);
-          $query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$qlog')";
-          mysqli_query($mysqlconnection, $query1);
       }
       else
       {
-          // get current row from db
-          $qry = "SELECT * from ektaktoi WHERE id=$id";
-          $res = mysqli_query($mysqlconnection, $qry);
-          $before = mysqli_fetch_row($res);
-          
           $query1 = "UPDATE ektaktoi SET name='".$name."', surname='".$surname."', klados='".$klados."', sx_yphrethshs='$yphr',";
           $query2 = " patrwnymo='$patrwnymo', mhtrwnymo='$mhtrwnymo', analipsi='$analipsi', met_did='$met_did',thesi=$thesi,ent_ty=$entty,wres=$wres,";
           $query3 = " hm_apox='$hm_apox', hm_anal='$hm_anal', type= '$type', comments='$comments',afm='$afm', status='$katast', ya='$ya', apofasi='$apofasi', metakinhsh='$metakinhsh', praxi='$praxi', stathero='$stathero', kinhto='$kinhto', email='$email', email_psd='$email_psd' WHERE id='$id'";
           $query = $query1.$query2.$query3;
-          $qlog .= $query;
-          //echo $query;
+
           mysqli_query($mysqlconnection, $query);
           // Archive current yphrethseis before saving new
           archive_yphrethseis($mysqlconnection, $id, $sxol_etos, $yphr_arr, $hours_arr, false);
@@ -188,13 +181,14 @@
           {
               $query = "insert into yphrethsh_ekt (emp_id, yphrethsh, hours, sxol_etos) values ($id, '$yphr_arr[0]', '$hours_arr[0]', $sxol_etos)";
               mysqli_query($mysqlconnection, $query);
-              $qlog = $qlog . ' \n ' . $query;
           }
-          // insert 2 log
-          $qlog = addslashes($qlog);
-          $query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$qlog')";
-          mysqli_query($mysqlconnection, $query1);
       }
+
+      // log changes
+      $qry = "SELECT * from ektaktoi WHERE id=$id";
+      $res = mysqli_query($mysqlconnection, $qry);
+      $after = mysqli_fetch_assoc($res);
+      employeeAuditLog($mysqlconnection, (int)$id, (int)$_SESSION['userid'], 'ektaktoi', 'edit', 2, '', $before, $after);
   }
 
   if (!$dupe)

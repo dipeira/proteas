@@ -139,8 +139,10 @@ if (isset($_POST['action']))
             mysqli_query($mysqlconnection, $query);
         } 
         // insert 2 log
-        $query1 = "INSERT INTO employee_log (emp_id, userid, action, ip) VALUES ('$id',".$_SESSION['userid'].", 0,'$ip')";
-        mysqli_query($mysqlconnection, $query1);
+        $qry_new = "SELECT * FROM employee WHERE id = $id";
+        $res_new = mysqli_query($mysqlconnection, $qry_new);
+        $new_row = $res_new ? mysqli_fetch_assoc($res_new) : null;
+        employeeAuditLog($mysqlconnection, (int)$id, (int)$_SESSION['userid'], 'employee', 'add', 1, 'Προσθήκη εγγραφής', null, $new_row);
     }
     // if already inserted
     else 
@@ -172,16 +174,7 @@ else {
         $res = mysqli_query($mysqlconnection, $qry);
         $after = mysqli_fetch_assoc($res);
 
-        $diff = array_diff($after, $before);
-        unset($diff['updated']);
-        $temp = Array();
-        foreach ($diff as $key => $value) {
-            array_push($temp, $key .': '. $before[$key] .' -> '.$value);
-        }
-        $change = implode(", ", $temp);
-        //
-        $query1 = "INSERT INTO employee_log (emp_id, userid, action, ip, query) VALUES ('$id',".$_SESSION['userid'].", 1, '$ip', '$change')";
-        mysqli_query($mysqlconnection, $query1);
+        employeeAuditLog($mysqlconnection, (int)$id, (int)$_SESSION['userid'], 'employee', 'edit', 1, '', $before, $after);
     }
     // Archive current yphrethseis before saving new
     archive_yphrethseis($mysqlconnection, $id, $sxol_etos, $yphr_arr, $hours_arr, true);

@@ -144,7 +144,7 @@
       // if monimos, examine employee_log for latest change in sx_yphreshsh
       $yphr_latest = '';
       if ($has_changes){
-        $log_qry = "SELECT max(timestamp) as max_ts FROM employee_log WHERE emp_id = $id AND query LIKE '%sx_yphrethshs%' ";
+        $log_qry = "SELECT max(created_at) as max_ts FROM employee_log WHERE emp_id = $id AND emp_type = 1 AND query LIKE '%sx_yphrethshs%' ";
         $res_log = mysqli_query($mysqlconnection, $log_qry);
         if ($log_row = mysqli_fetch_array($res_log)) {
           $yphr_latest = $log_row['max_ts'] ? $log_row['max_ts'] : '';

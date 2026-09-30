@@ -428,6 +428,12 @@
         e.preventDefault();
         $("#yphrethsh-archive").slideToggle();
       });
+      $(".slidingDiv3").hide();
+      $(".show_hide3").show();
+      $('.show_hide3').click(function(e){
+        e.preventDefault();
+        $(".slidingDiv3").slideToggle();
+      });
     });
   </script>
 
@@ -1164,6 +1170,51 @@ elseif ($_GET['op']=="view")
         <?php
         echo "</td><td colspan=2></td></tr>";
         
+        // show changes for admin (τρέχον σχολικό έτος)
+        if ($usrlvl == 0) {
+            $date_filter = "";
+            $start_year = (int)substr((string)$sxol_etos, 0, 4);
+            if ($start_year > 2000) {
+                $start_date = "$start_year-09-01 00:00:00";
+                $end_date = ($start_year + 1) . "-08-31 23:59:59";
+                $date_filter = "AND l.created_at >= '$start_date' AND l.created_at <= '$end_date'";
+            }
+            $update_qry = "SELECT l.*, u.username FROM employee_log l JOIN logon u ON u.userid = l.user_id WHERE l.emp_id=$id AND l.emp_type=2 $date_filter ORDER BY l.created_at DESC";
+            $result_upd = mysqli_query($mysqlconnection, $update_qry);
+            if (mysqli_num_rows($result_upd) > 0) {
+                echo "<tr><td><a href=\"#\" class=\"show_hide3\"><small>Εμφάνιση/Απόκρυψη<br>μεταβολών</small></a></td>";
+                echo "<td colspan=3><div class=\"slidingDiv3\">";
+                echo "<ul>";
+                while ($row = mysqli_fetch_array($result_upd, MYSQLI_ASSOC)) {
+                    $action_badge = '';
+                    if ($row['action'] === 'add') {
+                        $action_badge = "<span style='color:green;font-weight:bold;'>[Προσθήκη]</span> ";
+                    } elseif ($row['action'] === 'delete') {
+                        $action_badge = "<span style='color:red;font-weight:bold;'>[Διαγραφή]</span> ";
+                    } else {
+                        $action_badge = "<span style='color:#0d6efd;font-weight:bold;'>[Μεταβολή]</span> ";
+                    }
+                    $details_text = $row['query'] ?? '';
+                    $details_text = preg_replace_callback(
+                        '/\b(sx_yphrethshs|sx_organikhs):\s*(\d+)\s*->\s*(\d+)/',
+                        function ($matches) use ($mysqlconnection) {
+                            $field = $matches[1];
+                            $oldSch = getSchoolNameCached((int)$matches[2], $mysqlconnection);
+                            $newSch = getSchoolNameCached((int)$matches[3], $mysqlconnection);
+                            $oldText = $oldSch !== '' ? $oldSch : $matches[2];
+                            $newText = $newSch !== '' ? $newSch : $matches[3];
+                            return "$field: $oldText -> $newText";
+                        },
+                        $details_text
+                    );
+                    $details = htmlspecialchars($details_text, ENT_QUOTES, 'UTF-8');
+                    echo "<li><b>".date("d-m-Y H:i", strtotime($row['created_at']))."</b>&nbsp; $action_badge usr: ".$row['username']." - IP: ".$row['ip']." $details</li>";
+                }
+                echo "</ul>";
+                echo "</div>";
+                echo "</td></tr>";
+            }
+        }
         echo $updated > 0 ? "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>" : null;
         echo "	</table>";
         
@@ -1193,12 +1244,13 @@ if ($_GET['op']=="delete")
                 echo "<br><br><INPUT TYPE='button' class='btn-red' VALUE='Αρχική σελίδα' onClick=\"parent.location='../index.php'\">";
                 die();
         }
-        // Copies the to-be-deleted row to employee_deleted table for backup purposes.Also inserts a row on employee_del_log...
-        //$query1 = "INSERT INTO ektaktoi_deleted SELECT e.* FROM ektaktoi e WHERE id =".$_GET['id'];
-        //$result1 = mysqli_query($mysqlconnection, $query1)
-        //$query1 = "INSERT INTO ektaktoi_log (emp_id, userid, action) VALUES (".$_GET['id'].",".$_SESSION['userid'].", 2)";
-        //$result1 = mysqli_query($mysqlconnection, $query1)
-        $query = "DELETE from ektaktoi where id=".$_GET['id'];
+        $del_id = (int)$_GET['id'];
+        $qry_del = "SELECT * FROM ektaktoi WHERE id = $del_id";
+        $res_del = mysqli_query($mysqlconnection, $qry_del);
+        $deleted_emp = $res_del ? mysqli_fetch_assoc($res_del) : null;
+
+        employeeAuditLog($mysqlconnection, $del_id, (int)$_SESSION['userid'], 'ektaktoi', 'delete', 2, 'Διαγραφή αναπληρωτή εκπαιδευτικού', $deleted_emp, null);
+        $query = "DELETE from ektaktoi where id=".$del_id;
         $result = mysqli_query($mysqlconnection, $query);
         // Copies the deleted row to employee)deleted
         
