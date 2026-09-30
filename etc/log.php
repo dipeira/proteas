@@ -399,6 +399,10 @@ $num = $result ? mysqli_num_rows($result) : 0;
                         $emp_id = (int)$row['emp_id'];
                         $action = $row['action'];
                         $username = htmlspecialchars($row['username'], ENT_QUOTES, 'UTF-8');
+                        $user_ip = !empty($row['ip']) ? htmlspecialchars($row['ip'], ENT_QUOTES, 'UTF-8') : '';
+                        $user_display = $user_ip !== '' 
+                            ? "<span title='IP: $user_ip' style='cursor:help;'>$username</span>" 
+                            : $username;
                         $date_str = date('d-m-Y H:i:s', strtotime($row['created_at']));
                         
                         $type_badge = $emp_type === 1 
@@ -508,7 +512,7 @@ $num = $result ? mysqli_num_rows($result) : 0;
                         echo "<td>$type_badge</td>";
                         echo "<td>$action_badge</td>";
                         echo "<td>$emp_link</td>";
-                        echo "<td>$username</td>";
+                        echo "<td>$user_display</td>";
                         echo "<td>$date_str</td>";
                         echo "<td>$diff_html</td>";
                         echo "</tr>";
