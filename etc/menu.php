@@ -18,10 +18,10 @@
 		  		<li><a href="<?=$site_root?>/tools/assign_praxi.php">Ανάθεση πράξεων</a></li>
           		<li><a href="<?=$site_root?>/employee/praxi_sch.php">Εκπαιδευτικοί & Σχολεία ανά Πράξη</a></li>
 				<li><a href="<?=$site_root?>/employee/ektaktoi_prev.php">Προηγούμενου έτους</a></li>
-          		<li>&nbsp;&nbsp;- - - - - - - - - - - - -</li>
+          		<!-- <li>&nbsp;&nbsp;- - - - - - - - - - - - -</li>
           		<li><a href="<?=$site_root?>/tools/ektaktoi_import.php">Μαζική εισαγωγή</a></li>
 				<li><a href="<?=$site_root?>/tools/ektaktoi_import_minedu.php">Μαζική εισαγωγή από αρχεία Υπουργείου</a></li>
-          		<li><a href="<?=$site_root?>/employee/ektaktoi_top.php">Μαζική τοποθέτηση</a></li>
+          		<li><a href="<?=$site_root?>/employee/ektaktoi_top.php">Μαζική τοποθέτηση</a></li> -->
 			</ul>
 		</li>
 		<li class="sub">
@@ -29,7 +29,7 @@
 			<ul>
 				<li><a href="<?=$site_root?>/school/school.php">Λίστα</a></li>
 				<li><a href="<?=$site_root?>/school/school_status.php">Καρτέλα</a></li>
-				<li><a href="<?=$site_root?>/school/school_edit.php">Επεξεργασία</a></li>
+				<!-- <li><a href="<?=$site_root?>/school/school_edit.php">Επεξεργασία</a></li> -->
 			</ul>
 		</li>
 		<li class="sub">
@@ -58,7 +58,7 @@
 						<li><a href="<?=$site_root?>/reports/aksiologhsh_report.php">Αναφορά αξιολογούμενων</a></li>
 					</ul>
 				</li>
-				<li><a href="<?=$site_root?>/reports/report_tm_ekp.php">Μαθητές & Εκπ/κοί</a></li>
+				<li><a href="<?=$site_root?>/reports/report_tm_ekp.php">Μαθητές & Εκπαιδευτικοί</a></li>
            		<li><a href="<?=$site_root?>/reports/report_head.php">Διευθυντές / Προϊστάμενοι</a></li>
 				<li><a href="<?=$site_root?>/employee/absents.php">Εκπαιδευτικοί σε άδεια</a></li>
 				<?php
@@ -90,10 +90,14 @@
 			<li><a href='<?=$site_root?>/etc/params.php'>Παράμετροι</a></li>
 			<li><a href="<?=$site_root?>/employee/klados.php">Ειδικότητες</a></li>
 			<li><a href='<?=$site_root?>/etc/users.php'>Διαχείριση Χρηστών</a></li>
-			<li><a href='<?=$site_root?>/employee/symvouloi.php'>Ενότητες συμβούλων</a></li>
-			<li><a href='<?=$site_root?>/employee/symvouloi_epist.php'>Επιστημονική ευθύνη συμβούλων</a></li>
+			<li class="has-submenu">
+					<a href="#">Σύμβουλοι Εκπαίδευσης</a>
+					<ul>
+						<li><a href='<?=$site_root?>/employee/symvouloi.php'>Ενότητες συμβούλων</a></li>
+						<li><a href='<?=$site_root?>/employee/symvouloi_epist.php'>Επιστημονική ευθύνη συμβούλων</a></li>
+					</ul>
+				</li>
 			<li><a href='<?=$site_root?>/etc/log.php'>Αρχείο καταγραφής συμβάντων</a></li>
-        	<li><a href='<?=$site_root?>/school/school_log.php'>Αρχείο καταγραφής πρόσβασης σχολείων</a></li>
 			<li><a href='<?=$site_root?>/school/requests.php'>Αιτήματα Σχολείων</a></li>
         	<li><a href='<?=$site_root?>/tools/fix_leitoyrg.php'>Επιδιόρθωση λειτουργικότητας</a></li>
 		  </ul>
