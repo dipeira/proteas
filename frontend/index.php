@@ -825,9 +825,7 @@
       };
 
       // Make an API call to update the record with the new details
-      const urlArr = window.location.href.split('index.php');
-      const proxyURL = urlArr[0] + 'proxy.php';
-      var theUrl = proxyURL + '?school_code='+'<?php echo $sch_code; ?>';
+      var theUrl = 'proxy.php?school_code='+'<?php echo $sch_code; ?>';
       $.ajax({
           url: theUrl,
           type: 'POST',
@@ -837,6 +835,7 @@
           data: JSON.stringify(editedRecordData),
           success: function (data) {
               alert('Επιτυχής υποβολή αιτήματος!');
+              location.reload();
           },
           error: function (data) {
               console.log(data);
