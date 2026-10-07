@@ -270,6 +270,102 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             border-left: 3px solid #4FC5D6;
             border-radius: 4px;
         }
+
+        /* Audit log diff & badge styles (matching etc/log.php) */
+        .badge {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-add {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+        .badge-edit {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+        .badge-delete {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+        .diff-container,
+        .query-container {
+            font-size: 0.83rem;
+            line-height: 1.45;
+            width: 100%;
+            max-width: 100%;
+            white-space: normal !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+            margin-top: 4px;
+        }
+        .diff-field {
+            margin-bottom: 4px;
+            white-space: normal !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+        }
+        .diff-key {
+            font-weight: 600;
+            color: #334155;
+            display: inline;
+        }
+        .diff-old {
+            color: #dc2626;
+            text-decoration: line-through;
+            background: #fee2e2;
+            padding: 1px 4px;
+            border-radius: 3px;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+            display: inline;
+        }
+        .diff-new {
+            color: #16a34a;
+            font-weight: 600;
+            background: #dcfce7;
+            padding: 1px 4px;
+            border-radius: 3px;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+            display: inline;
+        }
+        .json-toggle-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 2px 7px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.72rem;
+            margin-top: 4px;
+        }
+        .json-toggle-btn:hover {
+            background: #f1f5f9;
+        }
+        .json-raw-box {
+            display: none;
+            margin-top: 6px;
+            padding: 8px;
+            background: #0f172a;
+            color: #38bdf8;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            max-height: 160px;
+            overflow-y: auto;
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+        }
         
         /* Checkbox styling */
         .imagetable input[type="checkbox"] {
@@ -491,6 +587,11 @@ if($log->logincheck($_SESSION['loggedin']) == false) {
             $("#archive-toggle").click(function(e) {
                 e.preventDefault();
                 $("#yphrethsh-archive").slideToggle();
+            });
+            $(document).on('click', '.json-toggle-btn', function(e) {
+                e.preventDefault();
+                var targetId = $(this).data('target');
+                $('#' + targetId).slideToggle(150);
             });
         });
 </script>
@@ -1388,41 +1489,32 @@ elseif ($_GET['op']=="view") {
     }
     // 
     // show changes for admin
-    if ($updated > 0 && $usrlvl==0) {
+    if ($usrlvl == 0) {
         $update_qry = "SELECT l.*, u.username FROM employee_log l JOIN logon u ON u.userid = l.user_id WHERE l.emp_id=$id AND l.emp_type=1 ORDER BY l.created_at DESC";
         $result_upd = mysqli_query($mysqlconnection, $update_qry);
-                      
-        echo "<tr><td><a href=\"#\" class=\"show_hide3\"><small>Εμφάνιση/Απόκρυψη<br>μεταβολών</small></a></td>";
-        echo "<td colspan=3><div class=\"slidingDiv3\">";
-        echo "<ul>";
-        while ($row = mysqli_fetch_array($result_upd, MYSQLI_ASSOC)) {
-              $action_badge = '';
-              if ($row['action'] === 'add') {
-                  $action_badge = "<span style='color:green;font-weight:bold;'>[Προσθήκη]</span> ";
-              } elseif ($row['action'] === 'delete') {
-                  $action_badge = "<span style='color:red;font-weight:bold;'>[Διαγραφή]</span> ";
-              } else {
-                  $action_badge = "<span style='color:#0d6efd;font-weight:bold;'>[Μεταβολή]</span> ";
-              }
-              $details_text = $row['query'] ?? '';
-              $details_text = preg_replace_callback(
-                  '/\b(sx_yphrethshs|sx_organikhs):\s*(\d+)\s*->\s*(\d+)/',
-                  function ($matches) use ($mysqlconnection) {
-                      $field = $matches[1];
-                      $oldSch = getSchoolNameCached((int)$matches[2], $mysqlconnection);
-                      $newSch = getSchoolNameCached((int)$matches[3], $mysqlconnection);
-                      $oldText = $oldSch !== '' ? $oldSch : $matches[2];
-                      $newText = $newSch !== '' ? $newSch : $matches[3];
-                      return "$field: $oldText -> $newText";
-                  },
-                  $details_text
-              );
-              $details = htmlspecialchars($details_text, ENT_QUOTES, 'UTF-8');
-              echo "<li><b>".date("d-m-Y H:i", strtotime($row['created_at']))."</b>&nbsp; $action_badge usr: ".$row['username']." - IP: ".$row['ip']." $details</li>";
+        if ($result_upd && mysqli_num_rows($result_upd) > 0) {
+            echo "<tr><td><a href=\"#\" class=\"show_hide3\"><small>Εμφάνιση/Απόκρυψη<br>μεταβολών</small></a></td>";
+            echo "<td colspan=3><div class=\"slidingDiv3\">";
+            echo "<ul>";
+            while ($row = mysqli_fetch_array($result_upd, MYSQLI_ASSOC)) {
+                $action_badge = getEmployeeLogActionBadge($row['action'] ?? 'edit');
+                $user_display = htmlspecialchars((string)($row['username'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $user_ip = !empty($row['ip']) ? htmlspecialchars((string)$row['ip'], ENT_QUOTES, 'UTF-8') : '';
+                $user_str = $user_ip !== '' ? "$user_display (IP: $user_ip)" : $user_display;
+                $date_str = date("d-m-Y H:i:s", strtotime($row['created_at']));
+                $diff_html = renderEmployeeLogDiffHtml($row, $mysqlconnection);
+
+                echo "<li style='margin-bottom: 8px; padding: 10px 14px;'>";
+                echo "<div style='display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;'>";
+                echo "<b>$date_str</b> $action_badge <span style='color:#64748b; font-size: 0.85rem;'>Χρήστης: <strong>$user_str</strong></span>";
+                echo "</div>";
+                echo $diff_html;
+                echo "</li>";
+            }
+            echo "</ul>";
+            echo "</div>";
+            echo "</td></tr>";
         }
-        echo "</ul>";
-        echo "</div>";
-        echo "</td></tr>";
     }
     echo "<tr><td colspan=4 align='right'><small>Τελευταία ενημέρωση: ".date("d-m-Y H:i", strtotime($updated))."</small></td></tr>";
     

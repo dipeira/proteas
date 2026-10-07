@@ -194,3 +194,109 @@ function getSchoolNameCached(int $id, mysqli $db): string {
     }
     return $schoolNameCache[$id];
 }
+
+/**
+ * Return action badge HTML for employee log.
+ *
+ * @param string $action Action name ('add', 'edit', 'delete')
+ * @return string HTML badge
+ */
+function getEmployeeLogActionBadge(string $action): string {
+    switch ($action) {
+        case 'add':
+            return "<span class='badge badge-add'>Προσθήκη</span>";
+        case 'delete':
+            return "<span class='badge badge-delete'>Διαγραφή</span>";
+        case 'edit':
+        default:
+            return "<span class='badge badge-edit'>Μεταβολή</span>";
+    }
+}
+
+/**
+ * Render diff HTML for an employee log record (with colors, strikethrough, JSON toggle).
+ *
+ * @param array $row Array containing log record columns (id, action, query, old_values, new_values, etc.)
+ * @param mysqli $db MySQLi connection
+ * @return string HTML diff
+ */
+function renderEmployeeLogDiffHtml(array $row, mysqli $db): string {
+    $id = isset($row['id']) ? (int)$row['id'] : 0;
+    $action = $row['action'] ?? 'edit';
+    $diff_html = '';
+
+    $old = !empty($row['old_values']) ? json_decode($row['old_values'], true) : null;
+    $new = !empty($row['new_values']) ? json_decode($row['new_values'], true) : null;
+
+    if ($action === 'edit' && is_array($old) && is_array($new) && !empty($old)) {
+        $diff_html .= "<div class='diff-container'>";
+        foreach ($new as $key => $nval) {
+            $oval = $old[$key] ?? '[κενό]';
+            if ($oval === '') $oval = '[κενό]';
+            if ($nval === '') $nval = '[κενό]';
+
+            if ($key === 'sx_yphrethshs' || $key === 'sx_organikhs') {
+                $schOld = getSchoolNameCached((int)$oval, $db);
+                $schNew = getSchoolNameCached((int)$nval, $db);
+                $oval_display = $schOld !== '' ? $schOld : $oval;
+                $nval_display = $schNew !== '' ? $schNew : $nval;
+            } else {
+                $oval_display = $oval;
+                $nval_display = $nval;
+            }
+
+            $oval_esc = htmlspecialchars((string)$oval_display, ENT_QUOTES, 'UTF-8');
+            $nval_esc = htmlspecialchars((string)$nval_display, ENT_QUOTES, 'UTF-8');
+            $diff_html .= "<div class='diff-field'><span class='diff-key'>" . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . ":</span> <span class='diff-old'>$oval_esc</span> &rarr; <span class='diff-new'>$nval_esc</span></div>";
+        }
+        if ($id > 0) {
+            $diff_html .= "<button type='button' class='json-toggle-btn' data-target='raw-$id'>Προβολή JSON</button>";
+            $diff_html .= "<pre id='raw-$id' class='json-raw-box'>" . htmlspecialchars(json_encode(['old' => $old, 'new' => $new], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') . "</pre>";
+        }
+        $diff_html .= "</div>";
+    } elseif ($action === 'add' && is_array($new) && !empty($new)) {
+        $diff_html .= "<span style='color:#15803d; font-weight:600;'>Προσθήκη νέας εγγραφής</span>";
+        if ($id > 0) {
+            $diff_html .= "<br><button type='button' class='json-toggle-btn' data-target='raw-$id'>Προβολή Στοιχείων (JSON)</button>";
+            $diff_html .= "<pre id='raw-$id' class='json-raw-box'>" . htmlspecialchars(json_encode($new, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') . "</pre>";
+        }
+    } elseif ($action === 'delete') {
+        $diff_html .= "<span style='color:#b91c1c; font-weight:600;'>Διαγραφή εγγραφής</span>";
+        if (is_array($old) && !empty($old) && $id > 0) {
+            $diff_html .= "<br><button type='button' class='json-toggle-btn' data-target='raw-$id'>Προβολή Στοιχείων Διαγραφής</button>";
+            $diff_html .= "<pre id='raw-$id' class='json-raw-box'>" . htmlspecialchars(json_encode($old, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') . "</pre>";
+        }
+    } else {
+        $raw_query = (string)($row['query'] ?? '');
+
+        // Replace sx_yphrethshs: ID -> ID or sx_organikhs: ID -> ID with school names
+        $formatted_query = preg_replace_callback(
+            '/\b(sx_yphrethshs|sx_organikhs):\s*(\d+)\s*->\s*(\d+)/',
+            function ($matches) use ($db) {
+                $field = $matches[1];
+                $oldSch = getSchoolNameCached((int)$matches[2], $db);
+                $newSch = getSchoolNameCached((int)$matches[3], $db);
+                $oldText = $oldSch !== '' ? $oldSch : $matches[2];
+                $newText = $newSch !== '' ? $newSch : $matches[3];
+                return "$field: $oldText -> $newText";
+            },
+            $raw_query
+        );
+
+        // Check if query contains diff entries like "field: old -> new"
+        if (preg_match_all('/([a-zA-Z0-9_\x{0370}-\x{03FF}]+):\s*([^,->\n]+?)\s*->\s*([^,\n]+)/u', $formatted_query, $m, PREG_SET_ORDER)) {
+            $diff_html .= "<div class='diff-container'>";
+            foreach ($m as $match) {
+                $key = htmlspecialchars(trim($match[1]), ENT_QUOTES, 'UTF-8');
+                $oval_esc = htmlspecialchars(trim($match[2]), ENT_QUOTES, 'UTF-8');
+                $nval_esc = htmlspecialchars(trim($match[3]), ENT_QUOTES, 'UTF-8');
+                $diff_html .= "<div class='diff-field'><span class='diff-key'>$key:</span> <span class='diff-old'>$oval_esc</span> &rarr; <span class='diff-new'>$nval_esc</span></div>";
+            }
+            $diff_html .= "</div>";
+        } else {
+            $diff_html .= "<div class='query-container' style='font-size:0.83rem; color:#475569;'>" . htmlspecialchars($formatted_query, ENT_QUOTES, 'UTF-8') . "</div>";
+        }
+    }
+
+    return $diff_html;
+}
