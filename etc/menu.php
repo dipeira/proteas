@@ -58,8 +58,14 @@
 						<li><a href="<?=$site_root?>/reports/aksiologhsh_report.php">Αναφορά αξιολογούμενων</a></li>
 					</ul>
 				</li>
-				<li><a href="<?=$site_root?>/reports/report_tm_ekp.php">Μαθητές & Εκπαιδευτικοί</a></li>
-           		<li><a href="<?=$site_root?>/reports/report_head.php">Διευθυντές / Προϊστάμενοι</a></li>
+				<li class="has-submenu">
+					<a href="#">Σχολεία</a>
+					<ul>						
+						<li><a href="<?=$site_root?>/reports/report_tm_ekp.php">Μαθητές & Εκπαιδευτικοί</a></li>
+           				<li><a href="<?=$site_root?>/reports/report_head.php">Διευθυντές / Προϊστάμενοι</a></li>
+						<li><a href="<?=$site_root?>/reports/report_vivliothiki.php">Υπεύθυνοι Βιβλιοθήκης</a></li>
+					</ul>
+				</li>
 				<li><a href="<?=$site_root?>/employee/absents.php">Εκπαιδευτικοί σε άδεια</a></li>
 				<?php
 				if ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') === 'gram-pispe'){
