@@ -1226,7 +1226,7 @@
     die();
   }
   
-  if (!isset($_POST['submit']))
+  if ($_SERVER['REQUEST_METHOD'] !== 'POST' && !isset($_POST['submit']))
   {
     require '../etc/menu.php';
 ?>
@@ -1288,6 +1288,7 @@
 
       <!-- Main Form -->
       <form enctype="multipart/form-data" action="import.php" method="post" id="importMainForm">
+        <input type="hidden" name="submit" value="1">
         
         <!-- Filter Tabs & Instant Search Toolbar -->
         <div class="import-toolbar">
@@ -1906,7 +1907,7 @@
         <div class="submit-actions-bar">
           <input type="button" class="btn-return-home" value="↩️ Επιστροφή στην Αρχική" onClick="parent.location='../index.php'">
           
-          <button type="submit" name="submit" id="btnSubmitImport" class="btn-import-submit">
+          <button type="submit" name="submit" value="1" id="btnSubmitImport" class="btn-import-submit">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             <span id="btnSubmitText">Μεταφόρτωση & Εκτέλεση Εισαγωγής</span>
           </button>
@@ -2479,9 +2480,13 @@
           return false;
         }
 
-        // Processing state
-        btnSubmitImport.disabled = true;
+        // Processing state: visual loading feedback without preventing FormData capture
+        btnSubmitImport.style.pointerEvents = 'none';
+        btnSubmitImport.style.opacity = '0.7';
         btnSubmitText.textContent = '⏳ Γίνεται επεξεργασία & εισαγωγή... Παρακαλώ περιμένετε.';
+        setTimeout(function() {
+          btnSubmitImport.disabled = true;
+        }, 50);
       });
 
     });
@@ -2536,6 +2541,7 @@
             break;
       }
       $num = 0;
+      $line_num = 0;
       $saves = 0;
       $checked = 0;
       $headers = 1;
@@ -2545,6 +2551,8 @@
       $er_msg = '';
       $top_afm = array();
       $top_wres = array();
+      $not_found_emp = array();
+      $row_errors = array();
       
       // set max execution time (for large files)
       set_time_limit (480);
@@ -2554,6 +2562,11 @@
       $update_yphrethseis = array();
       // read csv line by line
       while (($data = fgetcsv($handle, 10000, ";")) !== FALSE) {
+        $line_num++;
+        // skip empty lines
+        if (empty($data) || (count($data) == 1 && $data[0] === null) || trim(implode('', $data)) === '') {
+            continue;
+        }
         // skip header line
         if ($headers){
             $headers = 0;
@@ -2800,11 +2813,12 @@
           case 5:
           case 6:
           case 7:
-            // Decide if AM of AFM on 1st column
-            $searchcol = strlen($data[0]) > 8 ? 'afm' : 'am';
-            $searchcolname = strlen($data[0]) > 8 ? 'ΑΦΜ' : 'ΑΜ';
+            // Decide if AM or AFM on 1st column
+            $data[0] = trim($data[0]);
             // check if $data[0] has a length of 8 characters. If yes, add a leading zero:
             if (strlen($data[0]) == 8) $data[0] = '0'.$data[0];
+            $searchcol = strlen($data[0]) > 8 ? 'afm' : 'am';
+            $searchcolname = strlen($data[0]) > 8 ? 'ΑΦΜ' : 'ΑΜ';
             $is_mon = $_POST['type'] == 5 || $_POST['type'] == 6 ? true : false;
 
             // If anaplirotes & am in csv, abort with a message
@@ -2834,33 +2848,30 @@
             $emp = mysqli_query($mysqlconnection, $emp_qry);
             
             if ( !mysqli_num_rows($emp) ) {
-              $error = true;
-              $er_msg ="Σφάλμα: Ο υπάλληλος με $searchcolname ".$data[0]." δεν υπάρχει...";
-              $er_msg .= " (γραμμή ".($num+1).")";
-              break;
+              $not_found_emp[] = array(
+                'line' => $line_num,
+                'identifier' => $data[0],
+                'type' => $searchcolname,
+                'category' => $is_mon ? 'Μόνιμος' : 'Αναπληρωτής'
+              );
+              continue 2;
             }
             
             // check school codes
             $sch_id = getSchoolFromCode($sch_code,$mysqlconn);
             if (!$sch_id) {
-              $error = true;
-              $er_msg = 'Σφάλμα: Δε βρέθηκε το σχολείο με 7ψήφιο κωδικό: ' . $sch_code;
-              $er_msg .= " (γραμμή ".($num+1).")";
-              break;
+              $row_errors[] = "Γραμμή $line_num: Δε βρέθηκε το σχολείο με 7ψήφιο κωδικό: $sch_code ($searchcolname: " . $data[0] . ")";
+              continue 2;
             }
             // check hours
             if ($hours <= 0 || $hours > 30) {
-              $error = true;
-              $er_msg = 'Σφάλμα: Λάθος αριθμός ωρών: ' . $hours;
-              $er_msg .= " (γραμμή ".($num+1).")";
-              break;
+              $row_errors[] = "Γραμμή $line_num: Λάθος αριθμός ωρών: $hours ($searchcolname: " . $data[0] . ")";
+              continue 2;
             }
             // check wrario for ektaktoi
             if (!$is_mon && ($wrario <= 0 || $wrario > 30)) {
-              $error = true;
-              $er_msg = 'Σφάλμα: Λάθος ωράριο αναπληρωτή: ' . $data[1];
-              $er_msg .= " (γραμμή ".($num+1).")";
-              break;
+              $row_errors[] = "Γραμμή $line_num: Λάθος ωράριο αναπληρωτή: " . $data[1] . " ($searchcolname: " . $data[0] . ")";
+              continue 2;
             }
             
             // proceed to import
@@ -2881,7 +2892,7 @@
                 $warnings ++;
                 $warn_msg .= '<br>- Η τοποθέτηση υπάρχει ήδη: ';
                 $warn_msg .= $emp_row['afm'] . ': '.$emp_row['surname'].' '.$emp_row['name'];
-                $warn_msg .= " (γραμμή ".($num+1).")";
+                $warn_msg .= " (γραμμή $line_num)";
                 if (!$is_mon && !in_array($data[0], $top_wres, true)) {
                   $upd_wres = "UPDATE ektaktoi SET wres = $wrario WHERE id = $id";
                   $update_queries[] = safe_iconv_to_utf8($upd_wres);
@@ -2920,11 +2931,11 @@
           case 8:
             // csv: ΑΜ/ΑΦΜ εκπ/κού;Σχόλιο
             // Decide if AM of AFM on 1st column
-            // > 8 cause it may be 8 characters long
-            $searchcol = strlen($data[0]) > 8 ? 'afm' : 'am';
-            $searchcolname = strlen($data[0]) > 8 ? 'ΑΦΜ' : 'ΑΜ';
+            $data[0] = trim($data[0]);
             // check if $data[0] has a length of 8 characters. If yes, add a leading zero:
             if (strlen($data[0]) == 8) $data[0] = '0'.$data[0];
+            $searchcol = strlen($data[0]) > 8 ? 'afm' : 'am';
+            $searchcolname = strlen($data[0]) > 8 ? 'ΑΦΜ' : 'ΑΜ';
             
             $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
             // check if afm exists @ monimoi
@@ -2933,10 +2944,13 @@
             $emp = mysqli_query($mysqlconnection, $emp_qry);
             
             if ( !mysqli_num_rows($emp) ) {
-              $error = true;
-              $er_msg ="Σφάλμα: Ο υπάλληλος με $searchcolname ".$data[0]." δεν υπάρχει...";
-              $er_msg .= " (γραμμή ".($num+1).")";
-              break;
+              $not_found_emp[] = array(
+                'line' => $line_num,
+                'identifier' => $data[0],
+                'type' => $searchcolname,
+                'category' => 'Μόνιμος'
+              );
+              continue 2;
             }
             
             // proceed to import
@@ -2954,6 +2968,10 @@
           // 9) Μαζική ανάθεση αναπληρωτών σε πράξεις
           case 9:
             // csv: ΑΦΜ εκπ/κού;ID πράξης
+            $data[0] = trim($data[0]);
+            // check if $data[0] has a length of 8 characters. If yes, add a leading zero:
+            if (strlen($data[0]) == 8) $data[0] = '0'.$data[0];
+            $praxi_id = intval(trim($data[1]));
             $mysqlconn = mysqli_connect($db_host, $db_user, $db_password, $db_name);
             // check if afm exists @ ektaktoi
             $emp_qry = "SELECT * FROM ektaktoi WHERE afm = '$data[0]'";
@@ -2961,10 +2979,13 @@
             $emp = mysqli_query($mysqlconnection, $emp_qry);
             
             if ( !mysqli_num_rows($emp) ) {
-              $error = true;
-              $er_msg ="Σφάλμα: Ο υπάλληλος με ΑΦΜ ".$data[0]." δεν υπάρχει...";
-              $er_msg .= " (γραμμή ".($num+1).")";
-              break;
+              $not_found_emp[] = array(
+                'line' => $line_num,
+                'identifier' => $data[0],
+                'type' => 'ΑΦΜ',
+                'category' => 'Αναπληρωτής'
+              );
+              continue 2;
             }
             
             // proceed to import
@@ -2973,7 +2994,7 @@
             $id = $emp_row['id'];
             
             // update employee table
-            $upd_qry = "UPDATE ektaktoi set praxi=$data[1] where afm='".$data[0]."'";
+            $upd_qry = "UPDATE ektaktoi set praxi=$praxi_id where afm='".$data[0]."'";
             $saves++;
             $update_queries[] = safe_iconv_to_utf8($upd_qry);
              
@@ -3004,7 +3025,7 @@
         foreach ( $update_queries as $qry) {
           $res = mysqli_query($mysqlconnection, $qry);
           if (!$res) {
-            $errors[$qry] = mysqli_error();
+            $errors[$qry] = mysqli_error($mysqlconnection);
           }
         }
         if (!mysqli_commit($mysqlconnection)){
@@ -3046,6 +3067,55 @@
         } else {
           echo "<div class='result-message result-warning'>";
           echo "<h3>Δεν έγινε καμία εισαγωγή στη βάση δεδομένων.$infolink</h3>";
+          echo "</div>";
+        }
+
+        if (!empty($not_found_emp) || !empty($row_errors)){
+          $not_found_count = count($not_found_emp);
+          $row_errors_count = count($row_errors);
+          $total_skipped = $not_found_count + $row_errors_count;
+          
+          echo "<div class='result-message result-warning' style='margin-top: 15px;'>";
+          echo "<h4 style='color: #92400e; margin-bottom: 6px;'>⚠️ Εγγραφές που δεν βρέθηκαν στη βάση ή παραλείφθηκαν ($total_skipped):</h4>";
+          
+          $report_text = "";
+          if (!empty($not_found_emp)) {
+            $report_text .= "--- ΕΚΠΑΙΔΕΥΤΙΚΟΙ ΠΟΥ ΔΕΝ ΒΡΕΘΗΚΑΝ ΣΤΗ ΒΑΣΗ ($not_found_count) ---\n";
+            foreach ($not_found_emp as $nf) {
+              $report_text .= "Γραμμή " . $nf['line'] . ": " . $nf['type'] . " " . $nf['identifier'] . "\n";
+            }
+          }
+          if (!empty($row_errors)) {
+            if (!empty($report_text)) $report_text .= "\n";
+            $report_text .= "--- ΑΛΛΑ ΣΦΑΛΜΑΤΑ ΓΡΑΜΜΩΝ ($row_errors_count) ---\n";
+            foreach ($row_errors as $re) {
+              $report_text .= $re . "\n";
+            }
+          }
+          
+          echo "<p style='margin: 8px 0 6px 0; font-size: 13.5px; color: #78350f;'>Οι παρακάτω εγγραφές παραλείφθηκαν αυτόματα ώστε να ολοκληρωθεί η εισαγωγή των υπολοίπων. Μπορείτε να αντιγράψετε τη λίστα από το παρακάτω πλαίσιο:</p>";
+          echo "<textarea id='txtNotFoundReport' style='width: 100%; height: 180px; font-family: Consolas, monospace; font-size: 13px; padding: 10px; border: 1.5px solid #f59e0b; border-radius: 8px; background: #fffbeb; color: #1e293b; box-sizing: border-box; line-height: 1.5;' readonly>" . htmlspecialchars($report_text, ENT_QUOTES, 'UTF-8') . "</textarea>";
+          echo "<div style='margin-top: 8px; text-align: right;'>";
+          echo "<button type='button' id='btnCopyReport' class='btn' style='background: #f59e0b; color: #fff; border: none; padding: 7px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px;' onclick='copyReportToClipboard()'>📋 Αντιγραφή Αναφοράς</button>";
+          echo "</div>";
+          echo "<script>
+          function copyReportToClipboard() {
+            var txt = document.getElementById(\"txtNotFoundReport\");
+            txt.select();
+            txt.setSelectionRange(0, 99999);
+            var btn = document.getElementById(\"btnCopyReport\");
+            if (navigator.clipboard && window.isSecureContext) {
+              navigator.clipboard.writeText(txt.value).then(function() {
+                btn.innerText = \"✓ Αντιγράφηκε!\";
+                setTimeout(function(){ btn.innerText = \"📋 Αντιγραφή Αναφοράς\"; }, 2500);
+              });
+            } else {
+              document.execCommand('copy');
+              btn.innerText = \"✓ Αντιγράφηκε!\";
+              setTimeout(function(){ btn.innerText = \"📋 Αντιγραφή Αναφοράς\"; }, 2500);
+            }
+          }
+          </script>";
           echo "</div>";
         }
       }
