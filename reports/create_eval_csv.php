@@ -360,7 +360,7 @@ function detect_delimiter_from_file($path) {
     return ($counts[$firstKey] > 0) ? $firstKey : ';';
 }
 
-function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed_teachers, $suffix, $category) {
+function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed_teachers, $suffix, $category, array $excluded_a2_afms = [], array $consultant_afms = []) {
     $delimiter = detect_delimiter_from_file($csv_path);
     $handle = fopen($csv_path, 'r');
     if (!$handle) throw new Exception("Αδυναμία ανοίγματος του $csv_path");
@@ -424,6 +424,25 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
         if ($is_completed) {
             $excluded_rows++;
             continue;
+        }
+
+        // Exclude education consultants if they appear as evaluated
+        if (!empty($consultant_afms)) {
+            $is_consultant = ($teacher_afm !== '' && isset($consultant_afms[$teacher_afm])) ||
+                             ($id_teacher_afm !== '' && isset($consultant_afms[$id_teacher_afm]));
+            if ($is_consultant) {
+                $excluded_rows++;
+                continue;
+            }
+        }
+
+        if ($category === 'A2') {
+            $is_excluded_branch = ($teacher_afm !== '' && isset($excluded_a2_afms[$teacher_afm])) ||
+                                  ($id_teacher_afm !== '' && isset($excluded_a2_afms[$id_teacher_afm]));
+            if ($is_excluded_branch) {
+                $excluded_rows++;
+                continue;
+            }
         }
 
         if ($category === 'A1' || $category === 'A2') {
@@ -515,6 +534,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
         .select2-container {
             min-width: 260px;
             vertical-align: middle;
+        }
+        .consultant-popover-wrapper:hover .consultant-popover-box {
+            display: block !important;
         }
         .card-box {
             background: #ffffff;
@@ -724,28 +746,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Μονιμοποίηση:</label>
-                        <select name="monimopoihsh" class="form-control">
-                            <option value="" <?php echo (isset($_POST['monimopoihsh']) && $_POST['monimopoihsh'] === '') ? 'selected' : ''; ?>>Όλοι</option>
-                            <option value="1" <?php echo (isset($_POST['monimopoihsh']) && $_POST['monimopoihsh'] === '1') ? 'selected' : ''; ?>>Ναι</option>
-                            <option value="0" <?php echo (isset($_POST['monimopoihsh']) && $_POST['monimopoihsh'] === '0') ? 'selected' : ''; ?>>Όχι</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Αξιολόγηση:</label>
-                        <select name="aksiologhsh" class="form-control">
-                            <option value="" <?php echo (isset($_POST['aksiologhsh']) && $_POST['aksiologhsh'] === '') ? 'selected' : ''; ?>>Όλοι</option>
-                            <option value="1" <?php echo (isset($_POST['aksiologhsh']) && $_POST['aksiologhsh'] === '1') ? 'selected' : ''; ?>>Ναι</option>
-                            <option value="0" <?php echo (isset($_POST['aksiologhsh']) && $_POST['aksiologhsh'] === '0') ? 'selected' : ''; ?>>Όχι</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ημ/νία Αξιολόγησης από:</label>
-                        <input type="date" name="aks_date_from" class="form-control" value="<?php echo htmlspecialchars($_POST['aks_date_from'] ?? ''); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label>έως:</label>
-                        <input type="date" name="aks_date_to" class="form-control" value="<?php echo htmlspecialchars($_POST['aks_date_to'] ?? ''); ?>">
+                        <label>Αριθμός αξιολογούμενων ανά σύμβουλο:</label>
+                        <input type="number" name="eval_per_consultant" min="1" class="form-control" style="width: 140px;" value="<?php echo htmlspecialchars($_POST['eval_per_consultant'] ?? ''); ?>" placeholder="π.χ. 25">
                     </div>
                 </div>
             </div>
@@ -810,6 +812,48 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         ['B', 'csv_b', 'b.csv'],
                     ];
 
+                    // Pre-load AFMs for branches excluded from A2
+                    $excluded_a2_afms = [];
+                    $res_ex = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE klados IN (8, 9, 10, 11, 12, 21, 26, 27, 31)");
+                    if ($res_ex) {
+                        while ($r_ex = mysqli_fetch_assoc($res_ex)) {
+                            if (!empty($r_ex['afm'])) {
+                                $excluded_a2_afms[normalize_afm($r_ex['afm'])] = true;
+                            }
+                        }
+                    }
+
+                    // Pre-load consultant AFMs (teachers whose school is 'Σύμβουλος Εκπαίδευσης' or who are consultants)
+                    $consultant_afms = [];
+                    $sxol_symv_upload = getSchoolID('Σύμβουλος Εκπαίδευσης', $mysqlconnection);
+                    if (!$sxol_symv_upload) {
+                        $sxol_symv_upload = getSchoolID('Σύμβουλος εκπαίδευσης', $mysqlconnection);
+                    }
+                    $symv_ids_upload = $sxol_symv_upload ? [(int)$sxol_symv_upload] : [397];
+                    $res_symv_u = mysqli_query($mysqlconnection, "SELECT id FROM school WHERE name LIKE '%Σύμβουλος Εκπαίδευσης%' OR name LIKE '%Σύμβουλος εκπαίδευσης%'");
+                    if ($res_symv_u) {
+                        while ($r_su = mysqli_fetch_assoc($res_symv_u)) {
+                            $symv_ids_upload[] = (int)$r_su['id'];
+                        }
+                    }
+                    $symv_ids_upload = array_unique($symv_ids_upload);
+                    $symv_ids_upload_str = implode(',', $symv_ids_upload);
+
+                    $q_symv_afms = "SELECT DISTINCT e.afm 
+                        FROM employee e 
+                        LEFT JOIN yphrethsh y ON e.id = y.emp_id 
+                        WHERE e.sx_yphrethshs IN ($symv_ids_upload_str) 
+                           OR e.sx_organikhs IN ($symv_ids_upload_str) 
+                           OR y.yphrethsh IN ($symv_ids_upload_str)";
+                    $res_symv_afms = mysqli_query($mysqlconnection, $q_symv_afms);
+                    if ($res_symv_afms) {
+                        while ($r_sa = mysqli_fetch_assoc($res_symv_afms)) {
+                            if (!empty($r_sa['afm'])) {
+                                $consultant_afms[normalize_afm($r_sa['afm'])] = true;
+                            }
+                        }
+                    }
+
                     foreach ($uploaded_tasks as $t) {
                         $cat = $t[0];
                         $input_name = $t[1];
@@ -825,7 +869,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 $pending_dict[$cat],
                                 $exclude_set,
                                 $suffix,
-                                $cat
+                                $cat,
+                                $excluded_a2_afms,
+                                $consultant_afms
                             );
                             $stats[$cat] = [
                                 'file' => $filename,
@@ -848,12 +894,44 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $mysqlconnection);
                     $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό', $mysqlconnection);
                     $foreas = getSchoolID('Απόσπαση σε φορέα', $mysqlconnection);
+                    $sxol_symv = getSchoolID('Σύμβουλος Εκπαίδευσης', $mysqlconnection);
+                    if (!$sxol_symv) {
+                        $sxol_symv = getSchoolID('Σύμβουλος εκπαίδευσης', $mysqlconnection);
+                    }
                     $dipe = '398';
+
+                    $symv_school_ids = [];
+                    if ($sxol_symv) {
+                        $symv_school_ids[] = (int)$sxol_symv;
+                    }
+                    $res_symv = mysqli_query($mysqlconnection, "SELECT id FROM school WHERE name LIKE '%Σύμβουλος Εκπαίδευσης%' OR name LIKE '%Σύμβουλος εκπαίδευσης%'");
+                    if ($res_symv) {
+                        while ($r_s = mysqli_fetch_assoc($res_symv)) {
+                            $symv_school_ids[] = (int)$r_s['id'];
+                        }
+                    }
+                    if (empty($symv_school_ids)) {
+                        $symv_school_ids = [397];
+                    }
+                    $symv_school_ids = array_unique($symv_school_ids);
+                    $symv_school_ids_str = implode(',', $symv_school_ids);
+
+                    $excluded_schools = array_unique(array_filter([$allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko, ...$symv_school_ids]));
+                    $excluded_schools_str = implode(',', $excluded_schools);
 
                     $se_by_klados = [];
                     $se_res = mysqli_query($mysqlconnection, "SELECT id, klados, afm, eponymo, onoma, emp_id, sch_ids FROM symvouloi_epist");
                     while ($se_row = mysqli_fetch_assoc($se_res)) {
                         $se_by_klados[$se_row['klados']][] = $se_row;
+                    }
+
+                    // Pre-load PE60 consultant AFMs
+                    $pe60_consultant_afms = [];
+                    $res_pe60 = mysqli_query($mysqlconnection, "SELECT e.afm FROM symvouloi s JOIN employee e ON s.emp_id = e.id WHERE s.perif >= 600 OR e.klados = 1");
+                    while ($r_pe60 = mysqli_fetch_assoc($res_pe60)) {
+                        if (!empty($r_pe60['afm'])) {
+                            $pe60_consultant_afms[trim($r_pe60['afm'])] = true;
+                        }
                     }
 
                     $query = "SELECT
@@ -874,9 +952,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         s.type2,
                         s.perif,
                         e.hm_dior,
-                        e.thesi,
-                        e.monimopoihsh,
-                        e.aksiologhsh
+                        e.thesi
                     FROM employee e
                     LEFT JOIN klados k ON e.klados = k.id
                     LEFT JOIN (
@@ -912,9 +988,13 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     LEFT JOIN employee sp ON sm.emp_id = sp.id
                     LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
                     WHERE e.status = 1 
-                    AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
-                    AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
-                    AND s.type2 IN (0, 2)";
+                    AND e.sx_yphrethshs NOT IN ($excluded_schools_str)
+                    AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($excluded_schools_str)
+                    AND (e.sx_organikhs NOT IN ($symv_school_ids_str) OR e.sx_organikhs IS NULL)
+                    AND e.id NOT IN (SELECT emp_id FROM yphrethsh WHERE yphrethsh IN ($symv_school_ids_str) AND sxol_etos = '$sxol_etos')
+                    AND s.id NOT IN ($symv_school_ids_str)
+                    AND s.type2 IN (0, 2)
+                    AND (e.aksiologhsh = 0 OR e.aksiologhsh IS NULL)"; // dhmosio, eidiko, un-evaluated
 
                     if (!empty($_POST['hm_dior_from'])) {
                         $query .= " AND e.hm_dior >= '".$_POST['hm_dior_from']."'";
@@ -923,24 +1003,221 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         $query .= " AND e.hm_dior <= '".$_POST['hm_dior_to']."'";
                     }
                     if (!empty($_POST['klados'])) {
-                        $klados = implode(",", $_POST['klados']);
+                        $klados = implode(",", array_map('intval', $_POST['klados']));
                         $query .= " AND e.klados IN ($klados)";
                     }
-                    if ($_POST['monimopoihsh'] !== '') {
-                        $query .= " AND e.monimopoihsh = ".$_POST['monimopoihsh'];
-                    }
-                    if ($_POST['aksiologhsh'] !== '') {
-                        $query .= " AND e.aksiologhsh = ".$_POST['aksiologhsh'];
-                    }
-                    if (!empty($_POST['aks_date_from'])) {
-                        $query .= " AND e.aksiologhsh_date >= '".$_POST['aks_date_from']."'";
-                    }
-                    if (!empty($_POST['aks_date_to'])) {
-                        $query .= " AND e.aksiologhsh_date <= '".$_POST['aks_date_to']."'";
+
+                    $query .= " GROUP BY e.id ORDER BY e.hm_dior DESC, e.surname ASC, e.name ASC";
+                    $db_result = mysqli_query($mysqlconnection, $query);
+
+                    $seen_table = [];
+                    $candidates_by_consultant = [];
+                    $consultant_is_pe60 = [];
+
+                    if ($db_result) {
+                        while ($row = mysqli_fetch_array($db_result)) {
+                            $emp_afm_raw = trim($row['emp_afm']);
+                            if (isset($seen_table[$emp_afm_raw]) || in_array($row['sch_id'], $symv_school_ids)) {
+                                continue;
+                            }
+                            $seen_table[$emp_afm_raw] = true;
+
+                            // Consultant mapping
+                            $consultants = $se_by_klados[$row['klados_id']] ?? [];
+                            $consultant_found = null;
+                            $default_consultant = null;
+
+                            foreach ($consultants as $c) {
+                                if (!empty($c['sch_ids'])) {
+                                    $c_schools = explode(',', $c['sch_ids']);
+                                    if (in_array($row['sch_id'], $c_schools)) {
+                                        $consultant_found = $c;
+                                        break;
+                                    }
+                                } else {
+                                    if (!$default_consultant) {
+                                        $default_consultant = $c;
+                                    }
+                                }
+                            }
+
+                            $is_eae = (
+                                in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
+                                in_array($row['klados_id'], [16, 17, 18, 19]) || 
+                                ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
+                            );
+
+                            if ($is_eae) {
+                                $symv_epist_afm = $row['symv_paid_afm'];
+                                $symv_epist_surname = $row['symv_paid_surname'];
+                                $symv_epist_name = $row['symv_paid_name'];
+
+                                $eae_c = $consultant_found ?: $default_consultant;
+                                if (!$eae_c && $row['type2'] == 2) {
+                                    $eae_kladoi = ($row['klados_id'] == 1 || $row['klados'] == 'ΠΕ60') ? [16, 17] : [18, 19];
+                                    foreach ($eae_kladoi as $ek) {
+                                        if (!empty($se_by_klados[$ek])) {
+                                            foreach ($se_by_klados[$ek] as $c) {
+                                                if (!empty($c['sch_ids'])) {
+                                                    $c_schools = explode(',', $c['sch_ids']);
+                                                    if (in_array($row['sch_id'], $c_schools)) {
+                                                        $eae_c = $c;
+                                                        break 2;
+                                                    }
+                                                } elseif (!$eae_c) {
+                                                    $eae_c = $c;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if ($eae_c) {
+                                    $symv_paid_afm = $eae_c['afm'];
+                                    $symv_paid_surname = $eae_c['eponymo'];
+                                    $symv_paid_name = $eae_c['onoma'];
+                                } else {
+                                    $symv_paid_afm = $row['symv_paid_afm'];
+                                    $symv_paid_surname = $row['symv_paid_surname'];
+                                    $symv_paid_name = $row['symv_paid_name'];
+                                }
+                            } else {
+                                if ($consultant_found) {
+                                    $symv_epist_afm = $consultant_found['afm'];
+                                    $symv_epist_surname = $consultant_found['eponymo'];
+                                    $symv_epist_name = $consultant_found['onoma'];
+                                } elseif ($default_consultant) {
+                                    $symv_epist_afm = $default_consultant['afm'];
+                                    $symv_epist_surname = $default_consultant['eponymo'];
+                                    $symv_epist_name = $default_consultant['onoma'];
+                                } elseif ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70') {
+                                    $symv_epist_afm = $row['symv_paid_afm'];
+                                    $symv_epist_surname = $row['symv_paid_surname'];
+                                    $symv_epist_name = $row['symv_paid_name'];
+                                } else {
+                                    $symv_epist_afm = '';
+                                    $symv_epist_surname = '';
+                                    $symv_epist_name = '';
+                                }
+
+                                $symv_paid_afm = $row['symv_paid_afm'];
+                                $symv_paid_surname = $row['symv_paid_surname'];
+                                $symv_paid_name = $row['symv_paid_name'];
+                            }
+
+                            $taytish = (!empty($symv_epist_afm) && !empty($symv_paid_afm) && $symv_epist_afm === $symv_paid_afm);
+
+                            $row['resolved_symv_epist_afm'] = $symv_epist_afm;
+                            $row['resolved_symv_epist_surname'] = $symv_epist_surname;
+                            $row['resolved_symv_epist_name'] = $symv_epist_name;
+                            $row['resolved_symv_paid_afm'] = $symv_paid_afm;
+                            $row['resolved_symv_paid_surname'] = $symv_paid_surname;
+                            $row['resolved_symv_paid_name'] = $symv_paid_name;
+                            $row['resolved_taytish'] = $taytish;
+
+                            // Ομαδοποίηση βάσει συμβούλου επιστημονικής ευθύνης (Α1)
+                            $c_key = !empty($symv_epist_afm) ? trim($symv_epist_afm) : 'unassigned_' . $row['klados_id'];
+                            $candidates_by_consultant[$c_key][] = $row;
+                            if (!isset($consultant_is_pe60[$c_key])) {
+                                $consultant_is_pe60[$c_key] = (isset($pe60_consultant_afms[$c_key]) || $row['klados'] === 'ΠΕ60' || $row['klados_id'] == 1);
+                            }
+                        }
                     }
 
-                    $query .= " GROUP BY e.id";
-                    $db_result = mysqli_query($mysqlconnection, $query);
+                    $eval_limit = (!empty($_POST['eval_per_consultant']) && (int)$_POST['eval_per_consultant'] > 0) ? (int)$_POST['eval_per_consultant'] : 0;
+
+                    $selected_rows = [];
+                    if ($eval_limit > 0) {
+                        foreach ($candidates_by_consultant as $c_key => $teacher_list) {
+                            $is_pe60 = !empty($consultant_is_pe60[$c_key]);
+                            $total_available = count($teacher_list);
+
+                            if ($is_pe60) {
+                                // Για τους ΠΕ60: ελάχιστος αριθμός, δλδ τουλάχιστον Χ,
+                                // συμπεριλαμβανομένων όλων των εκπαιδευτικών της ίδιας (τελευταίας) ημερομηνίας διορισμού
+                                if ($total_available <= $eval_limit) {
+                                    $selected = $teacher_list;
+                                } else {
+                                    $cutoff_date = $teacher_list[$eval_limit - 1]['hm_dior'];
+                                    $selected = [];
+                                    foreach ($teacher_list as $t) {
+                                        if (!empty($cutoff_date) && $t['hm_dior'] >= $cutoff_date) {
+                                            $selected[] = $t;
+                                        } elseif (empty($cutoff_date) && count($selected) < $eval_limit) {
+                                            $selected[] = $t;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Για τους υπόλοιπους συμβούλους: μέγιστο, δλδ. το πολύ Χ
+                                $selected = array_slice($teacher_list, 0, $eval_limit);
+                            }
+
+                            foreach ($selected as $s) {
+                                $selected_rows[] = $s;
+                            }
+                        }
+                    } else {
+                        foreach ($candidates_by_consultant as $teacher_list) {
+                            foreach ($teacher_list as $s) {
+                                $selected_rows[] = $s;
+                            }
+                        }
+                    }
+
+                    // Ταξινόμηση επιλεγμένων εκπαιδευτικών κατά σύμβουλο και έπειτα κατά φθίνουσα ημερομηνία διορισμού
+                    usort($selected_rows, function($a, $b) {
+                        $c_sur_a = trim($a['resolved_symv_epist_surname'] ?? '');
+                        $c_sur_b = trim($b['resolved_symv_epist_surname'] ?? '');
+
+                        if ($c_sur_a === '' && $c_sur_b !== '') return 1;
+                        if ($c_sur_a !== '' && $c_sur_b === '') return -1;
+                        if ($c_sur_a !== '' && $c_sur_b !== '') {
+                            $cmp_cs = strcmp($c_sur_a, $c_sur_b);
+                            if ($cmp_cs !== 0) return $cmp_cs;
+
+                            $c_name_a = trim($a['resolved_symv_epist_name'] ?? '');
+                            $c_name_b = trim($b['resolved_symv_epist_name'] ?? '');
+                            $cmp_cn = strcmp($c_name_a, $c_name_b);
+                            if ($cmp_cn !== 0) return $cmp_cn;
+                        }
+
+                        $cmp = strcmp($b['hm_dior'], $a['hm_dior']);
+                        if ($cmp !== 0) return $cmp;
+                        $cmp_sur = strcmp($a['emp_surname'], $b['emp_surname']);
+                        if ($cmp_sur !== 0) return $cmp_sur;
+                        return strcmp($a['emp_name'], $b['emp_name']);
+                    });
+
+                    // Υπολογισμός αξιολογούμενων ανά σύμβουλο επιστημονικής ευθύνης
+                    $consultant_counts = [];
+                    $consultant_labels = [];
+                    foreach ($selected_rows as $r_item) {
+                        $c_key = !empty($r_item['resolved_symv_epist_afm']) ? trim($r_item['resolved_symv_epist_afm']) : ('unassigned_' . $r_item['klados']);
+                        $consultant_counts[$c_key] = ($consultant_counts[$c_key] ?? 0) + 1;
+                        if (!isset($consultant_labels[$c_key])) {
+                            if (!empty($r_item['resolved_symv_epist_surname'])) {
+                                $consultant_labels[$c_key] = trim($r_item['resolved_symv_epist_surname'] . ' ' . $r_item['resolved_symv_epist_name']) . ' (' . $r_item['klados'] . ')';
+                            } else {
+                                $consultant_labels[$c_key] = 'Χωρίς σύμβουλο (' . $r_item['klados'] . ')';
+                            }
+                        }
+                    }
+                    arsort($consultant_counts);
+
+                    $tooltip_lines = ["Αριθμός αξιολογούμενων ανά σύμβουλο:"];
+                    foreach ($consultant_counts as $c_key => $cnt) {
+                        $tooltip_lines[] = "• " . $consultant_labels[$c_key] . ": " . $cnt;
+                    }
+                    $consultant_tooltip_text = implode("\n", $tooltip_lines);
+                    $consultant_tooltip_attr = htmlspecialchars($consultant_tooltip_text, ENT_QUOTES, 'UTF-8');
+
+                    $evaluated_emp_ids = [];
+                    foreach ($selected_rows as $r) {
+                        $evaluated_emp_ids[] = (int)$r['emp_id'];
+                    }
+                    $_SESSION['eval_emp_ids'] = $evaluated_emp_ids;
 
                     $a1_header = ["Αναγνωριστικό-Εκκρεμότητας", "Αξιολογούμενος-Όνομα", "Αξιολογούμενος-Επίθετο", "Αξιολογούμενος-ΑΦΜ", "Αξιολογητής-Όνομα", "Αξιολογητής-Επίθετο", "Αξιολογητής-ΑΦΜ"];
                     $a2_header = ["Αναγνωριστικό-Εκκρεμότητας", "Αξιολογούμενος-Όνομα", "Αξιολογούμενος-Επίθετο", "Αξιολογούμενος-ΑΦΜ", "Αξιολογητής-Όνομα", "Αξιολογητής-Επίθετο", "Αξιολογητής-ΑΦΜ"];
@@ -950,7 +1227,6 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $a2_rows = [];
                     $b_rows = [];
 
-                    $seen_table = [];
                     $seen_a1 = [];
                     $seen_a2 = [];
                     $seen_b = [];
@@ -965,106 +1241,18 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $exclude_a2 = $per_category ? $completed_by_cat['A2'] : $completed_all;
                     $exclude_b  = $per_category ? $completed_by_cat['B']  : $completed_all;
 
-                    while ($row = mysqli_fetch_array($db_result)) {
-                        $emp_afm_raw = trim($row['emp_afm']);
-                        if (isset($seen_table[$emp_afm_raw])) {
-                            continue;
-                        }
-                        $seen_table[$emp_afm_raw] = true;
-
-                        $emp_afm = normalize_afm($emp_afm_raw);
+                    foreach ($selected_rows as $row) {
+                        $emp_afm = normalize_afm($row['emp_afm']);
                         $emp_name = trim($row['emp_name']);
                         $emp_surname = trim($row['emp_surname']);
 
-                        // Consultant mapping
-                        $consultants = $se_by_klados[$row['klados_id']] ?? [];
-                        $consultant_found = null;
-                        $default_consultant = null;
+                        $se_afm = normalize_afm($row['resolved_symv_epist_afm']);
+                        $se_name = trim($row['resolved_symv_epist_name']);
+                        $se_surname = trim($row['resolved_symv_epist_surname']);
 
-                        foreach ($consultants as $c) {
-                            if (!empty($c['sch_ids'])) {
-                                $c_schools = explode(',', $c['sch_ids']);
-                                if (in_array($row['sch_id'], $c_schools)) {
-                                    $consultant_found = $c;
-                                    break;
-                                }
-                            } else {
-                                if (!$default_consultant) {
-                                    $default_consultant = $c;
-                                }
-                            }
-                        }
-
-                        $is_eae = (
-                            in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
-                            in_array($row['klados_id'], [16, 17, 18, 19]) || 
-                            ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
-                        );
-
-                        if ($is_eae) {
-                            $symv_epist_afm = $row['symv_paid_afm'];
-                            $symv_epist_surname = $row['symv_paid_surname'];
-                            $symv_epist_name = $row['symv_paid_name'];
-
-                            $eae_c = $consultant_found ?: $default_consultant;
-                            if (!$eae_c && $row['type2'] == 2) {
-                                $eae_kladoi = ($row['klados_id'] == 1 || $row['klados'] == 'ΠΕ60') ? [16, 17] : [18, 19];
-                                foreach ($eae_kladoi as $ek) {
-                                    if (!empty($se_by_klados[$ek])) {
-                                        foreach ($se_by_klados[$ek] as $c) {
-                                            if (!empty($c['sch_ids'])) {
-                                                $c_schools = explode(',', $c['sch_ids']);
-                                                if (in_array($row['sch_id'], $c_schools)) {
-                                                    $eae_c = $c;
-                                                    break 2;
-                                                }
-                                            } elseif (!$eae_c) {
-                                                $eae_c = $c;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if ($eae_c) {
-                                $symv_paid_afm = $eae_c['afm'];
-                                $symv_paid_surname = $eae_c['eponymo'];
-                                $symv_paid_name = $eae_c['onoma'];
-                            } else {
-                                $symv_paid_afm = $row['symv_paid_afm'];
-                                $symv_paid_surname = $row['symv_paid_surname'];
-                                $symv_paid_name = $row['symv_paid_name'];
-                            }
-                        } else {
-                            if ($consultant_found) {
-                                $symv_epist_afm = $consultant_found['afm'];
-                                $symv_epist_surname = $consultant_found['eponymo'];
-                                $symv_epist_name = $consultant_found['onoma'];
-                            } elseif ($default_consultant) {
-                                $symv_epist_afm = $default_consultant['afm'];
-                                $symv_epist_surname = $default_consultant['eponymo'];
-                                $symv_epist_name = $default_consultant['onoma'];
-                            } elseif ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70') {
-                                $symv_epist_afm = $row['symv_paid_afm'];
-                                $symv_epist_surname = $row['symv_paid_surname'];
-                                $symv_epist_name = $row['symv_paid_name'];
-                            } else {
-                                $symv_epist_afm = '';
-                                $symv_epist_surname = '';
-                                $symv_epist_name = '';
-                            }
-
-                            $symv_paid_afm = $row['symv_paid_afm'];
-                            $symv_paid_surname = $row['symv_paid_surname'];
-                            $symv_paid_name = $row['symv_paid_name'];
-                        }
-
-                        $se_afm = normalize_afm($symv_epist_afm);
-                        $se_name = trim($symv_epist_name);
-                        $se_surname = trim($symv_epist_surname);
-
-                        $sp_afm = normalize_afm($symv_paid_afm);
-                        $sp_name = trim($symv_paid_name);
-                        $sp_surname = trim($symv_paid_surname);
+                        $sp_afm = normalize_afm($row['resolved_symv_paid_afm']);
+                        $sp_name = trim($row['resolved_symv_paid_name']);
+                        $sp_surname = trim($row['resolved_symv_paid_surname']);
 
                         $dnt_afm = normalize_afm($row['dnt_afm']);
                         $dnt_name = trim($row['dnt_name']);
@@ -1093,7 +1281,11 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
 
                         // --- A2 Field ---
-                        if (!isset($seen_a2[$emp_afm]) && !empty($emp_afm)) {
+                        $excluded_a2_kladoi = ['ΔΕ1ΕΒΠ', 'ΠΕ25', 'ΠΕ23', 'ΠΕ26', 'ΠΕ28', 'ΠΕ30', 'ΤΕ01', 'ΠΕ21', 'ΠΕ29'];
+                        $excluded_a2_ids = [8, 9, 10, 11, 12, 21, 26, 27, 31];
+                        $is_excluded_from_a2 = in_array(trim($row['klados'] ?? ''), $excluded_a2_kladoi) || in_array((int)($row['klados_id'] ?? 0), $excluded_a2_ids);
+
+                        if (!$is_excluded_from_a2 && !isset($seen_a2[$emp_afm]) && !empty($emp_afm)) {
                             $evaluator_afm = '';
                             $evaluator_name = '';
                             $evaluator_surname = '';
@@ -1231,6 +1423,50 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                 }
 
                 // Display Results
+                $db_summary_html = '';
+                if ($data_source === 'db' && !empty($selected_rows)) {
+                    $unique_count = count($selected_rows);
+                    $popover_rows_html = '';
+                    foreach ($consultant_counts as $c_key => $cnt) {
+                        $popover_rows_html .= "<tr>
+                            <td style='padding: 5px 8px; border-bottom: 1px solid #f1f5f9; text-align: left;'>" . htmlspecialchars($consultant_labels[$c_key] ?? '', ENT_QUOTES, 'UTF-8') . "</td>
+                            <td style='padding: 5px 8px; border-bottom: 1px solid #f1f5f9; font-weight: bold; color: #166534; text-align: right;'>" . $cnt . "</td>
+                        </tr>";
+                    }
+                    $db_summary_html = "
+                    <div style='display: flex; justify-content: space-between; align-items: center; margin: 15px 0 20px 0; flex-wrap: wrap; gap: 10px; background: #ffffff; padding: 12px 16px; border-radius: 6px; border: 1px solid #bbf7d0;'>
+                        <div style='display: inline-flex; align-items: center; gap: 12px;'>
+                            <div style='font-weight: bold; color: #1b5e20; font-size: 15px;'>
+                                <span title=\"$consultant_tooltip_attr\" style='cursor: help; border-bottom: 1px dotted #1b5e20;'>$unique_count μοναδικοί εκπαιδευτικοί από Βάση Δεδομένων</span>
+                            </div>
+                            <div class='consultant-popover-wrapper' style='position: relative; display: inline-block;'>
+                                <span class='badge-consultants' title=\"$consultant_tooltip_attr\" style='cursor: pointer; background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; padding: 5px 12px; border-radius: 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                    👥 Αριθμός ανά σύμβουλο (" . count($consultant_counts) . ") ▾
+                                </span>
+                                <div class='consultant-popover-box' style='display: none; position: absolute; top: calc(100% + 5px); left: 0; z-index: 1050; min-width: 350px; max-height: 420px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); padding: 12px;'>
+                                    <div style='font-weight: bold; font-size: 13px; color: #0f172a; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; display: flex; justify-content: space-between;'>
+                                        <span>Σύμβουλος</span>
+                                        <span>Αξιολογούμενοι</span>
+                                    </div>
+                                    <table style='width: 100%; border-collapse: collapse; font-size: 12.5px;'>
+                                        <tbody>
+                                            $popover_rows_html
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <form method='post' action='aksiologhsh_topo.php' target='_blank' style='margin: 0; display: inline-block;'>
+                                <input type='hidden' name='emp_ids' value='" . implode(',', $evaluated_emp_ids) . "'>
+                                <button type='submit' class='btn btn-blue' style='cursor: pointer; padding: 7px 16px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12);'>
+                                    🏫 Αναφορά Τοποθετήσεων Αξιολογούμενων ($unique_count)
+                                </button>
+                            </form>
+                        </div>
+                    </div>";
+                }
+
                 echo "
                 <div class='card-box' style='background: #f0fdf4; border: 1px solid #86efac;'>
                     <div style='display: flex; align-items: center; margin-bottom: 12px;'>
@@ -1240,8 +1476,15 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     <p style='color: #166534; margin: 0 0 16px 0; font-size: 14px;'>
                         Αναλύθηκε το αρχείο <strong>".htmlspecialchars($excel_name)."</strong> και εφαρμόστηκε επίθημα <code>:".htmlspecialchars($suffix)."</code> στις εκκρεμότητες.
                     </p>
+                    $db_summary_html
 
                     <div class='stats-grid'>
+                        " . (($data_source === 'db' && !empty($selected_rows)) ? "
+                        <div class='stat-card'>
+                            <div class='stat-value' style='color: #0369a1;'>" . count($selected_rows) . "</div>
+                            <div class='stat-label'>Επιλεγμένοι Εκπ/κοί</div>
+                        </div>
+                        " : "") . "
                         " . ($per_category ? "
                         <div class='stat-card'>
                             <div class='stat-value' style='color: #166534;'>" . count($completed_by_cat['A1']) . "</div>

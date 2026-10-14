@@ -25,7 +25,30 @@ $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ', $mysqlconnection);
 $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $mysqlconnection);
 $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό', $mysqlconnection);
 $foreas = getSchoolID('Απόσπαση σε φορέα', $mysqlconnection);
+$sxol_symv = getSchoolID('Σύμβουλος Εκπαίδευσης', $mysqlconnection);
+if (!$sxol_symv) {
+    $sxol_symv = getSchoolID('Σύμβουλος εκπαίδευσης', $mysqlconnection);
+}
 $dipe = '398';
+
+$symv_school_ids = [];
+if ($sxol_symv) {
+    $symv_school_ids[] = (int)$sxol_symv;
+}
+$res_symv = mysqli_query($mysqlconnection, "SELECT id FROM school WHERE name LIKE '%Σύμβουλος Εκπαίδευσης%' OR name LIKE '%Σύμβουλος εκπαίδευσης%'");
+if ($res_symv) {
+    while ($r_s = mysqli_fetch_assoc($res_symv)) {
+        $symv_school_ids[] = (int)$r_s['id'];
+    }
+}
+if (empty($symv_school_ids)) {
+    $symv_school_ids = [397];
+}
+$symv_school_ids = array_unique($symv_school_ids);
+$symv_school_ids_str = implode(',', $symv_school_ids);
+
+$excluded_schools = array_unique(array_filter([$allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko, ...$symv_school_ids]));
+$excluded_schools_str = implode(',', $excluded_schools);
 
 // Determine source of evaluated teachers
 $emp_ids = [];
@@ -112,8 +135,11 @@ if (!empty($emp_ids)) {
     ) yp ON e.id = yp.emp_id
     LEFT JOIN school s ON COALESCE(yp.primary_sch_id, e.sx_yphrethshs) = s.id
     WHERE e.status = 1 
-    AND e.sx_yphrethshs NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
-    AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko)
+    AND e.sx_yphrethshs NOT IN ($excluded_schools_str)
+    AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($excluded_schools_str)
+    AND (e.sx_organikhs NOT IN ($symv_school_ids_str) OR e.sx_organikhs IS NULL)
+    AND e.id NOT IN (SELECT emp_id FROM yphrethsh WHERE yphrethsh IN ($symv_school_ids_str) AND sxol_etos = '$sxol_etos')
+    AND s.id NOT IN ($symv_school_ids_str)
     AND s.type2 IN (0, 2)";
 
     if (!empty($_POST['hm_dior_from'])) {
