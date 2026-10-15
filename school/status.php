@@ -524,8 +524,17 @@
             } else {
                 echo "<td><input type=\"checkbox\" disabled>Σχολική βιβλιοθήκη</td>";
             }
-            echo "</tr>";
-            echo "<tr><td>Ενότητα Σχολικών Συμβούλων: ".$perif."η</td>";
+            $symv_str = '';
+            if ($perif) {
+              $symv_qry = "SELECT s.emp_id, e.surname, e.name FROM symvouloi s JOIN employee e ON s.emp_id = e.id WHERE s.perif = " . intval($perif);
+              $symv_res = mysqli_query($conn, $symv_qry);
+              if ($symv_res && mysqli_num_rows($symv_res) > 0) {
+                $symv_row = mysqli_fetch_assoc($symv_res);
+                $symv_name = htmlspecialchars($symv_row['surname'] . ' ' . $symv_row['name']);
+                $symv_str = " ($symv_name)";
+              }
+            }
+            echo "<tr><td>Ενότητα Σχολικών Συμβούλων: ".$perif."η".$symv_str."</td>";
             echo $anenergo ? "<td>Κατάσταση: Σε αναστολή</td>" : "<td>Κατάσταση: Ενεργό</td>";
             echo "</tr>";
         }

@@ -942,10 +942,24 @@ $can_view_comments = ($_SESSION['userlevel'] == 0 || ($_SESSION['user'] ?? '') =
         echo "<div class='info-section-content'>";
         echo "<div class='info-grid'>";
 
-        if ($type == 1) {
+        if ($type == 1 || ($type == 2 && $perif)) {
+          $symvoulos_info = '';
+          if ($perif) {
+            $symv_qry = "SELECT s.emp_id, e.surname, e.name 
+                         FROM symvouloi s 
+                         JOIN employee e ON s.emp_id = e.id 
+                         WHERE s.perif = " . intval($perif);
+            $symv_res = mysqli_query($conn, $symv_qry);
+            if ($symv_res && mysqli_num_rows($symv_res) > 0) {
+              $symv_row = mysqli_fetch_assoc($symv_res);
+              $symv_name = htmlspecialchars($symv_row['surname'] . ' ' . $symv_row['name']);
+              $symv_emp_id = (int)$symv_row['emp_id'];
+              $symvoulos_info = " (<a href='../employee/employee.php?id=$symv_emp_id&op=view' title='Καρτέλα εκπαιδευτικού'>$symv_name</a>)";
+            }
+          }
           echo "<div class='info-item'>";
           echo "<span class='info-label'>Ενότητα Σχολικών Συμβούλων</span>";
-          echo "<span class='info-value'>" . $perif . "η</span>";
+          echo "<span class='info-value'>" . ($perif ? $perif . "η" : "-") . $symvoulos_info . "</span>";
           echo "</div>";
         }
 
