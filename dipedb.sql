@@ -768,7 +768,9 @@ CREATE TABLE IF NOT EXISTS `symvouloi_epist` (
   `eponymo` VARCHAR(255), 
   `onoma` VARCHAR(255), 
   `emp_id` INT NULL, 
-  `sch_ids` TEXT
+  `sch_ids` TEXT,
+  `edra_allou` TINYINT(1) NOT NULL DEFAULT 0 COMMENT ' Έδρα σε άλλο νομό',
+  `aksiologhsh_ews` DATE NULL DEFAULT NULL COMMENT 'Αξιολόγηση έως'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

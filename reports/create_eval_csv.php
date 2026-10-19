@@ -660,11 +660,16 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
 <body>
     <?php require '../etc/menu.php'; ?>
 <div id="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
         <h1 style="margin: 0;">Δημιουργία Αρχείων CSV Αξιολόγησης</h1>
-        <a href="aksiologhsh_report.php" class="btn btn-primary" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
-            📊 Προβολή Αναφοράς Αξιολόγησης
-        </a>
+        <div style="display: flex; gap: 10px;">
+            <a href="eval_emp_csv.php" class="btn btn-primary" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; background: #0284c7;">
+                🔍 Χειροκίνητη Εισαγωγή Γραμμών Εκπ/κού (a1, a2, b)
+            </a>
+            <a href="aksiologhsh_report.php" class="btn btn-primary" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;">
+                📊 Προβολή Αναφοράς Αξιολόγησης
+            </a>
+        </div>
     </div>
 
     <p style="color: #475569; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
@@ -920,9 +925,20 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $excluded_schools_str = implode(',', $excluded_schools);
 
                     $se_by_klados = [];
-                    $se_res = mysqli_query($mysqlconnection, "SELECT id, klados, afm, eponymo, onoma, emp_id, sch_ids FROM symvouloi_epist");
+                    $se_edra_allou = [];
+                    $se_aksiologhsh_ews = [];
+                    $se_res = mysqli_query($mysqlconnection, "SELECT id, klados, afm, eponymo, onoma, emp_id, sch_ids, edra_allou, aksiologhsh_ews FROM symvouloi_epist");
                     while ($se_row = mysqli_fetch_assoc($se_res)) {
                         $se_by_klados[$se_row['klados']][] = $se_row;
+                        $c_afm = trim($se_row['afm']);
+                        if (!empty($c_afm)) {
+                            if (!empty($se_row['edra_allou'])) {
+                                $se_edra_allou[$c_afm] = true;
+                            }
+                            if (!empty($se_row['aksiologhsh_ews']) && $se_row['aksiologhsh_ews'] !== '0000-00-00') {
+                                $se_aksiologhsh_ews[$c_afm] = $se_row['aksiologhsh_ews'];
+                            }
+                        }
                     }
 
                     // Pre-load PE60 consultant AFMs
@@ -1007,7 +1023,22 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         $query .= " AND e.klados IN ($klados)";
                     }
 
-                    $query .= " GROUP BY e.id ORDER BY e.hm_dior DESC, e.surname ASC, e.name ASC";
+                    $query .= " GROUP BY e.id ORDER BY 
+                        CASE 
+                            WHEN e.hm_dior >= '2020-01-01' THEN 1 
+                            WHEN e.hm_dior > '1950-01-01' THEN 2 
+                            ELSE 3 
+                        END ASC,
+                        CASE 
+                            WHEN e.hm_dior >= '2020-01-01' THEN e.hm_dior 
+                            ELSE NULL 
+                        END ASC,
+                        CASE 
+                            WHEN e.hm_dior < '2020-01-01' AND e.hm_dior > '1950-01-01' THEN e.hm_dior 
+                            ELSE NULL 
+                        END DESC,
+                        e.surname ASC, 
+                        e.name ASC";
                     $db_result = mysqli_query($mysqlconnection, $query);
 
                     $seen_table = [];
@@ -1116,6 +1147,27 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
 
                             // Ομαδοποίηση βάσει συμβούλου επιστημονικής ευθύνης (Α1)
                             $c_key = !empty($symv_epist_afm) ? trim($symv_epist_afm) : 'unassigned_' . $row['klados_id'];
+
+                            // Αν ο σύμβουλος έχει έδρα σε άλλο νομό, δώστου εκπαιδευτικούς μόνο από την ομάδα 1 (>= 2020)
+                            if (!empty($se_edra_allou[$c_key]) && (empty($row['hm_dior']) || $row['hm_dior'] < '2020-01-01')) {
+                                continue;
+                            }
+                            if ($is_eae && !empty($symv_paid_afm) && !empty($se_edra_allou[trim($symv_paid_afm)]) && (empty($row['hm_dior']) || $row['hm_dior'] < '2020-01-01')) {
+                                continue;
+                            }
+
+                            // Αν έχει οριστεί όριο ημερομηνίας αξιολόγησης (aksiologhsh_ews), επιλέγονται εκπαιδευτικοί 1ης ομάδας (>= 2020) έως την ημερομηνία αυτή
+                            if (!empty($se_aksiologhsh_ews[$c_key])) {
+                                if (empty($row['hm_dior']) || $row['hm_dior'] < '2020-01-01' || $row['hm_dior'] > $se_aksiologhsh_ews[$c_key]) {
+                                    continue;
+                                }
+                            }
+                            if ($is_eae && !empty($symv_paid_afm) && !empty($se_aksiologhsh_ews[trim($symv_paid_afm)])) {
+                                if (empty($row['hm_dior']) || $row['hm_dior'] < '2020-01-01' || $row['hm_dior'] > $se_aksiologhsh_ews[trim($symv_paid_afm)]) {
+                                    continue;
+                                }
+                            }
+
                             $candidates_by_consultant[$c_key][] = $row;
                             if (!isset($consultant_is_pe60[$c_key])) {
                                 $consultant_is_pe60[$c_key] = (isset($pe60_consultant_afms[$c_key]) || $row['klados'] === 'ΠΕ60' || $row['klados_id'] == 1);
@@ -1137,15 +1189,15 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 if ($total_available <= $eval_limit) {
                                     $selected = $teacher_list;
                                 } else {
+                                    $selected = array_slice($teacher_list, 0, $eval_limit);
                                     $cutoff_date = $teacher_list[$eval_limit - 1]['hm_dior'];
-                                    $selected = [];
-                                    foreach ($teacher_list as $t) {
-                                        if (!empty($cutoff_date) && $t['hm_dior'] >= $cutoff_date) {
-                                            $selected[] = $t;
-                                        } elseif (empty($cutoff_date) && count($selected) < $eval_limit) {
-                                            $selected[] = $t;
-                                        } else {
-                                            break;
+                                    if (!empty($cutoff_date) && $cutoff_date !== '0000-00-00') {
+                                        for ($idx = $eval_limit; $idx < $total_available; $idx++) {
+                                            if ($teacher_list[$idx]['hm_dior'] === $cutoff_date) {
+                                                $selected[] = $teacher_list[$idx];
+                                            } else {
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -1166,7 +1218,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                     }
 
-                    // Ταξινόμηση επιλεγμένων εκπαιδευτικών κατά σύμβουλο και έπειτα κατά φθίνουσα ημερομηνία διορισμού
+                    // Ταξινόμηση επιλεγμένων εκπαιδευτικών κατά σύμβουλο και έπειτα κατά ημερομηνία διορισμού (αύξουσα από 2020+, φθίνουσα πριν το 2020)
                     usort($selected_rows, function($a, $b) {
                         $c_sur_a = trim($a['resolved_symv_epist_surname'] ?? '');
                         $c_sur_b = trim($b['resolved_symv_epist_surname'] ?? '');
@@ -1183,7 +1235,21 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             if ($cmp_cn !== 0) return $cmp_cn;
                         }
 
-                        $cmp = strcmp($b['hm_dior'], $a['hm_dior']);
+                        $d1 = $a['hm_dior'] ?? '';
+                        $d2 = $b['hm_dior'] ?? '';
+                        $g1 = ($d1 >= '2020-01-01') ? 1 : ((!empty($d1) && $d1 > '1950-01-01') ? 2 : 3);
+                        $g2 = ($d2 >= '2020-01-01') ? 1 : ((!empty($d2) && $d2 > '1950-01-01') ? 2 : 3);
+
+                        if ($g1 !== $g2) {
+                            $cmp = $g1 <=> $g2;
+                        } elseif ($g1 === 1) {
+                            $cmp = strcmp($d1, $d2); // Αύξουσα για >= 2020
+                        } elseif ($g1 === 2) {
+                            $cmp = strcmp($d2, $d1); // Φθίνουσα για < 2020
+                        } else {
+                            $cmp = strcmp($d1, $d2);
+                        }
+
                         if ($cmp !== 0) return $cmp;
                         $cmp_sur = strcmp($a['emp_surname'], $b['emp_surname']);
                         if ($cmp_sur !== 0) return $cmp_sur;
@@ -1197,8 +1263,16 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         $c_key = !empty($r_item['resolved_symv_epist_afm']) ? trim($r_item['resolved_symv_epist_afm']) : ('unassigned_' . $r_item['klados']);
                         $consultant_counts[$c_key] = ($consultant_counts[$c_key] ?? 0) + 1;
                         if (!isset($consultant_labels[$c_key])) {
+                            $suffix_parts = [];
+                            if (!empty($se_edra_allou[$c_key])) {
+                                $suffix_parts[] = 'Έδρα σε άλλο νομό';
+                            }
+                            if (!empty($se_aksiologhsh_ews[$c_key])) {
+                                $suffix_parts[] = 'Έως ' . date('d/m/Y', strtotime($se_aksiologhsh_ews[$c_key]));
+                            }
+                            $c_suffix = !empty($suffix_parts) ? ' [' . implode(', ', $suffix_parts) . ']' : '';
                             if (!empty($r_item['resolved_symv_epist_surname'])) {
-                                $consultant_labels[$c_key] = trim($r_item['resolved_symv_epist_surname'] . ' ' . $r_item['resolved_symv_epist_name']) . ' (' . $r_item['klados'] . ')';
+                                $consultant_labels[$c_key] = trim($r_item['resolved_symv_epist_surname'] . ' ' . $r_item['resolved_symv_epist_name']) . ' (' . $r_item['klados'] . ')' . $c_suffix;
                             } else {
                                 $consultant_labels[$c_key] = 'Χωρίς σύμβουλο (' . $r_item['klados'] . ')';
                             }

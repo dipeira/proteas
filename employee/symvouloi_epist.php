@@ -97,16 +97,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $onoma = $_POST['onoma'];
     $emp_id = !empty($_POST['emp_id']) ? $_POST['emp_id'] : NULL;
     $sch_ids = isset($_POST['sch_ids']) ? implode(',', $_POST['sch_ids']) : NULL;
+    $edra_allou = isset($_POST['edra_allou']) ? 1 : 0;
+    $aksiologhsh_ews = !empty($_POST['aksiologhsh_ews']) ? $_POST['aksiologhsh_ews'] : NULL;
 
     if (isset($_POST['id']) && !empty($_POST['id'])) {
         // Update existing advisor
         $id = $_POST['id'];
-        $stmt = $db->prepare("UPDATE symvouloi_epist SET klados = ?, afm = ?, eponymo = ?, onoma = ?, emp_id = ?, sch_ids = ? WHERE id = ?");
-        $stmt->execute([$klados, $afm, $eponymo, $onoma, $emp_id, $sch_ids, $id]);
+        $stmt = $db->prepare("UPDATE symvouloi_epist SET klados = ?, afm = ?, eponymo = ?, onoma = ?, emp_id = ?, sch_ids = ?, edra_allou = ?, aksiologhsh_ews = ? WHERE id = ?");
+        $stmt->execute([$klados, $afm, $eponymo, $onoma, $emp_id, $sch_ids, $edra_allou, $aksiologhsh_ews, $id]);
     } else {
         // Insert new advisor
-        $stmt = $db->prepare("INSERT INTO symvouloi_epist (klados, afm, eponymo, onoma, emp_id, sch_ids) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$klados, $afm, $eponymo, $onoma, $emp_id, $sch_ids]);
+        $stmt = $db->prepare("INSERT INTO symvouloi_epist (klados, afm, eponymo, onoma, emp_id, sch_ids, edra_allou, aksiologhsh_ews) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$klados, $afm, $eponymo, $onoma, $emp_id, $sch_ids, $edra_allou, $aksiologhsh_ews]);
     }
     header("Location: symvouloi_epist.php"); // Redirect to avoid form resubmission
     exit();
@@ -180,7 +182,7 @@ if (isset($_GET['edit'])) {
             font-weight: bold;
             color: #555;
         }
-        input[type="text"], input[type="number"], select, .select2-container {
+        input[type="text"], input[type="number"], input[type="date"], select, .select2-container {
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -307,6 +309,8 @@ if (isset($_GET['edit'])) {
                     <th>Όνομα</th>
                     <th>EMP ID</th>
                     <th>Σχολεία Ευθύνης</th>
+                    <th>Έδρα σε άλλο νομό</th>
+                    <th>Αξιολόγηση έως</th>
                     <th>Ενέργειες</th>
                 </tr>
             </thead>
@@ -334,6 +338,8 @@ if (isset($_GET['edit'])) {
                                 }
                             ?>
                         </td>
+                        <td><?php echo !empty($advisor['edra_allou']) ? 'Ναι' : 'Όχι'; ?></td>
+                        <td><?php echo !empty($advisor['aksiologhsh_ews']) ? date('d/m/Y', strtotime($advisor['aksiologhsh_ews'])) : '-'; ?></td>
                         <td class="actions">
                             <a href="symvouloi_epist.php?edit=<?php echo $advisor['id']; ?>" class="edit btn btn-yellow">Επεξεργασία</a>
                             <form method="POST" action="symvouloi_epist.php" style="display:inline-block;">
@@ -345,7 +351,7 @@ if (isset($_GET['edit'])) {
                 <?php endforeach; ?>
                 <?php if (empty($advisors)): ?>
                     <tr>
-                        <td colspan="7">Δεν υπάρχουν καταχωρημένοι σύμβουλοι.</td>
+                        <td colspan="9">Δεν υπάρχουν καταχωρημένοι σύμβουλοι.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -393,6 +399,14 @@ if (isset($_GET['edit'])) {
                         </option>
                     <?php endforeach; ?>
                 </select>
+            </div>
+            <div>
+                <label for="aksiologhsh_ews">Αξιολόγηση έως (Προαιρετικό):</label>
+                <input type="date" id="aksiologhsh_ews" name="aksiologhsh_ews" value="<?php echo htmlspecialchars($editing_advisor['aksiologhsh_ews'] ?? ''); ?>">
+            </div>
+            <div style="flex-direction: row; align-items: center; gap: 8px; margin-top: 10px;">
+                <input type="checkbox" id="edra_allou" name="edra_allou" value="1" style="width: 18px; height: 18px; cursor: pointer;" <?php echo (!empty($editing_advisor['edra_allou'])) ? 'checked' : ''; ?>>
+                <label for="edra_allou" style="margin-bottom: 0; cursor: pointer; font-size: 1rem;">Έδρα σε άλλο νομό</label>
             </div>
             <button type="submit" class='btn btn-green'><?php echo $editing_advisor ? 'Ενημέρωση Συμβούλου' : 'Προσθήκη Συμβούλου'; ?></button>
         </form>
