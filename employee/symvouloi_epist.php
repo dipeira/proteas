@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $afm = $_POST['afm'];
     $eponymo = $_POST['eponymo'];
     $onoma = $_POST['onoma'];
+    $email = !empty($_POST['email']) ? trim($_POST['email']) : NULL;
     $emp_id = !empty($_POST['emp_id']) ? $_POST['emp_id'] : NULL;
     $sch_ids = isset($_POST['sch_ids']) ? implode(',', $_POST['sch_ids']) : NULL;
     $edra_allou = isset($_POST['edra_allou']) ? 1 : 0;
@@ -103,12 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id']) && !empty($_POST['id'])) {
         // Update existing advisor
         $id = $_POST['id'];
-        $stmt = $db->prepare("UPDATE symvouloi_epist SET klados = ?, afm = ?, eponymo = ?, onoma = ?, emp_id = ?, sch_ids = ?, edra_allou = ?, aksiologhsh_ews = ? WHERE id = ?");
-        $stmt->execute([$klados, $afm, $eponymo, $onoma, $emp_id, $sch_ids, $edra_allou, $aksiologhsh_ews, $id]);
+        $stmt = $db->prepare("UPDATE symvouloi_epist SET klados = ?, afm = ?, eponymo = ?, onoma = ?, email = ?, emp_id = ?, sch_ids = ?, edra_allou = ?, aksiologhsh_ews = ? WHERE id = ?");
+        $stmt->execute([$klados, $afm, $eponymo, $onoma, $email, $emp_id, $sch_ids, $edra_allou, $aksiologhsh_ews, $id]);
     } else {
         // Insert new advisor
-        $stmt = $db->prepare("INSERT INTO symvouloi_epist (klados, afm, eponymo, onoma, emp_id, sch_ids, edra_allou, aksiologhsh_ews) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$klados, $afm, $eponymo, $onoma, $emp_id, $sch_ids, $edra_allou, $aksiologhsh_ews]);
+        $stmt = $db->prepare("INSERT INTO symvouloi_epist (klados, afm, eponymo, onoma, email, emp_id, sch_ids, edra_allou, aksiologhsh_ews) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$klados, $afm, $eponymo, $onoma, $email, $emp_id, $sch_ids, $edra_allou, $aksiologhsh_ews]);
     }
     header("Location: symvouloi_epist.php"); // Redirect to avoid form resubmission
     exit();
@@ -307,6 +308,7 @@ if (isset($_GET['edit'])) {
                     <th>ΑΦΜ</th>
                     <th>Επώνυμο</th>
                     <th>Όνομα</th>
+                    <th>Email</th>
                     <th>EMP ID</th>
                     <th>Σχολεία Ευθύνης</th>
                     <th>Έδρα σε άλλο νομό</th>
@@ -321,6 +323,7 @@ if (isset($_GET['edit'])) {
                         <td><?php echo htmlspecialchars($advisor['afm']); ?></td>
                         <td><?php echo htmlspecialchars($advisor['eponymo']); ?></td>
                         <td><?php echo htmlspecialchars($advisor['onoma']); ?></td>
+                        <td><?php echo htmlspecialchars($advisor['email'] ?? '-'); ?></td>
                         <td><?php echo htmlspecialchars($advisor['emp_id'] ?? '-'); ?></td>
                         <td>
                             <?php
@@ -351,7 +354,7 @@ if (isset($_GET['edit'])) {
                 <?php endforeach; ?>
                 <?php if (empty($advisors)): ?>
                     <tr>
-                        <td colspan="9">Δεν υπάρχουν καταχωρημένοι σύμβουλοι.</td>
+                        <td colspan="10">Δεν υπάρχουν καταχωρημένοι σύμβουλοι.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -384,6 +387,10 @@ if (isset($_GET['edit'])) {
             <div>
                 <label for="onoma">Όνομα:</label>
                 <input type="text" id="onoma" name="onoma" value="<?php echo htmlspecialchars($editing_advisor['onoma'] ?? ''); ?>" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($editing_advisor['email'] ?? ''); ?>" placeholder="π.χ. advisor@sch.gr">
             </div>
             <div>
                 <label for="emp_id">EMP ID (Προαιρετικό):</label>

@@ -767,6 +767,7 @@ CREATE TABLE IF NOT EXISTS `symvouloi_epist` (
   `afm` VARCHAR(255), 
   `eponymo` VARCHAR(255), 
   `onoma` VARCHAR(255), 
+  `email` VARCHAR(255) NULL, 
   `emp_id` INT NULL, 
   `sch_ids` TEXT,
   `edra_allou` TINYINT(1) NOT NULL DEFAULT 0 COMMENT ' Έδρα σε άλλο νομό',
