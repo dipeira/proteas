@@ -338,7 +338,12 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
 
     // 3. B Line
     $b_data = null;
-    if ($is_director || empty($dnt_afm)) {
+    if ($is_director) {
+        $b_data = [
+            'applicable' => false,
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από το πεδίο Β (δεν αξιολογείται στο Β).'
+        ];
+    } elseif (empty($dnt_afm)) {
         if (!empty($sp_afm)) {
             $b_id = $sp_afm . ':' . $emp_afm;
             $b_id_suffix = append_suffix($b_id, $suffix);
@@ -355,7 +360,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
                         'name' => $sp_name,
                         'surname' => $sp_surname,
                         'afm' => $sp_afm,
-                        'role' => $is_director ? 'Σύμβουλος Παιδαγωγικής Ευθύνης (μοναδικός αξιολογητής λόγω θέσης Διευθυντή)' : 'Σύμβουλος Παιδαγωγικής Ευθύνης (μοναδικός αξιολογητής)'
+                        'role' => 'Σύμβουλος Παιδαγωγικής Ευθύνης (μοναδικός αξιολογητής)'
                     ],
                     'ev2' => null
                 ]

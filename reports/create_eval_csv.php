@@ -32,6 +32,7 @@ if (isset($_GET['download'])) {
         'a1' => ['file' => 'a1.csv', 'mime' => 'text/csv; charset=utf-8'],
         'a2' => ['file' => 'a2.csv', 'mime' => 'text/csv; charset=utf-8'],
         'b' => ['file' => 'b.csv', 'mime' => 'text/csv; charset=utf-8'],
+        'directors' => ['file' => 'directors.csv', 'mime' => 'text/csv; charset=utf-8'],
         'zip' => ['file' => 'aksiologhsh_csv.zip', 'mime' => 'application/zip'],
     ];
     if (isset($files[$type])) {
@@ -360,7 +361,7 @@ function detect_delimiter_from_file($path) {
     return ($counts[$firstKey] > 0) ? $firstKey : ';';
 }
 
-function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed_teachers, $suffix, $category, array $excluded_a2_afms = [], array $consultant_afms = []) {
+function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed_teachers, $suffix, $category, array $excluded_a2_afms = [], array $consultant_afms = [], array $director_afms = [], array &$excluded_directors = []) {
     $delimiter = detect_delimiter_from_file($csv_path);
     $handle = fopen($csv_path, 'r');
     if (!$handle) throw new Exception("Αδυναμία ανοίγματος του $csv_path");
@@ -441,6 +442,18 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                   ($id_teacher_afm !== '' && isset($excluded_a2_afms[$id_teacher_afm]));
             if ($is_excluded_branch) {
                 $excluded_rows++;
+                continue;
+            }
+        }
+
+        // New rule: Directors do not go into B.csv
+        if ($category === 'B' && !empty($director_afms)) {
+            $is_dir = ($teacher_afm !== '' && isset($director_afms[$teacher_afm])) ||
+                      ($id_teacher_afm !== '' && isset($director_afms[$id_teacher_afm]));
+            if ($is_dir) {
+                $excluded_rows++;
+                $dir_afm = ($teacher_afm !== '') ? $teacher_afm : $id_teacher_afm;
+                $excluded_directors[$dir_afm] = true;
                 continue;
             }
         }
@@ -654,6 +667,17 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                 $('#csv_upload_section').slideDown();
             }
         });
+
+        if ($('#directors_table').length) {
+            $('#directors_table').DataTable({
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Όλοι"]],
+                language: {
+                    url: '../js/datatables/greek.json'
+                },
+                order: [[3, 'asc'], [4, 'asc']]
+            });
+        }
     });
     </script>
 </head>
@@ -859,6 +883,18 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                     }
 
+                    // Pre-load director AFMs
+                    $director_afms = [];
+                    $res_dir = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE thesi = 2 AND status IN (1,3)");
+                    if ($res_dir) {
+                        while ($r_dir = mysqli_fetch_assoc($res_dir)) {
+                            if (!empty($r_dir['afm'])) {
+                                $director_afms[normalize_afm($r_dir['afm'])] = true;
+                            }
+                        }
+                    }
+                    $excluded_directors_csv = [];
+
                     foreach ($uploaded_tasks as $t) {
                         $cat = $t[0];
                         $input_name = $t[1];
@@ -876,7 +912,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 $suffix,
                                 $cat,
                                 $excluded_a2_afms,
-                                $consultant_afms
+                                $consultant_afms,
+                                $director_afms,
+                                $excluded_directors_csv
                             );
                             $stats[$cat] = [
                                 'file' => $filename,
@@ -892,6 +930,52 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             ];
                         }
                     }
+
+                    // Build directors report from excluded directors in uploaded CSV
+                    $directors_report_rows = [];
+                    if (!empty($excluded_directors_csv)) {
+                        $csv_afms_quoted = [];
+                        foreach (array_keys($excluded_directors_csv) as $daf) {
+                            $daf_clean = mysqli_real_escape_string($mysqlconnection, $daf);
+                            $csv_afms_quoted[] = "'$daf_clean'";
+                        }
+                        $csv_afms_in = implode(',', $csv_afms_quoted);
+                        $q_dir_info = "SELECT e.id as emp_id, e.am as emp_am, e.afm as emp_afm, e.surname as emp_surname, e.name as emp_name, s.name as sch_name, e.hm_dior 
+                                       FROM employee e 
+                                       LEFT JOIN school s ON e.sx_yphrethshs = s.id 
+                                       WHERE e.afm IN ($csv_afms_in)
+                                       ORDER BY e.surname ASC, e.name ASC";
+                        $res_dir_info = mysqli_query($mysqlconnection, $q_dir_info);
+                        if ($res_dir_info) {
+                            while ($r_di = mysqli_fetch_assoc($res_dir_info)) {
+                                $directors_report_rows[] = [
+                                    'emp_id' => $r_di['emp_id'],
+                                    'am' => clean_str($r_di['emp_am'] ?? ''),
+                                    'afm' => normalize_afm($r_di['emp_afm']),
+                                    'surname' => trim($r_di['emp_surname']),
+                                    'name' => trim($r_di['emp_name']),
+                                    'sch_name' => clean_str($r_di['sch_name'] ?? ''),
+                                    'hm_dior' => (!empty($r_di['hm_dior']) && $r_di['hm_dior'] !== '0000-00-00') ? date('d/m/Y', strtotime($r_di['hm_dior'])) : ''
+                                ];
+                            }
+                        }
+                    }
+
+                    // Write directors.csv with UTF-8 BOM
+                    $f_dir = fopen($word_dir . '/directors.csv', 'w');
+                    fwrite($f_dir, "\xEF\xBB\xBF");
+                    fwrite($f_dir, format_csv_row(["ΑΜ", "ΑΦΜ", "Επώνυμο", "Όνομα", "Σχολείο Υπηρέτησης", "Ημερομηνία Διορισμού"]) . "\r\n");
+                    foreach ($directors_report_rows as $dr) {
+                        fwrite($f_dir, format_csv_row([
+                            $dr['am'],
+                            $dr['afm'],
+                            $dr['surname'],
+                            $dr['name'],
+                            $dr['sch_name'],
+                            $dr['hm_dior']
+                        ]) . "\r\n");
+                    }
+                    fclose($f_dir);
                 } else {
                     // Process directly from Database
                     $sxol_etos = getParam('sxol_etos', $mysqlconnection);
@@ -950,8 +1034,20 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                     }
 
+                    // Pre-load all director AFMs
+                    $all_director_afms = [];
+                    $res_dir = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE thesi = 2 AND status IN (1,3)");
+                    if ($res_dir) {
+                        while ($r_dir = mysqli_fetch_assoc($res_dir)) {
+                            if (!empty($r_dir['afm'])) {
+                                $all_director_afms[normalize_afm($r_dir['afm'])] = true;
+                            }
+                        }
+                    }
+
                     $query = "SELECT
                         e.id as emp_id,
+                        e.am as emp_am,
                         e.surname as emp_surname,
                         e.name as emp_name,
                         e.afm as emp_afm,
@@ -1305,10 +1401,14 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $seen_a2 = [];
                     $seen_b = [];
 
+                    $directors_report_rows = [];
+                    $seen_directors = [];
+                    $excluded_directors_b_count = 0;
+
                     $stats = [
                         'A1' => ['file' => 'a1.csv', 'total' => 0, 'excluded' => 0, 'matched' => 0, 'final' => 0],
                         'A2' => ['file' => 'a2.csv', 'total' => 0, 'excluded' => 0, 'matched' => 0, 'final' => 0],
-                        'B'  => ['file' => 'b.csv',  'total' => 0, 'excluded' => 0, 'matched' => 0, 'final' => 0],
+                        'B'  => ['file' => 'b.csv',  'total' => 0, 'excluded' => 0, 'matched' => 0, 'final' => 0, 'excluded_directors' => 0],
                     ];
 
                     $exclude_a1 = $per_category ? $completed_by_cat['A1'] : $completed_all;
@@ -1332,7 +1432,20 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         $dnt_name = trim($row['dnt_name']);
                         $dnt_surname = trim($row['dnt_surname']);
 
-                        $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm));
+                        $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm) || isset($all_director_afms[$emp_afm]));
+
+                        if ($is_director && !isset($seen_directors[$emp_afm])) {
+                            $seen_directors[$emp_afm] = true;
+                            $directors_report_rows[] = [
+                                'emp_id' => $row['emp_id'],
+                                'am' => clean_str($row['emp_am'] ?? ''),
+                                'afm' => $emp_afm,
+                                'surname' => $emp_surname,
+                                'name' => $emp_name,
+                                'sch_name' => clean_str($row['sch_name'] ?? ''),
+                                'hm_dior' => (!empty($row['hm_dior']) && $row['hm_dior'] !== '0000-00-00') ? date('d/m/Y', strtotime($row['hm_dior'])) : ''
+                            ];
+                        }
 
                         // --- A1 Field ---
                         if (!empty($se_afm) && !empty($emp_afm) && !isset($seen_a1[$emp_afm])) {
@@ -1399,28 +1512,31 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
 
                         // --- B Field ---
-                        if (!isset($seen_b[$emp_afm]) && !empty($emp_afm)) {
-                            if ($is_director || empty($dnt_afm)) {
-                                if (!empty($sp_afm)) {
-                                    $seen_b[$emp_afm] = true;
-                                    $stats['B']['total']++;
+                        // New rule: Directors do not go into B.csv
+                        if ($is_director) {
+                            $excluded_directors_b_count++;
+                        } else {
+                            if (!isset($seen_b[$emp_afm]) && !empty($emp_afm)) {
+                                if (empty($dnt_afm)) {
+                                    if (!empty($sp_afm)) {
+                                        $seen_b[$emp_afm] = true;
+                                        $stats['B']['total']++;
 
-                                    if (isset($exclude_b[$emp_afm])) {
-                                        $stats['B']['excluded']++;
-                                    } else {
-                                        $b_id = $sp_afm . ':' . $emp_afm;
-                                        $b_key = $sp_afm . ':' . $emp_afm;
-                                        $is_pending = isset($pending_dict['B'][$b_key]);
+                                        if (isset($exclude_b[$emp_afm])) {
+                                            $stats['B']['excluded']++;
+                                        } else {
+                                            $b_id = $sp_afm . ':' . $emp_afm;
+                                            $b_key = $sp_afm . ':' . $emp_afm;
+                                            $is_pending = isset($pending_dict['B'][$b_key]);
 
-                                        if ($is_pending) {
-                                            $b_id = append_suffix($b_id, $suffix);
-                                            $stats['B']['matched']++;
+                                            if ($is_pending) {
+                                                $b_id = append_suffix($b_id, $suffix);
+                                                $stats['B']['matched']++;
+                                            }
+                                            $b_rows[] = [$b_id, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm, '', '', ''];
                                         }
-                                        $b_rows[] = [$b_id, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm, '', '', ''];
                                     }
-                                }
-                            } else {
-                                if (!empty($dnt_afm)) {
+                                } else {
                                     $seen_b[$emp_afm] = true;
                                     $stats['B']['total']++;
 
@@ -1457,6 +1573,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $stats['A1']['final'] = count($a1_rows);
                     $stats['A2']['final'] = count($a2_rows);
                     $stats['B']['final'] = count($b_rows);
+                    $stats['B']['excluded_directors'] = $excluded_directors_b_count;
 
                     // Write CSV files with UTF-8 BOM
                     $f_a1 = fopen($word_dir . '/a1.csv', 'w');
@@ -1482,6 +1599,29 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         fwrite($f_b, format_csv_row($r) . "\r\n");
                     }
                     fclose($f_b);
+
+                    // Sort directors by surname, name
+                    usort($directors_report_rows, function($a, $b) {
+                        $cmp = strcmp($a['surname'], $b['surname']);
+                        if ($cmp !== 0) return $cmp;
+                        return strcmp($a['name'], $b['name']);
+                    });
+
+                    // Write directors.csv with UTF-8 BOM
+                    $f_dir = fopen($word_dir . '/directors.csv', 'w');
+                    fwrite($f_dir, "\xEF\xBB\xBF");
+                    fwrite($f_dir, format_csv_row(["ΑΜ", "ΑΦΜ", "Επώνυμο", "Όνομα", "Σχολείο Υπηρέτησης", "Ημερομηνία Διορισμού"]) . "\r\n");
+                    foreach ($directors_report_rows as $dr) {
+                        fwrite($f_dir, format_csv_row([
+                            $dr['am'],
+                            $dr['afm'],
+                            $dr['surname'],
+                            $dr['name'],
+                            $dr['sch_name'],
+                            $dr['hm_dior']
+                        ]) . "\r\n");
+                    }
+                    fclose($f_dir);
                 }
 
                 // Create ZIP file
@@ -1492,6 +1632,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         if (file_exists($word_dir . '/a1.csv')) $zip->addFile($word_dir . '/a1.csv', 'a1.csv');
                         if (file_exists($word_dir . '/a2.csv')) $zip->addFile($word_dir . '/a2.csv', 'a2.csv');
                         if (file_exists($word_dir . '/b.csv')) $zip->addFile($word_dir . '/b.csv', 'b.csv');
+                        if (file_exists($word_dir . '/directors.csv')) $zip->addFile($word_dir . '/directors.csv', 'directors.csv');
                         $zip->close();
                     }
                 }
@@ -1530,7 +1671,13 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div style='display: flex; gap: 8px; flex-wrap: wrap;'>
+                            <form method='post' action='aksiologhsh_directors.php' target='_blank' style='margin: 0; display: inline-block;'>
+                                <input type='hidden' name='dir_data' value='" . htmlspecialchars(json_encode($directors_report_rows, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') . "'>
+                                <button type='submit' class='btn' style='cursor: pointer; padding: 7px 16px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); color: white; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12);'>
+                                    👔 Αναφορά Δ/ντών - Πρ/νων (" . count($directors_report_rows) . ")
+                                </button>
+                            </form>
                             <form method='post' action='aksiologhsh_topo.php' target='_blank' style='margin: 0; display: inline-block;'>
                                 <input type='hidden' name='emp_ids' value='" . implode(',', $evaluated_emp_ids) . "'>
                                 <button type='submit' class='btn btn-blue' style='cursor: pointer; padding: 7px 16px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12);'>
@@ -1540,6 +1687,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         </div>
                     </div>";
                 }
+
+                $dir_count = count($directors_report_rows);
 
                 echo "
                 <div class='card-box' style='background: #f0fdf4; border: 1px solid #86efac;'>
@@ -1579,6 +1728,10 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         </div>
                         ") . "
                         <div class='stat-card'>
+                            <div class='stat-value' style='color: #0f766e;'>$dir_count</div>
+                            <div class='stat-label'>Δ/ντές - Πρ/νοι (Εκτός Β)</div>
+                        </div>
+                        <div class='stat-card'>
                             <div class='stat-value' style='color: #b45309;'>" . count($pending_dict['A1']) . "</div>
                             <div class='stat-label'>Εκκρεμότητες Α1 (Αρχείο)</div>
                         </div>
@@ -1612,10 +1765,13 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                     <td colspan='5' style='color: #b91c1c;'>{$st['error']}</td>
                                 </tr>";
                             } else {
+                                $dir_note = ($cat === 'B' && !empty($st['excluded_directors'])) 
+                                    ? "<br><small style='color: #991b1b; font-weight: 600;'>-{$st['excluded_directors']} δ/ντές (εκτός Β)</small>" 
+                                    : "";
                                 echo "<tr>
                                     <td><strong>$cat ({$st['file']})</strong></td>
                                     <td style='text-align: center;'>{$st['total']}</td>
-                                    <td style='text-align: center;'><span class='badge-completed'>-{$st['excluded']}</span></td>
+                                    <td style='text-align: center;'><span class='badge-completed'>-{$st['excluded']}</span>$dir_note</td>
                                     <td style='text-align: center;'><span class='badge-pending'>+{$st['matched']}</span></td>
                                     <td style='text-align: center; font-weight: bold;'>{$st['final']}</td>
                                     <td style='text-align: center;'>
@@ -1626,15 +1782,103 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 </tr>";
                             }
                         }
-                        echo "</tbody>
+                        echo "
+                        <tr style='background: #f0fdfa;'>
+                            <td><strong>👔 Αναφορά Δ/ντών - Πρ/νων (directors.csv)</strong></td>
+                            <td style='text-align: center;'>-</td>
+                            <td style='text-align: center;'><span class='badge-completed' style='background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;'>Εξαιρέθηκαν από Β</span></td>
+                            <td style='text-align: center;'>-</td>
+                            <td style='text-align: center; font-weight: bold; color: #0f766e;'>$dir_count</td>
+                            <td style='text-align: center;'>
+                                <a href='?download=directors' class='btn btn-primary' style='text-decoration: none; padding: 4px 10px; font-size: 13px; border-radius: 4px; background: #0d9488;'>
+                                    📥 Λήψη directors.csv
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
                     </table>
 
-                    <div style='margin-top: 20px; display: flex; gap: 12px; align-items: center;'>
+                    <div style='margin-top: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;'>
                         <a href='?download=zip' class='btn btn-green' style='text-decoration: none; padding: 10px 18px; font-size: 15px; font-weight: bold; border-radius: 5px; display: inline-flex; align-items: center; gap: 8px;'>
                             📦 Λήψη όλων σε ενιαίο ZIP (aksiologhsh_csv.zip)
                         </a>
+                        <a href='?download=directors' class='btn btn-primary' style='text-decoration: none; padding: 10px 18px; font-size: 15px; font-weight: bold; border-radius: 5px; display: inline-flex; align-items: center; gap: 8px; background: #0d9488;'>
+                            📥 Λήψη directors.csv ($dir_count)
+                        </a>
                     </div>
                 </div>";
+
+                // Directors / Heads Detailed Report Card
+                if (!empty($directors_report_rows)) {
+                    $dir_rows_html = '';
+                    $dir_idx = 1;
+                    foreach ($directors_report_rows as $dr) {
+                        $dr_am = htmlspecialchars($dr['am'] ?: '-');
+                        $dr_afm = htmlspecialchars($dr['afm'] ?: '-');
+                        $dr_surname = htmlspecialchars($dr['surname']);
+                        $dr_name = htmlspecialchars($dr['name']);
+                        $dr_sch = htmlspecialchars($dr['sch_name'] ?: '-');
+                        $dr_hm = htmlspecialchars($dr['hm_dior'] ?: '-');
+                        $dr_id = !empty($dr['emp_id']) ? (int)$dr['emp_id'] : null;
+
+                        $name_link = $dr_id 
+                            ? "<a href='../employee/employee.php?id=$dr_id&op=view' target='_blank' style='color:#0f172a; font-weight:600; text-decoration:none;' title='Προβολή καρτέλας εκπαιδευτικού'>$dr_surname</a>" 
+                            : "<strong style='color:#0f172a;'>$dr_surname</strong>";
+
+                        $dir_rows_html .= "<tr>
+                            <td style='text-align: center; color: #64748b;'>$dir_idx</td>
+                            <td style='text-align: center; font-weight: 500;'>$dr_am</td>
+                            <td style='text-align: center; font-weight: 500;'>$dr_afm</td>
+                            <td>$name_link</td>
+                            <td>$dr_name</td>
+                            <td>$dr_sch</td>
+                            <td style='text-align: center;'>$dr_hm</td>
+                        </tr>";
+                        $dir_idx++;
+                    }
+
+                    echo "
+                    <div class='card-box' style='background: #ffffff; border: 1px solid #cbd5e1; margin-top: 24px;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;'>
+                            <h3 style='margin: 0; color: #0f766e; border-bottom: none; padding-bottom: 0;'>
+                                👔 Αναφορά Διευθυντών / Προϊσταμένων ($dir_count)
+                            </h3>
+                            <div style='display: flex; gap: 8px;'>
+                                <a href='?download=directors' class='btn btn-primary' style='text-decoration: none; padding: 6px 14px; font-size: 13px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; background: #0d9488;'>
+                                    📥 Λήψη directors.csv
+                                </a>
+                                <form method='post' action='aksiologhsh_directors.php' target='_blank' style='margin: 0; display: inline-block;'>
+                                    <input type='hidden' name='dir_data' value='" . htmlspecialchars(json_encode($directors_report_rows, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') . "'>
+                                    <button type='submit' class='btn' style='padding: 6px 14px; font-size: 13px; border-radius: 4px; background: #f1f5f9; border: 1px solid #cbd5e1; cursor: pointer;'>
+                                        🖨️ Εκτύπωση / Πλήρης Προβολή
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <p style='color: #475569; font-size: 13.5px; line-height: 1.5; margin-bottom: 16px;'>
+                            Σύμφωνα με τον νέο κανόνα αξιολόγησης, οι διευθυντές και προϊστάμενοι σχολικών μονάδων <strong>εξαιρούνται από το αρχείο <code>b.csv</code></strong>.
+                            Ακολουθεί η αναλυτική αναφορά με τα στοιχεία τους (ΑΜ, ΑΦΜ, επώνυμο, όνομα, σχολείο υπηρέτησης, ημ/νία διορισμού).
+                        </p>
+                        <div style='overflow-x: auto;'>
+                            <table id='directors_table' class='results-table' style='width: 100%; font-size: 13.5px;'>
+                                <thead>
+                                    <tr>
+                                        <th style='width: 40px; text-align: center;'>#</th>
+                                        <th style='width: 90px; text-align: center;'>ΑΜ</th>
+                                        <th style='width: 100px; text-align: center;'>ΑΦΜ</th>
+                                        <th>Επώνυμο</th>
+                                        <th>Όνομα</th>
+                                        <th>Σχολείο Υπηρέτησης</th>
+                                        <th style='width: 130px; text-align: center;'>Ημ/νία Διορισμού</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    $dir_rows_html
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>";
+                }
 
             } catch (Exception $e) {
                 echo "<div class='alert alert-danger' style='background:#fee2e2; border:1px solid #ef4444; color:#b91c1c; padding:15px; border-radius:6px; margin:20px 0;'>
