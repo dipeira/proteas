@@ -1067,7 +1067,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         s.type2,
                         s.perif,
                         e.hm_dior,
-                        e.thesi
+                        e.thesi,
+                        e.ent_ty
                     FROM employee e
                     LEFT JOIN klados k ON e.klados = k.id
                     LEFT JOIN (
@@ -1171,20 +1172,23 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 }
                             }
 
+                            $is_in_ent_ty = in_array((int)($row['ent_ty'] ?? 0), [1, 2]);
+
                             $is_eae = (
                                 in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
                                 in_array($row['klados_id'], [16, 17, 18, 19]) || 
+                                $is_in_ent_ty ||
                                 ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
                             );
 
                             if ($is_eae) {
-                                $symv_epist_afm = $row['symv_paid_afm'];
-                                $symv_epist_surname = $row['symv_paid_surname'];
-                                $symv_epist_name = $row['symv_paid_name'];
-
-                                $eae_c = $consultant_found ?: $default_consultant;
-                                if (!$eae_c && $row['type2'] == 2) {
-                                    $eae_kladoi = ($row['klados_id'] == 1 || $row['klados'] == 'ΠΕ60') ? [16, 17] : [18, 19];
+                                $eae_c = null;
+                                if (in_array($row['klados_id'], [16, 17, 18, 19])) {
+                                    $eae_c = $consultant_found ?: $default_consultant;
+                                }
+                                if (!$eae_c) {
+                                    $is_nipiagwgos = ($row['klados_id'] == 1 || in_array($row['klados_id'], [16, 17]) || $row['klados'] === 'ΠΕ60' || $row['klados'] === 'ΠΕ60ΕΑΕ' || $row['klados'] === 'ΠΕ61');
+                                    $eae_kladoi = $is_nipiagwgos ? [16, 17] : [18, 19];
                                     foreach ($eae_kladoi as $ek) {
                                         if (!empty($se_by_klados[$ek])) {
                                             foreach ($se_by_klados[$ek] as $c) {
@@ -1201,7 +1205,18 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                         }
                                     }
                                 }
+
                                 if ($eae_c) {
+                                    $symv_epist_afm = $eae_c['afm'];
+                                    $symv_epist_surname = $eae_c['eponymo'];
+                                    $symv_epist_name = $eae_c['onoma'];
+                                } else {
+                                    $symv_epist_afm = $row['symv_paid_afm'];
+                                    $symv_epist_surname = $row['symv_paid_surname'];
+                                    $symv_epist_name = $row['symv_paid_name'];
+                                }
+
+                                if ($row['type2'] == 2 && $eae_c) {
                                     $symv_paid_afm = $eae_c['afm'];
                                     $symv_paid_surname = $eae_c['eponymo'];
                                     $symv_paid_name = $eae_c['onoma'];
