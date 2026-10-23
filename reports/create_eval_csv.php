@@ -844,9 +844,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         ['B', 'csv_b', 'b.csv'],
                     ];
 
-                    // Pre-load AFMs for branches excluded from A2
+                    // Pre-load AFMs for branches excluded from A2 (ΔΕ1ΕΒΠ, ΤΕ01)
                     $excluded_a2_afms = [];
-                    $res_ex = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE klados IN (8, 9, 10, 11, 12, 21, 26, 27, 31)");
+                    $res_ex = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE klados IN (12, 31) UNION SELECT afm FROM ektaktoi WHERE klados IN (12, 31)");
                     if ($res_ex) {
                         while ($r_ex = mysqli_fetch_assoc($res_ex)) {
                             if (!empty($r_ex['afm'])) {
@@ -1471,8 +1471,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
 
                         // --- A2 Field ---
-                        $excluded_a2_kladoi = ['ΔΕ1ΕΒΠ', 'ΠΕ25', 'ΠΕ23', 'ΠΕ26', 'ΠΕ28', 'ΠΕ30', 'ΤΕ01', 'ΠΕ21', 'ΠΕ29'];
-                        $excluded_a2_ids = [8, 9, 10, 11, 12, 21, 26, 27, 31];
+                        $excluded_a2_kladoi = ['ΔΕ1ΕΒΠ', 'ΤΕ01'];
+                        $excluded_a2_ids = [12, 31];
                         $is_excluded_from_a2 = in_array(trim($row['klados'] ?? ''), $excluded_a2_kladoi) || in_array((int)($row['klados_id'] ?? 0), $excluded_a2_ids);
 
                         if (!$is_excluded_from_a2 && !isset($seen_a2[$emp_afm]) && !empty($emp_afm)) {

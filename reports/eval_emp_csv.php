@@ -278,15 +278,15 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     }
 
     // 2. A2 Line
-    $excluded_a2_kladoi = ['ΔΕ1ΕΒΠ', 'ΠΕ25', 'ΠΕ23', 'ΠΕ26', 'ΠΕ28', 'ΠΕ30', 'ΤΕ01', 'ΠΕ21', 'ΠΕ29'];
-    $excluded_a2_ids = [8, 9, 10, 11, 12, 21, 26, 27, 31];
+    $excluded_a2_kladoi = ['ΔΕ1ΕΒΠ', 'ΤΕ01'];
+    $excluded_a2_ids = [12, 31];
     $is_excluded_from_a2 = in_array(trim($row['klados'] ?? ''), $excluded_a2_kladoi) || in_array((int)($row['klados_id'] ?? 0), $excluded_a2_ids);
 
     $a2_data = null;
     if ($is_excluded_from_a2) {
         $a2_data = [
             'applicable' => false,
-            'reason' => 'Ο κλάδος (' . htmlspecialchars($row['klados']) . ') εξαιρείται από το πεδίο Α2 (ΕΕΠ/ΕΒΠ).'
+            'reason' => 'Ο κλάδος (' . htmlspecialchars($row['klados']) . ') εξαιρείται από το πεδίο Α2 (ΔΕ1ΕΒΠ/ΤΕ01).'
         ];
     } else {
         $evaluator_afm = '';

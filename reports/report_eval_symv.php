@@ -463,7 +463,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             }
         }
 
-        $excluded_a2_ids = [8, 9, 10, 11, 12, 21, 26, 27, 31];
+        $excluded_a2_ids = [12, 31];
         foreach ($selected_rows as $row) {
             $emp_afm = normalize_afm($row['emp_afm']);
             $se_afm = normalize_afm($row['resolved_symv_epist_afm']);
