@@ -543,7 +543,7 @@ CREATE TABLE IF NOT EXISTS `logon` (
 
 CREATE TABLE IF NOT EXISTS `params` (
   `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL COMMENT 'Όνομα Παραμέτρου',
+  `name` varchar(50) NOT NULL COMMENT 'Όνομα Παραμέτρου',
   `value` text NOT NULL COMMENT 'Τιμή Παραμέτρου',
   `descr` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

@@ -78,11 +78,16 @@ if ($_SESSION['userlevel']<>0) {
 <body>
     <?php require '../etc/menu.php'; ?>
 <div id="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
         <h1 style="margin: 0;">Αναφορά Αξιολόγησης Εκπαιδευτικών</h1>
-        <a href="create_eval_csv.php" class="btn btn-green" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold;">
-            ⚙️ Δημιουργία CSV Αξιολόγησης
-        </a>
+        <div style="display: flex; gap: 8px;">
+            <a href="report_eval_symv.php" class="btn btn-primary" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; background: #0284c7;">
+                👥 Υποχρεώσεις ανά Σύμβουλο (Excel / Email)
+            </a>
+            <a href="create_eval_csv.php" class="btn btn-green" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold;">
+                ⚙️ Δημιουργία CSV Αξιολόγησης
+            </a>
+        </div>
     </div>
     
     <!-- Search Form -->

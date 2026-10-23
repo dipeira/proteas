@@ -686,7 +686,10 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
 <div id="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
         <h1 style="margin: 0;">Δημιουργία Αρχείων CSV Αξιολόγησης</h1>
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="report_eval_symv.php" class="btn btn-primary" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; background: #059669;">
+                👥 Υποχρεώσεις ανά Σύμβουλο (Excel / Email)
+            </a>
             <a href="eval_emp_csv.php" class="btn btn-primary" style="text-decoration: none; padding: 7px 14px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; background: #0284c7;">
                 🔍 Χειροκίνητη Εισαγωγή Γραμμών Εκπ/κού (a1, a2, b)
             </a>

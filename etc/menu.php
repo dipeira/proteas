@@ -56,6 +56,7 @@
 						<li><a href="<?=$site_root?>/reports/report_symv.php">Σύμβουλοι εκπαίδευσης ΠΕ60/ΠΕ70</a></li>
 						<li><a href="<?=$site_root?>/reports/report_symv_eid.php">Σύμβουλοι εκπαίδευσης ειδικοτήτων</a></li>
 						<li><a href="<?=$site_root?>/reports/aksiologhsh_report.php">Αναφορά αξιολογούμενων</a></li>
+						<li><a href="<?=$site_root?>/reports/report_eval_symv.php">Υποχρεώσεις αξιολόγησης ανά σύμβουλο</a></li>
 					</ul>
 				</li>
 				<li class="has-submenu">
