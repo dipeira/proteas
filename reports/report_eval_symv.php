@@ -461,6 +461,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
                 'klados' => $info['klados_name'] ?: getKlados($info['klados'], $conn),
                 'status' => ($info['status'] == 1) ? 'Εργάζεται' : 'Άδεια',
                 'hm_dior' => (!empty($info['hm_dior']) && $info['hm_dior'] != '0000-00-00') ? date('d-m-Y', strtotime($info['hm_dior'])) : '-',
+                'hm_dior_raw' => (!empty($info['hm_dior']) && $info['hm_dior'] != '0000-00-00') ? $info['hm_dior'] : '',
                 'hm_anal' => (!empty($info['hm_anal']) && $info['hm_anal'] != '0000-00-00') ? date('d-m-Y', strtotime($info['hm_anal'])) : '-',
                 'monimopoihsh' => ($info['monimopoihsh'] == 1) ? 'Ναι' : 'Όχι',
                 'aksiologhsh' => ($info['aksiologhsh'] == 1) ? 'Ναι' : 'Όχι',
@@ -473,8 +474,35 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             ];
         }
 
-        // Sort teachers alphabetically by surname, name
+        // Sort teachers by Evaluation Field (A1 first), then descending appointment date, then surname/name
         uasort($enriched, function($a, $b) {
+            $getFieldRank = function($item) {
+                $f = $item['fields_arr'] ?? [];
+                if (in_array('A1', $f) || in_array('Α1', $f)) {
+                    return 1;
+                }
+                if (in_array('A2', $f) || in_array('Α2', $f)) {
+                    return 2;
+                }
+                if (in_array('B', $f) || in_array('Β', $f)) {
+                    return 3;
+                }
+                return 4;
+            };
+
+            $rank_a = $getFieldRank($a);
+            $rank_b = $getFieldRank($b);
+            if ($rank_a !== $rank_b) {
+                return $rank_a <=> $rank_b;
+            }
+
+            // Descending appointment date (newest first)
+            $dior_a = (!empty($a['hm_dior_raw']) && $a['hm_dior_raw'] !== '0000-00-00') ? $a['hm_dior_raw'] : '';
+            $dior_b = (!empty($b['hm_dior_raw']) && $b['hm_dior_raw'] !== '0000-00-00') ? $b['hm_dior_raw'] : '';
+            if ($dior_a !== $dior_b) {
+                return strcmp($dior_b, $dior_a);
+            }
+
             $cmp = strcmp($a['surname'], $b['surname']);
             return ($cmp !== 0) ? $cmp : strcmp($a['name'], $b['name']);
         });
@@ -1322,10 +1350,10 @@ header('Content-type: text/html; charset=utf-8');
                         exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7] }
                     }
                 ],
-                order: [[1, 'asc'], [2, 'asc']],
+                order: [[3, 'asc'], [7, 'desc']],
                 columnDefs: [
                     { targets: 0, orderable: false, searchable: false, width: '36px' },
-                    { targets: 3, className: 'dt-center', orderable: true }
+                    { targets: [3, 7], className: 'dt-center', orderable: true }
                 ],
                 language: {
                     url: '../js/datatables/greek.json'
@@ -1719,7 +1747,17 @@ header('Content-type: text/html; charset=utf-8');
                     </td>
                     <td><a href="../employee/employee.php?id=<?=$t['emp_id']?>&op=view" target="_blank" style="font-weight: 600; color: #1e293b; text-decoration: underline;"><?=htmlspecialchars($t['surname'])?></a></td>
                     <td><?=htmlspecialchars($t['name'])?></td>
-                    <td style="text-align: center; white-space: nowrap;">
+                    <?php 
+                    $field_rank = 4;
+                    if (in_array('A1', $t['fields_arr']) || in_array('Α1', $t['fields_arr'])) {
+                        $field_rank = 1;
+                    } elseif (in_array('A2', $t['fields_arr']) || in_array('Α2', $t['fields_arr'])) {
+                        $field_rank = 2;
+                    } elseif (in_array('B', $t['fields_arr']) || in_array('Β', $t['fields_arr'])) {
+                        $field_rank = 3;
+                    }
+                    ?>
+                    <td data-order="<?=$field_rank?>" style="text-align: center; white-space: nowrap;">
                         <?php 
                         foreach ($t['fields_arr'] as $fld) {
                             if ($fld === 'A1' || $fld === 'Α1') echo "<span class='badge-a1'>Α1</span> ";
@@ -1731,7 +1769,7 @@ header('Content-type: text/html; charset=utf-8');
                     <td><code><?=htmlspecialchars($t['am'])?></code></td>
                     <td><code><?=htmlspecialchars($t['afm'])?></code></td>
                     <td><a href="../school/school_status.php?org=<?=$t['sch_id'] ?: $t['emp_id']?>" target="_blank" style="color: #2563eb; text-decoration: underline;"><?=htmlspecialchars($t['sname'])?></a></td>
-                    <td><?=htmlspecialchars($t['hm_dior'])?></td>
+                    <td data-order="<?=htmlspecialchars($t['hm_dior_raw'] ?? '')?>"><?=htmlspecialchars($t['hm_dior'])?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
