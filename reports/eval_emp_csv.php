@@ -76,6 +76,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $sxol_etos = getParam('sxol_etos', $conn);
     $lookups = get_eval_lookups($conn);
     $se_by_klados = $lookups['se_by_klados'];
+    $all_director_afms = $lookups['all_director_afms'] ?? [];
 
     $query = build_eval_evaluees_query($conn, $sxol_etos, ['emp_id' => $emp_id]);
     $res = mysqli_query($conn, $query);
@@ -85,7 +86,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
 
     $row = mysqli_fetch_assoc($res);
 
-    $eval_info = resolve_evaluee_consultants($row, $se_by_klados);
+    $eval_info = resolve_evaluee_consultants($row, $se_by_klados, $all_director_afms);
     $is_eae = $eval_info['is_eae'];
     $symv_epist_afm = $eval_info['symv_epist_afm'];
     $symv_epist_surname = $eval_info['symv_epist_surname'];
@@ -110,7 +111,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $dnt_name = trim($row['dnt_name']);
     $dnt_surname = trim($row['dnt_surname']);
 
-    $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm));
+    $is_director = is_eval_director($row, $all_director_afms);
 
     // Headers as in reports/create_eval_csv.php
     $a1_header = ["Αναγνωριστικό-Εκκρεμότητας", "Αξιολογούμενος-Όνομα", "Αξιολογούμενος-Επίθετο", "Αξιολογούμενος-ΑΦΜ", "Αξιολογητής-Όνομα", "Αξιολογητής-Επίθετο", "Αξιολογητής-ΑΦΜ"];
@@ -119,7 +120,12 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
 
     // 1. A1 Line
     $a1_data = null;
-    if (!empty($se_afm) && !empty($emp_afm)) {
+    if ($is_director) {
+        $a1_data = [
+            'applicable' => false,
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
+        ];
+    } elseif (!empty($se_afm) && !empty($emp_afm)) {
         $a1_id = $se_afm . ':' . $emp_afm;
         $a1_id_suffix = append_suffix($a1_id, $suffix);
         $a1_row = [$a1_id, $emp_name, $emp_surname, $emp_afm, $se_name, $se_surname, $se_afm];
@@ -150,7 +156,12 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $is_excluded_from_a2 = in_array(trim($row['klados'] ?? ''), $excluded_a2_kladoi) || in_array((int)($row['klados_id'] ?? 0), $excluded_a2_ids);
 
     $a2_data = null;
-    if ($is_excluded_from_a2) {
+    if ($is_director) {
+        $a2_data = [
+            'applicable' => false,
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
+        ];
+    } elseif ($is_excluded_from_a2) {
         $a2_data = [
             'applicable' => false,
             'reason' => 'Ο κλάδος (' . htmlspecialchars($row['klados']) . ') εξαιρείται από το πεδίο Α2 (ΔΕ1ΕΒΠ/ΤΕ01).'
@@ -161,12 +172,12 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
         $evaluator_surname = '';
         $evaluator_role = '';
 
-        if ($is_director || empty($dnt_afm)) {
+        if (empty($dnt_afm)) {
             if (!empty($sp_afm)) {
                 $evaluator_afm = $sp_afm;
                 $evaluator_name = $sp_name;
                 $evaluator_surname = $sp_surname;
-                $evaluator_role = $is_director ? 'Σύμβουλος Παιδαγωγικής Ευθύνης (ο αξιολογούμενος είναι Διευθυντής)' : 'Σύμβουλος Παιδαγωγικής Ευθύνης (δεν ορίστηκε Διευθυντής)';
+                $evaluator_role = 'Σύμβουλος Παιδαγωγικής Ευθύνης (δεν ορίστηκε Διευθυντής)';
             }
         } else {
             if (!empty($dnt_afm)) {
@@ -208,7 +219,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     if ($is_director) {
         $b_data = [
             'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από το πεδίο Β (δεν αξιολογείται στο Β).'
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
         ];
     } elseif (empty($dnt_afm)) {
         if (!empty($sp_afm)) {

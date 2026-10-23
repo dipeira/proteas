@@ -27,7 +27,7 @@ if (!empty($_POST['dir_data'])) {
     $decoded = json_decode($_POST['dir_data'], true);
     if (is_array($decoded)) {
         $directors = $decoded;
-        $source_desc = 'Διευθυντές / Προϊστάμενοι που εξαιρέθηκαν από το αρχείο b.csv κατά την τρέχουσα εξαγωγή';
+        $source_desc = 'Διευθυντές / Προϊστάμενοι που εξαιρέθηκαν από τα αρχεία CSV κατά την τρέχουσα εξαγωγή (διορισμός >= 1/1/2020)';
     }
 }
 
@@ -277,7 +277,7 @@ function normalize_afm($afm) {
                     👔 Αναφορά Διευθυντών / Προϊσταμένων
                 </h1>
                 <span class="badge-count"><?php echo count($directors); ?> Εγγραφές</span>
-                <span class="badge-excluded">Εξαιρούνται από το Β.csv</span>
+                <span class="badge-excluded">Εξαιρούνται από τα CSV (εισαγωγή manually)</span>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <a href="create_eval_csv.php?download=directors" class="btn-download">

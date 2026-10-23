@@ -45,6 +45,38 @@ if (!function_exists('normalize_afm')) {
 }
 
 /**
+ * Determines whether an employee is a Director or School Head (Διευθυντής / Προϊστάμενος).
+ * Evaluates:
+ * 1. thesi == 2 (Διευθυντής / Προϊστάμενος)
+ * 2. dnt_afm == emp_afm (School's active director matches the employee)
+ * 3. Employee's AFM is in the active directors lookup table ($all_director_afms)
+ *
+ * @param array $row Database row containing employee details (thesi, emp_afm, dnt_afm, etc.)
+ * @param array $all_director_afms Array map of normalized director AFMs (from get_eval_lookups)
+ * @return bool
+ */
+if (!function_exists('is_eval_director')) {
+    function is_eval_director(array $row, array $all_director_afms = []) {
+        $thesi = (int)($row['thesi'] ?? 0);
+        if ($thesi === 2) {
+            return true;
+        }
+        $emp_afm = normalize_afm($row['emp_afm'] ?? $row['afm'] ?? '');
+        if (empty($emp_afm)) {
+            return false;
+        }
+        $dnt_afm = normalize_afm($row['dnt_afm'] ?? '');
+        if (!empty($dnt_afm) && $dnt_afm === $emp_afm) {
+            return true;
+        }
+        if (!empty($all_director_afms) && isset($all_director_afms[$emp_afm])) {
+            return true;
+        }
+        return false;
+    }
+}
+
+/**
  * Returns IDs and comma-separated string lists of schools to exclude from evaluation
  * (other PYSPE/PYSDE, foreign, organizational bodies, DIPE, consultant schools).
  */
@@ -247,6 +279,9 @@ function build_eval_evaluees_query($conn, $sxol_etos, array $filters = [], $excl
         if ($ignore_evaluated) {
             $query .= " AND (e.aksiologhsh = 0 OR e.aksiologhsh IS NULL)";
         }
+        if (!empty($filters['exclude_directors'])) {
+            $query .= " AND e.thesi != 2";
+        }
     }
 
     if (!empty($filters['emp_ids']) && is_array($filters['emp_ids'])) {
@@ -308,15 +343,17 @@ function build_eval_evaluees_query($conn, $sxol_etos, array $filters = [], $excl
  *
  * @param array $row The database record for the employee with school, klados, and director info
  * @param array $se_by_klados The array of scientific advisors grouped by klados
+ * @param array $all_director_afms Map of director AFMs for identifying directors
  * @return array Evaluation metadata:
  *               - is_eae (bool)
  *               - is_in_ent_ty (bool)
+ *               - is_director (bool)
  *               - symv_epist_afm, symv_epist_surname, symv_epist_name
  *               - symv_paid_afm, symv_paid_surname, symv_paid_name
  *               - dnt_afm, dnt_surname, dnt_name
  *               - taytish (bool)
  */
-function resolve_evaluee_consultants(array $row, array $se_by_klados) {
+function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all_director_afms = []) {
     $klados_id = (int)($row['klados_id'] ?? 0);
     $klados_str = (string)($row['klados'] ?? '');
     $sch_id = (int)($row['sch_id'] ?? 0);
@@ -439,10 +476,12 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados) {
     $se_afm_clean = normalize_afm($symv_epist_afm);
     $sp_afm_clean = normalize_afm($symv_paid_afm);
     $taytish = (!empty($se_afm_clean) && !empty($sp_afm_clean) && $se_afm_clean === $sp_afm_clean);
+    $is_director = is_eval_director($row, $all_director_afms);
 
     return [
         'is_eae' => $is_eae,
         'is_in_ent_ty' => $is_in_ent_ty,
+        'is_director' => $is_director,
         'symv_epist_afm' => $symv_epist_afm,
         'symv_epist_surname' => $symv_epist_surname,
         'symv_epist_name' => $symv_epist_name,

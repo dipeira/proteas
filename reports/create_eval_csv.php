@@ -450,8 +450,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
             }
         }
 
-        // New rule: Directors do not go into B.csv
-        if ($category === 'B' && !empty($director_afms)) {
+        // New rule: Directors/Heads are completely excluded from all CSV files (A1, A2, B)
+        if (!empty($director_afms)) {
             $is_dir = ($teacher_afm !== '' && isset($director_afms[$teacher_afm])) ||
                       ($id_teacher_afm !== '' && isset($director_afms[$id_teacher_afm]));
             if ($is_dir) {
@@ -938,7 +938,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                     }
 
-                    // Build directors report from excluded directors in uploaded CSV
+                    // Build directors report from excluded directors in uploaded CSV (ONLY hm_dior >= 2020-01-01)
                     $directors_report_rows = [];
                     if (!empty($excluded_directors_csv)) {
                         $csv_afms_quoted = [];
@@ -951,6 +951,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                        FROM employee e 
                                        LEFT JOIN school s ON e.sx_yphrethshs = s.id 
                                        WHERE e.afm IN ($csv_afms_in)
+                                         AND e.hm_dior >= '2020-01-01'
                                        ORDER BY e.surname ASC, e.name ASC";
                         $res_dir_info = mysqli_query($mysqlconnection, $q_dir_info);
                         if ($res_dir_info) {
@@ -1002,6 +1003,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $seen_table = [];
                     $candidates_by_consultant = [];
                     $consultant_is_pe60 = [];
+                    $directors_report_rows = [];
+                    $seen_directors = [];
+                    $excluded_directors_count = 0;
 
                     if ($db_result) {
                         while ($row = mysqli_fetch_array($db_result)) {
@@ -1010,6 +1014,29 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 continue;
                             }
                             $seen_table[$emp_afm_raw] = true;
+
+                            // Exclude directors/principals completely from CSVs; collect only hm_dior >= 2020-01-01
+                            $is_director = is_eval_director($row, $all_director_afms);
+                            if ($is_director) {
+                                $excluded_directors_count++;
+                                $d_hm = $row['hm_dior'] ?? '';
+                                if (!empty($d_hm) && $d_hm !== '0000-00-00' && $d_hm >= '2020-01-01') {
+                                    $d_afm = normalize_afm($emp_afm_raw);
+                                    if (!isset($seen_directors[$d_afm])) {
+                                        $seen_directors[$d_afm] = true;
+                                        $directors_report_rows[] = [
+                                            'emp_id' => $row['emp_id'],
+                                            'am' => clean_str($row['emp_am'] ?? ''),
+                                            'afm' => $d_afm,
+                                            'surname' => trim($row['emp_surname']),
+                                            'name' => trim($row['emp_name']),
+                                            'sch_name' => clean_str($row['sch_name'] ?? ''),
+                                            'hm_dior' => date('d/m/Y', strtotime($d_hm))
+                                        ];
+                                    }
+                                }
+                                continue;
+                            }
 
                             $eval_info = resolve_evaluee_consultants($row, $se_by_klados);
                             $is_eae = $eval_info['is_eae'];
@@ -1190,10 +1217,6 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     $seen_a2 = [];
                     $seen_b = [];
 
-                    $directors_report_rows = [];
-                    $seen_directors = [];
-                    $excluded_directors_b_count = 0;
-
                     $stats = [
                         'A1' => ['file' => 'a1.csv', 'total' => 0, 'excluded' => 0, 'matched' => 0, 'final' => 0],
                         'A2' => ['file' => 'a2.csv', 'total' => 0, 'excluded' => 0, 'matched' => 0, 'final' => 0],
@@ -1221,19 +1244,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         $dnt_name = trim($row['dnt_name']);
                         $dnt_surname = trim($row['dnt_surname']);
 
-                        $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm) || isset($all_director_afms[$emp_afm]));
-
-                        if ($is_director && !isset($seen_directors[$emp_afm])) {
-                            $seen_directors[$emp_afm] = true;
-                            $directors_report_rows[] = [
-                                'emp_id' => $row['emp_id'],
-                                'am' => clean_str($row['emp_am'] ?? ''),
-                                'afm' => $emp_afm,
-                                'surname' => $emp_surname,
-                                'name' => $emp_name,
-                                'sch_name' => clean_str($row['sch_name'] ?? ''),
-                                'hm_dior' => (!empty($row['hm_dior']) && $row['hm_dior'] !== '0000-00-00') ? date('d/m/Y', strtotime($row['hm_dior'])) : ''
-                            ];
+                        // Defensive check: ensure no director enters CSVs
+                        if (is_eval_director($row, $all_director_afms)) {
+                            continue;
                         }
 
                         // --- A1 Field ---
@@ -1301,11 +1314,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
 
                         // --- B Field ---
-                        // New rule: Directors do not go into B.csv
-                        if ($is_director) {
-                            $excluded_directors_b_count++;
-                        } else {
-                            if (!isset($seen_b[$emp_afm]) && !empty($emp_afm)) {
+                        if (!isset($seen_b[$emp_afm]) && !empty($emp_afm)) {
                                 if (empty($dnt_afm)) {
                                     if (!empty($sp_afm)) {
                                         $seen_b[$emp_afm] = true;
@@ -1357,12 +1366,10 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 }
                             }
                         }
-                    }
-
                     $stats['A1']['final'] = count($a1_rows);
                     $stats['A2']['final'] = count($a2_rows);
                     $stats['B']['final'] = count($b_rows);
-                    $stats['B']['excluded_directors'] = $excluded_directors_b_count;
+                    $stats['B']['excluded_directors'] = $excluded_directors_count;
 
                     // Write CSV files with UTF-8 BOM
                     $f_a1 = fopen($word_dir . '/a1.csv', 'w');
@@ -1555,7 +1562,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 </tr>";
                             } else {
                                 $dir_note = ($cat === 'B' && !empty($st['excluded_directors'])) 
-                                    ? "<br><small style='color: #991b1b; font-weight: 600;'>-{$st['excluded_directors']} δ/ντές (εκτός Β)</small>" 
+                                    ? "<br><small style='color: #991b1b; font-weight: 600;'>-{$st['excluded_directors']} δ/ντές (εκτός CSV)</small>" 
                                     : "";
                                 echo "<tr>
                                     <td><strong>$cat ({$st['file']})</strong></td>
@@ -1573,9 +1580,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                         echo "
                         <tr style='background: #f0fdfa;'>
-                            <td><strong>👔 Αναφορά Δ/ντών - Πρ/νων (directors.csv)</strong></td>
+                            <td><strong>👔 Αναφορά Δ/ντών - Πρ/νων (directors.csv)</strong><br><small style='color: #0f766e;'>Διορισμός από 01/01/2020 (για χειροκίνητη εισαγωγή)</small></td>
                             <td style='text-align: center;'>-</td>
-                            <td style='text-align: center;'><span class='badge-completed' style='background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;'>Εξαιρέθηκαν από Β</span></td>
+                            <td style='text-align: center;'><span class='badge-completed' style='background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;'>Εξαιρέθηκαν από CSV</span></td>
                             <td style='text-align: center;'>-</td>
                             <td style='text-align: center; font-weight: bold; color: #0f766e;'>$dir_count</td>
                             <td style='text-align: center;'>
@@ -1645,8 +1652,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             </div>
                         </div>
                         <p style='color: #475569; font-size: 13.5px; line-height: 1.5; margin-bottom: 16px;'>
-                            Σύμφωνα με τον νέο κανόνα αξιολόγησης, οι διευθυντές και προϊστάμενοι σχολικών μονάδων <strong>εξαιρούνται από το αρχείο <code>b.csv</code></strong>.
-                            Ακολουθεί η αναλυτική αναφορά με τα στοιχεία τους (ΑΜ, ΑΦΜ, επώνυμο, όνομα, σχολείο υπηρέτησης, ημ/νία διορισμού).
+                            Σύμφωνα με τους κανόνες αξιολόγησης, οι διευθυντές και προϊστάμενοι σχολικών μονάδων <strong>εξαιρούνται πλήρως από τα αρχεία CSV (a1.csv, a2.csv, b.csv)</strong>.
+                            Στην παρακάτω αναφορά (και στο αρχείο <code>directors.csv</code>) περιλαμβάνονται <strong>μόνο όσοι έχουν ημερομηνία διορισμού από 01/01/2020 και μετά</strong>, προκειμένου να εισαχθούν χειροκίνητα (manually).
                         </p>
                         <div style='overflow-x: auto;'>
                             <table id='directors_table' class='results-table' style='width: 100%; font-size: 13.5px;'>
