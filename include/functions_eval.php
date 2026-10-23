@@ -15,7 +15,8 @@
  * 
  * - resolve_evaluee_consultants(array $row, array $se_by_klados): Αναλαμβάνει τον πλήρη προσδιορισμό του επιστημονικού συμβούλου (Α1) και του 
  * παιδαγωγικού συμβούλου (Α2), ενσωματώνοντας όλους τους κανόνες:
- *  - Κριτήρια Ειδικής Αγωγής (κλάδοι ΕΑΕ, υπηρετούντες σε τμήματα ένταξης ent_ty IN (1, 2), ειδικά σχολεία).
+ *  - Κριτήρια Ειδικής Αγωγής (κλάδοι ΕΑΕ εκτός τμημάτων ένταξης γενικών σχολείων, ειδικά σχολεία).
+ *  - Εκπαιδευτικοί σε Τμήμα Ένταξης γενικών σχολείων: αξιολογούνται στο Α1 από τον σύμβουλο γενικής αγωγής (ΠΕ60/ΠΕ70) του σχολείου.
  *  - Ανάθεση συμβούλου Ειδικής Αγωγής ανά κλάδο (Νηπιαγωγοί vs Δάσκαλοι) και ανά σχολείο.
  *  - Ανάθεση σε γενική αγωγή και fallback στον παιδαγωγικό σύμβουλο για ΠΕ60/ΠΕ70.
  *  - Ανάθεση του συμβούλου ΕΑΕ και ως παιδαγωγικού αν πρόκειται για ειδικό σχολείο.
@@ -317,11 +318,36 @@ function build_eval_evaluees_query($conn, $sxol_etos, array $filters = [], $excl
  */
 function resolve_evaluee_consultants(array $row, array $se_by_klados) {
     $klados_id = (int)($row['klados_id'] ?? 0);
-    $consultants = $se_by_klados[$klados_id] ?? [];
+    $klados_str = (string)($row['klados'] ?? '');
+    $sch_id = (int)($row['sch_id'] ?? 0);
+    $type2 = (int)($row['type2'] ?? 0);
+    $is_in_ent_ty = in_array((int)($row['ent_ty'] ?? 0), [1, 2], true);
+
+    $is_eae_klados = (
+        in_array($klados_str, ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71'], true) || 
+        in_array($klados_id, [16, 17, 18, 19], true)
+    );
+
+    // Εκπαιδευτικοί σε Τμήμα Ένταξης γενικών σχολείων (type2 != 2)
+    // αξιολογούνται στο Α1 από τον σύμβουλο γενικής αγωγής του σχολείου (ΠΕ60/ΠΕ70)
+    $eval_as_geniki = ($is_in_ent_ty && $type2 !== 2);
+
+    $effective_klados_id = $klados_id;
+    $effective_klados_str = $klados_str;
+    if ($eval_as_geniki && $is_eae_klados) {
+        $is_nipiagwgos = ($klados_id === 1 || in_array($klados_id, [16, 17], true) || $klados_str === 'ΠΕ60' || $klados_str === 'ΠΕ60ΕΑΕ' || $klados_str === 'ΠΕ61');
+        if ($is_nipiagwgos) {
+            $effective_klados_id = 1;
+            $effective_klados_str = 'ΠΕ60';
+        } else {
+            $effective_klados_id = 2;
+            $effective_klados_str = 'ΠΕ70';
+        }
+    }
+
+    $consultants = $se_by_klados[$effective_klados_id] ?? [];
     $consultant_found = null;
     $default_consultant = null;
-
-    $sch_id = (int)($row['sch_id'] ?? 0);
 
     foreach ($consultants as $c) {
         if (!empty($c['sch_ids'])) {
@@ -337,15 +363,9 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados) {
         }
     }
 
-    $is_in_ent_ty = in_array((int)($row['ent_ty'] ?? 0), [1, 2], true);
-    $klados_str = (string)($row['klados'] ?? '');
-    $type2 = (int)($row['type2'] ?? 0);
-
     $is_eae = (
-        in_array($klados_str, ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71'], true) || 
-        in_array($klados_id, [16, 17, 18, 19], true) || 
-        $is_in_ent_ty ||
-        ($type2 === 2 && (in_array($klados_str, ['ΠΕ60', 'ΠΕ70'], true) || in_array($klados_id, [1, 2], true)))
+        ($is_eae_klados && !$eval_as_geniki) ||
+        ($type2 === 2 && (in_array($klados_str, ['ΠΕ60', 'ΠΕ70'], true) || in_array($klados_id, [1, 2], true) || $is_eae_klados))
     );
 
     $symv_epist_afm = '';
@@ -405,7 +425,7 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados) {
             $symv_epist_afm = $default_consultant['afm'];
             $symv_epist_surname = $default_consultant['eponymo'];
             $symv_epist_name = $default_consultant['onoma'];
-        } elseif ($klados_str === 'ΠΕ60' || $klados_str === 'ΠΕ70') {
+        } elseif ($effective_klados_str === 'ΠΕ60' || $effective_klados_str === 'ΠΕ70' || in_array($effective_klados_id, [1, 2], true)) {
             $symv_epist_afm = $symv_paid_afm;
             $symv_epist_surname = $symv_paid_surname;
             $symv_epist_name = $symv_paid_name;

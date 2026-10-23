@@ -368,7 +368,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
         $chunks = array_chunk($tafms_escaped, 400);
         foreach ($chunks as $chunk) {
             $in_clause = implode(',', $chunk);
-            $q_emp = "SELECT e.*, s.id as sid, s.code as scode, s.name as sname, s.email as semail, k.perigrafh as klados_name 
+            $q_emp = "SELECT e.*, s.id as sid, s.code as scode, s.name as sname, k.perigrafh as klados_name 
                       FROM employee e 
                       LEFT JOIN school s ON e.sx_yphrethshs = s.id 
                       LEFT JOIN klados k ON e.klados = k.id 
@@ -391,7 +391,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             $id_chunks = array_chunk($emp_ids, 500);
             foreach ($id_chunks as $ichunk) {
                 $in_ids = implode(',', $ichunk);
-                $q_yp = "SELECT y.emp_id, y.yphrethsh, y.hours, s.name as school_name, s.email as school_email, s.code as school_code 
+                $q_yp = "SELECT y.emp_id, y.yphrethsh, y.hours, s.name as school_name 
                          FROM yphrethsh y 
                          JOIN school s ON y.yphrethsh = s.id 
                          WHERE y.emp_id IN ($in_ids) AND y.sxol_etos = $sxol_etos_int";
@@ -446,19 +446,6 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
                 }
             }
 
-            // School email fallback if not in sx_yphrethshs
-            $sch_email = trim((string)($info['semail'] ?? ''));
-            if (empty($sch_email) && isset($teacher_placements[$emp_id])) {
-                foreach ($teacher_placements[$emp_id] as $yp) {
-                    if (!empty($yp['school_email'])) {
-                        $sch_email = trim($yp['school_email']);
-                        break;
-                    }
-                }
-            }
-
-            $raw_hm_dior = (!empty($info['hm_dior']) && $info['hm_dior'] != '0000-00-00') ? $info['hm_dior'] : '0000-00-00';
-
             $enriched[$tafm] = [
                 'emp_id' => $info['id'],
                 'am' => !empty($info['am']) ? trim((string)$info['am']) : '-',
@@ -466,7 +453,6 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
                 'sch_id' => !empty($info['sid']) ? $info['sid'] : $info['id'],
                 'code' => $info['scode'] ?: '-',
                 'sname' => $info['sname'] ?: '-',
-                'semail' => $sch_email,
                 'loipa_sxoleia' => $loipa_sxoleia,
                 'surname' => trim($info['surname']),
                 'name' => trim($info['name']),
@@ -474,8 +460,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
                 'thesi' => ($info['thesi'] == 2) ? 'Δ/ντής/ντρια' : 'Εκπ/κός',
                 'klados' => $info['klados_name'] ?: getKlados($info['klados'], $conn),
                 'status' => ($info['status'] == 1) ? 'Εργάζεται' : 'Άδεια',
-                'hm_dior_raw' => $raw_hm_dior,
-                'hm_dior' => ($raw_hm_dior !== '0000-00-00') ? date('d-m-Y', strtotime($raw_hm_dior)) : '-',
+                'hm_dior' => (!empty($info['hm_dior']) && $info['hm_dior'] != '0000-00-00') ? date('d-m-Y', strtotime($info['hm_dior'])) : '-',
                 'hm_anal' => (!empty($info['hm_anal']) && $info['hm_anal'] != '0000-00-00') ? date('d-m-Y', strtotime($info['hm_anal'])) : '-',
                 'monimopoihsh' => ($info['monimopoihsh'] == 1) ? 'Ναι' : 'Όχι',
                 'aksiologhsh' => ($info['aksiologhsh'] == 1) ? 'Ναι' : 'Όχι',
@@ -488,35 +473,8 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             ];
         }
 
-        // Sort teachers by Evaluation Field (A1 first), then descending appointment date, then surname/name
+        // Sort teachers alphabetically by surname, name
         uasort($enriched, function($a, $b) {
-            $getFieldRank = function($item) {
-                $f = $item['fields_arr'] ?? [];
-                if (in_array('A1', $f) || in_array('Α1', $f)) {
-                    return 1;
-                }
-                if (in_array('A2', $f) || in_array('Α2', $f)) {
-                    return 2;
-                }
-                if (in_array('B', $f) || in_array('Β', $f)) {
-                    return 3;
-                }
-                return 4;
-            };
-
-            $rank_a = $getFieldRank($a);
-            $rank_b = $getFieldRank($b);
-            if ($rank_a !== $rank_b) {
-                return $rank_a <=> $rank_b;
-            }
-
-            // Descending appointment date (newest first)
-            $dior_a = (!empty($a['hm_dior_raw']) && $a['hm_dior_raw'] !== '0000-00-00') ? $a['hm_dior_raw'] : '';
-            $dior_b = (!empty($b['hm_dior_raw']) && $b['hm_dior_raw'] !== '0000-00-00') ? $b['hm_dior_raw'] : '';
-            if ($dior_a !== $dior_b) {
-                return strcmp($dior_b, $dior_a);
-            }
-
             $cmp = strcmp($a['surname'], $b['surname']);
             return ($cmp !== 0) ? $cmp : strcmp($a['name'], $b['name']);
         });
@@ -578,7 +536,6 @@ function generate_consultant_excel_html($consultant, $sx_etos, $end_year) {
         <th>Κατάσταση</th>
         <th>Κωδ. Σχολείου</th>
         <th>Ονομασία Σχολείου</th>
-        <th>email Σχολείου</th>
         <th>Λοιπά Σχολεία υπηρέτησης</th>
         <th>Ημ. Διορισμού</th>
         <th>Ημ. Ανάληψης</th>
@@ -605,7 +562,6 @@ function generate_consultant_excel_html($consultant, $sx_etos, $end_year) {
         echo "<td>{$t['status']}</td>";
         echo "<td class='text center'>{$t['code']}</td>";
         echo "<td>{$t['sname']}</td>";
-        echo "<td>{$t['semail']}</td>";
         echo "<td>{$t['loipa_sxoleia']}</td>";
         echo "<td class='text center'>{$t['hm_dior']}</td>";
         echo "<td class='text center'>{$t['hm_anal']}</td>";
@@ -662,7 +618,6 @@ function generate_all_consultants_excel_html($consultants, $sx_etos, $end_year) 
         <th>Κατάσταση</th>
         <th>Κωδ. Σχολείου</th>
         <th>Ονομασία Σχολείου</th>
-        <th>email Σχολείου</th>
         <th>Λοιπά Σχολεία υπηρέτησης</th>
         <th>Ημ. Διορισμού</th>
         <th>Ημ. Ανάληψης</th>
@@ -694,7 +649,6 @@ function generate_all_consultants_excel_html($consultants, $sx_etos, $end_year) 
             echo "<td>{$t['status']}</td>";
             echo "<td class='text center'>{$t['code']}</td>";
             echo "<td>{$t['sname']}</td>";
-            echo "<td>{$t['semail']}</td>";
             echo "<td>{$t['loipa_sxoleia']}</td>";
             echo "<td class='text center'>{$t['hm_dior']}</td>";
             echo "<td class='text center'>{$t['hm_anal']}</td>";
@@ -1368,10 +1322,10 @@ header('Content-type: text/html; charset=utf-8');
                         exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7] }
                     }
                 ],
-                order: [[3, 'asc'], [7, 'desc']],
+                order: [[1, 'asc'], [2, 'asc']],
                 columnDefs: [
                     { targets: 0, orderable: false, searchable: false, width: '36px' },
-                    { targets: [3, 7], className: 'dt-center', orderable: true }
+                    { targets: 3, className: 'dt-center', orderable: true }
                 ],
                 language: {
                     url: '../js/datatables/greek.json'
@@ -1765,17 +1719,7 @@ header('Content-type: text/html; charset=utf-8');
                     </td>
                     <td><a href="../employee/employee.php?id=<?=$t['emp_id']?>&op=view" target="_blank" style="font-weight: 600; color: #1e293b; text-decoration: underline;"><?=htmlspecialchars($t['surname'])?></a></td>
                     <td><?=htmlspecialchars($t['name'])?></td>
-                    <?php 
-                    $field_rank = 4;
-                    if (in_array('A1', $t['fields_arr']) || in_array('Α1', $t['fields_arr'])) {
-                        $field_rank = 1;
-                    } elseif (in_array('A2', $t['fields_arr']) || in_array('Α2', $t['fields_arr'])) {
-                        $field_rank = 2;
-                    } elseif (in_array('B', $t['fields_arr']) || in_array('Β', $t['fields_arr'])) {
-                        $field_rank = 3;
-                    }
-                    ?>
-                    <td data-order="<?=$field_rank?>" style="text-align: center; white-space: nowrap;">
+                    <td style="text-align: center; white-space: nowrap;">
                         <?php 
                         foreach ($t['fields_arr'] as $fld) {
                             if ($fld === 'A1' || $fld === 'Α1') echo "<span class='badge-a1'>Α1</span> ";
@@ -1787,7 +1731,7 @@ header('Content-type: text/html; charset=utf-8');
                     <td><code><?=htmlspecialchars($t['am'])?></code></td>
                     <td><code><?=htmlspecialchars($t['afm'])?></code></td>
                     <td><a href="../school/school_status.php?org=<?=$t['sch_id'] ?: $t['emp_id']?>" target="_blank" style="color: #2563eb; text-decoration: underline;"><?=htmlspecialchars($t['sname'])?></a></td>
-                    <td data-order="<?=htmlspecialchars($t['hm_dior_raw'])?>"><?=htmlspecialchars($t['hm_dior'])?></td>
+                    <td><?=htmlspecialchars($t['hm_dior'])?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -1851,20 +1795,8 @@ header('Content-type: text/html; charset=utf-8');
                                 <span>📞</span> Σχολείο & Επικοινωνία
                             </div>
                             <div class="child-field-row">
-                                <span class="child-field-label">Σχολείο:</span>
-                                <span class="child-field-val">
-                                    <?php if (!empty($t['sch_id'])): ?>
-                                        <a href="../school/school_status.php?org=<?=$t['sch_id']?>" target="_blank" style="color: #2563eb; text-decoration: underline;"><?=htmlspecialchars($t['sname'])?></a>
-                                    <?php else: ?>
-                                        <?=htmlspecialchars($t['sname'] ?: '-')?>
-                                    <?php endif; ?>
-                                </span>
-                            </div>
-                            <div class="child-field-row">
-                                <span class="child-field-label">Email Σχολείου:</span>
-                                <span class="child-field-val">
-                                    <?=$t['semail'] ? "<a href='mailto:".htmlspecialchars($t['semail'])."' style='color:#2563eb;'>".htmlspecialchars($t['semail'])."</a>" : '-'?>
-                                </span>
+                                <span class="child-field-label">Κωδικός Σχολείου:</span>
+                                <span class="child-field-val"><code><?=htmlspecialchars($t['code'])?></code></span>
                             </div>
                             <div class="child-field-row" style="align-items: flex-start;">
                                 <span class="child-field-label">Λοιπά Σχολεία:</span>
