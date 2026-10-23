@@ -25,19 +25,23 @@ if ($_SESSION['userlevel'] <> 0) {
 
 const DEFAULT_SUFFIX = "2026-27";
 
-function clean_str($val) {
-    if ($val === null) return "";
-    $s = trim((string)$val);
-    $s = str_replace(["\xC2\xA0", "\xEF\xBB\xBF"], [' ', ''], $s);
-    return trim($s);
+if (!function_exists('clean_str')) {
+    function clean_str($val) {
+        if ($val === null) return "";
+        $s = trim((string)$val);
+        $s = str_replace(["\xC2\xA0", "\xEF\xBB\xBF"], [' ', ''], $s);
+        return trim($s);
+    }
 }
 
-function normalize_afm($afm) {
-    $afm_clean = clean_str($afm);
-    if (ctype_digit($afm_clean) && strlen($afm_clean) <= 9) {
-        return str_pad($afm_clean, 9, '0', STR_PAD_LEFT);
+if (!function_exists('normalize_afm')) {
+    function normalize_afm($afm) {
+        $afm_clean = clean_str($afm);
+        if (ctype_digit($afm_clean) && strlen($afm_clean) <= 9) {
+            return str_pad($afm_clean, 9, '0', STR_PAD_LEFT);
+        }
+        return $afm_clean;
     }
-    return $afm_clean;
 }
 
 function append_suffix($identifier, $suffix) {
@@ -70,75 +74,10 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     }
 
     $sxol_etos = getParam('sxol_etos', $conn);
+    $lookups = get_eval_lookups($conn);
+    $se_by_klados = $lookups['se_by_klados'];
 
-    // Pre-load consultant data from symvouloi_epist
-    $se_by_klados = [];
-    $se_res = mysqli_query($conn, "SELECT id, klados, afm, eponymo, onoma, emp_id, sch_ids FROM symvouloi_epist");
-    if ($se_res) {
-        while ($se_row = mysqli_fetch_assoc($se_res)) {
-            $se_by_klados[$se_row['klados']][] = $se_row;
-        }
-    }
-
-    $query = "SELECT
-        e.id as emp_id,
-        e.surname as emp_surname,
-        e.name as emp_name,
-        e.patrwnymo,
-        e.am,
-        e.afm as emp_afm,
-        sp.surname as symv_paid_surname,
-        sp.name as symv_paid_name,
-        sp.afm as symv_paid_afm,
-        d.surname as dnt_surname,
-        d.name as dnt_name,
-        d.afm as dnt_afm,
-        k.perigrafh as klados,
-        e.klados as klados_id,
-        s.name as sch_name,
-        s.id as sch_id,
-        s.type2,
-        s.perif,
-        e.hm_dior,
-        e.thesi,
-        e.ent_ty
-    FROM employee e
-    LEFT JOIN klados k ON e.klados = k.id
-    LEFT JOIN (
-        SELECT 
-            emp_id,
-            SUBSTRING_INDEX(
-                GROUP_CONCAT(
-                    yphrethsh 
-                    ORDER BY 
-                        total_hours DESC, 
-                        is_sx_yphr DESC,
-                        yphrethsh ASC
-                    SEPARATOR ','
-                ), 
-                ',', 
-                1
-            ) AS primary_sch_id
-        FROM (
-            SELECT 
-                y.emp_id,
-                y.yphrethsh,
-                SUM(y.hours + 0) as total_hours,
-                MAX(y.yphrethsh = e.sx_yphrethshs) as is_sx_yphr
-            FROM yphrethsh y
-            JOIN employee e ON y.emp_id = e.id
-            WHERE y.sxol_etos = '$sxol_etos'
-            GROUP BY y.emp_id, y.yphrethsh
-        ) sch_hours
-        GROUP BY emp_id
-    ) yp ON e.id = yp.emp_id
-    LEFT JOIN school s ON COALESCE(yp.primary_sch_id, e.sx_yphrethshs) = s.id
-    LEFT JOIN symvouloi sm ON s.perif = sm.perif
-    LEFT JOIN employee sp ON sm.emp_id = sp.id
-    LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
-    WHERE e.id = $emp_id
-    GROUP BY e.id";
-
+    $query = build_eval_evaluees_query($conn, $sxol_etos, ['emp_id' => $emp_id]);
     $res = mysqli_query($conn, $query);
     if (!$res || mysqli_num_rows($res) === 0) {
         return ['error' => 'Ο εκπαιδευτικός δεν βρέθηκε στη βάση δεδομένων.'];
@@ -146,101 +85,14 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
 
     $row = mysqli_fetch_assoc($res);
 
-    // Consultant mapping (Scientific vs Pedagogical)
-    $consultants = $se_by_klados[$row['klados_id']] ?? [];
-    $consultant_found = null;
-    $default_consultant = null;
-
-    foreach ($consultants as $c) {
-        if (!empty($c['sch_ids'])) {
-            $c_schools = explode(',', $c['sch_ids']);
-            if (in_array($row['sch_id'], $c_schools)) {
-                $consultant_found = $c;
-                break;
-            }
-        } else {
-            if (!$default_consultant) {
-                $default_consultant = $c;
-            }
-        }
-    }
-
-    $is_in_ent_ty = in_array((int)($row['ent_ty'] ?? 0), [1, 2]);
-
-    $is_eae = (
-        in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
-        in_array($row['klados_id'], [16, 17, 18, 19]) || 
-        $is_in_ent_ty ||
-        ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
-    );
-
-    if ($is_eae) {
-        $eae_c = null;
-        if (in_array($row['klados_id'], [16, 17, 18, 19])) {
-            $eae_c = $consultant_found ?: $default_consultant;
-        }
-        if (!$eae_c) {
-            $is_nipiagwgos = ($row['klados_id'] == 1 || in_array($row['klados_id'], [16, 17]) || $row['klados'] === 'ΠΕ60' || $row['klados'] === 'ΠΕ60ΕΑΕ' || $row['klados'] === 'ΠΕ61');
-            $eae_kladoi = $is_nipiagwgos ? [16, 17] : [18, 19];
-            foreach ($eae_kladoi as $ek) {
-                if (!empty($se_by_klados[$ek])) {
-                    foreach ($se_by_klados[$ek] as $c) {
-                        if (!empty($c['sch_ids'])) {
-                            $c_schools = explode(',', $c['sch_ids']);
-                            if (in_array($row['sch_id'], $c_schools)) {
-                                $eae_c = $c;
-                                break 2;
-                            }
-                        } elseif (!$eae_c) {
-                            $eae_c = $c;
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($eae_c) {
-            $symv_epist_afm = $eae_c['afm'];
-            $symv_epist_surname = $eae_c['eponymo'];
-            $symv_epist_name = $eae_c['onoma'];
-        } else {
-            $symv_epist_afm = $row['symv_paid_afm'];
-            $symv_epist_surname = $row['symv_paid_surname'];
-            $symv_epist_name = $row['symv_paid_name'];
-        }
-
-        if ($row['type2'] == 2 && $eae_c) {
-            $symv_paid_afm = $eae_c['afm'];
-            $symv_paid_surname = $eae_c['eponymo'];
-            $symv_paid_name = $eae_c['onoma'];
-        } else {
-            $symv_paid_afm = $row['symv_paid_afm'];
-            $symv_paid_surname = $row['symv_paid_surname'];
-            $symv_paid_name = $row['symv_paid_name'];
-        }
-    } else {
-        if ($consultant_found) {
-            $symv_epist_afm = $consultant_found['afm'];
-            $symv_epist_surname = $consultant_found['eponymo'];
-            $symv_epist_name = $consultant_found['onoma'];
-        } elseif ($default_consultant) {
-            $symv_epist_afm = $default_consultant['afm'];
-            $symv_epist_surname = $default_consultant['eponymo'];
-            $symv_epist_name = $default_consultant['onoma'];
-        } elseif ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70') {
-            $symv_epist_afm = $row['symv_paid_afm'];
-            $symv_epist_surname = $row['symv_paid_surname'];
-            $symv_epist_name = $row['symv_paid_name'];
-        } else {
-            $symv_epist_afm = '';
-            $symv_epist_surname = '';
-            $symv_epist_name = '';
-        }
-
-        $symv_paid_afm = $row['symv_paid_afm'];
-        $symv_paid_surname = $row['symv_paid_surname'];
-        $symv_paid_name = $row['symv_paid_name'];
-    }
+    $eval_info = resolve_evaluee_consultants($row, $se_by_klados);
+    $is_eae = $eval_info['is_eae'];
+    $symv_epist_afm = $eval_info['symv_epist_afm'];
+    $symv_epist_surname = $eval_info['symv_epist_surname'];
+    $symv_epist_name = $eval_info['symv_epist_name'];
+    $symv_paid_afm = $eval_info['symv_paid_afm'];
+    $symv_paid_surname = $eval_info['symv_paid_surname'];
+    $symv_paid_name = $eval_info['symv_paid_name'];
 
     $emp_afm = normalize_afm($row['emp_afm']);
     $emp_name = trim($row['emp_name']);

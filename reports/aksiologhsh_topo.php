@@ -21,34 +21,11 @@ if ($_SESSION['userlevel'] <> 0) {
 }
 
 $sxol_etos = getParam('sxol_etos', $mysqlconnection);
-$allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ', $mysqlconnection);
-$allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $mysqlconnection);
-$ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό', $mysqlconnection);
-$foreas = getSchoolID('Απόσπαση σε φορέα', $mysqlconnection);
-$sxol_symv = getSchoolID('Σύμβουλος Εκπαίδευσης', $mysqlconnection);
-if (!$sxol_symv) {
-    $sxol_symv = getSchoolID('Σύμβουλος εκπαίδευσης', $mysqlconnection);
-}
-$dipe = '398';
-
-$symv_school_ids = [];
-if ($sxol_symv) {
-    $symv_school_ids[] = (int)$sxol_symv;
-}
-$res_symv = mysqli_query($mysqlconnection, "SELECT id FROM school WHERE name LIKE '%Σύμβουλος Εκπαίδευσης%' OR name LIKE '%Σύμβουλος εκπαίδευσης%'");
-if ($res_symv) {
-    while ($r_s = mysqli_fetch_assoc($res_symv)) {
-        $symv_school_ids[] = (int)$r_s['id'];
-    }
-}
-if (empty($symv_school_ids)) {
-    $symv_school_ids = [397];
-}
-$symv_school_ids = array_unique($symv_school_ids);
-$symv_school_ids_str = implode(',', $symv_school_ids);
-
-$excluded_schools = array_unique(array_filter([$allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko, ...$symv_school_ids]));
-$excluded_schools_str = implode(',', $excluded_schools);
+$excluded_info = get_eval_excluded_schools($mysqlconnection);
+$symv_school_ids = $excluded_info['symv_school_ids'];
+$symv_school_ids_str = $excluded_info['symv_school_ids_str'];
+$excluded_schools = $excluded_info['excluded_schools'];
+$excluded_schools_str = $excluded_info['excluded_schools_str'];
 
 // Determine source of evaluated teachers
 $emp_ids = [];

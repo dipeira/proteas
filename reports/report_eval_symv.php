@@ -28,13 +28,15 @@ $is_admin = isset($_SESSION['userlevel']) && (int)$_SESSION['userlevel'] === 0;
 // -------------------------------------------------------------
 // Helper Functions
 // -------------------------------------------------------------
-function normalize_afm($afm) {
-    $afm = trim((string)$afm);
-    $afm = str_replace(["\xC2\xA0", "\xEF\xBB\xBF", '"', "'"], '', $afm);
-    if (ctype_digit($afm) && strlen($afm) <= 9) {
-        return str_pad($afm, 9, '0', STR_PAD_LEFT);
+if (!function_exists('normalize_afm')) {
+    function normalize_afm($afm) {
+        $afm = trim((string)$afm);
+        $afm = str_replace(["\xC2\xA0", "\xEF\xBB\xBF", '"', "'"], '', $afm);
+        if (ctype_digit($afm) && strlen($afm) <= 9) {
+            return str_pad($afm, 9, '0', STR_PAD_LEFT);
+        }
+        return $afm;
     }
-    return $afm;
 }
 
 // Calculate target date (31/8 of the school year)
@@ -237,115 +239,17 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
         }
     } else {
         // --- Calculate from Database ---
-        $allo_pyspe = getSchoolID('Άλλο ΠΥΣΠΕ', $conn);
-        $allo_pysde = getSchoolID('Άλλο ΠΥΣΔΕ', $conn);
-        $ekswteriko = getSchoolID('Απόσπαση στο εξωτερικό', $conn);
-        $foreas = getSchoolID('Απόσπαση σε φορέα', $conn);
-        $sxol_symv = getSchoolID('Σύμβουλος Εκπαίδευσης', $conn) ?: getSchoolID('Σύμβουλος εκπαίδευσης', $conn);
-        $dipe = '398';
+        $excluded_info = get_eval_excluded_schools($conn);
+        $symv_school_ids = $excluded_info['symv_school_ids'];
 
-        $symv_school_ids = $sxol_symv ? [(int)$sxol_symv] : [397];
-        $res_symv_s = mysqli_query($conn, "SELECT id FROM school WHERE name LIKE '%Σύμβουλος Εκπαίδευσης%' OR name LIKE '%Σύμβουλος εκπαίδευσης%'");
-        if ($res_symv_s) {
-            while ($r_s = mysqli_fetch_assoc($res_symv_s)) {
-                $symv_school_ids[] = (int)$r_s['id'];
-            }
-        }
-        $symv_school_ids = array_unique($symv_school_ids);
-        $symv_school_ids_str = implode(',', $symv_school_ids);
-        $excluded_schools = array_unique(array_filter([$allo_pysde, $allo_pyspe, $dipe, $foreas, $ekswteriko, ...$symv_school_ids]));
-        $excluded_schools_str = implode(',', $excluded_schools);
+        $lookups = get_eval_lookups($conn);
+        $se_by_klados = $lookups['se_by_klados'];
+        $se_edra_allou = $lookups['se_edra_allou'];
+        $se_aksiologhsh_ews = $lookups['se_aksiologhsh_ews'];
+        $pe60_consultant_afms = $lookups['pe60_consultant_afms'];
+        $all_director_afms = $lookups['all_director_afms'];
 
-        $se_by_klados = [];
-        $se_edra_allou = [];
-        $se_aksiologhsh_ews = [];
-        $se_res = mysqli_query($conn, "SELECT id, klados, afm, eponymo, onoma, emp_id, sch_ids, edra_allou, aksiologhsh_ews FROM symvouloi_epist");
-        while ($se_row = mysqli_fetch_assoc($se_res)) {
-            $se_by_klados[$se_row['klados']][] = $se_row;
-            $c_afm = trim($se_row['afm']);
-            if (!empty($c_afm)) {
-                if (!empty($se_row['edra_allou'])) $se_edra_allou[$c_afm] = true;
-                if (!empty($se_row['aksiologhsh_ews']) && $se_row['aksiologhsh_ews'] !== '0000-00-00') {
-                    $se_aksiologhsh_ews[$c_afm] = $se_row['aksiologhsh_ews'];
-                }
-            }
-        }
-
-        $pe60_consultant_afms = [];
-        $res_pe60 = mysqli_query($conn, "SELECT e.afm FROM symvouloi s JOIN employee e ON s.emp_id = e.id WHERE s.perif >= 600 OR e.klados = 1");
-        while ($r_pe60 = mysqli_fetch_assoc($res_pe60)) {
-            if (!empty($r_pe60['afm'])) $pe60_consultant_afms[trim($r_pe60['afm'])] = true;
-        }
-
-        $all_director_afms = [];
-        $res_dir = mysqli_query($conn, "SELECT afm FROM employee WHERE thesi = 2 AND status IN (1,3)");
-        if ($res_dir) {
-            while ($r_dir = mysqli_fetch_assoc($res_dir)) {
-                if (!empty($r_dir['afm'])) $all_director_afms[normalize_afm($r_dir['afm'])] = true;
-            }
-        }
-
-        $query = "SELECT
-            e.id as emp_id,
-            e.surname as emp_surname,
-            e.name as emp_name,
-            e.afm as emp_afm,
-            sp.surname as symv_paid_surname,
-            sp.name as symv_paid_name,
-            sp.afm as symv_paid_afm,
-            d.surname as dnt_surname,
-            d.name as dnt_name,
-            d.afm as dnt_afm,
-            k.perigrafh as klados,
-            e.klados as klados_id,
-            s.name as sch_name,
-            s.id as sch_id,
-            s.type2,
-            s.perif,
-            e.hm_dior,
-            e.thesi,
-            e.ent_ty
-        FROM employee e
-        LEFT JOIN klados k ON e.klados = k.id
-        LEFT JOIN (
-            SELECT emp_id, SUBSTRING_INDEX(GROUP_CONCAT(yphrethsh ORDER BY total_hours DESC, is_sx_yphr DESC, yphrethsh ASC SEPARATOR ','), ',', 1) AS primary_sch_id
-            FROM (
-                SELECT y.emp_id, y.yphrethsh, SUM(y.hours + 0) as total_hours, MAX(y.yphrethsh = e.sx_yphrethshs) as is_sx_yphr
-                FROM yphrethsh y JOIN employee e ON y.emp_id = e.id WHERE y.sxol_etos = '$sxol_etos_int' GROUP BY y.emp_id, y.yphrethsh
-            ) sch_hours GROUP BY emp_id
-        ) yp ON e.id = yp.emp_id
-        LEFT JOIN school s ON COALESCE(yp.primary_sch_id, e.sx_yphrethshs) = s.id
-        LEFT JOIN symvouloi sm ON s.perif = sm.perif
-        LEFT JOIN employee sp ON sm.emp_id = sp.id
-        LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
-        WHERE e.status = 1 
-        AND e.sx_yphrethshs NOT IN ($excluded_schools_str)
-        AND COALESCE(yp.primary_sch_id, e.sx_yphrethshs) NOT IN ($excluded_schools_str)
-        AND (e.sx_organikhs NOT IN ($symv_school_ids_str) OR e.sx_organikhs IS NULL)
-        AND e.id NOT IN (SELECT emp_id FROM yphrethsh WHERE yphrethsh IN ($symv_school_ids_str) AND sxol_etos = '$sxol_etos_int')
-        AND s.id NOT IN ($symv_school_ids_str)
-        AND s.type2 IN (0, 2)
-        AND (e.aksiologhsh = 0 OR e.aksiologhsh IS NULL)";
-
-        if (!empty($db_filters['hm_dior_from'])) {
-            $query .= " AND e.hm_dior >= '" . mysqli_real_escape_string($conn, $db_filters['hm_dior_from']) . "'";
-        }
-        if (!empty($db_filters['hm_dior_to'])) {
-            $query .= " AND e.hm_dior <= '" . mysqli_real_escape_string($conn, $db_filters['hm_dior_to']) . "'";
-        }
-        if (!empty($db_filters['klados']) && is_array($db_filters['klados'])) {
-            $klados_ids = implode(",", array_map('intval', $db_filters['klados']));
-            if (!empty($klados_ids)) {
-                $query .= " AND e.klados IN ($klados_ids)";
-            }
-        }
-
-        $query .= " GROUP BY e.id ORDER BY 
-            CASE WHEN e.hm_dior >= '2020-01-01' THEN 1 WHEN e.hm_dior > '1950-01-01' THEN 2 ELSE 3 END ASC,
-            CASE WHEN e.hm_dior >= '2020-01-01' THEN e.hm_dior ELSE NULL END ASC,
-            CASE WHEN e.hm_dior < '2020-01-01' AND e.hm_dior > '1950-01-01' THEN e.hm_dior ELSE NULL END DESC,
-            e.surname ASC, e.name ASC";
-
+        $query = build_eval_evaluees_query($conn, $sxol_etos_int, $db_filters, $excluded_info);
         $db_result = mysqli_query($conn, $query);
         $seen_table = [];
         $candidates_by_consultant = [];
@@ -357,85 +261,16 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
                 if (isset($seen_table[$emp_afm_raw]) || in_array($row['sch_id'], $symv_school_ids)) continue;
                 $seen_table[$emp_afm_raw] = true;
 
-                $consultants_list = $se_by_klados[$row['klados_id']] ?? [];
-                $consultant_found = null;
-                $default_consultant = null;
-                foreach ($consultants_list as $c) {
-                    if (!empty($c['sch_ids'])) {
-                        $c_schools = explode(',', $c['sch_ids']);
-                        if (in_array($row['sch_id'], $c_schools)) {
-                            $consultant_found = $c;
-                            break;
-                        }
-                    } else {
-                        if (!$default_consultant) $default_consultant = $c;
-                    }
-                }
-
-                $is_in_ent_ty = in_array((int)($row['ent_ty'] ?? 0), [1, 2]);
-
-                $is_eae = (
-                    in_array($row['klados'], ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71']) || 
-                    in_array($row['klados_id'], [16, 17, 18, 19]) || 
-                    $is_in_ent_ty ||
-                    ($row['type2'] == 2 && (in_array($row['klados'], ['ΠΕ60', 'ΠΕ70']) || in_array($row['klados_id'], [1, 2])))
-                );
-
-                if ($is_eae) {
-                    $eae_c = null;
-                    if (in_array($row['klados_id'], [16, 17, 18, 19])) {
-                        $eae_c = $consultant_found ?: $default_consultant;
-                    }
-                    if (!$eae_c) {
-                        $is_nipiagwgos = ($row['klados_id'] == 1 || in_array($row['klados_id'], [16, 17]) || $row['klados'] === 'ΠΕ60' || $row['klados'] === 'ΠΕ60ΕΑΕ' || $row['klados'] === 'ΠΕ61');
-                        $eae_kladoi = $is_nipiagwgos ? [16, 17] : [18, 19];
-                        foreach ($eae_kladoi as $ek) {
-                            if (!empty($se_by_klados[$ek])) {
-                                foreach ($se_by_klados[$ek] as $c) {
-                                    if (!empty($c['sch_ids'])) {
-                                        if (in_array($row['sch_id'], explode(',', $c['sch_ids']))) {
-                                            $eae_c = $c;
-                                            break 2;
-                                        }
-                                    } elseif (!$eae_c) {
-                                        $eae_c = $c;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if ($eae_c) {
-                        $symv_epist_afm = $eae_c['afm'];
-                        $symv_epist_surname = $eae_c['eponymo'];
-                        $symv_epist_name = $eae_c['onoma'];
-                    } else {
-                        $symv_epist_afm = $row['symv_paid_afm'];
-                        $symv_epist_surname = $row['symv_paid_surname'];
-                        $symv_epist_name = $row['symv_paid_name'];
-                    }
-
-                    if ($row['type2'] == 2 && $eae_c) {
-                        $symv_paid_afm = $eae_c['afm'];
-                        $symv_paid_surname = $eae_c['eponymo'];
-                        $symv_paid_name = $eae_c['onoma'];
-                    } else {
-                        $symv_paid_afm = $row['symv_paid_afm'];
-                        $symv_paid_surname = $row['symv_paid_surname'];
-                        $symv_paid_name = $row['symv_paid_name'];
-                    }
-                } else {
-                    if ($consultant_found) {
-                        $symv_epist_afm = $consultant_found['afm'];
-                    } elseif ($default_consultant) {
-                        $symv_epist_afm = $default_consultant['afm'];
-                    } elseif ($row['klados'] == 'ΠΕ60' || $row['klados'] == 'ΠΕ70') {
-                        $symv_epist_afm = $row['symv_paid_afm'];
-                    } else {
-                        $symv_epist_afm = '';
-                    }
-                    $symv_paid_afm = $row['symv_paid_afm'];
-                }
+                $eval_info = resolve_evaluee_consultants($row, $se_by_klados);
+                $is_eae = $eval_info['is_eae'];
+                $is_in_ent_ty = $eval_info['is_in_ent_ty'];
+                $symv_epist_afm = $eval_info['symv_epist_afm'];
+                $symv_epist_surname = $eval_info['symv_epist_surname'];
+                $symv_epist_name = $eval_info['symv_epist_name'];
+                $symv_paid_afm = $eval_info['symv_paid_afm'];
+                $symv_paid_surname = $eval_info['symv_paid_surname'];
+                $symv_paid_name = $eval_info['symv_paid_name'];
+                $taytish = $eval_info['taytish'];
 
                 $row['resolved_symv_epist_afm'] = $symv_epist_afm;
                 $row['resolved_symv_paid_afm'] = $symv_paid_afm;
