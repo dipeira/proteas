@@ -709,6 +709,80 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
         <code>a1.csv</code>, <code>a2.csv</code> και <code>b.csv</code> (μονομερή).
     </p>
 
+    <!-- Έλεγχος & Προβολή Τελευταίας Εξαγωγής Αρχείων CSV στο φάκελο word -->
+    <?php
+    $word_dir_path = __DIR__ . '/../word';
+    $csv_file_configs = [
+        'a1' => ['file' => 'a1.csv', 'label' => 'a1.csv'],
+        'a2' => ['file' => 'a2.csv', 'label' => 'a2.csv'],
+        'b'  => ['file' => 'b.csv',  'label' => 'b.csv'],
+        'directors' => ['file' => 'directors.csv', 'label' => 'directors.csv'],
+    ];
+    $last_csv_export_timestamp = null;
+    $available_csv_files = [];
+    foreach ($csv_file_configs as $key => $cfg) {
+        $full_p = $word_dir_path . '/' . $cfg['file'];
+        if (file_exists($full_p)) {
+            $mtime = filemtime($full_p);
+            if ($last_csv_export_timestamp === null || $mtime > $last_csv_export_timestamp) {
+                $last_csv_export_timestamp = $mtime;
+            }
+            $available_csv_files[$key] = [
+                'file' => $cfg['file'],
+                'label' => $cfg['label'],
+                'mtime' => $mtime,
+                'size' => filesize($full_p)
+            ];
+        }
+    }
+    $has_zip_file = file_exists($word_dir_path . '/aksiologhsh_csv.zip');
+    ?>
+
+    <div class="card-box" style="background: #ffffff; border: 1px solid <?= ($last_csv_export_timestamp !== null) ? '#0284c7' : '#cbd5e1' ?>; border-left: 6px solid <?= ($last_csv_export_timestamp !== null) ? '#0284c7' : '#94a3b8' ?>; padding: 16px 20px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="background: <?= ($last_csv_export_timestamp !== null) ? '#e0f2fe' : '#f1f5f9' ?>; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                    <?= ($last_csv_export_timestamp !== null) ? '📁' : 'ℹ️' ?>
+                </div>
+                <div>
+                    <div style="font-size: 15px; color: #0f172a;">
+                        <strong>Ημερομηνία τελευταίας εξαγωγής αρχείων csv:</strong>
+                        <?php if ($last_csv_export_timestamp !== null): ?>
+                            <span style="display: inline-block; background: #0284c7; color: #ffffff; font-weight: 700; font-size: 14px; padding: 3px 10px; border-radius: 5px; margin-left: 6px; letter-spacing: 0.3px;">
+                                <?= date('d/m/Y H:i', $last_csv_export_timestamp) ?>
+                            </span>
+                        <?php else: ?>
+                            <span style="color: #64748b; font-style: italic; margin-left: 6px;">
+                                Δεν έχει πραγματοποιηθεί προηγούμενη εξαγωγή (δεν βρέθηκαν αρχεία στο φάκελο word).
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($last_csv_export_timestamp !== null): ?>
+                        <div style="font-size: 13px; color: #64748b; margin-top: 4px;">
+                            Τα αρχεία βρίσκονται αποθηκευμένα στο φάκελο <code>word</code> (ακριβής καταγραφή: <?= date('d/m/Y H:i:s', $last_csv_export_timestamp) ?>).
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <?php if (!empty($available_csv_files)): ?>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <span style="font-size: 13px; color: #475569; font-weight: 600;">Άμεση λήψη αρχείων:</span>
+                    <?php foreach ($available_csv_files as $k => $f): ?>
+                        <a href="?download=<?= $k ?>" class="btn" style="text-decoration: none; padding: 6px 11px; font-size: 13px; border-radius: 4px; background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" title="Λήψη <?= $f['file'] ?> (<?= round($f['size'] / 1024, 1) ?> KB)">
+                            📥 <?= $f['file'] ?>
+                        </a>
+                    <?php endforeach; ?>
+                    <?php if ($has_zip_file): ?>
+                        <a href="?download=zip" class="btn" style="text-decoration: none; padding: 6px 13px; font-size: 13px; border-radius: 4px; background: #059669; color: #ffffff; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);" title="Λήψη όλων σε ενιαίο ZIP">
+                            📦 ZIP
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <form method="post" enctype="multipart/form-data">
         <!-- 1. Excel/CSV File and Processing Parameters -->
         <div class="card-box">
@@ -1493,7 +1567,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         <h2 style='margin: 0; color: #14532d; font-size: 20px;'>Η επεξεργασία ολοκληρώθηκε με επιτυχία!</h2>
                     </div>
                     <p style='color: #166534; margin: 0 0 16px 0; font-size: 14px;'>
-                        Αναλύθηκε το αρχείο <strong>".htmlspecialchars($excel_name)."</strong> και εφαρμόστηκε επίθημα <code>:".htmlspecialchars($suffix)."</code> στις εκκρεμότητες.
+                        Αναλύθηκε το αρχείο <strong>".htmlspecialchars($excel_name)."</strong> και εφαρμόστηκε επίθημα <code>:".htmlspecialchars($suffix)."</code> στις εκκρεμότητες (Ημερομηνία εξαγωγής: <strong>".date('d/m/Y H:i')."</strong>).
                     </p>
                     $db_summary_html
 
