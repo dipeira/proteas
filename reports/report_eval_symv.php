@@ -849,6 +849,11 @@ if ($is_admin && isset($_POST['send_emails'])) {
         }
     }
 
+    // Σε δοκιμαστική αποστολή, στέλνονται μόνο 3 αρχεία (όχι όλα)
+    if ($is_testing) {
+        $target_consultants = array_slice($target_consultants, 0, 3, true);
+    }
+
     if (empty($target_consultants)) {
         $email_results = [
             'is_testing' => $is_testing,
@@ -1492,7 +1497,7 @@ header('Content-type: text/html; charset=utf-8');
             Αποτυχίες: <strong style="color: #dc2626;"><?=$email_results['failed']?></strong> | 
             Παραλείφθηκαν (χωρίς email): <strong style="color: #d97706;"><?=$email_results['skipped']?></strong>
             <?php if ($email_results['is_testing']): ?>
-                <br><span style="color: #b45309; font-weight: bold;">Όλα τα δοκιμαστικά μηνύματα απεστάλησαν αποκλειστικά στη διεύθυνση δοκιμής: <code><?=htmlspecialchars($email_results['test_email'])?></code></span>
+                <br><span style="color: #b45309; font-weight: bold;">(Δοκιμαστική λειτουργία: εστάλησαν έως 3 αρχεία δοκιμαστικά αποκλειστικά στη διεύθυνση δοκιμής: <code><?=htmlspecialchars($email_results['test_email'])?></code>)</span>
             <?php endif; ?>
         </p>
         <div style="max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px;">
@@ -1602,7 +1607,7 @@ header('Content-type: text/html; charset=utf-8');
                 <div class="testing-box">
                     <label style="font-weight: bold; color: #92400e; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; margin: 0;">
                         <input type="checkbox" name="testing" id="testing_checkbox" value="1" checked style="width: 18px; height: 18px; cursor: pointer;">
-                        🧪 Δοκιμαστική αποστολή (Testing mode)
+                        🧪 Δοκιμαστική αποστολή (3 αρχεία)
                     </label>
                     <div style="display: inline-flex; align-items: center; gap: 6px;">
                         <span style="font-size: 12.5px; color: #78350f;">Email δοκιμής:</span>
@@ -1895,7 +1900,7 @@ function validateEmailForm() {
     if (!isTesting) {
         return confirm('⚠️ ΠΡΟΣΟΧΗ:\nΗ επιλογή testing ΔΕΝ είναι ενεργοποιημένη!\n\nΘα αποσταλούν ΠΡΑΓΜΑΤΙΚΑ emails σε όλους τους συμβούλους.\nΕίστε βέβαιοι ότι θέλετε να προχωρήσετε;');
     } else {
-        return confirm('🧪 Δοκιμαστική Αποστολή:\nΌλα τα emails θα σταλούν αποκλειστικά στο: ' + testEmail + '\n\nΘέλετε να προχωρήσετε;');
+        return confirm('🧪 Δοκιμαστική Αποστολή:\nΘα σταλούν δοκιμαστικά έως 3 αρχεία αποκλειστικά στο: ' + testEmail + '\n\nΘέλετε να προχωρήσετε;');
     }
 }
 
