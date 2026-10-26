@@ -827,6 +827,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                 <label style="font-weight: bold; cursor: pointer;">
                     <input type="radio" name="data_source" value="csv" <?php echo (($_POST['data_source'] ?? '') === 'csv') ? 'checked' : ''; ?>>
                     Μεταφόρτωση έτοιμων αρχείων a1.csv, a2.csv, b.csv
+                    <?php if ($last_csv_export_timestamp !== null): ?>
+                        <span style="font-weight: 600; font-size: 12px; color: #0284c7; margin-left: 6px;">(τελευταία δημιουργία: <?= date('d/m/Y H:i', $last_csv_export_timestamp) ?>)</span>
+                    <?php endif; ?>
                 </label>
             </div>
 

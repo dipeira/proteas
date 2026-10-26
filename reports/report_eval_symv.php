@@ -724,6 +724,24 @@ list($consultants, $actual_source, $total_teachers_count) = load_evaluation_data
     $db_filters
 );
 
+// Check creation/modification date of CSV files
+$csv_mtime = null;
+$csv_files_to_check = [
+    __DIR__ . '/../word/a1.csv',
+    __DIR__ . '/../word/a2.csv',
+    __DIR__ . '/../word/b.csv',
+    __DIR__ . '/../word/directors.csv'
+];
+foreach ($csv_files_to_check as $cf) {
+    if (file_exists($cf)) {
+        $mt = filemtime($cf);
+        if ($csv_mtime === null || $mt > $csv_mtime) {
+            $csv_mtime = $mt;
+        }
+    }
+}
+$csv_date_str = $csv_mtime ? date('d/m/Y H:i', $csv_mtime) : '';
+
 // Determine selected consultant (default to first active or by AFM)
 $selected_afm = isset($_GET['afm']) ? normalize_afm($_GET['afm']) : '';
 if (empty($selected_afm) && !empty($consultants)) {
@@ -1465,6 +1483,11 @@ header('Content-type: text/html; charset=utf-8');
                 <span style="font-weight: bold; color: <?=$actual_source === 'csv' ? '#059669' : '#2563eb'?>;">
                     <?=$actual_source === 'csv' ? '📁 Αρχεία CSV αξιολόγησης (word/a1, a2, b)' : '🗄️ Βάση Δεδομένων Proteas'?>
                 </span>
+                <?php if ($actual_source === 'csv' && !empty($csv_date_str)): ?>
+                    <span style="display: inline-flex; align-items: center; gap: 4px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 1px 7px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-left: 6px;" title="Ημερομηνία & ώρα δημιουργίας των αρχείων CSV">
+                        🕒 <?=$csv_date_str?>
+                    </span>
+                <?php endif; ?>
             </p>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
