@@ -202,6 +202,7 @@ function extract_evaluations_from_rows(array $rows) {
     ];
 
     $pending_results = [];
+    $pending_teachers = [];
     $completed_by_category = ["A1" => [], "A2" => [], "B" => []];
     $completed_all = [];
 
@@ -222,6 +223,7 @@ function extract_evaluations_from_rows(array $rows) {
         $status_idx = $cat[2];
 
         $status_map = [];
+        $teacher_status_map = [];
 
         for ($r = 1; $r < $rowCount; $r++) {
             $row = $rows[$r];
@@ -238,6 +240,20 @@ function extract_evaluations_from_rows(array $rows) {
                     }
                     $status_map[$key_str][] = $val_status;
                 }
+            }
+
+            $row_teacher_afm = '';
+            if ($teacher_afm_col_idx !== null) {
+                $row_teacher_afm = normalize_afm($row[$teacher_afm_col_idx] ?? '');
+            }
+            if ($row_teacher_afm === '' && $val_id !== '') {
+                $row_teacher_afm = extract_teacher_afm($val_id, $cat_name);
+            }
+            if ($row_teacher_afm !== '') {
+                if (!isset($teacher_status_map[$row_teacher_afm])) {
+                    $teacher_status_map[$row_teacher_afm] = [];
+                }
+                $teacher_status_map[$row_teacher_afm][] = $val_status;
             }
 
             $val_status_norm = normalize_greek_text($val_status);
@@ -283,9 +299,33 @@ function extract_evaluations_from_rows(array $rows) {
             }
         }
         $pending_results[$cat_name] = $pending_for_cat;
+
+        $pending_teachers_for_cat = [];
+        foreach ($teacher_status_map as $t_afm => $statuses) {
+            $has_target = false;
+            foreach ($statuses as $s) {
+                if (normalize_greek_text($s) === $target_norm) {
+                    $has_target = true;
+                    break;
+                }
+            }
+            if ($has_target) {
+                $other_statuses = [];
+                foreach ($statuses as $s) {
+                    $c = clean_str($s);
+                    if ($c !== '' && normalize_greek_text($c) !== $target_norm) {
+                        $other_statuses[] = $c;
+                    }
+                }
+                if (empty($other_statuses)) {
+                    $pending_teachers_for_cat[$t_afm] = true;
+                }
+            }
+        }
+        $pending_teachers[$cat_name] = $pending_teachers_for_cat;
     }
 
-    return [$pending_results, $completed_all, $completed_by_category];
+    return [$pending_results, $completed_all, $completed_by_category, $pending_teachers];
 }
 
 function extract_evaluations_from_file($file_path, $original_filename = '') {
@@ -331,6 +371,8 @@ function extract_evaluations_from_excel($excel_path, $original_filename = '') {
 
 function append_suffix($identifier, $suffix) {
     $clean_id = clean_str($identifier);
+    if (empty($suffix)) return $clean_id;
+    $clean_id = preg_replace('/:\d{4}-\d{2}$/', '', $clean_id);
     $marker = ':' . $suffix;
     if (substr($clean_id, -strlen($marker)) === $marker) {
         return $clean_id;
@@ -365,7 +407,7 @@ function detect_delimiter_from_file($path) {
     return ($counts[$firstKey] > 0) ? $firstKey : ';';
 }
 
-function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed_teachers, $suffix, $category, array $excluded_a2_afms = [], array $consultant_afms = [], array $director_afms = [], array &$excluded_directors = []) {
+function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed_teachers, $suffix, $category, array $excluded_a2_afms = [], array $consultant_afms = [], array $director_afms = [], array &$excluded_directors = [], array $pending_teachers = []) {
     $delimiter = detect_delimiter_from_file($csv_path);
     $handle = fopen($csv_path, 'r');
     if (!$handle) throw new Exception("Αδυναμία ανοίγματος του $csv_path");
@@ -485,7 +527,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
         }
 
         $is_matched = ($key_from_id !== '' && isset($pending_keys[$key_from_id])) ||
-                      ($key_from_cols !== '' && isset($pending_keys[$key_from_cols]));
+                      ($key_from_cols !== '' && isset($pending_keys[$key_from_cols])) ||
+                      ($teacher_afm !== '' && isset($pending_teachers[$teacher_afm])) ||
+                      ($id_teacher_afm !== '' && isset($pending_teachers[$id_teacher_afm]));
 
         foreach ($afm_col_indices as $a_idx) {
             $val = clean_str($row[$a_idx]);
@@ -908,7 +952,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
 
             try {
                 // Parse Excel or CSV
-                list($pending_dict, $completed_all, $completed_by_cat) = extract_evaluations_from_file($excel_tmp, $excel_name);
+                list($pending_dict, $completed_all, $completed_by_cat, $pending_teachers) = extract_evaluations_from_file($excel_tmp, $excel_name);
 
                 $word_dir = __DIR__ . '/../word';
                 if (!is_dir($word_dir)) {
@@ -998,7 +1042,8 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 $excluded_a2_afms,
                                 $consultant_afms,
                                 $director_afms,
-                                $excluded_directors_csv
+                                $excluded_directors_csv,
+                                $pending_teachers[$cat] ?? []
                             );
                             $stats[$cat] = [
                                 'file' => $filename,
@@ -1336,7 +1381,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             } else {
                                 $a1_id = $se_afm . ':' . $emp_afm;
                                 $key_a1 = $se_afm . ':' . $emp_afm;
-                                $is_pending = isset($pending_dict['A1'][$key_a1]);
+                                $is_pending = isset($pending_dict['A1'][$key_a1]) || (!empty($emp_afm) && isset($pending_teachers['A1'][$emp_afm]));
 
                                 if ($is_pending) {
                                     $a1_id = append_suffix($a1_id, $suffix);
@@ -1379,7 +1424,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 } else {
                                     $a2_id = $evaluator_afm . ':' . $emp_afm;
                                     $key_a2 = $evaluator_afm . ':' . $emp_afm;
-                                    $is_pending = isset($pending_dict['A2'][$key_a2]);
+                                    $is_pending = isset($pending_dict['A2'][$key_a2]) || (!empty($emp_afm) && isset($pending_teachers['A2'][$emp_afm]));
 
                                     if ($is_pending) {
                                         $a2_id = append_suffix($a2_id, $suffix);
@@ -1402,7 +1447,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                         } else {
                                             $b_id = $sp_afm . ':' . $emp_afm;
                                             $b_key = $sp_afm . ':' . $emp_afm;
-                                            $is_pending = isset($pending_dict['B'][$b_key]);
+                                            $is_pending = isset($pending_dict['B'][$b_key]) || (!empty($emp_afm) && isset($pending_teachers['B'][$emp_afm]));
 
                                             if ($is_pending) {
                                                 $b_id = append_suffix($b_id, $suffix);
@@ -1421,7 +1466,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                         if (!empty($sp_afm)) {
                                             $b_id = $dnt_afm . ':' . $sp_afm . ':' . $emp_afm;
                                             $b_key = $dnt_afm . ':' . $sp_afm . ':' . $emp_afm;
-                                            $is_pending = isset($pending_dict['B'][$b_key]);
+                                            $is_pending = isset($pending_dict['B'][$b_key]) || (!empty($emp_afm) && isset($pending_teachers['B'][$emp_afm]));
 
                                             if ($is_pending) {
                                                 $b_id = append_suffix($b_id, $suffix);
@@ -1431,7 +1476,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                         } else {
                                             $b_id = $dnt_afm . ':' . $emp_afm;
                                             $b_key = $dnt_afm . ':' . $emp_afm;
-                                            $is_pending = isset($pending_dict['B'][$b_key]);
+                                            $is_pending = isset($pending_dict['B'][$b_key]) || (!empty($emp_afm) && isset($pending_teachers['B'][$emp_afm]));
 
                                             if ($is_pending) {
                                                 $b_id = append_suffix($b_id, $suffix);
