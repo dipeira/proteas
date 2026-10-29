@@ -13,10 +13,11 @@
  * (με το subquery υπολογισμού κύριας τοποθέτησης primary_sch_id, τα joins με συμβούλους και διευθυντές, τα βασικά κριτήρια αποκλεισμού και τα 
  * επιμέρους φίλτρα διορισμού/κλάδου/μονιμοποίησης/μεμονωμένου εκπαιδευτικού).
  * 
- * - resolve_evaluee_consultants(array $row, array $se_by_klados): Αναλαμβάνει τον πλήρη προσδιορισμό του επιστημονικού συμβούλου (Α1) και του 
- * παιδαγωγικού συμβούλου (Α2), ενσωματώνοντας όλους τους κανόνες:
+ * - resolve_evaluee_consultants(array $row, array $se_by_klados): Αναλαμβάνει τον πλήρη προσδιορισμό του επιστημονικού συμβούλου (Α1), του 
+ * παιδαγωγικού συμβούλου (Α2) και του συμβούλου Πεδίου Β, ενσωματώνοντας όλους τους κανόνες:
  *  - Κριτήρια Ειδικής Αγωγής (κλάδοι ΕΑΕ εκτός τμημάτων ένταξης γενικών σχολείων, ειδικά σχολεία).
- *  - Εκπαιδευτικοί σε Τμήμα Ένταξης γενικών σχολείων: αξιολογούνται στο Α1 από τον σύμβουλο γενικής αγωγής (ΠΕ60/ΠΕ70) του σχολείου.
+ *  - Εκπαιδευτικοί σε Τμήμα Ένταξης ή Παράλληλη Στήριξη γενικών σχολείων: αξιολογούνται στο Α1 από τον σύμβουλο γενικής αγωγής (ΠΕ60/ΠΕ70) του σχολείου.
+ *  - Εκπαιδευτικοί σε Τμήμα Ένταξης ή Παράλληλη Στήριξη γενικών σχολείων: αξιολογούνται στο Πεδίο Β από τον Διευθυντή του σχολείου και τη Σύμβουλο Ειδικής Αγωγής και Ενταξιακής Εκπαίδευσης.
  *  - Ανάθεση συμβούλου Ειδικής Αγωγής ανά κλάδο (Νηπιαγωγοί vs Δάσκαλοι) και ανά σχολείο.
  *  - Ανάθεση σε γενική αγωγή και fallback στον παιδαγωγικό σύμβουλο για ΠΕ60/ΠΕ70.
  *  - Ανάθεση του συμβούλου ΕΑΕ και ως παιδαγωγικού αν πρόκειται για ειδικό σχολείο.
@@ -339,7 +340,7 @@ function build_eval_evaluees_query($conn, $sxol_etos, array $filters = [], $excl
 }
 
 /**
- * Resolves the appropriate pedagogical and scientific consultant for an evaluee.
+ * Resolves the appropriate pedagogical, scientific, and field B consultant for an evaluee.
  *
  * @param array $row The database record for the employee with school, klados, and director info
  * @param array $se_by_klados The array of scientific advisors grouped by klados
@@ -347,9 +348,11 @@ function build_eval_evaluees_query($conn, $sxol_etos, array $filters = [], $excl
  * @return array Evaluation metadata:
  *               - is_eae (bool)
  *               - is_in_ent_ty (bool)
+ *               - is_ent_or_parallili (bool)
  *               - is_director (bool)
  *               - symv_epist_afm, symv_epist_surname, symv_epist_name
  *               - symv_paid_afm, symv_paid_surname, symv_paid_name
+ *               - symv_b_afm, symv_b_surname, symv_b_name, symv_b_role
  *               - dnt_afm, dnt_surname, dnt_name
  *               - taytish (bool)
  */
@@ -358,14 +361,22 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all
     $klados_str = (string)($row['klados'] ?? '');
     $sch_id = (int)($row['sch_id'] ?? 0);
     $type2 = (int)($row['type2'] ?? 0);
-    $is_in_ent_ty = in_array((int)($row['ent_ty'] ?? 0), [1, 2], true);
+    $ent_ty = (int)($row['ent_ty'] ?? 0);
+
+    // Τμήμα Ένταξης (ent_ty = 1) ή Παράλληλη Στήριξη (ent_ty = 3)
+    $is_tmima_entaxis = ($ent_ty === 1);
+    $is_parallili = ($ent_ty === 3);
+    $is_ent_or_parallili = ($is_tmima_entaxis || $is_parallili);
+
+    // Για συμβατότητα: αν υπηρετεί σε Τ.Ε., Τ.Υ. ή Παράλληλη (ent_ty: 1, 2, 3)
+    $is_in_ent_ty = in_array($ent_ty, [1, 2, 3], true);
 
     $is_eae_klados = (
         in_array($klados_str, ['ΠΕ60ΕΑΕ', 'ΠΕ70ΕΑΕ', 'ΠΕ61', 'ΠΕ71'], true) || 
         in_array($klados_id, [16, 17, 18, 19], true)
     );
 
-    // Εκπαιδευτικοί σε Τμήμα Ένταξης γενικών σχολείων (type2 != 2)
+    // Εκπαιδευτικοί σε Τμήμα Ένταξης, Τάξη Υποδοχής ή Παράλληλη Στήριξη γενικών σχολείων (type2 != 2)
     // αξιολογούνται στο Α1 από τον σύμβουλο γενικής αγωγής του σχολείου (ΠΕ60/ΠΕ70)
     $eval_as_geniki = ($is_in_ent_ty && $type2 !== 2);
 
@@ -400,6 +411,31 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all
         }
     }
 
+    // Εύρεση του κατάλληλου Συμβούλου Ειδικής Αγωγής & Ενταξιακής Εκπαίδευσης
+    $is_nipiagwgos = ($klados_id === 1 || in_array($klados_id, [16, 17], true) || $klados_str === 'ΠΕ60' || $klados_str === 'ΠΕ60ΕΑΕ' || $klados_str === 'ΠΕ61');
+    $eae_kladoi = $is_nipiagwgos ? [16, 17] : [18, 19];
+    $eae_c = null;
+    if (in_array($klados_id, [16, 17, 18, 19], true)) {
+        $eae_c = $consultant_found ?: $default_consultant;
+    }
+    if (!$eae_c) {
+        foreach ($eae_kladoi as $ek) {
+            if (!empty($se_by_klados[$ek])) {
+                foreach ($se_by_klados[$ek] as $c) {
+                    if (!empty($c['sch_ids'])) {
+                        $c_schools = array_map('intval', explode(',', $c['sch_ids']));
+                        if (in_array($sch_id, $c_schools, true)) {
+                            $eae_c = $c;
+                            break 2;
+                        }
+                    } elseif (!$eae_c) {
+                        $eae_c = $c;
+                    }
+                }
+            }
+        }
+    }
+
     $is_eae = (
         ($is_eae_klados && !$eval_as_geniki) ||
         ($type2 === 2 && (in_array($klados_str, ['ΠΕ60', 'ΠΕ70'], true) || in_array($klados_id, [1, 2], true) || $is_eae_klados))
@@ -414,30 +450,6 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all
     $symv_paid_name = $row['symv_paid_name'] ?? '';
 
     if ($is_eae) {
-        $eae_c = null;
-        if (in_array($klados_id, [16, 17, 18, 19], true)) {
-            $eae_c = $consultant_found ?: $default_consultant;
-        }
-        if (!$eae_c) {
-            $is_nipiagwgos = ($klados_id === 1 || in_array($klados_id, [16, 17], true) || $klados_str === 'ΠΕ60' || $klados_str === 'ΠΕ60ΕΑΕ' || $klados_str === 'ΠΕ61');
-            $eae_kladoi = $is_nipiagwgos ? [16, 17] : [18, 19];
-            foreach ($eae_kladoi as $ek) {
-                if (!empty($se_by_klados[$ek])) {
-                    foreach ($se_by_klados[$ek] as $c) {
-                        if (!empty($c['sch_ids'])) {
-                            $c_schools = array_map('intval', explode(',', $c['sch_ids']));
-                            if (in_array($sch_id, $c_schools, true)) {
-                                $eae_c = $c;
-                                break 2;
-                            }
-                        } elseif (!$eae_c) {
-                            $eae_c = $c;
-                        }
-                    }
-                }
-            }
-        }
-
         if ($eae_c) {
             $symv_epist_afm = $eae_c['afm'];
             $symv_epist_surname = $eae_c['eponymo'];
@@ -473,6 +485,46 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all
         }
     }
 
+    // Προσδιορισμός αξιολογητή για το Πεδίο Β:
+    // Οι εκπαιδευτικοί που υπηρετούν σε Τμήματα Ένταξης ή στην παράλληλη στήριξη
+    // αξιολογούνται στο πεδίο Β από τον διευθυντή του σχολείου και τη Σύμβουλο Ειδικής Αγωγής και Ενταξιακής Εκπαίδευσης.
+    $symv_b_afm = '';
+    $symv_b_surname = '';
+    $symv_b_name = '';
+    $symv_b_role = 'Σύμβουλος Παιδαγωγικής Ευθύνης';
+
+    if ($type2 === 2) {
+        // Ειδικό Σχολείο: Σύμβουλος Ειδικής Αγωγής
+        if ($eae_c) {
+            $symv_b_afm = $eae_c['afm'];
+            $symv_b_surname = $eae_c['eponymo'];
+            $symv_b_name = $eae_c['onoma'];
+            $symv_b_role = 'Σύμβουλος Ειδικής Αγωγής και Ενταξιακής Εκπαίδευσης';
+        } else {
+            $symv_b_afm = $symv_paid_afm;
+            $symv_b_surname = $symv_paid_surname;
+            $symv_b_name = $symv_paid_name;
+        }
+    } elseif ($is_ent_or_parallili) {
+        // Τμήμα Ένταξης (ent_ty = 1) ή Παράλληλη Στήριξη (ent_ty = 3) γενικού σχολείου:
+        // Αξιολογητής 2 στο Πεδίο Β είναι η Σύμβουλος Ειδικής Αγωγής & Ενταξιακής Εκπαίδευσης
+        if ($eae_c) {
+            $symv_b_afm = $eae_c['afm'];
+            $symv_b_surname = $eae_c['eponymo'];
+            $symv_b_name = $eae_c['onoma'];
+            $symv_b_role = 'Σύμβουλος Ειδικής Αγωγής και Ενταξιακής Εκπαίδευσης';
+        } else {
+            $symv_b_afm = $symv_paid_afm;
+            $symv_b_surname = $symv_paid_surname;
+            $symv_b_name = $symv_paid_name;
+        }
+    } else {
+        // Γενική αγωγή: Σύμβουλος Παιδαγωγικής Ευθύνης σχολικής μονάδας
+        $symv_b_afm = $symv_paid_afm;
+        $symv_b_surname = $symv_paid_surname;
+        $symv_b_name = $symv_paid_name;
+    }
+
     $se_afm_clean = normalize_afm($symv_epist_afm);
     $sp_afm_clean = normalize_afm($symv_paid_afm);
     $taytish = (!empty($se_afm_clean) && !empty($sp_afm_clean) && $se_afm_clean === $sp_afm_clean);
@@ -481,6 +533,7 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all
     return [
         'is_eae' => $is_eae,
         'is_in_ent_ty' => $is_in_ent_ty,
+        'is_ent_or_parallili' => $is_ent_or_parallili,
         'is_director' => $is_director,
         'symv_epist_afm' => $symv_epist_afm,
         'symv_epist_surname' => $symv_epist_surname,
@@ -488,6 +541,10 @@ function resolve_evaluee_consultants(array $row, array $se_by_klados, array $all
         'symv_paid_afm' => $symv_paid_afm,
         'symv_paid_surname' => $symv_paid_surname,
         'symv_paid_name' => $symv_paid_name,
+        'symv_b_afm' => $symv_b_afm,
+        'symv_b_surname' => $symv_b_surname,
+        'symv_b_name' => $symv_b_name,
+        'symv_b_role' => $symv_b_role,
         'dnt_afm' => $row['dnt_afm'] ?? '',
         'dnt_surname' => $row['dnt_surname'] ?? '',
         'dnt_name' => $row['dnt_name'] ?? '',

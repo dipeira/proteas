@@ -274,6 +274,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
 
                 $row['resolved_symv_epist_afm'] = $symv_epist_afm;
                 $row['resolved_symv_paid_afm'] = $symv_paid_afm;
+                $row['resolved_symv_b_afm'] = $eval_info['symv_b_afm'];
 
                 $c_key = !empty($symv_epist_afm) ? trim($symv_epist_afm) : ('unassigned_' . $row['klados_id']);
                 if (!empty($se_edra_allou[$c_key]) && (empty($row['hm_dior']) || $row['hm_dior'] < '2020-01-01')) continue;
@@ -329,6 +330,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             $emp_afm = normalize_afm($row['emp_afm']);
             $se_afm = normalize_afm($row['resolved_symv_epist_afm']);
             $sp_afm = normalize_afm($row['resolved_symv_paid_afm']);
+            $sb_afm = normalize_afm($row['resolved_symv_b_afm'] ?? $sp_afm);
             $dnt_afm = normalize_afm($row['dnt_afm']);
             $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm) || isset($all_director_afms[$emp_afm]));
 
@@ -349,8 +351,8 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             }
 
             // Field B (Directors excluded)
-            if (!$is_director && !empty($sp_afm) && isset($consultants[$sp_afm])) {
-                $consultants[$sp_afm]['teachers'][$emp_afm]['fields']['B'] = true;
+            if (!$is_director && !empty($sb_afm) && isset($consultants[$sb_afm])) {
+                $consultants[$sb_afm]['teachers'][$emp_afm]['fields']['B'] = true;
                 $teacher_afm_set[$emp_afm] = true;
             }
         }

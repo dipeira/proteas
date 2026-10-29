@@ -162,6 +162,10 @@ if ($_SESSION['userlevel']<>0) {
                 $row['resolved_symv_paid_afm'] = $symv_paid_afm;
                 $row['resolved_symv_paid_surname'] = $symv_paid_surname;
                 $row['resolved_symv_paid_name'] = $symv_paid_name;
+                $row['resolved_symv_b_afm'] = $eval_info['symv_b_afm'];
+                $row['resolved_symv_b_surname'] = $eval_info['symv_b_surname'];
+                $row['resolved_symv_b_name'] = $eval_info['symv_b_name'];
+                $row['resolved_symv_b_role'] = $eval_info['symv_b_role'];
                 $row['resolved_taytish'] = $taytish;
 
                 // Ομαδοποίηση βάσει συμβούλου επιστημονικής ευθύνης (Α1)
@@ -322,6 +326,9 @@ if ($_SESSION['userlevel']<>0) {
                 <th>Συμβ.παιδ.επώνυμο</th>
                 <th>Συμβ.παιδ.όνομα</th>
                 <th>Συμβ.παιδ.ΑΦΜ</th>
+                <th>Σύμβ.Πεδ.Β επώνυμο</th>
+                <th>Σύμβ.Πεδ.Β όνομα</th>
+                <th>Σύμβ.Πεδ.Β ΑΦΜ</th>
                 <th>Δ/ντής Επώνυμο</th>
                 <th>Δ/ντής Όνομα</th>
                 <th>Δ/ντής ΑΦΜ</th>
@@ -353,6 +360,9 @@ if ($_SESSION['userlevel']<>0) {
                 echo "<td>".$row['resolved_symv_paid_surname']."</td>";
                 echo "<td>".$row['resolved_symv_paid_name']."</td>";
                 echo "<td>".$row['resolved_symv_paid_afm']."</td>";
+                echo "<td>".$row['resolved_symv_b_surname']."</td>";
+                echo "<td>".$row['resolved_symv_b_name']."</td>";
+                echo "<td>".$row['resolved_symv_b_afm']."</td>";
                 echo "<td>".$row['dnt_surname']."</td>";
                 echo "<td>".$row['dnt_name']."</td>";
                 echo "<td>".$row['dnt_afm']."</td>";

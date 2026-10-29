@@ -1177,6 +1177,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             $row['resolved_symv_paid_afm'] = $symv_paid_afm;
                             $row['resolved_symv_paid_surname'] = $symv_paid_surname;
                             $row['resolved_symv_paid_name'] = $symv_paid_name;
+                            $row['resolved_symv_b_afm'] = $eval_info['symv_b_afm'];
+                            $row['resolved_symv_b_surname'] = $eval_info['symv_b_surname'];
+                            $row['resolved_symv_b_name'] = $eval_info['symv_b_name'];
                             $row['resolved_taytish'] = $taytish;
 
                             // Ομαδοποίηση βάσει συμβούλου επιστημονικής ευθύνης (Α1)
@@ -1362,6 +1365,10 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         $sp_name = trim($row['resolved_symv_paid_name']);
                         $sp_surname = trim($row['resolved_symv_paid_surname']);
 
+                        $sb_afm = normalize_afm($row['resolved_symv_b_afm'] ?? $sp_afm);
+                        $sb_name = trim($row['resolved_symv_b_name'] ?? $sp_name);
+                        $sb_surname = trim($row['resolved_symv_b_surname'] ?? $sp_surname);
+
                         $dnt_afm = normalize_afm($row['dnt_afm']);
                         $dnt_name = trim($row['dnt_name']);
                         $dnt_surname = trim($row['dnt_surname']);
@@ -1438,22 +1445,22 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         // --- B Field ---
                         if (!isset($seen_b[$emp_afm]) && !empty($emp_afm)) {
                                 if (empty($dnt_afm)) {
-                                    if (!empty($sp_afm)) {
+                                    if (!empty($sb_afm)) {
                                         $seen_b[$emp_afm] = true;
                                         $stats['B']['total']++;
 
                                         if (isset($exclude_b[$emp_afm])) {
                                             $stats['B']['excluded']++;
                                         } else {
-                                            $b_id = $sp_afm . ':' . $emp_afm;
-                                            $b_key = $sp_afm . ':' . $emp_afm;
+                                            $b_id = $sb_afm . ':' . $emp_afm;
+                                            $b_key = $sb_afm . ':' . $emp_afm;
                                             $is_pending = isset($pending_dict['B'][$b_key]) || (!empty($emp_afm) && isset($pending_teachers['B'][$emp_afm]));
 
                                             if ($is_pending) {
                                                 $b_id = append_suffix($b_id, $suffix);
                                                 $stats['B']['matched']++;
                                             }
-                                            $b_rows[] = [$b_id, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm, '', '', ''];
+                                            $b_rows[] = [$b_id, $emp_name, $emp_surname, $emp_afm, $sb_name, $sb_surname, $sb_afm, '', '', ''];
                                         }
                                     }
                                 } else {
@@ -1463,16 +1470,16 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                     if (isset($exclude_b[$emp_afm])) {
                                         $stats['B']['excluded']++;
                                     } else {
-                                        if (!empty($sp_afm)) {
-                                            $b_id = $dnt_afm . ':' . $sp_afm . ':' . $emp_afm;
-                                            $b_key = $dnt_afm . ':' . $sp_afm . ':' . $emp_afm;
+                                        if (!empty($sb_afm)) {
+                                            $b_id = $dnt_afm . ':' . $sb_afm . ':' . $emp_afm;
+                                            $b_key = $dnt_afm . ':' . $sb_afm . ':' . $emp_afm;
                                             $is_pending = isset($pending_dict['B'][$b_key]) || (!empty($emp_afm) && isset($pending_teachers['B'][$emp_afm]));
 
                                             if ($is_pending) {
                                                 $b_id = append_suffix($b_id, $suffix);
                                                 $stats['B']['matched']++;
                                             }
-                                            $b_rows[] = [$b_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sp_name, $sp_surname, $sp_afm];
+                                            $b_rows[] = [$b_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sb_name, $sb_surname, $sb_afm];
                                         } else {
                                             $b_id = $dnt_afm . ':' . $emp_afm;
                                             $b_key = $dnt_afm . ':' . $emp_afm;

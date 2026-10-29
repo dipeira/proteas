@@ -95,6 +95,11 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $symv_paid_surname = $eval_info['symv_paid_surname'];
     $symv_paid_name = $eval_info['symv_paid_name'];
 
+    $symv_b_afm = $eval_info['symv_b_afm'] ?? $symv_paid_afm;
+    $symv_b_surname = $eval_info['symv_b_surname'] ?? $symv_paid_surname;
+    $symv_b_name = $eval_info['symv_b_name'] ?? $symv_paid_name;
+    $symv_b_role = $eval_info['symv_b_role'] ?? 'Σύμβουλος Παιδαγωγικής Ευθύνης';
+
     $emp_afm = normalize_afm($row['emp_afm']);
     $emp_name = trim($row['emp_name']);
     $emp_surname = trim($row['emp_surname']);
@@ -106,6 +111,10 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $sp_afm = normalize_afm($symv_paid_afm);
     $sp_name = trim($symv_paid_name);
     $sp_surname = trim($symv_paid_surname);
+
+    $sb_afm = normalize_afm($symv_b_afm);
+    $sb_name = trim($symv_b_name);
+    $sb_surname = trim($symv_b_surname);
 
     $dnt_afm = normalize_afm($row['dnt_afm']);
     $dnt_name = trim($row['dnt_name']);
@@ -222,11 +231,11 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
             'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
         ];
     } elseif (empty($dnt_afm)) {
-        if (!empty($sp_afm)) {
-            $b_id = $sp_afm . ':' . $emp_afm;
+        if (!empty($sb_afm)) {
+            $b_id = $sb_afm . ':' . $emp_afm;
             $b_id_suffix = append_suffix($b_id, $suffix);
-            $b_row = [$b_id, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm, '', '', ''];
-            $b_row_suffix = [$b_id_suffix, $emp_name, $emp_surname, $emp_afm, $sp_name, $sp_surname, $sp_afm, '', '', ''];
+            $b_row = [$b_id, $emp_name, $emp_surname, $emp_afm, $sb_name, $sb_surname, $sb_afm, '', '', ''];
+            $b_row_suffix = [$b_id_suffix, $emp_name, $emp_surname, $emp_afm, $sb_name, $sb_surname, $sb_afm, '', '', ''];
             $b_data = [
                 'applicable' => true,
                 'id' => $b_id,
@@ -235,10 +244,10 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
                 'line_suffix' => format_csv_row($b_row_suffix),
                 'evaluators' => [
                     'ev1' => [
-                        'name' => $sp_name,
-                        'surname' => $sp_surname,
-                        'afm' => $sp_afm,
-                        'role' => 'Σύμβουλος Παιδαγωγικής Ευθύνης (μοναδικός αξιολογητής)'
+                        'name' => $sb_name,
+                        'surname' => $sb_surname,
+                        'afm' => $sb_afm,
+                        'role' => $symv_b_role . ' (μοναδικός αξιολογητής)'
                     ],
                     'ev2' => null
                 ]
@@ -246,16 +255,16 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
         } else {
             $b_data = [
                 'applicable' => false,
-                'reason' => 'Δεν βρέθηκε Σύμβουλος Παιδαγωγικής Ευθύνης για το πεδίο Β.'
+                'reason' => 'Δεν βρέθηκε Σύμβουλος για το πεδίο Β.'
             ];
         }
     } else {
         if (!empty($dnt_afm)) {
-            if (!empty($sp_afm)) {
-                $b_id = $dnt_afm . ':' . $sp_afm . ':' . $emp_afm;
+            if (!empty($sb_afm)) {
+                $b_id = $dnt_afm . ':' . $sb_afm . ':' . $emp_afm;
                 $b_id_suffix = append_suffix($b_id, $suffix);
-                $b_row = [$b_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sp_name, $sp_surname, $sp_afm];
-                $b_row_suffix = [$b_id_suffix, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sp_name, $sp_surname, $sp_afm];
+                $b_row = [$b_id, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sb_name, $sb_surname, $sb_afm];
+                $b_row_suffix = [$b_id_suffix, $emp_name, $emp_surname, $emp_afm, $dnt_name, $dnt_surname, $dnt_afm, $sb_name, $sb_surname, $sb_afm];
                 $b_data = [
                     'applicable' => true,
                     'id' => $b_id,
@@ -270,10 +279,10 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
                             'role' => 'Αξιολογητής 1: Διευθυντής / Προϊστάμενος'
                         ],
                         'ev2' => [
-                            'name' => $sp_name,
-                            'surname' => $sp_surname,
-                            'afm' => $sp_afm,
-                            'role' => 'Αξιολογητής 2: Σύμβουλος Παιδαγωγικής Ευθύνης'
+                            'name' => $sb_name,
+                            'surname' => $sb_surname,
+                            'afm' => $sb_afm,
+                            'role' => 'Αξιολογητής 2: ' . $symv_b_role
                         ]
                     ]
                 ];
