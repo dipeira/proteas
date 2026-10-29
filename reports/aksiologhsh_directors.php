@@ -27,7 +27,7 @@ if (!empty($_POST['dir_data'])) {
     $decoded = json_decode($_POST['dir_data'], true);
     if (is_array($decoded)) {
         $directors = $decoded;
-        $source_desc = 'Διευθυντές / Προϊστάμενοι που εξαιρέθηκαν από τα αρχεία CSV κατά την τρέχουσα εξαγωγή (διορισμός >= 1/1/2020)';
+        $source_desc = 'Διευθυντές / Υποδιευθυντές / Προϊστάμενοι που εξαιρέθηκαν από τα αρχεία CSV κατά την τρέχουσα εξαγωγή (διορισμός >= 1/1/2020)';
     }
 }
 
@@ -41,7 +41,7 @@ if (empty($directors) && !empty($_POST['emp_ids'])) {
               FROM employee e
               LEFT JOIN school s ON e.sx_yphrethshs = s.id
               LEFT JOIN employee d ON (s.id = d.sx_yphrethshs AND d.thesi = 2 AND d.status IN (1,3))
-              WHERE e.id IN ($ids_in) AND (e.thesi = 2 OR d.afm = e.afm)
+              WHERE e.id IN ($ids_in) AND (e.thesi IN (1, 2) OR d.afm = e.afm)
               ORDER BY e.surname ASC, e.name ASC";
         $res = mysqli_query($mysqlconnection, $q);
         if ($res) {
@@ -57,17 +57,17 @@ if (empty($directors) && !empty($_POST['emp_ids'])) {
                 ];
             }
         }
-        $source_desc = 'Διευθυντές / Προϊστάμενοι από τους επιλεγμένους αξιολογούμενους';
+        $source_desc = 'Διευθυντές / Υποδιευθυντές / Προϊστάμενοι από τους επιλεγμένους αξιολογούμενους';
     }
 }
 
 if (empty($directors)) {
-    // Default fallback: query all school directors/heads
+    // Default fallback: query all school directors/heads/vice-principals
     $q = "SELECT e.id as emp_id, e.am as emp_am, e.afm as emp_afm, e.surname as emp_surname, e.name as emp_name, 
                  s.name as sch_name, e.hm_dior
           FROM employee e
           LEFT JOIN school s ON e.sx_yphrethshs = s.id
-          WHERE e.thesi = 2 AND e.status IN (1,3) AND s.type2 IN (0, 2)
+          WHERE e.thesi IN (1, 2) AND e.status IN (1,3) AND s.type2 IN (0, 2)
           ORDER BY e.surname ASC, e.name ASC";
     $res = mysqli_query($mysqlconnection, $q);
     if ($res) {
@@ -83,7 +83,7 @@ if (empty($directors)) {
             ];
         }
     }
-    $source_desc = 'Όλοι οι εν ενεργεία Διευθυντές / Προϊστάμενοι σχολικών μονάδων';
+    $source_desc = 'Όλοι οι εν ενεργεία Διευθυντές / Υποδιευθυντές / Προϊστάμενοι σχολικών μονάδων';
 }
 
 function clean_str($val) {
@@ -252,7 +252,7 @@ function normalize_afm($afm) {
                     {
                         extend: 'print',
                         text: '🖨️ Εκτύπωση',
-                        title: 'Αναφορά Διευθυντών / Προϊσταμένων',
+                        title: 'Αναφορά Διευθυντών / Υποδιευθυντών / Προϊσταμένων',
                         exportOptions: {
                             stripHtml: false
                         }
@@ -274,7 +274,7 @@ function normalize_afm($afm) {
         <div class="page-header">
             <div class="header-title-group">
                 <h1 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-                    👔 Αναφορά Διευθυντών / Προϊσταμένων
+                    👔 Αναφορά Διευθυντών / Υποδιευθυντών / Προϊσταμένων
                 </h1>
                 <span class="badge-count"><?php echo count($directors); ?> Εγγραφές</span>
                 <span class="badge-excluded">Εξαιρούνται από τα CSV (εισαγωγή manually)</span>
@@ -295,7 +295,7 @@ function normalize_afm($afm) {
                 <span style="font-weight: 600;">Προέλευση δεδομένων:</span> <?php echo htmlspecialchars($source_desc); ?>
             </div>
             <div style="font-size: 13px; color: #64748b;">
-                Κανόνας: Οι δ/ντές - πρ/νοι δεν περιλαμβάνονται στο αρχείο <code>b.csv</code>.
+                Κανόνας: Οι δ/ντές - υποδ/ντές - πρ/νοι δεν περιλαμβάνονται στα αρχεία CSV (a1, a2, b).
             </div>
         </div>
 

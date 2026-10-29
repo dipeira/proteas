@@ -44,11 +44,12 @@ if (!function_exists('normalize_afm')) {
 }
 
 /**
- * Determines whether an employee is a Director or School Head (Διευθυντής / Προϊστάμενος).
+ * Determines whether an employee is a Director, Unit Head, or Vice-Principal (Διευθυντής / Προϊστάμενος / Υποδιευθυντής).
  * Evaluates:
  * 1. thesi == 2 (Διευθυντής / Προϊστάμενος)
- * 2. dnt_afm == emp_afm (School's active director matches the employee)
- * 3. Employee's AFM is in the active directors lookup table ($all_director_afms)
+ * 2. thesi == 1 (Υποδιευθυντής)
+ * 3. dnt_afm == emp_afm (School's active director matches the employee)
+ * 4. Employee's AFM is in the active directors lookup table ($all_director_afms)
  *
  * @param array $row Database row containing employee details (thesi, emp_afm, dnt_afm, etc.)
  * @param array $all_director_afms Array map of normalized director AFMs (from get_eval_lookups)
@@ -57,7 +58,7 @@ if (!function_exists('normalize_afm')) {
 if (!function_exists('is_eval_director')) {
     function is_eval_director(array $row, array $all_director_afms = []) {
         $thesi = (int)($row['thesi'] ?? 0);
-        if ($thesi === 2) {
+        if ($thesi === 1 || $thesi === 2) {
             return true;
         }
         $emp_afm = normalize_afm($row['emp_afm'] ?? $row['afm'] ?? '');
@@ -153,7 +154,7 @@ function get_eval_lookups($conn) {
     }
 
     $all_director_afms = [];
-    $res_dir = mysqli_query($conn, "SELECT afm FROM employee WHERE thesi = 2 AND status IN (1,3)");
+    $res_dir = mysqli_query($conn, "SELECT afm FROM employee WHERE thesi IN (1, 2) AND status IN (1,3)");
     if ($res_dir) {
         while ($r_dir = mysqli_fetch_assoc($res_dir)) {
             if (!empty($r_dir['afm'])) {
@@ -279,7 +280,7 @@ function build_eval_evaluees_query($conn, $sxol_etos, array $filters = [], $excl
             $query .= " AND (e.aksiologhsh = 0 OR e.aksiologhsh IS NULL)";
         }
         if (!empty($filters['exclude_directors'])) {
-            $query .= " AND e.thesi != 2";
+            $query .= " AND e.thesi NOT IN (1, 2)";
         }
     }
 

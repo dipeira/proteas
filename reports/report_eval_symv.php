@@ -332,7 +332,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
             $sp_afm = normalize_afm($row['resolved_symv_paid_afm']);
             $sb_afm = normalize_afm($row['resolved_symv_b_afm'] ?? $sp_afm);
             $dnt_afm = normalize_afm($row['dnt_afm']);
-            $is_director = ($row['thesi'] == 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm) || isset($all_director_afms[$emp_afm]));
+            $is_director = ($row['thesi'] == 2 || $row['thesi'] == 1 || (!empty($dnt_afm) && $dnt_afm === $emp_afm) || isset($all_director_afms[$emp_afm]));
 
             // Field A1
             if (!empty($se_afm) && isset($consultants[$se_afm])) {
@@ -459,7 +459,7 @@ function load_evaluation_dataset($conn, $sxol_etos_int, $target_date, $end_year,
                 'surname' => trim($info['surname']),
                 'name' => trim($info['name']),
                 'type' => 'Μόνιμος',
-                'thesi' => ($info['thesi'] == 2) ? 'Δ/ντής/ντρια' : 'Εκπ/κός',
+                'thesi' => ($info['thesi'] == 2) ? 'Δ/ντής/ντρια' : (($info['thesi'] == 1) ? 'Υποδ/ντής/ντρια' : 'Εκπ/κός'),
                 'klados' => $info['klados_name'] ?: getKlados($info['klados'], $conn),
                 'status' => ($info['status'] == 1) ? 'Εργάζεται' : 'Άδεια',
                 'hm_dior' => (!empty($info['hm_dior']) && $info['hm_dior'] != '0000-00-00') ? date('d-m-Y', strtotime($info['hm_dior'])) : '-',

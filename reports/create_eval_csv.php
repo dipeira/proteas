@@ -1011,9 +1011,9 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                     }
 
-                    // Pre-load director AFMs
+                    // Pre-load director and vice-principal AFMs
                     $director_afms = [];
-                    $res_dir = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE thesi = 2 AND status IN (1,3)");
+                    $res_dir = mysqli_query($mysqlconnection, "SELECT afm FROM employee WHERE thesi IN (1, 2) AND status IN (1,3)");
                     if ($res_dir) {
                         while ($r_dir = mysqli_fetch_assoc($res_dir)) {
                             if (!empty($r_dir['afm'])) {
@@ -1600,7 +1600,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             <form method='post' action='aksiologhsh_directors.php' target='_blank' style='margin: 0; display: inline-block;'>
                                 <input type='hidden' name='dir_data' value='" . htmlspecialchars(json_encode($directors_report_rows, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') . "'>
                                 <button type='submit' class='btn' style='cursor: pointer; padding: 7px 16px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); color: white; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12);'>
-                                    👔 Αναφορά Δ/ντών - Πρ/νων (" . count($directors_report_rows) . ")
+                                    👔 Αναφορά Δ/ντών - Υποδ/ντών - Πρ/νων (" . count($directors_report_rows) . ")
                                 </button>
                             </form>
                             <form method='post' action='aksiologhsh_topo.php' target='_blank' style='margin: 0; display: inline-block;'>
@@ -1654,7 +1654,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         ") . "
                         <div class='stat-card'>
                             <div class='stat-value' style='color: #0f766e;'>$dir_count</div>
-                            <div class='stat-label'>Δ/ντές - Πρ/νοι (Εκτός Β)</div>
+                            <div class='stat-label'>Δ/ντές - Υποδ/ντές - Πρ/νοι (Εκτός CSV)</div>
                         </div>
                         <div class='stat-card'>
                             <div class='stat-value' style='color: #b45309;'>" . count($pending_dict['A1']) . "</div>
@@ -1691,7 +1691,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                                 </tr>";
                             } else {
                                 $dir_note = ($cat === 'B' && !empty($st['excluded_directors'])) 
-                                    ? "<br><small style='color: #991b1b; font-weight: 600;'>-{$st['excluded_directors']} δ/ντές (εκτός CSV)</small>" 
+                                    ? "<br><small style='color: #991b1b; font-weight: 600;'>-{$st['excluded_directors']} δ/ντές - υποδ/ντές (εκτός CSV)</small>" 
                                     : "";
                                 echo "<tr>
                                     <td><strong>$cat ({$st['file']})</strong></td>
@@ -1709,7 +1709,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                         }
                         echo "
                         <tr style='background: #f0fdfa;'>
-                            <td><strong>👔 Αναφορά Δ/ντών - Πρ/νων (directors.csv)</strong><br><small style='color: #0f766e;'>Διορισμός από 01/01/2020 (για χειροκίνητη εισαγωγή)</small></td>
+                            <td><strong>👔 Αναφορά Δ/ντών - Υποδ/ντών - Πρ/νων (directors.csv)</strong><br><small style='color: #0f766e;'>Διορισμός από 01/01/2020 (για χειροκίνητη εισαγωγή)</small></td>
                             <td style='text-align: center;'>-</td>
                             <td style='text-align: center;'><span class='badge-completed' style='background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;'>Εξαιρέθηκαν από CSV</span></td>
                             <td style='text-align: center;'>-</td>
@@ -1766,7 +1766,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                     <div class='card-box' style='background: #ffffff; border: 1px solid #cbd5e1; margin-top: 24px;'>
                         <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;'>
                             <h3 style='margin: 0; color: #0f766e; border-bottom: none; padding-bottom: 0;'>
-                                👔 Αναφορά Διευθυντών / Προϊσταμένων ($dir_count)
+                                👔 Αναφορά Διευθυντών / Υποδιευθυντών / Προϊσταμένων ($dir_count)
                             </h3>
                             <div style='display: flex; gap: 8px;'>
                                 <a href='?download=directors' class='btn btn-primary' style='text-decoration: none; padding: 6px 14px; font-size: 13px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; background: #0d9488;'>
@@ -1781,7 +1781,7 @@ function process_uploaded_csv($csv_path, $output_path, $pending_keys, $completed
                             </div>
                         </div>
                         <p style='color: #475569; font-size: 13.5px; line-height: 1.5; margin-bottom: 16px;'>
-                            Σύμφωνα με τους κανόνες αξιολόγησης, οι διευθυντές και προϊστάμενοι σχολικών μονάδων <strong>εξαιρούνται πλήρως από τα αρχεία CSV (a1.csv, a2.csv, b.csv)</strong>.
+                            Σύμφωνα με τους κανόνες αξιολόγησης, οι διευθυντές, υποδιευθυντές και προϊστάμενοι σχολικών μονάδων <strong>εξαιρούνται πλήρως από τα αρχεία CSV (a1.csv, a2.csv, b.csv)</strong>.
                             Στην παρακάτω αναφορά (και στο αρχείο <code>directors.csv</code>) περιλαμβάνονται <strong>μόνο όσοι έχουν ημερομηνία διορισμού από 01/01/2020 και μετά</strong>, προκειμένου να εισαχθούν χειροκίνητα (manually).
                         </p>
                         <div style='overflow-x: auto;'>

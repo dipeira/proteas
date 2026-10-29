@@ -132,7 +132,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     if ($is_director) {
         $a1_data = [
             'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Υποδιευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
         ];
     } elseif (!empty($se_afm) && !empty($emp_afm)) {
         $a1_id = $se_afm . ':' . $emp_afm;
@@ -168,7 +168,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     if ($is_director) {
         $a2_data = [
             'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Υποδιευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
         ];
     } elseif ($is_excluded_from_a2) {
         $a2_data = [
@@ -228,7 +228,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     if ($is_director) {
         $b_data = [
             'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
+            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Υποδιευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
         ];
     } elseif (empty($dnt_afm)) {
         if (!empty($sb_afm)) {
@@ -648,7 +648,7 @@ if ($initial_emp_id > 0) {
                     👤 <span id="meta_emp_fullname">-</span>
                 </h3>
                 <span id="meta_director_badge" class="badge-evaluator" style="background: #fef3c7; color: #92400e; border-color: #fde68a; display: none;">
-                    ★ Διευθυντής / Προϊστάμενος
+                    ★ Διευθυντής / Υποδιευθυντής / Προϊστάμενος
                 </span>
             </div>
             
