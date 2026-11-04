@@ -1,4 +1,7 @@
-<?php
+﻿<?php
+// Χειροκίνητη Εισαγωγή Γραμμών CSV Αξιολόγησης
+// Διαμόρφωση γραμμών προς χειροκίνητη προσθήκη στα αρχεία a1.csv, a2.csv και b.csv
+
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 ini_set('memory_limit', '512M');
 
@@ -121,6 +124,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $dnt_surname = trim($row['dnt_surname']);
 
     $is_director = is_eval_director($row, $all_director_afms);
+    $is_head_or_director = ((int)($row['thesi'] ?? 0) === 2 || (!empty($dnt_afm) && $dnt_afm === $emp_afm));
 
     // Headers as in reports/create_eval_csv.php
     $a1_header = ["Αναγνωριστικό-Εκκρεμότητας", "Αξιολογούμενος-Όνομα", "Αξιολογούμενος-Επίθετο", "Αξιολογούμενος-ΑΦΜ", "Αξιολογητής-Όνομα", "Αξιολογητής-Επίθετο", "Αξιολογητής-ΑΦΜ"];
@@ -129,12 +133,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
 
     // 1. A1 Line
     $a1_data = null;
-    if ($is_director) {
-        $a1_data = [
-            'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Υποδιευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
-        ];
-    } elseif (!empty($se_afm) && !empty($emp_afm)) {
+    if (!empty($se_afm) && !empty($emp_afm)) {
         $a1_id = $se_afm . ':' . $emp_afm;
         $a1_id_suffix = append_suffix($a1_id, $suffix);
         $a1_row = [$a1_id, $emp_name, $emp_surname, $emp_afm, $se_name, $se_surname, $se_afm];
@@ -165,12 +164,7 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
     $is_excluded_from_a2 = in_array(trim($row['klados'] ?? ''), $excluded_a2_kladoi) || in_array((int)($row['klados_id'] ?? 0), $excluded_a2_ids);
 
     $a2_data = null;
-    if ($is_director) {
-        $a2_data = [
-            'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Υποδιευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
-        ];
-    } elseif ($is_excluded_from_a2) {
+    if ($is_excluded_from_a2) {
         $a2_data = [
             'applicable' => false,
             'reason' => 'Ο κλάδος (' . htmlspecialchars($row['klados']) . ') εξαιρείται από το πεδίο Α2 (ΔΕ1ΕΒΠ/ΤΕ01).'
@@ -181,20 +175,18 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
         $evaluator_surname = '';
         $evaluator_role = '';
 
-        if (empty($dnt_afm)) {
-            if (!empty($sp_afm)) {
-                $evaluator_afm = $sp_afm;
-                $evaluator_name = $sp_name;
-                $evaluator_surname = $sp_surname;
-                $evaluator_role = 'Σύμβουλος Παιδαγωγικής Ευθύνης (δεν ορίστηκε Διευθυντής)';
-            }
-        } else {
-            if (!empty($dnt_afm)) {
-                $evaluator_afm = $dnt_afm;
-                $evaluator_name = $dnt_name;
-                $evaluator_surname = $dnt_surname;
-                $evaluator_role = 'Διευθυντής / Προϊστάμενος Σχολικής Μονάδας';
-            }
+        if (!empty($dnt_afm) && $dnt_afm !== $emp_afm && !$is_head_or_director) {
+            $evaluator_afm = $dnt_afm;
+            $evaluator_name = $dnt_name;
+            $evaluator_surname = $dnt_surname;
+            $evaluator_role = 'Διευθυντής / Προϊστάμενος Σχολικής Μονάδας';
+        } elseif (!empty($sp_afm)) {
+            $evaluator_afm = $sp_afm;
+            $evaluator_name = $sp_name;
+            $evaluator_surname = $sp_surname;
+            $evaluator_role = ($is_director || $is_head_or_director)
+                ? 'Σύμβουλος Παιδαγωγικής Ευθύνης (ο αξιολογούμενος είναι Διευθυντής / Προϊστάμενος)'
+                : 'Σύμβουλος Παιδαγωγικής Ευθύνης (δεν ορίστηκε Διευθυντής)';
         }
 
         if (!empty($evaluator_afm)) {
@@ -225,12 +217,9 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
 
     // 3. B Line
     $b_data = null;
-    if ($is_director) {
-        $b_data = [
-            'applicable' => false,
-            'reason' => 'Ο αξιολογούμενος είναι Διευθυντής / Υποδιευθυντής / Προϊστάμενος σχολικής μονάδας και εξαιρείται από τα αρχεία CSV (εισάγεται χειροκίνητα).'
-        ];
-    } elseif (empty($dnt_afm)) {
+    $has_other_director = (!empty($dnt_afm) && $dnt_afm !== $emp_afm && !$is_head_or_director);
+
+    if (!$has_other_director) {
         if (!empty($sb_afm)) {
             $b_id = $sb_afm . ':' . $emp_afm;
             $b_id_suffix = append_suffix($b_id, $suffix);
@@ -247,7 +236,9 @@ function resolve_employee_eval_lines($emp_id, $conn, $suffix = '') {
                         'name' => $sb_name,
                         'surname' => $sb_surname,
                         'afm' => $sb_afm,
-                        'role' => $symv_b_role . ' (μοναδικός αξιολογητής)'
+                        'role' => ($is_director || $is_head_or_director)
+                            ? ($symv_b_role . ' (μοναδικός αξιολογητής λόγω θέσης Διευθυντή / Προϊσταμένου)')
+                            : ($symv_b_role . ' (μοναδικός αξιολογητής)')
                     ],
                     'ev2' => null
                 ]

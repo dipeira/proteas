@@ -1,4 +1,7 @@
 <?php
+// Υποχρεώσεις Αξιολόγησης ανά Σύμβουλο
+// Εξαγωγή, αποστολή email, προβολή αξιολογούμενων ανά σύμβουλο
+
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 ini_set('memory_limit', '512M');
 set_time_limit(300);
