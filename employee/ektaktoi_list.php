@@ -180,8 +180,15 @@
         }
     }
     $query_all = $query;
-    $query .= " ORDER BY surname ";
-            $query .= $limitQ;
+
+    // if surname is set, order by name first, else by surname,name
+    if (strlen(trim($surpost)) > 0) {
+        $query .= " ORDER BY name, surname ";
+    } else {
+        $query .= " ORDER BY surname, name ";
+    }
+    
+    $query .= $limitQ;
             
     // Debugging...
     //echo $query;

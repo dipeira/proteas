@@ -489,7 +489,12 @@ if ( isset($_REQUEST['surname']) && strlen($_REQUEST['surname'])>0) {
     }
   }
     
-    $query .= " ORDER BY surname ";
+    // if surname is set, order by name first, else by surname,name
+    if (strlen(trim($surpost)) > 0) {
+        $query .= " ORDER BY name, surname ";
+    } else {
+        $query .= " ORDER BY surname, name ";
+    }
                     
     // Create queries...
     $q_main = "SELECT * FROM employee ". $query . $limitQ;
